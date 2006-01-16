@@ -17,8 +17,8 @@
 
 */
 
-#ifndef KDEM2MDEFS_H
-#define KDEM2MDEFS_H
+#ifndef PHONONDEFS_H
+#define PHONONDEFS_H
 
 /**
  * \internal
@@ -33,17 +33,17 @@
  * {
  *   Q_OBJECT
  *   Q_PROPERTY( int propertyA READ propertyA WRITE setPropertyA )
- *   KDEM2M_ABSTRACTBASE( AbstractEffect )
+ *   PHONON_ABSTRACTBASE( AbstractEffect )
  *   public:
  *     int propertyA() const;
  *     void setPropertyA( int );
  * };
  * \endcode
  *
- * \see KDEM2M_OBJECT
- * \see KDEM2M_HEIR
+ * \see PHONON_OBJECT
+ * \see PHONON_HEIR
  */
-#define KDEM2M_ABSTRACTBASE( classname ) \
+#define PHONON_ABSTRACTBASE( classname ) \
 public: \
 	~classname(); \
 protected: \
@@ -173,17 +173,17 @@ private: \
  * {
  *   Q_OBJECT
  *   Q_PROPERTY( int propertyA READ propertyA WRITE setPropertyA )
- *   KDEM2M_OBJECT( EffectSettings )
+ *   PHONON_OBJECT( EffectSettings )
  *   public:
  *     int propertyA() const;
  *     void setPropertyA( int );
  * };
  * \endcode
  *
- * \see KDEM2M_ABSTRACTBASE
- * \see KDEM2M_HEIR
+ * \see PHONON_ABSTRACTBASE
+ * \see PHONON_HEIR
  */
-#define KDEM2M_OBJECT( classname ) \
+#define PHONON_OBJECT( classname ) \
 public: \
 	/**
 	 * Standard QObject constructor.
@@ -309,7 +309,7 @@ private: \
 /**
  * \internal
  * Used in class declarations to provide the needed functions. This is used for
- * classes that inherit another Kdem2m object.
+ * classes that inherit another Phonon object.
  *
  * \param classname The Name of the class this macro is used for.
  * \param baseclass The Name of the baseclass that inherits QObject directly.
@@ -320,17 +320,17 @@ private: \
  * {
  *   Q_OBJECT
  *   Q_PROPERTY( int propertyB READ propertyB WRITE setPropertyB )
- *   KDEM2M_HEIR( ConcreteEffect )
+ *   PHONON_HEIR( ConcreteEffect )
  *   public:
  *     int propertyB() const;
  *     void setPropertyB( int );
  * };
  * \endcode
  *
- * \see KDEM2M_ABSTRACTBASE
- * \see KDEM2M_OBJECT
+ * \see PHONON_ABSTRACTBASE
+ * \see PHONON_OBJECT
  */
-#define KDEM2M_HEIR( classname, baseclass ) \
+#define PHONON_HEIR( classname, baseclass ) \
 public: \
 	/**
 	 * Standard QObject constructor.
@@ -440,7 +440,7 @@ private: \
 	class Private; \
 	Private* d;
 
-#define KDEM2M_ABSTRACTBASE_IMPL( classname ) \
+#define PHONON_ABSTRACTBASE_IMPL( classname ) \
 classname::classname( Ifaces::classname* iface, QObject* parent ) \
 	: QObject( parent ) \
 	, m_iface( iface ) \
@@ -480,7 +480,7 @@ Ifaces::classname* classname::iface() \
 	return m_iface; \
 }
 
-#define KDEM2M_OBJECT_IMPL( classname ) \
+#define PHONON_OBJECT_IMPL( classname ) \
 classname::classname( QObject* parent ) \
 	: QObject( parent ) \
 	, m_iface( 0 ) \
@@ -534,7 +534,7 @@ Ifaces::classname* classname::createIface() \
 	return m_iface; \
 }
 
-#define KDEM2M_HEIR_IMPL( classname, parentclass, baseclass ) \
+#define PHONON_HEIR_IMPL( classname, parentclass, baseclass ) \
 classname::classname( QObject* parent ) \
 	: parentclass( m_iface = Factory::self()->create ## classname( this ), parent ) \
 	, d( new Private() ) \
@@ -569,4 +569,4 @@ Ifaces::baseclass* classname::createIface() \
 	return m_iface; \
 }
 
-#endif // KDEM2MDEFS_H
+#endif // PHONONDEFS_H

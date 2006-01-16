@@ -20,7 +20,7 @@
 #include "ifaces/videoeffect.h"
 #include "factory.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class VideoEffect::Private
 {
@@ -31,7 +31,7 @@ class VideoEffect::Private
 		QString type;
 };
 
-KDEM2M_OBJECT_IMPL( VideoEffect )
+PHONON_OBJECT_IMPL( VideoEffect )
 
 QString VideoEffect::type() const
 {
@@ -64,7 +64,7 @@ void VideoEffect::setupIface()
 	m_iface->setType( d->type );
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "videoeffect.moc"
 

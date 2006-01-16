@@ -16,15 +16,15 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_Ui_VIDEOWIDGETHELPER_H
-#define Kdem2m_Ui_VIDEOWIDGETHELPER_H
+#ifndef Phonon_Ui_VIDEOWIDGETHELPER_H
+#define Phonon_Ui_VIDEOWIDGETHELPER_H
 
 #include "../abstractvideooutput.h"
 #include <kdelibs_export.h>
 
 class QString;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ifaces
 {
@@ -39,7 +39,7 @@ namespace Ifaces
 
 class VideoWidget;
 
-class KDEM2M_EXPORT VideoWidgetHelper : public Kdem2m::AbstractVideoOutput
+class PHONON_EXPORT VideoWidgetHelper : public Phonon::AbstractVideoOutput
 {
 	Q_OBJECT
 	//cannot use macro: need special iface creation
@@ -49,7 +49,7 @@ class KDEM2M_EXPORT VideoWidgetHelper : public Kdem2m::AbstractVideoOutput
 	protected:
 		VideoWidgetHelper( Ifaces::VideoWidget* iface, VideoWidget* parent );
 		virtual void ifaceDeleted();
-		virtual Kdem2m::Ifaces::AbstractVideoOutput* createIface();
+		virtual Phonon::Ifaces::AbstractVideoOutput* createIface();
 		virtual bool aboutToDeleteIface();
 		virtual void setupIface();
 	private:
@@ -59,7 +59,7 @@ class KDEM2M_EXPORT VideoWidgetHelper : public Kdem2m::AbstractVideoOutput
 		Private* d;
 };
 
-}} //namespace Kdem2m::Ui
+}} //namespace Phonon::Ui
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_Ui_VIDEOWIDGETHELPER_H
+#endif // Phonon_Ui_VIDEOWIDGETHELPER_H

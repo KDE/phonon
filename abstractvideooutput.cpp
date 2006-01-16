@@ -20,7 +20,7 @@
 #include "ifaces/abstractvideooutput.h"
 #include "factory.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class AbstractVideoOutput::Private
 {
@@ -31,7 +31,7 @@ class AbstractVideoOutput::Private
 		QString name;
 };
 
-KDEM2M_ABSTRACTBASE_IMPL( AbstractVideoOutput )
+PHONON_ABSTRACTBASE_IMPL( AbstractVideoOutput )
 
 bool AbstractVideoOutput::aboutToDeleteIface()
 {
@@ -47,7 +47,7 @@ void AbstractVideoOutput::setupIface()
 		//return;
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "abstractvideooutput.moc"
 

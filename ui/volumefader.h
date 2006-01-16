@@ -17,13 +17,13 @@
 
 */
 
-#ifndef KDEM2M_UI_VOLUMEFADER_H
-#define KDEM2M_UI_VOLUMEFADER_H
+#ifndef PHONON_UI_VOLUMEFADER_H
+#define PHONON_UI_VOLUMEFADER_H
 
 #include <QWidget>
 #include <kdelibs_export.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 class AudioOutput;
 
@@ -36,7 +36,7 @@ namespace Ui
  * \author Matthias Kretz <kretz@kde.org>
  * \since 4.0
  */
-class KDEM2M_EXPORT VolumeFader : public QWidget
+class PHONON_EXPORT VolumeFader : public QWidget
 {
 	Q_OBJECT
 	public:
@@ -57,7 +57,7 @@ class KDEM2M_EXPORT VolumeFader : public QWidget
 		Private* d;
 };
 
-}} // namespace Kdem2m::Ui
+}} // namespace Phonon::Ui
 
 // vim: sw=4 ts=4 tw=80
-#endif // KDEM2M_UI_VOLUMEFADER_H
+#endif // PHONON_UI_VOLUMEFADER_H

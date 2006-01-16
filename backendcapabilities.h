@@ -17,8 +17,8 @@
 
 */
 
-#ifndef Kdem2m_BACKENDCAPABILITIES_H
-#define Kdem2m_BACKENDCAPABILITIES_H
+#ifndef Phonon_BACKENDCAPABILITIES_H
+#define Phonon_BACKENDCAPABILITIES_H
 
 #include <QObject>
 
@@ -26,11 +26,11 @@
 #include <kstaticdeleter.h>
 #include <kmimetype.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 class CaptureSource;
 
-class KDEM2M_EXPORT BackendCapabilities : public QObject
+class PHONON_EXPORT BackendCapabilities : public QObject
 {
 	friend void ::KStaticDeleter<BackendCapabilities>::destructObject();
 
@@ -71,7 +71,7 @@ class KDEM2M_EXPORT BackendCapabilities : public QObject
 		class Private;
 		Private* d;
 };
-} // namespace Kdem2m
+} // namespace Phonon
 
-#endif // Kdem2m_BACKENDCAPABILITIES_H
+#endif // Phonon_BACKENDCAPABILITIES_H
 // vim: sw=4 ts=4 tw=80 noet

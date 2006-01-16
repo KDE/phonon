@@ -22,7 +22,7 @@
 #include "capturesource.h"
 #include "ifaces/backend.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class SoundcardCapture::Private
 {
@@ -33,7 +33,7 @@ class SoundcardCapture::Private
 		CaptureSource source;
 };
 
-KDEM2M_HEIR_IMPL( SoundcardCapture, AbstractMediaProducer, AbstractMediaProducer )
+PHONON_HEIR_IMPL( SoundcardCapture, AbstractMediaProducer, AbstractMediaProducer )
 
 const CaptureSource& SoundcardCapture::captureSource() const
 {
@@ -91,7 +91,7 @@ void SoundcardCapture::setupIface()
 	m_iface->setCaptureSource( d->source.index() );
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "soundcardcapture.moc"
 

@@ -19,14 +19,14 @@ SUBDIRS = .
 
 INCLUDES = -I$(top_srcdir) $(all_includes)
 
-kde_module_LTLIBRARIES = kdem2m_fake.la
+kde_module_LTLIBRARIES = phonon_fake.la
 
-kdem2m_fake_la_SOURCES = abstractmediaproducer.cpp abstractaudiooutput.cpp abstractvideooutput.cpp audiodataoutput.cpp audioeffect.cpp audiofftoutput.cpp audiooutput.cpp audiopath.cpp bytestream.cpp mediaobject.cpp soundcardcapture.cpp videoeffect.cpp videopath.cpp backend.cpp
-kdem2m_fake_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-kdem2m_fake_la_LIBADD = ../../ifaces/libkdem2mifaces.la ../../ifaces/ui/libkdem2mifacesui.la $(LIB_KIO)
+phonon_fake_la_SOURCES = abstractmediaproducer.cpp abstractaudiooutput.cpp abstractvideooutput.cpp audiodataoutput.cpp audioeffect.cpp audiofftoutput.cpp audiooutput.cpp audiopath.cpp bytestream.cpp mediaobject.cpp soundcardcapture.cpp videoeffect.cpp videopath.cpp backend.cpp
+phonon_fake_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
+phonon_fake_la_LIBADD = ../../ifaces/libphononifaces.la ../../ifaces/ui/libphononifacesui.la $(LIB_KIO)
 
 METASOURCES = AUTO
 
-kdem2mbackendfilesdir = $(kde_servicesdir)/kdem2mbackends
-kdem2mbackendfiles_DATA = fake.desktop
+phononbackendfilesdir = $(kde_servicesdir)/phononbackends
+phononbackendfiles_DATA = fake.desktop
 

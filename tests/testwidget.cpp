@@ -19,11 +19,11 @@
 
 #include "testwidget.h"
 
-#include <kdem2m/mediaobject.h>
-#include <kdem2m/audiopath.h>
-#include <kdem2m/audiooutput.h>
-#include <kdem2m/videopath.h>
-#include <kdem2m/ui/videowidget.h>
+#include <phonon/mediaobject.h>
+#include <phonon/audiopath.h>
+#include <phonon/audiooutput.h>
+#include <phonon/videopath.h>
+#include <phonon/ui/videowidget.h>
 
 #include <QSlider>
 #include <QApplication>
@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <kurl.h>
 
-using namespace Kdem2m;
+using namespace Phonon;
 
 TestWidget::TestWidget()
 	: QWidget( 0 )
@@ -127,26 +127,26 @@ void TestWidget::tick( long t )
 	m_ticking = false;
 }
 
-void TestWidget::stateChanged( Kdem2m::State newstate )
+void TestWidget::stateChanged( Phonon::State newstate )
 {
 	switch( newstate )
 	{
-		case Kdem2m::ErrorState:
+		case Phonon::ErrorState:
 			m_statelabel->setText( "Error" );
 			break;
-		case Kdem2m::LoadingState:
+		case Phonon::LoadingState:
 			m_statelabel->setText( "Loading" );
 			break;
-		case Kdem2m::StoppedState:
+		case Phonon::StoppedState:
 			m_statelabel->setText( "Stopped" );
 			break;
-		case Kdem2m::PausedState:
+		case Phonon::PausedState:
 			m_statelabel->setText( "Paused" );
 			break;
-		case Kdem2m::BufferingState:
+		case Phonon::BufferingState:
 			m_statelabel->setText( "Buffering" );
 			break;
-		case Kdem2m::PlayingState:
+		case Phonon::PlayingState:
 			m_statelabel->setText( "Playing" );
 			break;
 	}
@@ -193,8 +193,8 @@ void TestWidget::loadFile( const QString & file )
 	connect( m_media, SIGNAL(   tick( long ) ), SLOT(   tick( long ) ) );
 	connect( m_media, SIGNAL( length( long ) ), SLOT( length( long ) ) );
 	length( m_media->totalTime() );
-	connect( m_media, SIGNAL( stateChanged( Kdem2m::State, Kdem2m::State ) ),
-			SLOT( stateChanged( Kdem2m::State ) ) );
+	connect( m_media, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ),
+			SLOT( stateChanged( Phonon::State ) ) );
 	connect( m_media, SIGNAL( finished() ), qApp, SLOT( quit() ) );
 }
 

@@ -24,7 +24,7 @@
 #include <kinstance.h>
 #include <kaboutdata.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 class AudioOutput::Private
 {
@@ -43,7 +43,7 @@ class AudioOutput::Private
 		float volume;
 };
 
-KDEM2M_HEIR_IMPL( AudioOutput, AbstractAudioOutput, AbstractAudioOutput )
+PHONON_HEIR_IMPL( AudioOutput, AbstractAudioOutput, AbstractAudioOutput )
 
 QString AudioOutput::name() const
 {
@@ -95,7 +95,7 @@ void AudioOutput::setupIface()
 	m_iface->setVolume( d->volume );
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "audiooutput.moc"
 

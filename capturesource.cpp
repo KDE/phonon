@@ -20,7 +20,7 @@
 #include "capturesource.h"
 #include <QString>
 
-namespace Kdem2m
+namespace Phonon
 {
 class CaptureSource::Private
 {
@@ -84,5 +84,5 @@ const QString& CaptureSource::description() const
 	return d->description;
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 // vim: sw=4 ts=4 noet

@@ -28,7 +28,7 @@
 #include "seekslider.h"
 #include "volumefader.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ui
 {
@@ -118,8 +118,8 @@ void MediaControls::setMediaProducer( AbstractMediaProducer* media )
 
 	d->media = media;
 	connect( d->media, SIGNAL( destroyed() ), SLOT( mediaDestroyed() ) );
-	connect( d->media, SIGNAL( stateChanged( Kdem2m::State, Kdem2m::State ) ),
-		   	SLOT( stateChanged( Kdem2m::State, Kdem2m::State ) ) );
+	connect( d->media, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ),
+		   	SLOT( stateChanged( Phonon::State, Phonon::State ) ) );
 	connect( d->playButton, SIGNAL( clicked() ), d->media, SLOT( play() ) );
 	connect( d->pauseButton, SIGNAL( clicked() ), d->media, SLOT( pause() ) );
 	connect( d->stopButton, SIGNAL( clicked() ), d->media, SLOT( stop() ) );
@@ -151,18 +151,18 @@ void MediaControls::stateChanged( State newstate, State )
 {
 	switch( newstate )
 	{
-		case Kdem2m::LoadingState:
-		case Kdem2m::PausedState:
-		case Kdem2m::StoppedState:
+		case Phonon::LoadingState:
+		case Phonon::PausedState:
+		case Phonon::StoppedState:
 			d->playButton->setEnabled( true );
 			d->pauseButton->setEnabled( false );
 			break;
-		case Kdem2m::BufferingState:
-		case Kdem2m::PlayingState:
+		case Phonon::BufferingState:
+		case Phonon::PlayingState:
 			d->playButton->setEnabled( false );
 			d->pauseButton->setEnabled( true );
 			break;
-		case Kdem2m::ErrorState:
+		case Phonon::ErrorState:
 			return;
 	}
 }
@@ -172,7 +172,7 @@ void MediaControls::mediaDestroyed()
 	d->media = 0;
 }
 
-}} // namespace Kdem2m::Ui
+}} // namespace Phonon::Ui
 
 #include "mediacontrols.moc"
 // vim: sw=4 ts=4 noet

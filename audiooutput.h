@@ -16,27 +16,27 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_AUDIOOUTPUT_H
-#define Kdem2m_AUDIOOUTPUT_H
+#ifndef Phonon_AUDIOOUTPUT_H
+#define Phonon_AUDIOOUTPUT_H
 
 #include "abstractaudiooutput.h"
 #include "mixeriface.h"
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 class QString;
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
 		class AudioOutput;
 	}
 
-	class KDEM2M_EXPORT AudioOutput : public AbstractAudioOutput, public MixerIface
+	class PHONON_EXPORT AudioOutput : public AbstractAudioOutput, public MixerIface
 	{
 		Q_OBJECT
-		KDEM2M_HEIR( AudioOutput, AbstractAudioOutput )
+		PHONON_HEIR( AudioOutput, AbstractAudioOutput )
 		public:
 			// Attributes Getters:
 			QString name() const;
@@ -50,7 +50,7 @@ namespace Kdem2m
 		signals:
 			void volumeChanged( float newVolume );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_AUDIOOUTPUT_H
+#endif // Phonon_AUDIOOUTPUT_H

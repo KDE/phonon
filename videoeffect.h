@@ -16,34 +16,34 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_VIDEOEFFECT_H
-#define Kdem2m_VIDEOEFFECT_H
+#ifndef Phonon_VIDEOEFFECT_H
+#define Phonon_VIDEOEFFECT_H
 
 #include <QObject>
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 class QString;
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
 		class VideoEffect;
 	}
 
-	class KDEM2M_EXPORT VideoEffect : public QObject
+	class PHONON_EXPORT VideoEffect : public QObject
 	{
 		friend class VideoPath;
 		Q_OBJECT
-		KDEM2M_OBJECT( VideoEffect )
+		PHONON_OBJECT( VideoEffect )
 		public:
 			QString type() const;
 
 		public slots:
 			void setType( const QString& );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_VIDEOEFFECT_H
+#endif // Phonon_VIDEOEFFECT_H

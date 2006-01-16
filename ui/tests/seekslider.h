@@ -23,7 +23,7 @@
 #include <QObject>
 
 class QSlider;
-namespace Kdem2m {
+namespace Phonon {
 	class MediaObject;
 	namespace Ui {
 		class SeekSlider;
@@ -39,7 +39,7 @@ class SeekSliderTest : public QObject
 		void testErrorMedia();
 		void cleanupTestCase();
 	private:
-		Kdem2m::Ui::SeekSlider* ss;
+		Phonon::Ui::SeekSlider* ss;
 		QSlider* qslider;
 };
 

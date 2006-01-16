@@ -20,7 +20,7 @@
 #include "ifaces/audioeffect.h"
 #include "factory.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class AudioEffect::Private
 {
@@ -30,7 +30,7 @@ class AudioEffect::Private
 
 		QString type;
 };
-KDEM2M_OBJECT_IMPL( AudioEffect )
+PHONON_OBJECT_IMPL( AudioEffect )
 
 QString AudioEffect::type() const
 {
@@ -60,7 +60,7 @@ void AudioEffect::setupIface()
 	m_iface->setType( d->type );
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "audioeffect.moc"
 

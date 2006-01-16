@@ -21,7 +21,7 @@
 #include "audioeffect.h"
 #include "abstractaudiooutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {

@@ -16,13 +16,13 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_FAKE_ABSTRACTAUDIOOUTPUTBASE_H
-#define Kdem2m_FAKE_ABSTRACTAUDIOOUTPUTBASE_H
+#ifndef Phonon_FAKE_ABSTRACTAUDIOOUTPUTBASE_H
+#define Phonon_FAKE_ABSTRACTAUDIOOUTPUTBASE_H
 
 #include <QObject>
 #include "../../ifaces/abstractaudiooutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -39,7 +39,7 @@ namespace Fake
 
 		private:
 	};
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_FAKE_ABSTRACTAUDIOOUTPUTBASE_H
+#endif // Phonon_FAKE_ABSTRACTAUDIOOUTPUTBASE_H

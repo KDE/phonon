@@ -20,14 +20,14 @@
 #include "ifaces/abstractaudiooutput.h"
 #include "factory.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class AbstractAudioOutput::Private
 {
 	public:
 };
 
-KDEM2M_ABSTRACTBASE_IMPL( AbstractAudioOutput )
+PHONON_ABSTRACTBASE_IMPL( AbstractAudioOutput )
 
 bool AbstractAudioOutput::aboutToDeleteIface()
 {
@@ -42,7 +42,7 @@ void AbstractAudioOutput::setupIface()
 	// set up attributes
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "abstractaudiooutput.moc"
 

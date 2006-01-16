@@ -16,13 +16,13 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_FAKE_BYTESTREAM_H
-#define Kdem2m_FAKE_BYTESTREAM_H
+#ifndef Phonon_FAKE_BYTESTREAM_H
+#define Phonon_FAKE_BYTESTREAM_H
 
 #include "abstractmediaproducer.h"
 #include "../../ifaces/bytestream.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -52,7 +52,7 @@ namespace Fake
 		private:
 			//QTimer* m_decBufferTimer;
 	};
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_FAKE_BYTESTREAM_H
+#endif // Phonon_FAKE_BYTESTREAM_H

@@ -17,8 +17,8 @@
 
 */
 
-#ifndef Kdem2m_IFACES_BACKEND_H
-#define Kdem2m_IFACES_BACKEND_H
+#ifndef Phonon_IFACES_BACKEND_H
+#define Phonon_IFACES_BACKEND_H
 
 #include <QObject>
 #include <kmimetype.h>
@@ -26,7 +26,7 @@
 
 class KURL;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ifaces
 {
@@ -52,7 +52,7 @@ namespace Ifaces
 	 * \author Matthias Kretz <kretz@kde.org>
 	 * \since 4.0
 	 */
-	class KDEM2M_EXPORT Backend : public QObject
+	class PHONON_EXPORT Backend : public QObject
 	{
 		Q_OBJECT
 		public:
@@ -121,7 +121,7 @@ namespace Ifaces
 			class Private;
 			Private * d;
 	};
-}} // namespace Kdem2m::Ifaces
+}} // namespace Phonon::Ifaces
 
 // vim: sw=4 ts=4 noet tw=80
-#endif // Kdem2m_IFACES_BACKEND_H
+#endif // Phonon_IFACES_BACKEND_H

@@ -16,20 +16,20 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_UI_IFACES_VIDEOWIDGET_H
-#define Kdem2m_UI_IFACES_VIDEOWIDGET_H
+#ifndef Phonon_UI_IFACES_VIDEOWIDGET_H
+#define Phonon_UI_IFACES_VIDEOWIDGET_H
 
-#include <kdem2m/ifaces/abstractvideooutput.h>
+#include <phonon/ifaces/abstractvideooutput.h>
 
 class QString;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ui
 {
 namespace Ifaces
 {
-	class VideoWidget : virtual public Kdem2m::Ifaces::AbstractVideoOutput
+	class VideoWidget : virtual public Phonon::Ifaces::AbstractVideoOutput
 	{
 		public:
 			virtual ~VideoWidget() {}
@@ -41,7 +41,7 @@ namespace Ifaces
 			class Private;
 			Private* d;
 	};
-}}} //namespace Kdem2m::Ui::Ifaces
+}}} //namespace Phonon::Ui::Ifaces
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_UI_IFACES_VIDEOWIDGET_H
+#endif // Phonon_UI_IFACES_VIDEOWIDGET_H

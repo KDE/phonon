@@ -17,14 +17,14 @@
 
 */
 
-#ifndef Kdem2m_TEMPLATE_H
-#define Kdem2m_TEMPLATE_H
+#ifndef Phonon_TEMPLATE_H
+#define Phonon_TEMPLATE_H
 
 #include <QObject>
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
@@ -35,12 +35,12 @@ namespace Kdem2m
 	 * \author Matthias Kretz <kretz@kde.org>
 	 * \since 4.0
 	 */
-	class KDEM2M_EXPORT Template : public QObject
+	class PHONON_EXPORT Template : public QObject
 	{
 		Q_OBJECT
-		KDEM2M_OBJECT( Template )
+		PHONON_OBJECT( Template )
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_TEMPLATE_H
+#endif // Phonon_TEMPLATE_H

@@ -22,7 +22,7 @@
 #include <QSlider>
 #include <QHBoxLayout>
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ui
 {
@@ -95,7 +95,7 @@ void VolumeFader::outputDestroyed()
 	d->slider->setEnabled( false );
 }
 
-}} // namespace Kdem2m::Ui
+}} // namespace Phonon::Ui
 
 #include "volumefader.moc"
 // vim: sw=4 ts=4 noet

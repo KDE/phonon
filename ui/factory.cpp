@@ -18,9 +18,9 @@
 */
 
 #include "factory.h"
-#include <kdem2m/ifaces/ui/videowidget.h>
-#include <kdem2m/ifaces/ui/backend.h>
-#include <kdem2m/factory.h>
+#include <phonon/ifaces/ui/videowidget.h>
+#include <phonon/ifaces/ui/backend.h>
+#include <phonon/factory.h>
 
 #include <QFile>
 
@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ui
 {
@@ -44,7 +44,7 @@ class Factory::Private
 
 		void createBackend()
 		{
-			const char* lib = Kdem2m::Factory::self()->uiLibrary();
+			const char* lib = Phonon::Factory::self()->uiLibrary();
 			if( lib == 0 )
 			{
 				KMessageBox::error( 0, i18n( "The current backend does not support any graphical user interface functionality. Choose a different backend if this is not what you want." ) ); //FIXME: Make this error message more usefull: Offer the user a simple way to change the backend
@@ -53,7 +53,7 @@ class Factory::Private
 
 			QStringList errormsg;
 			KLibFactory* factory = 0;
-			const char* symbol = Kdem2m::Factory::self()->uiSymbol();
+			const char* symbol = Phonon::Factory::self()->uiSymbol();
 			if( symbol == 0 )
 				factory = KLibLoader::self()->factory( lib );
 			else
@@ -76,7 +76,7 @@ class Factory::Private
 			}
 			if( factory )
 			{
-				backend = static_cast<Ui::Ifaces::Backend*>( factory->create( 0, "Multimedia Ui Backend", "Kdem2m::Ui::Ifaces::Backend" ) );
+				backend = static_cast<Ui::Ifaces::Backend*>( factory->create( 0, "Multimedia Ui Backend", "Phonon::Ui::Ifaces::Backend" ) );
 				if( 0 == backend )
 				{
 					QString e = i18n( "create method returned 0" );
@@ -108,11 +108,11 @@ Factory* Factory::self()
 	if( !m_self )
 	{
 		m_self = new Factory();
-		Kdem2m::Factory* f = Kdem2m::Factory::self();
+		Phonon::Factory* f = Phonon::Factory::self();
 		connect( f, SIGNAL( deleteYourObjects() ), m_self, SIGNAL( deleteYourObjects() ) );
 		connect( f, SIGNAL( recreateObjects() ), m_self, SIGNAL( recreateObjects() ) );
 		connect( f, SIGNAL( backendChanged() ), m_self, SIGNAL( backendChanged() ) );
-		connect( Kdem2m::Factory::self(), SIGNAL( destroyed( QObject* ) ), m_self, SLOT( deleteNow() ) );
+		connect( Phonon::Factory::self(), SIGNAL( destroyed( QObject* ) ), m_self, SLOT( deleteNow() ) );
 	}
 	return m_self;
 }
@@ -125,7 +125,7 @@ Factory::Factory()
 Factory::~Factory()
 {
 	kdDebug( 600 ) << k_funcinfo << endl;
-	emit deleteYourObjects(); //FIXME: this is probably emitted twice: once through Kdem2m::Factory::~Factory, and the second one from here
+	emit deleteYourObjects(); //FIXME: this is probably emitted twice: once through Phonon::Factory::~Factory, and the second one from here
 	delete d->backend;
 	delete d;
 }
@@ -147,11 +147,11 @@ const Ui::Ifaces::Backend* Factory::backend() const
 
 template<class T> inline T* Factory::registerObject( T* o )
 {
-	Kdem2m::Factory::self()->registerQObject( o->qobject() );
+	Phonon::Factory::self()->registerQObject( o->qobject() );
 	return o;
 }
 
-}} //namespace Kdem2m::Ui
+}} //namespace Phonon::Ui
 
 #include "factory.moc"
 

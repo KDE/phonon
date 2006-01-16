@@ -17,14 +17,14 @@
 
 */
 
-#ifndef KDEM2M_UI_SEEKSLIDER_H
-#define KDEM2M_UI_SEEKSLIDER_H
+#ifndef PHONON_UI_SEEKSLIDER_H
+#define PHONON_UI_SEEKSLIDER_H
 
 #include <QWidget>
 #include <kdelibs_export.h>
 #include "../state.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class AbstractMediaProducer;
 
@@ -37,7 +37,7 @@ namespace Ui
  * \author Matthias Kretz <kretz@kde.org>
  * \since 4.0
  */
-class KDEM2M_EXPORT SeekSlider : public QWidget
+class PHONON_EXPORT SeekSlider : public QWidget
 {
 	Q_OBJECT
 	public:
@@ -48,7 +48,7 @@ class KDEM2M_EXPORT SeekSlider : public QWidget
 		void setMediaProducer( AbstractMediaProducer* );
 
 	private slots:
-		void stateChanged( Kdem2m::State );
+		void stateChanged( Phonon::State );
 		void mediaDestroyed();
 		void seek( int );
 		void tick( long );
@@ -59,7 +59,7 @@ class KDEM2M_EXPORT SeekSlider : public QWidget
 		Private* d;
 };
 
-}} // namespace Kdem2m::Ui
+}} // namespace Phonon::Ui
 
 // vim: sw=4 ts=4 tw=80
-#endif // KDEM2M_UI_SEEKSLIDER_H
+#endif // PHONON_UI_SEEKSLIDER_H

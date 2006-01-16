@@ -20,13 +20,13 @@
 #include "ifaces/bytestream.h"
 #include "factory.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class ByteStream::Private
 {
 };
 
-KDEM2M_HEIR_IMPL( ByteStream, AbstractMediaProducer, AbstractMediaProducer )
+PHONON_HEIR_IMPL( ByteStream, AbstractMediaProducer, AbstractMediaProducer )
 
 bool ByteStream::aboutToDeleteIface()
 {
@@ -41,7 +41,7 @@ void ByteStream::setupIface()
 		return;
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "bytestream.moc"
 

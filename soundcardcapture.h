@@ -16,17 +16,17 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_SOUNDCARDCAPTURE_H
-#define Kdem2m_SOUNDCARDCAPTURE_H
+#ifndef Phonon_SOUNDCARDCAPTURE_H
+#define Phonon_SOUNDCARDCAPTURE_H
 
 #include "abstractmediaproducer.h"
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 class QString;
 class QStringList;
 
-namespace Kdem2m
+namespace Phonon
 {
 	class CaptureSource;
 	namespace Ifaces
@@ -46,10 +46,10 @@ namespace Kdem2m
 	 * @since 4.0
 	 * @see BackendCapabilities::availableSoundcardCaptureSources
 	 */
-	class KDEM2M_EXPORT SoundcardCapture : public AbstractMediaProducer
+	class PHONON_EXPORT SoundcardCapture : public AbstractMediaProducer
 	{
 		Q_OBJECT
-		KDEM2M_HEIR( SoundcardCapture, AbstractMediaProducer )
+		PHONON_HEIR( SoundcardCapture, AbstractMediaProducer )
 		public:
 			/**
 			 * Returns the currently used capture source.
@@ -85,7 +85,7 @@ namespace Kdem2m
 			 */
 			void setCaptureSource( int sourceIndex );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_SOUNDCARDCAPTURE_H
+#endif // Phonon_SOUNDCARDCAPTURE_H

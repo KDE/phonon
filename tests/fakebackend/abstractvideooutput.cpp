@@ -19,7 +19,7 @@
 
 #include "abstractvideooutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -32,7 +32,7 @@ AbstractVideoOutput::~AbstractVideoOutput()
 {
 }
 
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 #include "abstractvideooutput.moc"
 // vim: sw=4 ts=4 noet

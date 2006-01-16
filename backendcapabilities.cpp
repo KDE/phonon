@@ -22,7 +22,7 @@
 #include "factory.h"
 #include "capturesource.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 
 class BackendCapabilities::Private
@@ -103,6 +103,6 @@ void BackendCapabilities::slotBackendChanged()
 	emit capabilitesChanged();
 }
 
-} // namespace Kdem2m
+} // namespace Phonon
 #include "backendcapabilities.moc"
 // vim: sw=4 ts=4 noet

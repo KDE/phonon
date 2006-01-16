@@ -16,8 +16,8 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_FAKE_MEDIAOBJECT_H
-#define Kdem2m_FAKE_MEDIAOBJECT_H
+#ifndef Phonon_FAKE_MEDIAOBJECT_H
+#define Phonon_FAKE_MEDIAOBJECT_H
 
 #include "abstractmediaproducer.h"
 #include "../../ifaces/mediaobject.h"
@@ -25,7 +25,7 @@
 
 class KURL;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -63,7 +63,7 @@ namespace Fake
 			QTimer* m_aboutToFinishTimer;
 			QTimer* m_finishTimer;
 	};
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_FAKE_MEDIAOBJECT_H
+#endif // Phonon_FAKE_MEDIAOBJECT_H

@@ -19,23 +19,23 @@ INCLUDES = -I$(top_srcdir) $(all_includes)
 
 SUBDIRS = . tests
 
-lib_LTLIBRARIES = libkdem2mui.la
+lib_LTLIBRARIES = libphononui.la
 
-kdem2mincludedir = $(includedir)/kdem2m/ui
-kdem2minclude_HEADERS = videowidget.h seekslider.h mediacontrols.h \
+phononincludedir = $(includedir)/phonon/ui
+phononinclude_HEADERS = videowidget.h seekslider.h mediacontrols.h \
 						volumefader.h
 
-libkdem2mui_la_SOURCES = factory.cpp videowidget.cpp videowidgethelper.cpp \
+libphononui_la_SOURCES = factory.cpp videowidget.cpp videowidgethelper.cpp \
 						 seekslider.cpp mediacontrols.cpp volumefader.cpp
-libkdem2mui_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) \
+libphononui_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) \
 			  $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined
-libkdem2mui_la_LIBADD = $(top_builddir)/kdem2m/libkdem2mcore.la $(top_builddir)/kdem2m/ifaces/ui/libkdem2mifacesui.la
+libphononui_la_LIBADD = $(top_builddir)/phonon/libphononcore.la $(top_builddir)/phonon/ifaces/ui/libphononifacesui.la
 
 METASOURCES = AUTO
 
-SRCDOC_DEST=$(kde_htmldir)/en/kdelibs/kdem2m/ui
+SRCDOC_DEST=$(kde_htmldir)/en/kdelibs/phonon/ui
 
-DOXYGEN_REFERENCES = dcop kdecore kio kdem2m
+DOXYGEN_REFERENCES = dcop kdecore kio phonon
 
 include ../../admin/Doxyfile.am
 

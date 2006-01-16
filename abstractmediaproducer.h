@@ -16,18 +16,18 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_ABSTRACTMEDIAPRODUCER_H
-#define Kdem2m_ABSTRACTMEDIAPRODUCER_H
+#ifndef Phonon_ABSTRACTMEDIAPRODUCER_H
+#define Phonon_ABSTRACTMEDIAPRODUCER_H
 
 #include <QObject>
 
 #include <kdelibs_export.h>
 #include "state.h"
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 template<class T> class QList;
 
-namespace Kdem2m
+namespace Phonon
 {
 	class VideoPath;
 	class AudioPath;
@@ -47,10 +47,10 @@ namespace Kdem2m
 	 * @since 4.0
 	 * @see MediaObject
 	 */
-	class KDEM2M_EXPORT AbstractMediaProducer : public QObject
+	class PHONON_EXPORT AbstractMediaProducer : public QObject
 	{
 		Q_OBJECT
-		KDEM2M_ABSTRACTBASE( AbstractMediaProducer )
+		PHONON_ABSTRACTBASE( AbstractMediaProducer )
 		public:
 			/**
 			 * Add a VideoPath to process the video data of this media.
@@ -199,7 +199,7 @@ namespace Kdem2m
 			 * @param newstate The state the Player is in now.
 			 * @param oldstate The state the Player was in before.
 			 */
-			void stateChanged( Kdem2m::State newstate, Kdem2m::State oldstate );
+			void stateChanged( Phonon::State newstate, Phonon::State oldstate );
 
 			/**
 			 * This signal gets emitted every tickInterval milliseconds.
@@ -210,7 +210,7 @@ namespace Kdem2m
 			 */
 			void tick( long time );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_ABSTRACTMEDIAPRODUCER_H
+#endif // Phonon_ABSTRACTMEDIAPRODUCER_H

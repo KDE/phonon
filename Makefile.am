@@ -19,17 +19,17 @@ INCLUDES = -I$(top_srcdir) $(all_includes)
 
 SUBDIRS = . ifaces ui tests
 
-lib_LTLIBRARIES = libkdem2mcore.la
+lib_LTLIBRARIES = libphononcore.la
 
-kdem2mincludedir = $(includedir)/kdem2m
-kdem2minclude_HEADERS = state.h abstractmediaproducer.h mediaobject.h soundcardcapture.h \
+phononincludedir = $(includedir)/phonon
+phononinclude_HEADERS = state.h abstractmediaproducer.h mediaobject.h soundcardcapture.h \
 		       mixeriface.h audiopath.h \
 		       videopath.h audioeffect.h audiooutput.h videoeffect.h \
 		       abstractvideooutput.h abstractaudiooutput.h audiodataoutput.h \
 		       audiofftoutput.h simpleplayer.h bytestream.h \
 			   backendcapabilities.h capturesource.h
 
-libkdem2mcore_la_SOURCES = factory.cpp abstractmediaproducer.cpp mediaobject.cpp \
+libphononcore_la_SOURCES = factory.cpp abstractmediaproducer.cpp mediaobject.cpp \
 			  soundcardcapture.cpp factory.skel \
 			  mixeriface.skel audiopath.cpp videopath.cpp \
 			  audiooutput.cpp abstractvideooutput.cpp \
@@ -38,15 +38,15 @@ libkdem2mcore_la_SOURCES = factory.cpp abstractmediaproducer.cpp mediaobject.cpp
 			  audiofftoutput.cpp simpleplayer.cpp \
 			  backendcapabilities.cpp bytestream.cpp capturesource.cpp
 
-libkdem2mcore_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) \
+libphononcore_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) \
 			  $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined
-libkdem2mcore_la_LIBADD = $(LIB_KIO) ifaces/libkdem2mifaces.la
+libphononcore_la_LIBADD = $(LIB_KIO) ifaces/libphononifaces.la
 
 METASOURCES = AUTO
 
-kde_servicetypes_DATA = kdem2mbackend.desktop
+kde_servicetypes_DATA = phononbackend.desktop
 
-SRCDOC_DEST=$(kde_htmldir)/en/kdelibs/kdem2m
+SRCDOC_DEST=$(kde_htmldir)/en/kdelibs/phonon
 
 DOXYGEN_REFERENCES = dcop kdecore kio
 

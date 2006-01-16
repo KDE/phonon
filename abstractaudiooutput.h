@@ -16,27 +16,27 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_ABSTRACTAUDIOOUTPUTBASE_H
-#define Kdem2m_ABSTRACTAUDIOOUTPUTBASE_H
+#ifndef Phonon_ABSTRACTAUDIOOUTPUTBASE_H
+#define Phonon_ABSTRACTAUDIOOUTPUTBASE_H
 
 #include <QObject>
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
 		class AbstractAudioOutput;
 	}
 
-	class KDEM2M_EXPORT AbstractAudioOutput : public QObject
+	class PHONON_EXPORT AbstractAudioOutput : public QObject
 	{
 		friend class AudioPath;
 		Q_OBJECT
-		KDEM2M_ABSTRACTBASE( AbstractAudioOutput )
+		PHONON_ABSTRACTBASE( AbstractAudioOutput )
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_ABSTRACTAUDIOOUTPUTBASE_H
+#endif // Phonon_ABSTRACTAUDIOOUTPUTBASE_H

@@ -21,13 +21,13 @@
 #include "ifaces/template.h"
 #include "factory.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class Template::Private
 {
 };
 
-KDEM2M_OBJECT_IMPL( Template )
+PHONON_OBJECT_IMPL( Template )
 
 bool Template::aboutToDeleteIface()
 {
@@ -38,7 +38,7 @@ void Template::setupIface()
 {
 }
 
-} // namespace Kdem2m
+} // namespace Phonon
 
 #include "template.moc"
 

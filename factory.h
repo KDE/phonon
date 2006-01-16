@@ -17,8 +17,8 @@
 
 */
 
-#ifndef Kdem2m_FACTORY_H
-#define Kdem2m_FACTORY_H
+#ifndef Phonon_FACTORY_H
+#define Phonon_FACTORY_H
 
 #include <QObject>
 
@@ -35,11 +35,11 @@
  * exchangeable backends to do the "dirty" work.
  *
  * If you want to write a new backend you also find the necessary classes in
- * Kdem2m::Ifaces.
+ * Phonon::Ifaces.
  *
  * \since 4.0
  */
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
@@ -78,7 +78,7 @@ namespace Kdem2m
  * \since 4.0
  * \internal
  */
-class KDEM2M_EXPORT Factory : public QObject, public DCOPObject
+class PHONON_EXPORT Factory : public QObject, public DCOPObject
 {
 	friend void ::KStaticDeleter<Factory>::destructObject();
 
@@ -191,11 +191,11 @@ class KDEM2M_EXPORT Factory : public QObject, public DCOPObject
 	k_dcop:
 		/**
 		 * \internal
-		 * This is called via DCOP when the user changes the Kdem2m Backend.
+		 * This is called via DCOP when the user changes the Phonon Backend.
 		 */
-		void kdem2mBackendChanged();
+		void phononBackendChanged();
 };
-} // namespace Kdem2m
+} // namespace Phonon
 
 #endif // BACKENDFACTORY_H
 // vim: sw=4 ts=4 tw=80 noet

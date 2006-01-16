@@ -16,15 +16,15 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_FAKE_ABSTRACTMEDIAPRODUCER_H
-#define Kdem2m_FAKE_ABSTRACTMEDIAPRODUCER_H
+#ifndef Phonon_FAKE_ABSTRACTMEDIAPRODUCER_H
+#define Phonon_FAKE_ABSTRACTMEDIAPRODUCER_H
 
 #include <QObject>
 #include "../../ifaces/abstractmediaproducer.h"
 
 class QTimer;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -48,7 +48,7 @@ namespace Fake
 			virtual void seek( long time );
 
 		signals:
-			void stateChanged( Kdem2m::State newstate, Kdem2m::State oldstate );
+			void stateChanged( Phonon::State newstate, Phonon::State oldstate );
 			void tick( long time );
 
 		public:
@@ -66,7 +66,7 @@ namespace Fake
 			QTimer* m_tickTimer;
 			long m_fakeTime;
 	};
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_FAKE_ABSTRACTMEDIAPRODUCER_H
+#endif // Phonon_FAKE_ABSTRACTMEDIAPRODUCER_H

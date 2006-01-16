@@ -23,7 +23,7 @@
 #include "audioeffect.h"
 #include "abstractaudiooutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class AudioPath::Private
 {
@@ -35,7 +35,7 @@ class AudioPath::Private
 		int channel;
 };
 
-KDEM2M_OBJECT_IMPL( AudioPath )
+PHONON_OBJECT_IMPL( AudioPath )
 
 int AudioPath::availableChannels() const
 {
@@ -95,7 +95,7 @@ void AudioPath::setupIface()
 	m_iface->selectChannel( d->channel );
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "audiopath.moc"
 

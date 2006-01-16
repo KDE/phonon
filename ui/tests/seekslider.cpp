@@ -24,8 +24,8 @@
 #include "../../mediaobject.h"
 #include <QSlider>
 
-using namespace Kdem2m;
-using namespace Kdem2m::Ui;
+using namespace Phonon;
+using namespace Phonon::Ui;
 
 void SeekSliderTest::initTestCase()
 {
@@ -45,7 +45,7 @@ void SeekSliderTest::testEnabled()
 void SeekSliderTest::testErrorMedia()
 {
 	MediaObject media( "/dev/null", this );
-	QVERIFY( media.state() == Kdem2m::ErrorState );
+	QVERIFY( media.state() == Phonon::ErrorState );
 	ss->setMediaProducer( &media );
 	QVERIFY( !qslider->isEnabled() );
 }

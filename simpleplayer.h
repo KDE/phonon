@@ -17,8 +17,8 @@
 
 */
 
-#ifndef Kdem2m_SIMPLEPLAYER_H
-#define Kdem2m_SIMPLEPLAYER_H
+#ifndef Phonon_SIMPLEPLAYER_H
+#define Phonon_SIMPLEPLAYER_H
 
 #include <QObject>
 #include "state.h"
@@ -26,10 +26,10 @@
 
 class KURL;
 
-namespace Kdem2m
+namespace Phonon
 {
 
-class KDEM2M_EXPORT SimplePlayer : public QObject
+class PHONON_EXPORT SimplePlayer : public QObject
 {
 	Q_OBJECT
 	public:
@@ -54,14 +54,14 @@ class KDEM2M_EXPORT SimplePlayer : public QObject
 		void finished();
 
 	private slots:
-		void stateChanged( Kdem2m::State, Kdem2m::State );
+		void stateChanged( Phonon::State, Phonon::State );
 
 	private:
 		class Private;
 		Private * d;
 };
 
-} //namespace Kdem2m
+} //namespace Phonon
 
-#endif // Kdem2m_SIMPLEPLAYER_H
+#endif // Phonon_SIMPLEPLAYER_H
 // vim: sw=4 ts=4 noet tw=80

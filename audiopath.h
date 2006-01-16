@@ -16,14 +16,14 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_AUDIOPATH_H
-#define Kdem2m_AUDIOPATH_H
+#ifndef Phonon_AUDIOPATH_H
+#define Phonon_AUDIOPATH_H
 
 #include <QObject>
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 	class AudioEffect;
 	class AbstractAudioOutput;
@@ -55,12 +55,12 @@ namespace Kdem2m
 	 * @since 4.0
 	 * @see VideoPath
 	 */
-	class KDEM2M_EXPORT AudioPath : public QObject
+	class PHONON_EXPORT AudioPath : public QObject
 	{
 		friend class AbstractMediaProducer;
 		Q_OBJECT
 		Q_PROPERTY( int channel READ selectedChannel WRITE selectChannel )
-		KDEM2M_OBJECT( AudioPath )
+		PHONON_OBJECT( AudioPath )
 
 		public:
 			/**
@@ -191,7 +191,7 @@ namespace Kdem2m
 			 */
 			bool removeEffect( AudioEffect* effect );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_AUDIOPATH_H
+#endif // Phonon_AUDIOPATH_H

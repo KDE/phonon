@@ -26,7 +26,7 @@
 #include <kinstance.h>
 #include <kaboutdata.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 
 class SimplePlayer::Private
@@ -90,8 +90,8 @@ void SimplePlayer::play( const KURL & url )
 
 	d->url = url;
 
-	connect( d->player, SIGNAL( stateChanged( Kdem2m::State, Kdem2m::State ) ),
-			SLOT( stateChanged( Kdem2m::State, Kdem2m::State ) ) );
+	connect( d->player, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ),
+			SLOT( stateChanged( Phonon::State, Phonon::State ) ) );
 	connect( d->player, SIGNAL( finished() ), SIGNAL( finished() ) );
 
 	if( StoppedState == d->player->state() )

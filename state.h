@@ -16,10 +16,10 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_STATE_H
-#define Kdem2m_STATE_H
+#ifndef Phonon_STATE_H
+#define Phonon_STATE_H
 
-namespace Kdem2m
+namespace Phonon
 {
 	/**
 	 * The state the media producing object is in at the moment.
@@ -60,7 +60,7 @@ namespace Kdem2m
 		ErrorState
 	};
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_STATE_H
+#endif // Phonon_STATE_H

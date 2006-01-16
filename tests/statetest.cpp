@@ -21,7 +21,7 @@
 
 #include <QTimer>
 
-#include <kdem2m/mediaobject.h>
+#include <phonon/mediaobject.h>
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -31,28 +31,28 @@
 #include <cstdlib>
 #include <klocale.h>
 
-using namespace Kdem2m;
+using namespace Phonon;
 
-kdbgstream& operator<<( kdbgstream & stream, const Kdem2m::State state )
+kdbgstream& operator<<( kdbgstream & stream, const Phonon::State state )
 {
 	switch( state )
 	{
-		case Kdem2m::ErrorState:
+		case Phonon::ErrorState:
 			stream << "Error";
 			break;
-		case Kdem2m::LoadingState:
+		case Phonon::LoadingState:
 			stream << "LoadingState";
 			break;
-		case Kdem2m::StoppedState:
+		case Phonon::StoppedState:
 			stream << "StoppedState";
 			break;
-		case Kdem2m::PlayingState:
+		case Phonon::PlayingState:
 			stream << "PlayingState";
 			break;
-		case Kdem2m::BufferingState:
+		case Phonon::BufferingState:
 			stream << "BufferingState";
 			break;
-		case Kdem2m::PausedState:
+		case Phonon::PausedState:
 			stream << "PausedState";
 			break;
 	}
@@ -94,83 +94,83 @@ void StateTester::run()
 
 	kdDebug() << "loading " << *m_url << endl;
 	player = new MediaObject( *m_url, this );
-	connect( player, SIGNAL( stateChanged( Kdem2m::State, Kdem2m::State ) ),
-			SLOT( stateChanged( Kdem2m::State, Kdem2m::State ) ) );
+	connect( player, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ),
+			SLOT( stateChanged( Phonon::State, Phonon::State ) ) );
 	connect( player, SIGNAL( finished() ), kapp, SLOT( quit() ) );
 
-	if( player->state() == Kdem2m::LoadingState )
-		kdDebug() << "wait until Kdem2m finished LoadingState" << endl;
-	else if( player->state() == Kdem2m::StoppedState )
+	if( player->state() == Phonon::LoadingState )
+		kdDebug() << "wait until Phonon finished LoadingState" << endl;
+	else if( player->state() == Phonon::StoppedState )
 		testplaying();
-	else if( player->state() == Kdem2m::ErrorState )
+	else if( player->state() == Phonon::ErrorState )
 	{
 		kdDebug() << "could not load media. exiting." << endl;
 		exit( 0 );
 	}
 }
 
-void StateTester::stateChanged( Kdem2m::State newstate, Kdem2m::State oldstate )
+void StateTester::stateChanged( Phonon::State newstate, Phonon::State oldstate )
 {
 	kdDebug() << "stateChanged( new = " << newstate << ", old = " << oldstate << " )" << endl;
 	switch( oldstate )
 	{
-		case Kdem2m::LoadingState:
+		case Phonon::LoadingState:
 			switch( newstate )
 			{
-				case Kdem2m::ErrorState:
+				case Phonon::ErrorState:
 					return;
-				case Kdem2m::StoppedState:
+				case Phonon::StoppedState:
 					testplaying();
 					return;
 				default:
 					break;
 			}
 			break;
-		case Kdem2m::StoppedState:
+		case Phonon::StoppedState:
 			switch( newstate )
 			{
-				case Kdem2m::PlayingState:
-				case Kdem2m::PausedState:
+				case Phonon::PlayingState:
+				case Phonon::PausedState:
 					return;
 				default:
 					break;
 			}
 			break;
-		case Kdem2m::PlayingState:
+		case Phonon::PlayingState:
 			switch( newstate )
 			{
-				case Kdem2m::BufferingState:
+				case Phonon::BufferingState:
 					//testbuffering();
-				case Kdem2m::PausedState:
-				case Kdem2m::StoppedState:
+				case Phonon::PausedState:
+				case Phonon::StoppedState:
 					return;
 				default:
 					break;
 			}
 			break;
-		case Kdem2m::BufferingState:
+		case Phonon::BufferingState:
 			switch( newstate )
 			{
-				case Kdem2m::PlayingState:
-				case Kdem2m::StoppedState:
-				case Kdem2m::PausedState:
-				case Kdem2m::ErrorState:
+				case Phonon::PlayingState:
+				case Phonon::StoppedState:
+				case Phonon::PausedState:
+				case Phonon::ErrorState:
 					return;
 				default:
 					break;
 			}
 			break;
-		case Kdem2m::PausedState:
+		case Phonon::PausedState:
 			switch( newstate )
 			{
-				case Kdem2m::PlayingState:
-				case Kdem2m::StoppedState:
+				case Phonon::PlayingState:
+				case Phonon::StoppedState:
 					return;
 				default:
 					break;
 			}
 			break;
-		case Kdem2m::ErrorState:
+		case Phonon::ErrorState:
 			break;
 	}
 
@@ -180,30 +180,30 @@ void StateTester::stateChanged( Kdem2m::State newstate, Kdem2m::State oldstate )
 void StateTester::testplaying()
 {
 	player->play();
-	if( player->state() == Kdem2m::StoppedState )
+	if( player->state() == Phonon::StoppedState )
 	{
 		kdDebug() << "could not play media. exiting." << endl;
 		exit( 0 );
 	}
-	else if( player->state() == Kdem2m::PlayingState )
+	else if( player->state() == Phonon::PlayingState )
 	{
 		player->pause();
-		if( player->state() != Kdem2m::PausedState )
+		if( player->state() != Phonon::PausedState )
 			wrongStateChange();
 		player->play();
-		if( player->state() != Kdem2m::PlayingState )
+		if( player->state() != Phonon::PlayingState )
 			wrongStateChange();
 		player->stop();
-		if( player->state() != Kdem2m::StoppedState )
+		if( player->state() != Phonon::StoppedState )
 			wrongStateChange();
 		player->play();
-		if( player->state() != Kdem2m::PlayingState )
+		if( player->state() != Phonon::PlayingState )
 			wrongStateChange();
 		player->pause();
-		if( player->state() != Kdem2m::PausedState )
+		if( player->state() != Phonon::PausedState )
 			wrongStateChange();
 		player->stop();
-		if( player->state() != Kdem2m::StoppedState )
+		if( player->state() != Phonon::StoppedState )
 			wrongStateChange();
 		kdDebug() << "success! playing the last 1/5 of the file now and quit on the finished signal" << endl;
 		player->play();
@@ -225,7 +225,7 @@ static const KCmdLineOptions options[] =
 
 int main( int argc, char ** argv )
 {
-	KAboutData about( "kdem2mtest", "KDE Multimedia Test",
+	KAboutData about( "phonontest", "KDE Multimedia Test",
 			"0.1", "Testprogram",
 			KAboutData::License_LGPL, 0 );
 	about.addAuthor( "Matthias Kretz", 0, "kretz@kde.org" );

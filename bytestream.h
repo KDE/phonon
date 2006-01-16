@@ -16,27 +16,27 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_BYTESTREAM_H
-#define Kdem2m_BYTESTREAM_H
+#ifndef Phonon_BYTESTREAM_H
+#define Phonon_BYTESTREAM_H
 
 #include "abstractmediaproducer.h"
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 class QString;
 class QStringList;
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
 		class ByteStream;
 	}
 
-	class KDEM2M_EXPORT ByteStream : public AbstractMediaProducer
+	class PHONON_EXPORT ByteStream : public AbstractMediaProducer
 	{
 		Q_OBJECT
-		KDEM2M_HEIR( ByteStream, AbstractMediaProducer )
+		PHONON_HEIR( ByteStream, AbstractMediaProducer )
 		public:
 			long totalTime() const;
 			long remainingTime() const;
@@ -51,7 +51,7 @@ namespace Kdem2m
 			void aboutToFinish( long msec );
 			void length( long length );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_BYTESTREAM_H
+#endif // Phonon_BYTESTREAM_H

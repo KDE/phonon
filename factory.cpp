@@ -41,7 +41,7 @@
 #include <kdebug.h>
 #include <kstaticdeleter.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 class Factory::Private
 {
@@ -54,7 +54,7 @@ class Factory::Private
 
 		void createBackend()
 		{
-			KTrader::OfferList offers = KTrader::self()->query( "Kdem2mBackend", "Type == 'Service'" );
+			KTrader::OfferList offers = KTrader::self()->query( "PhononBackend", "Type == 'Service'" );
 			KTrader::OfferListIterator it = offers.begin();
 			KTrader::OfferListIterator end = offers.end();
 			QStringList errormsg;
@@ -64,7 +64,7 @@ class Factory::Private
 				KLibFactory * factory = KLibLoader::self()->factory( QFile::encodeName( ptr->library() ) );
 				if( factory )
 				{
-					backend = ( Ifaces::Backend* )factory->create( 0, "Multimedia Backend", "Kdem2m::Ifaces::Backend" );
+					backend = ( Ifaces::Backend* )factory->create( 0, "Multimedia Backend", "Phonon::Ifaces::Backend" );
 					if( 0 == backend )
 					{
 						QString e = i18n( "create method returned 0" );
@@ -127,10 +127,10 @@ Factory * Factory::self()
 }
 
 Factory::Factory()
-	: DCOPObject( "Kdem2mFactory" )
+	: DCOPObject( "PhononFactory" )
 	, d( new Private )
 {
-	connectDCOPSignal( 0, 0, "kdem2mBackendChanged()", "kdem2mBackendChanged()", false);
+	connectDCOPSignal( 0, 0, "phononBackendChanged()", "phononBackendChanged()", false);
 }
 
 Factory::~Factory()
@@ -146,7 +146,7 @@ Factory::~Factory()
 	delete d;
 }
 
-void Factory::kdem2mBackendChanged()
+void Factory::phononBackendChanged()
 {
 	if( d->backend )
 	{
@@ -312,7 +312,7 @@ void Factory::registerQObject( QObject* o )
 	d->objects.append( o );
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "factory.moc"
 

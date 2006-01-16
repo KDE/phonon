@@ -16,15 +16,15 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_VIDEOWIDGET_H
-#define Kdem2m_VIDEOWIDGET_H
+#ifndef Phonon_VIDEOWIDGET_H
+#define Phonon_VIDEOWIDGET_H
 
 #include <QWidget>
 #include <kdelibs_export.h>
 
 class QString;
 
-namespace Kdem2m
+namespace Phonon
 {
 class AbstractVideoOutput;
 
@@ -50,7 +50,7 @@ namespace Ifaces
 	 * @author Matthias Kretz <kretz@kde.org>
 	 * @since 4.0
 	 */
-	class KDEM2M_EXPORT VideoWidget : public QWidget
+	class PHONON_EXPORT VideoWidget : public QWidget
 	{
 		friend class VideoWidgetHelper;
 		Q_OBJECT
@@ -112,7 +112,7 @@ namespace Ifaces
 			class Private;
 			Private* d;
 	};
-}} //namespace Kdem2m::Ui
+}} //namespace Phonon::Ui
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_VIDEOWIDGET_H
+#endif // Phonon_VIDEOWIDGET_H

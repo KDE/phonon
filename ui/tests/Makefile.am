@@ -16,7 +16,7 @@
 #    Boston, MA 02111-1307, USA.
 
 INCLUDES = -I$(top_srcdir) $(all_includes)
-LDADD = ../libkdem2mui.la -lQtTest_debug
+LDADD = ../libphononui.la -lQtTest_debug
 AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 METASOURCES = AUTO

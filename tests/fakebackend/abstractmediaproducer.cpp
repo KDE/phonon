@@ -22,13 +22,13 @@
 #include "videopath.h"
 #include "audiopath.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
 AbstractMediaProducer::AbstractMediaProducer( QObject* parent )
 	: QObject( parent )
-	, m_state( Kdem2m::LoadingState )
+	, m_state( Phonon::LoadingState )
 	, m_tickTimer( new QTimer( this ) )
 	, m_fakeTime( 0 )
 {
@@ -89,20 +89,20 @@ long AbstractMediaProducer::setTickInterval( long newTickInterval )
 void AbstractMediaProducer::play()
 {
 	m_tickTimer->start();
-	setState( Kdem2m::PlayingState );
+	setState( Phonon::PlayingState );
 }
 
 void AbstractMediaProducer::pause()
 {
 	m_tickTimer->stop();
-	setState( Kdem2m::PausedState );
+	setState( Phonon::PausedState );
 }
 
 void AbstractMediaProducer::stop()
 {
 	m_tickTimer->stop();
 	m_fakeTime = 0;
-	setState( Kdem2m::StoppedState );
+	setState( Phonon::StoppedState );
 }
 
 void AbstractMediaProducer::seek( long time )

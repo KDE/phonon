@@ -22,7 +22,7 @@
 
 #include <QVector>
 
-namespace Kdem2m
+namespace Phonon
 {
 class AudioFftOutput::Private
 {
@@ -34,7 +34,7 @@ class AudioFftOutput::Private
 		int rate;
 };
 
-KDEM2M_HEIR_IMPL( AudioFftOutput, AbstractAudioOutput, AbstractAudioOutput )
+PHONON_HEIR_IMPL( AudioFftOutput, AbstractAudioOutput, AbstractAudioOutput )
 
 QVector<float> AudioFftOutput::fourierTransformedData() const
 {
@@ -92,7 +92,7 @@ void AudioFftOutput::setupIface()
 	m_iface->setRate( d->rate );
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "audiofftoutput.moc"
 

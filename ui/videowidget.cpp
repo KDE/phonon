@@ -21,9 +21,9 @@
 #include "factory.h"
 #include "videowidgethelper.h"
 
-#include <kdem2m/ifaces/ui/videowidget.h>
+#include <phonon/ifaces/ui/videowidget.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ui
 {
@@ -126,7 +126,7 @@ Ui::Ifaces::VideoWidget* VideoWidget::iface()
 	return m_iface;
 }
 
-}} //namespace Kdem2m::Ui
+}} //namespace Phonon::Ui
 
 #include "videowidget.moc"
 

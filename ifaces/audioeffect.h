@@ -16,13 +16,13 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_IFACES_AUDIOEFFECT_H
-#define Kdem2m_IFACES_AUDIOEFFECT_H
+#ifndef Phonon_IFACES_AUDIOEFFECT_H
+#define Phonon_IFACES_AUDIOEFFECT_H
 
 class QString;
 class QStringList;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ifaces
 {
@@ -49,7 +49,7 @@ namespace Ifaces
 			class Private;
 			Private* d;
 	};
-}} //namespace Kdem2m::Ifaces
+}} //namespace Phonon::Ifaces
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_IFACES_AUDIOEFFECT_H
+#endif // Phonon_IFACES_AUDIOEFFECT_H

@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 class MediaObject::Private
 {
@@ -35,7 +35,7 @@ class MediaObject::Private
 		long aboutToFinishTime;
 };
 
-KDEM2M_HEIR_IMPL( MediaObject, AbstractMediaProducer, AbstractMediaProducer )
+PHONON_HEIR_IMPL( MediaObject, AbstractMediaProducer, AbstractMediaProducer )
 
 KURL MediaObject::url() const
 {
@@ -95,7 +95,7 @@ void MediaObject::setupIface()
 
 	// set up attributes
 	m_iface->setUrl( d->url );
-	if( state() == Kdem2m::ErrorState )
+	if( state() == Phonon::ErrorState )
 	{
 		slotDeleteIface();
 		//TODO: at this point MediaObject should try to use an Ifaces::ByteStream
@@ -107,7 +107,7 @@ void MediaObject::setupIface()
 	m_iface->setAboutToFinishTime( d->aboutToFinishTime );
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "mediaobject.moc"
 

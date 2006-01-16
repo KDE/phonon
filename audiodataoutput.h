@@ -16,16 +16,16 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_AUDIODATAOUTPUT_H
-#define Kdem2m_AUDIODATAOUTPUT_H
+#ifndef Phonon_AUDIODATAOUTPUT_H
+#define Phonon_AUDIODATAOUTPUT_H
 
 #include <kdelibs_export.h>
 #include "abstractaudiooutput.h"
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 template<class T> class QVector;
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
@@ -36,10 +36,10 @@ namespace Kdem2m
 	 * @author Matthias Kretz <kretz@kde.org>
 	 * @since 4.0
 	 */
-	class KDEM2M_EXPORT AudioDataOutput : public AbstractAudioOutput
+	class PHONON_EXPORT AudioDataOutput : public AbstractAudioOutput
 	{
 		Q_OBJECT
-		KDEM2M_HEIR( AudioDataOutput, AbstractAudioOutput )
+		PHONON_HEIR( AudioDataOutput, AbstractAudioOutput )
 		public:
 			/**
 			 * @fn AudioDataOutput( QObject* parent = 0 );
@@ -55,7 +55,7 @@ namespace Kdem2m
 		public slots:
 			// Attributes Setters:
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_AUDIODATAOUTPUT_H
+#endif // Phonon_AUDIODATAOUTPUT_H

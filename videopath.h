@@ -16,14 +16,14 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_VIDEOPATH_H
-#define Kdem2m_VIDEOPATH_H
+#ifndef Phonon_VIDEOPATH_H
+#define Phonon_VIDEOPATH_H
 
 #include <QObject>
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 	class VideoEffect;
 	class AbstractVideoOutput;
@@ -33,11 +33,11 @@ namespace Kdem2m
 		class VideoPath;
 	}
 
-	class KDEM2M_EXPORT VideoPath : public QObject
+	class PHONON_EXPORT VideoPath : public QObject
 	{
 		friend class AbstractMediaProducer;
 		Q_OBJECT
-		KDEM2M_OBJECT( VideoPath )
+		PHONON_OBJECT( VideoPath )
 		public:
 			/**
 			 * @fn VideoPath( QObject* parent = 0 );
@@ -48,7 +48,7 @@ namespace Kdem2m
 			bool addOutput( AbstractVideoOutput* videoOutput );
 			bool removeOutput( AbstractVideoOutput* videoOutput );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_VIDEOPATH_H
+#endif // Phonon_VIDEOPATH_H

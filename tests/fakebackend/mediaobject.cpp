@@ -20,7 +20,7 @@
 #include "mediaobject.h"
 #include <QTimer>
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {

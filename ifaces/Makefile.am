@@ -19,17 +19,17 @@ INCLUDES = -I$(top_srcdir) $(all_includes)
 
 SUBDIRS = . ui
 
-lib_LTLIBRARIES = libkdem2mifaces.la
+lib_LTLIBRARIES = libphononifaces.la
 
-kdem2mincludedir = $(includedir)/kdem2m/ifaces
-kdem2minclude_HEADERS = abstractmediaproducer.h mediaobject.h soundcardcapture.h \
+phononincludedir = $(includedir)/phonon/ifaces
+phononinclude_HEADERS = abstractmediaproducer.h mediaobject.h soundcardcapture.h \
 		       audiopath.h backend.h abstractaudiooutput.h \
 		       audiooutput.h audiodataoutput.h audiofftoutput.h \
 		       videopath.h abstractvideooutput.h videoeffect.h audioeffect.h \
 		       bytestream.h
 
-libkdem2mifaces_la_SOURCES = backend.cpp
-libkdem2mifaces_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined
-libkdem2mifaces_la_LIBADD = $(LIB_KDECORE)
+libphononifaces_la_SOURCES = backend.cpp
+libphononifaces_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined
+libphononifaces_la_LIBADD = $(LIB_KDECORE)
 
 METASOURCES = AUTO

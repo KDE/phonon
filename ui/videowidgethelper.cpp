@@ -21,7 +21,7 @@
 #include "../ifaces/ui/videowidget.h"
 #include "factory.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ui
 {
@@ -70,7 +70,7 @@ void VideoWidgetHelper::ifaceDeleted()
 	AbstractVideoOutput::ifaceDeleted();
 }
 
-Kdem2m::Ifaces::AbstractVideoOutput* VideoWidgetHelper::createIface()
+Phonon::Ifaces::AbstractVideoOutput* VideoWidgetHelper::createIface()
 {
 	m_iface = d->videoWidget->iface();
 	return m_iface;
@@ -91,7 +91,7 @@ Ui::Ifaces::VideoWidget* VideoWidgetHelper::iface()
 	return m_iface;
 }
 
-}} //namespace Kdem2m::Ui
+}} //namespace Phonon::Ui
 
 #include "videowidgethelper.moc"
 

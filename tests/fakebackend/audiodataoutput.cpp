@@ -20,7 +20,7 @@
 #include "audiodataoutput.h"
 #include <QVector>
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -48,7 +48,7 @@ int AudioDataOutput::availableSamples() const
 	return 0;
 }
 
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 #include "audiodataoutput.moc"
 // vim: sw=4 ts=4 noet

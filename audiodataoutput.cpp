@@ -20,7 +20,7 @@
 #include "ifaces/audiodataoutput.h"
 #include "factory.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class AudioDataOutput::Private
 {
@@ -31,7 +31,7 @@ class AudioDataOutput::Private
 		int availableSamples;
 };
 
-KDEM2M_HEIR_IMPL( AudioDataOutput, AbstractAudioOutput, AbstractAudioOutput )
+PHONON_HEIR_IMPL( AudioDataOutput, AbstractAudioOutput, AbstractAudioOutput )
 
 void AudioDataOutput::readBuffer( QVector<float>& buffer )
 {
@@ -67,7 +67,7 @@ void AudioDataOutput::setupIface()
 	// set up attributes
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "audiodataoutput.moc"
 

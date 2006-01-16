@@ -17,12 +17,12 @@
 
 */
 
-#ifndef KDEM2M_CAPTURESOURCE_H
-#define KDEM2M_CAPTURESOURCE_H
+#ifndef PHONON_CAPTURESOURCE_H
+#define PHONON_CAPTURESOURCE_H
 
 class QString;
 
-namespace Kdem2m
+namespace Phonon
 {
 /**
  * @short Description for possible SoundcardCapture choices.
@@ -83,6 +83,6 @@ class CaptureSource
 		class Private;
 		Private* d;
 };
-} //namespace Kdem2m
+} //namespace Phonon
 
-#endif // KDEM2M_CAPTURESOURCE_H
+#endif // PHONON_CAPTURESOURCE_H

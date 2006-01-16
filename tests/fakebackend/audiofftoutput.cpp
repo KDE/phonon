@@ -19,7 +19,7 @@
 
 #include "audiofftoutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -58,7 +58,7 @@ int AudioFftOutput::setRate( int newRate )
 	return 0;
 }
 
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 #include "audiofftoutput.moc"
 // vim: sw=4 ts=4 noet

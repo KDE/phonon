@@ -16,14 +16,14 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_FAKE_VIDEOPATH_H
-#define Kdem2m_FAKE_VIDEOPATH_H
+#ifndef Phonon_FAKE_VIDEOPATH_H
+#define Phonon_FAKE_VIDEOPATH_H
 
 #include <QObject>
 #include <../../ifaces/videopath.h>
 #include <QList>
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -51,7 +51,7 @@ namespace Fake
 			QList<VideoEffect*> m_effects;
 			QList<AbstractVideoOutput*> m_outputs;
 	};
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_FAKE_VIDEOPATH_H
+#endif // Phonon_FAKE_VIDEOPATH_H

@@ -24,7 +24,7 @@
 
 int main( int argc, char ** argv )
 {
-	KAboutData about( "kdem2mtest", "KDE Multimedia Test",
+	KAboutData about( "phonontest", "KDE Multimedia Test",
 			"0.2", "Testprogram",
 			KAboutData::License_LGPL, 0 );
 	about.addAuthor( "Matthias Kretz", 0, "kretz@kde.org" );

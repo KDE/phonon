@@ -19,7 +19,7 @@
 
 #include "videoeffect.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -42,7 +42,7 @@ void VideoEffect::setType( const QString& type )
 	m_type = type;
 }
 
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 #include "videoeffect.moc"
 // vim: sw=4 ts=4 noet

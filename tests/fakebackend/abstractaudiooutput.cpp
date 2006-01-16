@@ -19,7 +19,7 @@
 
 #include "abstractaudiooutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -32,7 +32,7 @@ AbstractAudioOutput::~AbstractAudioOutput()
 {
 }
 
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 #include "abstractaudiooutput.moc"
 // vim: sw=4 ts=4 noet

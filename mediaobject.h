@@ -16,17 +16,17 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_MEDIAOBJECT_H
-#define Kdem2m_MEDIAOBJECT_H
+#ifndef Phonon_MEDIAOBJECT_H
+#define Phonon_MEDIAOBJECT_H
 
 #include "abstractmediaproducer.h"
 #include <kmimetype.h>
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 class KURL;
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
@@ -51,10 +51,10 @@ namespace Kdem2m
 	 * \author Matthias Kretz <kretz@kde.org>
 	 * \since 4.0
 	 */
-	class KDEM2M_EXPORT MediaObject : public AbstractMediaProducer
+	class PHONON_EXPORT MediaObject : public AbstractMediaProducer
 	{
 		Q_OBJECT
-		KDEM2M_HEIR( MediaObject, AbstractMediaProducer )
+		PHONON_HEIR( MediaObject, AbstractMediaProducer )
 		public:
 			/**
 			 * Get the URL the MediaObject should use as media data source.
@@ -140,7 +140,7 @@ namespace Kdem2m
 			 */
 			void length( long length );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_MEDIAOBJECT_H
+#endif // Phonon_MEDIAOBJECT_H

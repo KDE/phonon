@@ -16,14 +16,14 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_FAKE_AUDIOPATH_H
-#define Kdem2m_FAKE_AUDIOPATH_H
+#ifndef Phonon_FAKE_AUDIOPATH_H
+#define Phonon_FAKE_AUDIOPATH_H
 
 #include <QObject>
 #include "../../ifaces/audiopath.h"
 #include <QList>
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -55,7 +55,7 @@ namespace Fake
 			QList<AudioEffect*> m_effects;
 			QList<AbstractAudioOutput*> m_outputs;
 	};
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_FAKE_AUDIOPATH_H
+#endif // Phonon_FAKE_AUDIOPATH_H

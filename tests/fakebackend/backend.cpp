@@ -29,7 +29,7 @@
 #include "videopath.h"
 #include "videoeffect.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -166,7 +166,7 @@ const QStringList& Backend::availableVideoEffects() const
 
 const char* Backend::uiLibrary() const
 {
-	return "kdem2m_fakeui";
+	return "phonon_fakeui";
 }
 
 }}

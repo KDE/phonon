@@ -21,7 +21,7 @@
 #include "videoeffect.h"
 #include "abstractvideooutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {

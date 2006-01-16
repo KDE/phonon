@@ -19,7 +19,7 @@
 
 #include "audiooutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -55,7 +55,7 @@ float AudioOutput::setVolume( float newVolume )
 	return m_volume;
 }
 
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 #include "audiooutput.moc"
 // vim: sw=4 ts=4 noet

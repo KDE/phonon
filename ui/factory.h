@@ -17,15 +17,15 @@
 
 */
 
-#ifndef Kdem2m_Ui_FACTORY_H
-#define Kdem2m_Ui_FACTORY_H
+#ifndef Phonon_Ui_FACTORY_H
+#define Phonon_Ui_FACTORY_H
 
 #include <QObject>
 #include <kdelibs_export.h>
 
 class KURL;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ui
 {
@@ -49,7 +49,7 @@ namespace Ifaces
  * \since 4.0
  * \internal
  */
-class KDEM2M_EXPORT Factory : public QObject
+class PHONON_EXPORT Factory : public QObject
 {
 	Q_OBJECT
 	public:
@@ -98,7 +98,7 @@ class KDEM2M_EXPORT Factory : public QObject
 		class Private;
 		Private * d;
 };
-}} // namespace Kdem2m::Ui
+}} // namespace Phonon::Ui
 
-#endif // Kdem2m_Ui_FACTORY_H
+#endif // Phonon_Ui_FACTORY_H
 // vim: sw=4 ts=4 tw=80 noet

@@ -16,13 +16,13 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_FAKE_AUDIOEFFECT_H
-#define Kdem2m_FAKE_AUDIOEFFECT_H
+#ifndef Phonon_FAKE_AUDIOEFFECT_H
+#define Phonon_FAKE_AUDIOEFFECT_H
 
 #include <QObject>
 #include "../../ifaces/audioeffect.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -50,7 +50,7 @@ namespace Fake
 		private:
 			QString m_type;
 	};
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_FAKE_AUDIOEFFECT_H
+#endif // Phonon_FAKE_AUDIOEFFECT_H

@@ -22,7 +22,7 @@
 #include <QSlider>
 #include <QHBoxLayout>
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ui
 {
@@ -63,8 +63,8 @@ void SeekSlider::setMediaProducer( AbstractMediaProducer* media )
 		return;
 
 	d->media = media;
-	connect( media, SIGNAL( stateChanged( Kdem2m::State, Kdem2m::State ) ),
-			SLOT( stateChanged( Kdem2m::State ) ) );
+	connect( media, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ),
+			SLOT( stateChanged( Phonon::State ) ) );
 	connect( d->slider, SIGNAL( valueChanged( int ) ), SLOT( seek( int ) ) );
 	connect( media, SIGNAL( length( long ) ), SLOT( length( long ) ) );
 	connect( media, SIGNAL( tick( long ) ), SLOT( tick( long ) ) );
@@ -93,13 +93,13 @@ void SeekSlider::stateChanged( State newstate )
 {
 	switch( newstate )
 	{
-		case Kdem2m::BufferingState:
-		case Kdem2m::PlayingState:
+		case Phonon::BufferingState:
+		case Phonon::PlayingState:
 			d->slider->setEnabled( true );
-		case Kdem2m::PausedState:
-		case Kdem2m::StoppedState:
-		case Kdem2m::LoadingState:
-		case Kdem2m::ErrorState:
+		case Phonon::PausedState:
+		case Phonon::StoppedState:
+		case Phonon::LoadingState:
+		case Phonon::ErrorState:
 			d->slider->setEnabled( false );
 	}
 }
@@ -110,7 +110,7 @@ void SeekSlider::mediaDestroyed()
 	d->slider->setEnabled( false );
 }
 
-}} // namespace Kdem2m::Ui
+}} // namespace Phonon::Ui
 
 #include "seekslider.moc"
 // vim: sw=4 ts=4 noet

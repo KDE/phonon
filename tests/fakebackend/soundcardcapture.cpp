@@ -19,7 +19,7 @@
 
 #include "soundcardcapture.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -43,7 +43,7 @@ int SoundcardCapture::setCaptureSource( int index )
 	return 1;
 }
 
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 #include "soundcardcapture.moc"
 // vim: sw=4 ts=4 noet

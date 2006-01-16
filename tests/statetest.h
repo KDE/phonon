@@ -22,11 +22,11 @@
 
 #include <QObject>
 
-#include <kdem2m/state.h>
+#include <phonon/state.h>
 
 class KURL;
 
-namespace Kdem2m
+namespace Phonon
 {
 	class MediaObject;
 }
@@ -41,13 +41,13 @@ class StateTester : public QObject
 		void run();
 
 	private slots:
-		void stateChanged( Kdem2m::State, Kdem2m::State );
+		void stateChanged( Phonon::State, Phonon::State );
 
 	private:
 		void testplaying();
 		void wrongStateChange();
 
-		Kdem2m::MediaObject* player;
+		Phonon::MediaObject* player;
 		KURL* m_url;
 };
 

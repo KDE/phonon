@@ -23,7 +23,7 @@
 #include "videoeffect.h"
 #include "abstractvideooutput.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class VideoPath::Private
 {
@@ -33,7 +33,7 @@ class VideoPath::Private
 
 };
 
-KDEM2M_OBJECT_IMPL( VideoPath )
+PHONON_OBJECT_IMPL( VideoPath )
 
 bool VideoPath::insertEffect( VideoEffect* newEffect, VideoEffect* insertBefore )
 {
@@ -63,7 +63,7 @@ void VideoPath::setupIface()
 	// set up attributes
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "videopath.moc"
 

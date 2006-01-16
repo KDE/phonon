@@ -16,29 +16,29 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_ABSTRACTVIDEOOUTPUTBASE_H
-#define Kdem2m_ABSTRACTVIDEOOUTPUTBASE_H
+#ifndef Phonon_ABSTRACTVIDEOOUTPUTBASE_H
+#define Phonon_ABSTRACTVIDEOOUTPUTBASE_H
 
 #include <QObject>
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 class QString;
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
 		class AbstractVideoOutput;
 	}
 
-	class KDEM2M_EXPORT AbstractVideoOutput : public QObject
+	class PHONON_EXPORT AbstractVideoOutput : public QObject
 	{
 		friend class VideoPath;
 		Q_OBJECT
-		KDEM2M_ABSTRACTBASE( AbstractVideoOutput )
+		PHONON_ABSTRACTBASE( AbstractVideoOutput )
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_ABSTRACTVIDEOOUTPUTBASE_H
+#endif // Phonon_ABSTRACTVIDEOOUTPUTBASE_H

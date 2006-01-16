@@ -16,16 +16,16 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_AUDIOFFTOUTPUT_H
-#define Kdem2m_AUDIOFFTOUTPUT_H
+#ifndef Phonon_AUDIOFFTOUTPUT_H
+#define Phonon_AUDIOFFTOUTPUT_H
 
 #include "abstractaudiooutput.h"
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 template<class T> class QVector;
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
@@ -41,12 +41,12 @@ namespace Kdem2m
 	 * @author Matthias Kretz <kretz@kde.org>
 	 * @since 4.0
 	 */
-	class KDEM2M_EXPORT AudioFftOutput : public AbstractAudioOutput
+	class PHONON_EXPORT AudioFftOutput : public AbstractAudioOutput
 	{
 		Q_OBJECT
 		Q_PROPERTY( int rate READ rate WRITE setRate )
 		Q_PROPERTY( int bandwidth READ bandwidth WRITE setBandwidth )
-		KDEM2M_HEIR( AudioFftOutput, AbstractAudioOutput )
+		PHONON_HEIR( AudioFftOutput, AbstractAudioOutput )
 
 		public:
 			/**
@@ -120,7 +120,7 @@ namespace Kdem2m
 			 */
 			void fourierTransformedData( const QVector<float>& spectrum );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_AUDIOFFTOUTPUT_H
+#endif // Phonon_AUDIOFFTOUTPUT_H

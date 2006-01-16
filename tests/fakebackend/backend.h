@@ -17,14 +17,14 @@
 
 */
 
-#ifndef Kdem2m_FAKE_BACKEND_H
-#define Kdem2m_FAKE_BACKEND_H
+#ifndef Phonon_FAKE_BACKEND_H
+#define Phonon_FAKE_BACKEND_H
 
 #include "../../ifaces/backend.h"
 
 class KURL;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ifaces
 {
@@ -44,7 +44,7 @@ namespace Ifaces
 namespace Fake
 {
 
-	class KDEM2M_EXPORT Backend : public Ifaces::Backend
+	class PHONON_EXPORT Backend : public Ifaces::Backend
 	{
 		Q_OBJECT
 		public:
@@ -113,7 +113,7 @@ namespace Fake
 			KMimeType::List m_supportedMimeTypes;
 			QStringList m_audioEffects, m_videoEffects;
 	};
-}} // namespace Kdem2m::Ifaces
+}} // namespace Phonon::Ifaces
 
 // vim: sw=4 ts=4 noet tw=80
-#endif // Kdem2m_FAKE_BACKEND_H
+#endif // Phonon_FAKE_BACKEND_H

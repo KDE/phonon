@@ -17,14 +17,14 @@
 
 */
 
-#ifndef KDEM2M_UI_MEDIACONTROLS_H
-#define KDEM2M_UI_MEDIACONTROLS_H
+#ifndef PHONON_UI_MEDIACONTROLS_H
+#define PHONON_UI_MEDIACONTROLS_H
 
 #include <QWidget>
 #include <kdelibs_export.h>
 #include "../state.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 class AbstractMediaProducer;
 class AudioOutput;
@@ -43,7 +43,7 @@ namespace Ui
  * \author Matthias Kretz <kretz@kde.org>
  * \since 4.0
  */
-class KDEM2M_EXPORT MediaControls : public QWidget
+class PHONON_EXPORT MediaControls : public QWidget
 {
 	Q_OBJECT
 	public:
@@ -62,7 +62,7 @@ class KDEM2M_EXPORT MediaControls : public QWidget
 		void setLoopControlVisible( bool );
 
 	private slots:
-		void stateChanged( Kdem2m::State, Kdem2m::State );
+		void stateChanged( Phonon::State, Phonon::State );
 		void mediaDestroyed();
 
 	private:
@@ -70,7 +70,7 @@ class KDEM2M_EXPORT MediaControls : public QWidget
 		Private* d;
 };
 
-}} // namespace Kdem2m::Ui
+}} // namespace Phonon::Ui
 
 // vim: sw=4 ts=4 tw=80
-#endif // KDEM2M_UI_MEDIACONTROLS_H
+#endif // PHONON_UI_MEDIACONTROLS_H

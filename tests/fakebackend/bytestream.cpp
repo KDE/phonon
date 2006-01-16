@@ -19,7 +19,7 @@
 
 #include "bytestream.h"
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Fake
 {
@@ -48,7 +48,7 @@ void ByteStream::toBeWritten()
 		signals:
 			void bufferUnderrun();
 			*/
-}} //namespace Kdem2m::Fake
+}} //namespace Phonon::Fake
 
 #include "bytestream.moc"
 // vim: sw=4 ts=4 noet

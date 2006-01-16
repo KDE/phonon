@@ -28,13 +28,13 @@
 
 #include <kdebug.h>
 
-namespace Kdem2m
+namespace Phonon
 {
 class AbstractMediaProducer::Private
 {
 	public:
 		Private()
-			: state( Kdem2m::LoadingState )
+			: state( Phonon::LoadingState )
 			, currentTime( 0 )
 			, tickInterval( 0 )
 		{ }
@@ -46,7 +46,7 @@ class AbstractMediaProducer::Private
 		QList<AudioPath*> audioPaths;
 };
 
-KDEM2M_ABSTRACTBASE_IMPL( AbstractMediaProducer )
+PHONON_ABSTRACTBASE_IMPL( AbstractMediaProducer )
 
 bool AbstractMediaProducer::addVideoPath( VideoPath* videoPath )
 {
@@ -149,7 +149,7 @@ void AbstractMediaProducer::setupIface()
 	if( !m_iface )
 		return;
 
-	connect( m_iface->qobject(), SIGNAL( stateChanged( Kdem2m::State, Kdem2m::State ) ), SIGNAL( stateChanged( Kdem2m::State, Kdem2m::State ) ) );
+	connect( m_iface->qobject(), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ) );
 	connect( m_iface->qobject(), SIGNAL( tick( long ) ), SIGNAL( tick( long ) ) );
 
 	// set up attributes
@@ -183,7 +183,7 @@ void AbstractMediaProducer::setupIface()
 	d->state = m_iface->state();
 }
 
-} //namespace Kdem2m
+} //namespace Phonon
 
 #include "abstractmediaproducer.moc"
 

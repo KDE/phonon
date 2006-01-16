@@ -16,17 +16,17 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_AUDIOEFFECT_H
-#define Kdem2m_AUDIOEFFECT_H
+#ifndef Phonon_AUDIOEFFECT_H
+#define Phonon_AUDIOEFFECT_H
 
 #include <QObject>
 #include <kdelibs_export.h>
-#include "kdem2mdefs.h"
+#include "phonondefs.h"
 
 class QString;
 class QStringList;
 
-namespace Kdem2m
+namespace Phonon
 {
 	namespace Ifaces
 	{
@@ -37,18 +37,18 @@ namespace Kdem2m
 	 * @author Matthias Kretz <kretz@kde.org>
 	 * @since 4.0
 	 */
-	class KDEM2M_EXPORT AudioEffect : public QObject
+	class PHONON_EXPORT AudioEffect : public QObject
 	{
 		friend class AudioPath;
 		Q_OBJECT
-		KDEM2M_OBJECT( AudioEffect )
+		PHONON_OBJECT( AudioEffect )
 		public:
 			QString type() const;
 
 		public slots:
 			void setType( const QString& );
 	};
-} //namespace Kdem2m
+} //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_AUDIOEFFECT_H
+#endif // Phonon_AUDIOEFFECT_H

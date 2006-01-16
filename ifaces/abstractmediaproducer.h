@@ -16,15 +16,15 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Kdem2m_IFACES_ABSTRACTMEDIAPRODUCER_H
-#define Kdem2m_IFACES_ABSTRACTMEDIAPRODUCER_H
+#ifndef Phonon_IFACES_ABSTRACTMEDIAPRODUCER_H
+#define Phonon_IFACES_ABSTRACTMEDIAPRODUCER_H
 
-#include "kdem2m/state.h"
+#include "phonon/state.h"
 
 class QObject;
 template<class T> class QList;
 
-namespace Kdem2m
+namespace Phonon
 {
 namespace Ifaces
 {
@@ -119,7 +119,7 @@ namespace Ifaces
 			 * @param newstate The state the Player is in now.
 			 * @param oldstate The state the Player was in before.
 			 */
-			virtual void stateChanged( Kdem2m::State newstate, Kdem2m::State oldstate ) = 0;
+			virtual void stateChanged( Phonon::State newstate, Phonon::State oldstate ) = 0;
 			/**
 			 * This signal gets emitted every tickInterval milliseconds.
 			 *
@@ -137,7 +137,7 @@ namespace Ifaces
 			class Private;
 			Private* d;
 	};
-}} //namespace Kdem2m::Ifaces
+}} //namespace Phonon::Ifaces
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Kdem2m_IFACES_ABSTRACTMEDIAPRODUCER_H
+#endif // Phonon_IFACES_ABSTRACTMEDIAPRODUCER_H

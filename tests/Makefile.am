@@ -24,8 +24,8 @@ check_PROGRAMS = statetest guitest
 
 guitest_SOURCES = main.cpp testwidget.cpp
 guitest_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-guitest_LDADD   = $(LIB_KPARTS) $(top_builddir)/kdem2m/libkdem2mcore.la $(top_builddir)/kdem2m/ui/libkdem2mui.la
+guitest_LDADD   = $(LIB_KPARTS) $(top_builddir)/phonon/libphononcore.la $(top_builddir)/phonon/ui/libphononui.la
 
 statetest_SOURCES = statetest.cpp
 statetest_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-statetest_LDADD   = $(top_builddir)/kdem2m/libkdem2mcore.la
+statetest_LDADD   = $(top_builddir)/phonon/libphononcore.la

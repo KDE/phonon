@@ -21,13 +21,13 @@
 #define TESTWIDGET_H
 
 #include <QWidget>
-#include <kdem2m/state.h>
+#include <phonon/state.h>
 
 class QSlider;
 class QLabel;
 class QString;
 class QPushButton;
-namespace Kdem2m
+namespace Phonon
 {
 	class MediaObject;
 	class AudioPath;
@@ -40,7 +40,7 @@ namespace Kdem2m
 	}
 }
 
-using namespace Kdem2m;
+using namespace Phonon;
 
 class TestWidget : public QWidget
 {
@@ -51,7 +51,7 @@ class TestWidget : public QWidget
 		void volchanged( int );
 		void slotVolumeChanged( float );
 		void tick( long );
-		void stateChanged( Kdem2m::State );
+		void stateChanged( Phonon::State );
 		void seek( int );
 		void length( long );
 		void loadFile( const QString& );
