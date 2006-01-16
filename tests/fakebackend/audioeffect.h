@@ -1,0 +1,56 @@
+/*  This file is part of the KDE project
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+
+*/
+#ifndef Kdem2m_FAKE_AUDIOEFFECT_H
+#define Kdem2m_FAKE_AUDIOEFFECT_H
+
+#include <QObject>
+#include "../../ifaces/audioeffect.h"
+
+namespace Kdem2m
+{
+namespace Fake
+{
+	/**
+	 * \author Matthias Kretz <kretz@kde.org>
+	 * \since 4.0
+	 */
+	class AudioEffect : public QObject, virtual public Ifaces::AudioEffect
+	{
+		Q_OBJECT
+		public:
+			AudioEffect( QObject* parent );
+			virtual ~AudioEffect();
+
+			// Attributes Getters:
+			virtual QString type() const;
+
+			// Attributes Setters:
+			virtual void setType( const QString& type );
+
+		public:
+			virtual QObject* qobject() { return this; }
+			virtual const QObject* qobject() const { return this; }
+
+		private:
+			QString m_type;
+	};
+}} //namespace Kdem2m::Fake
+
+// vim: sw=4 ts=4 tw=80 noet
+#endif // Kdem2m_FAKE_AUDIOEFFECT_H

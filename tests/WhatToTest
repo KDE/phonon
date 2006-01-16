@@ -1,0 +1,22 @@
+b = AudioFftOutput::setBandwidth( a );
+QVERIFY( b <= a );
+QVERIFY( b == AudioFftOutput::bandwidth() );
+
+--------------
+
+AudioFftOutput::setRate( a );
+QVERIFY( a == AudioFftOutput::rate() );
+
+--------------
+
+create audio/video output, add to a path and delete the output, check whether
+the output cleanly gets removed from the path
+
+--------------
+
+create audio/video effect, add to a path and delete the effect, check whether
+the effect cleanly gets removed from the path
+
+--------------
+
+QVERIFY(Backend::captureSourceCount() >= 0)
