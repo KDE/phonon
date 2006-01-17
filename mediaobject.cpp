@@ -69,7 +69,7 @@ void MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
 {
 	kdDebug( 600 ) << k_funcinfo << endl;
 	if( m_iface )
-		d->aboutToFinishTime = m_iface->setAboutToFinishTime( newAboutToFinishTime );
+		m_iface->setAboutToFinishTime( newAboutToFinishTime );
 	else
 		d->aboutToFinishTime = newAboutToFinishTime;
 }

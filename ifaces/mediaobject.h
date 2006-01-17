@@ -60,7 +60,7 @@ namespace Ifaces
 
 			// Attributes Setters:
 			virtual void setUrl( const KURL& url ) = 0;
-			virtual long setAboutToFinishTime( long newAboutToFinishTime ) = 0;
+			virtual void setAboutToFinishTime( long newAboutToFinishTime ) = 0;
 
 		protected:
 		//signals:
