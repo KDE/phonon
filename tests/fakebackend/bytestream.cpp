@@ -39,6 +39,7 @@ ByteStream::ByteStream( QObject* parent )
 	, m_streamConsumeTimer( new QTimer( this ) )
 {
 	connect( m_streamConsumeTimer, SIGNAL( timeout() ), SLOT( consumeStream() ) );
+	setState( Phonon::LoadingState );
 }
 
 ByteStream::~ByteStream()
@@ -81,6 +82,11 @@ void ByteStream::writeData( const QByteArray& data )
 {
 	Q_ASSERT( ! m_eof );
 	m_bufferSize += data.size();
+	if( m_bufferSize > 50 / 3 * 1000 )
+		if( state() == Phonon::BufferingState )
+			setState( Phonon::PlayingState );
+		else if( state() == Phonon::LoadingState )
+			setState( Phonon::StoppedState );
 }
 
 void ByteStream::setStreamSize( long s )
@@ -92,6 +98,10 @@ void ByteStream::setStreamSize( long s )
 void ByteStream::endOfData()
 {
 	m_eof = true;
+	if( state() == Phonon::BufferingState )
+		setState( Phonon::PlayingState );
+	else if( state() == Phonon::LoadingState )
+		setState( Phonon::StoppedState );
 }
 
 void ByteStream::setAboutToFinishTime( long t )
@@ -101,18 +111,29 @@ void ByteStream::setAboutToFinishTime( long t )
 
 void ByteStream::play()
 {
-	m_streamConsumeTimer->start( 300 );
 	AbstractMediaProducer::play();
+	m_streamConsumeTimer->start( 300 );
+	if( state() == Phonon::LoadingState )
+	{
+		setState( Phonon::BufferingState );
+		return;
+	}
 }
 
 void ByteStream::pause()
 {
+	if( state() == Phonon::LoadingState )
+		return;
+
 	AbstractMediaProducer::pause();
 	m_streamConsumeTimer->stop();
 }
 
 void ByteStream::stop()
 {
+	if( state() == Phonon::LoadingState )
+		return;
+
 	AbstractMediaProducer::stop();
 	m_streamConsumeTimer->stop();
 }
@@ -146,6 +167,17 @@ void ByteStream::seek( long time )
 
 void ByteStream::consumeStream()
 {
+	switch( state() )
+	{
+		case Phonon::LoadingState:
+		case Phonon::BufferingState:
+		case Phonon::ErrorState:
+		case Phonon::PausedState:
+		case Phonon::StoppedState:
+			return;
+		case Phonon::PlayingState:
+			break;
+	}
 	long bytes = m_streamConsumeTimer->interval() * 50 / 3;
 	if( m_bufferSize < bytes )
 	{
