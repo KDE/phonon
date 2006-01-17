@@ -54,6 +54,7 @@ namespace Phonon
 			 */
 			bool streamSeekable() const;
 
+		public slots:
 			/**
 			 * Tell the object whether you will support seeking in the
 			 * datastream. If you do, you have to react to the seekStream
@@ -68,7 +69,6 @@ namespace Phonon
 			 */
 			void setStreamSeekable( bool seekable );
 
-		public slots:
 			void writeData( const QByteArray& data );
 
 			/**

@@ -33,21 +33,35 @@ namespace Ifaces
 		public:
 			virtual ~ByteStream() {}
 
-			//virtual void writeBuffer( const QByteArray& buffer ) = 0;
+			virtual long totalTime() const = 0;
+			virtual long remainingTime() const = 0;
+			virtual long aboutToFinishTime() const = 0;
+			virtual long streamSize() const = 0;
+			virtual bool streamSeekable() const = 0;
+
+			virtual void setStreamSeekable( bool ) = 0;
+			virtual void writeData( const QByteArray& data ) = 0;
+
+			/**
+			 * Sets the total number of bytes that will be streamed via
+			 * writeData
+			 */
+			virtual void setStreamSize( long ) = 0;
 
 			/**
 			 * Called when there will be no more calls to writeBuffer
 			 */
-			//virtual void endOfData() = 0;
+			virtual void endOfData() = 0;
 
-			/**
-			 * Sets the total number of bytes that will be streamed via
-			 * writeBuffer
-			 */
-			//virtual void toBeWritten() = 0;
+			virtual void setAboutToFinishTime( long ) = 0;
 
 		protected: //signals
-			//virtual void bufferUnderrun() = 0;
+			virtual void finished() = 0;
+			virtual void aboutToFinish( long ) = 0;
+			virtual void length( long ) = 0;
+			virtual void needData() = 0;
+			virtual void enoughData() = 0;
+			virtual void seekStream( long ) = 0;
 
 		private:
 			class Private;
