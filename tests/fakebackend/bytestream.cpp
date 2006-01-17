@@ -18,6 +18,13 @@
 */
 
 #include "bytestream.h"
+#include <QTimer>
+
+/* Fake bytestream:
+ * Tries to reach a ratio of 4MB = 4min
+ * => 4 000 000 Byte = 240 000 msec
+ * => 50 Byte = 3 msec
+ */
 
 namespace Phonon
 {
@@ -25,29 +32,159 @@ namespace Fake
 {
 ByteStream::ByteStream( QObject* parent )
 	: AbstractMediaProducer( parent )
+	, m_bufferSize( 0 )
+	, m_streamPosition( 0 )
+	, m_eof( false )
+	, m_aboutToFinishEmitted( false )
+	, m_streamConsumeTimer( new QTimer( this ) )
 {
+	connect( m_streamConsumeTimer, SIGNAL( timeout() ), SLOT( consumeStream() ) );
 }
 
 ByteStream::~ByteStream()
 {
 }
 
-/*
-void ByteStream::writeBuffer( const QByteArray& buffer )
+long ByteStream::currentTime() const
 {
+	return m_streamPosition * 3 / 50;
+}
+
+long ByteStream::totalTime() const
+{
+	if( m_streamSize >= 0 )
+		return m_streamSize * 3 / 50;
+	return 1000*60*3; // 3 minutes
+}
+
+long ByteStream::aboutToFinishTime() const
+{
+	return m_aboutToFinishBytes * 3 / 50;
+}
+
+long ByteStream::streamSize() const
+{
+	return m_streamSize;
+}
+
+bool ByteStream::streamSeekable() const
+{
+	return m_streamSeekable;
+}
+
+void ByteStream::setStreamSeekable( bool s )
+{
+	m_streamSeekable = s;
+}
+
+void ByteStream::writeData( const QByteArray& data )
+{
+	Q_ASSERT( ! m_eof );
+	m_bufferSize += data.size();
+}
+
+void ByteStream::setStreamSize( long s )
+{
+	m_streamSize = s;
+	emit length( totalTime() );
 }
 
 void ByteStream::endOfData()
 {
+	m_eof = true;
 }
 
-void ByteStream::toBeWritten()
+void ByteStream::setAboutToFinishTime( long t )
 {
+	m_aboutToFinishBytes = t * 50 / 3;
 }
 
-		signals:
-			void bufferUnderrun();
-			*/
+void ByteStream::play()
+{
+	m_streamConsumeTimer->start( 300 );
+	AbstractMediaProducer::play();
+}
+
+void ByteStream::pause()
+{
+	AbstractMediaProducer::pause();
+	m_streamConsumeTimer->stop();
+}
+
+void ByteStream::stop()
+{
+	AbstractMediaProducer::stop();
+	m_streamConsumeTimer->stop();
+}
+
+bool ByteStream::seekable() const
+{
+	return m_streamSeekable;
+}
+
+void ByteStream::seek( long time )
+{
+	if( ! seekable() )
+		return;
+
+	const long dataStart = m_streamPosition;
+	const long dataEnd = dataStart + m_bufferSize;
+	long newDataPosition = time * 50 / 3;
+	m_streamPosition = newDataPosition;
+	if( newDataPosition < dataStart || newDataPosition > dataEnd )
+	{
+		m_bufferSize = 0;
+		setState( Phonon::BufferingState );
+		emit seekStream( newDataPosition );
+	}
+	else
+		m_bufferSize = dataEnd - newDataPosition;
+	m_aboutToFinishEmitted = false;
+
+	AbstractMediaProducer::seek( currentTime() );
+}
+
+void ByteStream::consumeStream()
+{
+	long bytes = m_streamConsumeTimer->interval() * 50 / 3;
+	if( m_bufferSize < bytes )
+	{
+		m_streamPosition += m_bufferSize;
+		m_bufferSize = 0;
+	}
+	else
+	{
+		m_streamPosition += bytes;
+		m_bufferSize -= bytes;
+	}
+	if( m_eof )
+	{
+		if( m_bufferSize == 0 )
+		{
+			emit finished();
+			stop();
+		}
+		else if( !m_aboutToFinishEmitted && m_bufferSize <= m_aboutToFinishBytes )
+		{
+			m_aboutToFinishEmitted = true;
+			emit aboutToFinish( remainingTime() );
+		}
+	}
+	else
+	{
+		if( m_streamSize >= 0 && !m_aboutToFinishEmitted
+				&& m_streamSize - m_streamPosition <= m_aboutToFinishBytes )
+		{
+			m_aboutToFinishEmitted = true;
+			emit aboutToFinish( remainingTime() );
+		}
+		if( m_bufferSize < 50 / 3 * 5000 ) // try to keep a buffer of more than 5s
+			emit needData();
+		else if( m_bufferSize > 50 / 3 * 10000 ) // and don't let it grow too big (max 10s)
+			emit enoughData();
+	}
+}
+
 }} //namespace Phonon::Fake
 
 #include "bytestream.moc"

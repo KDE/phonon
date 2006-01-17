@@ -21,6 +21,7 @@
 
 #include "abstractmediaproducer.h"
 #include "../../ifaces/bytestream.h"
+class QTimer;
 
 namespace Phonon
 {
@@ -33,24 +34,46 @@ namespace Fake
 			ByteStream( QObject* parent );
 			virtual ~ByteStream();
 
-			//virtual void writeBuffer( const QByteArray& buffer );
+			virtual long currentTime() const;
+			virtual long totalTime() const;
+			virtual long aboutToFinishTime() const;
+			virtual long streamSize() const;
+			virtual bool streamSeekable() const;
+			virtual bool seekable() const;
 
-			/**
-			 * Called when there will be no more calls to writeBuffer
-			 */
-			//virtual void endOfData();
+			virtual void setStreamSeekable( bool );
+			virtual void writeData( const QByteArray& data );
+			virtual void setStreamSize( long );
+			virtual void endOfData();
+			virtual void setAboutToFinishTime( long );
 
-			/**
-			 * Sets the total number of bytes that will be streamed via
-			 * writeBuffer
-			 */
-			//virtual void toBeWritten();
+			virtual void play();
+			virtual void pause();
+			virtual void seek( long time );
 
-		//signals:
-			//void bufferUnderrun();
+		public slots:
+			virtual void stop();
+
+		signals:
+			void finished();
+			void aboutToFinish( long );
+			void length( long );
+			void needData();
+			void enoughData();
+			void seekStream( long );
+
+		private slots:
+			void consumeStream();
 
 		private:
-			//QTimer* m_decBufferTimer;
+			long m_aboutToFinishBytes;
+			long m_streamSize;
+			long m_bufferSize;
+			long m_streamPosition;
+			bool m_streamSeekable;
+			bool m_eof;
+			bool m_aboutToFinishEmitted;
+			QTimer* m_streamConsumeTimer;
 	};
 }} //namespace Phonon::Fake
 
