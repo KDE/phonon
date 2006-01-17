@@ -50,12 +50,12 @@ Ifaces::MediaObject*      Backend::createMediaObject( QObject* parent )
 
 Ifaces::SoundcardCapture* Backend::createSoundcardCapture( QObject* parent )
 {
-	//return new SoundcardCapture( parent );
+	return new SoundcardCapture( parent );
 }
 
 Ifaces::ByteStream*       Backend::createByteStream( QObject* parent )
 {
-	//return new ByteStream( parent );
+	return new ByteStream( parent );
 }
 
 Ifaces::AudioPath*        Backend::createAudioPath( QObject* parent )
@@ -65,7 +65,7 @@ Ifaces::AudioPath*        Backend::createAudioPath( QObject* parent )
 
 Ifaces::AudioEffect*      Backend::createAudioEffect( QObject* parent )
 {
-	//return new AudioEffect( parent );
+	return new AudioEffect( parent );
 }
 
 Ifaces::AudioOutput*      Backend::createAudioOutput( QObject* parent )
@@ -75,12 +75,12 @@ Ifaces::AudioOutput*      Backend::createAudioOutput( QObject* parent )
 
 Ifaces::AudioDataOutput*  Backend::createAudioDataOutput( QObject* parent )
 {
-	//return new AudioDataOutput( parent );
+	return new AudioDataOutput( parent );
 }
 
 Ifaces::AudioFftOutput*   Backend::createAudioFftOutput( QObject* parent )
 {
-	//return new AudioFftOutput( parent );
+	return new AudioFftOutput( parent );
 }
 
 Ifaces::VideoPath*        Backend::createVideoPath( QObject* parent )
@@ -90,12 +90,12 @@ Ifaces::VideoPath*        Backend::createVideoPath( QObject* parent )
 
 Ifaces::VideoEffect*      Backend::createVideoEffect( QObject* parent )
 {
-	//return new VideoEffect( parent );
+	return new VideoEffect( parent );
 }
 
 bool Backend::supportsVideo() const
 {
-	return false;
+	return true;
 }
 
 bool Backend::supportsOSD() const
