@@ -44,7 +44,8 @@ void SeekSliderTest::testEnabled()
 
 void SeekSliderTest::testErrorMedia()
 {
-	MediaObject media( "/dev/null", this );
+	MediaObject media( this );
+	media.setUrl( "/dev/null" );
 	QVERIFY( media.state() == Phonon::ErrorState );
 	ss->setMediaProducer( &media );
 	QVERIFY( !qslider->isEnabled() );

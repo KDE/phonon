@@ -23,6 +23,7 @@
 #include <phonon/audiopath.h>
 #include <phonon/audiooutput.h>
 #include <phonon/videopath.h>
+#include <phonon/backendcapabilities.h>
 #include <phonon/ui/videowidget.h>
 
 #include <QSlider>
@@ -170,7 +171,8 @@ void TestWidget::length( long ms )
 void TestWidget::loadFile( const QString & file )
 {
 	delete m_media;
-	m_media = new MediaObject( KURL( file ), this );
+	m_media = new MediaObject( this );
+	m_media->setUrl( KURL( file ) );
 	m_media->setTickInterval( 100 );
 	m_media->addAudioPath( path );
 	if( m_media->hasVideo() && BackendCapabilities::self()->supportsVideo() )

@@ -93,7 +93,8 @@ void StateTester::run()
 	//c = f->createChannel( "teststates" );
 
 	kdDebug() << "loading " << *m_url << endl;
-	player = new MediaObject( *m_url, this );
+	player = new MediaObject( this );
+	player->setUrl( *m_url );
 	connect( player, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ),
 			SLOT( stateChanged( Phonon::State, Phonon::State ) ) );
 	connect( player, SIGNAL( finished() ), kapp, SLOT( quit() ) );
