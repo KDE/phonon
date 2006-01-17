@@ -34,7 +34,7 @@ namespace Ifaces
 			virtual ~ByteStream() {}
 
 			virtual long totalTime() const = 0;
-			virtual long remainingTime() const = 0;
+			virtual long remainingTime() const { return totalTime() - currentTime(); }
 			virtual long aboutToFinishTime() const = 0;
 			virtual long streamSize() const = 0;
 			virtual bool streamSeekable() const = 0;
