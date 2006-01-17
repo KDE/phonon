@@ -40,7 +40,7 @@ namespace Fake
 			//virtual long remainingTime() const;
 			virtual long aboutToFinishTime() const;
 			virtual void setUrl( const KURL& url );
-			virtual long setAboutToFinishTime( long newAboutToFinishTime );
+			virtual void setAboutToFinishTime( long newAboutToFinishTime );
 
 			virtual void play();
 			virtual void pause();

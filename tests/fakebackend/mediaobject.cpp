@@ -60,11 +60,10 @@ void MediaObject::setUrl( const KURL& url )
 	emit length( totalTime() );
 }
 
-long MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
+void MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
 {
 	m_aboutToFinishTime = newAboutToFinishTime;
 	m_aboutToFinishTimer->setInterval( remainingTime() - m_aboutToFinishTime );
-	return m_aboutToFinishTimer->interval();
 }
 
 void MediaObject::play()
