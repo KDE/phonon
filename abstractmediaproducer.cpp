@@ -156,10 +156,6 @@ void AbstractMediaProducer::setupIface( Ifaces::AbstractMediaProducer* iface )
 	// set up attributes
 	m_iface->setTickInterval( d->tickInterval );
 
-	// FIXME: seeking probably only works in PlayingState
-	if( d->currentTime > 0 )
-		m_iface->seek( d->currentTime );
-
 	foreach( AudioPath* a, d->audioPaths )
 		m_iface->addAudioPath( a->iface() );
 	foreach( VideoPath* v, d->videoPaths )
@@ -173,15 +169,28 @@ void AbstractMediaProducer::setupIface( Ifaces::AbstractMediaProducer* iface )
 			break;
 		case PlayingState:
 		case BufferingState:
-			QTimer::singleShot( 0, this, SLOT( play() ) );
+			QTimer::singleShot( 0, this, SLOT( resumePlay() ) );
 			break;
 		case PausedState:
-			// FIXME: Going from StoppedState or even LoadingState into
-			// PausedState is not going to work.
-			QTimer::singleShot( 0, this, SLOT( pause() ) );
+			QTimer::singleShot( 0, this, SLOT( resumePause() ) );
 			break;
 	}
 	d->state = m_iface->state();
+}
+
+void AbstractMediaProducer::resumePlay()
+{
+	m_iface->play();
+	if( d->currentTime > 0 )
+		m_iface->seek( d->currentTime );
+}
+
+void AbstractMediaProducer::resumePause()
+{
+	m_iface->play();
+	if( d->currentTime > 0 )
+		m_iface->seek( d->currentTime );
+	m_iface->pause();
 }
 
 } //namespace Phonon

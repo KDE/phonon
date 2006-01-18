@@ -207,6 +207,10 @@ namespace Phonon
 			 * \see setTickInterval, tickInterval
 			 */
 			void tick( long time );
+
+		private slots:
+			void resumePlay();
+			void resumePause();
 	};
 } //namespace Phonon
 

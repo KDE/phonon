@@ -60,7 +60,16 @@ long MediaObject::aboutToFinishTime() const
 void MediaObject::setUrl( const KURL& url )
 {
 	if( iface() )
+	{
 		m_iface->setUrl( url );
+		if( state() == Phonon::ErrorState )
+		{
+			deleteIface();
+			//TODO: at this point MediaObject should try to use an Ifaces::ByteStream
+			//instead and send the data it receives from a KIO Job via writeBuffer.
+			//This essentially makes all media frameworks read data via KIO...
+		}
+	}
 	else
 		d->url = url;
 }
@@ -96,7 +105,8 @@ void MediaObject::setupIface( Ifaces::MediaObject* iface )
 	connect( m_iface->qobject(), SIGNAL( length( long ) ), SIGNAL( length( long ) ) );
 
 	// set up attributes
-	m_iface->setUrl( d->url );
+	if( !d->url.isEmpty() )
+		m_iface->setUrl( d->url );
 	if( state() == Phonon::ErrorState )
 	{
 		deleteIface();
