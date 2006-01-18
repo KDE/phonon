@@ -46,7 +46,7 @@ namespace Phonon
 		Q_OBJECT
 		Q_PROPERTY( int rate READ rate WRITE setRate )
 		Q_PROPERTY( int bandwidth READ bandwidth WRITE setBandwidth )
-		PHONON_HEIR( AudioFftOutput, AbstractAudioOutput )
+		PHONON_HEIR( AudioFftOutput )
 
 		public:
 			/**

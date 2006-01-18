@@ -22,6 +22,8 @@
 
 #include <dcopobject.h>
 
+namespace Phonon
+{
 class MixerIface : public DCOPObject
 {
 	K_DCOP
@@ -33,6 +35,7 @@ class MixerIface : public DCOPObject
 	protected:
 		MixerIface() : DCOPObject( "MixerIface" ) {}
 };
+} //namespace Phonon
 
 #endif // MIXERIFACE_H
 // vim: sw=4 ts=4 noet tw=80

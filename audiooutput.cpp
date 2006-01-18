@@ -43,7 +43,7 @@ class AudioOutput::Private
 		float volume;
 };
 
-PHONON_HEIR_IMPL( AudioOutput, AbstractAudioOutput, AbstractAudioOutput )
+PHONON_HEIR_IMPL( AudioOutput, AbstractAudioOutput )
 
 QString AudioOutput::name() const
 {
@@ -81,10 +81,11 @@ bool AudioOutput::aboutToDeleteIface()
 	return AbstractAudioOutput::aboutToDeleteIface();
 }
 
-void AudioOutput::setupIface()
+void AudioOutput::setupIface( Ifaces::AudioOutput* iface )
 {
-	AbstractAudioOutput::setupIface();
+	AbstractAudioOutput::setupIface( iface );
 
+	m_iface = iface;
 	if( !m_iface )
 		return;
 

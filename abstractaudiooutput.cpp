@@ -34,8 +34,9 @@ bool AbstractAudioOutput::aboutToDeleteIface()
 	return true;
 }
 
-void AbstractAudioOutput::setupIface()
+void AbstractAudioOutput::setupIface( Ifaces::AbstractAudioOutput* iface )
 {
+	m_iface = iface;
 	if( !m_iface )
 		return;
 

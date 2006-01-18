@@ -19,8 +19,7 @@
 #ifndef Phonon_VIDEOPATH_H
 #define Phonon_VIDEOPATH_H
 
-#include <QObject>
-#include <kdelibs_export.h>
+#include "object.h"
 #include "phonondefs.h"
 
 namespace Phonon
@@ -33,7 +32,7 @@ namespace Phonon
 		class VideoPath;
 	}
 
-	class PHONON_EXPORT VideoPath : public QObject
+	class PHONON_EXPORT VideoPath : public Object
 	{
 		friend class AbstractMediaProducer;
 		Q_OBJECT

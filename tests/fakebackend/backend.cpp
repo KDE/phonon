@@ -29,12 +29,17 @@
 #include "videopath.h"
 #include "videoeffect.h"
 
+#include <kgenericfactory.h>
+
+typedef KGenericFactory<Phonon::Fake::Backend, Phonon::Ifaces::Backend> FakeBackendFactory;
+K_EXPORT_COMPONENT_FACTORY( phonon_fake, FakeBackendFactory( "fakebackend" ) )
+
 namespace Phonon
 {
 namespace Fake
 {
 
-Backend::Backend( QObject* parent )
+Backend::Backend( QObject* parent, const char*, const QStringList& )
 	: Ifaces::Backend( parent )
 {
 }

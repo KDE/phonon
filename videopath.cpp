@@ -55,8 +55,10 @@ bool VideoPath::aboutToDeleteIface()
 	return true;
 }
 
-void VideoPath::setupIface()
-{	if( !m_iface )
+void VideoPath::setupIface( Ifaces::VideoPath* iface )
+{
+	m_iface = iface;
+	if( !m_iface )
 		return;
 
 

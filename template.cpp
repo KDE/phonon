@@ -34,7 +34,7 @@ bool Template::aboutToDeleteIface()
 	return true;
 }
 
-void Template::setupIface()
+void Template::setupIface( Ifaces::Template* iface )
 {
 }
 

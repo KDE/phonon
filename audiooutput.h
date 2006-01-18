@@ -36,7 +36,7 @@ namespace Phonon
 	class PHONON_EXPORT AudioOutput : public AbstractAudioOutput, public MixerIface
 	{
 		Q_OBJECT
-		PHONON_HEIR( AudioOutput, AbstractAudioOutput )
+		PHONON_HEIR( AudioOutput )
 		public:
 			// Attributes Getters:
 			QString name() const;

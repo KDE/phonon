@@ -39,7 +39,7 @@ namespace Phonon
 	class PHONON_EXPORT AudioDataOutput : public AbstractAudioOutput
 	{
 		Q_OBJECT
-		PHONON_HEIR( AudioDataOutput, AbstractAudioOutput )
+		PHONON_HEIR( AudioDataOutput )
 		public:
 			/**
 			 * @fn AudioDataOutput( QObject* parent = 0 );

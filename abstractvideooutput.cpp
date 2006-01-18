@@ -41,8 +41,9 @@ bool AbstractVideoOutput::aboutToDeleteIface()
 	return true;
 }
 
-void AbstractVideoOutput::setupIface()
+void AbstractVideoOutput::setupIface( Ifaces::AbstractVideoOutput* iface )
 {
+	m_iface = iface;
 	//if( !m_iface )
 		//return;
 }

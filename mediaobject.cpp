@@ -35,7 +35,7 @@ class MediaObject::Private
 		long aboutToFinishTime;
 };
 
-PHONON_HEIR_IMPL( MediaObject, AbstractMediaProducer, AbstractMediaProducer )
+PHONON_HEIR_IMPL( MediaObject, AbstractMediaProducer )
 
 KURL MediaObject::url() const
 {
@@ -59,7 +59,7 @@ long MediaObject::aboutToFinishTime() const
 
 void MediaObject::setUrl( const KURL& url )
 {
-	if( m_iface )
+	if( iface() )
 		m_iface->setUrl( url );
 	else
 		d->url = url;
@@ -82,10 +82,12 @@ bool MediaObject::aboutToDeleteIface()
 	return AbstractMediaProducer::aboutToDeleteIface();
 }
 
-void MediaObject::setupIface()
+void MediaObject::setupIface( Ifaces::MediaObject* iface )
 {
 	kdDebug( 600 ) << k_funcinfo << endl;
+	AbstractMediaProducer::setupIface( iface );
 
+	m_iface = iface;
 	if( !m_iface )
 		return;
 
@@ -97,13 +99,12 @@ void MediaObject::setupIface()
 	m_iface->setUrl( d->url );
 	if( state() == Phonon::ErrorState )
 	{
-		slotDeleteIface();
+		deleteIface();
 		//TODO: at this point MediaObject should try to use an Ifaces::ByteStream
 		//instead and send the data it receives from a KIO Job via writeBuffer.
 		//This essentially makes all media frameworks read data via KIO...
 		return;
 	}
-	AbstractMediaProducer::setupIface();
 	m_iface->setAboutToFinishTime( d->aboutToFinishTime );
 }
 

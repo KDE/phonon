@@ -86,8 +86,9 @@ bool AudioPath::aboutToDeleteIface()
 	return true;
 }
 
-void AudioPath::setupIface()
+void AudioPath::setupIface( Ifaces::AudioPath* iface )
 {
+	m_iface = iface;
 	if( !m_iface )
 		return;
 

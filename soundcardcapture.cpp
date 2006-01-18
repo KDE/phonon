@@ -33,7 +33,7 @@ class SoundcardCapture::Private
 		CaptureSource source;
 };
 
-PHONON_HEIR_IMPL( SoundcardCapture, AbstractMediaProducer, AbstractMediaProducer )
+PHONON_HEIR_IMPL( SoundcardCapture, AbstractMediaProducer )
 
 const CaptureSource& SoundcardCapture::captureSource() const
 {
@@ -80,10 +80,11 @@ bool SoundcardCapture::aboutToDeleteIface()
 	return AbstractMediaProducer::aboutToDeleteIface();
 }
 
-void SoundcardCapture::setupIface()
+void SoundcardCapture::setupIface( Ifaces::SoundcardCapture* iface )
 {
-	AbstractMediaProducer::setupIface();
+	AbstractMediaProducer::setupIface( iface );
 
+	m_iface = iface;
 	if( !m_iface )
 		return;
 

@@ -54,7 +54,7 @@ namespace Phonon
 	class PHONON_EXPORT MediaObject : public AbstractMediaProducer
 	{
 		Q_OBJECT
-		PHONON_HEIR( MediaObject, AbstractMediaProducer )
+		PHONON_HEIR( MediaObject )
 		public:
 			/**
 			 * Get the URL the MediaObject should use as media data source.

@@ -96,15 +96,15 @@ namespace Ifaces
 			void setFullscreen( bool fullscreen );
 
 		protected:
-			VideoWidget( Ui::Ifaces::VideoWidget* iface, QWidget* parent );
+			VideoWidget( bool callCreateIface, QWidget* parent );
 			virtual bool aboutToDeleteIface();
-			virtual Ui::Ifaces::VideoWidget* createIface();
-			virtual void setupIface();
+			virtual void ifaceDeleted();
+			void setupIface( Ui::Ifaces::VideoWidget* newIface );
 
 		protected slots:
 			// when the Factory wants to change the Backend the following slots are used
-			void slotDeleteIface();
-			void slotCreateIface();
+			void deleteIface();
+			virtual void createIface();
 
 		private:
 			Ui::Ifaces::VideoWidget* iface();

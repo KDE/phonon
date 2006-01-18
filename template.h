@@ -20,8 +20,7 @@
 #ifndef Phonon_TEMPLATE_H
 #define Phonon_TEMPLATE_H
 
-#include <QObject>
-#include <kdelibs_export.h>
+#include "object.h"
 #include "phonondefs.h"
 
 namespace Phonon
@@ -35,7 +34,7 @@ namespace Phonon
 	 * \author Matthias Kretz <kretz@kde.org>
 	 * \since 4.0
 	 */
-	class PHONON_EXPORT Template : public QObject
+	class PHONON_EXPORT Template : public Object
 	{
 		Q_OBJECT
 		PHONON_OBJECT( Template )

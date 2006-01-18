@@ -36,7 +36,7 @@ class ByteStream::Private
 		bool streamSeekable;
 };
 
-PHONON_HEIR_IMPL( ByteStream, AbstractMediaProducer, AbstractMediaProducer )
+PHONON_HEIR_IMPL( ByteStream, AbstractMediaProducer )
 
 long ByteStream::totalTime() const
 {
@@ -110,10 +110,11 @@ bool ByteStream::aboutToDeleteIface()
 	return AbstractMediaProducer::aboutToDeleteIface();
 }
 
-void ByteStream::setupIface()
+void ByteStream::setupIface( Ifaces::ByteStream* iface )
 {
-	AbstractMediaProducer::setupIface();
+	AbstractMediaProducer::setupIface( iface );
 
+	m_iface = iface;
 	if( !m_iface )
 		return;
 

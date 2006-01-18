@@ -49,7 +49,7 @@ namespace Phonon
 	class PHONON_EXPORT SoundcardCapture : public AbstractMediaProducer
 	{
 		Q_OBJECT
-		PHONON_HEIR( SoundcardCapture, AbstractMediaProducer )
+		PHONON_HEIR( SoundcardCapture )
 		public:
 			/**
 			 * Returns the currently used capture source.

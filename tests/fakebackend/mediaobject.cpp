@@ -19,6 +19,7 @@
 
 #include "mediaobject.h"
 #include <QTimer>
+#include <kdebug.h>
 
 namespace Phonon
 {
@@ -29,6 +30,7 @@ MediaObject::MediaObject( QObject* parent )
 	, m_aboutToFinishTimer( new QTimer( this ) )
 	, m_finishTimer( new QTimer( this ) )
 {
+	kdDebug() << k_funcinfo << endl;
 	connect( m_aboutToFinishTimer, SIGNAL( timeout() ), SLOT( aboutToFinishTimeout() ) );
 	connect( m_finishTimer, SIGNAL( timeout() ), SIGNAL( finished() ) );
 	connect( m_finishTimer, SIGNAL( timeout() ), SLOT( stop() ) );
@@ -36,25 +38,30 @@ MediaObject::MediaObject( QObject* parent )
 
 MediaObject::~MediaObject()
 {
+	kdDebug() << k_funcinfo << endl;
 }
 
 KURL MediaObject::url() const
 {
+	kdDebug() << k_funcinfo << endl;
 	return m_url;
 }
 
 long MediaObject::totalTime() const
 {
+	kdDebug() << k_funcinfo << endl;
 	return 1000*60*3; // 3 minutes
 }
 
 long MediaObject::aboutToFinishTime() const
 {
+	kdDebug() << k_funcinfo << endl;
 	return m_aboutToFinishTime;
 }
 
 void MediaObject::setUrl( const KURL& url )
 {
+	kdDebug() << k_funcinfo << endl;
 	stop();
 	m_url = url;
 	emit length( totalTime() );
@@ -62,12 +69,14 @@ void MediaObject::setUrl( const KURL& url )
 
 void MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
 {
+	kdDebug() << k_funcinfo << endl;
 	m_aboutToFinishTime = newAboutToFinishTime;
 	m_aboutToFinishTimer->setInterval( remainingTime() - m_aboutToFinishTime );
 }
 
 void MediaObject::play()
 {
+	kdDebug() << k_funcinfo << endl;
 	m_aboutToFinishTimer->setInterval( remainingTime() - m_aboutToFinishTime );
 	m_finishTimer->setInterval( remainingTime() );
 	AbstractMediaProducer::play();
@@ -77,6 +86,7 @@ void MediaObject::play()
 
 void MediaObject::pause()
 {
+	kdDebug() << k_funcinfo << endl;
 	AbstractMediaProducer::pause();
 	m_aboutToFinishTimer->stop();
 	m_finishTimer->stop();
@@ -84,6 +94,7 @@ void MediaObject::pause()
 
 void MediaObject::stop()
 {
+	kdDebug() << k_funcinfo << endl;
 	AbstractMediaProducer::stop();
 	m_aboutToFinishTimer->stop();
 	m_finishTimer->stop();
@@ -91,6 +102,7 @@ void MediaObject::stop()
 
 void MediaObject::seek( long time )
 {
+	kdDebug() << k_funcinfo << endl;
 	AbstractMediaProducer::seek( time );
 	m_aboutToFinishTimer->setInterval( remainingTime() - m_aboutToFinishTime );
 	m_finishTimer->setInterval( remainingTime() );

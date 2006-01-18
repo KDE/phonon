@@ -52,8 +52,10 @@ bool AudioEffect::aboutToDeleteIface()
 	return true;
 }
 
-void AudioEffect::setupIface()
-{	if( !m_iface )
+void AudioEffect::setupIface( Ifaces::AudioEffect* iface )
+{
+	m_iface = iface;
+	if( !m_iface )
 		return;
 
 	// set up attributes

@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,33 +16,23 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_VIDEOEFFECT_H
-#define Phonon_VIDEOEFFECT_H
 
 #include "object.h"
-#include "phonondefs.h"
-
-class QString;
+#include "factory.h"
 
 namespace Phonon
 {
-	namespace Ifaces
+	Object::Object( QObject* parent )
+		: QObject( parent )
 	{
-		class VideoEffect;
+		connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
+		connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
+		//QTimer::singleShot( 0, this, SLOT( createIface() ) );
 	}
-
-	class PHONON_EXPORT VideoEffect : public Object
-	{
-		friend class VideoPath;
-		Q_OBJECT
-		PHONON_OBJECT( VideoEffect )
-		public:
-			QString type() const;
-
-		public slots:
-			void setType( const QString& );
-	};
+	//Object::~Object()
+	//{
+		//deleteIface();
+	//}
 } //namespace Phonon
-
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_VIDEOEFFECT_H
+#include "object.moc"
+// vim: sw=4 ts=4 noet

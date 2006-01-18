@@ -34,7 +34,7 @@ class AudioFftOutput::Private
 		int rate;
 };
 
-PHONON_HEIR_IMPL( AudioFftOutput, AbstractAudioOutput, AbstractAudioOutput )
+PHONON_HEIR_IMPL( AudioFftOutput, AbstractAudioOutput )
 
 QVector<float> AudioFftOutput::fourierTransformedData() const
 {
@@ -78,10 +78,11 @@ bool AudioFftOutput::aboutToDeleteIface()
 	return AbstractAudioOutput::aboutToDeleteIface();
 }
 
-void AudioFftOutput::setupIface()
+void AudioFftOutput::setupIface( Ifaces::AudioFftOutput* iface )
 {
-	AbstractAudioOutput::setupIface();
+	AbstractAudioOutput::setupIface( iface );
 
+	m_iface = iface;
 	if( !m_iface )
 		return;
 

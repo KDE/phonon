@@ -36,7 +36,7 @@ namespace Phonon
 	class PHONON_EXPORT ByteStream : public AbstractMediaProducer
 	{
 		Q_OBJECT
-		PHONON_HEIR( ByteStream, AbstractMediaProducer )
+		PHONON_HEIR( ByteStream )
 		public:
 			long totalTime() const;
 			long remainingTime() const;

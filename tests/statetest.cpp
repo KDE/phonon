@@ -93,6 +93,7 @@ void StateTester::run()
 	//c = f->createChannel( "teststates" );
 
 	kdDebug() << "loading " << *m_url << endl;
+	kdDebug() << this << endl;
 	player = new MediaObject( this );
 	player->setUrl( *m_url );
 	connect( player, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ),
@@ -238,7 +239,7 @@ int main( int argc, char ** argv )
 	if( KCmdLineArgs::parsedArgs()->count() > 0 )
 	{
 		tester = new StateTester( KCmdLineArgs::parsedArgs()->url( 0 ) );
-		QTimer::singleShot( 0, tester, SLOT( run() ) );
+		QTimer::singleShot( 400, tester, SLOT( run() ) );
 	}
 	else
 	{

@@ -21,6 +21,7 @@
 #include <QTimer>
 #include "videopath.h"
 #include "audiopath.h"
+#include <kdebug.h>
 
 namespace Phonon
 {
@@ -32,15 +33,18 @@ AbstractMediaProducer::AbstractMediaProducer( QObject* parent )
 	, m_tickTimer( new QTimer( this ) )
 	, m_fakeTime( 0 )
 {
+	kdDebug() << k_funcinfo << endl;
 	connect( m_tickTimer, SIGNAL( timeout() ), SLOT( emitTick() ) );
 }
 
 AbstractMediaProducer::~AbstractMediaProducer()
 {
+	kdDebug() << k_funcinfo << endl;
 }
 
 bool AbstractMediaProducer::addVideoPath( Ifaces::VideoPath* videoPath )
 {
+	kdDebug() << k_funcinfo << endl;
 	Q_ASSERT( videoPath );
 	VideoPath* vp = qobject_cast<VideoPath*>( videoPath->qobject() );
 	Q_ASSERT( vp );
@@ -49,6 +53,7 @@ bool AbstractMediaProducer::addVideoPath( Ifaces::VideoPath* videoPath )
 
 bool AbstractMediaProducer::addAudioPath( Ifaces::AudioPath* audioPath )
 {
+	kdDebug() << k_funcinfo << endl;
 	Q_ASSERT( audioPath );
 	AudioPath* ap = qobject_cast<AudioPath*>( audioPath->qobject() );
 	Q_ASSERT( ap );
@@ -57,49 +62,58 @@ bool AbstractMediaProducer::addAudioPath( Ifaces::AudioPath* audioPath )
 
 State AbstractMediaProducer::state() const
 {
+	kdDebug() << k_funcinfo << endl;
 	return m_state;
 }
 
 bool AbstractMediaProducer::hasVideo() const
 {
+	kdDebug() << k_funcinfo << endl;
 	return false;
 }
 
 bool AbstractMediaProducer::seekable() const
 {
+	kdDebug() << k_funcinfo << endl;
 	return true;
 }
 
 long AbstractMediaProducer::currentTime() const
 {
+	//kdDebug() << k_funcinfo << endl;
 	return m_fakeTime;
 }
 
 long AbstractMediaProducer::tickInterval() const
 {
+	kdDebug() << k_funcinfo << endl;
 	return m_tickTimer->interval();
 }
 
 long AbstractMediaProducer::setTickInterval( long newTickInterval )
 {
+	kdDebug() << k_funcinfo << endl;
 	m_tickTimer->setInterval( newTickInterval );
 	return m_tickTimer->interval();
 }
 
 void AbstractMediaProducer::play()
 {
+	kdDebug() << k_funcinfo << endl;
 	m_tickTimer->start();
 	setState( Phonon::PlayingState );
 }
 
 void AbstractMediaProducer::pause()
 {
+	kdDebug() << k_funcinfo << endl;
 	m_tickTimer->stop();
 	setState( Phonon::PausedState );
 }
 
 void AbstractMediaProducer::stop()
 {
+	kdDebug() << k_funcinfo << endl;
 	m_tickTimer->stop();
 	m_fakeTime = 0;
 	setState( Phonon::StoppedState );
@@ -107,6 +121,7 @@ void AbstractMediaProducer::stop()
 
 void AbstractMediaProducer::seek( long time )
 {
+	kdDebug() << k_funcinfo << endl;
 	if( seekable() )
 		m_fakeTime = time;
 }
@@ -115,12 +130,14 @@ void AbstractMediaProducer::setState( State newstate )
 {
 	State oldstate = m_state;
 	m_state = newstate;
+	kdDebug() << "emit stateChanged( " << newstate << ", " << oldstate << " )" << endl;
 	emit stateChanged( newstate, oldstate );
 }
 
 void AbstractMediaProducer::emitTick()
 {
 	m_fakeTime += m_tickTimer->interval();
+	//kdDebug() << "emit tick( " << currentTime() << " )" << endl;
 	emit tick( currentTime() );
 }
 

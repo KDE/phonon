@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,12 +16,10 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_ABSTRACTMEDIAPRODUCER_H
-#define Phonon_ABSTRACTMEDIAPRODUCER_H
+#ifndef PHONON_ABSTRACTMEDIAPRODUCER_H
+#define PHONON_ABSTRACTMEDIAPRODUCER_H
 
-#include <QObject>
-
-#include <kdelibs_export.h>
+#include "object.h"
 #include "state.h"
 #include "phonondefs.h"
 
@@ -47,7 +45,7 @@ namespace Phonon
 	 * @since 4.0
 	 * @see MediaObject
 	 */
-	class PHONON_EXPORT AbstractMediaProducer : public QObject
+	class PHONON_EXPORT AbstractMediaProducer : public Object
 	{
 		Q_OBJECT
 		PHONON_ABSTRACTBASE( AbstractMediaProducer )
@@ -213,4 +211,4 @@ namespace Phonon
 } //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_ABSTRACTMEDIAPRODUCER_H
+#endif // PHONON_ABSTRACTMEDIAPRODUCER_H

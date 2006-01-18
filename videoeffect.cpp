@@ -55,8 +55,9 @@ bool VideoEffect::aboutToDeleteIface()
 	return true;
 }
 
-void VideoEffect::setupIface()
+void VideoEffect::setupIface( Ifaces::VideoEffect* iface )
 {
+	m_iface = iface;
 	if( !m_iface )
 		return;
 

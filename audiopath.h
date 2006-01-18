@@ -19,8 +19,7 @@
 #ifndef Phonon_AUDIOPATH_H
 #define Phonon_AUDIOPATH_H
 
-#include <QObject>
-#include <kdelibs_export.h>
+#include "object.h"
 #include "phonondefs.h"
 
 namespace Phonon
@@ -55,7 +54,7 @@ namespace Phonon
 	 * @since 4.0
 	 * @see VideoPath
 	 */
-	class PHONON_EXPORT AudioPath : public QObject
+	class PHONON_EXPORT AudioPath : public Object
 	{
 		friend class AbstractMediaProducer;
 		Q_OBJECT

@@ -51,14 +51,9 @@ protected: \
 	 * \internal
 	 * Constructor that is called from derived classes.
 	 *
-	 * \param iface Most of the time you can put
-	 * <tt>createIface()</tt> there. But pay attention, sometimes
-	 * you can't do that because the createIface method accesses an
-	 * uninitialized member variable like the d-pointer.
-	 *
 	 * \param parent Standard QObject parent.
 	 */ \
-	classname( Ifaces::classname* iface, QObject* parent ); \
+	classname( bool callCreateIface, QObject* parent ); \
 	/**
 	 * \internal
 	 * Called right after the <tt>delete m_iface</tt> statement to reset @c
@@ -77,20 +72,6 @@ protected: \
 	 * \see aboutToDeleteIface
 	 */ \
 	virtual void ifaceDeleted(); \
-	/**
-	 * \internal
-	 * Creates the Iface object belonging to this class. For most cases the
-	 * implementation is
-	 * \code
-	 * m_iface = Factory::self()->createClassName( this );
-	 * return m_iface;
-	 * \endcode
-	 *
-	 * This function should not be called except from slotCreateIface.
-	 *
-	 * \see slotCreateIface
-	 */ \
-	virtual Ifaces::classname* createIface() = 0; \
 	/**
 	 * \internal
 	 * Used to save the state of the object before the Iface object is
@@ -127,20 +108,8 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	virtual void setupIface(); \
-protected slots: \
-	/**
-	 * \internal
-	 * This method cleanly deletes the Iface object. It is called on
-	 * destruction and before a backend change.
-	 */ \
-	void slotDeleteIface(); \
-	/**
-	 * \internal
-	 * This method takes care of creating and setting up the Iface object.
-	 * It is called on construction and after a backend change.
-	 */ \
-	void slotCreateIface(); \
+	void setupIface( Ifaces::classname* newIface ); \
+	virtual void deleteIface(); \
 private: \
 	/**
 	 * \internal
@@ -193,18 +162,7 @@ public: \
 	classname( QObject* parent = 0 ); \
 	~classname(); \
 protected: \
-	/**
-	 * \internal
-	 * Constructor that is called from derived classes.
-	 *
-	 * \param iface Most of the time you can put
-	 * <tt>createIface()</tt> there. But pay attention, sometimes
-	 * you can't do that because the createIface method accesses an
-	 * uninitialized member variable like the d-pointer.
-	 *
-	 * \param parent Standard QObject parent.
-	 */ \
-	classname( Ifaces::classname* iface, QObject* parent ); \
+	classname( bool callCreateIface, QObject* parent ); \
 	/**
 	 * \internal
 	 * Called right after the <tt>delete m_iface</tt> statement to reset @c
@@ -236,7 +194,7 @@ protected: \
 	 *
 	 * \see slotCreateIface
 	 */ \
-	virtual Ifaces::classname* createIface(); \
+	virtual void createIface(); \
 	/**
 	 * \internal
 	 * Used to save the state of the object before the Iface object is
@@ -273,20 +231,8 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	virtual void setupIface(); \
-protected slots: \
-	/**
-	 * \internal
-	 * This method cleanly deletes the Iface object. It is called on
-	 * destruction and before a backend change.
-	 */ \
-	void slotDeleteIface(); \
-	/**
-	 * \internal
-	 * This method takes care of creating and setting up the Iface object.
-	 * It is called on construction and after a backend change.
-	 */ \
-	void slotCreateIface(); \
+	void setupIface( Ifaces::classname* newIface ); \
+	virtual void deleteIface(); \
 private: \
 	/**
 	 * \internal
@@ -312,7 +258,6 @@ private: \
  * classes that inherit another Phonon object.
  *
  * \param classname The Name of the class this macro is used for.
- * \param baseclass The Name of the baseclass that inherits QObject directly.
  *
  * Example:
  * \code
@@ -330,7 +275,7 @@ private: \
  * \see PHONON_ABSTRACTBASE
  * \see PHONON_OBJECT
  */
-#define PHONON_HEIR( classname, baseclass ) \
+#define PHONON_HEIR( classname ) \
 public: \
 	/**
 	 * Standard QObject constructor.
@@ -340,18 +285,7 @@ public: \
 	classname( QObject* parent = 0 ); \
 	~classname(); \
 protected: \
-	/**
-	 * \internal
-	 * Constructor that is called from derived classes.
-	 *
-	 * \param iface Most of the time you can put
-	 * <tt>createIface()</tt> there. But pay attention, sometimes
-	 * you can't do that because the createIface method accesses an
-	 * uninitialized member variable like the d-pointer.
-	 *
-	 * \param parent Standard QObject parent.
-	 */ \
-	classname( Ifaces::classname* iface, QObject* parent ); \
+	classname( bool callCreateIface, QObject* parent ); \
 	/**
 	 * \internal
 	 * Called right after the <tt>delete m_iface</tt> statement to reset @c
@@ -383,7 +317,7 @@ protected: \
 	 *
 	 * \see slotCreateIface
 	 */ \
-	virtual Ifaces::baseclass* createIface(); \
+	virtual void createIface(); \
 	/**
 	 * \internal
 	 * Used to save the state of the object before the Iface object is
@@ -420,7 +354,7 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	virtual void setupIface(); \
+	void setupIface( Ifaces::classname* newIface ); \
 private: \
 	/**
 	 * \internal
@@ -441,114 +375,99 @@ private: \
 	Private* d;
 
 #define PHONON_ABSTRACTBASE_IMPL( classname ) \
-classname::classname( Ifaces::classname* iface, QObject* parent ) \
-	: QObject( parent ) \
-	, m_iface( iface ) \
+classname::classname( bool callCreateIface, QObject* parent ) \
+	: Object( parent ) \
+	, m_iface( 0 ) \
 	, d( new Private() ) \
 { \
-	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( slotDeleteIface() ) ); \
-	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( slotCreateIface() ) ); \
+	Q_ASSERT( callCreateIface == false ); \
 } \
 classname::~classname() \
 { \
-	slotDeleteIface(); \
 	delete d; \
 	d = 0; \
 } \
-void classname::slotDeleteIface() \
+void classname::ifaceDeleted() \
+{ \
+	m_iface = 0; \
+} \
+Ifaces::classname* classname::iface() \
+{ \
+	if( !m_iface ) \
+		createIface(); \
+	return m_iface; \
+} \
+void classname::deleteIface() \
 { \
 	if( aboutToDeleteIface() ) \
 	{ \
 		delete m_iface; \
 		ifaceDeleted(); \
 	} \
-} \
-void classname::ifaceDeleted() \
-{ \
-	m_iface = 0; \
-} \
-void classname::slotCreateIface() \
-{ \
-	Q_ASSERT( m_iface == 0 ); \
-	m_iface = createIface(); \
-	setupIface(); \
-} \
-Ifaces::classname* classname::iface() \
-{ \
-	if( !m_iface ) \
-		slotCreateIface(); \
-	return m_iface; \
 }
 
 #define PHONON_OBJECT_IMPL( classname ) \
 classname::classname( QObject* parent ) \
-	: QObject( parent ) \
+	: Object( parent ) \
 	, m_iface( 0 ) \
 	, d( new Private() ) \
 { \
-	slotCreateIface(); \
-	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( slotDeleteIface() ) ); \
-	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( slotCreateIface() ) ); \
 } \
-classname::classname( Ifaces::classname* iface, QObject* parent ) \
-	: QObject( parent ) \
-	, m_iface( iface ) \
+classname::classname( bool callCreateIface, QObject* parent ) \
+	: Object( parent ) \
+	, m_iface( 0 ) \
 	, d( new Private() ) \
 { \
-	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( slotDeleteIface() ) ); \
-	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( slotCreateIface() ) ); \
+	if( callCreateIface ) \
+		createIface(); \
 } \
 classname::~classname() \
 { \
-	slotDeleteIface(); \
 	delete d; \
 	d = 0; \
 } \
-void classname::slotDeleteIface() \
+void classname::ifaceDeleted() \
+{ \
+	m_iface = 0; \
+} \
+Ifaces::classname* classname::iface() \
+{ \
+	if( !m_iface ) \
+		createIface(); \
+	return m_iface; \
+} \
+void classname::createIface() \
+{ \
+	Q_ASSERT( m_iface == 0 ); \
+	m_iface = Factory::self()->create ## classname( this ); \
+	setupIface( m_iface ); \
+} \
+void classname::deleteIface() \
 { \
 	if( aboutToDeleteIface() ) \
 	{ \
 		delete m_iface; \
 		ifaceDeleted(); \
 	} \
-} \
-void classname::ifaceDeleted() \
-{ \
-	m_iface = 0; \
-} \
-void classname::slotCreateIface() \
-{ \
-	Q_ASSERT( m_iface == 0 ); \
-	m_iface = createIface(); \
-	setupIface(); \
-} \
-Ifaces::classname* classname::iface() \
-{ \
-	if( !m_iface ) \
-		slotCreateIface(); \
-	return m_iface; \
-} \
-Ifaces::classname* classname::createIface() \
-{ \
-	m_iface = Factory::self()->create ## classname( this ); \
-	return m_iface; \
 }
 
-#define PHONON_HEIR_IMPL( classname, parentclass, baseclass ) \
+#define PHONON_HEIR_IMPL( classname, parentclass ) \
 classname::classname( QObject* parent ) \
-	: parentclass( m_iface = Factory::self()->create ## classname( this ), parent ) \
+	: parentclass( false, parent ) \
+	, m_iface( 0 ) \
 	, d( new Private() ) \
 { \
 } \
-classname::classname( Ifaces::classname* iface, QObject* parent ) \
-	: parentclass( iface, parent ) \
-	, m_iface( iface ) \
+classname::classname( bool callCreateIface, QObject* parent ) \
+	: parentclass( false, parent ) \
+	, m_iface( 0 ) \
 	, d( new Private() ) \
 { \
+	if( callCreateIface ) \
+		createIface(); \
 } \
 classname::~classname() \
 { \
-	slotDeleteIface(); \
 	delete d; \
 	d = 0; \
 } \
@@ -560,13 +479,14 @@ void classname::ifaceDeleted() \
 Ifaces::classname* classname::iface() \
 { \
 	if( !m_iface ) \
-		slotCreateIface(); \
+		createIface(); \
 	return m_iface; \
 } \
-Ifaces::baseclass* classname::createIface() \
+void classname::createIface() \
 { \
+	Q_ASSERT( m_iface == 0 ); \
 	m_iface = Factory::self()->create ## classname( this ); \
-	return m_iface; \
+	setupIface( m_iface ); \
 }
 
 #endif // PHONONDEFS_H

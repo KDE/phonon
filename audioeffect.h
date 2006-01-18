@@ -19,8 +19,7 @@
 #ifndef Phonon_AUDIOEFFECT_H
 #define Phonon_AUDIOEFFECT_H
 
-#include <QObject>
-#include <kdelibs_export.h>
+#include "object.h"
 #include "phonondefs.h"
 
 class QString;
@@ -37,7 +36,7 @@ namespace Phonon
 	 * @author Matthias Kretz <kretz@kde.org>
 	 * @since 4.0
 	 */
-	class PHONON_EXPORT AudioEffect : public QObject
+	class PHONON_EXPORT AudioEffect : public Object
 	{
 		friend class AudioPath;
 		Q_OBJECT

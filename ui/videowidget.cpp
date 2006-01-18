@@ -44,23 +44,24 @@ VideoWidget::VideoWidget( QWidget* parent )
 	, m_iface( 0 )
 	, d( new Private() )
 {
-	slotCreateIface();
-	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( slotDeleteIface() ) );
-	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( slotCreateIface() ) );
+	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
+	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
+	createIface();
 }
 
-VideoWidget::VideoWidget( Ui::Ifaces::VideoWidget* iface, QWidget* parent )
+VideoWidget::VideoWidget( bool callCreateIface, QWidget* parent )
 	: QWidget( parent )
-	, m_iface( iface )
+	, m_iface( 0 )
 	, d( new Private() )
 {
-	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( slotDeleteIface() ) );
-	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( slotCreateIface() ) );
+	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
+	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
+	if( callCreateIface )
+		createIface();
 }
 
 VideoWidget::~VideoWidget()
 {
-	slotDeleteIface();
 	delete d;
 	d = 0;
 }
@@ -90,31 +91,33 @@ bool VideoWidget::aboutToDeleteIface()
 	return true;
 }
 
-void VideoWidget::slotDeleteIface()
+void VideoWidget::deleteIface()
 {
 	if( aboutToDeleteIface() )
 	{
 		delete m_iface;
-		m_iface = 0;
+		ifaceDeleted();
 	}
 }
 
-void VideoWidget::slotCreateIface()
+void VideoWidget::ifaceDeleted()
 {
-	if( !m_iface )
-		m_iface = createIface();
-	setupIface();
+	m_iface = 0;
 }
 
-Ui::Ifaces::VideoWidget* VideoWidget::createIface()
+void VideoWidget::createIface()
 {
-  	delete m_iface;
+	Q_ASSERT( m_iface == 0 );
   	m_iface = Factory::self()->createVideoWidget( this );
-	return m_iface;
+	setupIface( m_iface );
 }
 
-void VideoWidget::setupIface()
+void VideoWidget::setupIface( Ifaces::VideoWidget* iface )
 {
+	m_iface = iface;
+	if( !m_iface )
+		return;
+
 	d->helper = new VideoWidgetHelper( this );
 	m_iface->setFullscreen( d->fullscreen );
 }
@@ -122,7 +125,7 @@ void VideoWidget::setupIface()
 Ui::Ifaces::VideoWidget* VideoWidget::iface()
 {
 	if( !m_iface )
-		slotCreateIface();
+		createIface();
 	return m_iface;
 }
 

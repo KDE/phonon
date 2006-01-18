@@ -31,7 +31,7 @@ class AudioDataOutput::Private
 		int availableSamples;
 };
 
-PHONON_HEIR_IMPL( AudioDataOutput, AbstractAudioOutput, AbstractAudioOutput )
+PHONON_HEIR_IMPL( AudioDataOutput, AbstractAudioOutput )
 
 void AudioDataOutput::readBuffer( QVector<float>& buffer )
 {
@@ -57,10 +57,11 @@ bool AudioDataOutput::aboutToDeleteIface()
 	return AbstractAudioOutput::aboutToDeleteIface();
 }
 
-void AudioDataOutput::setupIface()
+void AudioDataOutput::setupIface( Ifaces::AudioDataOutput* iface )
 {
-	AbstractAudioOutput::setupIface();
+	AbstractAudioOutput::setupIface( iface );
 
+	m_iface = iface;
 	if( !m_iface )
 		return;
 

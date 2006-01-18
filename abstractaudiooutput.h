@@ -19,8 +19,7 @@
 #ifndef Phonon_ABSTRACTAUDIOOUTPUTBASE_H
 #define Phonon_ABSTRACTAUDIOOUTPUTBASE_H
 
-#include <QObject>
-#include <kdelibs_export.h>
+#include "object.h"
 #include "phonondefs.h"
 
 namespace Phonon
@@ -30,7 +29,7 @@ namespace Phonon
 		class AbstractAudioOutput;
 	}
 
-	class PHONON_EXPORT AbstractAudioOutput : public QObject
+	class PHONON_EXPORT AbstractAudioOutput : public Object
 	{
 		friend class AudioPath;
 		Q_OBJECT

@@ -19,8 +19,7 @@
 #ifndef Phonon_ABSTRACTVIDEOOUTPUTBASE_H
 #define Phonon_ABSTRACTVIDEOOUTPUTBASE_H
 
-#include <QObject>
-#include <kdelibs_export.h>
+#include "object.h"
 #include "phonondefs.h"
 
 class QString;
@@ -32,7 +31,7 @@ namespace Phonon
 		class AbstractVideoOutput;
 	}
 
-	class PHONON_EXPORT AbstractVideoOutput : public QObject
+	class PHONON_EXPORT AbstractVideoOutput : public Object
 	{
 		friend class VideoPath;
 		Q_OBJECT

@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -38,23 +38,14 @@ class VideoWidgetHelper::Private
 //cannot use macro: need special iface creation
 
 VideoWidgetHelper::VideoWidgetHelper( VideoWidget* parent )
-	: AbstractVideoOutput( parent->iface(), parent )
+	: AbstractVideoOutput( false, parent )
 	, d( new Private( parent ) )
 {
-	m_iface = d->videoWidget->iface();
-	setupIface();
-}
-
-VideoWidgetHelper::VideoWidgetHelper( Ifaces::VideoWidget* iface, VideoWidget* parent )
-	: AbstractVideoOutput( iface, parent )
-	, m_iface( iface )
-	, d( new Private( parent ) )
-{
+	createIface();
 }
 
 VideoWidgetHelper::~VideoWidgetHelper()
 {
-	slotDeleteIface();
 	delete d;
 	d = 0;
 }
@@ -70,16 +61,17 @@ void VideoWidgetHelper::ifaceDeleted()
 	AbstractVideoOutput::ifaceDeleted();
 }
 
-Phonon::Ifaces::AbstractVideoOutput* VideoWidgetHelper::createIface()
+void VideoWidgetHelper::createIface()
 {
 	m_iface = d->videoWidget->iface();
-	return m_iface;
+	setupIface( m_iface );
 }
 
-void VideoWidgetHelper::setupIface()
+void VideoWidgetHelper::setupIface( Ifaces::VideoWidget* iface )
 {
-	AbstractVideoOutput::setupIface();
+	AbstractVideoOutput::setupIface( iface );
 
+	m_iface = iface;
 	//if( !m_iface )
 		//return;
 }
@@ -87,7 +79,7 @@ void VideoWidgetHelper::setupIface()
 Ui::Ifaces::VideoWidget* VideoWidgetHelper::iface()
 {
 	if( !m_iface )
-		slotCreateIface();
+		createIface();
 	return m_iface;
 }
 

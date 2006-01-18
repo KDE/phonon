@@ -7,32 +7,32 @@ Name=KDE Multimedia Backend
 ##
 # The interface version is used by phonon to be able to only load binary
 # compatible backends.
-[PropertyDef::X-KDE-M2MBackendInfo-InterfaceVersion]
+[PropertyDef::X-KDE-PhononBackendInfo-InterfaceVersion]
 Type=int
 
 ## This is information for the user
-[PropertyDef::X-KDE-M2MBackendInfo-Version]
+[PropertyDef::X-KDE-PhononBackendInfo-Version]
 Type=QString
 
 ## This is information for the user
-[PropertyDef::X-KDE-M2MBackendInfo-Website]
+[PropertyDef::X-KDE-PhononBackendInfo-Website]
 Type=QString
 
-#[PropertyDef::X-KDE-MMBackendInfo-Supports]
+#[PropertyDef::X-KDE-PhononBackendInfo-Supports]
 #Type=QStringList
 #
-#[PropertyDef::X-KDE-MMBackendInfo-Depends]
+#[PropertyDef::X-KDE-PhononBackendInfo-Depends]
 #Type=QStringList
 #
-#[PropertyDef::X-KDE-MMBackendInfo-License]
+#[PropertyDef::X-KDE-PhononBackendInfo-License]
 #Type=QString
 #
-#[PropertyDef::X-KDE-MMBackendInfo-Author]
+#[PropertyDef::X-KDE-PhononBackendInfo-Author]
 #Type=QString
 #
-#[PropertyDef::X-KDE-MMBackendInfo-Email]
+#[PropertyDef::X-KDE-PhononBackendInfo-Email]
 #Type=QString
 #
-#[PropertyDef::X-KDE-MMBackendInfo-Name]
+#[PropertyDef::X-KDE-PhononBackendInfo-Name]
 #Type=QString
 #
