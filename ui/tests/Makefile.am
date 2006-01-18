@@ -24,3 +24,5 @@ METASOURCES = AUTO
 check_PROGRAMS = seekslider
 
 seekslider_SOURCES = seekslider.cpp
+
+TESTS = seekslider

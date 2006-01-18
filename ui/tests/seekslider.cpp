@@ -42,13 +42,18 @@ void SeekSliderTest::testEnabled()
 	QVERIFY( !qslider->isEnabled() );
 }
 
-void SeekSliderTest::testErrorMedia()
+void SeekSliderTest::testMedia()
 {
 	MediaObject media( this );
-	media.setUrl( "/dev/null" );
-	QVERIFY( media.state() == Phonon::ErrorState );
+	QVERIFY( media.state() == Phonon::LoadingState );
+	media.setUrl( "/home/mkretz/Musik Abend 2 - Flora.wav" );
 	ss->setMediaProducer( &media );
 	QVERIFY( !qslider->isEnabled() );
+	media.play();
+	if( media.state() == Phonon::PlayingState )
+		QVERIFY( qslider->isEnabled() );
+	else
+		QVERIFY( !qslider->isEnabled() );
 }
 
 void SeekSliderTest::cleanupTestCase()

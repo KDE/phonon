@@ -96,11 +96,13 @@ void SeekSlider::stateChanged( State newstate )
 		case Phonon::BufferingState:
 		case Phonon::PlayingState:
 			d->slider->setEnabled( true );
+			break;
 		case Phonon::PausedState:
 		case Phonon::StoppedState:
 		case Phonon::LoadingState:
 		case Phonon::ErrorState:
 			d->slider->setEnabled( false );
+			break;
 	}
 }
 
