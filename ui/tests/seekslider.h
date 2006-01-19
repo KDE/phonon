@@ -42,7 +42,7 @@ class SeekSliderTest : public QObject
 	private:
 		Phonon::Ui::SeekSlider* ss;
 		QSlider* qslider;
-		MediaObject* media;
+		Phonon::MediaObject* media;
 };
 
 #endif // SEEKSLIDER_H
