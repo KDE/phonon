@@ -33,6 +33,7 @@ void SeekSliderTest::initTestCase()
 	QVERIFY( ss != 0 );
 	qslider = ss->findChild<QSlider*>();
 	QVERIFY( qslider != 0 );
+	media = new MediaObject( this );
 }
 
 void SeekSliderTest::testEnabled()
@@ -42,22 +43,22 @@ void SeekSliderTest::testEnabled()
 	QVERIFY( !qslider->isEnabled() );
 }
 
-void SeekSliderTest::testMedia()
+void SeekSliderTest::setMedia()
 {
-	MediaObject media( this );
-	QVERIFY( media.state() == Phonon::LoadingState );
-	media.setUrl( "/home/mkretz/Musik Abend 2 - Flora.wav" );
-	ss->setMediaProducer( &media );
+	QVERIFY( media->state() == Phonon::LoadingState );
+	media->setUrl( "/home/mkretz/Musik Abend 2 - Flora.wav" );
+	ss->setMediaProducer( media );
 	QVERIFY( !qslider->isEnabled() );
-	media.play();
-	if( media.state() == Phonon::PlayingState )
-		QVERIFY( qslider->isEnabled() );
-	else
+	media->play();
+	if( media->state() != Phonon::PlayingState )
 		QVERIFY( !qslider->isEnabled() );
+	else
+		QVERIFY( qslider->isEnabled() );
 }
 
 void SeekSliderTest::cleanupTestCase()
 {
+	delete media;
 	qslider = 0;
 	delete ss;
 }

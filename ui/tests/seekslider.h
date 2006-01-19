@@ -36,11 +36,12 @@ class SeekSliderTest : public QObject
 	private slots:
 		void initTestCase();
 		void testEnabled();
-		void testMedia();
+		void setMedia();
 		void cleanupTestCase();
 	private:
 		Phonon::Ui::SeekSlider* ss;
 		QSlider* qslider;
+		MediaObject* media;
 };
 
 #endif // SEEKSLIDER_H
