@@ -49,6 +49,10 @@ void SeekSliderTest::setMedia()
 	media->setUrl( "/home/mkretz/Musik Abend 2 - Flora.wav" );
 	ss->setMediaProducer( media );
 	QVERIFY( !qslider->isEnabled() );
+}
+
+void SeekSliderTest::playMedia()
+{
 	media->play();
 	if( media->state() != Phonon::PlayingState )
 		QVERIFY( !qslider->isEnabled() );
