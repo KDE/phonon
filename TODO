@@ -1,0 +1,7 @@
+- add categories for AudioOutput volume controls, so that a user doesn't have to
+  control amaroK, JuK but media player, not knotify but Notification sounds, not
+  Kopete or KPhone but communication
+  => these categories can also become more usefull for an application that
+     controls the volumes automatically, like turning down the music when a call
+     comes in, or turning down the notifications when the media player knows
+     it's playing classical music.
