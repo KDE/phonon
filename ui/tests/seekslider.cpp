@@ -60,6 +60,11 @@ void SeekSliderTest::playMedia()
 		QVERIFY( qslider->isEnabled() );
 }
 
+void SeekSliderTest::seekWithSlider()
+{
+	// click on the slider to seek
+}
+
 void SeekSliderTest::cleanupTestCase()
 {
 	delete media;

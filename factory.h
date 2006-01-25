@@ -44,7 +44,7 @@ namespace Phonon
 	namespace Ifaces
 	{
 		class MediaObject;
-		class SoundcardCapture;
+		class AvCapture;
 		class ByteStream;
 
 		class AudioEffect;
@@ -99,7 +99,7 @@ class PHONON_EXPORT Factory : public QObject, public DCOPObject
 		 * @return a pointer to the Ifaces::MediaObject the backend provides
 		 */
 		Ifaces::MediaObject* createMediaObject( QObject* parent = 0 );
-		Ifaces::SoundcardCapture* createSoundcardCapture( QObject* parent = 0 );
+		Ifaces::AvCapture* createAvCapture( QObject* parent = 0 );
 		Ifaces::ByteStream* createByteStream( QObject* parent = 0 );
 		
 		Ifaces::AudioPath* createAudioPath( QObject* parent = 0 );

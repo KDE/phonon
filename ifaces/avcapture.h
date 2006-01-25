@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,34 +16,33 @@
     Boston, MA 02110-1301, USA.
 
 */
+#ifndef Phonon_IFACES_AVCAPTURE_H
+#define Phonon_IFACES_AVCAPTURE_H
 
-#include "soundcardcapture.h"
+#include "abstractmediaproducer.h"
+
+class QString;
+class QStringList;
 
 namespace Phonon
 {
-namespace Fake
+namespace Ifaces
 {
-SoundcardCapture::SoundcardCapture( QObject* parent )
-	: AbstractMediaProducer( parent )
-{
-}
+	class AvCapture : virtual public AbstractMediaProducer
+	{
+		public:
+			virtual ~AvCapture() {}
 
-SoundcardCapture::~SoundcardCapture()
-{
-}
+			virtual int audioSource() const = 0;
+			virtual int setAudioSource( int index ) = 0;
+			virtual int videoSource() const = 0;
+			virtual int setVideoSource( int index ) = 0;
 
-int SoundcardCapture::captureSource() const
-{
-	return 1;
-}
+		private:
+			class Private;
+			Private* d;
+	};
+}} //namespace Phonon::Ifaces
 
-int SoundcardCapture::setCaptureSource( int index )
-{
-	Q_UNUSED( index );
-	return 1;
-}
-
-}} //namespace Phonon::Fake
-
-#include "soundcardcapture.moc"
-// vim: sw=4 ts=4 noet
+// vim: sw=4 ts=4 tw=80 noet
+#endif // Phonon_IFACES_AVCAPTURE_H

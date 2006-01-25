@@ -17,33 +17,44 @@
 
 */
 
-#ifndef SEEKSLIDER_H
-#define SEEKSLIDER_H
+#include "avcapture.h"
 
-#include <QObject>
-
-class QSlider;
-namespace Phonon {
-	class MediaObject;
-	namespace Ui {
-		class SeekSlider;
-	}
+namespace Phonon
+{
+namespace Fake
+{
+AvCapture::AvCapture( QObject* parent )
+	: AbstractMediaProducer( parent )
+{
 }
 
-class SeekSliderTest : public QObject
+AvCapture::~AvCapture()
 {
-	Q_OBJECT
-	private slots:
-		void initTestCase();
-		void testEnabled();
-		void setMedia();
-		void playMedia();
-		void seekWithSlider();
-		void cleanupTestCase();
-	private:
-		Phonon::Ui::SeekSlider* ss;
-		QSlider* qslider;
-		Phonon::MediaObject* media;
-};
+}
 
-#endif // SEEKSLIDER_H
+int AvCapture::audioSource() const
+{
+	return 1;
+}
+
+int AvCapture::setAudioSource( int index )
+{
+	Q_UNUSED( index );
+	return 1;
+}
+
+int AvCapture::videoSource() const
+{
+	return 1;
+}
+
+int AvCapture::setVideoSource( int index )
+{
+	Q_UNUSED( index );
+	return 1;
+}
+
+}} //namespace Phonon::Fake
+
+#include "avcapture.moc"
+// vim: sw=4 ts=4 noet

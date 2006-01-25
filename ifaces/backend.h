@@ -31,7 +31,7 @@ namespace Phonon
 namespace Ifaces
 {
 	class MediaObject;
-	class SoundcardCapture;
+	class AvCapture;
 	class ByteStream;
 
 	class AudioPath;
@@ -60,7 +60,7 @@ namespace Ifaces
 			virtual ~Backend() {}
 
 			virtual MediaObject*      createMediaObject( QObject* parent ) = 0;
-			virtual SoundcardCapture* createSoundcardCapture( QObject* parent ) = 0;
+			virtual AvCapture*        createAvCapture( QObject* parent ) = 0;
 			virtual ByteStream*       createByteStream( QObject* parent ) = 0;
 
 			virtual AudioPath*        createAudioPath( QObject* parent ) = 0;
@@ -79,36 +79,73 @@ namespace Ifaces
 
 			/**
 			 * Returns the number of available capture sources. An associated
-			 * name and description can be found using captureSourceNameForIndex
-			 * and captureSourceDescriptionForIndex.
+			 * name and description can be found using audioSourceName
+			 * and audioSourceDescription.
 			 *
 			 * \return The number of available capture sources.
-			 * \see captureSourceNameForIndex
-			 * \see captureSourceDescriptionForIndex
+			 * \see audioSourceName
+			 * \see audioSourceDescription
 			 *
 			 * \test The return value has to be \f$\ge0\f$
 			 */
-			virtual int captureSourceCount() const = 0;
+			virtual int audioSourceCount() const = 0;
 
 			/**
 			 * Returns the name of the capture source.
 			 *
-			 * \param index \f$0<\mathrm{index}\leq\mathrm{captureSourceCount}\f$
+			 * \param index \f$0<\mathrm{index}\leq\mathrm{audioSourceCount}\f$
 			 *
 			 * \return The name of this capture source.
 			 *
 			 * \test The return value has to be non-empty.
 			 */
-			virtual QString captureSourceNameForIndex( int index ) const = 0;
+			virtual QString audioSourceName( int index ) const = 0;
 
 			/**
 			 * Returns a description for the capture source.
 			 *
-			 * \param index \f$0<index\leq\f$ captureSourceCount
+			 * \param index \f$0<index\leq\f$ audioSourceCount
 			 *
 			 * \return The description for this capture source.
 			 */
-			virtual QString captureSourceDescriptionForIndex( int index ) const = 0;
+			virtual QString audioSourceDescription( int index ) const = 0;
+
+			virtual int audioSourceVideoIndex( int index ) const = 0;
+
+			/**
+			 * Returns the number of available capture sources. An associated
+			 * name and description can be found using videoSourceName
+			 * and videoSourceDescription.
+			 *
+			 * \return The number of available capture sources.
+			 * \see videoSourceName
+			 * \see videoSourceDescription
+			 *
+			 * \test The return value has to be \f$\ge0\f$
+			 */
+			virtual int videoSourceCount() const = 0;
+
+			/**
+			 * Returns the name of the capture source.
+			 *
+			 * \param index \f$0<\mathrm{index}\leq\mathrm{videoSourceCount}\f$
+			 *
+			 * \return The name of this capture source.
+			 *
+			 * \test The return value has to be non-empty.
+			 */
+			virtual QString videoSourceName( int index ) const = 0;
+
+			/**
+			 * Returns a description for the capture source.
+			 *
+			 * \param index \f$0<index\leq\f$ videoSourceCount
+			 *
+			 * \return The description for this capture source.
+			 */
+			virtual QString videoSourceDescription( int index ) const = 0;
+
+			virtual int videoSourceAudioIndex( int index ) const = 0;
 
 			// effects
 			virtual const QStringList& availableAudioEffects() const = 0;

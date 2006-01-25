@@ -16,29 +16,50 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_FAKE_SOUNDCARDCAPTURE_H
-#define Phonon_FAKE_SOUNDCARDCAPTURE_H
 
-#include "abstractmediaproducer.h"
-#include "../../ifaces/soundcardcapture.h"
+#include "namedescriptiontuple.h"
+#include "namedescriptiontuple_p.h"
+#include <QString>
 
 namespace Phonon
 {
-namespace Fake
+
+NameDescriptionTuple::NameDescriptionTuple( NameDescriptionTuplePrivate& dd,
+		int index, const QString& name, const QString& description )
+	: d_ptr( &dd )
 {
-	class SoundcardCapture : virtual public AbstractMediaProducer, virtual public Ifaces::SoundcardCapture
-	{
-		Q_OBJECT
-		public:
-			SoundcardCapture( QObject* parent );
-			virtual ~SoundcardCapture();
+	Q_D( NameDescriptionTuple );
+	d->index = index;
+	d->name = name;
+	d->description = description;
+}
 
-			virtual int captureSource() const;
-			virtual int setCaptureSource( int index );
+NameDescriptionTuple::NameDescriptionTuple( NameDescriptionTuplePrivate& dd )
+	: d_ptr( &dd )
+{
+}
 
-		private:
-	};
-}} //namespace Phonon::Fake
+NameDescriptionTuple::~NameDescriptionTuple()
+{
+	Q_D( NameDescriptionTuple );
+	delete d;
+	d_ptr = 0;
+}
 
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_FAKE_SOUNDCARDCAPTURE_H
+int NameDescriptionTuple::index() const
+{
+	return d_func()->index;
+}
+
+const QString& NameDescriptionTuple::name() const
+{
+	return d_func()->name;
+}
+
+const QString& NameDescriptionTuple::description() const
+{
+	return d_func()->description;
+}
+
+} //namespace Phonon
+// vim: sw=4 ts=4 noet

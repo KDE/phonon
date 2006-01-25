@@ -16,34 +16,31 @@
     Boston, MA 02110-1301, USA.
 
 */
+#ifndef Phonon_FAKE_AVCAPTURECAPTURE_H
+#define Phonon_FAKE_AVCAPTURECAPTURE_H
 
-#ifndef SEEKSLIDER_H
-#define SEEKSLIDER_H
+#include "abstractmediaproducer.h"
+#include "../../ifaces/avcapture.h"
 
-#include <QObject>
-
-class QSlider;
-namespace Phonon {
-	class MediaObject;
-	namespace Ui {
-		class SeekSlider;
-	}
-}
-
-class SeekSliderTest : public QObject
+namespace Phonon
 {
-	Q_OBJECT
-	private slots:
-		void initTestCase();
-		void testEnabled();
-		void setMedia();
-		void playMedia();
-		void seekWithSlider();
-		void cleanupTestCase();
-	private:
-		Phonon::Ui::SeekSlider* ss;
-		QSlider* qslider;
-		Phonon::MediaObject* media;
-};
+namespace Fake
+{
+	class AvCapture : virtual public AbstractMediaProducer, virtual public Ifaces::AvCapture
+	{
+		Q_OBJECT
+		public:
+			AvCapture( QObject* parent );
+			virtual ~AvCapture();
 
-#endif // SEEKSLIDER_H
+			virtual int audioSource() const;
+			virtual int setAudioSource( int index );
+			virtual int videoSource() const;
+			virtual int setVideoSource( int index );
+
+		private:
+	};
+}} //namespace Phonon::Fake
+
+// vim: sw=4 ts=4 tw=80 noet
+#endif // Phonon_FAKE_AVCAPTURECAPTURE_H

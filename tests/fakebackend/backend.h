@@ -29,7 +29,7 @@ namespace Phonon
 namespace Ifaces
 {
 	class MediaObject;
-	class SoundcardCapture;
+	class AvCapture;
 	class ByteStream;
 
 	class AudioPath;
@@ -52,7 +52,7 @@ namespace Fake
 			virtual ~Backend();
 
 			virtual Ifaces::MediaObject*      createMediaObject( QObject* parent );
-			virtual Ifaces::SoundcardCapture* createSoundcardCapture( QObject* parent );
+			virtual Ifaces::AvCapture*        createAvCapture( QObject* parent );
 			virtual Ifaces::ByteStream*       createByteStream( QObject* parent );
 
 			virtual Ifaces::AudioPath*        createAudioPath( QObject* parent );
@@ -69,38 +69,15 @@ namespace Fake
 			virtual bool supportsSubtitles() const;
 			virtual const KMimeType::List& knownMimeTypes() const;
 
-			/**
-			 * Returns the number of available capture sources. An associated
-			 * name and description can be found using captureSourceNameForIndex
-			 * and captureSourceDescriptionForIndex.
-			 *
-			 * \return The number of available capture sources.
-			 * \see captureSourceNameForIndex
-			 * \see captureSourceDescriptionForIndex
-			 *
-			 * \test The return value has to be \f$\ge0\f$
-			 */
-			virtual int captureSourceCount() const;
+			virtual int audioSourceCount() const;
+			virtual QString audioSourceName( int index ) const;
+			virtual QString audioSourceDescription( int index ) const;
+			virtual int audioSourceVideoIndex( int index ) const;
 
-			/**
-			 * Returns the name of the capture source.
-			 *
-			 * \param index \f$0<\mathrm{index}\leq\mathrm{captureSourceCount}\f$
-			 *
-			 * \return The name of this capture source.
-			 *
-			 * \test The return value has to be non-empty.
-			 */
-			virtual QString captureSourceNameForIndex( int index ) const;
-
-			/**
-			 * Returns a description for the capture source.
-			 *
-			 * \param index \f$0<index\leq\f$ captureSourceCount
-			 *
-			 * \return The description for this capture source.
-			 */
-			virtual QString captureSourceDescriptionForIndex( int index ) const;
+			virtual int videoSourceCount() const;
+			virtual QString videoSourceName( int index ) const;
+			virtual QString videoSourceDescription( int index ) const;
+			virtual int videoSourceAudioIndex( int index ) const;
 
 			// effects
 			virtual const QStringList& availableAudioEffects() const;

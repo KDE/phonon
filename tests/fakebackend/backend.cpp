@@ -19,7 +19,7 @@
 
 #include "backend.h"
 #include "mediaobject.h"
-#include "soundcardcapture.h"
+#include "avcapture.h"
 #include "bytestream.h"
 #include "audiopath.h"
 #include "audioeffect.h"
@@ -53,9 +53,9 @@ Ifaces::MediaObject*      Backend::createMediaObject( QObject* parent )
 	return new MediaObject( parent );
 }
 
-Ifaces::SoundcardCapture* Backend::createSoundcardCapture( QObject* parent )
+Ifaces::AvCapture*        Backend::createAvCapture( QObject* parent )
 {
-	return new SoundcardCapture( parent );
+	return new AvCapture( parent );
 }
 
 Ifaces::ByteStream*       Backend::createByteStream( QObject* parent )
@@ -124,25 +124,25 @@ const KMimeType::List& Backend::knownMimeTypes() const
 	return m_supportedMimeTypes;
 }
 
-int Backend::captureSourceCount() const
+int Backend::audioSourceCount() const
 {
 	return 2;
 }
 
-QString Backend::captureSourceNameForIndex( int index ) const
+QString Backend::audioSourceName( int index ) const
 {
 	switch( index )
 	{
 		case 1:
-			return "fake1";
+			return "Soundcard";
 		case 2:
-			return "fake2";
+			return "DV";
 		default:
 			return QString();
 	}
 }
 
-QString Backend::captureSourceDescriptionForIndex( int index ) const
+QString Backend::audioSourceDescription( int index ) const
 {
 	switch( index )
 	{
@@ -152,6 +152,59 @@ QString Backend::captureSourceDescriptionForIndex( int index ) const
 			return "second description";
 		default:
 			return QString();
+	}
+}
+
+int Backend::audioSourceVideoIndex( int index ) const
+{
+	switch( index )
+	{
+		case 2:
+			return 2;
+		default:
+			return -1;
+	}
+}
+
+int Backend::videoSourceCount() const
+{
+	return 2;
+}
+
+QString Backend::videoSourceName( int index ) const
+{
+	switch( index )
+	{
+		case 1:
+			return "USB Webcam";
+		case 2:
+			return "DV";
+		default:
+			return QString();
+	}
+}
+
+QString Backend::videoSourceDescription( int index ) const
+{
+	switch( index )
+	{
+		case 1:
+			return "first description";
+		case 2:
+			return "second description";
+		default:
+			return QString();
+	}
+}
+
+int Backend::videoSourceAudioIndex( int index ) const
+{
+	switch( index )
+	{
+		case 2:
+			return 2;
+		default:
+			return -1;
 	}
 }
 

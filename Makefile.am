@@ -22,21 +22,24 @@ SUBDIRS = . ifaces ui tests
 lib_LTLIBRARIES = libphononcore.la
 
 phononincludedir = $(includedir)/phonon
-phononinclude_HEADERS = object.h state.h abstractmediaproducer.h mediaobject.h soundcardcapture.h \
+phononinclude_HEADERS = object.h state.h abstractmediaproducer.h mediaobject.h avcapture.h \
 		       mixeriface.h audiopath.h \
 		       videopath.h audioeffect.h audiooutput.h videoeffect.h \
 		       abstractvideooutput.h abstractaudiooutput.h audiodataoutput.h \
 		       audiofftoutput.h simpleplayer.h bytestream.h \
-			   backendcapabilities.h capturesource.h
+		       backendcapabilities.h namedescriptiontuple.h audiosource.h \
+		       videosource.h
 
 libphononcore_la_SOURCES = object.cpp factory.cpp abstractmediaproducer.cpp mediaobject.cpp \
-			  soundcardcapture.cpp factory.skel \
+			  avcapture.cpp factory.skel \
 			  mixeriface.skel audiopath.cpp videopath.cpp \
 			  audiooutput.cpp abstractvideooutput.cpp \
 			  audioeffect.cpp videoeffect.cpp \
 			  abstractaudiooutput.cpp audiodataoutput.cpp \
 			  audiofftoutput.cpp simpleplayer.cpp \
-			  backendcapabilities.cpp bytestream.cpp capturesource.cpp
+			  backendcapabilities.cpp bytestream.cpp \
+			  namedescriptiontuple.cpp audiosource.cpp \
+			  videosource.cpp
 
 libphononcore_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) \
 			  $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined

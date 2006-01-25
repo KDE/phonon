@@ -20,7 +20,8 @@
 #include "backendcapabilities.h"
 #include "ifaces/backend.h"
 #include "factory.h"
-#include "capturesource.h"
+#include "audiosource.h"
+#include "videosource.h"
 
 namespace Phonon
 {
@@ -73,18 +74,58 @@ KMimeType::List BackendCapabilities::knownMimeTypes() const
 	return d->backend ? d->backend->knownMimeTypes() : KMimeType::List();
 }
 
-QList<CaptureSource> BackendCapabilities::availableSoundcardCaptureSources() const
+QList<AudioSource> BackendCapabilities::availableAudioSources() const
 {
 	if( d->backend )
 	{
-		QList<CaptureSource> ret;
-		for( int i = 1; i <= d->backend->captureSourceCount(); ++i )
-			ret.append( CaptureSource( i,
-						d->backend->captureSourceNameForIndex( i ),
-						d->backend->captureSourceDescriptionForIndex( i ) ) );
+		QList<AudioSource> ret;
+		for( int i = 1; i <= d->backend->audioSourceCount(); ++i )
+			ret.append( AudioSource( i,
+						d->backend->audioSourceName( i ),
+						d->backend->audioSourceDescription( i ),
+						d->backend->audioSourceVideoIndex( i ) ) );
 		return ret;
 	}
-	return QList<CaptureSource>();
+	return QList<AudioSource>();
+}
+
+QList<VideoSource> BackendCapabilities::availableVideoSources() const
+{
+	if( d->backend )
+	{
+		QList<VideoSource> ret;
+		for( int i = 1; i <= d->backend->videoSourceCount(); ++i )
+			ret.append( VideoSource( i,
+						d->backend->videoSourceName( i ),
+						d->backend->videoSourceDescription( i ),
+						d->backend->videoSourceAudioIndex( i ) ) );
+		return ret;
+	}
+	return QList<VideoSource>();
+}
+
+AudioSource BackendCapabilities::audioSource( int index ) const
+{
+	if( d->backend )
+	{
+		return AudioSource( index,
+				d->backend->audioSourceName( index ),
+				d->backend->audioSourceDescription( index ),
+				d->backend->audioSourceVideoIndex( index ) );
+	}
+	return AudioSource();
+}
+
+VideoSource BackendCapabilities::videoSource( int index ) const
+{
+	if( d->backend )
+	{
+		return VideoSource( index,
+				d->backend->videoSourceName( index ),
+				d->backend->videoSourceDescription( index ),
+				d->backend->videoSourceAudioIndex( index ) );
+	}
+	return VideoSource();
 }
 
 QStringList BackendCapabilities::availableAudioEffects() const

@@ -17,39 +17,42 @@
 
 */
 
-#ifndef PHONON_CAPTURESOURCE_H
-#define PHONON_CAPTURESOURCE_H
+#ifndef PHONON_NAMEDESCRIPTIONTUPLE_H
+#define PHONON_NAMEDESCRIPTIONTUPLE_H
 
+#include <QtGlobal>
 class QString;
 
 namespace Phonon
 {
+	class NameDescriptionTuplePrivate;
+
 /**
- * @short Description for possible SoundcardCapture choices.
+ * \short Provides a tuple of enduser visible name and description.
  *
- * There often are multiple choices of capture sources from the soundcard (or
- * sound system, e.g. soundserver). To let the enduser make a choice this class
- * provides the needed information.
+ * Some parts give the enduser choices, e.g. what source to capture audio from.
+ * These choices are described by the name and description methods of this class
+ * and identified with the id method. Subclasses then define additional
+ * information like which audio and video choices belong together.
  *
- * @author Matthias Kretz <kretz@kde.org>
- * @since 4.0
- * @see SoundcardCapture
+ * \author Matthias Kretz <kretz@kde.org>
+ * \since 4.0
+ * \see AudioCaptureSource
+ * \see VideoCaptureSource
  */
-class CaptureSource
+class NameDescriptionTuple
 {
-	friend class SoundcardCapture;
-	friend class BackendCapabilities;
+	Q_DECLARE_PRIVATE( NameDescriptionTuple )
 	public:
-		CaptureSource();
-		CaptureSource( const CaptureSource& );
-		~CaptureSource();
-		const CaptureSource& operator=( const CaptureSource& );
-		bool operator==( const CaptureSource& ) const;
+		/** \internal
+		 * Frees the memory used
+		 */
+		~NameDescriptionTuple();
 
 		/**
 		 * Returns the name of the capture source.
 		 *
-		 * @return A string that should be presented to the user to
+		 * \return A string that should be presented to the user to
 		 * choose the capture source.
 		 */
 		const QString& name() const;
@@ -59,7 +62,7 @@ class CaptureSource
 		 * make clear what sound source this is, which is sometimes hard
 		 * to describe or understand from just the name.
 		 *
-		 * @return A string describing the capture source.
+		 * \return A string describing the capture source.
 		 */
 		const QString& description() const;
 
@@ -67,22 +70,30 @@ class CaptureSource
 		 * A unique identifier for this capture source. Used internally
 		 * to distinguish between the capture sources.
 		 *
-		 * @return An integer that uniquely identifies every capture
+		 * \return An integer that uniquely identifies every capture
 		 * source.
 		 */
 		int index() const;
 
 	protected:
 		/**
-		 * @internal
+		 * \internal
 		 * Sets the data.
 		 */
-		CaptureSource( int index, const QString& name, const QString& description );
+		NameDescriptionTuple( NameDescriptionTuplePrivate &dd, int index,
+				const QString& name, const QString& description );
+		/**
+		 * \internal
+		 * for copy ctor
+		 */
+		NameDescriptionTuple( NameDescriptionTuplePrivate &dd );
+
+		NameDescriptionTuplePrivate* d_ptr;
 
 	private:
-		class Private;
-		Private* d;
+		Q_DISABLE_COPY( NameDescriptionTuple )
 };
 } //namespace Phonon
 
-#endif // PHONON_CAPTURESOURCE_H
+#endif // PHONON_NAMEDESCRIPTIONTUPLE_H
+// vim: sw=4 ts=4 noet tw=80

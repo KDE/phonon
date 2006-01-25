@@ -28,7 +28,8 @@
 
 namespace Phonon
 {
-class CaptureSource;
+class AudioSource;
+class VideoSource;
 
 class PHONON_EXPORT BackendCapabilities : public QObject
 {
@@ -48,7 +49,10 @@ class PHONON_EXPORT BackendCapabilities : public QObject
 		bool supportsOSD() const;
 		bool supportsSubtitles() const;
 		KMimeType::List knownMimeTypes() const;
-		QList<CaptureSource> availableSoundcardCaptureSources() const;
+		QList<AudioSource> availableAudioSources() const;
+		QList<VideoSource> availableVideoSources() const;
+		AudioSource audioSource( int index ) const;
+		VideoSource videoSource( int index ) const;
 		QStringList availableAudioEffects() const;
 		QStringList availableVideoEffects() const;
 

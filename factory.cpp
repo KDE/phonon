@@ -27,7 +27,7 @@
 #include "ifaces/videoeffect.h"
 #include "ifaces/backend.h"
 #include "ifaces/mediaobject.h"
-#include "ifaces/soundcardcapture.h"
+#include "ifaces/avcapture.h"
 #include "ifaces/bytestream.h"
 
 #include <ktrader.h>
@@ -181,9 +181,9 @@ Ifaces::MediaObject* Factory::createMediaObject( QObject* parent )
 	return d->backend ? registerObject( d->backend->createMediaObject( parent ) ) : 0;
 }
 
-Ifaces::SoundcardCapture* Factory::createSoundcardCapture( QObject* parent )
+Ifaces::AvCapture* Factory::createAvCapture( QObject* parent )
 {
-	return d->backend ? registerObject( d->backend->createSoundcardCapture( parent ) ) : 0;
+	return d->backend ? registerObject( d->backend->createAvCapture( parent ) ) : 0;
 }
 
 Ifaces::ByteStream* Factory::createByteStream( QObject* parent )
