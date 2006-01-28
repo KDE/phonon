@@ -11494,7 +11494,7 @@
         </codeblockwithcomments>
         <cppheaderclassdeclarationblock parent_id="38650" tag="classDeclarationBlock" canDelete="false" >
          <header>
-          <cppcodedocumentation tag="" text="Class KURL&amp;#010;" />
+          <cppcodedocumentation tag="" text="Class KUrl&amp;#010;" />
          </header>
          <textblocks>
           <hierarchicalcodeblock tag="publicBlock" canDelete="false" >
@@ -11518,7 +11518,7 @@
                 <cppcodedocumentation tag="" indentLevel="1" text="Constructors" />
                </header>
                <textblocks>
-                <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="KURL ( ) { }" >
+                <codeblockwithcomments tag="emptyconstructor" writeOutText="false" indentLevel="1" text="KUrl ( ) { }" >
                  <header>
                   <cppcodedocumentation tag="" indentLevel="1" text="Empty Constructor" />
                  </header>

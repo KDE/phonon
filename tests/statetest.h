@@ -24,7 +24,7 @@
 
 #include <phonon/state.h>
 
-class KURL;
+class KUrl;
 
 namespace Phonon
 {
@@ -48,7 +48,7 @@ class StateTester : public QObject
 		void wrongStateChange();
 
 		Phonon::MediaObject* player;
-		KURL* m_url;
+		KUrl* m_url;
 };
 
 #endif // STATETEST_H

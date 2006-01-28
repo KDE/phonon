@@ -41,7 +41,7 @@ MediaObject::~MediaObject()
 	kdDebug() << k_funcinfo << endl;
 }
 
-KURL MediaObject::url() const
+KUrl MediaObject::url() const
 {
 	kdDebug() << k_funcinfo << endl;
 	return m_url;
@@ -59,7 +59,7 @@ long MediaObject::aboutToFinishTime() const
 	return m_aboutToFinishTime;
 }
 
-void MediaObject::setUrl( const KURL& url )
+void MediaObject::setUrl( const KUrl& url )
 {
 	kdDebug() << k_funcinfo << endl;
 	stop();

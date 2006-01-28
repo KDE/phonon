@@ -24,7 +24,7 @@
 #include <kdelibs_export.h>
 #include "phonondefs.h"
 
-class KURL;
+class KUrl;
 
 namespace Phonon
 {
@@ -61,7 +61,7 @@ namespace Phonon
 			 *
 			 * \return The currently used URL to the media data
 			 */
-			KURL url() const;
+			KUrl url() const;
 			/**
 			 * Get the total time (in milliseconds) of the file currently being played.
 			 *
@@ -91,7 +91,7 @@ namespace Phonon
 			 *
 			 * \param url The URL to the media data.
 			 */
-			void setUrl( const KURL& url );
+			void setUrl( const KUrl& url );
 
 			/**
 			 * Sets the time in milliseconds the aboutToFinish signal is emitted

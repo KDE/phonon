@@ -40,7 +40,7 @@ class SimplePlayer::Private
 		MediaObject * player;
 		AudioPath * path;
 		AudioOutput * output;
-		KURL url;
+		KUrl url;
 		State state;
 		float volume;
 		long time;
@@ -64,7 +64,7 @@ SimplePlayer::~SimplePlayer()
 	delete d->output;
 }
 
-void SimplePlayer::play( const KURL & url )
+void SimplePlayer::play( const KUrl & url )
 {
 	if( d->player )
 	{

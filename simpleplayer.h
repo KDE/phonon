@@ -24,7 +24,7 @@
 #include "state.h"
 #include <kdelibs_export.h>
 
-class KURL;
+class KUrl;
 
 namespace Phonon
 {
@@ -36,7 +36,7 @@ class PHONON_EXPORT SimplePlayer : public QObject
 		SimplePlayer( QObject * parent = 0 );
 		~SimplePlayer();
 
-		void play( const KURL & url );
+		void play( const KUrl & url );
 		void pause();
 		void stop();
 

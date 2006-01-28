@@ -23,7 +23,7 @@
 #include <QObject>
 #include <kdelibs_export.h>
 
-class KURL;
+class KUrl;
 
 namespace Phonon
 {

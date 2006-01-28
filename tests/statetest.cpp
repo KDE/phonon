@@ -28,7 +28,7 @@ using namespace Phonon;
 
 void StateTester::initTestCase()
 {
-	m_url = new KURL( getenv( "PHONON_TESTURL" ) );
+	m_url = new KUrl( getenv( "PHONON_TESTURL" ) );
 }
 
 void StateTester::run()

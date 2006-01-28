@@ -22,7 +22,7 @@
 
 #include "../../ifaces/backend.h"
 
-class KURL;
+class KUrl;
 
 namespace Phonon
 {

@@ -23,7 +23,7 @@
 #include "../../ifaces/mediaobject.h"
 #include <kurl.h>
 
-class KURL;
+class KUrl;
 
 namespace Phonon
 {
@@ -35,11 +35,11 @@ namespace Fake
 		public:
 			MediaObject( QObject* parent );
 			virtual ~MediaObject();
-			virtual KURL url() const;
+			virtual KUrl url() const;
 			virtual long totalTime() const;
 			//virtual long remainingTime() const;
 			virtual long aboutToFinishTime() const;
-			virtual void setUrl( const KURL& url );
+			virtual void setUrl( const KUrl& url );
 			virtual void setAboutToFinishTime( long newAboutToFinishTime );
 
 			virtual void play();
@@ -58,7 +58,7 @@ namespace Fake
 			void aboutToFinishTimeout();
 
 		private:
-			KURL m_url;
+			KUrl m_url;
 			long m_aboutToFinishTime;
 			QTimer* m_aboutToFinishTimer;
 			QTimer* m_finishTimer;

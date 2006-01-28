@@ -172,7 +172,7 @@ void TestWidget::loadFile( const QString & file )
 {
 	delete m_media;
 	m_media = new MediaObject( this );
-	m_media->setUrl( KURL( file ) );
+	m_media->setUrl( KUrl( file ) );
 	m_media->setTickInterval( 100 );
 	m_media->addAudioPath( path );
 	if( m_media->hasVideo() && BackendCapabilities::self()->supportsVideo() )

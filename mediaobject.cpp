@@ -31,13 +31,13 @@ class MediaObject::Private
 			: aboutToFinishTime( 0 )
 		{ }
 
-		KURL url;
+		KUrl url;
 		long aboutToFinishTime;
 };
 
 PHONON_HEIR_IMPL( MediaObject, AbstractMediaProducer )
 
-KURL MediaObject::url() const
+KUrl MediaObject::url() const
 {
 	return m_iface ? m_iface->url() : d->url;
 }
@@ -57,7 +57,7 @@ long MediaObject::aboutToFinishTime() const
 	return m_iface ? m_iface->aboutToFinishTime() : d->aboutToFinishTime;
 }
 
-void MediaObject::setUrl( const KURL& url )
+void MediaObject::setUrl( const KUrl& url )
 {
 	if( iface() )
 	{

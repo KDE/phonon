@@ -21,7 +21,7 @@
 
 #include "abstractmediaproducer.h"
 
-class KURL;
+class KUrl;
 
 namespace Phonon
 {
@@ -45,7 +45,7 @@ namespace Ifaces
 			 *
 			 * @param url The URL to the media data.
 			 */
-			virtual KURL url() const = 0;
+			virtual KUrl url() const = 0;
 			/**
 			 * Get the total time (in milliseconds) of the file currently being played.
 			 *
@@ -59,7 +59,7 @@ namespace Ifaces
 			virtual long aboutToFinishTime() const = 0;
 
 			// Attributes Setters:
-			virtual void setUrl( const KURL& url ) = 0;
+			virtual void setUrl( const KUrl& url ) = 0;
 			virtual void setAboutToFinishTime( long newAboutToFinishTime ) = 0;
 
 		protected:

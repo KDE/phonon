@@ -43,7 +43,7 @@ class MediaObjectTest : public QObject
 		void cleanupTestCase();
 
 	private:
-		KURL m_url;
+		KUrl m_url;
 		Phonon::MediaObject* m_media;
 		QSignalSpy* m_spy;
 };
