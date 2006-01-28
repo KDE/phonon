@@ -18,50 +18,17 @@
 */
 
 #include "statetest.h"
-
 #include <QTimer>
-
-#include <phonon/mediaobject.h>
-
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-#include <kdebug.h>
+#include <qtest_kde.h>
 #include <kurl.h>
+#include <phonon/mediaobject.h>
 #include <cstdlib>
-#include <klocale.h>
 
 using namespace Phonon;
 
-kdbgstream& operator<<( kdbgstream & stream, const Phonon::State state )
+void StateTester::initTestCase()
 {
-	switch( state )
-	{
-		case Phonon::ErrorState:
-			stream << "Error";
-			break;
-		case Phonon::LoadingState:
-			stream << "LoadingState";
-			break;
-		case Phonon::StoppedState:
-			stream << "StoppedState";
-			break;
-		case Phonon::PlayingState:
-			stream << "PlayingState";
-			break;
-		case Phonon::BufferingState:
-			stream << "BufferingState";
-			break;
-		case Phonon::PausedState:
-			stream << "PausedState";
-			break;
-	}
-	return stream;
-}
-
-StateTester::StateTester( const KURL & url )
-{
-	m_url = new KURL( url );
+	m_url = new KURL( getenv( "PHONON_TESTURL" ) );
 }
 
 void StateTester::run()
@@ -219,37 +186,11 @@ void StateTester::wrongStateChange()
 	exit( 1 );
 }
 
-static const KCmdLineOptions options[] =
+void StateTester::cleanupTestCase()
 {
-	  { "+url", I18N_NOOP( "media file to play" ), 0 },
-	  KCmdLineLastOption // End of options.
-};
-
-int main( int argc, char ** argv )
-{
-	KAboutData about( "phonontest", "KDE Multimedia Test",
-			"0.1", "Testprogram",
-			KAboutData::License_LGPL, 0 );
-	about.addAuthor( "Matthias Kretz", 0, "kretz@kde.org" );
-	KCmdLineArgs::init( argc, argv, &about );
-	KCmdLineArgs::addCmdLineOptions( options );
-	KApplication app; // we need it for KTrader
-
-	StateTester* tester = 0;
-	if( KCmdLineArgs::parsedArgs()->count() > 0 )
-	{
-		tester = new StateTester( KCmdLineArgs::parsedArgs()->url( 0 ) );
-		QTimer::singleShot( 400, tester, SLOT( run() ) );
-	}
-	else
-	{
-		KCmdLineArgs::usage();
-		exit( 2 );
-	}
-
-	return app.exec();
 }
 
+QTEST_KDEMAIN( StateTester, NoGUI )
 #include "statetest.moc"
 
 // vim: sw=4 ts=4 noet
