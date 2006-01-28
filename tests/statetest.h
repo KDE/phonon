@@ -34,14 +34,14 @@ namespace Phonon
 class StateTester : public QObject
 {
 	Q_OBJECT
-	public:
-		StateTester( const KURL & );
 
 	public slots:
 		void run();
 
 	private slots:
+		void initTestCase();
 		void stateChanged( Phonon::State, Phonon::State );
+		void cleanupTestCase();
 
 	private:
 		void testplaying();
