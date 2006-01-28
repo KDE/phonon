@@ -17,15 +17,13 @@
 
 SUBDIRS = . fakebackend
 INCLUDES = -I$(top_srcdir) $(all_includes)
+LDADD = ../libphononcore.la -lQtTest_debug
+AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 METASOURCES = AUTO
 
-check_PROGRAMS = statetest guitest
-
-guitest_SOURCES = main.cpp testwidget.cpp
-guitest_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-guitest_LDADD   = $(LIB_KPARTS) $(top_builddir)/phonon/libphononcore.la $(top_builddir)/phonon/ui/libphononui.la
+check_PROGRAMS = statetest
 
 statetest_SOURCES = statetest.cpp
-statetest_LDFLAGS = $(KDE_RPATH) $(all_libraries)
-statetest_LDADD   = $(top_builddir)/phonon/libphononcore.la
+
+TESTS = statetest

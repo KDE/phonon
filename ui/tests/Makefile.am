@@ -21,8 +21,9 @@ AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 METASOURCES = AUTO
 
-check_PROGRAMS = seekslider
+check_PROGRAMS = seekslider guitest
 
 seekslider_SOURCES = seekslider.cpp
+guitest_SOURCES = main.cpp testwidget.cpp
 
 TESTS = seekslider
