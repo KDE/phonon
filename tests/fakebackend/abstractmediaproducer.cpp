@@ -128,6 +128,8 @@ void AbstractMediaProducer::seek( long time )
 
 void AbstractMediaProducer::setState( State newstate )
 {
+	if( newstate == m_state )
+		return;
 	State oldstate = m_state;
 	m_state = newstate;
 	kdDebug() << "emit stateChanged( " << newstate << ", " << oldstate << " )" << endl;

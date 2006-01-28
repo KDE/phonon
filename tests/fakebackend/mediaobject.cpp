@@ -87,9 +87,12 @@ void MediaObject::play()
 void MediaObject::pause()
 {
 	kdDebug() << k_funcinfo << endl;
-	AbstractMediaProducer::pause();
-	m_aboutToFinishTimer->stop();
-	m_finishTimer->stop();
+	if( state() == PlayingState || state() == BufferingState )
+	{
+		AbstractMediaProducer::pause();
+		m_aboutToFinishTimer->stop();
+		m_finishTimer->stop();
+	}
 }
 
 void MediaObject::stop()
