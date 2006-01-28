@@ -50,10 +50,10 @@ class PHONON_EXPORT SimplePlayer : public QObject
 		bool isPlaying() const;
 		bool isPaused() const;
 
-	signals:
+	Q_SIGNALS:
 		void finished();
 
-	private slots:
+	private Q_SLOTS:
 		void stateChanged( Phonon::State, Phonon::State );
 
 	private:

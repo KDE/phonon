@@ -43,7 +43,7 @@ namespace Ifaces
 			virtual int setBandwidth( int newBandwidth ) = 0;
 			virtual int setRate( int newRate ) = 0;
 
-		//signals:
+		//Q_SIGNALS:
 			virtual void fourierTransformedData( const QVector<float>& spectrum ) = 0;
 
 		private:

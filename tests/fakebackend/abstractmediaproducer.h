@@ -47,7 +47,7 @@ namespace Fake
 			virtual void stop();
 			virtual void seek( long time );
 
-		signals:
+		Q_SIGNALS:
 			void stateChanged( Phonon::State newstate, Phonon::State oldstate );
 			void tick( long time );
 
@@ -58,7 +58,7 @@ namespace Fake
 		protected:
 			void setState( State );
 
-		private slots:
+		private Q_SLOTS:
 			void emitTick();
 
 		private:

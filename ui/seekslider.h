@@ -44,10 +44,10 @@ class PHONON_EXPORT SeekSlider : public QWidget
 		SeekSlider( QWidget* parent = 0 );
 		~SeekSlider();
 
-	public slots:
+	public Q_SLOTS:
 		void setMediaProducer( AbstractMediaProducer* );
 
-	private slots:
+	private Q_SLOTS:
 		void stateChanged( Phonon::State );
 		void mediaDestroyed();
 		void seek( int );

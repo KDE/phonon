@@ -44,7 +44,7 @@ namespace Phonon
 		public:
 			QString type() const;
 
-		public slots:
+		public Q_SLOTS:
 			void setType( const QString& );
 	};
 } //namespace Phonon

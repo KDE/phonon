@@ -114,7 +114,7 @@ namespace Phonon
 			 */
 			bool streamSeekable() const;
 
-		public slots:
+		public Q_SLOTS:
 			/**
 			 * Tell the object whether you will support seeking in the
 			 * datastream. If you do, you have to react to the seekStream
@@ -177,7 +177,7 @@ namespace Phonon
 			 */
 			void setAboutToFinishTime( long newAboutToFinishTime );
 
-		signals:
+		Q_SIGNALS:
 			/**
 			 * \copydoc MediaObject::finished()
 			 */

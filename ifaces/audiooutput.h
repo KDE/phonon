@@ -40,7 +40,7 @@ namespace Ifaces
 			virtual QString setName( const QString& newName ) = 0;
 			virtual float setVolume( float newVolume ) = 0;
 
-		//signals:
+		//Q_SIGNALS:
 		protected:
 			virtual void volumeChanged( float newVolume ) = 0;
 

@@ -43,11 +43,11 @@ class PHONON_EXPORT VolumeFader : public QWidget
 		VolumeFader( QWidget* parent = 0 );
 		~VolumeFader();
 
-	public slots:
+	public Q_SLOTS:
 		void setOrientation( Qt::Orientation );
 		void setAudioOutput( AudioOutput* );
 
-	private slots:
+	private Q_SLOTS:
 		void outputDestroyed();
 		void sliderChanged( int );
 		void volumeChanged( float );

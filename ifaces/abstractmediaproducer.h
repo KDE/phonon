@@ -108,7 +108,7 @@ namespace Ifaces
 			 */
 			virtual void seek( long time ) = 0;
 
-		//signals:
+		//Q_SIGNALS:
 			/**
 			 * Emitted when the state of the MediaObject has changed.
 			 * In case you're not interested in the old state you can also

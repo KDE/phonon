@@ -84,7 +84,7 @@ namespace Phonon
 			 */
 			long aboutToFinishTime() const;
 
-		public slots:
+		public Q_SLOTS:
 			// Attributes Setters:
 			/**
 			 * Set the URL the MediaObject should use as media data source.
@@ -105,7 +105,7 @@ namespace Phonon
 			 */
 			void setAboutToFinishTime( long newAboutToFinishTime );
 
-		signals:
+		Q_SIGNALS:
 			/**
 			 * Emitted when the file has finished playing on its own.
 			 * I.e. it is not emitted if you call stop(), pause() or

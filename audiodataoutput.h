@@ -52,7 +52,7 @@ namespace Phonon
 			// Attributes Getters:
 			int availableSamples() const;
 
-		public slots:
+		public Q_SLOTS:
 			// Attributes Setters:
 	};
 } //namespace Phonon

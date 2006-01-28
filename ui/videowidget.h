@@ -84,7 +84,7 @@ namespace Ifaces
 			 */
 			bool isFullscreen() const;
 
-		public slots:
+		public Q_SLOTS:
 			/**
 			 * Sets whether the video should be shown using the full screen.
 			 *
@@ -101,7 +101,7 @@ namespace Ifaces
 			virtual void ifaceDeleted();
 			void setupIface( Ui::Ifaces::VideoWidget* newIface );
 
-		protected slots:
+		protected Q_SLOTS:
 			// when the Factory wants to change the Backend the following slots are used
 			void deleteIface();
 			virtual void createIface();

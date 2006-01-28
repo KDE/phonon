@@ -54,14 +54,14 @@ class PHONON_EXPORT MediaControls : public QWidget
 		bool isVolumeControlVisible() const;
 		bool isLoopControlVisible() const;
 
-	public slots:
+	public Q_SLOTS:
 		void setMediaProducer( AbstractMediaProducer* );
 		void setAudioOutput( AudioOutput* audioOutput );
 		void setSeekSliderVisible( bool );
 		void setVolumeControlVisible( bool );
 		void setLoopControlVisible( bool );
 
-	private slots:
+	private Q_SLOTS:
 		void stateChanged( Phonon::State, Phonon::State );
 		void mediaDestroyed();
 

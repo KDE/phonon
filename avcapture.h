@@ -72,7 +72,7 @@ namespace Phonon
 			 */
 			const VideoSource& videoSource() const;
 
-		public slots:
+		public Q_SLOTS:
 			/**
 			 * Sets the audio capture source to use.
 			 *

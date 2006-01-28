@@ -66,7 +66,7 @@ class PHONON_EXPORT Factory : public QObject
 
 		const Ui::Ifaces::Backend* backend() const;
 
-	signals:
+	Q_SIGNALS:
 		/**
 		 * This signal is emitted when the user changes the backend. At that
 		 * point all references to Ifaces objects need to be freed.
@@ -90,7 +90,7 @@ class PHONON_EXPORT Factory : public QObject
 	protected:
 		template<class T> T* Factory::registerObject( T* o );
 
-	private slots:
+	private Q_SLOTS:
 		void deleteNow();
 
 	private:

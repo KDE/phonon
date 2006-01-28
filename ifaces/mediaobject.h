@@ -63,7 +63,7 @@ namespace Ifaces
 			virtual void setAboutToFinishTime( long newAboutToFinishTime ) = 0;
 
 		protected:
-		//signals:
+		//Q_SIGNALS:
 			/**
 			 * Emitted when the file has finished playing on its own.
 			 * I.e. it is not emitted if you call stop(), pause() or

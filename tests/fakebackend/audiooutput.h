@@ -41,7 +41,7 @@ namespace Fake
 			virtual QString setName( const QString& newName );
 			virtual float setVolume( float newVolume );
 
-		signals:
+		Q_SIGNALS:
 			void volumeChanged( float newVolume );
 
 		private:

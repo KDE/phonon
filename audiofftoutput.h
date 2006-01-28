@@ -83,7 +83,7 @@ namespace Phonon
 			 */
 			int rate() const;
 
-		public slots:
+		public Q_SLOTS:
 			// Attributes Setters:
 			/**
 			 * Sets the bandwidth of the values in the frequency spectrum. The
@@ -112,7 +112,7 @@ namespace Phonon
 			 */
 			void setRate( int newRate );
 
-		signals:
+		Q_SIGNALS:
 			/**
 			 * Emitted whenever a fourier transformation has been calculated.
 			 *

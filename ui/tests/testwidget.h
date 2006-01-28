@@ -47,7 +47,7 @@ class TestWidget : public QWidget
 	Q_OBJECT
 	public:
 		TestWidget();
-	private slots:
+	private Q_SLOTS:
 		void volchanged( int );
 		void slotVolumeChanged( float );
 		void tick( long );

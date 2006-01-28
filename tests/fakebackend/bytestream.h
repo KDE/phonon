@@ -51,10 +51,10 @@ namespace Fake
 			virtual void pause();
 			virtual void seek( long time );
 
-		public slots:
+		public Q_SLOTS:
 			virtual void stop();
 
-		signals:
+		Q_SIGNALS:
 			void finished();
 			void aboutToFinish( long );
 			void length( long );
@@ -62,7 +62,7 @@ namespace Fake
 			void enoughData();
 			void seekStream( long );
 
-		private slots:
+		private Q_SLOTS:
 			void consumeStream();
 
 		private:

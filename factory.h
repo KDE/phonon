@@ -150,7 +150,7 @@ class PHONON_EXPORT Factory : public QObject, public DCOPObject
 		QString backendWebsite() const;
 #endif
 
-	signals:
+	Q_SIGNALS:
 		/**
 		 * This signal is emitted when the user changes the backend. At that
 		 * point all references to Ifaces objects need to be freed.
@@ -179,7 +179,7 @@ class PHONON_EXPORT Factory : public QObject, public DCOPObject
 		 */
 		void registerQObject( QObject* o );
 
-	private slots:
+	private Q_SLOTS:
 		void objectDestroyed( QObject * );
 
 	private:

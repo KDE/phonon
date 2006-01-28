@@ -32,7 +32,7 @@ AudioFftOutput::~AudioFftOutput()
 {
 }
 
-//signals: void fourierTransformedData( const QVector<float>& spectrum );
+//Q_SIGNALS: void fourierTransformedData( const QVector<float>& spectrum );
 const QVector<float>& AudioFftOutput::fourierTransformedData() const
 {
 	return m_data;

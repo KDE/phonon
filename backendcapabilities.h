@@ -56,7 +56,7 @@ class PHONON_EXPORT BackendCapabilities : public QObject
 		QStringList availableAudioEffects() const;
 		QStringList availableVideoEffects() const;
 
-	signals:
+	Q_SIGNALS:
 		/**
 		 * This signal is emitted if the capabilites have changed. This can
 		 * happen if the user has requested a backend change.
@@ -67,7 +67,7 @@ class PHONON_EXPORT BackendCapabilities : public QObject
 		BackendCapabilities();
 		~BackendCapabilities();
 
-	private slots:
+	private Q_SLOTS:
 		void slotBackendChanged();
 
 	private:

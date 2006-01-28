@@ -154,7 +154,7 @@ namespace Phonon
 			 */
 			const QList<AudioPath*>& audioPaths() const;
 
-		public slots:
+		public Q_SLOTS:
 			/**
 			 * Change the interval the tick signal is emitted. If you set
 			 * @p newTickInterval to @c 0 the signal gets disabled.
@@ -163,7 +163,7 @@ namespace Phonon
 			 */
 			void setTickInterval( long newTickInterval );
 
-		public slots:
+		public Q_SLOTS:
 			/**
 			 * Start playback of the media data.
 			 */
@@ -186,7 +186,7 @@ namespace Phonon
 			 */
 			void seek( long time );
 
-		signals:
+		Q_SIGNALS:
 			/**
 			 * Emitted when the state of the MediaObject has changed.
 			 * In case you're not interested in the old state you can also
@@ -208,7 +208,7 @@ namespace Phonon
 			 */
 			void tick( long time );
 
-		private slots:
+		private Q_SLOTS:
 			void resumePlay();
 			void resumePause();
 	};

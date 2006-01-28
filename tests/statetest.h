@@ -35,10 +35,10 @@ class StateTester : public QObject
 {
 	Q_OBJECT
 
-	public slots:
+	public Q_SLOTS:
 		void run();
 
-	private slots:
+	private Q_SLOTS:
 		void initTestCase();
 		void stateChanged( Phonon::State, Phonon::State );
 		void cleanupTestCase();

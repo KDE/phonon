@@ -42,12 +42,12 @@ namespace Phonon
 			QString name() const;
 			float volume() const;
 
-		public slots:
+		public Q_SLOTS:
 			// Attributes Setters:
 			void setName( const QString& newName );
 			void setVolume( float newVolume );
 
-		signals:
+		Q_SIGNALS:
 			void volumeChanged( float newVolume );
 	};
 } //namespace Phonon

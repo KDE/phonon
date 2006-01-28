@@ -47,7 +47,7 @@ namespace Phonon
 			 */
 			Object( QObject* parent = 0 );
 
-		protected slots:
+		protected Q_SLOTS:
 			/**
 			 * \internal
 			 * This method cleanly deletes the Iface object. It is called on

@@ -45,7 +45,7 @@ namespace Fake
 			virtual int setBandwidth( int newBandwidth );
 			virtual int setRate( int newRate );
 
-		signals:
+		Q_SIGNALS:
 			void fourierTransformedData( const QVector<float>& spectrum );
 
 		private:
