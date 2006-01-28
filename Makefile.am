@@ -30,7 +30,7 @@ phononinclude_HEADERS = object.h state.h abstractmediaproducer.h mediaobject.h a
 		       backendcapabilities.h namedescriptiontuple.h audiosource.h \
 		       videosource.h
 
-libphononcore_la_SOURCES = object.cpp factory.cpp abstractmediaproducer.cpp mediaobject.cpp \
+libphononcore_la_SOURCES = state.cpp object.cpp factory.cpp abstractmediaproducer.cpp mediaobject.cpp \
 			  avcapture.cpp factory.skel \
 			  mixeriface.skel audiopath.cpp videopath.cpp \
 			  audiooutput.cpp abstractvideooutput.cpp \

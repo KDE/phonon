@@ -16,9 +16,10 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_STATE_H
-#define Phonon_STATE_H
+#ifndef PHONON_STATE_H
+#define PHONON_STATE_H
 
+#include <kdelibs_export.h>
 namespace Phonon
 {
 	/**
@@ -62,5 +63,36 @@ namespace Phonon
 
 } //namespace Phonon
 
+class kdbgstream;
+#include <kdebug.h>
+/**
+ * Implements needed operator to use Phonon::State with kdDebug
+ */
+inline PHONON_EXPORT kdbgstream& operator<<( kdbgstream & stream, const Phonon::State state )
+{
+	switch( state )
+	{
+		case Phonon::ErrorState:
+			stream << "Error";
+			break;
+		case Phonon::LoadingState:
+			stream << "LoadingState";
+			break;
+		case Phonon::StoppedState:
+			stream << "StoppedState";
+			break;
+		case Phonon::PlayingState:
+			stream << "PlayingState";
+			break;
+		case Phonon::BufferingState:
+			stream << "BufferingState";
+			break;
+		case Phonon::PausedState:
+			stream << "PausedState";
+			break;
+	}
+	return stream;
+}
+
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_STATE_H
+#endif // PHONON_STATE_H
