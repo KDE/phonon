@@ -84,7 +84,7 @@ TestWidget::TestWidget()
 	m_stop->setText( "stop" );
 
 	KLineEdit * file = new KLineEdit( frame );
-	file->setCompletionObject( new KURLCompletion( KURLCompletion::FileCompletion ) );
+	file->setCompletionObject( new KUrlCompletion( KUrlCompletion::FileCompletion ) );
 	connect( file, SIGNAL( returnPressed( const QString & ) ), SLOT( loadFile( const QString & ) ) );
 
 	QFrame * frame2 = new QFrame( this );
