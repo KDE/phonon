@@ -26,7 +26,7 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 #include "seekslider.h"
-#include "volumefader.h"
+#include "volumeslider.h"
 
 namespace Phonon
 {
@@ -43,7 +43,7 @@ class MediaControls::Private
 			, stopButton( 0 )
 			, loopButton( 0 )
 			, seekSlider( 0 )
-			, volumeFader( 0 )
+			, volumeSlider( 0 )
 			, media( 0 )
 		{
 		}
@@ -54,7 +54,7 @@ class MediaControls::Private
 		QToolButton* stopButton;
 		QToolButton* loopButton;
 		SeekSlider*  seekSlider;
-		VolumeFader* volumeFader;
+		VolumeSlider* volumeSlider;
 		AbstractMediaProducer* media;
 };
 
@@ -78,16 +78,16 @@ MediaControls::MediaControls( QWidget* parent )
 	d->seekSlider = new SeekSlider( this );
 	d->seekSlider->setEnabled( false );
 
-	d->volumeFader = new VolumeFader( this );
-	d->volumeFader->setOrientation( Qt::Horizontal );
-	d->volumeFader->hide();
+	d->volumeSlider = new VolumeSlider( this );
+	d->volumeSlider->setOrientation( Qt::Horizontal );
+	d->volumeSlider->hide();
 
 	d->layout = new QHBoxLayout( this );
 	d->layout->addWidget( d->playButton );
 	d->layout->addWidget( d->pauseButton );
 	d->layout->addWidget( d->stopButton );
 	d->layout->addWidget( d->seekSlider );
-	d->layout->addWidget( d->volumeFader );
+	d->layout->addWidget( d->volumeSlider );
 	d->layout->addStretch();
 }
 
@@ -103,7 +103,7 @@ bool MediaControls::isSeekSliderVisible() const
 
 bool MediaControls::isVolumeControlVisible() const
 {
-	return d->volumeFader->isVisible();
+	return d->volumeSlider->isVisible();
 }
 
 bool MediaControls::isLoopControlVisible() const
@@ -129,7 +129,7 @@ void MediaControls::setMediaProducer( AbstractMediaProducer* media )
 
 void MediaControls::setAudioOutput( AudioOutput* audioOutput )
 {
-	d->volumeFader->setAudioOutput( audioOutput );
+	d->volumeSlider->setAudioOutput( audioOutput );
 }
 
 void MediaControls::setSeekSliderVisible( bool vis )
@@ -139,7 +139,7 @@ void MediaControls::setSeekSliderVisible( bool vis )
 
 void MediaControls::setVolumeControlVisible( bool vis )
 {
-	d->volumeFader->setVisible( vis );
+	d->volumeSlider->setVisible( vis );
 }
 
 void MediaControls::setLoopControlVisible( bool vis )

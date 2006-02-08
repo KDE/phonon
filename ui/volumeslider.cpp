@@ -17,7 +17,7 @@
 
 */
 
-#include "volumefader.h"
+#include "volumeslider.h"
 #include "../audiooutput.h"
 #include <QSlider>
 #include <QHBoxLayout>
@@ -27,7 +27,7 @@ namespace Phonon
 namespace Ui
 {
 
-class VolumeFader::Private
+class VolumeSlider::Private
 {
 	public:
 		Private()
@@ -42,7 +42,7 @@ class VolumeFader::Private
 		bool ignoreVolumeChange;
 };
 
-VolumeFader::VolumeFader( QWidget* parent )
+VolumeSlider::VolumeSlider( QWidget* parent )
 	: QWidget( parent )
 	, d( new Private )
 {
@@ -52,17 +52,17 @@ VolumeFader::VolumeFader( QWidget* parent )
 	layout->addWidget( d->slider );
 }
 
-VolumeFader::~VolumeFader()
+VolumeSlider::~VolumeSlider()
 {
 	delete d;
 }
 
-void VolumeFader::setOrientation( Qt::Orientation o )
+void VolumeSlider::setOrientation( Qt::Orientation o )
 {
 	d->slider->setOrientation( o );
 }
 
-void VolumeFader::setAudioOutput( AudioOutput* output )
+void VolumeSlider::setAudioOutput( AudioOutput* output )
 {
 	if( !output )
 		return;
@@ -75,20 +75,20 @@ void VolumeFader::setAudioOutput( AudioOutput* output )
 	connect( output, SIGNAL( volumeChanged( float ) ), SLOT( volumeChanged( float ) ) );
 }
 
-void VolumeFader::sliderChanged( int value )
+void VolumeSlider::sliderChanged( int value )
 {
 	d->ignoreVolumeChange = true;
 	d->output->setVolume( ( static_cast<float>( value ) ) * 0.01 );
 	d->ignoreVolumeChange = false;
 }
 
-void VolumeFader::volumeChanged( float value )
+void VolumeSlider::volumeChanged( float value )
 {
 	if( !d->ignoreVolumeChange )
 		d->slider->setValue( qRound( 100 * value ) );
 }
 
-void VolumeFader::outputDestroyed()
+void VolumeSlider::outputDestroyed()
 {
 	d->output = 0;
 	d->slider->setValue( 100 );
@@ -97,5 +97,5 @@ void VolumeFader::outputDestroyed()
 
 }} // namespace Phonon::Ui
 
-#include "volumefader.moc"
+#include "volumeslider.moc"
 // vim: sw=4 ts=4 noet

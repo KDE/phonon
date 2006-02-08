@@ -17,8 +17,8 @@
 
 */
 
-#ifndef PHONON_UI_VOLUMEFADER_H
-#define PHONON_UI_VOLUMEFADER_H
+#ifndef PHONON_UI_VOLUMESLIDER_H
+#define PHONON_UI_VOLUMESLIDER_H
 
 #include <QWidget>
 #include <kdelibs_export.h>
@@ -31,17 +31,17 @@ namespace Ui
 {
 
 /**
- * \short Widget providing a fader to control the volume of an AudioOutput.
+ * \short Widget providing a slider to control the volume of an AudioOutput.
  *
  * \author Matthias Kretz <kretz@kde.org>
  * \since 4.0
  */
-class PHONON_EXPORT VolumeFader : public QWidget
+class PHONON_EXPORT VolumeSlider : public QWidget
 {
 	Q_OBJECT
 	public:
-		VolumeFader( QWidget* parent = 0 );
-		~VolumeFader();
+		VolumeSlider( QWidget* parent = 0 );
+		~VolumeSlider();
 
 	public Q_SLOTS:
 		void setOrientation( Qt::Orientation );
@@ -60,4 +60,4 @@ class PHONON_EXPORT VolumeFader : public QWidget
 }} // namespace Phonon::Ui
 
 // vim: sw=4 ts=4 tw=80
-#endif // PHONON_UI_VOLUMEFADER_H
+#endif // PHONON_UI_VOLUMESLIDER_H

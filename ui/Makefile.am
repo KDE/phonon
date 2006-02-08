@@ -23,10 +23,10 @@ lib_LTLIBRARIES = libphononui.la
 
 phononincludedir = $(includedir)/phonon/ui
 phononinclude_HEADERS = videowidget.h seekslider.h mediacontrols.h \
-						volumefader.h
+						volumeslider.h
 
 libphononui_la_SOURCES = factory.cpp videowidget.cpp videowidgethelper.cpp \
-						 seekslider.cpp mediacontrols.cpp volumefader.cpp
+						 seekslider.cpp mediacontrols.cpp volumeslider.cpp
 libphononui_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) \
 			  $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined
 libphononui_la_LIBADD = $(top_builddir)/phonon/libphononcore.la $(top_builddir)/phonon/ifaces/ui/libphononifacesui.la
