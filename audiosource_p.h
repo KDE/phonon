@@ -24,7 +24,7 @@
 
 namespace Phonon
 {
-	class AudioSourcePrivate : NameDescriptionTuplePrivate
+	class AudioSourcePrivate : public NameDescriptionTuplePrivate
 	{
 		Q_DECLARE_PUBLIC( AudioSource )
 		protected:
