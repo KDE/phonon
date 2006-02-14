@@ -20,6 +20,7 @@
 #define PHONON_STATE_H
 
 #include <kdelibs_export.h>
+
 namespace Phonon
 {
 	/**
@@ -61,6 +62,24 @@ namespace Phonon
 		ErrorState
 	};
 
+	/**
+	 * Set's the category your program should be listed in in the mixer.
+	 *
+	 * A Jukebox will set this to Music, a VoIP program to Communication, a
+	 * DVD player to video, and so on.
+	 *
+	 * \see AudioOutput::setCategory
+	 */
+	enum Category
+	{
+		Unspecified,
+		Notification,
+		Music,
+		Video,
+		Communication
+	};
+
+	QString categoryToString( Category c );
 } //namespace Phonon
 
 class kdbgstream;

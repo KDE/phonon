@@ -19,7 +19,28 @@
 
 #include "state.h"
 #include <kdebug.h>
+#include <klocale.h>
 
+namespace Phonon
+{
+	QString categoryToString( Category c )
+	{
+		switch( c )
+		{
+			case Phonon::Unspecified:
+				return i18n( "Unspecified" );
+			case Phonon::Notification:
+				return i18n( "Notification" );
+			case Phonon::Music:
+				return i18n( "Music" );
+			case Phonon::Video:
+				return i18n( "Video" );
+			case Phonon::Communication:
+				return i18n( "Communication" );
+		}
+		return QString();
+	}
+}
 /*
 kdbgstream& operator<<( kdbgstream & stream, const Phonon::State state )
 {
