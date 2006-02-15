@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,29 +16,19 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_IFACES_ABSTRACTAUDIOOUTPUTBASE_H
-#define Phonon_IFACES_ABSTRACTAUDIOOUTPUTBASE_H
+#ifndef Phonon_IFACES_ABSTRACTAUDIOOUTPUT_H
+#define Phonon_IFACES_ABSTRACTAUDIOOUTPUT_H
 
-class QObject;
+#include "base.h"
 
 namespace Phonon
 {
 namespace Ifaces
 {
-	class AbstractAudioOutput
+	class AbstractAudioOutput : virtual public Base
 	{
-		public:
-			virtual ~AbstractAudioOutput() {}
-
-		public:
-			virtual QObject* qobject() = 0;
-			virtual const QObject* qobject() const = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_IFACES_ABSTRACTAUDIOOUTPUTBASE_H
+#endif // Phonon_IFACES_ABSTRACTAUDIOOUTPUT_H

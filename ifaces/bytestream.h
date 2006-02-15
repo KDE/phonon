@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -31,8 +31,6 @@ namespace Ifaces
 	class ByteStream : virtual public AbstractMediaProducer
 	{
 		public:
-			virtual ~ByteStream() {}
-
 			virtual long totalTime() const = 0;
 			virtual long remainingTime() const { return totalTime() - currentTime(); }
 			virtual long aboutToFinishTime() const = 0;
@@ -62,10 +60,6 @@ namespace Ifaces
 			virtual void needData() = 0;
 			virtual void enoughData() = 0;
 			virtual void seekStream( long ) = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

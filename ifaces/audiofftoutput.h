@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -30,8 +30,6 @@ namespace Ifaces
 	class AudioFftOutput : virtual public AbstractAudioOutput
 	{
 		public:
-			virtual ~AudioFftOutput() {}
-
 			// Operations:
 			virtual const QVector<float>& fourierTransformedData() const = 0;
 
@@ -45,10 +43,6 @@ namespace Ifaces
 
 		//Q_SIGNALS:
 			virtual void fourierTransformedData( const QVector<float>& spectrum ) = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

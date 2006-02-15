@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -34,18 +34,12 @@ namespace Ifaces
 	class AudioDataOutput : virtual public AbstractAudioOutput
 	{
 		public:
-			virtual ~AudioDataOutput() {}
-
 			// Operations:
 			virtual void readBuffer( QVector<float>& buffer ) = 0;
 			virtual void readBuffer( QVector<int>& buffer ) = 0;
 
 			// Attributes Getters:
 			virtual int availableSamples() const = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

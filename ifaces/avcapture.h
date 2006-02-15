@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -31,16 +31,10 @@ namespace Ifaces
 	class AvCapture : virtual public AbstractMediaProducer
 	{
 		public:
-			virtual ~AvCapture() {}
-
 			virtual int audioSource() const = 0;
 			virtual int setAudioSource( int index ) = 0;
 			virtual int videoSource() const = 0;
 			virtual int setVideoSource( int index ) = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

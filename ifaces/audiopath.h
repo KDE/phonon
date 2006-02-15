@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,6 +19,8 @@
 #ifndef Phonon_IFACES_AUDIOPATH_H
 #define Phonon_IFACES_AUDIOPATH_H
 
+#include "base.h"
+
 class QObject;
 
 namespace Phonon
@@ -32,11 +34,9 @@ namespace Ifaces
 	 * @author Matthias Kretz <kretz@kde.org>
 	 * @since 4.0
 	 */
-	class AudioPath
+	class AudioPath : virtual public Base
 	{
 		public:
-			virtual ~AudioPath() {}
-
 			virtual int availableChannels() const = 0;
 			virtual QString channelName( int ) const = 0;
 			virtual bool selectChannel( int ) = 0;
@@ -46,14 +46,6 @@ namespace Ifaces
 			virtual bool removeOutput( AbstractAudioOutput* audioOutput ) = 0;
 			virtual bool insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore = 0 ) = 0;
 			virtual bool removeEffect( AudioEffect* effect ) = 0;
-
-		public:
-			virtual QObject* qobject() = 0;
-			virtual const QObject* qobject() const = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

@@ -32,14 +32,8 @@ namespace Ifaces
 	class VideoWidget : virtual public Phonon::Ifaces::AbstractVideoOutput
 	{
 		public:
-			virtual ~VideoWidget() {}
-
 			virtual bool isFullscreen() const = 0;
 			virtual bool setFullscreen( bool ) = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }}} //namespace Phonon::Ui::Ifaces
 

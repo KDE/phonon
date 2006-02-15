@@ -1,5 +1,5 @@
 #    This file is part of the KDE libraries
-#    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+#    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
 #    This library is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@ phononinclude_HEADERS = abstractmediaproducer.h mediaobject.h soundcardcapture.h
 		       audiopath.h backend.h abstractaudiooutput.h \
 		       audiooutput.h audiodataoutput.h audiofftoutput.h \
 		       videopath.h abstractvideooutput.h videoeffect.h audioeffect.h \
-		       bytestream.h
+		       bytestream.h base.h
 
 libphononifaces_la_SOURCES = backend.cpp
 libphononifaces_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined

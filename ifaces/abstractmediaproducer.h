@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #define Phonon_IFACES_ABSTRACTMEDIAPRODUCER_H
 
 #include "phonon/state.h"
+#include "base.h"
 
 class QObject;
 template<class T> class QList;
@@ -31,12 +32,9 @@ namespace Ifaces
 	class VideoPath;
 	class AudioPath;
 
-	class AbstractMediaProducer
+	class AbstractMediaProducer : virtual public Base
 	{
 		public:
-			AbstractMediaProducer() {}
-			virtual ~AbstractMediaProducer() {}
-
 			// Operations:
 			virtual bool addVideoPath( VideoPath* videoPath ) = 0;
 			virtual bool addAudioPath( AudioPath* audioPath ) = 0;
@@ -128,14 +126,6 @@ namespace Ifaces
 			 * \see setTickInterval, tickInterval
 			 */
 			virtual void tick( long time ) = 0;
-
-		public:
-			virtual QObject* qobject() = 0;
-			virtual const QObject* qobject() const = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,6 +19,8 @@
 #ifndef Phonon_IFACES_ABSTRACTVIDEOOUTPUTBASE_H
 #define Phonon_IFACES_ABSTRACTVIDEOOUTPUTBASE_H
 
+#include "base.h"
+
 class QObject;
 class QString;
 
@@ -26,18 +28,8 @@ namespace Phonon
 {
 namespace Ifaces
 {
-	class AbstractVideoOutput
+	class AbstractVideoOutput : virtual public Base
 	{
-		public:
-			virtual ~AbstractVideoOutput() {}
-
-		public:
-			virtual QObject* qobject() = 0;
-			virtual const QObject* qobject() const = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

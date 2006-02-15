@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -36,9 +36,6 @@ namespace Ifaces
 	class MediaObject : virtual public AbstractMediaProducer
 	{
 		public:
-			MediaObject() : AbstractMediaProducer() {}
-			virtual ~MediaObject() {}
-
 			// Attributes Getters:
 			/**
 			 * Set the URL the MediaObject should use as media data source.
@@ -86,10 +83,6 @@ namespace Ifaces
 			 * \see totalTime
 			 */
 			virtual void length( long length ) = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

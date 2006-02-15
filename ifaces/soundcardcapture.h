@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -21,9 +21,6 @@
 
 #include "abstractmediaproducer.h"
 
-class QString;
-class QStringList;
-
 namespace Phonon
 {
 namespace Ifaces
@@ -31,14 +28,8 @@ namespace Ifaces
 	class SoundcardCapture : virtual public AbstractMediaProducer
 	{
 		public:
-			virtual ~SoundcardCapture() {}
-
 			virtual int captureSource() const = 0;
 			virtual int setCaptureSource( int index ) = 0;
-
-		private:
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ifaces
 

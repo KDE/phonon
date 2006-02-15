@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,28 +16,29 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_IFACES_VIDEOPATH_H
-#define Phonon_IFACES_VIDEOPATH_H
+#ifndef Phonon_IFACES_BASE_H
+#define Phonon_IFACES_BASE_H
 
-#include "base.h"
+class QObject;
 
 namespace Phonon
 {
 namespace Ifaces
 {
-	class VideoEffect;
-	class AbstractVideoOutput;
-
-	class VideoPath : virtual public Base
+	class BasePrivate;
+	class Base
 	{
+		Q_DECLARE_PRIVATE( Base )
 		public:
-			// Operations:
-			virtual bool addOutput( AbstractVideoOutput* videoOutput ) = 0;
-			virtual bool removeOutput( AbstractVideoOutput* videoOutput ) = 0;
-			virtual bool insertEffect( VideoEffect* newEffect, VideoEffect* insertBefore = 0 ) = 0;
-			virtual bool removeEffect( VideoEffect* effect ) = 0;
+			virtual ~Base() {}
+
+			virtual QObject* qobject() = 0;
+			virtual const QObject* qobject() const = 0;
+
+		protected:
+			BasePrivate* d_ptr;
 	};
 }} //namespace Phonon::Ifaces
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_IFACES_VIDEOPATH_H
+#endif // Phonon_IFACES_BASE_H
