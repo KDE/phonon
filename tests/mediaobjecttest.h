@@ -28,9 +28,12 @@
 class MediaObjectTest : public QObject
 {
 	Q_OBJECT
+
 	private Q_SLOTS:
 		void initTestCase();
 		void setMedia();
+
+		// state change tests
 		void stopToStop();
 		void stopToPause();
 		void stopToPlay();
@@ -40,9 +43,17 @@ class MediaObjectTest : public QObject
 		void pauseToPause();
 		void pauseToPlay();
 		void pauseToStop();
+
+		void testSeek();
+
+		// test signals
+		void testAboutToFinish();
+
 		void cleanupTestCase();
 
 	private:
+		void startPlaying();
+
 		KUrl m_url;
 		Phonon::MediaObject* m_media;
 		QSignalSpy* m_spy;
