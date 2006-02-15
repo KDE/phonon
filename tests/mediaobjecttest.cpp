@@ -21,6 +21,7 @@
 #include <cstdlib>
 #include <qtest_kde.h>
 #include <QTime>
+#include <QtDebug>
 
 using namespace Phonon;
 
@@ -54,6 +55,18 @@ void MediaObjectTest::startPlaying()
 	QCOMPARE( m_media->state(), Phonon::PlayingState );
 }
 
+void MediaObjectTest::stopPlaying( Phonon::State currentState )
+{
+	m_media->stop();
+	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
+	QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
+	Phonon::State newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
+	Phonon::State oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
+	QCOMPARE( oldstate, currentState );
+	QCOMPARE( newstate, Phonon::StoppedState );
+	QCOMPARE( m_media->state(), Phonon::StoppedState );
+}
+
 void MediaObjectTest::initTestCase()
 {
 	qRegisterMetaType<Phonon::State>( "Phonon::State" );
@@ -63,13 +76,13 @@ void MediaObjectTest::initTestCase()
 		QFAIL( "You need to set PHONON_TESTURL to a valid URL" );
 	m_media = new MediaObject( this );
 	m_stateChangedSignalSpy = new QSignalSpy( m_media, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ) );
-	m_lengthSignalSpy = new QSignalSpy( m_media, SIGNAL( length( long ) ) );
 	QVERIFY( m_stateChangedSignalSpy->isValid() );
 	m_stateChangedSignalSpy->clear();
 }
 
 void MediaObjectTest::setMedia()
 {
+	QSignalSpy lengthSignalSpy( m_media, SIGNAL( length( long ) ) );
 	QVERIFY( m_media->url().isEmpty() );
 	QCOMPARE( m_media->state(), Phonon::LoadingState );
 	QCOMPARE( m_stateChangedSignalSpy->count(), 0 );
@@ -102,8 +115,8 @@ void MediaObjectTest::setMedia()
 		QCOMPARE( m_stateChangedSignalSpy->count(), 0 );
 
 		// check for length signal
-		QVERIFY( m_lengthSignalSpy->count() > 0 );
-		args = m_lengthSignalSpy->takeLast();
+		QVERIFY( lengthSignalSpy.count() > 0 );
+		args = lengthSignalSpy.takeLast();
 		QCOMPARE( m_media->totalTime(), qvariant_cast<long>( args.at( 0 ) ) );
 	}
 	else
@@ -139,15 +152,7 @@ void MediaObjectTest::stopToPause()
 void MediaObjectTest::stopToPlay()
 {
 	startPlaying();
-
-	m_media->stop();
-	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
-	QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
-	Phonon::State newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
-	Phonon::State oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
-	QCOMPARE( oldstate, Phonon::PlayingState );
-	QCOMPARE( newstate, Phonon::StoppedState );
-	QCOMPARE( m_media->state(), Phonon::StoppedState );
+	stopPlaying( Phonon::PlayingState );
 }
 
 void MediaObjectTest::playToPlay()
@@ -157,14 +162,8 @@ void MediaObjectTest::playToPlay()
 	m_media->play();
 	QCOMPARE( m_stateChangedSignalSpy->count(), 0 );
 	QCOMPARE( m_media->state(), Phonon::PlayingState );
-	m_media->stop();
-	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
-	QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
-	Phonon::State newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
-	Phonon::State oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
-	QCOMPARE( oldstate, Phonon::PlayingState );
-	QCOMPARE( newstate, Phonon::StoppedState );
-	QCOMPARE( m_media->state(), Phonon::StoppedState );
+
+	stopPlaying( Phonon::PlayingState );
 }
 
 void MediaObjectTest::playToPause()
@@ -179,28 +178,14 @@ void MediaObjectTest::playToPause()
 	QCOMPARE( oldstate, Phonon::PlayingState );
 	QCOMPARE( newstate, Phonon::PausedState );
 	QCOMPARE( m_media->state(), Phonon::PausedState );
-	m_media->stop();
-	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
-	args = m_stateChangedSignalSpy->takeFirst();
-	newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
-	oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
-	QCOMPARE( oldstate, Phonon::PausedState );
-	QCOMPARE( newstate, Phonon::StoppedState );
-	QCOMPARE( m_media->state(), Phonon::StoppedState );
+
+	stopPlaying( Phonon::PausedState );
 }
 
 void MediaObjectTest::playToStop()
 {
 	startPlaying();
-
-	m_media->stop();
-	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
-	QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
-	Phonon::State newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
-	Phonon::State oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
-	QCOMPARE( oldstate, Phonon::PlayingState );
-	QCOMPARE( newstate, Phonon::StoppedState );
-	QCOMPARE( m_media->state(), Phonon::StoppedState );
+	stopPlaying( Phonon::PlayingState );
 }
 
 void MediaObjectTest::pauseToPause()
@@ -220,14 +205,7 @@ void MediaObjectTest::pauseToPause()
 	QCOMPARE( m_stateChangedSignalSpy->count(), 0 );
 	QCOMPARE( m_media->state(), Phonon::PausedState );
 
-	m_media->stop();
-	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
-	args = m_stateChangedSignalSpy->takeFirst();
-	newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
-	oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
-	QCOMPARE( oldstate, Phonon::PausedState );
-	QCOMPARE( newstate, Phonon::StoppedState );
-	QCOMPARE( m_media->state(), Phonon::StoppedState );
+	stopPlaying( Phonon::PausedState );
 }
 
 void MediaObjectTest::pauseToPlay()
@@ -252,14 +230,7 @@ void MediaObjectTest::pauseToPlay()
 	QCOMPARE( newstate, Phonon::PlayingState );
 	QCOMPARE( m_media->state(), Phonon::PlayingState );
 
-	m_media->stop();
-	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
-	args = m_stateChangedSignalSpy->takeFirst();
-	newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
-	oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
-	QCOMPARE( oldstate, Phonon::PlayingState );
-	QCOMPARE( newstate, Phonon::StoppedState );
-	QCOMPARE( m_media->state(), Phonon::StoppedState );
+	stopPlaying( Phonon::PlayingState );
 }
 
 void MediaObjectTest::pauseToStop()
@@ -275,14 +246,7 @@ void MediaObjectTest::pauseToStop()
 	QCOMPARE( newstate, Phonon::PausedState );
 	QCOMPARE( m_media->state(), Phonon::PausedState );
 
-	m_media->stop();
-	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
-	args = m_stateChangedSignalSpy->takeFirst();
-	newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
-	oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
-	QCOMPARE( oldstate, Phonon::PausedState );
-	QCOMPARE( newstate, Phonon::StoppedState );
-	QCOMPARE( m_media->state(), Phonon::StoppedState );
+	stopPlaying( Phonon::PausedState );
 }
 
 void MediaObjectTest::testSeek()
@@ -315,16 +279,43 @@ void MediaObjectTest::testSeek()
 			QWARN( "didn't test seeking as the MediaObject reported a remaining size <= 0" );
 	else
 		QWARN( "didn't test seeking as the MediaObject is not seekable" );
+	stopPlaying( Phonon::PlayingState );
 }
 
 void MediaObjectTest::testAboutToFinish()
 {
+	m_media->setAboutToFinishTime( 500L );
+	QCOMPARE( m_media->aboutToFinishTime(), 500L );
+	QSignalSpy aboutToFinishSpy( m_media, SIGNAL( aboutToFinish( long ) ) );
+	QSignalSpy finishSpy( m_media, SIGNAL( finished() ) );
+	startPlaying();
+	if( m_media->seekable() )
+		m_media->seek( m_media->totalTime() - 1000L );
+	while( aboutToFinishSpy.count() == 0 && ( m_media->state() == Phonon::PlayingState || m_media->state() == Phonon::BufferingState ) )
+		QCoreApplication::processEvents();
+	// at this point the media should be about to finish playing
+	long r = m_media->remainingTime();
+	Phonon::State state = m_media->state();
+	QCOMPARE( aboutToFinishSpy.count(), 1 );
+	long aboutToFinishTime = qvariant_cast<long>( aboutToFinishSpy.first().at( 0 ) );
+	QVERIFY( aboutToFinishTime <= 500L );
+	if( state == Phonon::PlayingState || state == Phonon::BufferingState )
+	{
+		QVERIFY( r <= aboutToFinishTime );
+		while( finishSpy.count() == 0 )
+			QCoreApplication::processEvents();
+	}
+	else
+	{
+		QVERIFY( aboutToFinishTime > 0L );
+	}
+	QCOMPARE( finishSpy.count(), 1 );
+	QCOMPARE( m_media->state(), Phonon::StoppedState );
 }
 
 void MediaObjectTest::cleanupTestCase()
 {
 	delete m_stateChangedSignalSpy;
-	delete m_lengthSignalSpy;
 	delete m_media;
 }
 

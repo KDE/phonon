@@ -54,6 +54,7 @@ class MediaObjectTest : public QObject
 
 	private:
 		void startPlaying();
+		void stopPlaying( Phonon::State currentState );
 
 		KUrl m_url;
 		Phonon::MediaObject* m_media;
