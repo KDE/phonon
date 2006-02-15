@@ -29,6 +29,8 @@ using namespace Phonon;
 void StateTester::initTestCase()
 {
 	m_url = new KUrl( getenv( "PHONON_TESTURL" ) );
+	if( !m_url->isValid() )
+		QFAIL( "You need to set PHONON_TESTURL to a valid URL" );
 }
 
 void StateTester::run()
