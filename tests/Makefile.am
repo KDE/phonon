@@ -22,9 +22,8 @@ AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 METASOURCES = AUTO
 
-check_PROGRAMS = statetest mediaobjecttest
+check_PROGRAMS = mediaobjecttest
 
-statetest_SOURCES = statetest.cpp
 mediaobjecttest_SOURCES = mediaobjecttest.cpp
 
-TESTS = mediaobjecttest statetest
+TESTS = mediaobjecttest
