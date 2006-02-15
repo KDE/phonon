@@ -32,6 +32,7 @@ class MediaObjectTest : public QObject
 	private Q_SLOTS:
 		void initTestCase();
 		void setMedia();
+		void checkForDefaults();
 
 		// state change tests
 		void stopToStop();
@@ -56,7 +57,8 @@ class MediaObjectTest : public QObject
 
 		KUrl m_url;
 		Phonon::MediaObject* m_media;
-		QSignalSpy* m_spy;
+		QSignalSpy* m_stateChangedSignalSpy;
+		QSignalSpy* m_lengthSignalSpy;
 };
 
 // vim: sw=4 ts=4
