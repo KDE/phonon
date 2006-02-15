@@ -138,11 +138,11 @@ Factory::Factory()
 
 Factory::~Factory()
 {
-	kdDebug( 600 ) << k_funcinfo << endl;
+	//kdDebug( 600 ) << k_funcinfo << endl;
 	emit deleteYourObjects();
 	foreach( QObject* o, d->objects )
 	{
-		kdDebug( 600 ) << "delete " << o << endl;
+		//kdDebug( 600 ) << "delete " << o << endl;
 		delete o;
 	}
 	delete d->backend;
@@ -175,7 +175,7 @@ void Factory::phononBackendChanged()
 
 void Factory::objectDestroyed( QObject * obj )
 {
-	kdDebug( 600 ) << k_funcinfo << obj << endl;
+	//kdDebug( 600 ) << k_funcinfo << obj << endl;
 	d->objects.removeAll( obj );
 }
 

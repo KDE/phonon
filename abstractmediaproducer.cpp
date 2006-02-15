@@ -133,7 +133,7 @@ void AbstractMediaProducer::seek( long time )
 
 bool AbstractMediaProducerPrivate::aboutToDeleteIface()
 {
-	kdDebug( 600 ) << k_funcinfo << endl;
+	//kdDebug( 600 ) << k_funcinfo << endl;
 	if( iface() )
 	{
 		state = iface()->state();
@@ -147,7 +147,7 @@ void AbstractMediaProducer::setupIface()
 {
 	Q_D( AbstractMediaProducer );
 	Q_ASSERT( d->iface() );
-	kdDebug( 600 ) << k_funcinfo << endl;
+	//kdDebug( 600 ) << k_funcinfo << endl;
 
 	connect( d->iface()->qobject(), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ) );
 	connect( d->iface()->qobject(), SIGNAL( tick( long ) ), SIGNAL( tick( long ) ) );

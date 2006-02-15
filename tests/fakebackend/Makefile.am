@@ -18,6 +18,7 @@
 SUBDIRS = .
 
 INCLUDES = -I$(top_srcdir) $(all_includes)
+AM_CXXFLAGS = -DNDEBUG
 
 kde_module_LTLIBRARIES = phonon_fake.la
 

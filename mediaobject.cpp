@@ -72,7 +72,7 @@ void MediaObject::setUrl( const KUrl& url )
 void MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
 {
 	Q_D( MediaObject );
-	kdDebug( 600 ) << k_funcinfo << endl;
+	//kdDebug( 600 ) << k_funcinfo << endl;
 	if( d->iface() )
 		d->iface()->setAboutToFinishTime( newAboutToFinishTime );
 	else
@@ -81,7 +81,7 @@ void MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
 
 bool MediaObjectPrivate::aboutToDeleteIface()
 {
-	kdDebug( 600 ) << k_funcinfo << endl;
+	//kdDebug( 600 ) << k_funcinfo << endl;
 	if( iface() )
 		aboutToFinishTime = iface()->aboutToFinishTime();
 	return AbstractMediaProducerPrivate::aboutToDeleteIface();
@@ -91,7 +91,7 @@ void MediaObject::setupIface()
 {
 	Q_D( MediaObject );
 	Q_ASSERT( d->iface() );
-	kdDebug( 600 ) << k_funcinfo << endl;
+	//kdDebug( 600 ) << k_funcinfo << endl;
 	AbstractMediaProducer::setupIface();
 
 	connect( d->iface()->qobject(), SIGNAL( finished() ), SIGNAL( finished() ) );
