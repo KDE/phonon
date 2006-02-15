@@ -132,9 +132,12 @@ namespace Phonon
 
 			/**
 			 * Return the time interval in milliseconds between two ticks.
-			 
+			 *
 			 * @return Returns the tick intervall that it was set to (might not
 			 * be the same as you asked for).
+			 *
+			 * @see setTickInterval
+			 * @see tick
 			 */
 			long tickInterval() const;
 
@@ -159,9 +162,13 @@ namespace Phonon
 		public Q_SLOTS:
 			/**
 			 * Change the interval the tick signal is emitted. If you set
-			 * @p newTickInterval to @c 0 the signal gets disabled.
+			 * @p newTickInterval to @c 0 the signal gets disabled. The tick
+			 * interval defaults to @c 0, meaning it is disabled.
 			 *
 			 * @param newTickInterval tick interval in milliseconds
+			 *
+			 * @see tickInterval
+			 * @see tick
 			 */
 			void setTickInterval( long newTickInterval );
 
@@ -204,9 +211,9 @@ namespace Phonon
 			/**
 			 * This signal gets emitted every tickInterval milliseconds.
 			 *
-			 * \param time The position of the media file in milliseconds.
+			 * @param time The position of the media file in milliseconds.
 			 *
-			 * \see setTickInterval, tickInterval
+			 * @see setTickInterval, tickInterval
 			 */
 			void tick( long time );
 
