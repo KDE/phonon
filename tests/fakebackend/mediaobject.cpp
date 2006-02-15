@@ -27,13 +27,9 @@ namespace Fake
 {
 MediaObject::MediaObject( QObject* parent )
 	: AbstractMediaProducer( parent )
-	, m_aboutToFinishTimer( new QTimer( this ) )
-	, m_finishTimer( new QTimer( this ) )
+	, m_aboutToFinishNotEmitted( true )
 {
 	kdDebug() << k_funcinfo << endl;
-	connect( m_aboutToFinishTimer, SIGNAL( timeout() ), SLOT( aboutToFinishTimeout() ) );
-	connect( m_finishTimer, SIGNAL( timeout() ), SIGNAL( finished() ) );
-	connect( m_finishTimer, SIGNAL( timeout() ), SLOT( stop() ) );
 }
 
 MediaObject::~MediaObject()
@@ -71,17 +67,14 @@ void MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
 {
 	kdDebug() << k_funcinfo << endl;
 	m_aboutToFinishTime = newAboutToFinishTime;
-	m_aboutToFinishTimer->setInterval( remainingTime() - m_aboutToFinishTime );
+	if( currentTime() < totalTime() - m_aboutToFinishTime ) // not about to finish
+		m_aboutToFinishNotEmitted = true;
 }
 
 void MediaObject::play()
 {
 	kdDebug() << k_funcinfo << endl;
-	m_aboutToFinishTimer->setInterval( remainingTime() - m_aboutToFinishTime );
-	m_finishTimer->setInterval( remainingTime() );
 	AbstractMediaProducer::play();
-	m_aboutToFinishTimer->start();
-	m_finishTimer->start();
 }
 
 void MediaObject::pause()
@@ -90,8 +83,6 @@ void MediaObject::pause()
 	if( state() == PlayingState || state() == BufferingState )
 	{
 		AbstractMediaProducer::pause();
-		m_aboutToFinishTimer->stop();
-		m_finishTimer->stop();
 	}
 }
 
@@ -99,21 +90,34 @@ void MediaObject::stop()
 {
 	kdDebug() << k_funcinfo << endl;
 	AbstractMediaProducer::stop();
-	m_aboutToFinishTimer->stop();
-	m_finishTimer->stop();
+	m_aboutToFinishNotEmitted = true;
 }
 
 void MediaObject::seek( long time )
 {
 	kdDebug() << k_funcinfo << endl;
 	AbstractMediaProducer::seek( time );
-	m_aboutToFinishTimer->setInterval( remainingTime() - m_aboutToFinishTime );
-	m_finishTimer->setInterval( remainingTime() );
+
+	if( currentTime() < totalTime() - m_aboutToFinishTime ) // not about to finish
+		m_aboutToFinishNotEmitted = true;
 }
 
-void MediaObject::aboutToFinishTimeout()
+void MediaObject::emitTick()
 {
-	emit aboutToFinish( remainingTime() );
+	AbstractMediaProducer::emitTick();
+	if( currentTime() >= totalTime() - m_aboutToFinishTime ) // about to finish
+	{
+		if( m_aboutToFinishNotEmitted )
+		{
+			m_aboutToFinishNotEmitted = false;
+			emit aboutToFinish( remainingTime() );
+		}
+	}
+	if( currentTime() >= totalTime() ) // finished
+	{
+		stop();
+		emit finished();
+	}
 }
 
 }}

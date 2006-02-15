@@ -54,14 +54,13 @@ namespace Fake
 			void aboutToFinish( long msec );
 			void length( long length );
 
-		private Q_SLOTS:
-			void aboutToFinishTimeout();
+		protected:
+			virtual void emitTick();
 
 		private:
 			KUrl m_url;
 			long m_aboutToFinishTime;
-			QTimer* m_aboutToFinishTimer;
-			QTimer* m_finishTimer;
+			bool m_aboutToFinishNotEmitted;
 	};
 }} //namespace Phonon::Fake
 

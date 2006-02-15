@@ -87,14 +87,18 @@ long AbstractMediaProducer::currentTime() const
 long AbstractMediaProducer::tickInterval() const
 {
 	kdDebug() << k_funcinfo << endl;
-	return m_tickTimer->interval();
+	return m_tickInterval;
 }
 
 long AbstractMediaProducer::setTickInterval( long newTickInterval )
 {
 	kdDebug() << k_funcinfo << endl;
-	m_tickTimer->setInterval( newTickInterval );
-	return m_tickTimer->interval();
+	m_tickInterval = newTickInterval;
+	if( m_tickInterval <= 0 )
+		m_tickTimer->setInterval( 50 );
+	else
+		m_tickTimer->setInterval( newTickInterval );
+	return m_tickInterval;
 }
 
 void AbstractMediaProducer::play()
@@ -140,7 +144,8 @@ void AbstractMediaProducer::emitTick()
 {
 	m_fakeTime += m_tickTimer->interval();
 	//kdDebug() << "emit tick( " << currentTime() << " )" << endl;
-	emit tick( currentTime() );
+	if( m_tickInterval > 0 )
+		emit tick( currentTime() );
 }
 
 }}

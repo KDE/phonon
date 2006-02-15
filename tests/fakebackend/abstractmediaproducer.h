@@ -58,13 +58,14 @@ namespace Fake
 		protected:
 			void setState( State );
 
-		private Q_SLOTS:
-			void emitTick();
+		protected Q_SLOTS:
+			virtual void emitTick();
 
 		private:
 			State m_state;
 			QTimer* m_tickTimer;
 			long m_fakeTime;
+			long m_tickInterval;
 	};
 }} //namespace Phonon::Fake
 
