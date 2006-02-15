@@ -17,51 +17,36 @@
 
 */
 
-#ifndef PHONON_UI_SEEKSLIDER_H
-#define PHONON_UI_SEEKSLIDER_H
+#ifndef SEEKSLIDER_P_H
+#define SEEKSLIDER_P_H
 
-#include <QWidget>
-#include <kdelibs_export.h>
-#include "../state.h"
+#include "seekslider.h"
+class QSlider;
 
 namespace Phonon
 {
 class AbstractMediaProducer;
-
 namespace Ui
 {
-class SeekSliderPrivate;
-
-/**
- * \short Widget providing a slider for seeking in AbstractMediaProducer objects.
- *
- * \author Matthias Kretz <kretz@kde.org>
- * \since 4.0
- */
-class PHONON_EXPORT SeekSlider : public QWidget
+class SeekSliderPrivate
 {
-	Q_OBJECT
-	Q_DECLARE_PRIVATE( SeekSlider )
-	public:
-		SeekSlider( QWidget* parent = 0 );
-		~SeekSlider();
-
-	public Q_SLOTS:
-		void setMediaProducer( AbstractMediaProducer* );
-
-	private Q_SLOTS:
-		void stateChanged( Phonon::State );
-		void mediaDestroyed();
-		void seek( int );
-		void tick( long );
-		void length( long );
-
+	Q_DECLARE_PUBLIC( SeekSlider )
 	protected:
-		SeekSlider( SeekSliderPrivate& d, QWidget* parent );
-		SeekSliderPrivate* d_ptr;
-};
+		SeekSliderPrivate()
+			: slider( 0 )
+			, media( 0 )
+			, ticking( false )
+		{
+		}
 
+		SeekSlider* q_ptr;
+		
+	private:
+		QSlider* slider;
+		AbstractMediaProducer* media;
+		bool ticking;
+};
 }} // namespace Phonon::Ui
 
+#endif // SEEKSLIDER_P_H
 // vim: sw=4 ts=4 tw=80
-#endif // PHONON_UI_SEEKSLIDER_H

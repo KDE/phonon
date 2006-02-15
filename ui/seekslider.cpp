@@ -18,6 +18,7 @@
 */
 
 #include "seekslider.h"
+#include "seekslider_p.h"
 #include "../abstractmediaproducer.h"
 #include <QSlider>
 #include <QHBoxLayout>
@@ -27,25 +28,22 @@ namespace Phonon
 namespace Ui
 {
 
-class SeekSlider::Private
-{
-	public:
-		Private()
-			: slider( 0 )
-			, media( 0 )
-			, ticking( false )
-		{
-		}
-
-		QSlider* slider;
-		AbstractMediaProducer* media;
-		bool ticking;
-};
-
 SeekSlider::SeekSlider( QWidget* parent )
 	: QWidget( parent )
-	, d( new Private )
+	, d_ptr( new SeekSliderPrivate )
 {
+	Q_D( SeekSlider );
+	QHBoxLayout* layout = new QHBoxLayout( this );
+	d->slider = new QSlider( Qt::Horizontal, this );
+	d->slider->setEnabled( false );
+	layout->addWidget( d->slider );
+}
+
+SeekSlider::SeekSlider( SeekSliderPrivate& _d, QWidget* parent )
+	: QWidget( parent )
+	, d_ptr( &_d )
+{
+	Q_D( SeekSlider );
 	QHBoxLayout* layout = new QHBoxLayout( this );
 	d->slider = new QSlider( Qt::Horizontal, this );
 	d->slider->setEnabled( false );
@@ -54,7 +52,7 @@ SeekSlider::SeekSlider( QWidget* parent )
 
 SeekSlider::~SeekSlider()
 {
-	delete d;
+	delete d_ptr;
 }
 
 void SeekSlider::setMediaProducer( AbstractMediaProducer* media )
@@ -62,6 +60,7 @@ void SeekSlider::setMediaProducer( AbstractMediaProducer* media )
 	if( !media )
 		return;
 
+	Q_D( SeekSlider );
 	d->media = media;
 	connect( media, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ),
 			SLOT( stateChanged( Phonon::State ) ) );
@@ -73,12 +72,14 @@ void SeekSlider::setMediaProducer( AbstractMediaProducer* media )
 
 void SeekSlider::seek( int msec )
 {
+	Q_D( SeekSlider );
 	if( ! d->ticking && d->media )
 		d->media->seek( msec );
 }
 
 void SeekSlider::tick( long msec )
 {
+	Q_D( SeekSlider );
 	d->ticking = true;
 	d->slider->setValue( msec );
 	d->ticking = false;
@@ -86,11 +87,13 @@ void SeekSlider::tick( long msec )
 
 void SeekSlider::length( long msec )
 {
+	Q_D( SeekSlider );
 	d->slider->setRange( 0, msec );
 }
 
 void SeekSlider::stateChanged( State newstate )
 {
+	Q_D( SeekSlider );
 	switch( newstate )
 	{
 		case Phonon::BufferingState:
@@ -108,6 +111,7 @@ void SeekSlider::stateChanged( State newstate )
 
 void SeekSlider::mediaDestroyed()
 {
+	Q_D( SeekSlider );
 	d->media = 0;
 	d->slider->setEnabled( false );
 }
