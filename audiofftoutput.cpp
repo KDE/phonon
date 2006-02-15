@@ -17,6 +17,7 @@
 
 */
 #include "audiofftoutput.h"
+#include "audiofftoutput_p.h"
 #include "ifaces/audiofftoutput.h"
 #include "factory.h"
 
@@ -24,32 +25,25 @@
 
 namespace Phonon
 {
-class AudioFftOutput::Private
-{
-	public:
-		Private()
-		{ }
-
-		int bandwidth;
-		int rate;
-};
-
 PHONON_HEIR_IMPL( AudioFftOutput, AbstractAudioOutput )
 
 QVector<float> AudioFftOutput::fourierTransformedData() const
 {
-	return m_iface ? m_iface->fourierTransformedData() : QVector<float>();
+	Q_D( const AudioFftOutput );
+	return d->iface() ? d->iface()->fourierTransformedData() : QVector<float>();
 }
 
 int AudioFftOutput::bandwidth() const
 {
-	return m_iface ? m_iface->bandwidth() : d->bandwidth;
+	Q_D( const AudioFftOutput );
+	return d->iface() ? d->iface()->bandwidth() : d->bandwidth;
 }
 
 int AudioFftOutput::setBandwidth( int newBandwidth )
 {
-	if( m_iface )
-		d->bandwidth = m_iface->setBandwidth( newBandwidth );
+	Q_D( AudioFftOutput );
+	if( d->iface() )
+		d->bandwidth = d->iface()->setBandwidth( newBandwidth );
 	else
 		d->bandwidth = newBandwidth;
 	return d->bandwidth;
@@ -57,40 +51,40 @@ int AudioFftOutput::setBandwidth( int newBandwidth )
 
 int AudioFftOutput::rate() const
 {
-	return m_iface ? m_iface->rate() : d->rate;
+	Q_D( const AudioFftOutput );
+	return d->iface() ? d->iface()->rate() : d->rate;
 }
 
 void AudioFftOutput::setRate( int newRate )
 {
-	if( m_iface )
-		d->rate = m_iface->setRate( newRate );
+	Q_D( AudioFftOutput );
+	if( d->iface() )
+		d->rate = d->iface()->setRate( newRate );
 	else
 		d->rate = newRate;
 }
 
-bool AudioFftOutput::aboutToDeleteIface()
+bool AudioFftOutputPrivate::aboutToDeleteIface()
 {
-	if( m_iface )
+	if( iface() )
 	{
-		d->bandwidth = m_iface->bandwidth();
-		d->rate = m_iface->rate();
+		bandwidth = iface()->bandwidth();
+		rate = iface()->rate();
 	}
-	return AbstractAudioOutput::aboutToDeleteIface();
+	return AbstractAudioOutputPrivate::aboutToDeleteIface();
 }
 
-void AudioFftOutput::setupIface( Ifaces::AudioFftOutput* iface )
+void AudioFftOutput::setupIface()
 {
-	AbstractAudioOutput::setupIface( iface );
+	Q_D( AudioFftOutput );
+	Q_ASSERT( d->iface() );
+	AbstractAudioOutput::setupIface();
 
-	m_iface = iface;
-	if( !m_iface )
-		return;
-
-	connect( m_iface->qobject(), SIGNAL( fourierTransformedData( const QVector<float>& ) ),
+	connect( d->iface()->qobject(), SIGNAL( fourierTransformedData( const QVector<float>& ) ),
 			SIGNAL( fourierTransformedData( const QVector<float>& ) ) );
 	// set up attributes
-	d->bandwidth = m_iface->setBandwidth( d->bandwidth );
-	m_iface->setRate( d->rate );
+	d->bandwidth = d->iface()->setBandwidth( d->bandwidth );
+	d->iface()->setRate( d->rate );
 }
 
 } //namespace Phonon

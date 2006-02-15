@@ -28,6 +28,7 @@ class QStringList;
 
 namespace Phonon
 {
+	class ByteStreamPrivate;
 	namespace Ifaces
 	{
 		class ByteStream;
@@ -74,6 +75,7 @@ namespace Phonon
 	class PHONON_EXPORT ByteStream : public AbstractMediaProducer
 	{
 		Q_OBJECT
+		Q_DECLARE_PRIVATE( ByteStream )
 		PHONON_HEIR( ByteStream )
 		public:
 			/**

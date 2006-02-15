@@ -16,7 +16,9 @@
     Boston, MA 02110-1301, USA.
 
 */
+
 #include "videowidgethelper.h"
+#include "videowidgethelper_p.h"
 #include "videowidget.h"
 #include "../ifaces/ui/videowidget.h"
 #include "factory.h"
@@ -25,62 +27,39 @@ namespace Phonon
 {
 namespace Ui
 {
-class VideoWidgetHelper::Private
-{
-	public:
-		Private( VideoWidget* vw )
-			: videoWidget( vw )
-		{ }
-
-		VideoWidget* videoWidget;
-};
-
 //cannot use macro: need special iface creation
 
 VideoWidgetHelper::VideoWidgetHelper( VideoWidget* parent )
-	: AbstractVideoOutput( false, parent )
-	, d( new Private( parent ) )
+	: AbstractVideoOutput( *new VideoWidgetHelperPrivate( parent ), parent )
 {
-	createIface();
 }
 
-VideoWidgetHelper::~VideoWidgetHelper()
+bool VideoWidgetHelperPrivate::aboutToDeleteIface()
 {
-	delete d;
-	d = 0;
+	return AbstractVideoOutputPrivate::aboutToDeleteIface();
 }
 
-bool VideoWidgetHelper::aboutToDeleteIface()
+void VideoWidgetHelperPrivate::createIface()
 {
-	return AbstractVideoOutput::aboutToDeleteIface();
+	Q_Q( VideoWidgetHelper );
+	Q_ASSERT( iface_ptr == 0 );
+	setIface( videoWidget->iface() );
+	q->setupIface();
 }
 
-void VideoWidgetHelper::ifaceDeleted()
+void VideoWidgetHelper::setupIface()
 {
-	m_iface = 0;
-	AbstractVideoOutput::ifaceDeleted();
-}
-
-void VideoWidgetHelper::createIface()
-{
-	m_iface = d->videoWidget->iface();
-	setupIface( m_iface );
-}
-
-void VideoWidgetHelper::setupIface( Ifaces::VideoWidget* iface )
-{
-	AbstractVideoOutput::setupIface( iface );
-
-	m_iface = iface;
-	//if( !m_iface )
-		//return;
+	Q_D( VideoWidgetHelper );
+	Q_ASSERT( d->iface() );
+	AbstractVideoOutput::setupIface();
 }
 
 Ui::Ifaces::VideoWidget* VideoWidgetHelper::iface()
 {
-	if( !m_iface )
-		createIface();
-	return m_iface;
+	Q_D( VideoWidgetHelper );
+	if( !d->iface() )
+		d->createIface();
+	return d->iface();
 }
 
 }} //namespace Phonon::Ui

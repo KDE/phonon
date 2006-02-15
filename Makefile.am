@@ -22,7 +22,7 @@ SUBDIRS = . ifaces ui tests
 lib_LTLIBRARIES = libphononcore.la
 
 phononincludedir = $(includedir)/phonon
-phononinclude_HEADERS = object.h state.h abstractmediaproducer.h mediaobject.h avcapture.h \
+phononinclude_HEADERS = base.h state.h abstractmediaproducer.h mediaobject.h avcapture.h \
 		       mixeriface.h audiopath.h \
 		       videopath.h audioeffect.h audiooutput.h videoeffect.h \
 		       abstractvideooutput.h abstractaudiooutput.h audiodataoutput.h \
@@ -30,7 +30,7 @@ phononinclude_HEADERS = object.h state.h abstractmediaproducer.h mediaobject.h a
 		       backendcapabilities.h namedescriptiontuple.h audiosource.h \
 		       videosource.h
 
-libphononcore_la_SOURCES = state.cpp object.cpp factory.cpp abstractmediaproducer.cpp mediaobject.cpp \
+libphononcore_la_SOURCES = state.cpp base.cpp factory.cpp abstractmediaproducer.cpp mediaobject.cpp \
 			  avcapture.cpp factory.skel \
 			  mixeriface.skel audiopath.cpp videopath.cpp \
 			  audiooutput.cpp abstractvideooutput.cpp \

@@ -122,7 +122,10 @@ Factory * Factory::m_self = 0;
 Factory * Factory::self()
 {
 	if( ! m_self )
-		sd.setObject( m_self, m_self = new Factory() );
+	{
+		m_self = new Factory();
+		sd.setObject( m_self, m_self );
+	}
 	return m_self;
 }
 

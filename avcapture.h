@@ -27,6 +27,7 @@ class QStringList;
 
 namespace Phonon
 {
+	class AvCapturePrivate;
 	class AudioSource;
 	class VideoSource;
 	namespace Ifaces
@@ -52,6 +53,7 @@ namespace Phonon
 	class PHONON_EXPORT AvCapture : public AbstractMediaProducer
 	{
 		Q_OBJECT
+		Q_DECLARE_PRIVATE( AvCapture )
 		PHONON_HEIR( AvCapture )
 		public:
 			/**

@@ -17,35 +17,24 @@
 
 */
 #include "abstractvideooutput.h"
+#include "abstractvideooutput_p.h"
 #include "ifaces/abstractvideooutput.h"
 #include "factory.h"
 
 namespace Phonon
 {
-class AbstractVideoOutput::Private
-{
-	public:
-		Private()
-		{ }
-
-		QString name;
-};
 
 PHONON_ABSTRACTBASE_IMPL( AbstractVideoOutput )
 
-bool AbstractVideoOutput::aboutToDeleteIface()
+bool AbstractVideoOutputPrivate::aboutToDeleteIface()
 {
-	//if( m_iface )
-	//{
-	//}
 	return true;
 }
 
-void AbstractVideoOutput::setupIface( Ifaces::AbstractVideoOutput* iface )
+void AbstractVideoOutput::setupIface()
 {
-	m_iface = iface;
-	//if( !m_iface )
-		//return;
+	Q_D( AbstractVideoOutput );
+	Q_ASSERT( d->iface() );
 }
 
 } //namespace Phonon

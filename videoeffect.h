@@ -19,21 +19,23 @@
 #ifndef Phonon_VIDEOEFFECT_H
 #define Phonon_VIDEOEFFECT_H
 
-#include "object.h"
+#include "base.h"
 #include "phonondefs.h"
 
 class QString;
 
 namespace Phonon
 {
+	class VideoEffectPrivate;
 	namespace Ifaces
 	{
 		class VideoEffect;
 	}
 
-	class PHONON_EXPORT VideoEffect : public Object
+	class PHONON_EXPORT VideoEffect : public Base
 	{
 		friend class VideoPath;
+		Q_DECLARE_PRIVATE( VideoEffect )
 		Q_OBJECT
 		PHONON_OBJECT( VideoEffect )
 		public:

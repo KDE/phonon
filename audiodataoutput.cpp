@@ -17,19 +17,12 @@
 
 */
 #include "audiodataoutput.h"
+#include "audiodataoutput_p.h"
 #include "ifaces/audiodataoutput.h"
 #include "factory.h"
 
 namespace Phonon
 {
-class AudioDataOutput::Private
-{
-	public:
-		Private()
-		{ }
-
-		int availableSamples;
-};
 
 PHONON_HEIR_IMPL( AudioDataOutput, AbstractAudioOutput )
 
@@ -45,25 +38,24 @@ void AudioDataOutput::readBuffer( QVector<int>& buffer )
 
 int AudioDataOutput::availableSamples() const
 {
-	return m_iface ? m_iface->availableSamples() : d->availableSamples;
+	Q_D( const AudioDataOutput );
+	return d->iface() ? d->iface()->availableSamples() : d->availableSamples;
 }
 
-bool AudioDataOutput::aboutToDeleteIface()
+bool AudioDataOutputPrivate::aboutToDeleteIface()
 {
-	if( m_iface )
+	if( iface() )
 	{
-		d->availableSamples = m_iface->availableSamples();
+		availableSamples = iface()->availableSamples();
 	}
-	return AbstractAudioOutput::aboutToDeleteIface();
+	return AbstractAudioOutputPrivate::aboutToDeleteIface();
 }
 
-void AudioDataOutput::setupIface( Ifaces::AudioDataOutput* iface )
+void AudioDataOutput::setupIface()
 {
-	AbstractAudioOutput::setupIface( iface );
-
-	m_iface = iface;
-	if( !m_iface )
-		return;
+	Q_D( AudioDataOutput );
+	Q_ASSERT( d->iface() );
+	AbstractAudioOutput::setupIface();
 
 	// set up attributes
 }

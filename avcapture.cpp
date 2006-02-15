@@ -17,33 +17,23 @@
 
 */
 #include "avcapture.h"
+#include "avcapture_p.h"
 #include "ifaces/avcapture.h"
 #include "factory.h"
-#include "audiosource.h"
-#include "videosource.h"
 #include "ifaces/backend.h"
 
 namespace Phonon
 {
-class AvCapture::Private
-{
-	public:
-		Private()
-		{ }
-
-		AudioSource audioSource;
-		VideoSource videoSource;
-};
-
 PHONON_HEIR_IMPL( AvCapture, AbstractMediaProducer )
 
 const AudioSource& AvCapture::audioSource() const
 {
-	if( m_iface && m_iface->audioSource() != d->audioSource.index() )
+	Q_D( const AvCapture );
+	if( d->iface() && d->iface()->audioSource() != d->audioSource.index() )
 	{
-		int index = m_iface->audioSource();
+		int index = d->iface()->audioSource();
 		const Ifaces::Backend* backend = Factory::self()->backend();
-		d->audioSource = AudioSource( index,
+		const_cast<AvCapturePrivate*>( d )->audioSource = AudioSource( index,
 				backend->audioSourceName( index ),
 				backend->audioSourceDescription( index ) );
 	}
@@ -52,16 +42,18 @@ const AudioSource& AvCapture::audioSource() const
 
 void AvCapture::setAudioSource( const AudioSource& audioSource )
 {
-	if( m_iface )
-		m_iface->setAudioSource( audioSource.index() );
+	Q_D( AvCapture );
+	if( d->iface() )
+		d->iface()->setAudioSource( audioSource.index() );
 	else
 		d->audioSource = audioSource;
 }
 
 void AvCapture::setAudioSource( int audioSourceIndex )
 {
-	if( m_iface )
-		m_iface->setAudioSource( audioSourceIndex );
+	Q_D( AvCapture );
+	if( d->iface() )
+		d->iface()->setAudioSource( audioSourceIndex );
 	else
 	{
 		const Ifaces::Backend* backend = Factory::self()->backend();
@@ -74,11 +66,12 @@ void AvCapture::setAudioSource( int audioSourceIndex )
 
 const VideoSource& AvCapture::videoSource() const
 {
-	if( m_iface && m_iface->videoSource() != d->videoSource.index() )
+	Q_D( const AvCapture );
+	if( d->iface() && d->iface()->videoSource() != d->videoSource.index() )
 	{
-		int index = m_iface->videoSource();
+		int index = d->iface()->videoSource();
 		const Ifaces::Backend* backend = Factory::self()->backend();
-		d->videoSource = VideoSource( index,
+		const_cast<AvCapturePrivate*>( d )->videoSource = VideoSource( index,
 				backend->videoSourceName( index ),
 				backend->videoSourceDescription( index ) );
 	}
@@ -87,16 +80,18 @@ const VideoSource& AvCapture::videoSource() const
 
 void AvCapture::setVideoSource( const VideoSource& videoSource )
 {
-	if( m_iface )
-		m_iface->setVideoSource( videoSource.index() );
+	Q_D( AvCapture );
+	if( d->iface() )
+		d->iface()->setVideoSource( videoSource.index() );
 	else
 		d->videoSource = videoSource;
 }
 
 void AvCapture::setVideoSource( int videoSourceIndex )
 {
-	if( m_iface )
-		m_iface->setVideoSource( videoSourceIndex );
+	Q_D( AvCapture );
+	if( d->iface() )
+		d->iface()->setVideoSource( videoSourceIndex );
 	else
 	{
 		const Ifaces::Backend* backend = Factory::self()->backend();
@@ -107,26 +102,24 @@ void AvCapture::setVideoSource( int videoSourceIndex )
 	}
 }
 
-bool AvCapture::aboutToDeleteIface()
+bool AvCapturePrivate::aboutToDeleteIface()
 {
-	int index = m_iface->audioSource();
+	int index = iface()->audioSource();
 	const Ifaces::Backend* backend = Factory::self()->backend();
-	d->audioSource = AudioSource( index,
+	audioSource = AudioSource( index,
 			backend->audioSourceName( index ),
 			backend->audioSourceDescription( index ) );
-	return AbstractMediaProducer::aboutToDeleteIface();
+	return AbstractMediaProducerPrivate::aboutToDeleteIface();
 }
 
-void AvCapture::setupIface( Ifaces::AvCapture* iface )
+void AvCapture::setupIface()
 {
-	AbstractMediaProducer::setupIface( iface );
-
-	m_iface = iface;
-	if( !m_iface )
-		return;
+	Q_D( AvCapture );
+	Q_ASSERT( d->iface() );
+	AbstractMediaProducer::setupIface();
 
 	// set up attributes
-	m_iface->setAudioSource( d->audioSource.index() );
+	d->iface()->setAudioSource( d->audioSource.index() );
 }
 
 } //namespace Phonon

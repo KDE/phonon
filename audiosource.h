@@ -46,6 +46,7 @@ class AudioSource : public NameDescriptionTuple
 	Q_DECLARE_PRIVATE( AudioSource )
 	friend class BackendCapabilities;
 	friend class AvCapture;
+	friend class AvCapturePrivate;
 	public:
 		AudioSource();
 		AudioSource( const AudioSource& );

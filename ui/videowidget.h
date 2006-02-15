@@ -52,7 +52,7 @@ namespace Ifaces
 	 */
 	class PHONON_EXPORT VideoWidget : public QWidget
 	{
-		friend class VideoWidgetHelper;
+		friend class VideoWidgetHelperPrivate;
 		Q_OBJECT
 		Q_PROPERTY( bool fullscreen READ isFullscreen WRITE setFullscreen );
 		public:

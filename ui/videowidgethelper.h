@@ -37,25 +37,20 @@ namespace Ifaces
 	class VideoWidget;
 }
 
+class VideoWidgetHelperPrivate;
 class VideoWidget;
 
 class PHONON_EXPORT VideoWidgetHelper : public Phonon::AbstractVideoOutput
 {
 	Q_OBJECT
+	Q_DECLARE_PRIVATE( VideoWidgetHelper )
 	//cannot use macro: need special iface creation
 	public:
 		VideoWidgetHelper( VideoWidget* parent );
-		~VideoWidgetHelper();
 	protected:
-		virtual void ifaceDeleted();
-		virtual void createIface();
-		virtual bool aboutToDeleteIface();
-		virtual void setupIface( Ifaces::VideoWidget* );
+		virtual void setupIface();
 	private:
 		Ifaces::VideoWidget* iface();
-		Ifaces::VideoWidget* m_iface;
-		class Private;
-		Private* d;
 };
 
 }} //namespace Phonon::Ui

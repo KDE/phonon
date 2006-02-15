@@ -17,8 +17,8 @@
 
 */
 
-#ifndef PHONON_OBJECT_H
-#define PHONON_OBJECT_H
+#ifndef PHONON_BASE_H
+#define PHONON_BASE_H
 
 #include <QObject>
 
@@ -26,55 +26,36 @@
 
 namespace Phonon
 {
-	namespace Ifaces
-	{
-		class Object;
-	}
+	class BasePrivate;
 	/**
 	 * \internal
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
 	 * \since 4.0
 	 */
-	class PHONON_EXPORT Object : public QObject
+	class PHONON_EXPORT Base : public QObject
 	{
 		Q_OBJECT
+		Q_DECLARE_PRIVATE( Base )
 		protected:
 			/**
 			 * Standard QObject constructor.
 			 *
-			 * @param parent QObject parent
+			 * \param d private object
+			 * \param parent QObject parent
 			 */
-			Object( QObject* parent = 0 );
+			Base( BasePrivate& d, QObject* parent = 0 );
 
-		protected Q_SLOTS:
-			/**
-			 * \internal
-			 * This method cleanly deletes the Iface object. It is called on
-			 * destruction and before a backend change.
-			 */
-			virtual void deleteIface() = 0;
+			virtual ~Base();
 
-			/**
-			 * \internal
-			 * Creates the Iface object belonging to this class. For most cases the
-			 * implementation is
-			 * \code
-			 * m_iface = Factory::self()->createClassName( this );
-			 * return m_iface;
-			 * \endcode
-			 *
-			 * This function should not be called except from slotCreateIface.
-			 *
-			 * \see slotCreateIface
-			 */
-			virtual void createIface() = 0;
+		protected:
+			BasePrivate* d_ptr;
 
-		//private:
-			//class Private;
-			//Private* d;
+		private:
+			Q_PRIVATE_SLOT( d_func(), void deleteIface() );
+			Q_PRIVATE_SLOT( d_func(), void createIface() );
 	};
 } //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // PHONON_OBJECT_H
+#endif // PHONON_BASE_H

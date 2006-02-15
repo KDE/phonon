@@ -17,6 +17,7 @@
 
 */
 #include "audiooutput.h"
+#include "audiooutput_p.h"
 #include "ifaces/audiooutput.h"
 #include "factory.h"
 
@@ -26,74 +27,77 @@
 
 namespace Phonon
 {
-class AudioOutput::Private
-{
-	public:
-		Private()
-			: volume( 1.0 )
-		{ 
-			const KAboutData* ad = KGlobal::instance()->aboutData();
-			if( ad )
-				name = ad->programName();
-			else
-				name = KGlobal::instance()->instanceName();
-		}
-
-		QString name;
-		float volume;
-};
-
 PHONON_HEIR_IMPL( AudioOutput, AbstractAudioOutput )
 
 QString AudioOutput::name() const
 {
-	return m_iface ? m_iface->name() : d->name;
+	Q_D( const AudioOutput );
+	return d->iface() ? d->iface()->name() : d->name;
 }
 
 void AudioOutput::setName( const QString& newName )
 {
-	if( m_iface )
-		d->name = m_iface->setName( newName );
+	Q_D( AudioOutput );
+	if( d->iface() )
+		d->name = d->iface()->setName( newName );
 	else
 		d->name = newName;
 }
 
 float AudioOutput::volume() const
 {
-	return m_iface ? m_iface->volume() : d->volume;
+	Q_D( const AudioOutput );
+	return d->iface() ? d->iface()->volume() : d->volume;
 }
 
 void AudioOutput::setVolume( float newVolume )
 {
-	if( m_iface )
-		d->volume = m_iface->setVolume( newVolume );
+	Q_D( AudioOutput );
+	if( d->iface() )
+		d->volume = d->iface()->setVolume( newVolume );
 	else
 		d->volume = newVolume;
 }
 
-bool AudioOutput::aboutToDeleteIface()
+Category AudioOutput::category() const
 {
-	if( m_iface )
-	{
-		d->name = m_iface->name();
-		d->volume = m_iface->volume();
-	}
-	return AbstractAudioOutput::aboutToDeleteIface();
+	Q_D( const AudioOutput );
+	return d->category;
 }
 
-void AudioOutput::setupIface( Ifaces::AudioOutput* iface )
+QString AudioOutput::categoryName() const
 {
-	AbstractAudioOutput::setupIface( iface );
+	Q_D( const AudioOutput );
+	return Phonon::categoryToString( d->category );
+}
 
-	m_iface = iface;
-	if( !m_iface )
-		return;
+void AudioOutput::setCategory( Category c )
+{
+	Q_D( AudioOutput );
+	d->category = c;
+}
 
-	connect( m_iface->qobject(), SIGNAL( volumeChanged( float ) ), SIGNAL( volumeChanged( float ) ) );
+bool AudioOutputPrivate::aboutToDeleteIface()
+{
+	if( iface() )
+	{
+		name = iface()->name();
+		volume = iface()->volume();
+	}
+	return AbstractAudioOutputPrivate::aboutToDeleteIface();
+}
+
+void AudioOutput::setupIface()
+{
+	Q_D( AudioOutput );
+	Q_ASSERT( d->iface() );
+	AbstractAudioOutput::setupIface();
+
+	connect( d->iface()->qobject(), SIGNAL( volumeChanged( float ) ), SIGNAL( volumeChanged( float ) ) );
 
 	// set up attributes
-	m_iface->setName( d->name );
-	m_iface->setVolume( d->volume );
+	d->iface()->setName( d->name );
+	d->iface()->setVolume( d->volume );
 }
 
 } //namespace Phonon

@@ -19,11 +19,12 @@
 #ifndef Phonon_AUDIOPATH_H
 #define Phonon_AUDIOPATH_H
 
-#include "object.h"
+#include "base.h"
 #include "phonondefs.h"
 
 namespace Phonon
 {
+	class AudioPathPrivate;
 	class AudioEffect;
 	class AbstractAudioOutput;
 
@@ -54,9 +55,10 @@ namespace Phonon
 	 * @since 4.0
 	 * @see VideoPath
 	 */
-	class PHONON_EXPORT AudioPath : public Object
+	class PHONON_EXPORT AudioPath : public Base
 	{
 		friend class AbstractMediaProducer;
+		Q_DECLARE_PRIVATE( AudioPath )
 		Q_OBJECT
 		Q_PROPERTY( int channel READ selectedChannel WRITE selectChannel )
 		PHONON_OBJECT( AudioPath )

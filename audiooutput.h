@@ -23,29 +23,44 @@
 #include "mixeriface.h"
 #include <kdelibs_export.h>
 #include "phonondefs.h"
+#include "state.h"
 
 class QString;
 
 namespace Phonon
 {
+	class AudioOutputPrivate;
 	namespace Ifaces
 	{
 		class AudioOutput;
 	}
 
+	/**
+	 * \short Class for audio output to the soundcard.
+	 *
+	 * \author Matthias Kretz <kretz@kde.org>
+	 * \since 4.0
+	 */
 	class PHONON_EXPORT AudioOutput : public AbstractAudioOutput, public MixerIface
 	{
 		Q_OBJECT
+		Q_DECLARE_PRIVATE( AudioOutput )
+		Q_PROPERTY( QString name READ name WRITE setName )
+		Q_PROPERTY( float volume READ volume WRITE setVolume )
+		Q_PROPERTY( Category category READ category WRITE setCategory )
 		PHONON_HEIR( AudioOutput )
 		public:
 			// Attributes Getters:
 			QString name() const;
 			float volume() const;
+			Phonon::Category category() const;
+			QString categoryName() const;
 
 		public Q_SLOTS:
 			// Attributes Setters:
 			void setName( const QString& newName );
 			void setVolume( float newVolume );
+			void setCategory( Phonon::Category category );
 
 		Q_SIGNALS:
 			void volumeChanged( float newVolume );

@@ -17,6 +17,7 @@
 
 */
 #include "mediaobject.h"
+#include "mediaobject_p.h"
 #include "ifaces/mediaobject.h"
 #include "factory.h"
 
@@ -24,47 +25,41 @@
 
 namespace Phonon
 {
-class MediaObject::Private
-{
-	public:
-		Private()
-			: aboutToFinishTime( 0 )
-		{ }
-
-		KUrl url;
-		long aboutToFinishTime;
-};
-
 PHONON_HEIR_IMPL( MediaObject, AbstractMediaProducer )
 
 KUrl MediaObject::url() const
 {
-	return m_iface ? m_iface->url() : d->url;
+	Q_D( const MediaObject );
+	return d->iface() ? d->iface()->url() : d->url;
 }
 
 long MediaObject::totalTime() const
 {
-	return m_iface ? m_iface->totalTime() : -1;
+	Q_D( const MediaObject );
+	return d->iface() ? d->iface()->totalTime() : -1;
 }
 
 long MediaObject::remainingTime() const
 {
-	return m_iface ? m_iface->remainingTime() : -1;
+	Q_D( const MediaObject );
+	return d->iface() ? d->iface()->remainingTime() : -1;
 }
 
 long MediaObject::aboutToFinishTime() const
 {
-	return m_iface ? m_iface->aboutToFinishTime() : d->aboutToFinishTime;
+	Q_D( const MediaObject );
+	return d->iface() ? d->iface()->aboutToFinishTime() : d->aboutToFinishTime;
 }
 
 void MediaObject::setUrl( const KUrl& url )
 {
+	Q_D( MediaObject );
 	if( iface() )
 	{
-		m_iface->setUrl( url );
+		d->iface()->setUrl( url );
 		if( state() == Phonon::ErrorState )
 		{
-			deleteIface();
+			d->deleteIface();
 			//TODO: at this point MediaObject should try to use an Ifaces::ByteStream
 			//instead and send the data it receives from a KIO Job via writeBuffer.
 			//This essentially makes all media frameworks read data via KIO...
@@ -76,46 +71,45 @@ void MediaObject::setUrl( const KUrl& url )
 
 void MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
 {
+	Q_D( MediaObject );
 	kdDebug( 600 ) << k_funcinfo << endl;
-	if( m_iface )
-		m_iface->setAboutToFinishTime( newAboutToFinishTime );
+	if( d->iface() )
+		d->iface()->setAboutToFinishTime( newAboutToFinishTime );
 	else
 		d->aboutToFinishTime = newAboutToFinishTime;
 }
 
-bool MediaObject::aboutToDeleteIface()
+bool MediaObjectPrivate::aboutToDeleteIface()
 {
 	kdDebug( 600 ) << k_funcinfo << endl;
-	if( m_iface )
-		d->aboutToFinishTime = m_iface->aboutToFinishTime();
-	return AbstractMediaProducer::aboutToDeleteIface();
+	if( iface() )
+		aboutToFinishTime = iface()->aboutToFinishTime();
+	return AbstractMediaProducerPrivate::aboutToDeleteIface();
 }
 
-void MediaObject::setupIface( Ifaces::MediaObject* iface )
+void MediaObject::setupIface()
 {
+	Q_D( MediaObject );
+	Q_ASSERT( d->iface() );
 	kdDebug( 600 ) << k_funcinfo << endl;
-	AbstractMediaProducer::setupIface( iface );
+	AbstractMediaProducer::setupIface();
 
-	m_iface = iface;
-	if( !m_iface )
-		return;
-
-	connect( m_iface->qobject(), SIGNAL( finished() ), SIGNAL( finished() ) );
-	connect( m_iface->qobject(), SIGNAL( aboutToFinish( long ) ), SIGNAL( aboutToFinish( long ) ) );
-	connect( m_iface->qobject(), SIGNAL( length( long ) ), SIGNAL( length( long ) ) );
+	connect( d->iface()->qobject(), SIGNAL( finished() ), SIGNAL( finished() ) );
+	connect( d->iface()->qobject(), SIGNAL( aboutToFinish( long ) ), SIGNAL( aboutToFinish( long ) ) );
+	connect( d->iface()->qobject(), SIGNAL( length( long ) ), SIGNAL( length( long ) ) );
 
 	// set up attributes
 	if( !d->url.isEmpty() )
-		m_iface->setUrl( d->url );
+		d->iface()->setUrl( d->url );
 	if( state() == Phonon::ErrorState )
 	{
-		deleteIface();
+		d->deleteIface();
 		//TODO: at this point MediaObject should try to use an Ifaces::ByteStream
 		//instead and send the data it receives from a KIO Job via writeBuffer.
 		//This essentially makes all media frameworks read data via KIO...
 		return;
 	}
-	m_iface->setAboutToFinishTime( d->aboutToFinishTime );
+	d->iface()->setAboutToFinishTime( d->aboutToFinishTime );
 }
 
 } //namespace Phonon

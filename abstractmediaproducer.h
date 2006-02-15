@@ -19,7 +19,7 @@
 #ifndef PHONON_ABSTRACTMEDIAPRODUCER_H
 #define PHONON_ABSTRACTMEDIAPRODUCER_H
 
-#include "object.h"
+#include "base.h"
 #include "state.h"
 #include "phonondefs.h"
 
@@ -29,6 +29,7 @@ namespace Phonon
 {
 	class VideoPath;
 	class AudioPath;
+	class AbstractMediaProducerPrivate;
 
 	namespace Ifaces
 	{
@@ -45,9 +46,10 @@ namespace Phonon
 	 * @since 4.0
 	 * @see MediaObject
 	 */
-	class PHONON_EXPORT AbstractMediaProducer : public Object
+	class PHONON_EXPORT AbstractMediaProducer : public Base
 	{
 		Q_OBJECT
+		Q_DECLARE_PRIVATE( AbstractMediaProducer )
 		PHONON_ABSTRACTBASE( AbstractMediaProducer )
 		public:
 			/**

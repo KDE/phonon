@@ -17,22 +17,28 @@
 
 */
 
-#include "object.h"
-#include "factory.h"
+#ifndef AUDIOPATH_P_H
+#define AUDIOPATH_P_H
+
+#include "audiopath.h"
+#include "ifaces/audiopath.h"
+#include "base_p.h"
 
 namespace Phonon
 {
-	Object::Object( QObject* parent )
-		: QObject( parent )
-	{
-		connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
-		connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
-		//QTimer::singleShot( 0, this, SLOT( createIface() ) );
-	}
-	//Object::~Object()
-	//{
-		//deleteIface();
-	//}
-} //namespace Phonon
-#include "object.moc"
-// vim: sw=4 ts=4 noet
+class AudioPathPrivate : public BasePrivate
+{
+	Q_DECLARE_PUBLIC( AudioPath )
+	PHONON_PRIVATECLASS( AudioPath, Base )
+	protected:
+		AudioPathPrivate()
+			: channel( -1 )
+		{
+		}
+
+		int channel;
+};
+}
+
+#endif // AUDIOPATH_P_H
+// vim: sw=4 ts=4 tw=80

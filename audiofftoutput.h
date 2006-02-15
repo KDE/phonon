@@ -27,6 +27,7 @@ template<class T> class QVector;
 
 namespace Phonon
 {
+	class AudioFftOutputPrivate;
 	namespace Ifaces
 	{
 		class AudioFftOutput;
@@ -44,6 +45,7 @@ namespace Phonon
 	class PHONON_EXPORT AudioFftOutput : public AbstractAudioOutput
 	{
 		Q_OBJECT
+		Q_DECLARE_PRIVATE( AudioFftOutput )
 		Q_PROPERTY( int rate READ rate WRITE setRate )
 		Q_PROPERTY( int bandwidth READ bandwidth WRITE setBandwidth )
 		PHONON_HEIR( AudioFftOutput )

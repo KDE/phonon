@@ -17,6 +17,7 @@
 
 */
 #include "audiopath.h"
+#include "audiopath_p.h"
 #include "ifaces/audiopath.h"
 #include "factory.h"
 
@@ -25,39 +26,33 @@
 
 namespace Phonon
 {
-class AudioPath::Private
-{
-	public:
-		Private()
-			: channel( -1 )
-		{ }
-
-		int channel;
-};
-
 PHONON_OBJECT_IMPL( AudioPath )
 
 int AudioPath::availableChannels() const
 {
-	return m_iface ? m_iface->availableChannels() : -1;
+	Q_D( const AudioPath );
+	return d->iface() ? d->iface()->availableChannels() : -1;
 }
 
 QString AudioPath::channelName( int channel ) const
 {
-	return m_iface ? m_iface->channelName( channel ) : QString();
+	Q_D( const AudioPath );
+	return d->iface() ? d->iface()->channelName( channel ) : QString();
 }
 
 bool AudioPath::selectChannel( int channel )
 {
-	if( m_iface )
-		return m_iface->selectChannel( channel );
+	Q_D( AudioPath );
+	if( d->iface() )
+		return d->iface()->selectChannel( channel );
 	d->channel = channel;
 	return false;
 }
 
 int AudioPath::selectedChannel() const
 {
-	return m_iface ? m_iface->selectedChannel() : d->channel;
+	Q_D( const AudioPath );
+	return d->iface() ? d->iface()->selectedChannel() : d->channel;
 }
 
 bool AudioPath::addOutput( AbstractAudioOutput* audioOutput )
@@ -80,20 +75,19 @@ bool AudioPath::removeEffect( AudioEffect* effect )
 	return iface()->removeEffect( effect->iface() );
 }
 
-bool AudioPath::aboutToDeleteIface()
+bool AudioPathPrivate::aboutToDeleteIface()
 {
-	d->channel = m_iface->selectedChannel();
+	channel = iface()->selectedChannel();
 	return true;
 }
 
-void AudioPath::setupIface( Ifaces::AudioPath* iface )
+void AudioPath::setupIface()
 {
-	m_iface = iface;
-	if( !m_iface )
-		return;
+	Q_D( AudioPath );
+	Q_ASSERT( d->iface() );
 
 	// set up attributes
-	m_iface->selectChannel( d->channel );
+	d->iface()->selectChannel( d->channel );
 }
 
 } //namespace Phonon

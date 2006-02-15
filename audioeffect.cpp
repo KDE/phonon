@@ -17,49 +17,43 @@
 
 */
 #include "audioeffect.h"
+#include "audioeffect_p.h"
 #include "ifaces/audioeffect.h"
 #include "factory.h"
 
 namespace Phonon
 {
-class AudioEffect::Private
-{
-	public:
-		Private()
-		{ }
-
-		QString type;
-};
 PHONON_OBJECT_IMPL( AudioEffect )
 
 QString AudioEffect::type() const
 {
-	return m_iface ? m_iface->type() : d->type;
+	Q_D( const AudioEffect );
+	return d->iface() ? d->iface()->type() : d->type;
 }
 
 void AudioEffect::setType( const QString& type )
 {
-	if( m_iface )
-		m_iface->setType( type );
+	Q_D( AudioEffect );
+	if( d->iface() )
+		d->iface()->setType( type );
 	else
 		d->type = type;
 }
 
-bool AudioEffect::aboutToDeleteIface()
+bool AudioEffectPrivate::aboutToDeleteIface()
 {
-	if( m_iface )
-		d->type = m_iface->type();
+	if( iface() )
+		type = iface()->type();
 	return true;
 }
 
-void AudioEffect::setupIface( Ifaces::AudioEffect* iface )
+void AudioEffect::setupIface()
 {
-	m_iface = iface;
-	if( !m_iface )
-		return;
+	Q_D( AudioEffect );
+	Q_ASSERT( d->iface() );
 
 	// set up attributes
-	m_iface->setType( d->type );
+	d->iface()->setType( d->type );
 }
 
 } //namespace Phonon

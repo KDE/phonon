@@ -16,7 +16,9 @@
     Boston, MA 02110-1301, USA.
 
 */
+
 #include "abstractmediaproducer.h"
+#include "abstractmediaproducer_p.h"
 #include "ifaces/abstractmediaproducer.h"
 #include "factory.h"
 
@@ -30,136 +32,133 @@
 
 namespace Phonon
 {
-class AbstractMediaProducer::Private
-{
-	public:
-		Private()
-			: state( Phonon::LoadingState )
-			, currentTime( 0 )
-			, tickInterval( 0 )
-		{ }
-
-		State state;
-		long currentTime;
-		long tickInterval;
-		QList<VideoPath*> videoPaths;
-		QList<AudioPath*> audioPaths;
-};
-
 PHONON_ABSTRACTBASE_IMPL( AbstractMediaProducer )
 
 bool AbstractMediaProducer::addVideoPath( VideoPath* videoPath )
 {
+	Q_D( AbstractMediaProducer );
 	d->videoPaths.append( videoPath );
 	if( iface() )
-		return m_iface->addVideoPath( videoPath->iface() );
+		return d->iface()->addVideoPath( videoPath->iface() );
 	return false;
 }
 
 bool AbstractMediaProducer::addAudioPath( AudioPath* audioPath )
 {
+	Q_D( AbstractMediaProducer );
 	d->audioPaths.append( audioPath );
 	if( iface() )
-		return m_iface->addAudioPath( audioPath->iface() );
+		return d->iface()->addAudioPath( audioPath->iface() );
 	return false;
 }
 
 State AbstractMediaProducer::state() const
 {
-	return m_iface ? m_iface->state() : d->state;
+	Q_D( const AbstractMediaProducer );
+	return d->iface() ? d->iface()->state() : d->state;
 }
 
 bool AbstractMediaProducer::hasVideo() const
 {
-	return m_iface ? m_iface->hasVideo() : false;
+	Q_D( const AbstractMediaProducer );
+	return d->iface() ? d->iface()->hasVideo() : false;
 }
 
 bool AbstractMediaProducer::seekable() const
 {
-	return m_iface ? m_iface->seekable() : false;
+	Q_D( const AbstractMediaProducer );
+	return d->iface() ? d->iface()->seekable() : false;
 }
 
 long AbstractMediaProducer::currentTime() const
 {
-	return m_iface ? m_iface->currentTime() : d->currentTime;
+	Q_D( const AbstractMediaProducer );
+	return d->iface() ? d->iface()->currentTime() : d->currentTime;
 }
 
 long AbstractMediaProducer::tickInterval() const
 {
-	return m_iface ? m_iface->tickInterval() : d->tickInterval;
+	Q_D( const AbstractMediaProducer );
+	return d->iface() ? d->iface()->tickInterval() : d->tickInterval;
 }
 
 void AbstractMediaProducer::setTickInterval( long newTickInterval )
 {
-	if( m_iface )
-		d->tickInterval = m_iface->setTickInterval( newTickInterval );
+	Q_D( AbstractMediaProducer );
+	if( d->iface() )
+		d->tickInterval = d->iface()->setTickInterval( newTickInterval );
 	else
 		d->tickInterval = newTickInterval;
 }
 
 const QList<VideoPath*>& AbstractMediaProducer::videoPaths() const
 {
+	Q_D( const AbstractMediaProducer );
 	return d->videoPaths;
 }
 
 const QList<AudioPath*>& AbstractMediaProducer::audioPaths() const
 {
+	Q_D( const AbstractMediaProducer );
 	return d->audioPaths;
 }
 
 void AbstractMediaProducer::play()
 {
+	Q_D( AbstractMediaProducer );
 	if( iface() )
-		m_iface->play();
+		d->iface()->play();
 }
 
 void AbstractMediaProducer::pause()
 {
+	Q_D( AbstractMediaProducer );
 	if( iface() )
-		m_iface->pause();
+		d->iface()->pause();
 }
 
 void AbstractMediaProducer::stop()
 {
+	Q_D( AbstractMediaProducer );
 	if( iface() )
-		m_iface->stop();
+		d->iface()->stop();
 }
 
 void AbstractMediaProducer::seek( long time )
 {
+	Q_D( AbstractMediaProducer );
 	if( iface() )
-		m_iface->seek( time );
+		d->iface()->seek( time );
 }
 
-bool AbstractMediaProducer::aboutToDeleteIface()
+bool AbstractMediaProducerPrivate::aboutToDeleteIface()
 {
 	kdDebug( 600 ) << k_funcinfo << endl;
-	if( m_iface )
+	if( iface() )
 	{
-		d->state = m_iface->state();
-		d->currentTime = m_iface->currentTime();
-		d->tickInterval = m_iface->tickInterval();
+		state = iface()->state();
+		currentTime = iface()->currentTime();
+		tickInterval = iface()->tickInterval();
 	}
 	return true;
 }
 
-void AbstractMediaProducer::setupIface( Ifaces::AbstractMediaProducer* iface )
+void AbstractMediaProducer::setupIface()
 {
+	Q_D( AbstractMediaProducer );
+	Q_ASSERT( d->iface() );
 	kdDebug( 600 ) << k_funcinfo << endl;
-	m_iface = iface;
-	if( !m_iface )
-		return;
 
-	connect( m_iface->qobject(), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ) );
-	connect( m_iface->qobject(), SIGNAL( tick( long ) ), SIGNAL( tick( long ) ) );
+	connect( d->iface()->qobject(), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ) );
+	connect( d->iface()->qobject(), SIGNAL( tick( long ) ), SIGNAL( tick( long ) ) );
 
 	// set up attributes
-	m_iface->setTickInterval( d->tickInterval );
+	d->iface()->setTickInterval( d->tickInterval );
 
 	foreach( AudioPath* a, d->audioPaths )
-		m_iface->addAudioPath( a->iface() );
+		d->iface()->addAudioPath( a->iface() );
 	foreach( VideoPath* v, d->videoPaths )
-		m_iface->addVideoPath( v->iface() );
+		d->iface()->addVideoPath( v->iface() );
 
 	switch( d->state )
 	{
@@ -175,22 +174,24 @@ void AbstractMediaProducer::setupIface( Ifaces::AbstractMediaProducer* iface )
 			QTimer::singleShot( 0, this, SLOT( resumePause() ) );
 			break;
 	}
-	d->state = m_iface->state();
+	d->state = d->iface()->state();
 }
 
 void AbstractMediaProducer::resumePlay()
 {
-	m_iface->play();
+	Q_D( AbstractMediaProducer );
+	d->iface()->play();
 	if( d->currentTime > 0 )
-		m_iface->seek( d->currentTime );
+		d->iface()->seek( d->currentTime );
 }
 
 void AbstractMediaProducer::resumePause()
 {
-	m_iface->play();
+	Q_D( AbstractMediaProducer );
+	d->iface()->play();
 	if( d->currentTime > 0 )
-		m_iface->seek( d->currentTime );
-	m_iface->pause();
+		d->iface()->seek( d->currentTime );
+	d->iface()->pause();
 }
 
 } //namespace Phonon

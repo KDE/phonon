@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2004-2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -12,31 +12,29 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-    Boston, MA 02111-1307, USA.
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
-#ifndef MIXERIFACE_H
-#define MIXERIFACE_H
+#ifndef ABSTRACTVIDEOOUTPUT_P_H
+#define ABSTRACTVIDEOOUTPUT_P_H
 
-#include <dcopobject.h>
+#include "abstractvideooutput.h"
+#include "ifaces/abstractvideooutput.h"
+#include "base_p.h"
+#include <kdelibs_export.h>
 
 namespace Phonon
 {
-class MixerIface : public DCOPObject
+class PHONON_EXPORT AbstractVideoOutputPrivate : public BasePrivate
 {
-	K_DCOP
-	k_dcop:
-		virtual QString name() const = 0;
-		virtual QString categoryName() const = 0;
-		virtual float volume() const = 0;
-		virtual void setVolume( float volume ) = 0;
-
+	Q_DECLARE_PUBLIC( AbstractVideoOutput )
+	PHONON_PRIVATEABSTRACTCLASS( AbstractVideoOutput, Base )
 	protected:
-		MixerIface() : DCOPObject( "MixerIface" ) {}
+		QString name;
 };
 } //namespace Phonon
 
-#endif // MIXERIFACE_H
-// vim: sw=4 ts=4 noet tw=80
+#endif // ABSTRACTVIDEOOUTPUT_P_H
+// vim: sw=4 ts=4 tw=80

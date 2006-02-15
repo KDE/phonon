@@ -28,6 +28,7 @@ class KUrl;
 
 namespace Phonon
 {
+	class MediaObjectPrivate;
 	namespace Ifaces
 	{
 		class MediaObject;
@@ -54,6 +55,7 @@ namespace Phonon
 	class PHONON_EXPORT MediaObject : public AbstractMediaProducer
 	{
 		Q_OBJECT
+		Q_DECLARE_PRIVATE( MediaObject )
 		PHONON_HEIR( MediaObject )
 		public:
 			/**

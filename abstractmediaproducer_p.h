@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,40 +16,35 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_AUDIOEFFECT_H
-#define Phonon_AUDIOEFFECT_H
 
-#include "base.h"
-#include "phonondefs.h"
+#ifndef ABSTRACTMEDIAPRODUCER_P_H
+#define ABSTRACTMEDIAPRODUCER_P_H
 
-class QString;
-class QStringList;
+#include "abstractmediaproducer.h"
+#include "ifaces/abstractmediaproducer.h"
+#include "state.h"
+#include "base_p.h"
 
 namespace Phonon
 {
-	class AudioEffectPrivate;
-	namespace Ifaces
-	{
-		class AudioEffect;
-	}
+class AbstractMediaProducerPrivate : public BasePrivate
+{
+	Q_DECLARE_PUBLIC( AbstractMediaProducer )
+	PHONON_PRIVATEABSTRACTCLASS( AbstractMediaProducer, Base )
+	protected:
+		AbstractMediaProducerPrivate()
+			: state( Phonon::LoadingState )
+			, currentTime( 0 )
+			, tickInterval( 0 )
+		{ }
 
-	/**
-	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
-	 */
-	class PHONON_EXPORT AudioEffect : public Base
-	{
-		friend class AudioPath;
-		Q_OBJECT
-		Q_DECLARE_PRIVATE( AudioEffect )
-		PHONON_OBJECT( AudioEffect )
-		public:
-			QString type() const;
-
-		public Q_SLOTS:
-			void setType( const QString& );
-	};
+		State state;
+		long currentTime;
+		long tickInterval;
+		QList<VideoPath*> videoPaths;
+		QList<AudioPath*> audioPaths;
+};
 } //namespace Phonon
 
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_AUDIOEFFECT_H
+#endif // ABSTRACTMEDIAPRODUCER_P_H
+// vim: sw=4 ts=4 tw=80

@@ -17,52 +17,45 @@
 
 */
 #include "videoeffect.h"
+#include "videoeffect_p.h"
 #include "ifaces/videoeffect.h"
 #include "factory.h"
 
 namespace Phonon
 {
-class VideoEffect::Private
-{
-	public:
-		Private()
-		{ }
-
-		QString type;
-};
-
 PHONON_OBJECT_IMPL( VideoEffect )
 
 QString VideoEffect::type() const
 {
-	return m_iface ? m_iface->type() : d->type;
+	Q_D( const VideoEffect );
+	return d->iface() ? d->iface()->type() : d->type;
 }
 
 void VideoEffect::setType( const QString& type )
 {
-	if( m_iface )
-		m_iface->setType( type );
+	Q_D( VideoEffect );
+	if( d->iface() )
+		d->iface()->setType( type );
 	else
 		d->type = type;
 }
 
-bool VideoEffect::aboutToDeleteIface()
+bool VideoEffectPrivate::aboutToDeleteIface()
 {
-	if( m_iface )
+	if( iface() )
 	{
-		d->type = m_iface->type();
+		type = iface()->type();
 	}
 	return true;
 }
 
-void VideoEffect::setupIface( Ifaces::VideoEffect* iface )
+void VideoEffect::setupIface()
 {
-	m_iface = iface;
-	if( !m_iface )
-		return;
+	Q_D( VideoEffect );
+	Q_ASSERT( d->iface() );
 
 	// set up attributes
-	m_iface->setType( d->type );
+	d->iface()->setType( d->type );
 }
 
 } //namespace Phonon

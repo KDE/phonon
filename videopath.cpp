@@ -17,6 +17,7 @@
 
 */
 #include "videopath.h"
+#include "videopath_p.h"
 #include "ifaces/videopath.h"
 #include "factory.h"
 
@@ -25,14 +26,6 @@
 
 namespace Phonon
 {
-class VideoPath::Private
-{
-	public:
-		Private()
-		{ }
-
-};
-
 PHONON_OBJECT_IMPL( VideoPath )
 
 bool VideoPath::insertEffect( VideoEffect* newEffect, VideoEffect* insertBefore )
@@ -50,17 +43,15 @@ bool VideoPath::removeOutput( AbstractVideoOutput* videoOutput )
 	return iface()->removeOutput( videoOutput->iface() );
 }
 
-bool VideoPath::aboutToDeleteIface()
+bool VideoPathPrivate::aboutToDeleteIface()
 {
 	return true;
 }
 
-void VideoPath::setupIface( Ifaces::VideoPath* iface )
+void VideoPath::setupIface()
 {
-	m_iface = iface;
-	if( !m_iface )
-		return;
-
+	Q_D( VideoPath );
+	Q_ASSERT( d->iface() );
 
 	// set up attributes
 }

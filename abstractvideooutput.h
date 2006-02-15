@@ -19,21 +19,23 @@
 #ifndef Phonon_ABSTRACTVIDEOOUTPUTBASE_H
 #define Phonon_ABSTRACTVIDEOOUTPUTBASE_H
 
-#include "object.h"
+#include "base.h"
 #include "phonondefs.h"
 
 class QString;
 
 namespace Phonon
 {
+	class AbstractVideoOutputPrivate;
 	namespace Ifaces
 	{
 		class AbstractVideoOutput;
 	}
 
-	class PHONON_EXPORT AbstractVideoOutput : public Object
+	class PHONON_EXPORT AbstractVideoOutput : public Base
 	{
 		friend class VideoPath;
+		Q_DECLARE_PRIVATE( AbstractVideoOutput )
 		Q_OBJECT
 		PHONON_ABSTRACTBASE( AbstractVideoOutput )
 	};

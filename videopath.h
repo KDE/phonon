@@ -19,11 +19,12 @@
 #ifndef Phonon_VIDEOPATH_H
 #define Phonon_VIDEOPATH_H
 
-#include "object.h"
+#include "base.h"
 #include "phonondefs.h"
 
 namespace Phonon
 {
+	class VideoPathPrivate;
 	class VideoEffect;
 	class AbstractVideoOutput;
 
@@ -32,9 +33,10 @@ namespace Phonon
 		class VideoPath;
 	}
 
-	class PHONON_EXPORT VideoPath : public Object
+	class PHONON_EXPORT VideoPath : public Base
 	{
 		friend class AbstractMediaProducer;
+		Q_DECLARE_PRIVATE( VideoPath )
 		Q_OBJECT
 		PHONON_OBJECT( VideoPath )
 		public:

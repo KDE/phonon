@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,40 +16,41 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_AUDIOEFFECT_H
-#define Phonon_AUDIOEFFECT_H
 
-#include "base.h"
-#include "phonondefs.h"
+#ifndef AUDIOOUTPUT_P_H
+#define AUDIOOUTPUT_P_H
 
-class QString;
-class QStringList;
+#include "audiooutput.h"
+#include "abstractaudiooutput_p.h"
+#include "ifaces/audiooutput.h"
+#include <kaboutdata.h>
+#include <kglobal.h>
+#include <kinstance.h>
 
 namespace Phonon
 {
-	class AudioEffectPrivate;
-	namespace Ifaces
-	{
-		class AudioEffect;
-	}
+class AudioOutputPrivate : public AbstractAudioOutputPrivate
+{
+	Q_DECLARE_PUBLIC( AudioOutput )
+	PHONON_PRIVATECLASS( AudioOutput, AbstractAudioOutput )
+	protected:
+		AudioOutputPrivate()
+			: volume( 1.0 )
+			, category( Phonon::Unspecified )
+		{ 
+			const KAboutData* ad = KGlobal::instance()->aboutData();
+			if( ad )
+				name = ad->programName();
+			else
+				name = KGlobal::instance()->instanceName();
+		}
 
-	/**
-	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
-	 */
-	class PHONON_EXPORT AudioEffect : public Base
-	{
-		friend class AudioPath;
-		Q_OBJECT
-		Q_DECLARE_PRIVATE( AudioEffect )
-		PHONON_OBJECT( AudioEffect )
-		public:
-			QString type() const;
-
-		public Q_SLOTS:
-			void setType( const QString& );
-	};
+	private:
+		float volume;
+		Category category;
+		QString name;
+};
 } //namespace Phonon
 
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_AUDIOEFFECT_H
+#endif // AUDIOOUTPUT_P_H
+// vim: sw=4 ts=4 tw=80

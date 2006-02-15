@@ -20,6 +20,33 @@
 #ifndef PHONONDEFS_H
 #define PHONONDEFS_H
 
+#define PHONON_PRIVATECLASS( classname, baseclass ) \
+protected: \
+	virtual bool aboutToDeleteIface(); \
+	virtual void createIface(); \
+	virtual void setIface( void* p ) \
+	{ \
+		iface_ptr = reinterpret_cast<Ifaces::classname*>( p ); \
+		baseclass##Private::setIface( static_cast<Ifaces::baseclass*>( iface_ptr ) ); \
+	} \
+private: \
+	Ifaces::classname* iface_ptr; \
+	inline Ifaces::classname* iface() { return iface_ptr; } \
+	inline const Ifaces::classname* iface() const { return iface_ptr; } \
+
+#define PHONON_PRIVATEABSTRACTCLASS( classname, baseclass ) \
+protected: \
+	virtual bool aboutToDeleteIface(); \
+	virtual void setIface( void* p ) \
+	{ \
+		iface_ptr = reinterpret_cast<Ifaces::classname*>( p ); \
+		baseclass##Private::setIface( static_cast<Ifaces::baseclass*>( iface_ptr ) ); \
+	} \
+private: \
+	Ifaces::classname* iface_ptr; \
+	inline Ifaces::classname* iface() { return iface_ptr; } \
+	inline const Ifaces::classname* iface() const { return iface_ptr; } \
+
 /**
  * \internal
  * Used in class declarations to provide the needed functions. This is used for
@@ -44,8 +71,6 @@
  * \see PHONON_HEIR
  */
 #define PHONON_ABSTRACTBASE( classname ) \
-public: \
-	~classname(); \
 protected: \
 	/**
 	 * \internal
@@ -53,48 +78,7 @@ protected: \
 	 *
 	 * \param parent Standard QObject parent.
 	 */ \
-	classname( bool callCreateIface, QObject* parent ); \
-	/**
-	 * \internal
-	 * Called right after the <tt>delete m_iface</tt> statement to reset @c
-	 * m_iface to @c 0. If this is not done there can be dangling pointers
-	 * in the hierarchy of classes.
-	 *
-	 * The reimplementation has to call its parent class:
-	 * \code
-	 * void SubClass::ifaceDeleted()
-	 * {
-	 *   m_iface = 0;
-	 *   ParentClass::ifaceDeleted();
-	 * }
-	 * \endcode
-	 *
-	 * \see aboutToDeleteIface
-	 */ \
-	virtual void ifaceDeleted(); \
-	/**
-	 * \internal
-	 * Used to save the state of the object before the Iface object is
-	 * deleted. This can be used to recreate the state in setupIface().
-	 *
-	 * \return \c true if the Iface object may be deleted.
-	 * \return \c false if the Iface object should not be deleted.
-	 * The reimplementation has to call its parent class:
-	 * \code
-	 * return ParentClass::aboutToDeleteIface();
-	 * \endcode
-	 *
-	 * A complete implementation could look like this:
-	 * \code
-	 * d->propertyA = m_iface->propertyA();
-	 * d->propertyB = m_iface->propertyB();
-	 * return ParentClass::aboutToDeleteIface();
-	 * \endcode
-	 *
-	 * \see ifaceDeleted
-	 * \see slotDeleteIface
-	 */ \
-	virtual bool aboutToDeleteIface(); \
+	classname( classname ## Private& d, QObject* parent ); \
 	/**
 	 * \internal
 	 * After construction of the Iface object this method is called
@@ -108,26 +92,16 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	void setupIface( Ifaces::classname* newIface ); \
-	virtual void deleteIface(); \
+	void setupIface(); \
 private: \
 	/**
 	 * \internal
-	 * Returns the Iface object. If m_iface is @c 0 it calls slotCreateIface
-	 * before returning m_iface.
+	 * Returns the Iface object. If the object does not exist it tries to
+	 * create it before returning.
 	 *
-	 * \return the Iface object
-	 *
-	 * \see m_iface
+	 * \return the Iface object, might return \c 0
 	 */ \
 	Ifaces::classname* iface(); \
-	/**
-	 * \internal
-	 * The pointer to the Iface object. This can be @c.
-	 */ \
-	Ifaces::classname* m_iface; \
-	class Private; \
-	Private* d;
 
 /**
  * \internal
@@ -160,64 +134,8 @@ public: \
 	 * @param parent QObject parent
 	 */ \
 	classname( QObject* parent = 0 ); \
-	~classname(); \
 protected: \
-	classname( bool callCreateIface, QObject* parent ); \
-	/**
-	 * \internal
-	 * Called right after the <tt>delete m_iface</tt> statement to reset @c
-	 * m_iface to @c 0. If this is not done there can be dangling pointers
-	 * in the hierarchy of classes.
-	 *
-	 * The reimplementation has to call its parent class:
-	 * \code
-	 * void SubClass::ifaceDeleted()
-	 * {
-	 *   m_iface = 0;
-	 *   ParentClass::ifaceDeleted();
-	 * }
-	 * \endcode
-	 *
-	 * \see aboutToDeleteIface
-	 */ \
-	virtual void ifaceDeleted(); \
-	/**
-	 * \internal
-	 * Creates the Iface object belonging to this class. For most cases the
-	 * implementation is
-	 * \code
-	 * m_iface = Factory::self()->createClassName( this );
-	 * return m_iface;
-	 * \endcode
-	 *
-	 * This function should not be called except from slotCreateIface.
-	 *
-	 * \see slotCreateIface
-	 */ \
-	virtual void createIface(); \
-	/**
-	 * \internal
-	 * Used to save the state of the object before the Iface object is
-	 * deleted. This can be used to recreate the state in setupIface().
-	 *
-	 * \return \c true if the Iface object may be deleted.
-	 * \return \c false if the Iface object should not be deleted.
-	 * The reimplementation has to call its parent class:
-	 * \code
-	 * return ParentClass::aboutToDeleteIface();
-	 * \endcode
-	 *
-	 * A complete implementation could look like this:
-	 * \code
-	 * d->propertyA = m_iface->propertyA();
-	 * d->propertyB = m_iface->propertyB();
-	 * return ParentClass::aboutToDeleteIface();
-	 * \endcode
-	 *
-	 * \see ifaceDeleted
-	 * \see slotDeleteIface
-	 */ \
-	virtual bool aboutToDeleteIface(); \
+	classname( classname ## Private& d, QObject* parent ); \
 	/**
 	 * \internal
 	 * After construction of the Iface object this method is called
@@ -231,26 +149,16 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	void setupIface( Ifaces::classname* newIface ); \
-	virtual void deleteIface(); \
+	void setupIface(); \
 private: \
 	/**
 	 * \internal
-	 * Returns the Iface object. If m_iface is @c 0 it calls slotCreateIface
-	 * before returning m_iface.
+	 * Returns the Iface object. If the object does not exist it tries to
+	 * create it before returning.
 	 *
-	 * \return the Iface object
-	 *
-	 * \see m_iface
+	 * \return the Iface object, might return \c 0
 	 */ \
 	Ifaces::classname* iface(); \
-	/**
-	 * \internal
-	 * The pointer to the Iface object. This can be @c.
-	 */ \
-	Ifaces::classname* m_iface; \
-	class Private; \
-	Private* d;
 
 /**
  * \internal
@@ -283,64 +191,8 @@ public: \
 	 * @param parent QObject parent
 	 */ \
 	classname( QObject* parent = 0 ); \
-	~classname(); \
 protected: \
-	classname( bool callCreateIface, QObject* parent ); \
-	/**
-	 * \internal
-	 * Called right after the <tt>delete m_iface</tt> statement to reset @c
-	 * m_iface to @c 0. If this is not done there can be dangling pointers
-	 * in the hierarchy of classes.
-	 *
-	 * The reimplementation has to call its parent class:
-	 * \code
-	 * void SubClass::ifaceDeleted()
-	 * {
-	 *   m_iface = 0;
-	 *   ParentClass::ifaceDeleted();
-	 * }
-	 * \endcode
-	 *
-	 * \see aboutToDeleteIface
-	 */ \
-	virtual void ifaceDeleted(); \
-	/**
-	 * \internal
-	 * Creates the Iface object belonging to this class. For most cases the
-	 * implementation is
-	 * \code
-	 * m_iface = Factory::self()->createClassName( this );
-	 * return m_iface;
-	 * \endcode
-	 *
-	 * This function should not be called except from slotCreateIface.
-	 *
-	 * \see slotCreateIface
-	 */ \
-	virtual void createIface(); \
-	/**
-	 * \internal
-	 * Used to save the state of the object before the Iface object is
-	 * deleted. This can be used to recreate the state in setupIface().
-	 *
-	 * \return \c true if the Iface object may be deleted.
-	 * \return \c false if the Iface object should not be deleted.
-	 * The reimplementation has to call its parent class:
-	 * \code
-	 * return ParentClass::aboutToDeleteIface();
-	 * \endcode
-	 *
-	 * A complete implementation could look like this:
-	 * \code
-	 * d->propertyA = m_iface->propertyA();
-	 * d->propertyB = m_iface->propertyB();
-	 * return ParentClass::aboutToDeleteIface();
-	 * \endcode
-	 *
-	 * \see ifaceDeleted
-	 * \see slotDeleteIface
-	 */ \
-	virtual bool aboutToDeleteIface(); \
+	classname( classname ## Private& d, QObject* parent ); \
 	/**
 	 * \internal
 	 * After construction of the Iface object this method is called
@@ -354,139 +206,78 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	void setupIface( Ifaces::classname* newIface ); \
+	void setupIface(); \
 private: \
 	/**
 	 * \internal
-	 * Returns the Iface object. If m_iface is @c 0 it calls slotCreateIface
-	 * before returning m_iface.
+	 * Returns the Iface object. If the object does not exist it tries to
+	 * create it before returning.
 	 *
-	 * \return the Iface object
-	 *
-	 * \see m_iface
+	 * \return the Iface object, might return \c 0
 	 */ \
 	Ifaces::classname* iface(); \
-	/**
-	 * \internal
-	 * The pointer to the Iface object. This can be @c.
-	 */ \
-	Ifaces::classname* m_iface; \
-	class Private; \
-	Private* d;
 
 #define PHONON_ABSTRACTBASE_IMPL( classname ) \
-classname::classname( bool callCreateIface, QObject* parent ) \
-	: Object( parent ) \
-	, m_iface( 0 ) \
-	, d( new Private() ) \
+classname::classname( classname ## Private& d, QObject* parent ) \
+	: Base( d, parent ) \
 { \
-	Q_ASSERT( callCreateIface == false ); \
-} \
-classname::~classname() \
-{ \
-	delete d; \
-	d = 0; \
-} \
-void classname::ifaceDeleted() \
-{ \
-	m_iface = 0; \
 } \
 Ifaces::classname* classname::iface() \
 { \
-	if( !m_iface ) \
-		createIface(); \
-	return m_iface; \
+	Q_D( classname ); \
+	if( !d->iface() ) \
+		d->createIface(); \
+	return d->iface(); \
 } \
-void classname::deleteIface() \
-{ \
-	if( aboutToDeleteIface() ) \
-	{ \
-		delete m_iface; \
-		ifaceDeleted(); \
-	} \
-}
 
 #define PHONON_OBJECT_IMPL( classname ) \
 classname::classname( QObject* parent ) \
-	: Object( parent ) \
-	, m_iface( 0 ) \
-	, d( new Private() ) \
+	: Base( *new classname ## Private(), parent ) \
 { \
+	Q_D( classname ); \
+	d->createIface(); \
 } \
-classname::classname( bool callCreateIface, QObject* parent ) \
-	: Object( parent ) \
-	, m_iface( 0 ) \
-	, d( new Private() ) \
+classname::classname( classname ## Private& d, QObject* parent ) \
+	: Base( d, parent ) \
 { \
-	if( callCreateIface ) \
-		createIface(); \
-} \
-classname::~classname() \
-{ \
-	delete d; \
-	d = 0; \
-} \
-void classname::ifaceDeleted() \
-{ \
-	m_iface = 0; \
 } \
 Ifaces::classname* classname::iface() \
 { \
-	if( !m_iface ) \
-		createIface(); \
-	return m_iface; \
+	Q_D( classname ); \
+	if( !d->iface() ) \
+		d->createIface(); \
+	return d->iface(); \
 } \
-void classname::createIface() \
+void classname ## Private::createIface() \
 { \
-	Q_ASSERT( m_iface == 0 ); \
-	m_iface = Factory::self()->create ## classname( this ); \
-	setupIface( m_iface ); \
+	Q_Q( classname ); \
+	Q_ASSERT( iface_ptr == 0 ); \
+	setIface( Factory::self()->create ## classname( q ) ); \
+	q->setupIface(); \
 } \
-void classname::deleteIface() \
-{ \
-	if( aboutToDeleteIface() ) \
-	{ \
-		delete m_iface; \
-		ifaceDeleted(); \
-	} \
-}
 
 #define PHONON_HEIR_IMPL( classname, parentclass ) \
 classname::classname( QObject* parent ) \
-	: parentclass( false, parent ) \
-	, m_iface( 0 ) \
-	, d( new Private() ) \
+	: parentclass( *new classname ## Private, parent ) \
 { \
 } \
-classname::classname( bool callCreateIface, QObject* parent ) \
-	: parentclass( false, parent ) \
-	, m_iface( 0 ) \
-	, d( new Private() ) \
+classname::classname( classname ## Private& d, QObject* parent ) \
+	: parentclass( d, parent ) \
 { \
-	if( callCreateIface ) \
-		createIface(); \
-} \
-classname::~classname() \
-{ \
-	delete d; \
-	d = 0; \
-} \
-void classname::ifaceDeleted() \
-{ \
-	m_iface = 0; \
-	parentclass::ifaceDeleted(); \
 } \
 Ifaces::classname* classname::iface() \
 { \
-	if( !m_iface ) \
-		createIface(); \
-	return m_iface; \
+	Q_D( classname ); \
+	if( !d->iface() ) \
+		d->createIface(); \
+	return d->iface(); \
 } \
-void classname::createIface() \
+void classname ## Private::createIface() \
 { \
-	Q_ASSERT( m_iface == 0 ); \
-	m_iface = Factory::self()->create ## classname( this ); \
-	setupIface( m_iface ); \
+	Q_Q( classname ); \
+	Q_ASSERT( iface_ptr == 0 ); \
+	setIface( Factory::self()->create ## classname( q ) ); \
+	q->setupIface(); \
 }
 
 #endif // PHONONDEFS_H

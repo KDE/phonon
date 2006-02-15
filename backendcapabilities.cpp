@@ -39,7 +39,10 @@ BackendCapabilities* BackendCapabilities::m_self = 0;
 BackendCapabilities* BackendCapabilities::self()
 {
 	if( !m_self )
-		sd.setObject( m_self, m_self = new BackendCapabilities() );
+	{
+		m_self = new BackendCapabilities();
+		sd.setObject( m_self, m_self );
+	}
 	return m_self;
 }
 

@@ -16,116 +16,112 @@
     Boston, MA 02110-1301, USA.
 
 */
+
 #include "bytestream.h"
+#include "bytestream_p.h"
 #include "ifaces/bytestream.h"
 #include "factory.h"
 
 namespace Phonon
 {
-class ByteStream::Private
-{
-	public:
-		Private()
-			: aboutToFinishTime( 0 )
-			, streamSize( -1 )
-			, streamSeekable( false )
-		{ }
-
-		long aboutToFinishTime;
-		long streamSize;
-		bool streamSeekable;
-};
-
 PHONON_HEIR_IMPL( ByteStream, AbstractMediaProducer )
 
 long ByteStream::totalTime() const
 {
-	return m_iface ? m_iface->totalTime() : -1;
+	Q_D( const ByteStream );
+	return d->iface() ? d->iface()->totalTime() : -1;
 }
 
 long ByteStream::remainingTime() const
 {
-	return m_iface ? m_iface->remainingTime() : -1;
+	Q_D( const ByteStream );
+	return d->iface() ? d->iface()->remainingTime() : -1;
 }
 
 long ByteStream::aboutToFinishTime() const
 {
-	return m_iface ? m_iface->aboutToFinishTime() : d->aboutToFinishTime;
+	Q_D( const ByteStream );
+	return d->iface() ? d->iface()->aboutToFinishTime() : d->aboutToFinishTime;
 }
 
 long ByteStream::streamSize() const
 {
-	return m_iface ? m_iface->streamSize() : d->streamSize;
+	Q_D( const ByteStream );
+	return d->iface() ? d->iface()->streamSize() : d->streamSize;
 }
 
 bool ByteStream::streamSeekable() const
 {
-	return m_iface ? m_iface->streamSeekable() : d->streamSeekable;
+	Q_D( const ByteStream );
+	return d->iface() ? d->iface()->streamSeekable() : d->streamSeekable;
 }
 
 void ByteStream::setStreamSeekable( bool seekable )
 {
-	if( m_iface )
-		m_iface->setStreamSeekable( seekable );
+	Q_D( ByteStream );
+	if( d->iface() )
+		d->iface()->setStreamSeekable( seekable );
 	else
 		d->streamSeekable = seekable;
 }
 
 void ByteStream::writeData( const QByteArray& data )
 {
+	Q_D( ByteStream );
 	if( iface() )
-		m_iface->writeData( data );
+		d->iface()->writeData( data );
 }
 
 void ByteStream::setStreamSize( long streamSize )
 {
-	if( m_iface )
-		m_iface->setStreamSize( streamSize );
+	Q_D( ByteStream );
+	if( d->iface() )
+		d->iface()->setStreamSize( streamSize );
 	else
 		d->streamSize = streamSize;
 }
 
 void ByteStream::endOfData()
 {
+	Q_D( ByteStream );
 	if( iface() )
-		m_iface->endOfData();
+		d->iface()->endOfData();
 }
 
 void ByteStream::setAboutToFinishTime( long newAboutToFinishTime )
 {
-	if( m_iface )
-		m_iface->setAboutToFinishTime( newAboutToFinishTime );
+	Q_D( ByteStream );
+	if( d->iface() )
+		d->iface()->setAboutToFinishTime( newAboutToFinishTime );
 	else
 		d->aboutToFinishTime = newAboutToFinishTime;
 }
 
-bool ByteStream::aboutToDeleteIface()
+bool ByteStreamPrivate::aboutToDeleteIface()
 {
-	if( m_iface )
+	if( iface() )
 	{
-		d->aboutToFinishTime = m_iface->aboutToFinishTime();
-		d->streamSize = m_iface->streamSize();
-		d->streamSeekable = m_iface->streamSeekable();
+		aboutToFinishTime = iface()->aboutToFinishTime();
+		streamSize = iface()->streamSize();
+		streamSeekable = iface()->streamSeekable();
 	}
-	return AbstractMediaProducer::aboutToDeleteIface();
+	return AbstractMediaProducerPrivate::aboutToDeleteIface();
 }
 
-void ByteStream::setupIface( Ifaces::ByteStream* iface )
+void ByteStream::setupIface()
 {
-	AbstractMediaProducer::setupIface( iface );
+	Q_D( ByteStream );
+	Q_ASSERT( d->iface() );
+	AbstractMediaProducer::setupIface();
 
-	m_iface = iface;
-	if( !m_iface )
-		return;
+	connect( d->iface()->qobject(), SIGNAL( finished() ), SIGNAL( finished() ) );
+	connect( d->iface()->qobject(), SIGNAL( aboutToFinish( long ) ), SIGNAL( aboutToFinish( long ) ) );
+	connect( d->iface()->qobject(), SIGNAL( length( long ) ), SIGNAL( length( long ) ) );
+	connect( d->iface()->qobject(), SIGNAL( needData() ), SIGNAL( needData() ) );
+	connect( d->iface()->qobject(), SIGNAL( enoughData() ), SIGNAL( enoughData() ) );
+	connect( d->iface()->qobject(), SIGNAL( seekStream( long ) ), SIGNAL( seekStream( long ) ) );
 
-	connect( m_iface->qobject(), SIGNAL( finished() ), SIGNAL( finished() ) );
-	connect( m_iface->qobject(), SIGNAL( aboutToFinish( long ) ), SIGNAL( aboutToFinish( long ) ) );
-	connect( m_iface->qobject(), SIGNAL( length( long ) ), SIGNAL( length( long ) ) );
-	connect( m_iface->qobject(), SIGNAL( needData() ), SIGNAL( needData() ) );
-	connect( m_iface->qobject(), SIGNAL( enoughData() ), SIGNAL( enoughData() ) );
-	connect( m_iface->qobject(), SIGNAL( seekStream( long ) ), SIGNAL( seekStream( long ) ) );
-
-	m_iface->setAboutToFinishTime( d->aboutToFinishTime );
+	d->iface()->setAboutToFinishTime( d->aboutToFinishTime );
 }
 
 } //namespace Phonon

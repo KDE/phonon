@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,28 +17,24 @@
 
 */
 #include "abstractaudiooutput.h"
+#include "abstractaudiooutput_p.h"
 #include "ifaces/abstractaudiooutput.h"
 #include "factory.h"
 
 namespace Phonon
 {
-class AbstractAudioOutput::Private
-{
-	public:
-};
 
 PHONON_ABSTRACTBASE_IMPL( AbstractAudioOutput )
 
-bool AbstractAudioOutput::aboutToDeleteIface()
+bool AbstractAudioOutputPrivate::aboutToDeleteIface()
 {
 	return true;
 }
 
-void AbstractAudioOutput::setupIface( Ifaces::AbstractAudioOutput* iface )
+void AbstractAudioOutput::setupIface()
 {
-	m_iface = iface;
-	if( !m_iface )
-		return;
+	Q_D( AbstractAudioOutput );
+	Q_ASSERT( d->iface() );
 
 	// set up attributes
 }
