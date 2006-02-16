@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include "../../ifaces/abstractmediaproducer.h"
+#include <QTime>
 
 class QTimer;
 
@@ -64,8 +65,8 @@ namespace Fake
 		private:
 			State m_state;
 			QTimer* m_tickTimer;
-			long m_fakeTime;
 			long m_tickInterval;
+			QTime m_startTime, m_pauseTime;
 	};
 }} //namespace Phonon::Fake
 

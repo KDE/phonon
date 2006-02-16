@@ -46,9 +46,8 @@ class MediaObjectTest : public QObject
 		void pauseToStop();
 
 		void testSeek();
-
-		// test signals
 		void testAboutToFinish();
+		void testTickSignal();
 
 		void cleanupTestCase();
 

@@ -31,7 +31,6 @@ AbstractMediaProducer::AbstractMediaProducer( QObject* parent )
 	: QObject( parent )
 	, m_state( Phonon::LoadingState )
 	, m_tickTimer( new QTimer( this ) )
-	, m_fakeTime( 0 )
 {
 	kdDebug() << k_funcinfo << endl;
 	connect( m_tickTimer, SIGNAL( timeout() ), SLOT( emitTick() ) );
@@ -81,7 +80,20 @@ bool AbstractMediaProducer::seekable() const
 long AbstractMediaProducer::currentTime() const
 {
 	//kdDebug() << k_funcinfo << endl;
-	return m_fakeTime;
+	switch( state() )
+	{
+		case Phonon::PausedState:
+		case Phonon::BufferingState:
+			return m_startTime.msecsTo( m_pauseTime );
+		case Phonon::PlayingState:
+			return m_startTime.elapsed();
+		case Phonon::StoppedState:
+		case Phonon::LoadingState:
+			return 0;
+		case Phonon::ErrorState:
+			break;
+	}
+	return -1;
 }
 
 long AbstractMediaProducer::tickInterval() const
@@ -119,7 +131,6 @@ void AbstractMediaProducer::stop()
 {
 	kdDebug() << k_funcinfo << endl;
 	m_tickTimer->stop();
-	m_fakeTime = 0;
 	setState( Phonon::StoppedState );
 }
 
@@ -127,7 +138,23 @@ void AbstractMediaProducer::seek( long time )
 {
 	kdDebug() << k_funcinfo << endl;
 	if( seekable() )
-		m_fakeTime = time;
+	{
+		switch( state() )
+		{
+			case Phonon::PausedState:
+			case Phonon::BufferingState:
+				m_startTime = m_pauseTime;
+				break;
+			case Phonon::PlayingState:
+				m_startTime = QTime::currentTime();
+				break;
+			case Phonon::StoppedState:
+			case Phonon::ErrorState:
+			case Phonon::LoadingState:
+				return; // cannot seek
+		}
+		m_startTime = m_startTime.addMSecs( -time );
+	}
 }
 
 void AbstractMediaProducer::setState( State newstate )
@@ -136,13 +163,29 @@ void AbstractMediaProducer::setState( State newstate )
 		return;
 	State oldstate = m_state;
 	m_state = newstate;
+	switch( newstate )
+	{
+		case Phonon::PausedState:
+		case Phonon::BufferingState:
+			m_pauseTime.start();
+			break;
+		case Phonon::PlayingState:
+			if( oldstate == Phonon::PausedState || oldstate == Phonon::BufferingState )
+				m_startTime = m_startTime.addMSecs( m_pauseTime.elapsed() );
+			else
+				m_startTime.start();
+			break;
+		case Phonon::StoppedState:
+		case Phonon::ErrorState:
+		case Phonon::LoadingState:
+			break;
+	}
 	kdDebug() << "emit stateChanged( " << newstate << ", " << oldstate << " )" << endl;
 	emit stateChanged( newstate, oldstate );
 }
 
 void AbstractMediaProducer::emitTick()
 {
-	m_fakeTime += m_tickTimer->interval();
 	//kdDebug() << "emit tick( " << currentTime() << " )" << endl;
 	if( m_tickInterval > 0 )
 		emit tick( currentTime() );

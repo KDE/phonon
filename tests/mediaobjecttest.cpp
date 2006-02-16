@@ -310,7 +310,58 @@ void MediaObjectTest::testAboutToFinish()
 		QVERIFY( aboutToFinishTime > 0L );
 	}
 	QCOMPARE( finishSpy.count(), 1 );
+
+	QCOMPARE( m_stateChangedSignalSpy->count(), 1 );
+	QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
+	Phonon::State newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
+	Phonon::State oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
+	QCOMPARE( oldstate, Phonon::PlayingState );
+	QCOMPARE( newstate, Phonon::StoppedState );
 	QCOMPARE( m_media->state(), Phonon::StoppedState );
+}
+
+void MediaObjectTest::testTickSignal()
+{
+	QSignalSpy tickSpy( m_media, SIGNAL( tick( long ) ) );
+	QCOMPARE( m_media->tickInterval(), 0L );
+	for( long tickInterval = 20; tickInterval <= 2000; tickInterval *= 2 )
+	{
+		qDebug() << "Test 20 ticks with an interval of" <<  tickInterval << "ms";
+		m_media->setTickInterval( tickInterval );
+		QVERIFY( m_media->tickInterval() <= tickInterval );
+		QVERIFY( m_media->tickInterval() >= tickInterval/2 );
+		QTime start1 = QTime::currentTime();
+		startPlaying();
+		QTime start2 = QTime::currentTime();
+		int lastCount = 0;
+		long s1, s2 = start2.elapsed();
+		while( tickSpy.count() < 20 && ( m_media->state() == Phonon::PlayingState || m_media->state() == Phonon::BufferingState ) )
+		{
+			if( tickSpy.count() > lastCount )
+			{
+				s1 = start1.elapsed();
+				long tickTime = qvariant_cast<long>( tickSpy.last().at( 0 ) );
+				lastCount = tickSpy.count();
+				// s1 is the time from before the beginning of the playback to
+				// after the tick signal
+				// s2 is the time from after the beginning of the playback to
+				// before the tick signal
+				// so: s2 <= s1
+
+				QVERIFY( tickTime <= m_media->currentTime() );
+				QVERIFY( s1 >= tickTime );
+				QVERIFY( s2 <= tickTime );
+				QVERIFY( s1 >= lastCount * m_media->tickInterval() );
+				if( s2 > ( lastCount + 1 ) * m_media->tickInterval() )
+					QWARN( qPrintable( QString( "%1. tick came too late: %2ms elapsed while this tick should have come before %3ms" )
+							.arg( lastCount ).arg( s2 ).arg( ( lastCount + 1 ) * m_media->tickInterval() ) ) );
+			}
+			s2 = start2.elapsed();
+			QCoreApplication::processEvents();
+		}
+		stopPlaying( Phonon::PlayingState );
+		tickSpy.clear();
+	}
 }
 
 void MediaObjectTest::cleanupTestCase()
