@@ -57,22 +57,61 @@ int AudioPath::selectedChannel() const
 
 bool AudioPath::addOutput( AbstractAudioOutput* audioOutput )
 {
-	return iface()->addOutput( audioOutput->iface() );
+	Q_D( AudioPath );
+	if( iface()->addOutput( audioOutput->iface() ) )
+	{
+		d->outputs << audioOutput;
+		return true;
+	}
+	return false;
 }
 
 bool AudioPath::removeOutput( AbstractAudioOutput* audioOutput )
 {
-	return iface()->removeOutput( audioOutput->iface() );
+	Q_D( AudioPath );
+	if( iface()->removeOutput( audioOutput->iface() ) )
+	{
+		d->outputs.removeAll( audioOutput );
+		return true;
+	}
+	return false;
+}
+
+const QList<AbstractAudioOutput*>& AudioPath::outputs() const
+{
+	Q_D( const AudioPath );
+	return d->outputs;
 }
 
 bool AudioPath::insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore )
 {
-	return iface()->insertEffect( newEffect->iface(), insertBefore->iface() );
+	Q_D( AudioPath );
+	if( iface()->insertEffect( newEffect->iface(), insertBefore->iface() ) )
+	{
+		if( insertBefore )
+			d->effects.insert( d->effects.indexOf( insertBefore ), newEffect );
+		else
+			d->effects << newEffect;
+		return true;
+	}
+	return false;
 }
 
 bool AudioPath::removeEffect( AudioEffect* effect )
 {
-	return iface()->removeEffect( effect->iface() );
+	Q_D( AudioPath );
+	if( iface()->removeEffect( effect->iface() ) )
+	{
+		d->effects.removeAll( effect );
+		return true;
+	}
+	return false;
+}
+
+const QList<AudioEffect*>& AudioPath::effects() const
+{
+	Q_D( const AudioPath );
+	return d->effects;
 }
 
 bool AudioPathPrivate::aboutToDeleteIface()
@@ -88,6 +127,16 @@ void AudioPath::setupIface()
 
 	// set up attributes
 	d->iface()->selectChannel( d->channel );
+
+	QList<AbstractAudioOutput*> outputList = d->outputs;
+	foreach( AbstractAudioOutput* output, outputList )
+		if( !d->iface()->addOutput( output->iface() ) )
+			d->outputs.removeAll( output );
+
+	QList<AudioEffect*> effectList = d->effects;
+	foreach( AudioEffect* effect, effectList )
+		if( !d->iface()->insertEffect( effect->iface() ) )
+			d->effects.removeAll( effect );
 }
 
 } //namespace Phonon

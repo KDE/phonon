@@ -23,6 +23,7 @@
 #include "audiopath.h"
 #include "ifaces/audiopath.h"
 #include "base_p.h"
+#include <QList>
 
 namespace Phonon
 {
@@ -37,6 +38,8 @@ class AudioPathPrivate : public BasePrivate
 		}
 
 		int channel;
+		QList<AbstractAudioOutput*> outputs;
+		QList<AudioEffect*> effects;
 };
 }
 

@@ -156,6 +156,8 @@ namespace Phonon
 			 */
 			bool removeOutput( AbstractAudioOutput* audioOutput );
 
+			const QList<AbstractAudioOutput*>& outputs() const;
+
 			/**
 			 * Inserts an effect into the audio path.
 			 *
@@ -191,6 +193,8 @@ namespace Phonon
 			 * @see insertEffect
 			 */
 			bool removeEffect( AudioEffect* effect );
+
+			const QList<AudioEffect*>& effects() const;
 	};
 } //namespace Phonon
 
