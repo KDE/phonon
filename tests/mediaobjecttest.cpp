@@ -22,6 +22,8 @@
 #include <qtest_kde.h>
 #include <QTime>
 #include <QtDebug>
+#include <phonon/audiopath.h>
+#include <phonon/videopath.h>
 
 using namespace Phonon;
 
@@ -362,6 +364,81 @@ void MediaObjectTest::testTickSignal()
 		stopPlaying( Phonon::PlayingState );
 		tickSpy.clear();
 	}
+}
+
+void MediaObjectTest::addPaths()
+{
+	AudioPath *a1 = new AudioPath( this );
+	AudioPath *a2 = new AudioPath( this );
+	VideoPath *v1 = new VideoPath( this );
+	VideoPath *v2 = new VideoPath( this );
+	QCOMPARE( m_media->audioPaths().size(), 0 );
+	QCOMPARE( m_media->videoPaths().size(), 0 );
+	m_media->addAudioPath( a1 );
+	QCOMPARE( m_media->audioPaths().size(), 1 ); // one should always work
+	QVERIFY( m_media->audioPaths().contains( a1 ) );
+	QCOMPARE( m_media->addAudioPath( a1 ), false ); // adding the same one should not work
+	QCOMPARE( m_media->audioPaths().size(), 1 );
+	QVERIFY( m_media->audioPaths().contains( a1 ) );
+	if( m_media->addAudioPath( a2 ) )
+	{
+		QCOMPARE( m_media->audioPaths().size(), 2 );
+		QVERIFY( m_media->audioPaths().contains( a1 ) );
+		QVERIFY( m_media->audioPaths().contains( a2 ) );
+		QCOMPARE( m_media->addAudioPath( a1 ), false ); // adding the same one should not work
+		QCOMPARE( m_media->audioPaths().size(), 2 );
+		QCOMPARE( m_media->addAudioPath( a2 ), false ); // adding the same one should not work
+		QCOMPARE( m_media->audioPaths().size(), 2 );
+		delete a2;
+		QCOMPARE( m_media->audioPaths().size(), 1 );
+		QVERIFY( m_media->audioPaths().contains( a1 ) );
+		QVERIFY( !m_media->audioPaths().contains( a2 ) );
+		a2 = new AudioPath( this );
+		QCOMPARE( m_media->addAudioPath( a2 ), true );
+		QCOMPARE( m_media->audioPaths().size(), 2 );
+		QVERIFY( m_media->audioPaths().contains( a1 ) );
+		QVERIFY( m_media->audioPaths().contains( a2 ) );
+		delete a2;
+		QCOMPARE( m_media->audioPaths().size(), 1 );
+		QVERIFY( m_media->audioPaths().contains( a1 ) );
+		QVERIFY( !m_media->audioPaths().contains( a2 ) );
+		a2 = 0;
+	}
+	else
+		QWARN( "backend does not allow usage of more than one AudioPath" );
+
+	m_media->addVideoPath( v1 );
+	QCOMPARE( m_media->videoPaths().size(), 1 ); // one should always work
+	QVERIFY( m_media->videoPaths().contains( v1 ) );
+	QCOMPARE( m_media->addVideoPath( v1 ), false ); // adding the same one should not work
+	QCOMPARE( m_media->videoPaths().size(), 1 );
+	QVERIFY( m_media->videoPaths().contains( v1 ) );
+	if( m_media->addVideoPath( v2 ) )
+	{
+		QCOMPARE( m_media->videoPaths().size(), 2 );
+		QVERIFY( m_media->videoPaths().contains( v1 ) );
+		QVERIFY( m_media->videoPaths().contains( v2 ) );
+		QCOMPARE( m_media->addVideoPath( v1 ), false ); // adding the same one should not work
+		QCOMPARE( m_media->videoPaths().size(), 2 );
+		QCOMPARE( m_media->addVideoPath( v2 ), false ); // adding the same one should not work
+		QCOMPARE( m_media->videoPaths().size(), 2 );
+		delete v2;
+		QCOMPARE( m_media->videoPaths().size(), 1 );
+		QVERIFY( m_media->videoPaths().contains( v1 ) );
+		QVERIFY( !m_media->videoPaths().contains( v2 ) );
+		v2 = new VideoPath( this );
+		QCOMPARE( m_media->addVideoPath( v2 ), true );
+		QCOMPARE( m_media->videoPaths().size(), 2 );
+		QVERIFY( m_media->videoPaths().contains( v1 ) );
+		QVERIFY( m_media->videoPaths().contains( v2 ) );
+		delete v2;
+		QCOMPARE( m_media->videoPaths().size(), 1 );
+		QVERIFY( m_media->videoPaths().contains( v1 ) );
+		QVERIFY( !m_media->videoPaths().contains( v2 ) );
+		v2 = 0;
+	}
+	else
+		QWARN( "backend does not allow usage of more than one VideoPath" );
 }
 
 void MediaObjectTest::cleanupTestCase()

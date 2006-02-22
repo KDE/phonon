@@ -35,7 +35,7 @@ class AudioPathTest : public QObject
 		void initTestCase();
 		void checkForDefaults();
 
-		void addOutput();
+		void addOutputs();
 		void addEffects();
 
 		void cleanupTestCase();

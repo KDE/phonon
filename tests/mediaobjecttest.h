@@ -49,6 +49,8 @@ class MediaObjectTest : public QObject
 		void testAboutToFinish();
 		void testTickSignal();
 
+		void addPaths();
+
 		void cleanupTestCase();
 
 	private:
