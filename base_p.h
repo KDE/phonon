@@ -35,7 +35,10 @@ class BasePrivate
 	Q_DECLARE_PUBLIC( Base )
 	protected:
 		BasePrivate() {}
-		virtual ~BasePrivate() {}
+		virtual ~BasePrivate()
+		{
+			delete iface_ptr;
+		}
 
 		/**
 		 * \internal

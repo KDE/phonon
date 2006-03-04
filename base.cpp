@@ -36,6 +36,7 @@ namespace Phonon
 
 	Base::~Base()
 	{
+		emit destroyed( this );
 		delete d_ptr;
 		d_ptr = 0;
 	}

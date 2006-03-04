@@ -130,11 +130,14 @@ namespace Phonon
 			 */
 			long currentTime() const;
 
+			// TODO: document the freedom of the backend to choose the
+			// tickInterval
 			/**
 			 * Return the time interval in milliseconds between two ticks.
 			 *
 			 * @return Returns the tick intervall that it was set to (might not
-			 * be the same as you asked for).
+			 * be the same as you asked for, but then it will be less but more
+			 * than half of what you asked for).
 			 *
 			 * @see setTickInterval
 			 * @see tick
@@ -220,6 +223,10 @@ namespace Phonon
 		private Q_SLOTS:
 			void resumePlay();
 			void resumePause();
+
+		private:
+			Q_PRIVATE_SLOT( d_func(), void audioPathDestroyed( Base* ) );
+			Q_PRIVATE_SLOT( d_func(), void videoPathDestroyed( Base* ) );
 	};
 } //namespace Phonon
 

@@ -48,6 +48,15 @@ namespace Phonon
 
 			virtual ~Base();
 
+		Q_SIGNALS:
+			/**
+			 * This class has its own destroyed signal since some cleanup calls
+			 * need the pointer to the Ifaces object intact. The
+			 * QObject::destroyed signals comes after the Ifaces object was
+			 * deleted.
+			 */
+			void destroyed( Base* );
+
 		protected:
 			BasePrivate* d_ptr;
 

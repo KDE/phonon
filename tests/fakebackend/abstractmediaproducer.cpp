@@ -59,6 +59,20 @@ bool AbstractMediaProducer::addAudioPath( Ifaces::AudioPath* audioPath )
 	return true;
 }
 
+void AbstractMediaProducer::removeVideoPath( Ifaces::VideoPath* videoPath )
+{
+	Q_ASSERT( videoPath );
+	VideoPath* vp = qobject_cast<VideoPath*>( videoPath->qobject() );
+	Q_ASSERT( vp );
+}
+
+void AbstractMediaProducer::removeAudioPath( Ifaces::AudioPath* audioPath )
+{
+	Q_ASSERT( audioPath );
+	AudioPath* ap = qobject_cast<AudioPath*>( audioPath->qobject() );
+	Q_ASSERT( ap );
+}
+
 State AbstractMediaProducer::state() const
 {
 	kdDebug() << k_funcinfo << endl;

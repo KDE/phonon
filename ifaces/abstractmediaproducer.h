@@ -35,9 +35,20 @@ namespace Ifaces
 	class AbstractMediaProducer : virtual public Base
 	{
 		public:
-			// Operations:
+			/**
+			 * The frontend class ensures that the \p videoPath is unique,
+			 * meaning the VideoPath object has not been added to this object.
+			 */
 			virtual bool addVideoPath( VideoPath* videoPath ) = 0;
+
+			/**
+			 * The frontend class ensures that the \p audioPath is unique,
+			 * meaning the AudioPath object has not been added to this object.
+			 */
 			virtual bool addAudioPath( AudioPath* audioPath ) = 0;
+
+			virtual void removeVideoPath( VideoPath* videoPath ) = 0;
+			virtual void removeAudioPath( AudioPath* audioPath ) = 0;
 
 			// Attributes Getters:
 			/**

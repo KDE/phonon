@@ -36,6 +36,7 @@ namespace Phonon
 	class PHONON_EXPORT VideoPath : public Base
 	{
 		friend class AbstractMediaProducer;
+		friend class AbstractMediaProducerPrivate;
 		Q_DECLARE_PRIVATE( VideoPath )
 		Q_OBJECT
 		PHONON_OBJECT( VideoPath )

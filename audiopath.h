@@ -58,6 +58,7 @@ namespace Phonon
 	class PHONON_EXPORT AudioPath : public Base
 	{
 		friend class AbstractMediaProducer;
+		friend class AbstractMediaProducerPrivate;
 		Q_DECLARE_PRIVATE( AudioPath )
 		Q_OBJECT
 		Q_PROPERTY( int channel READ selectedChannel WRITE selectChannel )

@@ -37,6 +37,8 @@ namespace Fake
 			virtual ~AbstractMediaProducer();
 			virtual bool addVideoPath( Ifaces::VideoPath* videoPath );
 			virtual bool addAudioPath( Ifaces::AudioPath* audioPath );
+			virtual void removeVideoPath( Ifaces::VideoPath* videoPath );
+			virtual void removeAudioPath( Ifaces::AudioPath* audioPath );
 			virtual State state() const;
 			virtual bool hasVideo() const;
 			virtual bool seekable() const;

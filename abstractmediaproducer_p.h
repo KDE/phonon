@@ -38,6 +38,9 @@ class AbstractMediaProducerPrivate : public BasePrivate
 			, tickInterval( 0 )
 		{ }
 
+		void audioPathDestroyed( Base* );
+		void videoPathDestroyed( Base* );
+
 		State state;
 		long currentTime;
 		long tickInterval;

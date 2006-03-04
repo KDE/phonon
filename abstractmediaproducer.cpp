@@ -37,18 +37,30 @@ PHONON_ABSTRACTBASE_IMPL( AbstractMediaProducer )
 bool AbstractMediaProducer::addVideoPath( VideoPath* videoPath )
 {
 	Q_D( AbstractMediaProducer );
-	d->videoPaths.append( videoPath );
-	if( iface() )
-		return d->iface()->addVideoPath( videoPath->iface() );
+	if( d->videoPaths.contains( videoPath ) )
+		return false;
+
+	if( iface() && d->iface()->addVideoPath( videoPath->iface() ) )
+	{
+		connect( videoPath, SIGNAL( destroyed( Base* ) ), SLOT( videoPathDestroyed( Base* ) ) );
+		d->videoPaths.append( videoPath );
+		return true;
+	}
 	return false;
 }
 
 bool AbstractMediaProducer::addAudioPath( AudioPath* audioPath )
 {
 	Q_D( AbstractMediaProducer );
-	d->audioPaths.append( audioPath );
-	if( iface() )
-		return d->iface()->addAudioPath( audioPath->iface() );
+	if( d->audioPaths.contains( audioPath ) )
+		return false;
+
+	if( iface() && d->iface()->addAudioPath( audioPath->iface() ) )
+	{
+		connect( audioPath, SIGNAL( destroyed( Base* ) ), SLOT( audioPathDestroyed( Base* ) ) );
+		d->audioPaths.append( audioPath );
+		return true;
+	}
 	return false;
 }
 
@@ -192,6 +204,28 @@ void AbstractMediaProducer::resumePause()
 	if( d->currentTime > 0 )
 		d->iface()->seek( d->currentTime );
 	d->iface()->pause();
+}
+
+void AbstractMediaProducerPrivate::audioPathDestroyed( Base* o )
+{
+	Q_ASSERT( o );
+	AudioPath* audioPath = static_cast<AudioPath*>( o );
+	if( iface() )
+	{
+		iface()->removeAudioPath( audioPath->iface() );
+		audioPaths.removeAll( audioPath );
+	}
+}
+
+void AbstractMediaProducerPrivate::videoPathDestroyed( Base* o )
+{
+	Q_ASSERT( o );
+	VideoPath* videoPath = static_cast<VideoPath*>( o );
+	if( iface() )
+	{
+		iface()->removeVideoPath( videoPath->iface() );
+		videoPaths.removeAll( videoPath );
+	}
 }
 
 } //namespace Phonon
