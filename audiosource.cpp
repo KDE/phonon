@@ -22,6 +22,8 @@
 #include "audiosource_p.h"
 #include "videosource.h"
 #include "backendcapabilities.h"
+#include "factory.h"
+#include "ifaces/backend.h"
 
 namespace Phonon
 {
@@ -34,6 +36,15 @@ AudioSource::AudioSource()
 AudioSource::AudioSource( const AudioSource& rhs )
 	: NameDescriptionTuple( *new AudioSourcePrivate( rhs.d_func() ) )
 {
+}
+
+AudioSource AudioSource::fromIndex( int index )
+{
+	const Ifaces::Backend* b = Factory::self()->backend();
+	return AudioSource( index,
+			b->audioSourceName( index ),
+			b->audioSourceDescription( index ),
+			b->audioSourceVideoIndex( index ) );
 }
 
 AudioSource::AudioSource( int index, const QString& name, const QString& description, int videoIndex )
@@ -66,7 +77,7 @@ int AudioSource::indexOfAssociatedVideoSource() const
 
 VideoSource AudioSource::associatedVideoSource() const
 {
-	return BackendCapabilities::self()->videoSource( d_func()->videoIndex );
+	return VideoSource::fromIndex( d_func()->videoIndex );
 }
 
 } //namespace Phonon

@@ -64,6 +64,8 @@ class VideoSource : public NameDescriptionTuple
 
 		AudioSource associatedAudioSource() const;
 
+		static VideoSource fromIndex( int index );
+
 	protected:
 		/**
 		 * \internal

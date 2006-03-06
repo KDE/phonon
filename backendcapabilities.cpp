@@ -107,30 +107,6 @@ QList<VideoSource> BackendCapabilities::availableVideoSources() const
 	return QList<VideoSource>();
 }
 
-AudioSource BackendCapabilities::audioSource( int index ) const
-{
-	if( d->backend )
-	{
-		return AudioSource( index,
-				d->backend->audioSourceName( index ),
-				d->backend->audioSourceDescription( index ),
-				d->backend->audioSourceVideoIndex( index ) );
-	}
-	return AudioSource();
-}
-
-VideoSource BackendCapabilities::videoSource( int index ) const
-{
-	if( d->backend )
-	{
-		return VideoSource( index,
-				d->backend->videoSourceName( index ),
-				d->backend->videoSourceDescription( index ),
-				d->backend->videoSourceAudioIndex( index ) );
-	}
-	return VideoSource();
-}
-
 QStringList BackendCapabilities::availableAudioEffects() const
 {
 	return d->backend ? d->backend->availableAudioEffects() : QStringList();
@@ -144,7 +120,7 @@ QStringList BackendCapabilities::availableVideoEffects() const
 void BackendCapabilities::slotBackendChanged()
 {
 	d->backend = Factory::self()->backend();
-	emit capabilitesChanged();
+	emit capabilitiesChanged();
 }
 
 } // namespace Phonon

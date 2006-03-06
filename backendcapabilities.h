@@ -31,6 +31,11 @@ namespace Phonon
 class AudioSource;
 class VideoSource;
 
+/**
+ * Singleton class describing the capabilities of the Backend.
+ *
+ * \author Matthias Kretz <kretz@kde.org>
+ */
 class PHONON_EXPORT BackendCapabilities : public QObject
 {
 	friend void ::KStaticDeleter<BackendCapabilities>::destructObject();
@@ -40,19 +45,44 @@ class PHONON_EXPORT BackendCapabilities : public QObject
 		/**
 		 * Use this function to get an instance of Factory.
 		 *
-		 * @return a pointer to the BackendCapabilities instance. If no instance exists until now then
-		 * one is created
+		 * \return a pointer to the BackendCapabilities instance. If no instance exists until now then
+		 * one is created.
 		 */
 		static BackendCapabilities* self();
 
+		/**
+		 * Returns whether the current Backend supports video.
+		 *
+		 * If the backend does not support video the classes
+		 * VideoPath, VideoEffect and all AbstractVideoOutput subclasses won't
+		 * do anything.
+		 */
 		bool supportsVideo() const;
+
 		bool supportsOSD() const;
 		bool supportsSubtitles() const;
+
+		/**
+		 * Returns a list of mime types that the Backend can decode.
+		 */
 		KMimeType::List knownMimeTypes() const;
+
+		/**
+		 * Returns the audio sources the backend supports.
+		 *
+		 * \return A list of AudioSource objects that give a name and
+		 * description for every supported audio source.
+		 */
 		QList<AudioSource> availableAudioSources() const;
+
+		/**
+		 * Returns the video sources the backend supports.
+		 *
+		 * \return A list of VideoSource objects that give a name and
+		 * description for every supported video source.
+		 */
 		QList<VideoSource> availableVideoSources() const;
-		AudioSource audioSource( int index ) const;
-		VideoSource videoSource( int index ) const;
+
 		QStringList availableAudioEffects() const;
 		QStringList availableVideoEffects() const;
 
@@ -61,7 +91,7 @@ class PHONON_EXPORT BackendCapabilities : public QObject
 		 * This signal is emitted if the capabilites have changed. This can
 		 * happen if the user has requested a backend change.
 		 */
-		void capabilitesChanged();
+		void capabilitiesChanged();
 
 	protected:
 		BackendCapabilities();
