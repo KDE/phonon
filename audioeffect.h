@@ -35,7 +35,6 @@ namespace Phonon
 
 	/**
 	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
 	 */
 	class PHONON_EXPORT AudioEffect : public Base
 	{

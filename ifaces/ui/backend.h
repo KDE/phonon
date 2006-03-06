@@ -38,7 +38,6 @@ namespace Ifaces
 	 * a pointer to a new Player or VideoWidget.
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
-	 * \since 4.0
 	 */
 	class PHONON_EXPORT Backend : public QObject
 	{

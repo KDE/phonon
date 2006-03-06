@@ -43,7 +43,6 @@ namespace Phonon
 	 * stream, like MediaObject or SoundcardCapture.
 	 *
 	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
 	 * @see MediaObject
 	 */
 	class PHONON_EXPORT AbstractMediaProducer : public Base

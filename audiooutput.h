@@ -39,7 +39,6 @@ namespace Phonon
 	 * \short Class for audio output to the soundcard.
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
-	 * \since 4.0
 	 */
 	class PHONON_EXPORT AudioOutput : public AbstractAudioOutput, public MixerIface
 	{

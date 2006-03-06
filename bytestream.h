@@ -70,7 +70,6 @@ namespace Phonon
 	 * being emitted at the correct time.
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
-	 * \since 4.0
 	 */
 	class PHONON_EXPORT ByteStream : public AbstractMediaProducer
 	{

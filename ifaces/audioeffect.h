@@ -30,7 +30,6 @@ namespace Ifaces
 {
 	/**
 	 * \author Matthias Kretz <kretz@kde.org>
-	 * \since 4.0
 	 */
 	class AudioEffect : virtual public Base
 	{

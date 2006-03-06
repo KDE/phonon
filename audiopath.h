@@ -52,7 +52,6 @@ namespace Phonon
 	 * before calling any other methods.
 	 *
 	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
 	 * @see VideoPath
 	 */
 	class PHONON_EXPORT AudioPath : public Base

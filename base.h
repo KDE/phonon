@@ -31,7 +31,6 @@ namespace Phonon
 	 * \internal
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
-	 * \since 4.0
 	 */
 	class PHONON_EXPORT Base : public QObject
 	{

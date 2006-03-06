@@ -36,7 +36,6 @@ class SeekSliderPrivate;
  * \short Widget providing a slider for seeking in AbstractMediaProducer objects.
  *
  * \author Matthias Kretz <kretz@kde.org>
- * \since 4.0
  */
 class PHONON_EXPORT SeekSlider : public QWidget
 {

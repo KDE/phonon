@@ -26,7 +26,6 @@ namespace Phonon
 	/**
 	 * The state the media producing object is in at the moment.
 	 *
-	 * @since 4.0
 	 * @see AbstractMediaProducer
 	 */
 	enum State

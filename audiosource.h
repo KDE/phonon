@@ -37,7 +37,6 @@ namespace Phonon
  * provides the needed information.
  *
  * \author Matthias Kretz <kretz@kde.org>
- * \since 4.0
  * \see AvCapture
  * \see VideoSource
  */

@@ -46,7 +46,6 @@ namespace Phonon
 	 * BackendCapabilities::availableVideoSources.
 	 *
 	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
 	 * @see BackendCapabilities::availableAudioSources
 	 * @see BackendCapabilities::availableVideoSources
 	 */

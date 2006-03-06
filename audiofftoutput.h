@@ -40,7 +40,6 @@ namespace Phonon
 	 * i.e. the frequency spectrum. The spectrum can be used for visualizations.
 	 *
 	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
 	 */
 	class PHONON_EXPORT AudioFftOutput : public AbstractAudioOutput
 	{

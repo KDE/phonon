@@ -28,7 +28,6 @@ namespace Fake
 {
 	/**
 	 * \author Matthias Kretz <kretz@kde.org>
-	 * \since 4.0
 	 */
 	class AudioEffect : public QObject, virtual public Ifaces::AudioEffect
 	{

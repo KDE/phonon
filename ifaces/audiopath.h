@@ -32,7 +32,6 @@ namespace Ifaces
 
 	/**
 	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
 	 */
 	class AudioPath : virtual public Base
 	{

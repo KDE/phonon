@@ -48,7 +48,6 @@ namespace Ifaces
 	 * @endcode
 	 *
 	 * @author Matthias Kretz <kretz@kde.org>
-	 * @since 4.0
 	 */
 	class PHONON_EXPORT VideoWidget : public QWidget
 	{

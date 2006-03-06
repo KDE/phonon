@@ -31,7 +31,6 @@ namespace Ifaces
 	 * \short Interface for accessing media playback functions
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
-	 * \since 4.0
 	 */
 	class MediaObject : virtual public AbstractMediaProducer
 	{

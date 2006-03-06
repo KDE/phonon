@@ -41,7 +41,6 @@ namespace Ui
  * Optional controls include a volume control and a loop control button.
  *
  * \author Matthias Kretz <kretz@kde.org>
- * \since 4.0
  */
 class PHONON_EXPORT MediaControls : public QWidget
 {

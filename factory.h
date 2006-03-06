@@ -37,7 +37,7 @@
  * If you want to write a new backend you also find the necessary classes in
  * Phonon::Ifaces.
  *
- * \since 4.0
+ * \author Matthias Kretz <kretz@kde.org>
  */
 namespace Phonon
 {
@@ -75,7 +75,6 @@ namespace Phonon
  * created.
  *
  * \author Matthias Kretz <kretz@kde.org>
- * \since 4.0
  * \internal
  */
 class PHONON_EXPORT Factory : public QObject, public DCOPObject

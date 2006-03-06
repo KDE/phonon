@@ -46,7 +46,6 @@ namespace Ifaces
  * created.
  *
  * \author Matthias Kretz <kretz@kde.org>
- * \since 4.0
  * \internal
  */
 class PHONON_EXPORT Factory : public QObject

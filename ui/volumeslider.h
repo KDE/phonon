@@ -34,7 +34,6 @@ namespace Ui
  * \short Widget providing a slider to control the volume of an AudioOutput.
  *
  * \author Matthias Kretz <kretz@kde.org>
- * \since 4.0
  */
 class PHONON_EXPORT VolumeSlider : public QWidget
 {

@@ -36,7 +36,6 @@ namespace Phonon
  * information like which audio and video choices belong together.
  *
  * \author Matthias Kretz <kretz@kde.org>
- * \since 4.0
  * \see AudioCaptureSource
  * \see VideoCaptureSource
  */
