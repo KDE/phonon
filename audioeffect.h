@@ -40,6 +40,7 @@ namespace Phonon
 	class PHONON_EXPORT AudioEffect : public Base
 	{
 		friend class AudioPath;
+		friend class AudioPathPrivate;
 		Q_OBJECT
 		Q_DECLARE_PRIVATE( AudioEffect )
 		PHONON_OBJECT( AudioEffect )

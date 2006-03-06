@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -33,6 +33,7 @@ namespace Phonon
 	class PHONON_EXPORT AbstractAudioOutput : public Base
 	{
 		friend class AudioPath;
+		friend class AudioPathPrivate;
 		Q_OBJECT
 		Q_DECLARE_PRIVATE( AbstractAudioOutput )
 		PHONON_ABSTRACTBASE( AbstractAudioOutput )

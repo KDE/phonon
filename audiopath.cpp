@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -58,8 +58,12 @@ int AudioPath::selectedChannel() const
 bool AudioPath::addOutput( AbstractAudioOutput* audioOutput )
 {
 	Q_D( AudioPath );
-	if( iface()->addOutput( audioOutput->iface() ) )
+	if( d->outputs.contains( audioOutput ) )
+		return false;
+
+	if( iface() && d->iface()->addOutput( audioOutput->iface() ) )
 	{
+		connect( audioOutput, SIGNAL( destroyed( Base* ) ), SLOT( outputDestroyed( Base* ) ) );
 		d->outputs << audioOutput;
 		return true;
 	}
@@ -69,6 +73,9 @@ bool AudioPath::addOutput( AbstractAudioOutput* audioOutput )
 bool AudioPath::removeOutput( AbstractAudioOutput* audioOutput )
 {
 	Q_D( AudioPath );
+	if( !d->outputs.contains( audioOutput ) )
+		return false;
+
 	if( iface()->removeOutput( audioOutput->iface() ) )
 	{
 		d->outputs.removeAll( audioOutput );
@@ -85,9 +92,15 @@ const QList<AbstractAudioOutput*>& AudioPath::outputs() const
 
 bool AudioPath::insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore )
 {
+	// effects may be added multiple times, but that means the objects are
+	// different (the class is still the same)
 	Q_D( AudioPath );
-	if( iface()->insertEffect( newEffect->iface(), insertBefore->iface() ) )
+	if( d->effects.contains( newEffect ) )
+		return false;
+
+	if( iface() && d->iface()->insertEffect( newEffect->iface(), insertBefore->iface() ) )
 	{
+		connect( newEffect, SIGNAL( destroyed( Base* ) ), SLOT( effectDestroyed( Base* ) ) );
 		if( insertBefore )
 			d->effects.insert( d->effects.indexOf( insertBefore ), newEffect );
 		else
@@ -100,6 +113,9 @@ bool AudioPath::insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore 
 bool AudioPath::removeEffect( AudioEffect* effect )
 {
 	Q_D( AudioPath );
+	if( !d->effects.contains( effect ) )
+		return false;
+
 	if( iface()->removeEffect( effect->iface() ) )
 	{
 		d->effects.removeAll( effect );
@@ -137,6 +153,31 @@ void AudioPath::setupIface()
 	foreach( AudioEffect* effect, effectList )
 		if( !d->iface()->insertEffect( effect->iface() ) )
 			d->effects.removeAll( effect );
+}
+
+void AudioPathPrivate::effectDestroyed( Base* o )
+{
+	// this method is called from Phonon::Base::~Base(), meaning the AudioEffect
+	// dtor has already been called, also virtual functions don't work anymore
+	// (therefore qobject_cast can only downcast from Base)
+	Q_ASSERT( o );
+	AudioEffect* audioEffect = static_cast<AudioEffect*>( o );
+	if( iface() )
+	{
+		iface()->removeEffect( audioEffect->iface() );
+		effects.removeAll( audioEffect );
+	}
+}
+
+void AudioPathPrivate::outputDestroyed( Base* o )
+{
+	Q_ASSERT( o );
+	AbstractAudioOutput* output = static_cast<AbstractAudioOutput*>( o );
+	if( iface() )
+	{
+		iface()->removeOutput( output->iface() );
+		outputs.removeAll( output );
+	}
 }
 
 } //namespace Phonon

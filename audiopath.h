@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -127,6 +127,9 @@ namespace Phonon
 			 * all audio data from the selected channel, after they are
 			 * processed in the effects, to the given audio output object.
 			 *
+			 * You may add outputs of the same class as often as you like,
+			 * but if you insert the same object, the call will fail.
+			 *
 			 * @param audioOutput An object of a subclass of AbstractAudioOutput.
 			 * This can be standard soundcard outputs or special outputs that
 			 * give your program access to the audio data (or frequency spectrum).
@@ -162,6 +165,9 @@ namespace Phonon
 			/**
 			 * Inserts an effect into the audio path.
 			 *
+			 * You may insert effects of the same class as often as you like,
+			 * but if you insert the same object, the call will fail.
+			 *
 			 * @param newEffect An object of a subclass of AudioEffect.
 			 *
 			 * @param insertBefore If you already inserted an effect you can
@@ -196,6 +202,10 @@ namespace Phonon
 			bool removeEffect( AudioEffect* effect );
 
 			const QList<AudioEffect*>& effects() const;
+
+		private:
+			Q_PRIVATE_SLOT( d_func(), void effectDestroyed( Base* ) );
+			Q_PRIVATE_SLOT( d_func(), void outputDestroyed( Base* ) );
 	};
 } //namespace Phonon
 

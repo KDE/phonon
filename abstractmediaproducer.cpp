@@ -208,6 +208,9 @@ void AbstractMediaProducer::resumePause()
 
 void AbstractMediaProducerPrivate::audioPathDestroyed( Base* o )
 {
+	// this method is called from Phonon::Base::~Base(), meaning the AudioPath
+	// dtor has already been called, also virtual functions don't work anymore
+	// (therefore qobject_cast can only downcast from Base)
 	Q_ASSERT( o );
 	AudioPath* audioPath = static_cast<AudioPath*>( o );
 	if( iface() )

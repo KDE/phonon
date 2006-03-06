@@ -37,6 +37,9 @@ class AudioPathPrivate : public BasePrivate
 		{
 		}
 
+		void effectDestroyed( Base* );
+		void outputDestroyed( Base* );
+
 		int channel;
 		QList<AbstractAudioOutput*> outputs;
 		QList<AudioEffect*> effects;
