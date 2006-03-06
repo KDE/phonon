@@ -24,7 +24,6 @@
 
 #include "videopath.h"
 #include "audiopath.h"
-#include "state.h"
 
 #include <QTimer>
 

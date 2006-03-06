@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <kdelibs_export.h>
-#include "../state.h"
+#include "../phononnamespace.h"
 
 namespace Phonon
 {

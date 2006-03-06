@@ -23,7 +23,7 @@
 #include "mixeriface.h"
 #include <kdelibs_export.h>
 #include "phonondefs.h"
-#include "state.h"
+#include "phononnamespace.h"
 
 class QString;
 

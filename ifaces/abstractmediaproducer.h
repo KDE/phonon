@@ -19,7 +19,7 @@
 #ifndef Phonon_IFACES_ABSTRACTMEDIAPRODUCER_H
 #define Phonon_IFACES_ABSTRACTMEDIAPRODUCER_H
 
-#include "phonon/state.h"
+#include "phonon/phononnamespace.h"
 #include "base.h"
 
 class QObject;

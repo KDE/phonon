@@ -58,7 +58,7 @@ private: \
  * \code
  * class AbstractEffect : public QObject
  * {
- *   Q_OBJECT
+ *   Q _OBJECT
  *   Q_PROPERTY( int propertyA READ propertyA WRITE setPropertyA )
  *   PHONON_ABSTRACTBASE( AbstractEffect )
  *   public:
@@ -114,7 +114,7 @@ private: \
  * \code
  * class EffectSettings : public QObject
  * {
- *   Q_OBJECT
+ *   Q _OBJECT
  *   Q_PROPERTY( int propertyA READ propertyA WRITE setPropertyA )
  *   PHONON_OBJECT( EffectSettings )
  *   public:
@@ -171,7 +171,7 @@ private: \
  * \code
  * class ConcreteEffect : public AbstractEffect
  * {
- *   Q_OBJECT
+ *   Q _OBJECT
  *   Q_PROPERTY( int propertyB READ propertyB WRITE setPropertyB )
  *   PHONON_HEIR( ConcreteEffect )
  *   public:

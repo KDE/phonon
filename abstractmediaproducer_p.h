@@ -22,7 +22,6 @@
 
 #include "abstractmediaproducer.h"
 #include "ifaces/abstractmediaproducer.h"
-#include "state.h"
 #include "base_p.h"
 
 namespace Phonon

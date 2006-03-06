@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,8 +16,9 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef PHONON_STATE_H
-#define PHONON_STATE_H
+
+#ifndef PHONONNAMESPACE_H
+#define PHONONNAMESPACE_H
 
 #include <kdelibs_export.h>
 
@@ -113,4 +114,4 @@ inline PHONON_EXPORT kdbgstream& operator<<( kdbgstream & stream, const Phonon::
 }
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // PHONON_STATE_H
+#endif // PHONONNAMESPACE_H

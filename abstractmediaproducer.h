@@ -20,7 +20,7 @@
 #define PHONON_ABSTRACTMEDIAPRODUCER_H
 
 #include "base.h"
-#include "state.h"
+#include "phononnamespace.h"
 #include "phonondefs.h"
 
 template<class T> class QList;

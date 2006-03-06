@@ -17,7 +17,7 @@
 
 */
 
-#include "state.h"
+#include "phononnamespace.h"
 #include <kdebug.h>
 #include <klocale.h>
 
