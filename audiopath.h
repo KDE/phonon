@@ -34,25 +34,25 @@ namespace Phonon
 	}
 
 	/**
-	 * @short A class to route and modify audio data.
+	 * \short A class to route and process audio data.
 	 *
 	 * This class is used to define where the audio data is sent to, what
 	 * effects are applied and what audio channels is to be used.
 	 *
-	 * For simple usage an instance of this class is added to a AbstractMediaProducer
+	 * For simple usage an instance of this class is added to an AbstractMediaProducer
 	 * and an AbstractAudioOutput subclass (such as AudioOutput) added with
 	 * addOutput.
-	 * @code
+	 * \code
 	 * AudioPath* path = new AudioPath( this );
 	 * mediaProducer->addAudioPath( path );
 	 * path->addOutput( audioOutput );
-	 * @endcode
+	 * \endcode
 	 *
-	 * It is best to add the path to a AbstractMediaProducer after construction and
-	 * before calling any other methods.
+	 * It is best to add the path to an AbstractMediaProducer after
+	 * construction, before calling any other methods.
 	 *
-	 * @author Matthias Kretz <kretz@kde.org>
-	 * @see VideoPath
+	 * \author Matthias Kretz <kretz@kde.org>
+	 * \see VideoPath
 	 */
 	class PHONON_EXPORT AudioPath : public Base
 	{
@@ -75,49 +75,49 @@ namespace Phonon
 			 * you recall that, of course, the audio information is in the media
 			 * data (which is represented by the AbstractMediaProducer object).
 			 *
-			 * @return The number of channels. @c 0 means no audio channels at
-			 * all. @c -1 means it is not known yet, your program should ask
+			 * \return The number of channels. \c 0 means no audio channels at
+			 * all. \c -1 means it is not known yet, your program should ask
 			 * again at a later point.
 			 *
-			 * @see channelName
-			 * @see selectChannel
+			 * \see channelName
+			 * \see selectChannel
 			 */
 			int availableChannels() const;
 
 			/**
 			 * Returns the name of the given channel number.
 			 *
-			 * @param channel A number greater than @c 0 but less than or equal to
-			 * availableChannels (0 < @p channel <= availableChannels)
+			 * \param channel A number greater than \c 0 but less than or equal to
+			 * availableChannels (0 < \p channel <= availableChannels)
 			 *
-			 * @return The user visible name for the audio channel. This string
+			 * \return The user visible name for the audio channel. This string
 			 * should be used by the end user to select the channel.
 			 *
-			 * @see availableChannels
+			 * \see availableChannels
 			 */
 			QString channelName( int channel ) const;
 
 			/**
 			 * Selects the given channel.
 			 *
-			 * @param channel A number greater than @c 0 but less than or equal to
-			 * availableChannels (0 < @p channel <= availableChannels)
+			 * \param channel A number greater than \c 0 but less than or equal to
+			 * availableChannels (0 < \p channel <= availableChannels)
 			 *
-			 * @return @c true if the call succeeded.
-			 * @return @c false if the call failed. This should only happen if
-			 * @p channel is out of range.
+			 * \return \c true if the call succeeded.
+			 * \return \c false if the call failed. This should only happen if
+			 * \p channel is out of range.
 			 *
-			 * @see availableChannels
-			 * @see selectedChannel
+			 * \see availableChannels
+			 * \see selectedChannel
 			 */
 			bool selectChannel( int channel );
 
 			/**
 			 * Returns the index of the currently selected channel.
 			 *
-			 * @return The index of the currently selected channel.
+			 * \return The index of the currently selected channel.
 			 *
-			 * @see selectChannel
+			 * \see selectChannel
 			 */
 			int selectedChannel() const;
 
@@ -129,16 +129,17 @@ namespace Phonon
 			 * You may add outputs of the same class as often as you like,
 			 * but if you insert the same object, the call will fail.
 			 *
-			 * @param audioOutput An object of a subclass of AbstractAudioOutput.
+			 * \param audioOutput An object of a subclass of AbstractAudioOutput.
 			 * This can be standard soundcard outputs or special outputs that
 			 * give your program access to the audio data (or frequency spectrum).
 			 *
-			 * @return Returns whether the call was successfull.
+			 * \return Returns whether the call was successfull.
 			 *
-			 * @see removeOutput
-			 * @see AudioOutput
-			 * @see AudioFftOutput
-			 * @see AudioDataOutput
+			 * \see removeOutput
+			 * \see AudioOutput
+			 * \see AudioFftOutput
+			 * \see AudioDataOutput
+			 * \see outputs
 			 */
 			bool addOutput( AbstractAudioOutput* audioOutput );
 
@@ -149,16 +150,26 @@ namespace Phonon
 			 * If the audio output object gets deleted while it is still
 			 * connected the output will be removed automatically.
 			 *
-			 * @param audioOutput your audio output object
+			 * \param audioOutput your audio output object
 			 *
-			 * @return Returns whether the call was successfull. If it returns
-			 * @c false the audio output could not be found in the path, meaning
+			 * \return Returns whether the call was successfull. If it returns
+			 * \c false the audio output could not be found in the path, meaning
 			 * it was not connected at all.
 			 *
-			 * @see addOutput
+			 * \see addOutput
+			 * \see outputs
 			 */
 			bool removeOutput( AbstractAudioOutput* audioOutput );
 
+			/**
+			 * Returns a list of AbstractAudioOutput objects that are currently
+			 * used as outputs.
+			 *
+			 * \return A list with all current outputs.
+			 *
+			 * \see addOutput
+			 * \see removeOutput
+			 */
 			const QList<AbstractAudioOutput*>& outputs() const;
 
 			/**
@@ -167,20 +178,20 @@ namespace Phonon
 			 * You may insert effects of the same class as often as you like,
 			 * but if you insert the same object, the call will fail.
 			 *
-			 * @param newEffect An object of a subclass of AudioEffect.
+			 * \param newEffect An object of a subclass of AudioEffect.
 			 *
-			 * @param insertBefore If you already inserted an effect you can
+			 * \param insertBefore If you already inserted an effect you can
 			 * tell with this parameter in which order the audio data gets
-			 * processed. If this is @c 0 the effect is appended at the end of
+			 * processed. If this is \c 0 the effect is appended at the end of
 			 * the processing list. If the effect has not been inserted before
-			 * the method will do nothing and return @c false.
+			 * the method will do nothing and return \c false.
 			 *
-			 * @return Returns whether the effect could be inserted at the
-			 * specified position. If @c false is returned the effect was not
+			 * \return Returns whether the effect could be inserted at the
+			 * specified position. If \c false is returned the effect was not
 			 * inserted.
 			 *
-			 * @see removeEffect
-			 * @see AudioEffect
+			 * \see removeEffect
+			 * \see effects
 			 */
 			bool insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore = 0 );
 
@@ -190,16 +201,27 @@ namespace Phonon
 			 * If the effect gets deleted while it is still connected the effect
 			 * will be removed automatically.
 			 *
-			 * @param effect The effect to be removed.
+			 * \param effect The effect to be removed.
 			 *
-			 * @return Returns whether the call was successfull. If it returns
-			 * @c false the effect could not be found in the path, meaning it
+			 * \return Returns whether the call was successfull. If it returns
+			 * \c false the effect could not be found in the path, meaning it
 			 * has not been inserted before.
 			 *
-			 * @see insertEffect
+			 * \see insertEffect
+			 * \see effects
 			 */
 			bool removeEffect( AudioEffect* effect );
 
+			/**
+			 * Returns a list of AudioEffect objects that are currently
+			 * used as effects. The order in the list determines the order the
+			 * audio signal is sent through the effects.
+			 *
+			 * \return A list with all current effects.
+			 *
+			 * \see insertEffect
+			 * \see removeEffect
+			 */
 			const QList<AudioEffect*>& effects() const;
 
 		private:

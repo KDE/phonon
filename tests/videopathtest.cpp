@@ -17,7 +17,7 @@
 
 */
 
-#include "audiopathtest.h"
+#include "videopathtest.h"
 #include <cstdlib>
 #include <qtest_kde.h>
 #include <QTime>
@@ -27,7 +27,7 @@ using namespace Phonon;
 
 Q_DECLARE_METATYPE( Phonon::State )
 
-void AudioPathTest::initTestCase()
+void VideoPathTest::initTestCase()
 {
 	qRegisterMetaType<Phonon::State>( "Phonon::State" );
 
@@ -36,25 +36,25 @@ void AudioPathTest::initTestCase()
 		QFAIL( "You need to set PHONON_TESTURL to a valid URL" );
 
 	m_media = new MediaObject( this );
-	m_path = new AudioPath( this );
-	m_output = new AudioOutput( this );
+	m_path = new VideoPath( this );
+	m_output = new VideoOutput( this );
 
 	m_media->setUrl( m_url );
 }
 
-void AudioPathTest::checkForDefaults()
+void VideoPathTest::checkForDefaults()
 {
 	QCOMPARE( m_path->effects().size(), 0 );
 	QCOMPARE( m_path->outputs().size(), 0 );
 }
 
-void AudioPathTest::addOutputs()
+void VideoPathTest::addOutputs()
 {
 	//this is the first output, this has to work:
 	QCOMPARE( m_path->addOutput( m_output ), true );
 	QCOMPARE( m_path->outputs().size(), 1 );
 	QVERIFY( m_path->outputs().contains( m_output ) );
-	AudioOutput* o2 = new AudioOutput( this );
+	VideoOutput* o2 = new VideoOutput( this );
 	if( m_path->addOutput( o2 ) )
 	{
 		QCOMPARE( m_path->outputs().size(), 2 );
@@ -78,23 +78,23 @@ void AudioPathTest::addOutputs()
 	}
 	else
 	{
-		QWARN( "AudioPath not able to use more than one AudioOutput" );
+		QWARN( "VideoPath not able to use more than one VideoOutput" );
 		delete o2;
 	}
 }
 
-void AudioPathTest::addEffects()
+void VideoPathTest::addEffects()
 {
-	QWARN( "AudioEffects not implemented" );
+	QWARN( "VideoEffects not implemented" );
 }
 
-void AudioPathTest::cleanupTestCase()
+void VideoPathTest::cleanupTestCase()
 {
 	delete m_output;
 	delete m_path;
 	delete m_media;
 }
 
-QTEST_KDEMAIN( AudioPathTest, NoGUI )
-#include "audiopathtest.moc"
+QTEST_KDEMAIN( VideoPathTest, NoGUI )
+#include "videopathtest.moc"
 // vim: sw=4 ts=4 noet

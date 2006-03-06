@@ -326,7 +326,7 @@ void MediaObjectTest::testTickSignal()
 {
 	QSignalSpy tickSpy( m_media, SIGNAL( tick( long ) ) );
 	QCOMPARE( m_media->tickInterval(), 0L );
-	for( long tickInterval = 20; tickInterval <= 2000; tickInterval *= 2 )
+	for( long tickInterval = 20; tickInterval <= 1000; tickInterval *= 2 )
 	{
 		qDebug() << "Test 20 ticks with an interval of" <<  tickInterval << "ms";
 		m_media->setTickInterval( tickInterval );
