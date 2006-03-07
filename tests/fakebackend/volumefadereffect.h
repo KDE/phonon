@@ -16,42 +16,38 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_FAKE_VIDEOPATH_H
-#define Phonon_FAKE_VIDEOPATH_H
+#ifndef Phonon_FAKE_VOLUMEFADEREFFECT_H
+#define Phonon_FAKE_VOLUMEFADEREFFECT_H
 
-#include <QObject>
-#include <../../ifaces/videopath.h>
-#include <QList>
+#include "../../ifaces/volumefadereffect.h"
+#include <QTime>
+#include "audioeffect.h"
 
 namespace Phonon
 {
 namespace Fake
 {
-	class VideoEffect;
-	class AbstractVideoOutput;
-
-	class VideoPath : public QObject, virtual public Ifaces::VideoPath
+	/**
+	 * \author Matthias Kretz <kretz@kde.org>
+	 */
+	class VolumeFaderEffect : public AudioEffect, virtual public Ifaces::VolumeFaderEffect
 	{
 		Q_OBJECT
 		public:
-			VideoPath( QObject* parent );
-			virtual ~VideoPath();
+			VolumeFaderEffect( QObject* parent );
+			virtual ~VolumeFaderEffect();
 
-			// Operations:
-			virtual bool addOutput( Ifaces::AbstractVideoOutput* videoOutput );
-			virtual bool removeOutput( Ifaces::AbstractVideoOutput* videoOutput );
-			virtual bool insertEffect( Ifaces::VideoEffect* newEffect, Ifaces::VideoEffect* insertBefore = 0 );
-			virtual bool removeEffect( Ifaces::VideoEffect* effect );
-
-		public:
-			virtual QObject* qobject() { return this; }
-			virtual const QObject* qobject() const { return this; }
+			virtual float volume() const;
+			virtual void setVolume( float volume );
+			virtual void fadeTo( float volume, int fadeTime );
 
 		private:
-			QList<VideoEffect*> m_effects;
-			QList<Ifaces::AbstractVideoOutput*> m_outputs;
+			float m_volume;
+			float m_endvolume;
+			int m_fadeTime;
+			QTime m_fadeStart;
 	};
 }} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_FAKE_VIDEOPATH_H
+#endif // Phonon_FAKE_VOLUMEFADEREFFECT_H

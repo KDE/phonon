@@ -21,7 +21,7 @@
 #define TESTWIDGET_H
 
 #include <QWidget>
-#include <phonon/state.h>
+#include <phonon/phononnamespace.h>
 
 class QSlider;
 class QLabel;

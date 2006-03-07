@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,26 +16,36 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_UI_IFACES_VIDEOWIDGET_H
-#define Phonon_UI_IFACES_VIDEOWIDGET_H
 
-#include <phonon/ifaces/abstractvideooutput.h>
+#include "backend.h"
+#include "videowidget.h"
+#include <kgenericfactory.h>
 
-class QString;
+typedef KGenericFactory<Phonon::Ui::Fake::Backend, Phonon::Ui::Ifaces::Backend> FakeUiBackendFactory;
+K_EXPORT_COMPONENT_FACTORY( phonon_fakeui, FakeUiBackendFactory( "fakeuibackend" ) )
 
 namespace Phonon
 {
 namespace Ui
 {
-namespace Ifaces
+namespace Fake
 {
-	class VideoWidget : virtual public Phonon::Ifaces::AbstractVideoOutput
-	{
-		public:
-			virtual bool isFullscreen() const = 0;
-			virtual void setFullscreen( bool ) = 0;
-	};
-}}} //namespace Phonon::Ui::Ifaces
 
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_UI_IFACES_VIDEOWIDGET_H
+Backend::Backend( QObject* parent, const char*, const QStringList& )
+	: Ui::Ifaces::Backend( parent )
+{
+}
+
+Backend::~Backend()
+{
+}
+
+Ifaces::VideoWidget* Backend::createVideoWidget( QWidget* parent )
+{
+	return new Fake::VideoWidget( parent );
+}
+
+}}}
+
+#include "backend.moc"
+// vim: sw=4 ts=4 noet

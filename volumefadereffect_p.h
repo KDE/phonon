@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,26 +16,29 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_UI_IFACES_VIDEOWIDGET_H
-#define Phonon_UI_IFACES_VIDEOWIDGET_H
 
-#include <phonon/ifaces/abstractvideooutput.h>
+#ifndef PHONON_VOLUMEFADEREFFECT_P_H
+#define PHONON_VOLUMEFADEREFFECT_P_H
 
-class QString;
+#include "volumefadereffect.h"
+#include "audioeffect_p.h"
+#include "ifaces/volumefadereffect.h"
 
 namespace Phonon
 {
-namespace Ui
+class VolumeFaderEffectPrivate : public AudioEffectPrivate
 {
-namespace Ifaces
-{
-	class VideoWidget : virtual public Phonon::Ifaces::AbstractVideoOutput
-	{
-		public:
-			virtual bool isFullscreen() const = 0;
-			virtual void setFullscreen( bool ) = 0;
-	};
-}}} //namespace Phonon::Ui::Ifaces
+	Q_DECLARE_PUBLIC( VolumeFaderEffect )
+	PHONON_PRIVATECLASS( VolumeFaderEffect, AudioEffect )
+	protected:
+		VolumeFaderEffectPrivate()
+			: currentVolume( 1.0 )
+		{
+		}
 
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_UI_IFACES_VIDEOWIDGET_H
+		float currentVolume;
+};
+}
+
+#endif // PHONON_VOLUMEFADEREFFECT_P_H
+// vim: sw=4 ts=4 tw=80

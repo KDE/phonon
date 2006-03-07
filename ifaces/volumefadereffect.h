@@ -17,28 +17,26 @@
 
 */
 
-#ifndef PHONON_FADEREFFECT_P_H
-#define PHONON_FADEREFFECT_P_H
+#ifndef PHONON_IFACES_VOLUMEFADEREFFECT_H
+#define PHONON_IFACES_VOLUMEFADEREFFECT_H
 
-#include "fadereffect.h"
-#include "audioeffect_p.h"
-#include "ifaces/fadereffect.h"
+#include "audioeffect.h"
 
 namespace Phonon
 {
-class FaderEffectPrivate : public AudioEffectPrivate
+namespace Ifaces
 {
-	Q_DECLARE_PUBLIC( FaderEffect )
-	PHONON_PRIVATECLASS( FaderEffect, AudioEffect )
-	protected:
-		FaderEffectPrivate()
-			: currentVolume( 1.0 )
-		{
-		}
+	/**
+	 * \author Matthias Kretz <kretz@kde.org>
+	 */
+	class VolumeFaderEffect : virtual public AudioEffect
+	{
+		public:
+			virtual float volume() const = 0;
+			virtual void setVolume( float volume ) = 0;
+			virtual void fadeTo( float volume, int fadeTime ) = 0;
+	};
+}} //namespace Phonon::Ifaces
 
-		float currentVolume;
-};
-}
-
-#endif // PHONON_FADEREFFECT_P_H
-// vim: sw=4 ts=4 tw=80
+// vim: sw=4 ts=4 tw=80 noet
+#endif // PHONON_IFACES_VOLUMEFADEREFFECT_H

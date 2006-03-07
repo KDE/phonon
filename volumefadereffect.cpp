@@ -17,58 +17,58 @@
 
 */
 
-#include "fadereffect.h"
-#include "fadereffect_p.h"
+#include "volumefadereffect.h"
+#include "volumefadereffect_p.h"
 #include "factory.h"
 
 namespace Phonon
 {
-PHONON_HEIR_IMPL( FaderEffect, AudioEffect )
+PHONON_HEIR_IMPL( VolumeFaderEffect, AudioEffect )
 
-float FaderEffect::volume() const
+float VolumeFaderEffect::volume() const
 {
-	Q_D( const FaderEffect );
+	Q_D( const VolumeFaderEffect );
 	return d->iface() ? d->iface()->volume() : d->currentVolume;
 }
 
-void FaderEffect::setVolume( float volume )
+void VolumeFaderEffect::setVolume( float volume )
 {
-	Q_D( FaderEffect );
+	Q_D( VolumeFaderEffect );
 	if( d->iface() )
 		d->iface()->setVolume( volume );
 	else
 		d->currentVolume = volume;
 }
 
-void FaderEffect::fadeIn( int fadeTime )
+void VolumeFaderEffect::fadeIn( int fadeTime )
 {
 	fadeTo( 1.0, fadeTime );
 }
 
-void FaderEffect::fadeOut( int fadeTime )
+void VolumeFaderEffect::fadeOut( int fadeTime )
 {
 	fadeTo( 0.0, fadeTime );
 }
 
-void FaderEffect::fadeTo( float volume, int fadeTime )
+void VolumeFaderEffect::fadeTo( float volume, int fadeTime )
 {
-	Q_D( FaderEffect );
+	Q_D( VolumeFaderEffect );
 	if( iface() )
 		d->iface()->fadeTo( volume, fadeTime );
 	else
 		d->currentVolume = volume;
 }
 
-bool FaderEffectPrivate::aboutToDeleteIface()
+bool VolumeFaderEffectPrivate::aboutToDeleteIface()
 {
 	if( iface() )
 		currentVolume = iface()->volume();
 	return true;
 }
 
-void FaderEffect::setupIface()
+void VolumeFaderEffect::setupIface()
 {
-	Q_D( FaderEffect );
+	Q_D( VolumeFaderEffect );
 	Q_ASSERT( d->iface() );
 
 	// set up attributes
@@ -76,5 +76,5 @@ void FaderEffect::setupIface()
 }
 }
 
-#include "fadereffect.moc"
+#include "volumefadereffect.moc"
 // vim: sw=4 ts=4 noet

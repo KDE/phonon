@@ -16,38 +16,35 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_FAKE_FADEREFFECT_H
-#define Phonon_FAKE_FADEREFFECT_H
 
-#include "../../ifaces/fadereffect.h"
-#include <QTime>
-#include "audioeffect.h"
+#include "videowidget.h"
 
 namespace Phonon
 {
+namespace Ui
+{
 namespace Fake
 {
-	/**
-	 * \author Matthias Kretz <kretz@kde.org>
-	 */
-	class FaderEffect : public AudioEffect, virtual public Ifaces::FaderEffect
-	{
-		Q_OBJECT
-		public:
-			FaderEffect( QObject* parent );
-			virtual ~FaderEffect();
 
-			virtual float volume() const;
-			virtual void setVolume( float volume );
-			virtual void fadeTo( float volume, int fadeTime );
+VideoWidget::VideoWidget( QWidget* parent )
+	: QWidget( parent )
+{
+}
 
-		private:
-			float m_volume;
-			float m_endvolume;
-			int m_fadeTime;
-			QTime m_fadeStart;
-	};
-}} //namespace Phonon::Fake
+bool VideoWidget::isFullscreen() const
+{
+	return QWidget::isFullScreen();
+}
 
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_FAKE_FADEREFFECT_H
+void VideoWidget::setFullscreen( bool fullscreen )
+{
+	if( fullscreen )
+		setWindowState( windowState() | Qt::WindowFullScreen );
+	else
+		setWindowState( windowState() & ~Qt::WindowFullScreen );
+}
+
+}}} //namespace Phonon::Ui::Fake
+
+#include "videowidget.moc"
+// vim: sw=4 ts=4 noet

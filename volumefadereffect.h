@@ -17,18 +17,18 @@
 
 */
 
-#ifndef PHONON_FADEREFFECT_H
-#define PHONON_FADEREFFECT_H
+#ifndef PHONON_VOLUMEFADEREFFECT_H
+#define PHONON_VOLUMEFADEREFFECT_H
 
 #include <kdelibs_export.h>
 #include "audioeffect.h"
 
 namespace Phonon
 {
-	class FaderEffectPrivate;
+	class VolumeFaderEffectPrivate;
 	namespace Ifaces
 	{
-		class FaderEffect;
+		class VolumeFaderEffect;
 	}
 
 	/**
@@ -42,11 +42,11 @@ namespace Phonon
 	 * \author Matthias Kretz <kretz@kde.org>
 	 * \see AudioOutput::setVolume
 	 */
-	class PHONON_EXPORT FaderEffect : public AudioEffect
+	class PHONON_EXPORT VolumeFaderEffect : public AudioEffect
 	{
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( FaderEffect )
-		PHONON_HEIR( FaderEffect )
+		Q_DECLARE_PRIVATE( VolumeFaderEffect )
+		PHONON_HEIR( VolumeFaderEffect )
 		public:
 			/**
 			 * Returns the current volume.
@@ -102,4 +102,4 @@ namespace Phonon
 } //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // PHONON_FADEREFFECT_H
+#endif // PHONON_VOLUMEFADEREFFECT_H

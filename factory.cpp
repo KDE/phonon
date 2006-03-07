@@ -20,7 +20,7 @@
 #include "factory.h"
 #include "ifaces/audiopath.h"
 #include "ifaces/audioeffect.h"
-#include "ifaces/fadereffect.h"
+#include "ifaces/volumefadereffect.h"
 #include "ifaces/audiooutput.h"
 #include "ifaces/audiodataoutput.h"
 #include "ifaces/audiofftoutput.h"
@@ -191,7 +191,7 @@ FACTORY_IMPL( AvCapture )
 FACTORY_IMPL( ByteStream )
 FACTORY_IMPL( AudioPath )
 FACTORY_IMPL( AudioEffect )
-FACTORY_IMPL( FaderEffect )
+FACTORY_IMPL( VolumeFaderEffect )
 FACTORY_IMPL( AudioOutput )
 FACTORY_IMPL( AudioDataOutput )
 FACTORY_IMPL( AudioFftOutput )

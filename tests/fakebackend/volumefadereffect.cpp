@@ -17,30 +17,30 @@
 
 */
 
-#include "fadereffect.h"
+#include "volumefadereffect.h"
 
 namespace Phonon
 {
 namespace Fake
 {
-FaderEffect::FaderEffect( QObject* parent )
+VolumeFaderEffect::VolumeFaderEffect( QObject* parent )
 	: AudioEffect( parent )
 	, m_fadeTime( 0 )
 {
 }
 
-FaderEffect::~FaderEffect()
+VolumeFaderEffect::~VolumeFaderEffect()
 {
 }
 
-float FaderEffect::volume() const
+float VolumeFaderEffect::volume() const
 {
 	if( m_fadeTime > 0 )
 	{
 		float v = m_volume + ( m_endvolume - m_volume ) / m_fadeTime * m_fadeStart.elapsed();
 		if( ( m_volume < m_endvolume && v > m_endvolume ) || ( m_volume > m_endvolume && v < m_endvolume ) )
 		{
-			FaderEffect* t = const_cast<FaderEffect*>( this );
+			VolumeFaderEffect* t = const_cast<VolumeFaderEffect*>( this );
 			t->m_volume = m_endvolume;
 			t->m_fadeTime = 0;
 		}
@@ -50,12 +50,12 @@ float FaderEffect::volume() const
 	return m_volume;
 }
 
-void FaderEffect::setVolume( float volume )
+void VolumeFaderEffect::setVolume( float volume )
 {
 	m_volume = volume;
 }
 
-void FaderEffect::fadeTo( float volume, int fadeTime )
+void VolumeFaderEffect::fadeTo( float volume, int fadeTime )
 {
 	if( m_fadeTime > 0 )
 		m_volume = this->volume();
@@ -66,5 +66,5 @@ void FaderEffect::fadeTo( float volume, int fadeTime )
 
 }} //namespace Phonon::Fake
 
-#include "fadereffect.moc"
+#include "volumefadereffect.moc"
 // vim: sw=4 ts=4 noet

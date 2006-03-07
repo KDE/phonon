@@ -79,7 +79,7 @@ bool VideoWidget::isFullscreen() const
 void VideoWidget::setFullscreen( bool newFullscreen )
 {
 	if( m_iface )
-		d->fullscreen = m_iface->setFullscreen( newFullscreen );
+		m_iface->setFullscreen( newFullscreen );
 	else
 		d->fullscreen = newFullscreen;
 }

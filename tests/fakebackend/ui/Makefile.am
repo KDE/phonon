@@ -1,5 +1,5 @@
 #    This file is part of the KDE libraries
-#    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+#    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
 #    This library is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU Library General Public
@@ -16,16 +16,12 @@
 #    Boston, MA 02111-1307, USA.
 
 INCLUDES = -I$(top_srcdir) $(all_includes)
+AM_CXXFLAGS = -DNDEBUG
 
-SUBDIRS = .
+kde_module_LTLIBRARIES = phonon_fakeui.la
 
-lib_LTLIBRARIES = libphononifacesui.la
-
-phononincludedir = $(includedir)/phonon/ifaces/ui
-phononinclude_HEADERS = videowidget.h backend.h
-
-libphononifacesui_la_SOURCES = backend.cpp
-libphononifacesui_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined
-libphononifacesui_la_LIBADD = ../libphononifaces.la $(LIB_KDECORE)
+phonon_fakeui_la_SOURCES = videowidget.cpp backend.cpp
+phonon_fakeui_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
+phonon_fakeui_la_LIBADD = ../../../ifaces/ui/libphononifacesui.la $(LIB_KIO)
 
 METASOURCES = AUTO

@@ -38,29 +38,23 @@ VideoPath::~VideoPath()
 bool VideoPath::addOutput( Ifaces::AbstractVideoOutput* videoOutput )
 {
 	Q_ASSERT( videoOutput );
-	AbstractVideoOutput* ao = qobject_cast<AbstractVideoOutput*>( videoOutput->qobject() );
-	Q_ASSERT( ao );
-	if( m_outputs.contains( ao ) )
-		return false;
-	m_outputs.append( ao );
+	Q_ASSERT( !m_outputs.contains( videoOutput ) );
+	m_outputs.append( videoOutput );
 	return true;
 }
 
 bool VideoPath::removeOutput( Ifaces::AbstractVideoOutput* videoOutput )
 {
 	Q_ASSERT( videoOutput );
-	AbstractVideoOutput* ao = qobject_cast<AbstractVideoOutput*>( videoOutput->qobject() );
-	Q_ASSERT( ao );
-	if( m_outputs.removeAll( ao ) > 0 )
-		return true;
-	return false;
+	Q_ASSERT( m_outputs.removeAll( videoOutput ) == 1 );
+	return true;
 }
 
 bool VideoPath::insertEffect( Ifaces::VideoEffect* newEffect, Ifaces::VideoEffect* insertBefore )
 {
 	Q_ASSERT( newEffect );
-	VideoEffect* ae = qobject_cast<VideoEffect*>( newEffect->qobject() );
-	Q_ASSERT( ae );
+	VideoEffect* ve = qobject_cast<VideoEffect*>( newEffect->qobject() );
+	Q_ASSERT( ve );
 	VideoEffect* before = 0;
 	if( insertBefore )
 	{
@@ -68,10 +62,10 @@ bool VideoPath::insertEffect( Ifaces::VideoEffect* newEffect, Ifaces::VideoEffec
 		Q_ASSERT( before );
 		if( !m_effects.contains( before ) )
 			return false;
-		m_effects.insert( m_effects.indexOf( before ), ae );
+		m_effects.insert( m_effects.indexOf( before ), ve );
 	}
 	else
-		m_effects.append( ae );
+		m_effects.append( ve );
 
 	return true;
 }
@@ -79,9 +73,9 @@ bool VideoPath::insertEffect( Ifaces::VideoEffect* newEffect, Ifaces::VideoEffec
 bool VideoPath::removeEffect( Ifaces::VideoEffect* effect )
 {
 	Q_ASSERT( effect );
-	VideoEffect* ae = qobject_cast<VideoEffect*>( effect->qobject() );
-	Q_ASSERT( ae );
-	if( m_effects.removeAll( ae ) > 0 )
+	VideoEffect* ve = qobject_cast<VideoEffect*>( effect->qobject() );
+	Q_ASSERT( ve );
+	if( m_effects.removeAll( ve ) > 0 )
 		return true;
 	return false;
 }

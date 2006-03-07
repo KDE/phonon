@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2004-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -12,31 +12,38 @@
 
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
-    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-    Boston, MA 02110-1301, USA.
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
 
 */
 
-#ifndef PHONON_IFACES_FADEREFFECT_H
-#define PHONON_IFACES_FADEREFFECT_H
+#ifndef Phonon_FAKE_UI_BACKEND_H
+#define Phonon_FAKE_UI_BACKEND_H
 
-#include "audioeffect.h"
+#include <QObject>
+#include <kdelibs_export.h>
+#include <phonon/ifaces/ui/backend.h>
 
 namespace Phonon
 {
+namespace Ui
+{
 namespace Ifaces
 {
-	/**
-	 * \author Matthias Kretz <kretz@kde.org>
-	 */
-	class FaderEffect : virtual public AudioEffect
+	class VideoWidget;
+}
+namespace Fake
+{
+	class PHONON_EXPORT Backend : public Ui::Ifaces::Backend
 	{
+		Q_OBJECT
 		public:
-			virtual float volume() const = 0;
-			virtual void setVolume( float volume ) = 0;
-			virtual void fadeTo( float volume, int fadeTime ) = 0;
-	};
-}} //namespace Phonon::Ifaces
+			Backend( QObject* parent, const char*, const QStringList& args );
+			virtual ~Backend();
 
-// vim: sw=4 ts=4 tw=80 noet
-#endif // PHONON_IFACES_FADEREFFECT_H
+			virtual Ifaces::VideoWidget*  createVideoWidget( QWidget* parent );
+	};
+}}} // namespace Phonon::Ui::Fake
+
+// vim: sw=4 ts=4 noet tw=80
+#endif // Phonon_FAKE_UI_BACKEND_H

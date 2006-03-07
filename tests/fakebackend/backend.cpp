@@ -30,7 +30,7 @@
 #include "videoeffect.h"
 
 #include <kgenericfactory.h>
-#include "fadereffect.h"
+#include "volumefadereffect.h"
 
 typedef KGenericFactory<Phonon::Fake::Backend, Phonon::Ifaces::Backend> FakeBackendFactory;
 K_EXPORT_COMPONENT_FACTORY( phonon_fake, FakeBackendFactory( "fakebackend" ) )
@@ -74,9 +74,9 @@ Ifaces::AudioEffect*      Backend::createAudioEffect( QObject* parent )
 	return new AudioEffect( parent );
 }
 
-Ifaces::FaderEffect*      Backend::createFaderEffect( QObject* parent )
+Ifaces::VolumeFaderEffect*      Backend::createVolumeFaderEffect( QObject* parent )
 {
-	return new FaderEffect( parent );
+	return new VolumeFaderEffect( parent );
 }
 
 Ifaces::AudioOutput*      Backend::createAudioOutput( QObject* parent )

@@ -15,7 +15,7 @@
 #    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 #    Boston, MA 02111-1307, USA.
 
-SUBDIRS = .
+SUBDIRS = . ui
 
 INCLUDES = -I$(top_srcdir) $(all_includes)
 AM_CXXFLAGS = -DNDEBUG
@@ -27,9 +27,9 @@ phonon_fake_la_SOURCES = abstractmediaproducer.cpp abstractaudiooutput.cpp \
                          audioeffect.cpp audiofftoutput.cpp audiooutput.cpp \
                          audiopath.cpp bytestream.cpp mediaobject.cpp \
                          avcapture.cpp videoeffect.cpp videopath.cpp \
-                         backend.cpp fadereffect.cpp
+                         backend.cpp volumefadereffect.cpp
 phonon_fake_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-phonon_fake_la_LIBADD = ../../ifaces/libphononifaces.la ../../ifaces/ui/libphononifacesui.la $(LIB_KIO)
+phonon_fake_la_LIBADD = ../../ifaces/libphononifaces.la $(LIB_KIO)
 
 METASOURCES = AUTO
 

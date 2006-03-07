@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,42 +16,38 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_FAKE_VIDEOPATH_H
-#define Phonon_FAKE_VIDEOPATH_H
+#ifndef Phonon_UI_FAKE_VIDEOWIDGET_H
+#define Phonon_UI_FAKE_VIDEOWIDGET_H
 
-#include <QObject>
-#include <../../ifaces/videopath.h>
-#include <QList>
+#include <QWidget>
+#include <phonon/ifaces/ui/videowidget.h>
+#include "../abstractvideooutput.h"
+
+class QString;
 
 namespace Phonon
 {
+namespace Ui
+{
 namespace Fake
 {
-	class VideoEffect;
-	class AbstractVideoOutput;
-
-	class VideoPath : public QObject, virtual public Ifaces::VideoPath
+	class VideoWidget : public QWidget, virtual public Ui::Ifaces::VideoWidget
 	{
 		Q_OBJECT
 		public:
-			VideoPath( QObject* parent );
-			virtual ~VideoPath();
+			VideoWidget( QWidget* parent = 0 );
 
-			// Operations:
-			virtual bool addOutput( Ifaces::AbstractVideoOutput* videoOutput );
-			virtual bool removeOutput( Ifaces::AbstractVideoOutput* videoOutput );
-			virtual bool insertEffect( Ifaces::VideoEffect* newEffect, Ifaces::VideoEffect* insertBefore = 0 );
-			virtual bool removeEffect( Ifaces::VideoEffect* effect );
+			virtual bool isFullscreen() const;
+			virtual void setFullscreen( bool );
 
 		public:
 			virtual QObject* qobject() { return this; }
 			virtual const QObject* qobject() const { return this; }
 
 		private:
-			QList<VideoEffect*> m_effects;
-			QList<Ifaces::AbstractVideoOutput*> m_outputs;
+			bool m_fullscreen;
 	};
-}} //namespace Phonon::Fake
+}}} //namespace Phonon::Ui::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_FAKE_VIDEOPATH_H
+#endif // Phonon_UI_FAKE_VIDEOWIDGET_H
