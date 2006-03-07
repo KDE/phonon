@@ -16,31 +16,15 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_IFACES_BASE_H
-#define Phonon_IFACES_BASE_H
 
-#include <kdelibs_export.h>
-#include <QtGlobal>
-class QObject;
+#include "base.h"
 
 namespace Phonon
 {
 namespace Ifaces
 {
-	class BasePrivate;
-	class PHONON_EXPORT Base
-	{
-		Q_DECLARE_PRIVATE( Base )
-		public:
-			virtual ~Base();
-
-			virtual QObject* qobject() = 0;
-			virtual const QObject* qobject() const = 0;
-
-		protected:
-			BasePrivate* d_ptr;
-	};
+Base::~Base()
+{}
 }} //namespace Phonon::Ifaces
 
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_IFACES_BASE_H
+// vim: sw=4 ts=4 noet

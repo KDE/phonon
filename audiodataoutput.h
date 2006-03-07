@@ -42,19 +42,9 @@ namespace Phonon
 		Q_DECLARE_PRIVATE( AudioDataOutput )
 		PHONON_HEIR( AudioDataOutput )
 		public:
-			/**
-			 * @fn AudioDataOutput( QObject* parent = 0 );
-			 */
-
-			// Operations:
 			void readBuffer( QVector<float>& buffer );
 			void readBuffer( QVector<int>& buffer );
-
-			// Attributes Getters:
 			int availableSamples() const;
-
-		public Q_SLOTS:
-			// Attributes Setters:
 	};
 } //namespace Phonon
 

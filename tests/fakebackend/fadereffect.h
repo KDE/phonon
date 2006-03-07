@@ -16,31 +16,38 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_IFACES_BASE_H
-#define Phonon_IFACES_BASE_H
+#ifndef Phonon_FAKE_FADEREFFECT_H
+#define Phonon_FAKE_FADEREFFECT_H
 
-#include <kdelibs_export.h>
-#include <QtGlobal>
-class QObject;
+#include "../../ifaces/fadereffect.h"
+#include <QTime>
+#include "audioeffect.h"
 
 namespace Phonon
 {
-namespace Ifaces
+namespace Fake
 {
-	class BasePrivate;
-	class PHONON_EXPORT Base
+	/**
+	 * \author Matthias Kretz <kretz@kde.org>
+	 */
+	class FaderEffect : public AudioEffect, virtual public Ifaces::FaderEffect
 	{
-		Q_DECLARE_PRIVATE( Base )
+		Q_OBJECT
 		public:
-			virtual ~Base();
+			FaderEffect( QObject* parent );
+			virtual ~FaderEffect();
 
-			virtual QObject* qobject() = 0;
-			virtual const QObject* qobject() const = 0;
+			virtual float volume() const;
+			virtual void setVolume( float volume );
+			virtual void fadeTo( float volume, int fadeTime );
 
-		protected:
-			BasePrivate* d_ptr;
+		private:
+			float m_volume;
+			float m_endvolume;
+			int m_fadeTime;
+			QTime m_fadeStart;
 	};
-}} //namespace Phonon::Ifaces
+}} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_IFACES_BASE_H
+#endif // Phonon_FAKE_FADEREFFECT_H

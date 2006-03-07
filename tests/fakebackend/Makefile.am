@@ -22,7 +22,12 @@ AM_CXXFLAGS = -DNDEBUG
 
 kde_module_LTLIBRARIES = phonon_fake.la
 
-phonon_fake_la_SOURCES = abstractmediaproducer.cpp abstractaudiooutput.cpp abstractvideooutput.cpp audiodataoutput.cpp audioeffect.cpp audiofftoutput.cpp audiooutput.cpp audiopath.cpp bytestream.cpp mediaobject.cpp avcapture.cpp videoeffect.cpp videopath.cpp backend.cpp
+phonon_fake_la_SOURCES = abstractmediaproducer.cpp abstractaudiooutput.cpp \
+                         abstractvideooutput.cpp audiodataoutput.cpp \
+                         audioeffect.cpp audiofftoutput.cpp audiooutput.cpp \
+                         audiopath.cpp bytestream.cpp mediaobject.cpp \
+                         avcapture.cpp videoeffect.cpp videopath.cpp \
+                         backend.cpp fadereffect.cpp
 phonon_fake_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
 phonon_fake_la_LIBADD = ../../ifaces/libphononifaces.la ../../ifaces/ui/libphononifacesui.la $(LIB_KIO)
 

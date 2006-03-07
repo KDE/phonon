@@ -26,9 +26,9 @@ phononinclude_HEADERS = abstractmediaproducer.h mediaobject.h soundcardcapture.h
 		       audiopath.h backend.h abstractaudiooutput.h \
 		       audiooutput.h audiodataoutput.h audiofftoutput.h \
 		       videopath.h abstractvideooutput.h videoeffect.h audioeffect.h \
-		       bytestream.h base.h
+		       bytestream.h base.h fadereffect.h
 
-libphononifaces_la_SOURCES = backend.cpp
+libphononifaces_la_SOURCES = backend.cpp base.cpp
 libphononifaces_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined
 libphononifaces_la_LIBADD = $(LIB_KDECORE)
 

@@ -34,6 +34,7 @@ namespace Ifaces
 
 	class AudioPath;
 	class AudioEffect;
+	class FaderEffect;
 	class AudioOutput;
 	class AudioDataOutput;
 	class AudioFftOutput;
@@ -57,6 +58,7 @@ namespace Fake
 
 			virtual Ifaces::AudioPath*        createAudioPath( QObject* parent );
 			virtual Ifaces::AudioEffect*      createAudioEffect( QObject* parent );
+			virtual Ifaces::FaderEffect*      createFaderEffect( QObject* parent );
 			virtual Ifaces::AudioOutput*      createAudioOutput( QObject* parent );
 			virtual Ifaces::AudioDataOutput*  createAudioDataOutput( QObject* parent );
 			virtual Ifaces::AudioFftOutput*   createAudioFftOutput( QObject* parent );

@@ -16,31 +16,27 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_IFACES_BASE_H
-#define Phonon_IFACES_BASE_H
 
-#include <kdelibs_export.h>
-#include <QtGlobal>
-class QObject;
+#ifndef PHONON_IFACES_FADEREFFECT_H
+#define PHONON_IFACES_FADEREFFECT_H
+
+#include "audioeffect.h"
 
 namespace Phonon
 {
 namespace Ifaces
 {
-	class BasePrivate;
-	class PHONON_EXPORT Base
+	/**
+	 * \author Matthias Kretz <kretz@kde.org>
+	 */
+	class FaderEffect : virtual public AudioEffect
 	{
-		Q_DECLARE_PRIVATE( Base )
 		public:
-			virtual ~Base();
-
-			virtual QObject* qobject() = 0;
-			virtual const QObject* qobject() const = 0;
-
-		protected:
-			BasePrivate* d_ptr;
+			virtual float volume() const = 0;
+			virtual void setVolume( float volume ) = 0;
+			virtual void fadeTo( float volume, int fadeTime ) = 0;
 	};
 }} //namespace Phonon::Ifaces
 
 // vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_IFACES_BASE_H
+#endif // PHONON_IFACES_FADEREFFECT_H

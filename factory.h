@@ -48,6 +48,7 @@ namespace Phonon
 		class ByteStream;
 
 		class AudioEffect;
+		class FaderEffect;
 		class AudioPath;
 		class AudioOutput;
 		class AudioDataOutput;
@@ -103,6 +104,7 @@ class PHONON_EXPORT Factory : public QObject, public DCOPObject
 		
 		Ifaces::AudioPath* createAudioPath( QObject* parent = 0 );
 		Ifaces::AudioEffect* createAudioEffect( QObject* parent = 0 );
+		Ifaces::FaderEffect* createFaderEffect( QObject* parent = 0 );
 		Ifaces::AudioOutput* createAudioOutput( QObject* parent = 0 );
 		Ifaces::AudioDataOutput* createAudioDataOutput( QObject* parent = 0 );
 		Ifaces::AudioFftOutput* createAudioFftOutput( QObject* parent = 0 );

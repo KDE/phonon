@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2004-2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2004-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@ namespace Ifaces
 
 	class AudioPath;
 	class AudioEffect;
+	class FaderEffect;
 	class AudioOutput;
 	class AudioDataOutput;
 	class AudioFftOutput;
@@ -55,8 +56,8 @@ namespace Ifaces
 	{
 		Q_OBJECT
 		public:
-			Backend( QObject* parent ) : QObject( parent ) {}
-			virtual ~Backend() {}
+			Backend( QObject* parent );
+			virtual ~Backend();
 
 			virtual MediaObject*      createMediaObject( QObject* parent ) = 0;
 			virtual AvCapture*        createAvCapture( QObject* parent ) = 0;
@@ -64,6 +65,7 @@ namespace Ifaces
 
 			virtual AudioPath*        createAudioPath( QObject* parent ) = 0;
 			virtual AudioEffect*      createAudioEffect( QObject* parent ) = 0;
+			virtual FaderEffect*      createFaderEffect( QObject* parent ) = 0;
 			virtual AudioOutput*      createAudioOutput( QObject* parent ) = 0;
 			virtual AudioDataOutput*  createAudioDataOutput( QObject* parent ) = 0;
 			virtual AudioFftOutput*   createAudioFftOutput( QObject* parent ) = 0;

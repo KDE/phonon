@@ -20,6 +20,7 @@
 #include "factory.h"
 #include "ifaces/audiopath.h"
 #include "ifaces/audioeffect.h"
+#include "ifaces/fadereffect.h"
 #include "ifaces/audiooutput.h"
 #include "ifaces/audiodataoutput.h"
 #include "ifaces/audiofftoutput.h"
@@ -179,55 +180,25 @@ void Factory::objectDestroyed( QObject * obj )
 	d->objects.removeAll( obj );
 }
 
-Ifaces::MediaObject* Factory::createMediaObject( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createMediaObject( parent ) ) : 0;
+#define FACTORY_IMPL( classname ) \
+Ifaces::classname* Factory::create ## classname( QObject* parent ) \
+{ \
+	return d->backend ? registerObject( d->backend->create ## classname( parent ) ) : 0; \
 }
 
-Ifaces::AvCapture* Factory::createAvCapture( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createAvCapture( parent ) ) : 0;
-}
+FACTORY_IMPL( MediaObject )
+FACTORY_IMPL( AvCapture )
+FACTORY_IMPL( ByteStream )
+FACTORY_IMPL( AudioPath )
+FACTORY_IMPL( AudioEffect )
+FACTORY_IMPL( FaderEffect )
+FACTORY_IMPL( AudioOutput )
+FACTORY_IMPL( AudioDataOutput )
+FACTORY_IMPL( AudioFftOutput )
+FACTORY_IMPL( VideoPath )
+FACTORY_IMPL( VideoEffect )
 
-Ifaces::ByteStream* Factory::createByteStream( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createByteStream( parent ) ) : 0;
-}
-
-Ifaces::AudioPath* Factory::createAudioPath( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createAudioPath( parent ) ) : 0;
-}
-
-Ifaces::AudioEffect* Factory::createAudioEffect( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createAudioEffect( parent ) ) : 0;
-}
-
-Ifaces::AudioOutput* Factory::createAudioOutput( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createAudioOutput( parent ) ) : 0;
-}
-
-Ifaces::AudioDataOutput* Factory::createAudioDataOutput( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createAudioDataOutput( parent ) ) : 0;
-}
-
-Ifaces::AudioFftOutput* Factory::createAudioFftOutput( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createAudioFftOutput( parent ) ) : 0;
-}
-
-Ifaces::VideoPath* Factory::createVideoPath( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createVideoPath( parent ) ) : 0;
-}
-
-Ifaces::VideoEffect* Factory::createVideoEffect( QObject* parent )
-{
-	return d->backend ? registerObject( d->backend->createVideoEffect( parent ) ) : 0;
-}
+#undef FACTORY_IMPL
 
 const Ifaces::Backend* Factory::backend() const
 {
