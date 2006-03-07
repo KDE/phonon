@@ -68,6 +68,11 @@ namespace Phonon
 	 * A Jukebox will set this to Music, a VoIP program to Communication, a
 	 * DVD player to video, and so on.
 	 *
+	 * \note These categories can also become usefull for an application that
+	 * controls the volumes automatically, like turning down the music when a call
+	 * comes in, or turning down the notifications when the media player knows
+	 * it's playing classical music.
+	 *
 	 * \see AudioOutput::setCategory
 	 */
 	enum Category
