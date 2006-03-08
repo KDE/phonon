@@ -30,7 +30,7 @@ namespace Ui
 
 VideoWidget::VideoWidget( QWidget* parent )
 	: QWidget( parent )
-	, Phonon::AbstractVideoOutput( *new VideoWidgetPrivate )
+	, Phonon::AbstractVideoOutput( *new VideoWidgetPrivate( this ) )
 {
 	K_D( VideoWidget );
 	d->createIface();
@@ -85,8 +85,35 @@ void VideoWidget::setupIface()
 	K_D( VideoWidget );
 	Q_ASSERT( d->iface() );
 
+	QWidget* w = qobject_cast<QWidget*>( d->iface()->qobject() );
+	d->layout.addWidget( w );
 	d->iface()->setFullscreen( d->fullscreen );
+	if( w )
+		setSizePolicy( w->sizePolicy() );
 }
+
+/*
+QSize VideoWidget::sizeHint()
+{
+	if( iface() )
+	{
+		QWidget* w = qobject_cast<QWidget*>( d->iface()->qobject() );
+		if( w )
+			return w->sizeHint();
+	}
+	return QSize( 0, 0 );
+}
+
+QSize VideoWidget::minimumSizeHint()
+{
+	if( iface() )
+	{
+		QWidget* w = qobject_cast<QWidget*>( d->iface()->qobject() );
+		if( w )
+			return w->minimumSizeHint();
+	}
+	return QSize( 0, 0 );
+}*/
 
 }} //namespace Phonon::Ui
 

@@ -23,6 +23,7 @@
 #include "videowidget.h"
 #include "../ifaces/ui/videowidget.h"
 #include "../abstractvideooutput_p.h"
+#include <QHBoxLayout>
 
 namespace Phonon
 {
@@ -45,12 +46,15 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 		inline const Ifaces::VideoWidget* iface() const { return iface_ptr; }
 
 	protected:
-		VideoWidgetPrivate()
+		VideoWidgetPrivate( VideoWidget* parent )
 			: fullscreen( false )
+			, layout( parent )
 		{
+			layout.setMargin( 0 );
 		}
 
 		bool fullscreen;
+		QHBoxLayout layout;
 };
 }}
 

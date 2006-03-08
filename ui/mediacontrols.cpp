@@ -63,17 +63,23 @@ MediaControls::MediaControls( QWidget* parent )
 	, d( new Private )
 {
 	d->playButton = new QToolButton( this );
-	d->playButton->setIcon( KGlobal::iconLoader()->loadIconSet( "player_play", KIcon::Small ) );
+	d->playButton->setIcon( SmallIcon( "player_play" ) );
 	d->playButton->setText( i18n( "&Play" ) );
+	d->playButton->setFixedSize( 20, 20 );
+	d->playButton->setAutoRaise( true );
 
 	d->pauseButton = new QToolButton( this );
-	d->pauseButton->setIcon( KGlobal::iconLoader()->loadIconSet( "player_pause", KIcon::Small ) );
+	d->pauseButton->setIcon( SmallIcon( "player_pause" ) );
 	d->pauseButton->setText( i18n( "&Pause" ) );
 	d->pauseButton->setEnabled( false );
+	d->pauseButton->setFixedSize( 20, 20 );
+	d->pauseButton->setAutoRaise( true );
 
 	d->stopButton = new QToolButton( this );
-	d->stopButton->setIcon( KGlobal::iconLoader()->loadIconSet( "player_stop", KIcon::Small ) );
+	d->stopButton->setIcon( SmallIcon( "player_stop" ) );
 	d->stopButton->setText( i18n( "&Stop" ) );
+	d->stopButton->setFixedSize( 20, 20 );
+	d->stopButton->setAutoRaise( true );
 
 	d->seekSlider = new SeekSlider( this );
 
