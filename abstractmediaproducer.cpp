@@ -147,7 +147,7 @@ void AbstractMediaProducer::stop()
 void AbstractMediaProducer::seek( long time )
 {
 	K_D( AbstractMediaProducer );
-	if( iface() )
+	if( iface() && ( d->state == Phonon::PlayingState || d->state == Phonon::BufferingState || d->state == Phonon::PausedState ) )
 		d->iface()->seek( time );
 }
 

@@ -197,6 +197,8 @@ namespace Phonon
 			/**
 			 * Seek to the time indicated.
 			 *
+			 * You can only seek if playing, buffering or in pause.
+			 *
 			 * @param time The time in milliseconds where to continue playing.
 			 */
 			void seek( long time );
