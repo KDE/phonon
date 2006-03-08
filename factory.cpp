@@ -30,6 +30,7 @@
 #include "ifaces/mediaobject.h"
 #include "ifaces/avcapture.h"
 #include "ifaces/bytestream.h"
+#include "base_p.h"
 
 #include <ktrader.h>
 #include <kservice.h>
@@ -114,6 +115,7 @@ class Factory::Private
 		KService::Ptr service;
 
 		QList<QObject*> objects;
+		QList<BasePrivate*> basePrivateList;
 };
 
 static ::KStaticDeleter<Factory> sd;
@@ -141,6 +143,8 @@ Factory::~Factory()
 {
 	//kdDebug( 600 ) << k_funcinfo << endl;
 	emit deleteYourObjects();
+	foreach( BasePrivate* bp, d->basePrivateList )
+		bp->deleteIface();
 	foreach( QObject* o, d->objects )
 	{
 		//kdDebug( 600 ) << "delete " << o << endl;
@@ -150,11 +154,23 @@ Factory::~Factory()
 	delete d;
 }
 
+void Factory::registerFrontendObject( BasePrivate* bp )
+{
+	d->basePrivateList.append( bp );
+}
+
+void Factory::deregisterFrontendObject( BasePrivate* bp )
+{
+	d->basePrivateList.removeAll( bp );
+}
+
 void Factory::phononBackendChanged()
 {
 	if( d->backend )
 	{
 		emit deleteYourObjects();
+		foreach( BasePrivate* bp, d->basePrivateList )
+			bp->deleteIface();
 		if( d->objects.size() > 0 )
 		{
 			kdWarning( 600 ) << "we were asked to change the backend but the application did\n"
@@ -164,6 +180,8 @@ void Factory::phononBackendChanged()
 			// in case there were objects deleted give 'em a chance to recreate
 			// them now
 			emit recreateObjects();
+			foreach( BasePrivate* bp, d->basePrivateList )
+				bp->createIface();
 			return;
 		}
 		delete d->backend;
@@ -171,6 +189,8 @@ void Factory::phononBackendChanged()
 	}
 	d->createBackend();
 	emit recreateObjects();
+	foreach( BasePrivate* bp, d->basePrivateList )
+		bp->createIface();
 	emit backendChanged();
 }
 

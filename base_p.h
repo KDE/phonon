@@ -24,6 +24,7 @@
 #include "ifaces/base.h"
 #include <QList>
 #include "basedestructionhandler.h"
+#include "factory.h"
 
 namespace Phonon
 {
@@ -35,10 +36,16 @@ namespace Phonon
 class BasePrivate
 {
 	K_DECLARE_PUBLIC( Base )
+	friend class Phonon::Factory;
 	protected:
-		BasePrivate() {}
+		BasePrivate()
+		{
+			Factory::self()->registerFrontendObject( this );
+		}
+
 		virtual ~BasePrivate()
 		{
+			Factory::self()->deregisterFrontendObject( this );
 			delete iface_ptr;
 		}
 

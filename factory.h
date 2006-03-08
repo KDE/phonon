@@ -59,6 +59,7 @@ namespace Phonon
 
 		class Backend;
 	}
+	class BasePrivate;
 
 /**
  * \brief Factory to access the preferred Backend.
@@ -81,6 +82,7 @@ namespace Phonon
 class PHONON_EXPORT Factory : public QObject, public DCOPObject
 {
 	friend void ::KStaticDeleter<Factory>::destructObject();
+	friend class Phonon::BasePrivate;
 
 	Q_OBJECT
 	public:
@@ -184,6 +186,8 @@ class PHONON_EXPORT Factory : public QObject, public DCOPObject
 		void objectDestroyed( QObject * );
 
 	private:
+		void registerFrontendObject( BasePrivate* );
+		void deregisterFrontendObject( BasePrivate* );
 		static Factory * m_self;
 		class Private;
 		Private * d;

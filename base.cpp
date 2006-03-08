@@ -33,10 +33,6 @@ namespace Phonon
 		// cannot call k_ptr->createIface(); from here as that calls setupIface
 		// on the classes that inherit Base - and they're not constructed at
 		// this point
-
-		//TODO:
-		//connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
-		//connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
 	}
 
 	Base::~Base()
