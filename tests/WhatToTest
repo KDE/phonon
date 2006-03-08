@@ -6,7 +6,3 @@ QVERIFY( b == AudioFftOutput::bandwidth() );
 
 AudioFftOutput::setRate( a );
 QVERIFY( a == AudioFftOutput::rate() );
-
---------------
-
-QVERIFY(Backend::captureSourceCount() >= 0)
