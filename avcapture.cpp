@@ -28,7 +28,7 @@ PHONON_HEIR_IMPL( AvCapture, AbstractMediaProducer )
 
 const AudioSource& AvCapture::audioSource() const
 {
-	Q_D( const AvCapture );
+	K_D( const AvCapture );
 	if( d->iface() && d->iface()->audioSource() != d->audioSource.index() )
 	{
 		int index = d->iface()->audioSource();
@@ -42,7 +42,7 @@ const AudioSource& AvCapture::audioSource() const
 
 void AvCapture::setAudioSource( const AudioSource& audioSource )
 {
-	Q_D( AvCapture );
+	K_D( AvCapture );
 	if( d->iface() )
 		d->iface()->setAudioSource( audioSource.index() );
 	else
@@ -51,7 +51,7 @@ void AvCapture::setAudioSource( const AudioSource& audioSource )
 
 void AvCapture::setAudioSource( int audioSourceIndex )
 {
-	Q_D( AvCapture );
+	K_D( AvCapture );
 	if( d->iface() )
 		d->iface()->setAudioSource( audioSourceIndex );
 	else
@@ -66,7 +66,7 @@ void AvCapture::setAudioSource( int audioSourceIndex )
 
 const VideoSource& AvCapture::videoSource() const
 {
-	Q_D( const AvCapture );
+	K_D( const AvCapture );
 	if( d->iface() && d->iface()->videoSource() != d->videoSource.index() )
 	{
 		int index = d->iface()->videoSource();
@@ -80,7 +80,7 @@ const VideoSource& AvCapture::videoSource() const
 
 void AvCapture::setVideoSource( const VideoSource& videoSource )
 {
-	Q_D( AvCapture );
+	K_D( AvCapture );
 	if( d->iface() )
 		d->iface()->setVideoSource( videoSource.index() );
 	else
@@ -89,7 +89,7 @@ void AvCapture::setVideoSource( const VideoSource& videoSource )
 
 void AvCapture::setVideoSource( int videoSourceIndex )
 {
-	Q_D( AvCapture );
+	K_D( AvCapture );
 	if( d->iface() )
 		d->iface()->setVideoSource( videoSourceIndex );
 	else
@@ -114,7 +114,7 @@ bool AvCapturePrivate::aboutToDeleteIface()
 
 void AvCapture::setupIface()
 {
-	Q_D( AvCapture );
+	K_D( AvCapture );
 	Q_ASSERT( d->iface() );
 	AbstractMediaProducer::setupIface();
 

@@ -21,6 +21,7 @@
 
 #include "base.h"
 #include "phonondefs.h"
+#include <QObject>
 
 namespace Phonon
 {
@@ -30,12 +31,12 @@ namespace Phonon
 		class AbstractAudioOutput;
 	}
 
-	class PHONON_EXPORT AbstractAudioOutput : public Base
+	class PHONON_EXPORT AbstractAudioOutput : public QObject, public Base
 	{
 		friend class AudioPath;
 		friend class AudioPathPrivate;
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( AbstractAudioOutput )
+		K_DECLARE_PRIVATE( AbstractAudioOutput )
 		PHONON_ABSTRACTBASE( AbstractAudioOutput )
 	};
 } //namespace Phonon

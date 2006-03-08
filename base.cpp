@@ -21,25 +21,43 @@
 #include "base_p.h"
 #include "ifaces/base.h"
 #include "factory.h"
+#include "basedestructionhandler.h"
 
 namespace Phonon
 {
-	Base::Base( BasePrivate& d, QObject* parent )
-		: QObject( parent )
-		, d_ptr( &d )
+	Base::Base( BasePrivate& d )
+		: k_ptr( &d )
 	{
-		d_ptr->q_ptr = this;
-		d_ptr->setIface( 0 );
-		connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
-		connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
+		k_ptr->q_ptr = this;
+		k_ptr->setIface( 0 );
+		// cannot call k_ptr->createIface(); from here as that calls setupIface
+		// on the classes that inherit Base - and they're not constructed at
+		// this point
+
+		//TODO:
+		//connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
+		//connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
 	}
 
 	Base::~Base()
 	{
-		emit destroyed( this );
-		delete d_ptr;
-		d_ptr = 0;
+		K_D( Base );
+		foreach( BaseDestructionHandler* handler, d->handlers )
+			handler->phononObjectDestroyed( this );
+		delete k_ptr;
+		k_ptr = 0;
+	}
+
+	void Base::addDestructionHandler( BaseDestructionHandler* handler )
+	{
+		K_D( Base );
+		d->handlers.append( handler );
+	}
+
+	void Base::removeDestructionHandler( BaseDestructionHandler* handler )
+	{
+		K_D( Base );
+		d->handlers.removeAll( handler );
 	}
 } //namespace Phonon
-#include "base.moc"
 // vim: sw=4 ts=4 noet

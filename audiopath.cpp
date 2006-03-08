@@ -28,21 +28,30 @@ namespace Phonon
 {
 PHONON_OBJECT_IMPL( AudioPath )
 
+AudioPath::~AudioPath()
+{
+	K_D( AudioPath );
+	foreach( AbstractAudioOutput* ao, d->outputs )
+		ao->removeDestructionHandler( this );
+	foreach( AudioEffect* ae, d->effects )
+		ae->removeDestructionHandler( this );
+}
+
 int AudioPath::availableChannels() const
 {
-	Q_D( const AudioPath );
+	K_D( const AudioPath );
 	return d->iface() ? d->iface()->availableChannels() : -1;
 }
 
 QString AudioPath::channelName( int channel ) const
 {
-	Q_D( const AudioPath );
+	K_D( const AudioPath );
 	return d->iface() ? d->iface()->channelName( channel ) : QString();
 }
 
 bool AudioPath::selectChannel( int channel )
 {
-	Q_D( AudioPath );
+	K_D( AudioPath );
 	if( d->iface() )
 		return d->iface()->selectChannel( channel );
 	d->channel = channel;
@@ -51,19 +60,19 @@ bool AudioPath::selectChannel( int channel )
 
 int AudioPath::selectedChannel() const
 {
-	Q_D( const AudioPath );
+	K_D( const AudioPath );
 	return d->iface() ? d->iface()->selectedChannel() : d->channel;
 }
 
 bool AudioPath::addOutput( AbstractAudioOutput* audioOutput )
 {
-	Q_D( AudioPath );
+	K_D( AudioPath );
 	if( d->outputs.contains( audioOutput ) )
 		return false;
 
 	if( iface() && d->iface()->addOutput( audioOutput->iface() ) )
 	{
-		connect( audioOutput, SIGNAL( destroyed( Base* ) ), SLOT( outputDestroyed( Base* ) ) );
+		audioOutput->addDestructionHandler( this );
 		d->outputs << audioOutput;
 		return true;
 	}
@@ -72,7 +81,7 @@ bool AudioPath::addOutput( AbstractAudioOutput* audioOutput )
 
 bool AudioPath::removeOutput( AbstractAudioOutput* audioOutput )
 {
-	Q_D( AudioPath );
+	K_D( AudioPath );
 	if( !d->outputs.contains( audioOutput ) )
 		return false;
 
@@ -86,7 +95,7 @@ bool AudioPath::removeOutput( AbstractAudioOutput* audioOutput )
 
 const QList<AbstractAudioOutput*>& AudioPath::outputs() const
 {
-	Q_D( const AudioPath );
+	K_D( const AudioPath );
 	return d->outputs;
 }
 
@@ -94,13 +103,13 @@ bool AudioPath::insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore 
 {
 	// effects may be added multiple times, but that means the objects are
 	// different (the class is still the same)
-	Q_D( AudioPath );
+	K_D( AudioPath );
 	if( d->effects.contains( newEffect ) )
 		return false;
 
 	if( iface() && d->iface()->insertEffect( newEffect->iface(), insertBefore->iface() ) )
 	{
-		connect( newEffect, SIGNAL( destroyed( Base* ) ), SLOT( effectDestroyed( Base* ) ) );
+		newEffect->addDestructionHandler( this );
 		if( insertBefore )
 			d->effects.insert( d->effects.indexOf( insertBefore ), newEffect );
 		else
@@ -112,7 +121,7 @@ bool AudioPath::insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore 
 
 bool AudioPath::removeEffect( AudioEffect* effect )
 {
-	Q_D( AudioPath );
+	K_D( AudioPath );
 	if( !d->effects.contains( effect ) )
 		return false;
 
@@ -126,7 +135,7 @@ bool AudioPath::removeEffect( AudioEffect* effect )
 
 const QList<AudioEffect*>& AudioPath::effects() const
 {
-	Q_D( const AudioPath );
+	K_D( const AudioPath );
 	return d->effects;
 }
 
@@ -138,7 +147,7 @@ bool AudioPathPrivate::aboutToDeleteIface()
 
 void AudioPath::setupIface()
 {
-	Q_D( AudioPath );
+	K_D( AudioPath );
 	Q_ASSERT( d->iface() );
 
 	// set up attributes
@@ -155,28 +164,26 @@ void AudioPath::setupIface()
 			d->effects.removeAll( effect );
 }
 
-void AudioPathPrivate::effectDestroyed( Base* o )
+void AudioPath::phononObjectDestroyed( Base* o )
 {
 	// this method is called from Phonon::Base::~Base(), meaning the AudioEffect
 	// dtor has already been called, also virtual functions don't work anymore
 	// (therefore qobject_cast can only downcast from Base)
-	Q_ASSERT( o );
-	AudioEffect* audioEffect = static_cast<AudioEffect*>( o );
-	if( iface() )
-	{
-		iface()->removeEffect( audioEffect->iface() );
-		effects.removeAll( audioEffect );
-	}
-}
-
-void AudioPathPrivate::outputDestroyed( Base* o )
-{
+	K_D( AudioPath );
 	Q_ASSERT( o );
 	AbstractAudioOutput* output = static_cast<AbstractAudioOutput*>( o );
-	if( iface() )
+	AudioEffect* audioEffect = static_cast<AudioEffect*>( o );
+	if( d->outputs.contains( output ) )
 	{
-		iface()->removeOutput( output->iface() );
-		outputs.removeAll( output );
+		if( d->iface() )
+			d->iface()->removeOutput( output->iface() );
+		d->outputs.removeAll( output );
+	}
+	else if( d->effects.contains( audioEffect ) )
+	{
+		if( d->iface() )
+			d->iface()->removeEffect( audioEffect->iface() );
+		d->effects.removeAll( audioEffect );
 	}
 }
 

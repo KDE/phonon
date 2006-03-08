@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -18,8 +18,8 @@
 */
 
 #include "videowidget.h"
+#include "videowidget_p.h"
 #include "factory.h"
-#include "videowidgethelper.h"
 
 #include <phonon/ifaces/ui/videowidget.h>
 
@@ -27,106 +27,65 @@ namespace Phonon
 {
 namespace Ui
 {
-class VideoWidget::Private
-{
-	public:
-		Private()
-			: helper( 0 )
-			, fullscreen( false )
-		{ }
-
-		VideoWidgetHelper* helper;
-		bool fullscreen;
-};
 
 VideoWidget::VideoWidget( QWidget* parent )
 	: QWidget( parent )
-	, m_iface( 0 )
-	, d( new Private() )
+	, Phonon::AbstractVideoOutput( *new VideoWidgetPrivate )
 {
-	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
-	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
-	createIface();
+	K_D( VideoWidget );
+	d->createIface();
 }
 
-VideoWidget::VideoWidget( bool callCreateIface, QWidget* parent )
+VideoWidget::VideoWidget( VideoWidgetPrivate& d, QWidget* parent )
 	: QWidget( parent )
-	, m_iface( 0 )
-	, d( new Private() )
+	, Phonon::AbstractVideoOutput( d )
 {
-	connect( Factory::self(), SIGNAL( deleteYourObjects() ), SLOT( deleteIface() ) );
-	connect( Factory::self(), SIGNAL( recreateObjects() ), SLOT( createIface() ) );
-	if( callCreateIface )
-		createIface();
 }
 
-VideoWidget::~VideoWidget()
+Ifaces::VideoWidget* VideoWidget::iface()
 {
-	delete d;
-	d = 0;
+	K_D( VideoWidget );
+	if( !d->iface() )
+		d->createIface();
+	return d->iface();
 }
 
-AbstractVideoOutput* VideoWidget::videoOutput()
+void VideoWidgetPrivate::createIface()
 {
-	return d->helper;
+	K_Q( VideoWidget );
+	Q_ASSERT( iface_ptr == 0 );
+	setIface( Factory::self()->createVideoWidget( q ) );
+	q->setupIface();
 }
 
 bool VideoWidget::isFullscreen() const
 {
-	return m_iface ? m_iface->isFullscreen() : d->fullscreen;
+	K_D( const VideoWidget );
+	return d->iface() ? d->iface()->isFullscreen() : d->fullscreen;
 }
 
 void VideoWidget::setFullscreen( bool newFullscreen )
 {
-	if( m_iface )
-		m_iface->setFullscreen( newFullscreen );
+	K_D( VideoWidget );
+	if( iface() )
+		d->iface()->setFullscreen( newFullscreen );
 	else
 		d->fullscreen = newFullscreen;
 }
 
-bool VideoWidget::aboutToDeleteIface()
+bool VideoWidgetPrivate::aboutToDeleteIface()
 {
-	if( m_iface )
-		d->fullscreen = m_iface->isFullscreen();
+	if( iface() )
+		fullscreen = iface()->isFullscreen();
 	return true;
 }
 
-void VideoWidget::deleteIface()
+void VideoWidget::setupIface()
 {
-	if( aboutToDeleteIface() )
-	{
-		delete m_iface;
-		ifaceDeleted();
-	}
-}
+	K_D( VideoWidget );
+	Q_ASSERT( d->iface() );
 
-void VideoWidget::ifaceDeleted()
-{
-	m_iface = 0;
-}
-
-void VideoWidget::createIface()
-{
-	Q_ASSERT( m_iface == 0 );
-  	m_iface = Factory::self()->createVideoWidget( this );
-	setupIface( m_iface );
-}
-
-void VideoWidget::setupIface( Ifaces::VideoWidget* iface )
-{
-	m_iface = iface;
-	if( !m_iface )
-		return;
-
-	d->helper = new VideoWidgetHelper( this );
-	m_iface->setFullscreen( d->fullscreen );
-}
-
-Ui::Ifaces::VideoWidget* VideoWidget::iface()
-{
-	if( !m_iface )
-		createIface();
-	return m_iface;
+	d->iface()->setFullscreen( d->fullscreen );
 }
 
 }} //namespace Phonon::Ui

@@ -28,7 +28,7 @@ namespace Phonon
 {
 class AudioFftOutputPrivate : public AbstractAudioOutputPrivate
 {
-	Q_DECLARE_PUBLIC( AudioFftOutput )
+	K_DECLARE_PUBLIC( AudioFftOutput )
 	PHONON_PRIVATECLASS( AudioFftOutput, AbstractAudioOutput )
 	protected:
 		int bandwidth;

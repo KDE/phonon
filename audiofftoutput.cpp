@@ -29,19 +29,19 @@ PHONON_HEIR_IMPL( AudioFftOutput, AbstractAudioOutput )
 
 QVector<float> AudioFftOutput::fourierTransformedData() const
 {
-	Q_D( const AudioFftOutput );
+	K_D( const AudioFftOutput );
 	return d->iface() ? d->iface()->fourierTransformedData() : QVector<float>();
 }
 
 int AudioFftOutput::bandwidth() const
 {
-	Q_D( const AudioFftOutput );
+	K_D( const AudioFftOutput );
 	return d->iface() ? d->iface()->bandwidth() : d->bandwidth;
 }
 
 int AudioFftOutput::setBandwidth( int newBandwidth )
 {
-	Q_D( AudioFftOutput );
+	K_D( AudioFftOutput );
 	if( d->iface() )
 		d->bandwidth = d->iface()->setBandwidth( newBandwidth );
 	else
@@ -51,13 +51,13 @@ int AudioFftOutput::setBandwidth( int newBandwidth )
 
 int AudioFftOutput::rate() const
 {
-	Q_D( const AudioFftOutput );
+	K_D( const AudioFftOutput );
 	return d->iface() ? d->iface()->rate() : d->rate;
 }
 
 void AudioFftOutput::setRate( int newRate )
 {
-	Q_D( AudioFftOutput );
+	K_D( AudioFftOutput );
 	if( d->iface() )
 		d->rate = d->iface()->setRate( newRate );
 	else
@@ -76,7 +76,7 @@ bool AudioFftOutputPrivate::aboutToDeleteIface()
 
 void AudioFftOutput::setupIface()
 {
-	Q_D( AudioFftOutput );
+	K_D( AudioFftOutput );
 	Q_ASSERT( d->iface() );
 	AbstractAudioOutput::setupIface();
 

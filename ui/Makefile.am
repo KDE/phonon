@@ -25,7 +25,7 @@ phononincludedir = $(includedir)/phonon/ui
 phononinclude_HEADERS = videowidget.h seekslider.h mediacontrols.h \
 						volumeslider.h
 
-libphononui_la_SOURCES = factory.cpp videowidget.cpp videowidgethelper.cpp \
+libphononui_la_SOURCES = factory.cpp videowidget.cpp \
 						 seekslider.cpp mediacontrols.cpp volumeslider.cpp
 libphononui_la_LDFLAGS = $(QT_LDFLAGS) $(KDE_RPATH) $(KDE_LDFLAGS) \
 			  $(USER_LDFLAGS) -version-info 0:0:0 -no-undefined

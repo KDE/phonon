@@ -28,7 +28,7 @@ namespace Phonon
 {
 class AbstractMediaProducerPrivate : public BasePrivate
 {
-	Q_DECLARE_PUBLIC( AbstractMediaProducer )
+	K_DECLARE_PUBLIC( AbstractMediaProducer )
 	PHONON_PRIVATEABSTRACTCLASS( AbstractMediaProducer, Base )
 	protected:
 		AbstractMediaProducerPrivate()
@@ -36,9 +36,6 @@ class AbstractMediaProducerPrivate : public BasePrivate
 			, currentTime( 0 )
 			, tickInterval( 0 )
 		{ }
-
-		void audioPathDestroyed( Base* );
-		void videoPathDestroyed( Base* );
 
 		State state;
 		long currentTime;

@@ -27,13 +27,13 @@ PHONON_OBJECT_IMPL( AudioEffect )
 
 QString AudioEffect::type() const
 {
-	Q_D( const AudioEffect );
+	K_D( const AudioEffect );
 	return d->iface() ? d->iface()->type() : d->type;
 }
 
 void AudioEffect::setType( const QString& type )
 {
-	Q_D( AudioEffect );
+	K_D( AudioEffect );
 	if( d->iface() )
 		d->iface()->setType( type );
 	else
@@ -49,7 +49,7 @@ bool AudioEffectPrivate::aboutToDeleteIface()
 
 void AudioEffect::setupIface()
 {
-	Q_D( AudioEffect );
+	K_D( AudioEffect );
 	Q_ASSERT( d->iface() );
 
 	// set up attributes

@@ -29,10 +29,9 @@ namespace Phonon
 {
 class PHONON_EXPORT AbstractVideoOutputPrivate : public BasePrivate
 {
-	Q_DECLARE_PUBLIC( AbstractVideoOutput )
+	K_DECLARE_PUBLIC( AbstractVideoOutput )
 	PHONON_PRIVATEABSTRACTCLASS( AbstractVideoOutput, Base )
 	protected:
-		QString name;
 };
 } //namespace Phonon
 

@@ -21,6 +21,8 @@
 
 #include "base.h"
 #include "phonondefs.h"
+#include <QObject>
+#include "basedestructionhandler.h"
 
 namespace Phonon
 {
@@ -53,14 +55,16 @@ namespace Phonon
 	 * \author Matthias Kretz <kretz@kde.org>
 	 * \see AudioPath
 	 */
-	class PHONON_EXPORT VideoPath : public Base
+	class PHONON_EXPORT VideoPath : public QObject, public Base, private BaseDestructionHandler
 	{
 		friend class AbstractMediaProducer;
 		friend class AbstractMediaProducerPrivate;
-		Q_DECLARE_PRIVATE( VideoPath )
+		K_DECLARE_PRIVATE( VideoPath )
 		Q_OBJECT
 		PHONON_OBJECT( VideoPath )
 		public:
+			~VideoPath();
+
 			/**
 			 * Adds a video output at the "end" of the video path. This sends
 			 * all video data, after it is processed in the effects, to the
@@ -160,8 +164,10 @@ namespace Phonon
 			const QList<VideoEffect*>& effects() const;
 
 		private:
-			Q_PRIVATE_SLOT( d_func(), void effectDestroyed( Base* ) );
-			Q_PRIVATE_SLOT( d_func(), void outputDestroyed( Base* ) );
+			/**
+			 * \internal
+			 */
+			virtual void phononObjectDestroyed( Base* );
 	};
 } //namespace Phonon
 

@@ -21,6 +21,8 @@
 
 #include "base.h"
 #include "phonondefs.h"
+#include <QObject>
+#include "basedestructionhandler.h"
 
 namespace Phonon
 {
@@ -54,16 +56,18 @@ namespace Phonon
 	 * \author Matthias Kretz <kretz@kde.org>
 	 * \see VideoPath
 	 */
-	class PHONON_EXPORT AudioPath : public Base
+	class PHONON_EXPORT AudioPath : public QObject, public Base, private BaseDestructionHandler
 	{
 		friend class AbstractMediaProducer;
 		friend class AbstractMediaProducerPrivate;
-		Q_DECLARE_PRIVATE( AudioPath )
+		K_DECLARE_PRIVATE( AudioPath )
 		Q_OBJECT
 		Q_PROPERTY( int channel READ selectedChannel WRITE selectChannel )
 		PHONON_OBJECT( AudioPath )
 
 		public:
+			~AudioPath();
+
 			/**
 			 * Returns the number of available audio channels. Audio files
 			 * normally only have one channel. Channels are interesting for
@@ -225,8 +229,10 @@ namespace Phonon
 			const QList<AudioEffect*>& effects() const;
 
 		private:
-			Q_PRIVATE_SLOT( d_func(), void effectDestroyed( Base* ) );
-			Q_PRIVATE_SLOT( d_func(), void outputDestroyed( Base* ) );
+			/**
+			 * \internal
+			 */
+			virtual void phononObjectDestroyed( Base* );
 	};
 } //namespace Phonon
 

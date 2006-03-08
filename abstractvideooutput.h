@@ -36,9 +36,40 @@ namespace Phonon
 	{
 		friend class VideoPath;
 		friend class VideoPathPrivate;
-		Q_DECLARE_PRIVATE( AbstractVideoOutput )
-		Q_OBJECT
-		PHONON_ABSTRACTBASE( AbstractVideoOutput )
+		K_DECLARE_PRIVATE( AbstractVideoOutput )
+		protected:
+			/**
+			 * \internal
+			 * Constructor that is called from derived classes.
+			 *
+			 * \param parent Standard QObject parent.
+			 */
+			AbstractVideoOutput( AbstractVideoOutputPrivate& d );
+
+			/**
+			 * \internal
+			 * After construction of the Iface object this method is called
+			 * throughout the complete class hierarchy in order to set up the
+			 * properties that were already set on the public interface.
+			 *
+			 * An example implementation could look like this:
+			 * \code
+			 * ParentClass::setupIface();
+			 * m_iface->setPropertyA( d->propertyA );
+			 * m_iface->setPropertyB( d->propertyB );
+			 * \endcode
+			 */
+			void setupIface();
+
+		private:
+			/**
+			 * \internal
+			 * Returns the Iface object. If the object does not exist it tries to
+			 * create it before returning.
+			 *
+			 * \return the Iface object, might return \c 0
+			 */
+			Ifaces::AbstractVideoOutput* iface();
 	};
 } //namespace Phonon
 

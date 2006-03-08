@@ -30,7 +30,7 @@ namespace Phonon
 {
 class AvCapturePrivate : public AbstractMediaProducerPrivate
 {
-	Q_DECLARE_PUBLIC( AvCapture )
+	K_DECLARE_PUBLIC( AvCapture )
 	PHONON_PRIVATECLASS( AvCapture, AbstractMediaProducer )
 	protected:
 		AudioSource audioSource;

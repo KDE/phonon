@@ -29,31 +29,31 @@ PHONON_HEIR_IMPL( MediaObject, AbstractMediaProducer )
 
 KUrl MediaObject::url() const
 {
-	Q_D( const MediaObject );
+	K_D( const MediaObject );
 	return d->iface() ? d->iface()->url() : d->url;
 }
 
 long MediaObject::totalTime() const
 {
-	Q_D( const MediaObject );
+	K_D( const MediaObject );
 	return d->iface() ? d->iface()->totalTime() : -1;
 }
 
 long MediaObject::remainingTime() const
 {
-	Q_D( const MediaObject );
+	K_D( const MediaObject );
 	return d->iface() ? d->iface()->remainingTime() : -1;
 }
 
 long MediaObject::aboutToFinishTime() const
 {
-	Q_D( const MediaObject );
+	K_D( const MediaObject );
 	return d->iface() ? d->iface()->aboutToFinishTime() : d->aboutToFinishTime;
 }
 
 void MediaObject::setUrl( const KUrl& url )
 {
-	Q_D( MediaObject );
+	K_D( MediaObject );
 	if( iface() )
 	{
 		d->iface()->setUrl( url );
@@ -71,7 +71,7 @@ void MediaObject::setUrl( const KUrl& url )
 
 void MediaObject::setAboutToFinishTime( long newAboutToFinishTime )
 {
-	Q_D( MediaObject );
+	K_D( MediaObject );
 	//kdDebug( 600 ) << k_funcinfo << endl;
 	if( d->iface() )
 		d->iface()->setAboutToFinishTime( newAboutToFinishTime );
@@ -89,7 +89,7 @@ bool MediaObjectPrivate::aboutToDeleteIface()
 
 void MediaObject::setupIface()
 {
-	Q_D( MediaObject );
+	K_D( MediaObject );
 	Q_ASSERT( d->iface() );
 	//kdDebug( 600 ) << k_funcinfo << endl;
 	AbstractMediaProducer::setupIface();

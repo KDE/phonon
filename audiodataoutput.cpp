@@ -38,7 +38,7 @@ void AudioDataOutput::readBuffer( QVector<int>& buffer )
 
 int AudioDataOutput::availableSamples() const
 {
-	Q_D( const AudioDataOutput );
+	K_D( const AudioDataOutput );
 	return d->iface() ? d->iface()->availableSamples() : d->availableSamples;
 }
 
@@ -53,7 +53,7 @@ bool AudioDataOutputPrivate::aboutToDeleteIface()
 
 void AudioDataOutput::setupIface()
 {
-	Q_D( AudioDataOutput );
+	K_D( AudioDataOutput );
 	Q_ASSERT( d->iface() );
 	AbstractAudioOutput::setupIface();
 

@@ -27,13 +27,13 @@ PHONON_HEIR_IMPL( VolumeFaderEffect, AudioEffect )
 
 float VolumeFaderEffect::volume() const
 {
-	Q_D( const VolumeFaderEffect );
+	K_D( const VolumeFaderEffect );
 	return d->iface() ? d->iface()->volume() : d->currentVolume;
 }
 
 void VolumeFaderEffect::setVolume( float volume )
 {
-	Q_D( VolumeFaderEffect );
+	K_D( VolumeFaderEffect );
 	if( d->iface() )
 		d->iface()->setVolume( volume );
 	else
@@ -52,7 +52,7 @@ void VolumeFaderEffect::fadeOut( int fadeTime )
 
 void VolumeFaderEffect::fadeTo( float volume, int fadeTime )
 {
-	Q_D( VolumeFaderEffect );
+	K_D( VolumeFaderEffect );
 	if( iface() )
 		d->iface()->fadeTo( volume, fadeTime );
 	else
@@ -68,7 +68,7 @@ bool VolumeFaderEffectPrivate::aboutToDeleteIface()
 
 void VolumeFaderEffect::setupIface()
 {
-	Q_D( VolumeFaderEffect );
+	K_D( VolumeFaderEffect );
 	Q_ASSERT( d->iface() );
 
 	// set up attributes

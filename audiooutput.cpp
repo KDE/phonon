@@ -31,13 +31,13 @@ PHONON_HEIR_IMPL( AudioOutput, AbstractAudioOutput )
 
 QString AudioOutput::name() const
 {
-	Q_D( const AudioOutput );
+	K_D( const AudioOutput );
 	return d->iface() ? d->iface()->name() : d->name;
 }
 
 void AudioOutput::setName( const QString& newName )
 {
-	Q_D( AudioOutput );
+	K_D( AudioOutput );
 	if( d->iface() )
 		d->name = d->iface()->setName( newName );
 	else
@@ -46,13 +46,13 @@ void AudioOutput::setName( const QString& newName )
 
 float AudioOutput::volume() const
 {
-	Q_D( const AudioOutput );
+	K_D( const AudioOutput );
 	return d->iface() ? d->iface()->volume() : d->volume;
 }
 
 void AudioOutput::setVolume( float newVolume )
 {
-	Q_D( AudioOutput );
+	K_D( AudioOutput );
 	if( d->iface() )
 		d->volume = d->iface()->setVolume( newVolume );
 	else
@@ -61,19 +61,19 @@ void AudioOutput::setVolume( float newVolume )
 
 Category AudioOutput::category() const
 {
-	Q_D( const AudioOutput );
+	K_D( const AudioOutput );
 	return d->category;
 }
 
 QString AudioOutput::categoryName() const
 {
-	Q_D( const AudioOutput );
+	K_D( const AudioOutput );
 	return Phonon::categoryToString( d->category );
 }
 
 void AudioOutput::setCategory( Category c )
 {
-	Q_D( AudioOutput );
+	K_D( AudioOutput );
 	d->category = c;
 }
 
@@ -89,7 +89,7 @@ bool AudioOutputPrivate::aboutToDeleteIface()
 
 void AudioOutput::setupIface()
 {
-	Q_D( AudioOutput );
+	K_D( AudioOutput );
 	Q_ASSERT( d->iface() );
 	AbstractAudioOutput::setupIface();
 

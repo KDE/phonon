@@ -39,7 +39,7 @@ MediaPlayer::MediaPlayer( QWidget* parent )
 
 	m_media = new MediaObject( this );
 	m_media->addVideoPath( m_vpath );
-	m_vpath->addOutput( m_vwidget->videoOutput() );
+	m_vpath->addOutput( m_vwidget );
 	m_media->addAudioPath( m_apath );
 	m_apath->addOutput( m_aoutput );
 
@@ -70,6 +70,7 @@ int main( int argc, char ** argv )
 	KCmdLineArgs::init( argc, argv, &about );
 	KApplication app;
 	MediaPlayer foo;
+	foo.show();
 	KUrl url = getenv( "PHONON_TESTURL" );
 	if( url.isValid() )
 	{

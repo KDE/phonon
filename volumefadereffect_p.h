@@ -28,7 +28,7 @@ namespace Phonon
 {
 class VolumeFaderEffectPrivate : public AudioEffectPrivate
 {
-	Q_DECLARE_PUBLIC( VolumeFaderEffect )
+	K_DECLARE_PUBLIC( VolumeFaderEffect )
 	PHONON_PRIVATECLASS( VolumeFaderEffect, AudioEffect )
 	protected:
 		VolumeFaderEffectPrivate()

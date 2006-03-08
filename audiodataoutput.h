@@ -39,7 +39,7 @@ namespace Phonon
 	class PHONON_EXPORT AudioDataOutput : public AbstractAudioOutput
 	{
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( AudioDataOutput )
+		K_DECLARE_PRIVATE( AudioDataOutput )
 		PHONON_HEIR( AudioDataOutput )
 		public:
 			void readBuffer( QVector<float>& buffer );

@@ -21,6 +21,7 @@
 
 #include "base.h"
 #include "phonondefs.h"
+#include <QObject>
 
 class QString;
 
@@ -32,11 +33,11 @@ namespace Phonon
 		class VideoEffect;
 	}
 
-	class PHONON_EXPORT VideoEffect : public Base
+	class PHONON_EXPORT VideoEffect : public QObject, public Base
 	{
 		friend class VideoPath;
 		friend class VideoPathPrivate;
-		Q_DECLARE_PRIVATE( VideoEffect )
+		K_DECLARE_PRIVATE( VideoEffect )
 		Q_OBJECT
 		PHONON_OBJECT( VideoEffect )
 		public:

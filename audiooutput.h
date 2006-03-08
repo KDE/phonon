@@ -43,7 +43,7 @@ namespace Phonon
 	class PHONON_EXPORT AudioOutput : public AbstractAudioOutput, public MixerIface
 	{
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( AudioOutput )
+		K_DECLARE_PRIVATE( AudioOutput )
 		Q_PROPERTY( QString name READ name WRITE setName )
 		Q_PROPERTY( float volume READ volume WRITE setVolume )
 		Q_PROPERTY( Category category READ category WRITE setCategory )

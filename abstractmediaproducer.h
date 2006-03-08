@@ -22,6 +22,8 @@
 #include "base.h"
 #include "phononnamespace.h"
 #include "phonondefs.h"
+#include <QObject>
+#include "basedestructionhandler.h"
 
 template<class T> class QList;
 
@@ -45,12 +47,14 @@ namespace Phonon
 	 * @author Matthias Kretz <kretz@kde.org>
 	 * @see MediaObject
 	 */
-	class PHONON_EXPORT AbstractMediaProducer : public Base
+	class PHONON_EXPORT AbstractMediaProducer : public QObject, public Base, private BaseDestructionHandler
 	{
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( AbstractMediaProducer )
+		K_DECLARE_PRIVATE( AbstractMediaProducer )
 		PHONON_ABSTRACTBASE( AbstractMediaProducer )
 		public:
+			~AbstractMediaProducer();
+
 			/**
 			 * Add a VideoPath to process the video data of this media.
 			 *
@@ -224,8 +228,10 @@ namespace Phonon
 			void resumePause();
 
 		private:
-			Q_PRIVATE_SLOT( d_func(), void audioPathDestroyed( Base* ) );
-			Q_PRIVATE_SLOT( d_func(), void videoPathDestroyed( Base* ) );
+			/**
+			 * \internal
+			 */
+			virtual void phononObjectDestroyed( Base* );
 	};
 } //namespace Phonon
 

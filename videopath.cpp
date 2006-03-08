@@ -28,15 +28,24 @@ namespace Phonon
 {
 PHONON_OBJECT_IMPL( VideoPath )
 
+VideoPath::~VideoPath()
+{
+	K_D( VideoPath );
+	foreach( AbstractVideoOutput* vo, d->outputs )
+		vo->removeDestructionHandler( this );
+	foreach( VideoEffect* ve, d->effects )
+		ve->removeDestructionHandler( this );
+}
+
 bool VideoPath::addOutput( AbstractVideoOutput* videoOutput )
 {
-	Q_D( VideoPath );
+	K_D( VideoPath );
 	if( d->outputs.contains( videoOutput ) )
 		return false;
 
 	if( iface() && d->iface()->addOutput( videoOutput->iface() ) )
 	{
-		connect( videoOutput, SIGNAL( destroyed( Base* ) ), SLOT( outputDestroyed( Base* ) ) );
+		videoOutput->addDestructionHandler( this );
 		d->outputs << videoOutput;
 		return true;
 	}
@@ -45,7 +54,7 @@ bool VideoPath::addOutput( AbstractVideoOutput* videoOutput )
 
 bool VideoPath::removeOutput( AbstractVideoOutput* videoOutput )
 {
-	Q_D( VideoPath );
+	K_D( VideoPath );
 	if( !d->outputs.contains( videoOutput ) )
 		return false;
 
@@ -59,7 +68,7 @@ bool VideoPath::removeOutput( AbstractVideoOutput* videoOutput )
 
 const QList<AbstractVideoOutput*>& VideoPath::outputs() const
 {
-	Q_D( const VideoPath );
+	K_D( const VideoPath );
 	return d->outputs;
 }
 
@@ -67,13 +76,13 @@ bool VideoPath::insertEffect( VideoEffect* newEffect, VideoEffect* insertBefore 
 {
 	// effects may be added multiple times, but that means the objects are
 	// different (the class is still the same)
-	Q_D( VideoPath );
+	K_D( VideoPath );
 	if( d->effects.contains( newEffect ) )
 		return false;
 
 	if( iface() && d->iface()->insertEffect( newEffect->iface(), insertBefore->iface() ) )
 	{
-		connect( newEffect, SIGNAL( destroyed( Base* ) ), SLOT( effectDestroyed( Base* ) ) );
+		newEffect->addDestructionHandler( this );
 		if( insertBefore )
 			d->effects.insert( d->effects.indexOf( insertBefore ), newEffect );
 		else
@@ -85,7 +94,7 @@ bool VideoPath::insertEffect( VideoEffect* newEffect, VideoEffect* insertBefore 
 
 bool VideoPath::removeEffect( VideoEffect* effect )
 {
-	Q_D( VideoPath );
+	K_D( VideoPath );
 	if( !d->effects.contains( effect ) )
 		return false;
 
@@ -99,7 +108,7 @@ bool VideoPath::removeEffect( VideoEffect* effect )
 
 const QList<VideoEffect*>& VideoPath::effects() const
 {
-	Q_D( const VideoPath );
+	K_D( const VideoPath );
 	return d->effects;
 }
 
@@ -110,7 +119,7 @@ bool VideoPathPrivate::aboutToDeleteIface()
 
 void VideoPath::setupIface()
 {
-	Q_D( VideoPath );
+	K_D( VideoPath );
 	Q_ASSERT( d->iface() );
 
 	// set up attributes
@@ -125,28 +134,26 @@ void VideoPath::setupIface()
 			d->effects.removeAll( effect );
 }
 
-void VideoPathPrivate::effectDestroyed( Base* o )
+void VideoPath::phononObjectDestroyed( Base* o )
 {
 	// this method is called from Phonon::Base::~Base(), meaning the VideoEffect
 	// dtor has already been called, also virtual functions don't work anymore
 	// (therefore qobject_cast can only downcast from Base)
-	Q_ASSERT( o );
-	VideoEffect* videoEffect = static_cast<VideoEffect*>( o );
-	if( iface() )
-	{
-		iface()->removeEffect( videoEffect->iface() );
-		effects.removeAll( videoEffect );
-	}
-}
-
-void VideoPathPrivate::outputDestroyed( Base* o )
-{
+	K_D( VideoPath );
 	Q_ASSERT( o );
 	AbstractVideoOutput* output = static_cast<AbstractVideoOutput*>( o );
-	if( iface() )
+	VideoEffect* videoEffect = static_cast<VideoEffect*>( o );
+	if( d->outputs.contains( output ) )
 	{
-		iface()->removeOutput( output->iface() );
-		outputs.removeAll( output );
+		if( d->iface() )
+			d->iface()->removeOutput( output->iface() );
+		d->outputs.removeAll( output );
+	}
+	else if( d->effects.contains( videoEffect ) )
+	{
+		if( d->iface() )
+			d->iface()->removeEffect( videoEffect->iface() );
+		d->effects.removeAll( videoEffect );
 	}
 }
 

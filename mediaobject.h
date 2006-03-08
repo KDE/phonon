@@ -54,7 +54,7 @@ namespace Phonon
 	class PHONON_EXPORT MediaObject : public AbstractMediaProducer
 	{
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( MediaObject )
+		K_DECLARE_PRIVATE( MediaObject )
 		PHONON_HEIR( MediaObject )
 		public:
 			/**

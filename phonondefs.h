@@ -20,6 +20,17 @@
 #ifndef PHONONDEFS_H
 #define PHONONDEFS_H
 
+#define K_DECLARE_PRIVATE( classname ) \
+	inline classname ## Private* k_func() { return reinterpret_cast<classname ## Private*>( k_ptr ); } \
+	inline const classname ## Private* k_func() const { return reinterpret_cast<classname ## Private*>( k_ptr ); } \
+	friend class classname ## Private;
+#define K_DECLARE_PUBLIC( classname ) \
+	inline classname* q_func() { return static_cast<classname*>( q_ptr ); } \
+	inline const classname* q_func() const { return static_cast<classname*>( q_ptr ); } \
+	friend class classname;
+#define K_D( classname ) classname ## Private* const d = k_func()
+#define K_Q( classname ) classname* const q = q_func()
+
 #define PHONON_PRIVATECLASS( classname, baseclass ) \
 protected: \
 	virtual bool aboutToDeleteIface(); \
@@ -219,12 +230,13 @@ private: \
 
 #define PHONON_ABSTRACTBASE_IMPL( classname ) \
 classname::classname( classname ## Private& d, QObject* parent ) \
-	: Base( d, parent ) \
+	: QObject( parent ) \
+	, Base( d ) \
 { \
 } \
 Ifaces::classname* classname::iface() \
 { \
-	Q_D( classname ); \
+	K_D( classname ); \
 	if( !d->iface() ) \
 		d->createIface(); \
 	return d->iface(); \
@@ -232,25 +244,27 @@ Ifaces::classname* classname::iface() \
 
 #define PHONON_OBJECT_IMPL( classname ) \
 classname::classname( QObject* parent ) \
-	: Base( *new classname ## Private(), parent ) \
+	: QObject( parent ) \
+	, Base( *new classname ## Private() ) \
 { \
-	Q_D( classname ); \
+	K_D( classname ); \
 	d->createIface(); \
 } \
 classname::classname( classname ## Private& d, QObject* parent ) \
-	: Base( d, parent ) \
+	: QObject( parent ) \
+	, Base( d ) \
 { \
 } \
 Ifaces::classname* classname::iface() \
 { \
-	Q_D( classname ); \
+	K_D( classname ); \
 	if( !d->iface() ) \
 		d->createIface(); \
 	return d->iface(); \
 } \
 void classname ## Private::createIface() \
 { \
-	Q_Q( classname ); \
+	K_Q( classname ); \
 	Q_ASSERT( iface_ptr == 0 ); \
 	setIface( Factory::self()->create ## classname( q ) ); \
 	q->setupIface(); \
@@ -260,6 +274,8 @@ void classname ## Private::createIface() \
 classname::classname( QObject* parent ) \
 	: parentclass( *new classname ## Private, parent ) \
 { \
+	K_D( classname ); \
+	d->createIface(); \
 } \
 classname::classname( classname ## Private& d, QObject* parent ) \
 	: parentclass( d, parent ) \
@@ -267,14 +283,14 @@ classname::classname( classname ## Private& d, QObject* parent ) \
 } \
 Ifaces::classname* classname::iface() \
 { \
-	Q_D( classname ); \
+	K_D( classname ); \
 	if( !d->iface() ) \
 		d->createIface(); \
 	return d->iface(); \
 } \
 void classname ## Private::createIface() \
 { \
-	Q_Q( classname ); \
+	K_Q( classname ); \
 	Q_ASSERT( iface_ptr == 0 ); \
 	setIface( Factory::self()->create ## classname( q ) ); \
 	q->setupIface(); \

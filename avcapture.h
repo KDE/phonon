@@ -52,7 +52,7 @@ namespace Phonon
 	class PHONON_EXPORT AvCapture : public AbstractMediaProducer
 	{
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( AvCapture )
+		K_DECLARE_PRIVATE( AvCapture )
 		PHONON_HEIR( AvCapture )
 		public:
 			/**

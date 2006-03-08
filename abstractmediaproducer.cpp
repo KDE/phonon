@@ -33,15 +33,24 @@ namespace Phonon
 {
 PHONON_ABSTRACTBASE_IMPL( AbstractMediaProducer )
 
+AbstractMediaProducer::~AbstractMediaProducer()
+{
+	K_D( AbstractMediaProducer );
+	foreach( VideoPath* vp, d->videoPaths )
+		vp->removeDestructionHandler( this );
+	foreach( AudioPath* ap, d->audioPaths )
+		ap->removeDestructionHandler( this );
+}
+
 bool AbstractMediaProducer::addVideoPath( VideoPath* videoPath )
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	if( d->videoPaths.contains( videoPath ) )
 		return false;
 
 	if( iface() && d->iface()->addVideoPath( videoPath->iface() ) )
 	{
-		connect( videoPath, SIGNAL( destroyed( Base* ) ), SLOT( videoPathDestroyed( Base* ) ) );
+		videoPath->addDestructionHandler( this );
 		d->videoPaths.append( videoPath );
 		return true;
 	}
@@ -50,13 +59,13 @@ bool AbstractMediaProducer::addVideoPath( VideoPath* videoPath )
 
 bool AbstractMediaProducer::addAudioPath( AudioPath* audioPath )
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	if( d->audioPaths.contains( audioPath ) )
 		return false;
 
 	if( iface() && d->iface()->addAudioPath( audioPath->iface() ) )
 	{
-		connect( audioPath, SIGNAL( destroyed( Base* ) ), SLOT( audioPathDestroyed( Base* ) ) );
+		audioPath->addDestructionHandler( this );
 		d->audioPaths.append( audioPath );
 		return true;
 	}
@@ -65,37 +74,37 @@ bool AbstractMediaProducer::addAudioPath( AudioPath* audioPath )
 
 State AbstractMediaProducer::state() const
 {
-	Q_D( const AbstractMediaProducer );
+	K_D( const AbstractMediaProducer );
 	return d->iface() ? d->iface()->state() : d->state;
 }
 
 bool AbstractMediaProducer::hasVideo() const
 {
-	Q_D( const AbstractMediaProducer );
+	K_D( const AbstractMediaProducer );
 	return d->iface() ? d->iface()->hasVideo() : false;
 }
 
 bool AbstractMediaProducer::seekable() const
 {
-	Q_D( const AbstractMediaProducer );
+	K_D( const AbstractMediaProducer );
 	return d->iface() ? d->iface()->seekable() : false;
 }
 
 long AbstractMediaProducer::currentTime() const
 {
-	Q_D( const AbstractMediaProducer );
+	K_D( const AbstractMediaProducer );
 	return d->iface() ? d->iface()->currentTime() : d->currentTime;
 }
 
 long AbstractMediaProducer::tickInterval() const
 {
-	Q_D( const AbstractMediaProducer );
+	K_D( const AbstractMediaProducer );
 	return d->iface() ? d->iface()->tickInterval() : d->tickInterval;
 }
 
 void AbstractMediaProducer::setTickInterval( long newTickInterval )
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	if( d->iface() )
 		d->tickInterval = d->iface()->setTickInterval( newTickInterval );
 	else
@@ -104,40 +113,40 @@ void AbstractMediaProducer::setTickInterval( long newTickInterval )
 
 const QList<VideoPath*>& AbstractMediaProducer::videoPaths() const
 {
-	Q_D( const AbstractMediaProducer );
+	K_D( const AbstractMediaProducer );
 	return d->videoPaths;
 }
 
 const QList<AudioPath*>& AbstractMediaProducer::audioPaths() const
 {
-	Q_D( const AbstractMediaProducer );
+	K_D( const AbstractMediaProducer );
 	return d->audioPaths;
 }
 
 void AbstractMediaProducer::play()
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	if( iface() )
 		d->iface()->play();
 }
 
 void AbstractMediaProducer::pause()
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	if( iface() )
 		d->iface()->pause();
 }
 
 void AbstractMediaProducer::stop()
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	if( iface() )
 		d->iface()->stop();
 }
 
 void AbstractMediaProducer::seek( long time )
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	if( iface() )
 		d->iface()->seek( time );
 }
@@ -156,7 +165,7 @@ bool AbstractMediaProducerPrivate::aboutToDeleteIface()
 
 void AbstractMediaProducer::setupIface()
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	Q_ASSERT( d->iface() );
 	//kdDebug( 600 ) << k_funcinfo << endl;
 
@@ -190,7 +199,7 @@ void AbstractMediaProducer::setupIface()
 
 void AbstractMediaProducer::resumePlay()
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	d->iface()->play();
 	if( d->currentTime > 0 )
 		d->iface()->seek( d->currentTime );
@@ -198,35 +207,33 @@ void AbstractMediaProducer::resumePlay()
 
 void AbstractMediaProducer::resumePause()
 {
-	Q_D( AbstractMediaProducer );
+	K_D( AbstractMediaProducer );
 	d->iface()->play();
 	if( d->currentTime > 0 )
 		d->iface()->seek( d->currentTime );
 	d->iface()->pause();
 }
 
-void AbstractMediaProducerPrivate::audioPathDestroyed( Base* o )
+void AbstractMediaProducer::phononObjectDestroyed( Base* o )
 {
 	// this method is called from Phonon::Base::~Base(), meaning the AudioPath
 	// dtor has already been called, also virtual functions don't work anymore
 	// (therefore qobject_cast can only downcast from Base)
+	K_D( AbstractMediaProducer );
 	Q_ASSERT( o );
 	AudioPath* audioPath = static_cast<AudioPath*>( o );
-	if( iface() )
-	{
-		iface()->removeAudioPath( audioPath->iface() );
-		audioPaths.removeAll( audioPath );
-	}
-}
-
-void AbstractMediaProducerPrivate::videoPathDestroyed( Base* o )
-{
-	Q_ASSERT( o );
 	VideoPath* videoPath = static_cast<VideoPath*>( o );
-	if( iface() )
+	if( d->audioPaths.contains( audioPath ) )
 	{
-		iface()->removeVideoPath( videoPath->iface() );
-		videoPaths.removeAll( videoPath );
+		if( d->iface() )
+			d->iface()->removeAudioPath( audioPath->iface() );
+		d->audioPaths.removeAll( audioPath );
+	}
+	else if( d->videoPaths.contains( videoPath ) )
+	{
+		if( d->iface() )
+			d->iface()->removeVideoPath( videoPath->iface() );
+		d->videoPaths.removeAll( videoPath );
 	}
 }
 

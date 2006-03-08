@@ -28,7 +28,7 @@ namespace Phonon
 {
 class ByteStreamPrivate : public AbstractMediaProducerPrivate
 {
-	Q_DECLARE_PUBLIC( ByteStream )
+	K_DECLARE_PUBLIC( ByteStream )
 	PHONON_PRIVATECLASS( ByteStream, AbstractMediaProducer )
 	protected:
 		ByteStreamPrivate()

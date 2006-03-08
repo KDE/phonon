@@ -22,6 +22,8 @@
 
 #include "base.h"
 #include "ifaces/base.h"
+#include <QList>
+#include "basedestructionhandler.h"
 
 namespace Phonon
 {
@@ -32,7 +34,7 @@ namespace Phonon
 
 class BasePrivate
 {
-	Q_DECLARE_PUBLIC( Base )
+	K_DECLARE_PUBLIC( Base )
 	protected:
 		BasePrivate() {}
 		virtual ~BasePrivate()
@@ -81,6 +83,7 @@ class BasePrivate
 
 	private:
 		Ifaces::Base* iface_ptr;
+		QList<BaseDestructionHandler*> handlers;
 };
 } //namespace Phonon
 

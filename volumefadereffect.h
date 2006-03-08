@@ -45,7 +45,7 @@ namespace Phonon
 	class PHONON_EXPORT VolumeFaderEffect : public AudioEffect
 	{
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( VolumeFaderEffect )
+		K_DECLARE_PRIVATE( VolumeFaderEffect )
 		PHONON_HEIR( VolumeFaderEffect )
 		public:
 			/**

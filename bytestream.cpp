@@ -28,37 +28,37 @@ PHONON_HEIR_IMPL( ByteStream, AbstractMediaProducer )
 
 long ByteStream::totalTime() const
 {
-	Q_D( const ByteStream );
+	K_D( const ByteStream );
 	return d->iface() ? d->iface()->totalTime() : -1;
 }
 
 long ByteStream::remainingTime() const
 {
-	Q_D( const ByteStream );
+	K_D( const ByteStream );
 	return d->iface() ? d->iface()->remainingTime() : -1;
 }
 
 long ByteStream::aboutToFinishTime() const
 {
-	Q_D( const ByteStream );
+	K_D( const ByteStream );
 	return d->iface() ? d->iface()->aboutToFinishTime() : d->aboutToFinishTime;
 }
 
 long ByteStream::streamSize() const
 {
-	Q_D( const ByteStream );
+	K_D( const ByteStream );
 	return d->iface() ? d->iface()->streamSize() : d->streamSize;
 }
 
 bool ByteStream::streamSeekable() const
 {
-	Q_D( const ByteStream );
+	K_D( const ByteStream );
 	return d->iface() ? d->iface()->streamSeekable() : d->streamSeekable;
 }
 
 void ByteStream::setStreamSeekable( bool seekable )
 {
-	Q_D( ByteStream );
+	K_D( ByteStream );
 	if( d->iface() )
 		d->iface()->setStreamSeekable( seekable );
 	else
@@ -67,14 +67,14 @@ void ByteStream::setStreamSeekable( bool seekable )
 
 void ByteStream::writeData( const QByteArray& data )
 {
-	Q_D( ByteStream );
+	K_D( ByteStream );
 	if( iface() )
 		d->iface()->writeData( data );
 }
 
 void ByteStream::setStreamSize( long streamSize )
 {
-	Q_D( ByteStream );
+	K_D( ByteStream );
 	if( d->iface() )
 		d->iface()->setStreamSize( streamSize );
 	else
@@ -83,14 +83,14 @@ void ByteStream::setStreamSize( long streamSize )
 
 void ByteStream::endOfData()
 {
-	Q_D( ByteStream );
+	K_D( ByteStream );
 	if( iface() )
 		d->iface()->endOfData();
 }
 
 void ByteStream::setAboutToFinishTime( long newAboutToFinishTime )
 {
-	Q_D( ByteStream );
+	K_D( ByteStream );
 	if( d->iface() )
 		d->iface()->setAboutToFinishTime( newAboutToFinishTime );
 	else
@@ -110,7 +110,7 @@ bool ByteStreamPrivate::aboutToDeleteIface()
 
 void ByteStream::setupIface()
 {
-	Q_D( ByteStream );
+	K_D( ByteStream );
 	Q_ASSERT( d->iface() );
 	AbstractMediaProducer::setupIface();
 

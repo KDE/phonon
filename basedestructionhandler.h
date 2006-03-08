@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,44 +16,20 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_Ui_VIDEOWIDGETHELPER_H
-#define Phonon_Ui_VIDEOWIDGETHELPER_H
 
-#include "../abstractvideooutput.h"
-#include <kdelibs_export.h>
-
-class QString;
-
+#ifndef BASEDESTRUCTIONHANDLER_H
+#define BASEDESTRUCTIONHANDLER_H
 namespace Phonon
 {
-namespace Ifaces
+class BaseDestructionHandler
 {
-	class AbstractVideoOutput;
-}
-namespace Ui
-{
-namespace Ifaces
-{
-	class VideoWidget;
-}
+	friend class Base;
 
-class VideoWidgetHelperPrivate;
-class VideoWidget;
-
-class PHONON_EXPORT VideoWidgetHelper : public Phonon::AbstractVideoOutput
-{
-	Q_OBJECT
-	Q_DECLARE_PRIVATE( VideoWidgetHelper )
-	//cannot use macro: need special iface creation
 	public:
-		VideoWidgetHelper( VideoWidget* parent );
+		virtual ~BaseDestructionHandler() {}
 	protected:
-		virtual void setupIface();
-	private:
-		Ifaces::VideoWidget* iface();
+		virtual void phononObjectDestroyed( Base* ) = 0;
 };
+}
 
-}} //namespace Phonon::Ui
-
-// vim: sw=4 ts=4 tw=80 noet
-#endif // Phonon_Ui_VIDEOWIDGETHELPER_H
+#endif // BASEDESTRUCTIONHANDLER_H

@@ -29,7 +29,7 @@ namespace Phonon
 {
 class MediaObjectPrivate : public AbstractMediaProducerPrivate
 {
-	Q_DECLARE_PUBLIC( MediaObject )
+	K_DECLARE_PUBLIC( MediaObject )
 	PHONON_PRIVATECLASS( MediaObject, AbstractMediaProducer )
 	protected:
 		MediaObjectPrivate()

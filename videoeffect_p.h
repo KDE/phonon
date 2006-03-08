@@ -28,7 +28,7 @@ namespace Phonon
 {
 class VideoEffectPrivate : public BasePrivate
 {
-	Q_DECLARE_PUBLIC( VideoEffect )
+	K_DECLARE_PUBLIC( VideoEffect )
 	PHONON_PRIVATECLASS( VideoEffect, Base )
 	protected:
 		QString type;

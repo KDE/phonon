@@ -17,10 +17,10 @@
 
 */
 
-#ifndef VIDEOWIDGETHELPER_P_H
-#define VIDEOWIDGETHELPER_P_H
+#ifndef VIDEOWIDGET_P_H
+#define VIDEOWIDGET_P_H
 
-#include "videowidgethelper.h"
+#include "videowidget.h"
 #include "../ifaces/ui/videowidget.h"
 #include "../abstractvideooutput_p.h"
 
@@ -28,32 +28,31 @@ namespace Phonon
 {
 namespace Ui
 {
-	class VideoWidget;
-
-class VideoWidgetHelperPrivate : public Phonon::AbstractVideoOutputPrivate
+class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 {
-	Q_DECLARE_PUBLIC( VideoWidgetHelper )
+	K_DECLARE_PUBLIC( VideoWidget )
 	protected:
 		virtual bool aboutToDeleteIface();
 		virtual void createIface();
 		virtual void setIface( void* p )
 		{
 			iface_ptr = reinterpret_cast<Ifaces::VideoWidget*>( p );
-			Phonon::AbstractVideoOutputPrivate::setIface( static_cast<Phonon::Ifaces::AbstractVideoOutput*>( iface_ptr ) );
+			AbstractVideoOutputPrivate::setIface( static_cast<Phonon::Ifaces::AbstractVideoOutput*>( iface_ptr ) );
 		}
 	private:
 		Ifaces::VideoWidget* iface_ptr;
 		inline Ifaces::VideoWidget* iface() { return iface_ptr; }
 		inline const Ifaces::VideoWidget* iface() const { return iface_ptr; }
+
 	protected:
-		VideoWidgetHelperPrivate( VideoWidget* vw )
-			: videoWidget( vw )
+		VideoWidgetPrivate()
+			: fullscreen( false )
 		{
 		}
 
-		VideoWidget* videoWidget;
+		bool fullscreen;
 };
 }}
 
-#endif // VIDEOWIDGETHELPER_P_H
+#endif // VIDEOWIDGET_P_H
 // vim: sw=4 ts=4 tw=80

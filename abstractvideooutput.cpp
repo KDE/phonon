@@ -24,7 +24,18 @@
 namespace Phonon
 {
 
-PHONON_ABSTRACTBASE_IMPL( AbstractVideoOutput )
+AbstractVideoOutput::AbstractVideoOutput( AbstractVideoOutputPrivate& d )
+	: Base( d )
+{
+}
+
+Ifaces::AbstractVideoOutput* AbstractVideoOutput::iface()
+{
+	K_D( AbstractVideoOutput );
+	if( !d->iface() )
+		d->createIface();
+	return d->iface();
+}
 
 bool AbstractVideoOutputPrivate::aboutToDeleteIface()
 {
@@ -33,12 +44,10 @@ bool AbstractVideoOutputPrivate::aboutToDeleteIface()
 
 void AbstractVideoOutput::setupIface()
 {
-	Q_D( AbstractVideoOutput );
+	K_D( AbstractVideoOutput );
 	Q_ASSERT( d->iface() );
 }
 
 } //namespace Phonon
-
-#include "abstractvideooutput.moc"
 
 // vim: sw=4 ts=4 tw=80 noet

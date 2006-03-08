@@ -21,6 +21,7 @@
 
 #include "base.h"
 #include "phonondefs.h"
+#include <QObject>
 
 class QString;
 class QStringList;
@@ -36,12 +37,12 @@ namespace Phonon
 	/**
 	 * @author Matthias Kretz <kretz@kde.org>
 	 */
-	class PHONON_EXPORT AudioEffect : public Base
+	class PHONON_EXPORT AudioEffect : public QObject, public Base
 	{
 		friend class AudioPath;
 		friend class AudioPathPrivate;
 		Q_OBJECT
-		Q_DECLARE_PRIVATE( AudioEffect )
+		K_DECLARE_PRIVATE( AudioEffect )
 		PHONON_OBJECT( AudioEffect )
 		public:
 			QString type() const;

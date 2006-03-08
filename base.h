@@ -20,22 +20,22 @@
 #ifndef PHONON_BASE_H
 #define PHONON_BASE_H
 
-#include <QObject>
-
+#include "phonondefs.h"
 #include <kdelibs_export.h>
 
 namespace Phonon
 {
 	class BasePrivate;
+	class BaseDestructionHandler;
+
 	/**
 	 * \internal
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
 	 */
-	class PHONON_EXPORT Base : public QObject
+	class PHONON_EXPORT Base
 	{
-		Q_OBJECT
-		Q_DECLARE_PRIVATE( Base )
+		K_DECLARE_PRIVATE( Base )
 		protected:
 			/**
 			 * Standard QObject constructor.
@@ -43,25 +43,23 @@ namespace Phonon
 			 * \param d private object
 			 * \param parent QObject parent
 			 */
-			Base( BasePrivate& d, QObject* parent = 0 );
+			Base( BasePrivate& d );
 
 			virtual ~Base();
 
-		Q_SIGNALS:
+		public:
 			/**
+			 * \internal
 			 * This class has its own destroyed signal since some cleanup calls
 			 * need the pointer to the Ifaces object intact. The
 			 * QObject::destroyed signals comes after the Ifaces object was
 			 * deleted.
 			 */
-			void destroyed( Base* );
+			void addDestructionHandler( BaseDestructionHandler* handler );
+			void removeDestructionHandler( BaseDestructionHandler* handler );
 
 		protected:
-			BasePrivate* d_ptr;
-
-		private:
-			Q_PRIVATE_SLOT( d_func(), void deleteIface() );
-			Q_PRIVATE_SLOT( d_func(), void createIface() );
+			BasePrivate* k_ptr;
 	};
 } //namespace Phonon
 

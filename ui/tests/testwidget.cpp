@@ -180,7 +180,7 @@ void TestWidget::loadFile( const QString & file )
 		vpath = new VideoPath( vout );
 		m_media->addVideoPath( vpath );
 		vout = new Ui::VideoWidget( this );
-		vpath->addOutput( vout->videoOutput() );
+		vpath->addOutput( vout );
 
 		vout->setMinimumSize( 160, 120 );
 		vout->setFullscreen( false );

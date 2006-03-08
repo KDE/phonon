@@ -33,7 +33,7 @@ bool AbstractAudioOutputPrivate::aboutToDeleteIface()
 
 void AbstractAudioOutput::setupIface()
 {
-	Q_D( AbstractAudioOutput );
+	K_D( AbstractAudioOutput );
 	Q_ASSERT( d->iface() );
 
 	// set up attributes

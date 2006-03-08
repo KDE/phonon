@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <kdelibs_export.h>
+#include "../abstractvideooutput.h"
 
 class QString;
 
@@ -34,24 +35,23 @@ namespace Ifaces
 {
 	class VideoWidget;
 }
+	class VideoWidgetPrivate;
 	/**
 	 * @short Widget to display video.
 	 *
 	 * This widget shows the video signal and provides an object that can be
-	 * plugged into the VideoPath. VideoWidget itself cannot derive from
-	 * AbstractVideoOutput because of a design limitation and therefore you have to
-	 * use the class like this:
+	 * plugged into the VideoPath.
 	 *
 	 * @code
 	 * VideoWidget* vwidget = new VideoWidget( this );
-	 * videoPath->addOutput( vwidget->videoOutput() );
+	 * videoPath->addOutput( vwidget );
 	 * @endcode
 	 *
 	 * @author Matthias Kretz <kretz@kde.org>
 	 */
-	class PHONON_EXPORT VideoWidget : public QWidget
+	class PHONON_EXPORT VideoWidget : public QWidget, public Phonon::AbstractVideoOutput
 	{
-		friend class VideoWidgetHelperPrivate;
+		K_DECLARE_PRIVATE( VideoWidget )
 		Q_OBJECT
 		Q_PROPERTY( bool fullscreen READ isFullscreen WRITE setFullscreen );
 		public:
@@ -61,16 +61,6 @@ namespace Ifaces
 			 * @param parent The parent widget.
 			 */
 			VideoWidget( QWidget* parent = 0 );
-			~VideoWidget();
-
-			/**
-			 * Returns an object implementing the AbstractVideoOutput interface that
-			 * is used for adding an output the the VideoPath. The returned
-			 * object has no other uses.
-			 *
-			 * @return Returns an object for use with VideoPath.
-			 */
-			AbstractVideoOutput* videoOutput();
 
 			/**
 			 * Tells whether the VideoWidget should show the video using the
@@ -95,21 +85,11 @@ namespace Ifaces
 			void setFullscreen( bool fullscreen );
 
 		protected:
-			VideoWidget( bool callCreateIface, QWidget* parent );
-			virtual bool aboutToDeleteIface();
-			virtual void ifaceDeleted();
-			void setupIface( Ui::Ifaces::VideoWidget* newIface );
-
-		protected Q_SLOTS:
-			// when the Factory wants to change the Backend the following slots are used
-			void deleteIface();
-			virtual void createIface();
+			VideoWidget( VideoWidgetPrivate& d, QWidget* parent );
+			void setupIface();
 
 		private:
 			Ui::Ifaces::VideoWidget* iface();
-			Ui::Ifaces::VideoWidget* m_iface;
-			class Private;
-			Private* d;
 	};
 }} //namespace Phonon::Ui
 

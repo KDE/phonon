@@ -27,13 +27,13 @@ PHONON_OBJECT_IMPL( VideoEffect )
 
 QString VideoEffect::type() const
 {
-	Q_D( const VideoEffect );
+	K_D( const VideoEffect );
 	return d->iface() ? d->iface()->type() : d->type;
 }
 
 void VideoEffect::setType( const QString& type )
 {
-	Q_D( VideoEffect );
+	K_D( VideoEffect );
 	if( d->iface() )
 		d->iface()->setType( type );
 	else
@@ -51,7 +51,7 @@ bool VideoEffectPrivate::aboutToDeleteIface()
 
 void VideoEffect::setupIface()
 {
-	Q_D( VideoEffect );
+	K_D( VideoEffect );
 	Q_ASSERT( d->iface() );
 
 	// set up attributes
