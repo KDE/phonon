@@ -94,6 +94,11 @@ void SeekSlider::length( long msec )
 void SeekSlider::stateChanged( State newstate )
 {
 	Q_D( SeekSlider );
+	if( !d->media->seekable() )
+	{
+		d->slider->setEnabled( false );
+		return;
+	}
 	switch( newstate )
 	{
 		case Phonon::BufferingState:
