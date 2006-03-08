@@ -21,7 +21,6 @@
 
 #include <QWidget>
 #include <phonon/ifaces/ui/videowidget.h>
-#include "../abstractvideooutput.h"
 
 class QString;
 
