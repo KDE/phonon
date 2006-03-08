@@ -22,12 +22,13 @@ AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
 METASOURCES = AUTO
 
-check_PROGRAMS = mediaobjecttest audiopathtest
+check_PROGRAMS = mediaobjecttest audiopathtest backendcapabilitiestest
 #videopathtest
 
 mediaobjecttest_SOURCES = mediaobjecttest.cpp
 audiopathtest_SOURCES = audiopathtest.cpp
 videopathtest_SOURCES = videopathtest.cpp
+backendcapabilitiestest_SOURCES = backendcapabilitiestest.cpp
 
-TESTS = mediaobjecttest audiopathtest
+TESTS = mediaobjecttest audiopathtest backendcapabilitiestest
 #videopathtest
