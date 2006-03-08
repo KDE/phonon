@@ -21,6 +21,7 @@
 #define PHONON_NAMEDESCRIPTIONTUPLE_H
 
 #include <QtGlobal>
+#include <kdelibs_export.h>
 class QString;
 
 namespace Phonon
@@ -39,7 +40,7 @@ namespace Phonon
  * \see AudioCaptureSource
  * \see VideoCaptureSource
  */
-class NameDescriptionTuple
+class PHONON_EXPORT NameDescriptionTuple
 {
 	Q_DECLARE_PRIVATE( NameDescriptionTuple )
 	public:

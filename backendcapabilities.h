@@ -25,11 +25,12 @@
 #include <kdelibs_export.h>
 #include <kstaticdeleter.h>
 #include <kmimetype.h>
+#include <QList>
+#include "videosource.h"
+#include "audiosource.h"
 
 namespace Phonon
 {
-class AudioSource;
-class VideoSource;
 
 /**
  * Singleton class describing the capabilities of the Backend.

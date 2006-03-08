@@ -40,7 +40,7 @@ namespace Phonon
  * \see AvCapture
  * \see VideoSource
  */
-class AudioSource : public NameDescriptionTuple
+class PHONON_EXPORT AudioSource : public NameDescriptionTuple
 {
 	Q_DECLARE_PRIVATE( AudioSource )
 	friend class BackendCapabilities;
