@@ -21,7 +21,9 @@
 #define SEEKSLIDER_P_H
 
 #include "seekslider.h"
-class QSlider;
+#include <QHBoxLayout>
+#include <QSlider>
+#include <QLabel>
 
 namespace Phonon
 {
@@ -32,8 +34,10 @@ class SeekSliderPrivate
 {
 	Q_DECLARE_PUBLIC( SeekSlider )
 	protected:
-		SeekSliderPrivate()
-			: slider( 0 )
+		SeekSliderPrivate( SeekSlider* parent )
+			: layout( parent )
+			, slider( Qt::Horizontal, parent )
+			, icon( parent )
 			, media( 0 )
 			, ticking( false )
 		{
@@ -42,7 +46,9 @@ class SeekSliderPrivate
 		SeekSlider* q_ptr;
 		
 	private:
-		QSlider* slider;
+		QHBoxLayout layout;
+		QSlider slider;
+		QLabel icon;
 		AbstractMediaProducer* media;
 		bool ticking;
 };

@@ -41,11 +41,15 @@ class PHONON_EXPORT SeekSlider : public QWidget
 {
 	Q_OBJECT
 	Q_DECLARE_PRIVATE( SeekSlider )
+	Q_PROPERTY( bool iconVisible READ isIconVisible WRITE setIconVisible )
 	public:
 		SeekSlider( QWidget* parent = 0 );
 		~SeekSlider();
 
+		bool isIconVisible() const;
+
 	public Q_SLOTS:
+		void setIconVisible( bool );
 		void setMediaProducer( AbstractMediaProducer* );
 
 	private Q_SLOTS:

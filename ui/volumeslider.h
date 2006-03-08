@@ -38,11 +38,21 @@ namespace Ui
 class PHONON_EXPORT VolumeSlider : public QWidget
 {
 	Q_OBJECT
+	Q_PROPERTY( float maximumVolume READ maximumVolume WRITE setMaximumVolume )
+	Q_PROPERTY( bool iconVisible READ isIconVisible WRITE setIconVisible )
 	public:
 		VolumeSlider( QWidget* parent = 0 );
 		~VolumeSlider();
 
+		/**
+		 * defaults to 1.0
+		 */
+		float maximumVolume() const;
+		bool isIconVisible() const;
+
 	public Q_SLOTS:
+		void setMaximumVolume( float );
+		void setIconVisible( bool );
 		void setOrientation( Qt::Orientation );
 		void setAudioOutput( AudioOutput* );
 

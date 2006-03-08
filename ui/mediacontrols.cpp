@@ -76,17 +76,21 @@ MediaControls::MediaControls( QWidget* parent )
 	d->stopButton->setText( i18n( "&Stop" ) );
 
 	d->seekSlider = new SeekSlider( this );
-	d->seekSlider->setEnabled( false );
 
 	d->volumeSlider = new VolumeSlider( this );
 	d->volumeSlider->setOrientation( Qt::Horizontal );
+	d->volumeSlider->setFixedWidth( 70 );
 	d->volumeSlider->hide();
 
 	d->layout = new QHBoxLayout( this );
+	d->layout->setMargin( 0 );
+	d->layout->setSpacing( 2 );
 	d->layout->addWidget( d->playButton );
 	d->layout->addWidget( d->pauseButton );
 	d->layout->addWidget( d->stopButton );
-	d->layout->addWidget( d->seekSlider );
+	d->layout->addSpacing( 4 );
+	d->layout->addWidget( d->seekSlider, 1 );
+	d->layout->addSpacing( 4 );
 	d->layout->addWidget( d->volumeSlider );
 	d->layout->addStretch();
 }
@@ -130,6 +134,7 @@ void MediaControls::setMediaProducer( AbstractMediaProducer* media )
 void MediaControls::setAudioOutput( AudioOutput* audioOutput )
 {
 	d->volumeSlider->setAudioOutput( audioOutput );
+	d->volumeSlider->show();
 }
 
 void MediaControls::setSeekSliderVisible( bool vis )
