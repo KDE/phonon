@@ -25,7 +25,6 @@
 #include "audioeffect.h"
 #include "audiooutput.h"
 #include "audiodataoutput.h"
-#include "audiofftoutput.h"
 #include "videopath.h"
 #include "videoeffect.h"
 
@@ -87,11 +86,6 @@ Ifaces::AudioOutput*      Backend::createAudioOutput( QObject* parent )
 Ifaces::AudioDataOutput*  Backend::createAudioDataOutput( QObject* parent )
 {
 	return new AudioDataOutput( parent );
-}
-
-Ifaces::AudioFftOutput*   Backend::createAudioFftOutput( QObject* parent )
-{
-	return new AudioFftOutput( parent );
 }
 
 Ifaces::VideoPath*        Backend::createVideoPath( QObject* parent )

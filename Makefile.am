@@ -26,7 +26,7 @@ phononinclude_HEADERS = base.h phononnamespace.h abstractmediaproducer.h mediaob
 		       mixeriface.h audiopath.h \
 		       videopath.h audioeffect.h audiooutput.h videoeffect.h \
 		       abstractvideooutput.h abstractaudiooutput.h audiodataoutput.h \
-		       audiofftoutput.h simpleplayer.h bytestream.h \
+		       simpleplayer.h bytestream.h \
 		       backendcapabilities.h namedescriptiontuple.h audiosource.h \
 		       videosource.h volumefadereffect.h
 
@@ -36,7 +36,7 @@ libphononcore_la_SOURCES = phononnamespace.cpp base.cpp factory.cpp abstractmedi
 			  audiooutput.cpp abstractvideooutput.cpp \
 			  audioeffect.cpp videoeffect.cpp \
 			  abstractaudiooutput.cpp audiodataoutput.cpp \
-			  audiofftoutput.cpp simpleplayer.cpp \
+			  simpleplayer.cpp \
 			  backendcapabilities.cpp bytestream.cpp \
 			  namedescriptiontuple.cpp audiosource.cpp \
 			  videosource.cpp volumefadereffect.cpp

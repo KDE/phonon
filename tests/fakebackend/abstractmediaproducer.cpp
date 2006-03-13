@@ -22,15 +22,20 @@
 #include "videopath.h"
 #include "audiopath.h"
 #include <kdebug.h>
+#include <QVector>
 
 namespace Phonon
 {
 namespace Fake
 {
+static const int SAMPLE_RATE = 44100;
+
 AbstractMediaProducer::AbstractMediaProducer( QObject* parent )
 	: QObject( parent )
 	, m_state( Phonon::LoadingState )
 	, m_tickTimer( new QTimer( this ) )
+	, m_bufferSize( 512 )
+	, m_lastSamplesMissing( 0 )
 {
 	kdDebug() << k_funcinfo << endl;
 	connect( m_tickTimer, SIGNAL( timeout() ), SLOT( emitTick() ) );
@@ -39,6 +44,11 @@ AbstractMediaProducer::AbstractMediaProducer( QObject* parent )
 AbstractMediaProducer::~AbstractMediaProducer()
 {
 	kdDebug() << k_funcinfo << endl;
+}
+
+void AbstractMediaProducer::setBufferSize( int size )
+{
+	m_bufferSize = size;
 }
 
 bool AbstractMediaProducer::addVideoPath( Ifaces::VideoPath* videoPath )
@@ -56,6 +66,8 @@ bool AbstractMediaProducer::addAudioPath( Ifaces::AudioPath* audioPath )
 	Q_ASSERT( audioPath );
 	AudioPath* ap = qobject_cast<AudioPath*>( audioPath->qobject() );
 	Q_ASSERT( ap );
+	Q_ASSERT( !m_audioPathList.contains( ap ) );
+	m_audioPathList.append( ap );
 	return true;
 }
 
@@ -71,6 +83,8 @@ void AbstractMediaProducer::removeAudioPath( Ifaces::AudioPath* audioPath )
 	Q_ASSERT( audioPath );
 	AudioPath* ap = qobject_cast<AudioPath*>( audioPath->qobject() );
 	Q_ASSERT( ap );
+	Q_ASSERT( m_audioPathList.contains( ap ) );
+	m_audioPathList.removeAll( ap );
 }
 
 State AbstractMediaProducer::state() const
@@ -201,8 +215,68 @@ void AbstractMediaProducer::setState( State newstate )
 void AbstractMediaProducer::emitTick()
 {
 	//kdDebug() << "emit tick( " << currentTime() << " )" << endl;
+	int tickInterval = 50;
 	if( m_tickInterval > 0 )
+	{
 		emit tick( currentTime() );
+		tickInterval = m_tickInterval;
+	}
+	QVector<float> buffer( m_bufferSize );
+	fillBuffer( &buffer );
+
+	const int availableSamples = tickInterval * SAMPLE_RATE / 1000 + m_lastSamplesMissing;
+	const int bufferCount = availableSamples / m_bufferSize;
+	m_lastSamplesMissing = availableSamples - bufferCount * m_bufferSize;
+	foreach( AudioPath* ap, m_audioPathList )
+	{
+		for( int i = 0; i < bufferCount; ++i )
+			ap->processBuffer( buffer );
+	}
+}
+
+float dampEdges( const float& f )
+{
+	if( f > 0.8f )
+		return 0.8f + ( f - 0.8f ) * ( 3.0f - 2.5f * f );
+	else if( f < -0.8f )
+		return -0.8f + ( f + 0.8f ) * ( -3.0f - 2.5f * f );
+	else return f;
+}
+
+void AbstractMediaProducer::fillBuffer( QVector<float>* buffer ) const
+{
+	Q_ASSERT( buffer );
+	// create a triangle wave function:
+	//    / \   / \
+	//       \ /   \ /
+	float f = 0;
+	float df = 8.0f / static_cast<float>( m_bufferSize );
+	int i = 0;
+	for( ; i < m_bufferSize / 8; ++i )
+	{
+		( *buffer )[ i ] = dampEdges( f );
+		f += df;
+	}
+	for( ; i < m_bufferSize * 3 / 8; ++i )
+	{
+		( *buffer )[ i ] = dampEdges( f );
+		f -= df;
+	}
+	for( ; i < m_bufferSize * 5 / 8; ++i )
+	{
+		( *buffer )[ i ] = dampEdges( f );
+		f += df;
+	}
+	for( ; i < m_bufferSize * 7 / 8; ++i )
+	{
+		( *buffer )[ i ] = dampEdges( f );
+		f -= df;
+	}
+	for( ; i < m_bufferSize; ++i )
+	{
+		( *buffer )[ i ] = dampEdges( f );
+		f += df;
+	}
 }
 
 }}

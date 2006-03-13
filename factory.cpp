@@ -23,7 +23,6 @@
 #include "ifaces/volumefadereffect.h"
 #include "ifaces/audiooutput.h"
 #include "ifaces/audiodataoutput.h"
-#include "ifaces/audiofftoutput.h"
 #include "ifaces/videopath.h"
 #include "ifaces/videoeffect.h"
 #include "ifaces/backend.h"
@@ -214,7 +213,6 @@ FACTORY_IMPL( AudioEffect )
 FACTORY_IMPL( VolumeFaderEffect )
 FACTORY_IMPL( AudioOutput )
 FACTORY_IMPL( AudioDataOutput )
-FACTORY_IMPL( AudioFftOutput )
 FACTORY_IMPL( VideoPath )
 FACTORY_IMPL( VideoEffect )
 

@@ -25,7 +25,7 @@
 class AudioOutputTest : public QObject
 {
 	Q_OBJECT
-	private:
+	private slots:
 		void initTestCase();
 		void checkName();
 		void checkVolume();

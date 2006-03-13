@@ -21,6 +21,7 @@
 
 #include "abstractaudiooutput.h"
 #include "../../ifaces/audiooutput.h"
+#include <QFile>
 
 namespace Phonon
 {
@@ -41,12 +42,15 @@ namespace Fake
 			virtual QString setName( const QString& newName );
 			virtual float setVolume( float newVolume );
 
+			virtual void processBuffer( const QVector<float>& buffer );
+
 		Q_SIGNALS:
 			void volumeChanged( float newVolume );
 
 		private:
 			float m_volume;
 			QString m_name;
+			QFile m_dsp;
 	};
 }} //namespace Phonon::Fake
 

@@ -20,6 +20,7 @@
 #include "audiopath.h"
 #include "audioeffect.h"
 #include "abstractaudiooutput.h"
+#include <QVector>
 
 namespace Phonon
 {
@@ -64,8 +65,7 @@ bool AudioPath::addOutput( Ifaces::AbstractAudioOutput* audioOutput )
 	Q_ASSERT( audioOutput );
 	AbstractAudioOutput* ao = qobject_cast<AbstractAudioOutput*>( audioOutput->qobject() );
 	Q_ASSERT( ao );
-	if( m_outputs.contains( ao ) )
-		return false;
+	Q_ASSERT( !m_outputs.contains( ao ) );
 	m_outputs.append( ao );
 	return true;
 }
@@ -75,9 +75,8 @@ bool AudioPath::removeOutput( Ifaces::AbstractAudioOutput* audioOutput )
 	Q_ASSERT( audioOutput );
 	AbstractAudioOutput* ao = qobject_cast<AbstractAudioOutput*>( audioOutput->qobject() );
 	Q_ASSERT( ao );
-	if( m_outputs.removeAll( ao ) > 0 )
-		return true;
-	return false;
+	Q_ASSERT( m_outputs.removeAll( ao ) > 0 );
+	return true;
 }
 
 bool AudioPath::insertEffect( Ifaces::AudioEffect* newEffect, Ifaces::AudioEffect* insertBefore )
@@ -109,6 +108,16 @@ bool AudioPath::removeEffect( Ifaces::AudioEffect* effect )
 		return true;
 	return false;
 }
+
+void AudioPath::processBuffer( const QVector<float>& _buffer )
+{
+	QVector<float> buffer( _buffer );
+	foreach( AudioEffect* effect, m_effects )
+		effect->processBuffer( buffer ); //modifies the buffer
+	foreach( AbstractAudioOutput* output, m_outputs )
+		output->processBuffer( buffer );
+}
+
 }}
 
 #include "audiopath.moc"

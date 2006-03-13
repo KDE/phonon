@@ -23,6 +23,9 @@
 #include "../seekslider.h"
 #include "../../mediaobject.h"
 #include <QSlider>
+#include <kurl.h>
+#include <cstdlib>
+#include <QLabel>
 
 using namespace Phonon;
 using namespace Phonon::Ui;
@@ -32,7 +35,9 @@ void SeekSliderTest::initTestCase()
 	ss = new SeekSlider;
 	QVERIFY( ss != 0 );
 	qslider = ss->findChild<QSlider*>();
+	qlabel = ss->findChild<QLabel*>();
 	QVERIFY( qslider != 0 );
+	QVERIFY( qlabel != 0 );
 	media = new MediaObject( this );
 }
 
@@ -46,7 +51,10 @@ void SeekSliderTest::testEnabled()
 void SeekSliderTest::setMedia()
 {
 	QVERIFY( media->state() == Phonon::LoadingState );
-	media->setUrl( "/home/mkretz/Musik Abend 2 - Flora.wav" );
+	KUrl url = getenv( "PHONON_TESTURL" );
+	if( !url.isValid() )
+		QFAIL( "You need to set PHONON_TESTURL to a valid URL" );
+	media->setUrl( url );
 	ss->setMediaProducer( media );
 	QVERIFY( !qslider->isEnabled() );
 }

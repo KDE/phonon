@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include "../../ifaces/audioeffect.h"
+#include <QQueue>
 
 namespace Phonon
 {
@@ -42,12 +43,16 @@ namespace Fake
 			// Attributes Setters:
 			virtual void setType( const QString& type );
 
+			// Fake specific:
+			virtual void processBuffer( QVector<float>& buffer );
+
 		public:
 			virtual QObject* qobject() { return this; }
 			virtual const QObject* qobject() const { return this; }
 
 		private:
 			QString m_type;
+			QQueue<float> m_delayBuffer;
 	};
 }} //namespace Phonon::Fake
 

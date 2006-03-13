@@ -22,13 +22,14 @@
 
 #include <QObject>
 
-class QSlider;
 namespace Phonon {
 	class MediaObject;
 	namespace Ui {
 		class SeekSlider;
 	}
 }
+class QSlider;
+class QLabel;
 
 class SeekSliderTest : public QObject
 {
@@ -43,6 +44,7 @@ class SeekSliderTest : public QObject
 	private:
 		Phonon::Ui::SeekSlider* ss;
 		QSlider* qslider;
+		QLabel* qlabel;
 		Phonon::MediaObject* media;
 };
 

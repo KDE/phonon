@@ -24,7 +24,7 @@ kde_module_LTLIBRARIES = phonon_fake.la
 
 phonon_fake_la_SOURCES = abstractmediaproducer.cpp abstractaudiooutput.cpp \
                          audiodataoutput.cpp \
-                         audioeffect.cpp audiofftoutput.cpp audiooutput.cpp \
+                         audioeffect.cpp audiooutput.cpp \
                          audiopath.cpp bytestream.cpp mediaobject.cpp \
                          avcapture.cpp videoeffect.cpp videopath.cpp \
                          backend.cpp volumefadereffect.cpp

@@ -21,6 +21,7 @@
 
 #include "abstractaudiooutput.h"
 #include "../../ifaces/audiodataoutput.h"
+#include <QVector>
 
 namespace Phonon
 {
@@ -34,16 +35,28 @@ namespace Fake
 		Q_OBJECT
 		public:
 			AudioDataOutput( QObject* parent );
-			virtual ~AudioDataOutput();
+			~AudioDataOutput();
 
-			// Operations:
-			virtual void readBuffer( QVector<float>& buffer );
-			virtual void readBuffer( QVector<int>& buffer );
+			virtual Phonon::AudioDataOutput::Format format() const;
+			virtual int dataSize() const;
+			virtual int sampleRate() const;
+			virtual void setFormat( Phonon::AudioDataOutput::Format format );
+			virtual void setDataSize( int size );
 
-			// Attributes Getters:
-			virtual int availableSamples() const;
+			// Fake specific:
+			virtual void processBuffer( const QVector<float>& buffer );
+
+		signals:
+			void dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >& data );
+			void dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<float> >& data );
+			void endOfMedia( int remainingSamples );
 
 		private:
+			void convertAndEmit( const QVector<float>& buffer );
+
+			Phonon::AudioDataOutput::Format m_format;
+			int m_dataSize;
+			QVector<float> m_pendingData;
 	};
 }} //namespace Phonon::Fake
 

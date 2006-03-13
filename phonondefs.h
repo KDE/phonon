@@ -264,8 +264,9 @@ Ifaces::classname* classname::iface() \
 } \
 void classname ## Private::createIface() \
 { \
+	if( iface_ptr ) \
+		return; \
 	K_Q( classname ); \
-	Q_ASSERT( iface_ptr == 0 ); \
 	setIface( Factory::self()->create ## classname( q ) ); \
 	q->setupIface(); \
 } \
@@ -290,8 +291,9 @@ Ifaces::classname* classname::iface() \
 } \
 void classname ## Private::createIface() \
 { \
+	if( iface_ptr ) \
+		return; \
 	K_Q( classname ); \
-	Q_ASSERT( iface_ptr == 0 ); \
 	setIface( Factory::self()->create ## classname( q ) ); \
 	q->setupIface(); \
 }

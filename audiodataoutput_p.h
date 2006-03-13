@@ -31,7 +31,14 @@ class AudioDataOutputPrivate : public AbstractAudioOutputPrivate
 	K_DECLARE_PUBLIC( AudioDataOutput )
 	PHONON_PRIVATECLASS( AudioDataOutput, AbstractAudioOutput )
 	protected:
-		int availableSamples;
+		AudioDataOutputPrivate()
+			: format( AudioDataOutput::IntegerFormat )
+			, dataSize( 512 )
+		{
+		}
+
+		AudioDataOutput::Format format;
+		int dataSize;
 };
 } //namespace Phonon
 

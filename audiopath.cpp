@@ -107,7 +107,7 @@ bool AudioPath::insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore 
 	if( d->effects.contains( newEffect ) )
 		return false;
 
-	if( iface() && d->iface()->insertEffect( newEffect->iface(), insertBefore->iface() ) )
+	if( iface() && d->iface()->insertEffect( newEffect->iface(), insertBefore ? insertBefore->iface() : 0 ) )
 	{
 		newEffect->addDestructionHandler( this );
 		if( insertBefore )

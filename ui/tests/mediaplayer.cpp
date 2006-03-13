@@ -19,6 +19,7 @@
 
 #include "mediaplayer.h"
 #include <QVBoxLayout>
+#include <phonon/audioeffect.h>
 
 using namespace Phonon;
 using namespace Phonon::Ui;
@@ -30,7 +31,7 @@ MediaPlayer::MediaPlayer( QWidget* parent )
 
 	m_vwidget = new VideoWidget( this );
 	layout->addWidget( m_vwidget );
-	m_vwidget->hide();
+	//m_vwidget->hide();
 
 	m_vpath = new VideoPath( this );
 
@@ -47,12 +48,15 @@ MediaPlayer::MediaPlayer( QWidget* parent )
 	layout->addWidget( m_controls );
 	m_controls->setMediaProducer( m_media );
 	m_controls->setAudioOutput( m_aoutput );
+
+	AudioEffect* effect = new AudioEffect( m_apath );
+	m_apath->insertEffect( effect );
 }
 
 void MediaPlayer::setUrl( const KUrl& url )
 {
 	m_media->setUrl( url );
-	m_vwidget->setVisible( m_media->hasVideo() );
+	//m_vwidget->setVisible( m_media->hasVideo() );
 }
 
 #include <kcmdlineargs.h>

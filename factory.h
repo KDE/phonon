@@ -52,7 +52,6 @@ namespace Phonon
 		class AudioPath;
 		class AudioOutput;
 		class AudioDataOutput;
-		class AudioFftOutput;
 
 		class VideoEffect;
 		class VideoPath;
@@ -109,7 +108,6 @@ class PHONON_EXPORT Factory : public QObject, public DCOPObject
 		Ifaces::VolumeFaderEffect* createVolumeFaderEffect( QObject* parent = 0 );
 		Ifaces::AudioOutput* createAudioOutput( QObject* parent = 0 );
 		Ifaces::AudioDataOutput* createAudioDataOutput( QObject* parent = 0 );
-		Ifaces::AudioFftOutput* createAudioFftOutput( QObject* parent = 0 );
 
 		Ifaces::VideoPath* createVideoPath( QObject* parent = 0 );
 		Ifaces::VideoEffect* createVideoEffect( QObject* parent = 0 );

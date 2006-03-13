@@ -24,7 +24,7 @@ lib_LTLIBRARIES = libphononifaces.la
 phononincludedir = $(includedir)/phonon/ifaces
 phononinclude_HEADERS = abstractmediaproducer.h mediaobject.h soundcardcapture.h \
 		       audiopath.h backend.h abstractaudiooutput.h \
-		       audiooutput.h audiodataoutput.h audiofftoutput.h \
+		       audiooutput.h audiodataoutput.h \
 		       videopath.h abstractvideooutput.h videoeffect.h audioeffect.h \
 		       bytestream.h base.h volumefadereffect.h
 

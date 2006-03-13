@@ -17,48 +17,20 @@
 
 */
 
-#include "audiofftoutput.h"
+#ifndef AUDIODATAOUTPUTTEST_H
+#define AUDIODATAOUTPUTTEST_H
 
-namespace Phonon
-{
-namespace Fake
-{
-AudioFftOutput::AudioFftOutput( QObject* parent )
-	: AbstractAudioOutput( parent )
-{
-}
+#include <QObject>
 
-AudioFftOutput::~AudioFftOutput()
+class AudioDataOutputTest : public QObject
 {
-}
+	Q_OBJECT
+	private slots:
+		void initTestCase();
+		void testSampleRate();
+		void testFormat();
+		void testDataSize();
+		void cleanupTestCase();
+};
 
-//Q_SIGNALS: void fourierTransformedData( const QVector<float>& spectrum );
-const QVector<float>& AudioFftOutput::fourierTransformedData() const
-{
-	return m_data;
-}
-
-int AudioFftOutput::bandwidth() const
-{
-	return 0;
-}
-
-int AudioFftOutput::rate() const
-{
-	return 0;
-}
-
-int AudioFftOutput::setBandwidth( int newBandwidth )
-{
-	return 0;
-}
-
-int AudioFftOutput::setRate( int newRate )
-{
-	return 0;
-}
-
-}} //namespace Phonon::Fake
-
-#include "audiofftoutput.moc"
-// vim: sw=4 ts=4 noet
+#endif // AUDIODATAOUTPUTTEST_H

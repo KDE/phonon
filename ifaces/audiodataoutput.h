@@ -20,11 +20,14 @@
 #define Phonon_IFACES_AUDIODATAOUTPUT_H
 
 #include "abstractaudiooutput.h"
+#include "../audiodataoutput.h"
 
 template<class T> class QVector;
 
 namespace Phonon
 {
+	class IntDataConsumer;
+	class FloatDataConsumer;
 namespace Ifaces
 {
 	/**
@@ -33,12 +36,16 @@ namespace Ifaces
 	class AudioDataOutput : virtual public AbstractAudioOutput
 	{
 		public:
-			// Operations:
-			virtual void readBuffer( QVector<float>& buffer ) = 0;
-			virtual void readBuffer( QVector<int>& buffer ) = 0;
+			virtual Phonon::AudioDataOutput::Format format() const = 0;
+			virtual int dataSize() const = 0;
+			virtual int sampleRate() const = 0;
+			virtual void setFormat( Phonon::AudioDataOutput::Format format ) = 0;
+			virtual void setDataSize( int size ) = 0;
 
-			// Attributes Getters:
-			virtual int availableSamples() const = 0;
+		protected: //signals
+			virtual void dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >& data ) = 0;
+			virtual void dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<float> >& data ) = 0;
+			virtual void endOfMedia( int remainingSamples ) = 0;
 	};
 }} //namespace Phonon::Ifaces
 

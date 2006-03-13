@@ -22,6 +22,8 @@
 #include <QObject>
 #include "../../ifaces/abstractmediaproducer.h"
 #include <QTime>
+#include <QList>
+#include "audiopath.h"
 
 class QTimer;
 
@@ -50,6 +52,8 @@ namespace Fake
 			virtual void stop();
 			virtual void seek( long time );
 
+			void setBufferSize( int size );
+
 		Q_SIGNALS:
 			void stateChanged( Phonon::State newstate, Phonon::State oldstate );
 			void tick( long time );
@@ -59,6 +63,7 @@ namespace Fake
 			virtual const QObject* qobject() const { return this; }
 
 		protected:
+			void fillBuffer( QVector<float>* buffer ) const;
 			void setState( State );
 
 		protected Q_SLOTS:
@@ -69,6 +74,9 @@ namespace Fake
 			QTimer* m_tickTimer;
 			long m_tickInterval;
 			QTime m_startTime, m_pauseTime;
+			int m_bufferSize;
+			QList<AudioPath*> m_audioPathList;
+			int m_lastSamplesMissing;
 	};
 }} //namespace Phonon::Fake
 

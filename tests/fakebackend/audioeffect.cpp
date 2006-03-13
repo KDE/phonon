@@ -18,6 +18,9 @@
 */
 
 #include "audioeffect.h"
+#include <QVector>
+#include <cstdlib>
+#include <iostream>
 
 namespace Phonon
 {
@@ -26,6 +29,8 @@ namespace Fake
 AudioEffect::AudioEffect( QObject* parent )
 	: QObject( parent )
 {
+	for( int i = 0; i < 22127; ++i )
+		m_delayBuffer.enqueue( 0.0f );
 }
 
 AudioEffect::~AudioEffect()
@@ -40,6 +45,27 @@ QString AudioEffect::type() const
 void AudioEffect::setType( const QString& type )
 {
 	m_type = type;
+}
+
+inline float clamp( const float& min, const float& value, const float& max )
+{
+	return ( min > value ) ? min : ( max < value ) ? max : value;
+}
+
+void AudioEffect::processBuffer( QVector<float>& buffer )
+{
+	int enqueue;
+	for( int i = 0; i < buffer.size(); ++i )
+	{
+		buffer[ i ] = clamp( -1.0, buffer[ i ] + m_delayBuffer.dequeue(), 1.0 );
+		enqueue = rand() / ( RAND_MAX / 3 );
+		if( enqueue > 0 || m_delayBuffer.isEmpty() )
+		{
+			m_delayBuffer.enqueue( buffer[ i ] * 0.11 );
+			if( enqueue > 1 || m_delayBuffer.size() < 100 )
+				m_delayBuffer.enqueue( buffer[ i ] * 0.2 );
+		}
+	}
 }
 
 }} //namespace Phonon::Fake

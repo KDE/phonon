@@ -37,7 +37,6 @@ namespace Ifaces
 	class VolumeFaderEffect;
 	class AudioOutput;
 	class AudioDataOutput;
-	class AudioFftOutput;
 
 	class VideoPath;
 	class VideoEffect;
@@ -61,7 +60,6 @@ namespace Fake
 			virtual Ifaces::VolumeFaderEffect* createVolumeFaderEffect( QObject* parent );
 			virtual Ifaces::AudioOutput*      createAudioOutput( QObject* parent );
 			virtual Ifaces::AudioDataOutput*  createAudioDataOutput( QObject* parent );
-			virtual Ifaces::AudioFftOutput*   createAudioFftOutput( QObject* parent );
 
 			virtual Ifaces::VideoPath*        createVideoPath( QObject* parent );
 			virtual Ifaces::VideoEffect*      createVideoEffect( QObject* parent );

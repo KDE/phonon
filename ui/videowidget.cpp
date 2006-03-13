@@ -52,8 +52,9 @@ Ifaces::VideoWidget* VideoWidget::iface()
 
 void VideoWidgetPrivate::createIface()
 {
+	if( iface_ptr )
+		return;
 	K_Q( VideoWidget );
-	Q_ASSERT( iface_ptr == 0 );
 	setIface( Factory::self()->createVideoWidget( q ) );
 	q->setupIface();
 }
@@ -77,13 +78,14 @@ bool VideoWidgetPrivate::aboutToDeleteIface()
 {
 	if( iface() )
 		fullscreen = iface()->isFullscreen();
-	return true;
+	return AbstractVideoOutputPrivate::aboutToDeleteIface();
 }
 
 void VideoWidget::setupIface()
 {
 	K_D( VideoWidget );
 	Q_ASSERT( d->iface() );
+	AbstractVideoOutput::setupIface();
 
 	QWidget* w = qobject_cast<QWidget*>( d->iface()->qobject() );
 	d->layout.addWidget( w );

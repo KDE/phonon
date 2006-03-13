@@ -54,14 +54,19 @@ void AudioOutputTest::checkVolume()
 void AudioOutputTest::checkCategory()
 {
 	AudioOutput ao( this );
+	ao.setCategory( Phonon::Unspecified );
 	QCOMPARE( ao.category(), Phonon::Unspecified );
 	QCOMPARE( ao.categoryName(), QLatin1String( "Unspecified" ) );
+	ao.setCategory( Phonon::Notification );
 	QCOMPARE( ao.category(), Phonon::Notification );
 	QCOMPARE( ao.categoryName(), QLatin1String( "Notification" ) );
+	ao.setCategory( Phonon::Music );
 	QCOMPARE( ao.category(), Phonon::Music );
 	QCOMPARE( ao.categoryName(), QLatin1String( "Music" ) );
+	ao.setCategory( Phonon::Video );
 	QCOMPARE( ao.category(), Phonon::Video );
 	QCOMPARE( ao.categoryName(), QLatin1String( "Video" ) );
+	ao.setCategory( Phonon::Communication );
 	QCOMPARE( ao.category(), Phonon::Communication );
 	QCOMPARE( ao.categoryName(), QLatin1String( "Communication" ) );
 }

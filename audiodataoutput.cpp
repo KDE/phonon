@@ -26,28 +26,48 @@ namespace Phonon
 
 PHONON_HEIR_IMPL( AudioDataOutput, AbstractAudioOutput )
 
-void AudioDataOutput::readBuffer( QVector<float>& buffer )
-{
-	iface()->readBuffer( buffer );
-}
-
-void AudioDataOutput::readBuffer( QVector<int>& buffer )
-{
-	iface()->readBuffer( buffer );
-}
-
-int AudioDataOutput::availableSamples() const
+AudioDataOutput::Format AudioDataOutput::format() const
 {
 	K_D( const AudioDataOutput );
-	return d->iface() ? d->iface()->availableSamples() : d->availableSamples;
+	return d->iface() ? d->iface()->format() : d->format;
+}
+
+int AudioDataOutput::dataSize() const
+{
+	K_D( const AudioDataOutput );
+	return d->iface() ? d->iface()->dataSize() : d->dataSize;
+}
+
+int AudioDataOutput::sampleRate() const
+{
+	K_D( const AudioDataOutput );
+	return d->iface() ? d->iface()->sampleRate() : -1;
+}
+
+void AudioDataOutput::setFormat( AudioDataOutput::Format newformat )
+{
+	K_D( AudioDataOutput );
+	if( iface() )
+		d->iface()->setFormat( newformat );
+	else
+		d->format = newformat;
+}
+
+void AudioDataOutput::setDataSize( int size )
+{
+	K_D( AudioDataOutput );
+	if( iface() )
+		d->iface()->setDataSize( size );
+	else
+		d->dataSize = size;
 }
 
 bool AudioDataOutputPrivate::aboutToDeleteIface()
 {
-	if( iface() )
-	{
-		availableSamples = iface()->availableSamples();
-	}
+	Q_ASSERT( iface() );
+	format = iface()->format();
+	dataSize = iface()->dataSize();
+
 	return AbstractAudioOutputPrivate::aboutToDeleteIface();
 }
 
@@ -58,6 +78,15 @@ void AudioDataOutput::setupIface()
 	AbstractAudioOutput::setupIface();
 
 	// set up attributes
+	d->iface()->setFormat( d->format );
+	d->iface()->setDataSize( d->dataSize );
+	connect( d->iface()->qobject(),
+			SIGNAL( dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >& ) ),
+			SIGNAL( dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >& ) ) );
+	connect( d->iface()->qobject(),
+			SIGNAL( dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<float> >& ) ),
+			SIGNAL( dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<float> >& ) ) );
+	connect( d->iface()->qobject(), SIGNAL( endOfMedia( int ) ), SIGNAL( endOfMedia( int ) ) );
 }
 
 } //namespace Phonon

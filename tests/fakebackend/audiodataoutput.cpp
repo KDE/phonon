@@ -19,6 +19,7 @@
 
 #include "audiodataoutput.h"
 #include <QVector>
+#include <QMap>
 
 namespace Phonon
 {
@@ -33,19 +34,76 @@ AudioDataOutput::~AudioDataOutput()
 {
 }
 
-void AudioDataOutput::readBuffer( QVector<float>& buffer )
+Phonon::AudioDataOutput::Format AudioDataOutput::format() const
 {
-	buffer.clear();
+	return m_format;
 }
 
-void AudioDataOutput::readBuffer( QVector<int>& buffer )
+int AudioDataOutput::dataSize() const
 {
-	buffer.clear();
+	return m_dataSize;
 }
 
-int AudioDataOutput::availableSamples() const
+int AudioDataOutput::sampleRate() const
 {
-	return 0;
+	return 44100;
+}
+
+void AudioDataOutput::setFormat( Phonon::AudioDataOutput::Format format )
+{
+	m_format = format;
+}
+
+void AudioDataOutput::setDataSize( int size )
+{
+	m_dataSize = size;
+}
+
+typedef QMap<Phonon::AudioDataOutput::Channel, QVector<float> > FloatMap;
+typedef QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > IntMap;
+
+inline void AudioDataOutput::convertAndEmit( const QVector<float>& buffer )
+{
+	if( m_format == Phonon::AudioDataOutput::FloatFormat )
+	{
+		FloatMap map;
+		map.insert( Phonon::AudioDataOutput::LeftChannel, buffer );
+		map.insert( Phonon::AudioDataOutput::RightChannel, buffer );
+		emit dataReady( map );
+	}
+	else
+	{
+		IntMap map;
+		QVector<qint16> intBuffer( m_dataSize );
+		for( int i = 0; i < m_dataSize; ++i )
+			intBuffer[ i ] = static_cast<qint16>( buffer[ i ] * static_cast<float>( 0x7FFF ) );
+		map.insert( Phonon::AudioDataOutput::LeftChannel, intBuffer );
+		map.insert( Phonon::AudioDataOutput::RightChannel, intBuffer );
+		emit dataReady( map );
+	}
+}
+
+void AudioDataOutput::processBuffer( const QVector<float>& buffer )
+{
+	// TODO emit endOfMedia
+	m_pendingData += buffer;
+	if( m_pendingData.size() < m_dataSize )
+		return;
+
+	if( m_pendingData.size() == m_dataSize )
+		convertAndEmit( buffer );
+	else
+	{
+		QVector<float> floatBuffer( m_dataSize );
+		while( m_pendingData.size() >= m_dataSize )
+		{
+			memcpy( floatBuffer.data(), m_pendingData.constData(), m_dataSize * sizeof( float ) );
+			convertAndEmit( floatBuffer );
+			int newSize = m_pendingData.size() - m_dataSize;
+			memmove( m_pendingData.data(), m_pendingData.constData() + m_dataSize, newSize * sizeof( float ) );
+			m_pendingData.resize( newSize );
+		}
+	}
 }
 
 }} //namespace Phonon::Fake

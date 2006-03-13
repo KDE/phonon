@@ -17,14 +17,15 @@
 
 */
 
-#ifndef MIXERIFACE_H
-#define MIXERIFACE_H
+#ifndef PHONON_MIXERIFACE_H
+#define PHONON_MIXERIFACE_H
 
 #include <dcopobject.h>
+#include <kdelibs_export.h>
 
 namespace Phonon
 {
-class MixerIface : public DCOPObject
+class PHONON_EXPORT MixerIface : public DCOPObject
 {
 	K_DCOP
 	k_dcop:
@@ -38,5 +39,5 @@ class MixerIface : public DCOPObject
 };
 } //namespace Phonon
 
-#endif // MIXERIFACE_H
+#endif // PHONON_MIXERIFACE_H
 // vim: sw=4 ts=4 noet tw=80

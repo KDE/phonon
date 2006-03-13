@@ -18,6 +18,7 @@
 */
 
 #include "videowidget.h"
+#include <QPalette>
 
 namespace Phonon
 {
@@ -29,6 +30,11 @@ namespace Fake
 VideoWidget::VideoWidget( QWidget* parent )
 	: QWidget( parent )
 {
+	QPalette p = palette();
+	p.setColor( QPalette::Window, Qt::blue );
+	setPalette( p );
+	setBackgroundRole( QPalette::Window );
+	setMinimumSize( 100, 100 );
 }
 
 bool VideoWidget::isFullscreen() const
