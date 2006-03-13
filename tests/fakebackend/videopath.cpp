@@ -19,7 +19,6 @@
 
 #include "videopath.h"
 #include "videoeffect.h"
-#include "abstractvideooutput.h"
 
 namespace Phonon
 {
