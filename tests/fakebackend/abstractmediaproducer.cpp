@@ -37,13 +37,13 @@ AbstractMediaProducer::AbstractMediaProducer( QObject* parent )
 	, m_bufferSize( 512 )
 	, m_lastSamplesMissing( 0 )
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	connect( m_tickTimer, SIGNAL( timeout() ), SLOT( emitTick() ) );
 }
 
 AbstractMediaProducer::~AbstractMediaProducer()
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 }
 
 void AbstractMediaProducer::setBufferSize( int size )
@@ -53,7 +53,7 @@ void AbstractMediaProducer::setBufferSize( int size )
 
 bool AbstractMediaProducer::addVideoPath( Ifaces::VideoPath* videoPath )
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	Q_ASSERT( videoPath );
 	VideoPath* vp = qobject_cast<VideoPath*>( videoPath->qobject() );
 	Q_ASSERT( vp );
@@ -62,7 +62,7 @@ bool AbstractMediaProducer::addVideoPath( Ifaces::VideoPath* videoPath )
 
 bool AbstractMediaProducer::addAudioPath( Ifaces::AudioPath* audioPath )
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	Q_ASSERT( audioPath );
 	AudioPath* ap = qobject_cast<AudioPath*>( audioPath->qobject() );
 	Q_ASSERT( ap );
@@ -89,25 +89,25 @@ void AbstractMediaProducer::removeAudioPath( Ifaces::AudioPath* audioPath )
 
 State AbstractMediaProducer::state() const
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	return m_state;
 }
 
 bool AbstractMediaProducer::hasVideo() const
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	return false;
 }
 
 bool AbstractMediaProducer::seekable() const
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	return true;
 }
 
 long AbstractMediaProducer::currentTime() const
 {
-	//kdDebug() << k_funcinfo << endl;
+	//kDebug() << k_funcinfo << endl;
 	switch( state() )
 	{
 		case Phonon::PausedState:
@@ -126,13 +126,13 @@ long AbstractMediaProducer::currentTime() const
 
 long AbstractMediaProducer::tickInterval() const
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	return m_tickInterval;
 }
 
 long AbstractMediaProducer::setTickInterval( long newTickInterval )
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	m_tickInterval = newTickInterval;
 	if( m_tickInterval <= 0 )
 		m_tickTimer->setInterval( 50 );
@@ -143,28 +143,28 @@ long AbstractMediaProducer::setTickInterval( long newTickInterval )
 
 void AbstractMediaProducer::play()
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	m_tickTimer->start();
 	setState( Phonon::PlayingState );
 }
 
 void AbstractMediaProducer::pause()
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	m_tickTimer->stop();
 	setState( Phonon::PausedState );
 }
 
 void AbstractMediaProducer::stop()
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	m_tickTimer->stop();
 	setState( Phonon::StoppedState );
 }
 
 void AbstractMediaProducer::seek( long time )
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	if( seekable() )
 	{
 		switch( state() )
@@ -208,13 +208,13 @@ void AbstractMediaProducer::setState( State newstate )
 		case Phonon::LoadingState:
 			break;
 	}
-	kdDebug() << "emit stateChanged( " << newstate << ", " << oldstate << " )" << endl;
+	kDebug() << "emit stateChanged( " << newstate << ", " << oldstate << " )" << endl;
 	emit stateChanged( newstate, oldstate );
 }
 
 void AbstractMediaProducer::emitTick()
 {
-	//kdDebug() << "emit tick( " << currentTime() << " )" << endl;
+	//kDebug() << "emit tick( " << currentTime() << " )" << endl;
 	int tickInterval = 50;
 	if( m_tickInterval > 0 )
 	{

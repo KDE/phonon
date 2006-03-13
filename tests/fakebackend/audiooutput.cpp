@@ -34,7 +34,7 @@ AudioOutput::AudioOutput( QObject* parent )
 	, m_dsp( "/dev/dsp" )
 {
 	if( !m_dsp.open( QIODevice::WriteOnly ) )
-		kdWarning() << "couldn't open /dev/dsp for writing" << endl;
+		kWarning() << "couldn't open /dev/dsp for writing" << endl;
 	else
 	{
 		int fd = m_dsp.handle();
@@ -98,7 +98,7 @@ void AudioOutput::processBuffer( const QVector<float>& buffer )
 		if( size > 0 )
 		{
 			towrite += written;
-			kdWarning() << "only " << written << " bytes written to /dev/dsp" << endl;
+			kWarning() << "only " << written << " bytes written to /dev/dsp" << endl;
 		}
 	}
 

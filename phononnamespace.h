@@ -90,7 +90,7 @@ namespace Phonon
 class kdbgstream;
 #include <kdebug.h>
 /**
- * Implements needed operator to use Phonon::State with kdDebug
+ * Implements needed operator to use Phonon::State with kDebug
  */
 inline PHONON_EXPORT kdbgstream& operator<<( kdbgstream & stream, const Phonon::State state )
 {

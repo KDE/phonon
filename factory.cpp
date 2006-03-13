@@ -70,13 +70,13 @@ class Factory::Private
 					{
 						QString e = i18n( "create method returned 0" );
 						errormsg.append( e );
-						kdDebug( 600 ) << "Error getting backend from factory for " <<
+						kDebug( 600 ) << "Error getting backend from factory for " <<
 							ptr->name() << ":\n" << e << endl;
 					}
 					else
 					{
 						service = ptr;
-						kdDebug( 600 ) << "using backend: " << ptr->name() << endl;
+						kDebug( 600 ) << "using backend: " << ptr->name() << endl;
 						break;
 					}
 				}
@@ -84,7 +84,7 @@ class Factory::Private
 				{
 					QString e = KLibLoader::self()->lastErrorMessage();
 					errormsg.append( e );
-					kdDebug( 600 ) << "Error getting factory for " << ptr->name() <<
+					kDebug( 600 ) << "Error getting factory for " << ptr->name() <<
 						":\n" << e << endl;
 				}
 			}
@@ -140,13 +140,13 @@ Factory::Factory()
 
 Factory::~Factory()
 {
-	//kdDebug( 600 ) << k_funcinfo << endl;
+	//kDebug( 600 ) << k_funcinfo << endl;
 	emit deleteYourObjects();
 	foreach( BasePrivate* bp, d->basePrivateList )
 		bp->deleteIface();
 	foreach( QObject* o, d->objects )
 	{
-		//kdDebug( 600 ) << "delete " << o << endl;
+		//kDebug( 600 ) << "delete " << o << endl;
 		delete o;
 	}
 	delete d->backend;
@@ -172,7 +172,7 @@ void Factory::phononBackendChanged()
 			bp->deleteIface();
 		if( d->objects.size() > 0 )
 		{
-			kdWarning( 600 ) << "we were asked to change the backend but the application did\n"
+			kWarning( 600 ) << "we were asked to change the backend but the application did\n"
 				"not free all references to objects created by the factory. Therefore we can not\n"
 				"change the backend without crashing. Now we have to wait for a restart to make\n"
 				"backendswitching possible." << endl;
@@ -195,7 +195,7 @@ void Factory::phononBackendChanged()
 
 void Factory::objectDestroyed( QObject * obj )
 {
-	//kdDebug( 600 ) << k_funcinfo << obj << endl;
+	//kDebug( 600 ) << k_funcinfo << obj << endl;
 	d->objects.removeAll( obj );
 }
 
