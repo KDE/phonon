@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2004 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2004-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -39,6 +39,8 @@
 #include <kdebug.h>
 #include <kurl.h>
 
+#include <cstdlib>
+
 using namespace Phonon;
 
 TestWidget::TestWidget()
@@ -57,52 +59,64 @@ TestWidget::TestWidget()
 		exit( 1 );
 	path->addOutput( m_output );
 
-	( new QHBoxLayout( this ) )->setAutoAdd( true );
+	QHBoxLayout* hlayout = new QHBoxLayout( this );
 
 	m_volslider = new QSlider( this );
 	m_volslider->setRange( 0, 150 );
 	m_volslider->setValue( ( int )( 100 * m_output->volume() ) );
 	connect( m_volslider, SIGNAL( valueChanged( int ) ), SLOT( volchanged( int ) ) );
 	connect( m_output, SIGNAL( volumeChanged( float ) ), SLOT( slotVolumeChanged( float ) ) );
+	hlayout->addWidget( m_volslider );
 
 	QFrame * frame = new QFrame( this );
-	( new QVBoxLayout( frame ) )->setAutoAdd( true );
+	hlayout->addWidget( frame );
+	QVBoxLayout* vlayout = new QVBoxLayout( frame );
 
 	m_seekslider = new QSlider( frame );
 	m_seekslider->setOrientation( Qt::Horizontal );
 	connect( m_seekslider, SIGNAL( valueChanged( int ) ), SLOT( seek( int ) ) );
+	vlayout->addWidget( m_seekslider );
 
 	m_statelabel = new QLabel( frame );
+	vlayout->addWidget( m_statelabel );
 
 	m_pause = new QPushButton( frame );
 	m_pause->setText( "pause" );
+	vlayout->addWidget( m_pause );
 
 	m_play = new QPushButton( frame );
 	m_play->setText( "play" );
+	vlayout->addWidget( m_play );
 
 	m_stop = new QPushButton( frame );
 	m_stop->setText( "stop" );
+	vlayout->addWidget( m_stop );
 
 	KLineEdit * file = new KLineEdit( frame );
 	file->setCompletionObject( new KUrlCompletion( KUrlCompletion::FileCompletion ) );
 	connect( file, SIGNAL( returnPressed( const QString & ) ), SLOT( loadFile( const QString & ) ) );
+	vlayout->addWidget( file );
 
 	QFrame * frame2 = new QFrame( this );
-	( new QVBoxLayout( frame2 ) )->setAutoAdd( true );
+	hlayout->addWidget( frame2 );
+	QVBoxLayout* vlayout2 = new QVBoxLayout( frame2 );
 
 	m_volumelabel = new QLabel( frame2 );
 	m_volumelabel->setText( QString::number( m_output->volume() ) );
+	vlayout2->addWidget( m_volumelabel );
 
 	m_totaltime = new QLabel( frame2 );
+	vlayout2->addWidget( m_totaltime );
 	
 	m_currenttime = new QLabel( frame2 );
+	vlayout2->addWidget( m_currenttime );
 	
 	m_remainingtime = new QLabel( frame2 );
+	vlayout2->addWidget( m_remainingtime );
 	
 	show();
 
-	loadFile( "/home/mkretz/davidbelle.avi" );
-	//loadFile( "/home/mkretz/centauri/Musik/qt23.mp3" );
+	loadFile( getenv( "PHONON_TESTURL" ) );
 }
 
 void TestWidget::volchanged( int v )

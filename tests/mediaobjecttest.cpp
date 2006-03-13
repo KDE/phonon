@@ -85,7 +85,7 @@ void MediaObjectTest::initTestCase()
 {
 	qRegisterMetaType<Phonon::State>( "Phonon::State" );
 
-	m_url = getenv( "PHONON_TESTURL" );
+	m_url.setUrl( getenv( "PHONON_TESTURL" ) );
 	if( !m_url.isValid() )
 		QFAIL( "You need to set PHONON_TESTURL to a valid URL" );
 	m_media = new MediaObject( this );

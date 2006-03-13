@@ -51,7 +51,7 @@ void SeekSliderTest::testEnabled()
 void SeekSliderTest::setMedia()
 {
 	QVERIFY( media->state() == Phonon::LoadingState );
-	KUrl url = getenv( "PHONON_TESTURL" );
+	KUrl url( getenv( "PHONON_TESTURL" ) );
 	if( !url.isValid() )
 		QFAIL( "You need to set PHONON_TESTURL to a valid URL" );
 	media->setUrl( url );

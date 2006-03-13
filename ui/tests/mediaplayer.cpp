@@ -75,7 +75,7 @@ int main( int argc, char ** argv )
 	KApplication app;
 	MediaPlayer foo;
 	foo.show();
-	KUrl url = getenv( "PHONON_TESTURL" );
+	KUrl url( getenv( "PHONON_TESTURL" ) );
 	if( url.isValid() )
 	{
 		foo.setUrl( url );
