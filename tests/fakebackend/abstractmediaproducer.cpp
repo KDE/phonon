@@ -246,9 +246,10 @@ float dampEdges( const float& f )
 void AbstractMediaProducer::fillBuffer( QVector<float>* buffer ) const
 {
 	Q_ASSERT( buffer );
-	// create a triangle wave function:
-	//    / \   / \
-	//       \ /   \ /
+	/* create a triangle wave function:
+	 *     / \   / \
+	 *        \ /   \ /
+	 */
 	float f = 0;
 	float df = 8.0f / static_cast<float>( m_bufferSize );
 	int i = 0;
