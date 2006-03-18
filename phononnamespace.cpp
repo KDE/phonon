@@ -27,15 +27,15 @@ namespace Phonon
 	{
 		switch( c )
 		{
-			case Phonon::Unspecified:
+			case Phonon::UnspecifiedCategory:
 				return i18n( "Unspecified" );
-			case Phonon::Notification:
+			case Phonon::NotificationCategory:
 				return i18n( "Notification" );
-			case Phonon::Music:
+			case Phonon::MusicCategory:
 				return i18n( "Music" );
-			case Phonon::Video:
+			case Phonon::VideoCategory:
 				return i18n( "Video" );
-			case Phonon::Communication:
+			case Phonon::CommunicationCategory:
 				return i18n( "Communication" );
 		}
 		return QString();

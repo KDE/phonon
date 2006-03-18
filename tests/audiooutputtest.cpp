@@ -42,33 +42,37 @@ void AudioOutputTest::checkName()
 void AudioOutputTest::checkVolume()
 {
 	AudioOutput ao( this );
+	QSignalSpy volumeSignalSpy( &ao, SIGNAL( volumeChanged( float ) ) );
 	float v = 1.0;
 	QCOMPARE( ao.volume(), v );
+	QCOMPARE( volumeSignalSpy.size(), 0 );
 	for( v = 0.0; v <= 10.0; v += 0.01 )
 	{
 		ao.setVolume( v );
 		QCOMPARE( ao.volume(), v );
+		QCOMPARE( volumeSignalSpy.size(), 1 );
+		QCOMPARE( qvariant_cast<float>( volumeSignalSpy.takeFirst().at( 0 ) ), v );
 	}
 }
 
 void AudioOutputTest::checkCategory()
 {
 	AudioOutput ao( this );
-	ao.setCategory( Phonon::Unspecified );
-	QCOMPARE( ao.category(), Phonon::Unspecified );
-	QCOMPARE( ao.categoryName(), QLatin1String( "Unspecified" ) );
-	ao.setCategory( Phonon::Notification );
-	QCOMPARE( ao.category(), Phonon::Notification );
-	QCOMPARE( ao.categoryName(), QLatin1String( "Notification" ) );
-	ao.setCategory( Phonon::Music );
-	QCOMPARE( ao.category(), Phonon::Music );
-	QCOMPARE( ao.categoryName(), QLatin1String( "Music" ) );
-	ao.setCategory( Phonon::Video );
-	QCOMPARE( ao.category(), Phonon::Video );
-	QCOMPARE( ao.categoryName(), QLatin1String( "Video" ) );
-	ao.setCategory( Phonon::Communication );
-	QCOMPARE( ao.category(), Phonon::Communication );
-	QCOMPARE( ao.categoryName(), QLatin1String( "Communication" ) );
+	ao.setCategory( Phonon::UnspecifiedCategory );
+	QCOMPARE( ao.category(), Phonon::UnspecifiedCategory );
+	QCOMPARE( Phonon::categoryToString( ao.category() ), QLatin1String( "Unspecified" ) );
+	ao.setCategory( Phonon::NotificationCategory );
+	QCOMPARE( ao.category(), Phonon::NotificationCategory );
+	QCOMPARE( Phonon::categoryToString( ao.category() ), QLatin1String( "Notification" ) );
+	ao.setCategory( Phonon::MusicCategory );
+	QCOMPARE( ao.category(), Phonon::MusicCategory );
+	QCOMPARE( Phonon::categoryToString( ao.category() ), QLatin1String( "Music" ) );
+	ao.setCategory( Phonon::VideoCategory );
+	QCOMPARE( ao.category(), Phonon::VideoCategory );
+	QCOMPARE( Phonon::categoryToString( ao.category() ), QLatin1String( "Video" ) );
+	ao.setCategory( Phonon::CommunicationCategory );
+	QCOMPARE( ao.category(), Phonon::CommunicationCategory );
+	QCOMPARE( Phonon::categoryToString( ao.category() ), QLatin1String( "Communication" ) );
 }
 
 void AudioOutputTest::cleanupTestCase()

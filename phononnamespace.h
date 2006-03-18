@@ -77,14 +77,14 @@ namespace Phonon
 	 */
 	enum Category
 	{
-		Unspecified,
-		Notification,
-		Music,
-		Video,
-		Communication
+		UnspecifiedCategory,
+		NotificationCategory,
+		MusicCategory,
+		VideoCategory,
+		CommunicationCategory
 	};
 
-	QString categoryToString( Category c );
+	QString PHONON_EXPORT categoryToString( Category c );
 } //namespace Phonon
 
 class kdbgstream;
