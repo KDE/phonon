@@ -41,7 +41,7 @@ namespace Phonon
 	 * Use this class to define the audio output. Example:
 	 * \code
 	 * m_audioOutput = new AudioOutput( this );
-	 * m_audioOutput->setCategory( Phonon::Music );
+	 * m_audioOutput->setCategory( Phonon::MusicCategory );
 	 * m_audioPath->addOutput( m_audioOutput );
 	 * \endcode
 	 *
