@@ -26,7 +26,7 @@ namespace Phonon
 {
 namespace Fake
 {
-	class AvCapture : virtual public AbstractMediaProducer, virtual public Ifaces::AvCapture
+	class AvCapture : public AbstractMediaProducer, virtual public Ifaces::AvCapture
 	{
 		Q_OBJECT
 		public:

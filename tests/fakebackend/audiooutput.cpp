@@ -33,18 +33,6 @@ AudioOutput::AudioOutput( QObject* parent )
 	: AbstractAudioOutput( parent )
 	, m_dsp( "/dev/dsp" )
 {
-	if( !m_dsp.open( QIODevice::WriteOnly ) )
-		kWarning() << "couldn't open /dev/dsp for writing" << endl;
-	else
-	{
-		int fd = m_dsp.handle();
-		int format = AFMT_S16_LE;
-		int stereo = 1;
-		int samplingRate = 44100;
-		ioctl( fd, SNDCTL_DSP_SETFMT, &format );
-		ioctl( fd, SNDCTL_DSP_STEREO, &stereo );
-		ioctl( fd, SNDCTL_DSP_SPEED, &samplingRate );
-	}
 }
 
 AudioOutput::~AudioOutput()
@@ -76,6 +64,7 @@ float AudioOutput::setVolume( float newVolume )
 
 void AudioOutput::processBuffer( const QVector<float>& buffer )
 {
+	openDevice();
 	if( !m_dsp.isOpen() )
 		return;
 
@@ -104,6 +93,30 @@ void AudioOutput::processBuffer( const QVector<float>& buffer )
 
 	pcm -= 2*buffer.size();
 	delete[] pcm;
+}
+
+void AudioOutput::openDevice()
+{
+	if( m_dsp.isOpen() )
+		return;
+
+	if( !m_dsp.open( QIODevice::WriteOnly ) )
+		kWarning() << "couldn't open /dev/dsp for writing" << endl;
+	else
+	{
+		int fd = m_dsp.handle();
+		int format = AFMT_S16_LE;
+		int stereo = 1;
+		int samplingRate = 44100;
+		ioctl( fd, SNDCTL_DSP_SETFMT, &format );
+		ioctl( fd, SNDCTL_DSP_STEREO, &stereo );
+		ioctl( fd, SNDCTL_DSP_SPEED, &samplingRate );
+	}
+}
+
+void AudioOutput::closeDevice()
+{
+	m_dsp.close();
 }
 
 }} //namespace Phonon::Fake

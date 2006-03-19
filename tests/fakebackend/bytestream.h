@@ -27,7 +27,7 @@ namespace Phonon
 {
 namespace Fake
 {
-	class ByteStream : virtual public AbstractMediaProducer, virtual public Ifaces::ByteStream
+	class ByteStream : public AbstractMediaProducer, virtual public Ifaces::ByteStream
 	{
 		Q_OBJECT
 		public:

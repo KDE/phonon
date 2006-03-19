@@ -29,7 +29,7 @@ namespace Phonon
 {
 namespace Fake
 {
-	class MediaObject : virtual public AbstractMediaProducer, virtual public Ifaces::MediaObject
+	class MediaObject : public AbstractMediaProducer, virtual public Ifaces::MediaObject
 	{
 		Q_OBJECT
 		public:

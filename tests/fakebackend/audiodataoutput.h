@@ -30,7 +30,7 @@ namespace Fake
 	/**
 	 * \author Matthias Kretz <kretz@kde.org>
 	 */
-	class AudioDataOutput : virtual public AbstractAudioOutput, virtual public Ifaces::AudioDataOutput
+	class AudioDataOutput : public AbstractAudioOutput, virtual public Ifaces::AudioDataOutput
 	{
 		Q_OBJECT
 		public:

@@ -21,6 +21,8 @@
 #define Phonon_FAKE_BACKEND_H
 
 #include "../../ifaces/backend.h"
+#include <QList>
+#include <QPointer>
 
 class KUrl;
 
@@ -43,6 +45,7 @@ namespace Ifaces
 }
 namespace Fake
 {
+	class AudioOutput;
 
 	class PHONON_EXPORT Backend : public Ifaces::Backend
 	{
@@ -69,6 +72,8 @@ namespace Fake
 			virtual bool supportsSubtitles() const;
 			virtual const KMimeType::List& knownMimeTypes() const;
 
+			virtual void freeSoundcardDevices();
+
 			virtual int audioSourceCount() const;
 			virtual QString audioSourceName( int index ) const;
 			virtual QString audioSourceDescription( int index ) const;
@@ -89,6 +94,7 @@ namespace Fake
 		private:
 			KMimeType::List m_supportedMimeTypes;
 			QStringList m_audioEffects, m_videoEffects;
+			QList<QPointer<AudioOutput> > m_audioOutputs;
 	};
 }} // namespace Phonon::Ifaces
 

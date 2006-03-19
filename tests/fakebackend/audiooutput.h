@@ -27,7 +27,7 @@ namespace Phonon
 {
 namespace Fake
 {
-	class AudioOutput : virtual public AbstractAudioOutput, virtual public Ifaces::AudioOutput
+	class AudioOutput : public AbstractAudioOutput, virtual public Ifaces::AudioOutput
 	{
 		Q_OBJECT
 		public:
@@ -43,6 +43,9 @@ namespace Fake
 			virtual float setVolume( float newVolume );
 
 			virtual void processBuffer( const QVector<float>& buffer );
+
+			void openDevice();
+			void closeDevice();
 
 		Q_SIGNALS:
 			void volumeChanged( float newVolume );
