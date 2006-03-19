@@ -26,19 +26,6 @@
 #include <kstaticdeleter.h>
 #include <kdelibs_export.h>
 
-/**
- * \brief The KDE Multimedia classes
- *
- * In this Namespace you find the classes to access Multimedia functions for
- * audio and video playback. Those classes are not dependent
- * on any specific framework (like they were in pre KDE4 times) but rather use
- * exchangeable backends to do the "dirty" work.
- *
- * If you want to write a new backend you also find the necessary classes in
- * Phonon::Ifaces.
- *
- * \author Matthias Kretz <kretz@kde.org>
- */
 namespace Phonon
 {
 	namespace Ifaces
@@ -197,6 +184,17 @@ class PHONON_EXPORT Factory : public QObject, public DCOPObject
 		 * This is called via DCOP when the user changes the Phonon Backend.
 		 */
 		void phononBackendChanged();
+
+//X 		It is probably better if we can get away with internal handling of
+//X 		freeing the soundcard device when it's not needed anymore and
+//X 		providing an IPC method to stop all MediaProducers -> free all
+//X 		devices
+//X 		/**
+//X 		 * \internal
+//X 		 * This is called when the application needs to free the soundcard
+//X 		 * device(s).
+//X 		 */
+//X 		void freeSoundcardDevices();
 };
 } // namespace Phonon
 

@@ -193,6 +193,14 @@ void Factory::phononBackendChanged()
 	emit backendChanged();
 }
 
+//X void Factory::freeSoundcardDevices()
+//X {
+//X 	if( d->backend )
+//X 	{
+//X 		d->backend->freeSoundcardDevices();
+//X 	}
+//X }
+
 void Factory::objectDestroyed( QObject * obj )
 {
 	//kDebug( 600 ) << k_funcinfo << obj << endl;

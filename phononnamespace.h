@@ -22,12 +22,25 @@
 
 #include <kdelibs_export.h>
 
+/**
+ * \brief The KDE Multimedia classes
+ *
+ * In this Namespace you find the classes to access Multimedia functions for
+ * audio and video playback. Those classes are not dependent
+ * on any specific framework (like they were in pre KDE4 times) but rather use
+ * exchangeable backends to do the "dirty" work.
+ *
+ * If you want to write a new backend you also find the necessary classes in
+ * Phonon::Ifaces.
+ *
+ * \author Matthias Kretz <kretz@kde.org>
+ */
 namespace Phonon
 {
 	/**
 	 * The state the media producing object is in at the moment.
 	 *
-	 * @see AbstractMediaProducer
+	 * \see AbstractMediaProducer
 	 */
 	enum State
 	{

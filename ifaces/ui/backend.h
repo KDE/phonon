@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2004-2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2004-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -27,15 +27,23 @@ namespace Phonon
 {
 namespace Ui
 {
+/**
+ * \short The interfaces that depend on a GUI.
+ *
+ * This class is currently only used to create new VideoWidget instances.
+ *
+ * \see Phonon::Ifaces
+ * \author Matthias Kretz <kretz@kde.org>
+ */
 namespace Ifaces
 {
 	class VideoWidget;
 
 	/**
-	 * \brief Base class for all KDE Multimedia Backends
+	 * \brief Central class for all GUI dependent parts of Phonon backends.
 	 *
-	 * This class provides the interface for Multimedia Backends. Use it to get
-	 * a pointer to a new Player or VideoWidget.
+	 * Exactly one instance of this class is created for the Phonon fronted
+	 * class which utilizes it to create your VideoWidget implementation.
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
 	 */
@@ -43,9 +51,15 @@ namespace Ifaces
 	{
 		Q_OBJECT
 		public:
-			Backend( QObject* parent = 0 ) : QObject( parent ) {}
-			virtual ~Backend() {}
+			/**
+			 * Standard QObject constructor.
+			 */
+			Backend( QObject* parent = 0 );
+			virtual ~Backend();
 
+			/**
+			 * Creates an instance of VideoWidget
+			 */
 			virtual VideoWidget*  createVideoWidget( QWidget* parent ) = 0;
 
 		private:
