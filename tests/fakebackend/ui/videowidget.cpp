@@ -34,6 +34,7 @@ VideoWidget::VideoWidget( QWidget* parent )
 	p.setColor( QPalette::Window, Qt::blue );
 	setPalette( p );
 	setBackgroundRole( QPalette::Window );
+	setAutoFillBackground( true );
 	setMinimumSize( 100, 100 );
 }
 
