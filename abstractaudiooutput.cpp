@@ -18,7 +18,6 @@
 */
 #include "abstractaudiooutput.h"
 #include "abstractaudiooutput_p.h"
-#include "ifaces/abstractaudiooutput.h"
 #include "factory.h"
 
 namespace Phonon
@@ -34,7 +33,7 @@ bool AbstractAudioOutputPrivate::aboutToDeleteIface()
 void AbstractAudioOutput::setupIface()
 {
 	K_D( AbstractAudioOutput );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 
 	// set up attributes
 }

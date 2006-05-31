@@ -20,13 +20,12 @@
 #define Phonon_FAKE_ABSTRACTAUDIOOUTPUTBASE_H
 
 #include <QObject>
-#include "../../ifaces/abstractaudiooutput.h"
 
 namespace Phonon
 {
 namespace Fake
 {
-	class AbstractAudioOutput : public QObject, virtual public Ifaces::AbstractAudioOutput
+	class AbstractAudioOutput : public QObject
 	{
 		Q_OBJECT
 		public:
@@ -34,10 +33,6 @@ namespace Fake
 			virtual ~AbstractAudioOutput();
 
 			virtual void processBuffer( const QVector<float>& buffer ) = 0;
-
-		public:
-			virtual QObject* qobject() { return this; }
-			virtual const QObject* qobject() const { return this; }
 
 		private:
 	};

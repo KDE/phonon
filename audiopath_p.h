@@ -21,7 +21,6 @@
 #define AUDIOPATH_P_H
 
 #include "audiopath.h"
-#include "ifaces/audiopath.h"
 #include "base_p.h"
 #include <QList>
 

@@ -22,7 +22,6 @@
 
 #include "visualization.h"
 #include "base_p.h"
-#include "ifaces/visualization.h"
 
 namespace Phonon
 {

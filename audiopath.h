@@ -30,11 +30,6 @@ namespace Phonon
 	class AudioEffect;
 	class AbstractAudioOutput;
 
-	namespace Ifaces
-	{
-		class AudioPath;
-	}
-
 	/**
 	 * \short A class to route and process audio data.
 	 *

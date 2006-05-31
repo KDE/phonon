@@ -47,7 +47,7 @@ void Visualization::setAudioPath( AudioPath* audioPath )
 	K_D( Visualization );
 	d->audioPath = audioPath;
 	if( iface() )
-		d->iface()->setAudioPath( audioPath->iface() );
+		BACKEND_CALL1( "setAudioPath", QObject*, audioPath->iface() );
 }
 
 AbstractVideoOutput* Visualization::videoOutput() const
@@ -61,29 +61,39 @@ void Visualization::setVideoOutput( AbstractVideoOutput* videoOutput )
 	K_D( Visualization );
 	d->videoOutput = videoOutput;
 	if( iface() )
-		d->iface()->setVideoOutput( videoOutput->iface() );
+		BACKEND_CALL1( "setVideoOutput", QObject*, videoOutput->iface() );
 }
 
 VisualizationEffect Visualization::visualization() const
 {
 	K_D( const Visualization );
-	return VisualizationEffect::fromIndex( d->iface() ? d->iface()->visualization() : d->visualizationIndex );
+	int index;
+	if( d->backendObject )
+		BACKEND_GET( int, index, "visualization" );
+	else
+		index = d->visualizationIndex;
+	return VisualizationEffect::fromIndex( index );
 }
 
 void Visualization::setVisualization( const VisualizationEffect& newVisualization )
 {
 	K_D( Visualization );
 	if( iface() )
-		d->iface()->setVisualization( newVisualization.index() );
+		BACKEND_CALL1( "setVisualization", int, newVisualization.index() );
 	else
 		d->visualizationIndex = newVisualization.index();
 }
 
+/*
 bool Visualization::hasParameterWidget() const
 {
 	K_D( const Visualization );
-	if( d->iface() )
-		return d->iface()->hasParameterWidget();
+	if( d->backendObject )
+	{
+		bool ret;
+		BACKEND_GET( bool, ret, "hasParameterWidget" );
+		return ret;
+	}
 	return false;
 }
 
@@ -91,9 +101,14 @@ QWidget* Visualization::createParameterWidget( QWidget* parent )
 {
 	K_D( Visualization );
 	if( iface() )
-		return d->iface()->createParameterWidget( parent );
+	{
+		QWidget* ret;
+		BACKEND_GET1( QWidget*, ret, "createParameterWidget", QWidget*, parent );
+		return ret;
+	}
 	return 0;
 }
+*/
 
 void Visualization::phononObjectDestroyed( Base* o )
 {
@@ -112,21 +127,21 @@ void Visualization::phononObjectDestroyed( Base* o )
 
 bool VisualizationPrivate::aboutToDeleteIface()
 {
-	if( iface() )
-		visualizationIndex = iface()->visualization();
+	if( backendObject )
+		pBACKEND_GET( int, visualizationIndex, "visualization" );
 	return true;
 }
 
 void Visualization::setupIface()
 {
 	K_D( Visualization );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 
-	d->iface()->setVisualization( d->visualizationIndex );
+	BACKEND_CALL1( "setVisualization", int, d->visualizationIndex );
 	if( d->audioPath )
-		d->iface()->setAudioPath( d->audioPath->iface() );
+		BACKEND_CALL1( "setAudioPath", QObject*, d->audioPath->iface() );
 	if( d->videoOutput )
-		d->iface()->setVideoOutput( d->videoOutput->iface() );
+		BACKEND_CALL1( "setVideoOutput", QObject*, d->videoOutput->iface() );
 }
 
 } // namespace Phonon

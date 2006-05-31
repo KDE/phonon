@@ -204,16 +204,36 @@ class PHONONCORE_EXPORT EffectParameter
 			IntegerHint      = 0x20
 		};
 		Q_DECLARE_FLAGS( Hints, Hint )
-	protected:
 
 		/**
-		 * \internal
-		 * Constructs a new effect parameter and
-		 * sets all the internal data.
+		 * Only to be used by backend implementations:
+		 *
+		 * Creates a new effect parameter.
+		 *
+		 * \param parameterId This is a number to uniquely identify the
+		 * parameter. The id is used for value() and setValue().
+		 *
+		 * \param name The name/label for this parameter.
+		 *
+		 * \param hints Sets the hints for the type of parameter.
+		 *
+		 * \param defaultValue The value that should be used as a default.
+		 *
+		 * \param min The minium value allowed for this parameter. You only
+		 * need to set this if the BoundedBelowHint is set.
+		 *
+		 * \param max The maxium value allowed for this parameter. You only
+		 * need to set this if the BoundedAboveHint is set.
+		 *
+		 * \param description A descriptive text for the parameter
+		 * (explaining what it controls) to be used as a tooltip or
+		 * WhatsThis help.
 		 */
-		EffectParameter( int parameterId, Hints hints, QVariant min, QVariant max,
-				QVariant defaultValue, const QString& name, const QString& description = QString() );
+		EffectParameter( int parameterId, const QString& name, EffectParameter::Hints hints,
+				QVariant defaultValue, QVariant min = QVariant(), QVariant max = QVariant(),
+				const QString& description = QString() );
 
+	protected:
 		/**
 		 * \internal
 		 * Sets the pointer to the Effect object for value() and setValue().

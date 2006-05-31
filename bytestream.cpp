@@ -19,91 +19,43 @@
 
 #include "bytestream.h"
 #include "bytestream_p.h"
-#include "ifaces/bytestream.h"
 #include "factory.h"
 
 namespace Phonon
 {
 PHONON_HEIR_IMPL( ByteStream, AbstractMediaProducer )
 
-qint64 ByteStream::totalTime() const
-{
-	K_D( const ByteStream );
-	return d->iface() ? d->iface()->totalTime() : -1;
-}
+PHONON_GETTER( ByteStream, qint64, totalTime, -1 )
+PHONON_GETTER( ByteStream, qint64, remainingTime, -1 )
+PHONON_GETTER( ByteStream, qint32, aboutToFinishTime, d->aboutToFinishTime )
+PHONON_GETTER( ByteStream, qint64, streamSize, d->streamSize )
+PHONON_GETTER( ByteStream, bool, streamSeekable, d->streamSeekable )
 
-qint64 ByteStream::remainingTime() const
-{
-	K_D( const ByteStream );
-	return d->iface() ? d->iface()->remainingTime() : -1;
-}
-
-qint32 ByteStream::aboutToFinishTime() const
-{
-	K_D( const ByteStream );
-	return d->iface() ? d->iface()->aboutToFinishTime() : d->aboutToFinishTime;
-}
-
-qint64 ByteStream::streamSize() const
-{
-	K_D( const ByteStream );
-	return d->iface() ? d->iface()->streamSize() : d->streamSize;
-}
-
-bool ByteStream::streamSeekable() const
-{
-	K_D( const ByteStream );
-	return d->iface() ? d->iface()->streamSeekable() : d->streamSeekable;
-}
-
-void ByteStream::setStreamSeekable( bool seekable )
-{
-	K_D( ByteStream );
-	if( d->iface() )
-		d->iface()->setStreamSeekable( seekable );
-	else
-		d->streamSeekable = seekable;
-}
+PHONON_SETTER( ByteStream, setStreamSeekable, streamSeekable, bool )
+PHONON_SETTER( ByteStream, setStreamSize, streamSize, qint64 )
+PHONON_SETTER( ByteStream, setAboutToFinishTime, aboutToFinishTime, qint32 )
 
 void ByteStream::writeData( const QByteArray& data )
 {
 	K_D( ByteStream );
 	if( iface() )
-		d->iface()->writeData( data );
-}
-
-void ByteStream::setStreamSize( qint64 streamSize )
-{
-	K_D( ByteStream );
-	if( d->iface() )
-		d->iface()->setStreamSize( streamSize );
-	else
-		d->streamSize = streamSize;
+		BACKEND_CALL1( "writeData", QByteArray, data );
 }
 
 void ByteStream::endOfData()
 {
 	K_D( ByteStream );
 	if( iface() )
-		d->iface()->endOfData();
-}
-
-void ByteStream::setAboutToFinishTime( qint32 newAboutToFinishTime )
-{
-	K_D( ByteStream );
-	if( d->iface() )
-		d->iface()->setAboutToFinishTime( newAboutToFinishTime );
-	else
-		d->aboutToFinishTime = newAboutToFinishTime;
+		BACKEND_CALL( "endOfData" );
 }
 
 bool ByteStreamPrivate::aboutToDeleteIface()
 {
-	if( iface() )
+	if( backendObject )
 	{
-		aboutToFinishTime = iface()->aboutToFinishTime();
-		streamSize = iface()->streamSize();
-		streamSeekable = iface()->streamSeekable();
+		pBACKEND_GET( qint32, aboutToFinishTime, "aboutToFinishTime" );
+		pBACKEND_GET( qint64, streamSize, "streamSize" );
+		pBACKEND_GET( bool, streamSeekable, "streamSeekable" );
 	}
 	return AbstractMediaProducerPrivate::aboutToDeleteIface();
 }
@@ -111,17 +63,17 @@ bool ByteStreamPrivate::aboutToDeleteIface()
 void ByteStream::setupIface()
 {
 	K_D( ByteStream );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 	AbstractMediaProducer::setupIface();
 
-	connect( d->iface()->qobject(), SIGNAL( finished() ), SIGNAL( finished() ) );
-	connect( d->iface()->qobject(), SIGNAL( aboutToFinish( qint32 ) ), SIGNAL( aboutToFinish( qint32 ) ) );
-	connect( d->iface()->qobject(), SIGNAL( length( qint64 ) ), SIGNAL( length( qint64 ) ) );
-	connect( d->iface()->qobject(), SIGNAL( needData() ), SIGNAL( needData() ) );
-	connect( d->iface()->qobject(), SIGNAL( enoughData() ), SIGNAL( enoughData() ) );
-	connect( d->iface()->qobject(), SIGNAL( seekStream( qint64 ) ), SIGNAL( seekStream( qint64 ) ) );
+	connect( d->backendObject, SIGNAL( finished() ), SIGNAL( finished() ) );
+	connect( d->backendObject, SIGNAL( aboutToFinish( qint32 ) ), SIGNAL( aboutToFinish( qint32 ) ) );
+	connect( d->backendObject, SIGNAL( length( qint64 ) ), SIGNAL( length( qint64 ) ) );
+	connect( d->backendObject, SIGNAL( needData() ), SIGNAL( needData() ) );
+	connect( d->backendObject, SIGNAL( enoughData() ), SIGNAL( enoughData() ) );
+	connect( d->backendObject, SIGNAL( seekStream( qint64 ) ), SIGNAL( seekStream( qint64 ) ) );
 
-	d->iface()->setAboutToFinishTime( d->aboutToFinishTime );
+	BACKEND_CALL1( "setAboutToFinishTime", qint32, d->aboutToFinishTime );
 }
 
 } //namespace Phonon

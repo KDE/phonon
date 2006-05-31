@@ -21,7 +21,6 @@
 #define VIDEOWIDGET_P_H
 
 #include "videowidget.h"
-#include "ifaces/videowidget.h"
 #include "../abstractvideooutput_p.h"
 #include <QHBoxLayout>
 #include <QAction>
@@ -86,15 +85,6 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 	protected:
 		virtual bool aboutToDeleteIface();
 		virtual void createIface();
-		virtual void setIface( void* p )
-		{
-			iface_ptr = reinterpret_cast<Ifaces::VideoWidget*>( p );
-			AbstractVideoOutputPrivate::setIface( static_cast<Phonon::Ifaces::AbstractVideoOutput*>( iface_ptr ) );
-		}
-	private:
-		Ifaces::VideoWidget* iface_ptr;
-		inline Ifaces::VideoWidget* iface() { return iface_ptr; }
-		inline const Ifaces::VideoWidget* iface() const { return iface_ptr; }
 
 	protected:
 		VideoWidgetPrivate( VideoWidget* parent )

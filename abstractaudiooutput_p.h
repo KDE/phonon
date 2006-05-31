@@ -21,7 +21,6 @@
 #define PHONON_ABSTRACTAUDIOOUTPUT_P_H
 
 #include "abstractaudiooutput.h"
-#include "ifaces/abstractaudiooutput.h"
 #include "base_p.h"
 
 namespace Phonon

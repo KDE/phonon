@@ -21,30 +21,25 @@
 #define PHONON_FAKE_MEDIAQUEUE_H
 
 #include <QObject>
-#include <phonon/ifaces/mediaqueue.h>
 
 namespace Phonon
 {
 namespace Fake
 {
 
-class MediaQueue : public QObject, virtual public Ifaces::MediaQueue
+class MediaQueue : public QObject
 {
 	Q_OBJECT
 	public:
 		MediaQueue( QObject* parent );
 
-		virtual void setNext( Ifaces::MediaObject* );
+		Q_INVOKABLE void setNext( QObject* );
 
-		virtual qint32 timeBetweenMedia() const;
-		virtual void setTimeBetweenMedia( qint32 milliseconds );
+		Q_INVOKABLE qint32 timeBetweenMedia() const;
+		Q_INVOKABLE void setTimeBetweenMedia( qint32 milliseconds );
 
-		virtual bool doCrossfade() const;
-		virtual void setDoCrossfade( bool doCrossfade );
-
-	public:
-		virtual QObject* qobject() { return this; }
-		virtual const QObject* qobject() const { return this; }
+		Q_INVOKABLE bool doCrossfade() const;
+		Q_INVOKABLE void setDoCrossfade( bool doCrossfade );
 
 	Q_SIGNALS:
 		void needNextMediaObject();

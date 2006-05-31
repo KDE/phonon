@@ -26,10 +26,6 @@
 namespace Phonon
 {
 	class AbstractAudioOutputPrivate;
-	namespace Ifaces
-	{
-		class AbstractAudioOutput;
-	}
 
 	class PHONONCORE_EXPORT AbstractAudioOutput : public QObject, public Base
 	{

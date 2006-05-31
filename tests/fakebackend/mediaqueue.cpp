@@ -29,7 +29,7 @@ MediaQueue::MediaQueue( QObject* parent )
 {
 }
 
-void MediaQueue::setNext( Ifaces::MediaObject* )
+void MediaQueue::setNext( QObject* )
 {
 }
 

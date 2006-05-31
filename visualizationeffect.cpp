@@ -20,7 +20,7 @@
 #include "visualizationeffect.h"
 #include "visualizationeffect_p.h"
 #include "factory.h"
-#include "ifaces/backend.h"
+#include "phonondefs.h"
 
 #include <QString>
 #include <QSet>
@@ -54,16 +54,7 @@ bool VisualizationEffect::operator==( const VisualizationEffect& rhs ) const
 	return *d_func() == *rhs.d_func();
 }
 
-VisualizationEffect VisualizationEffect::fromIndex( int index )
-{
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->visualizationIndexes().contains( index ) )
-		return VisualizationEffect( index,
-				b->visualizationName( index ),
-				b->visualizationDescription( index ) );
-	else
-		return VisualizationEffect(); //isValid() == false
-}
+NAMEDESCRIPTIONFROMINDEX( VisualizationEffect, visualization )
 
 } // namespace Phonon
 

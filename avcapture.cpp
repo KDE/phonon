@@ -18,9 +18,7 @@
 */
 #include "avcapture.h"
 #include "avcapture_p.h"
-#include "ifaces/avcapture.h"
 #include "factory.h"
-#include "ifaces/backend.h"
 #include "audiocapturedevice.h"
 #include "videocapturedevice.h"
 
@@ -31,14 +29,19 @@ PHONON_HEIR_IMPL( AvCapture, AbstractMediaProducer )
 AudioCaptureDevice AvCapture::audioCaptureDevice() const
 {
 	K_D( const AvCapture );
-	return AudioCaptureDevice::fromIndex( d->iface() ? d->iface()->audioCaptureDevice() : d->audioCaptureDevice );
+	int index;
+	if( d->backendObject )
+		BACKEND_GET( int, index, "audioCaptureDevice" );
+	else
+		index = d->audioCaptureDevice;
+	return AudioCaptureDevice::fromIndex( index );
 }
 
 void AvCapture::setAudioCaptureDevice( const AudioCaptureDevice& audioCaptureDevice )
 {
 	K_D( AvCapture );
-	if( d->iface() )
-		d->iface()->setAudioCaptureDevice( audioCaptureDevice.index() );
+	if( d->backendObject )
+		BACKEND_CALL1( "setAudioCaptureDevice", int, audioCaptureDevice.index() );
 	else
 		d->audioCaptureDevice = audioCaptureDevice.index();
 }
@@ -46,8 +49,8 @@ void AvCapture::setAudioCaptureDevice( const AudioCaptureDevice& audioCaptureDev
 void AvCapture::setAudioCaptureDevice( int audioCaptureDeviceIndex )
 {
 	K_D( AvCapture );
-	if( d->iface() )
-		d->iface()->setAudioCaptureDevice( audioCaptureDeviceIndex );
+	if( d->backendObject )
+		BACKEND_CALL1( "setAudioCaptureDevice", int, audioCaptureDeviceIndex );
 	else
 		d->audioCaptureDevice = audioCaptureDeviceIndex;
 }
@@ -55,14 +58,19 @@ void AvCapture::setAudioCaptureDevice( int audioCaptureDeviceIndex )
 VideoCaptureDevice AvCapture::videoCaptureDevice() const
 {
 	K_D( const AvCapture );
-	return VideoCaptureDevice::fromIndex( d->iface() ? d->iface()->videoCaptureDevice() : d->videoCaptureDevice );
+	int index;
+	if( d->backendObject )
+		BACKEND_GET( int, index, "videoCaptureDevice" );
+	else
+		index = d->videoCaptureDevice;
+	return VideoCaptureDevice::fromIndex( index );
 }
 
 void AvCapture::setVideoCaptureDevice( const VideoCaptureDevice& videoCaptureDevice )
 {
 	K_D( AvCapture );
-	if( d->iface() )
-		d->iface()->setVideoCaptureDevice( videoCaptureDevice.index() );
+	if( d->backendObject )
+		BACKEND_CALL1( "setVideoCaptureDevice", int, videoCaptureDevice.index() );
 	else
 		d->videoCaptureDevice = videoCaptureDevice.index();
 }
@@ -70,28 +78,28 @@ void AvCapture::setVideoCaptureDevice( const VideoCaptureDevice& videoCaptureDev
 void AvCapture::setVideoCaptureDevice( int videoCaptureDeviceIndex )
 {
 	K_D( AvCapture );
-	if( d->iface() )
-		d->iface()->setVideoCaptureDevice( videoCaptureDeviceIndex );
+	if( d->backendObject )
+		BACKEND_CALL1( "setVideoCaptureDevice", int, videoCaptureDeviceIndex );
 	else
 		d->videoCaptureDevice = videoCaptureDeviceIndex;
 }
 
 bool AvCapturePrivate::aboutToDeleteIface()
 {
-	audioCaptureDevice = iface()->audioCaptureDevice();
-	videoCaptureDevice = iface()->videoCaptureDevice();
+	pBACKEND_GET( int, audioCaptureDevice, "audioCaptureDevice" );
+	pBACKEND_GET( int, videoCaptureDevice, "videoCaptureDevice" );
 	return AbstractMediaProducerPrivate::aboutToDeleteIface();
 }
 
 void AvCapture::setupIface()
 {
 	K_D( AvCapture );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 	AbstractMediaProducer::setupIface();
 
 	// set up attributes
-	d->iface()->setAudioCaptureDevice( d->audioCaptureDevice );
-	d->iface()->setVideoCaptureDevice( d->videoCaptureDevice );
+	BACKEND_CALL1( "setAudioCaptureDevice", int, d->audioCaptureDevice );
+	BACKEND_CALL1( "setVideoCaptureDevice", int, d->videoCaptureDevice );
 }
 
 } //namespace Phonon

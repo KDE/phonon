@@ -21,7 +21,6 @@
 #define PHONON_VIDEODATAOUTPUT_P_H
 
 #include "videodataoutput.h"
-#include "ifaces/videodataoutput.h"
 #include "abstractvideooutput_p.h"
 #include "videoframe.h"
 #include <QSize>

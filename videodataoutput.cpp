@@ -18,9 +18,7 @@
 */
 #include "videodataoutput.h"
 #include "videodataoutput_p.h"
-#include "ifaces/videodataoutput.h"
 #include "factory.h"
-#include "ifaces/backend.h"
 #include <QSize>
 
 namespace Phonon
@@ -40,76 +38,34 @@ VideoDataOutput::VideoDataOutput( VideoDataOutputPrivate& dd, QObject* parent )
 {
 }
 
-Ifaces::VideoDataOutput* VideoDataOutput::iface()
-{
-	K_D( VideoDataOutput );
-	if( !d->iface() )
-		d->createIface();
-	return d->iface();
-}
-
 void VideoDataOutputPrivate::createIface()
 {
-	if( iface_ptr )
+	if( backendObject )
 		return;
 	K_Q( VideoDataOutput );
-	Ifaces::VideoDataOutput* iface = Factory::self()->createVideoDataOutput( q );
-	if( iface )
-	{
-		setIface( iface );
+	backendObject = Factory::self()->createVideoDataOutput( q );
+	if( backendObject )
 		q->setupIface();
-	}
 }
 
-quint32 VideoDataOutput::format() const
-{
-	K_D( const VideoDataOutput );
-	return d->iface() ? d->iface()->format() : d->format;
-}
-
-//X int VideoDataOutput::displayLatency() const
-//X {
-//X 	K_D( const VideoDataOutput );
-//X 	return d->iface() ? d->iface()->displayLatency() : d->displayLatency;
-//X }
+PHONON_GETTER( VideoDataOutput, quint32, format, d->format )
 
 bool VideoDataOutput::formatSupported( quint32 fourcc )
 {
-	const Ifaces::Backend* backend = Factory::self()->backend();
+	QObject* backend = Factory::self()->backend();
 	if( backend )
-		return backend->supportsFourcc( fourcc );
+	{
+		bool ret;
+		QMetaObject::invokeMethod( backend, "supportsFourcc", Q_RETURN_ARG( bool, ret ), Q_ARG( quint32, fourcc ) );
+		return ret;
+	}
 	return false;
 }
 
-int VideoDataOutput::frameRate() const
-{
-	K_D( const VideoDataOutput );
-	return d->iface() ? d->iface()->frameRate() : d->frameRate;
-}
-
-void VideoDataOutput::setFrameRate( int newRate )
-{
-	K_D( VideoDataOutput );
-	if( iface() )
-		d->iface()->setFrameRate( newRate );
-	else
-		d->frameRate = newRate;
-}
-
-void VideoDataOutput::setFormat( quint32 newformat )
-{
-	K_D( VideoDataOutput );
-	if( iface() )
-		d->iface()->setFormat( newformat );
-	else
-		d->format = newformat;
-}
-
-QSize VideoDataOutput::frameSize() const
-{
-	K_D( const VideoDataOutput );
-	return d->iface() ? d->iface()->frameSize() : d->frameSize;
-}
+PHONON_GETTER( VideoDataOutput, int, frameRate, d->frameRate )
+PHONON_SETTER( VideoDataOutput, setFrameRate, frameRate, int )
+PHONON_SETTER( VideoDataOutput, setFormat, format, quint32 )
+PHONON_GETTER( VideoDataOutput, QSize, frameSize, d->frameSize )
 
 void VideoDataOutput::setFrameSize( const QSize& size, Qt::AspectRatioMode aspectRatioMode )
 {
@@ -119,9 +75,10 @@ void VideoDataOutput::setFrameSize( const QSize& size, Qt::AspectRatioMode aspec
 
 	if( iface() )
 	{
-		QSize newsize = d->iface()->naturalFrameSize();
+		QSize newsize;
+		BACKEND_GET( QSize, newsize, "naturalFrameSize" );
 		newsize.scale( size, aspectRatioMode );
-		d->iface()->setFrameSize( newsize );
+		BACKEND_CALL1( "setFrameSize", QSize, newsize );
 	}
 }
 
@@ -130,20 +87,10 @@ void VideoDataOutput::setFrameSize( int width, int height, Qt::AspectRatioMode a
 	setFrameSize( QSize( width, height ), aspectRatioMode );
 }
 
-//X void VideoDataOutput::setDisplayLatency( int milliseconds )
-//X {
-//X 	K_D( VideoDataOutput );
-//X 	if( iface() )
-//X 		d->iface()->setDisplayLatency( milliseconds );
-//X 	else
-//X 		d->displayLatency = milliseconds;
-//X }
-
 bool VideoDataOutputPrivate::aboutToDeleteIface()
 {
-	Q_ASSERT( iface() );
-	format = iface()->format();
-	//displayLatency = iface()->displayLatency();
+	Q_ASSERT( backendObject );
+	pBACKEND_GET( quint32, format, "format" );
 
 	return AbstractVideoOutputPrivate::aboutToDeleteIface();
 }
@@ -151,15 +98,15 @@ bool VideoDataOutputPrivate::aboutToDeleteIface()
 void VideoDataOutput::setupIface()
 {
 	K_D( VideoDataOutput );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 	AbstractVideoOutput::setupIface();
 
 	// set up attributes
-	d->iface()->setFormat( d->format );
-	//d->iface()->setDisplayLatency( d->displayLatency );
-	connect( d->iface()->qobject(), SIGNAL( frameReady( const Phonon::VideoFrame& ) ),
+	BACKEND_CALL1( "setFormat", quint32, d->format );
+	//d->backendObject->setDisplayLatency( d->displayLatency );
+	connect( d->backendObject, SIGNAL( frameReady( const Phonon::VideoFrame& ) ),
 			SIGNAL( frameReady( const Phonon::VideoFrame& ) ) );
-	connect( d->iface()->qobject(), SIGNAL( endOfMedia() ), SIGNAL( endOfMedia() ) );
+	connect( d->backendObject, SIGNAL( endOfMedia() ), SIGNAL( endOfMedia() ) );
 }
 
 } //namespace Phonon

@@ -35,10 +35,6 @@ namespace Phonon
 {
 	class VideoDataOutputPrivate;
 	class VideoFrame;
-	namespace Ifaces
-	{
-		class VideoDataOutput;
-	}
 
 	/**
 	 * \short This class gives you the video data.

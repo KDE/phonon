@@ -22,24 +22,19 @@
 
 #include <QObject>
 #include <kdelibs_export.h>
-#include <phonon/ui/ifaces/backend.h>
 
 namespace Phonon
 {
-namespace Ifaces
-{
-	class VideoWidget;
-}
 namespace Fake
 {
-	class PHONON_FAKEUI_EXPORT UiBackend : public Ifaces::UiBackend
+	class PHONON_FAKEUI_EXPORT UiBackend : public QObject
 	{
 		Q_OBJECT
 		public:
 			UiBackend( QObject* parent, const QStringList& args );
 			virtual ~UiBackend();
 
-			virtual Ifaces::VideoWidget*  createVideoWidget( QWidget* parent );
+			Q_INVOKABLE QWidget*  createVideoWidget( QWidget* parent );
 	};
 }} // namespace Phonon::Fake
 

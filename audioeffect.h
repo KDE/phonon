@@ -34,10 +34,6 @@ namespace Phonon
 	class EffectParameter;
 	class AudioEffectPrivate;
 	class AudioEffectDescription;
-	namespace Ifaces
-	{
-		class AudioEffect;
-	}
 
 	/**
 	 * \short Audio effects that can be inserted into an AudioPath.
@@ -87,16 +83,6 @@ namespace Phonon
 			 * \endcode
 			 */
 			void setupIface();
-
-		private:
-			/**
-			 * \internal
-			 * Returns the Iface object. If the object does not exist it tries to
-			 * create it before returning.
-			 *
-			 * \return the Iface object, might return \c 0
-			 */
-			Ifaces::AudioEffect* iface();
 
 		protected:
 			virtual QVariant value( int parameterId ) const;

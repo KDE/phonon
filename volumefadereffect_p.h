@@ -22,7 +22,6 @@
 
 #include "volumefadereffect.h"
 #include "audioeffect_p.h"
-#include "ifaces/volumefadereffect.h"
 
 namespace Phonon
 {

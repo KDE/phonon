@@ -20,7 +20,7 @@
 #define Phonon_FAKE_AUDIOEFFECT_H
 
 #include <QObject>
-#include "../../ifaces/audioeffect.h"
+#include <phonon/effectparameter.h>
 
 namespace Phonon
 {
@@ -28,27 +28,23 @@ namespace Fake
 {
 	class EffectInterface;
 
-	/**
-	 * \author Matthias Kretz <kretz@kde.org>
-	 */
-	class AudioEffect : public QObject, virtual public Ifaces::AudioEffect
+	class AudioEffect : public QObject
 	{
 		Q_OBJECT
 		public:
 			AudioEffect( int effectId, QObject* parent );
-			virtual ~AudioEffect();
-			virtual QVariant value( int parameterId ) const;
-			virtual void setValue( int parameterId, QVariant newValue );
+			~AudioEffect();
+			Q_INVOKABLE QVariant value( int parameterId ) const;
+			Q_INVOKABLE void setValue( int parameterId, QVariant newValue );
+
+			Q_INVOKABLE QList<EffectParameter> parameterList() const;
 
 			// Fake specific:
 			virtual void processBuffer( QVector<float>& buffer );
 
-		public:
-			virtual QObject* qobject() { return this; }
-			virtual const QObject* qobject() const { return this; }
-
 		private:
 			EffectInterface* m_effect;
+			QList<Phonon::EffectParameter> m_parameterList;
 	};
 }} //namespace Phonon::Fake
 

@@ -20,7 +20,7 @@
 #include "containerformat.h"
 #include "containerformat_p.h"
 #include "factory.h"
-#include "ifaces/backend.h"
+#include "phonondefs.h"
 
 #include <QString>
 #include <QSet>
@@ -54,16 +54,7 @@ bool ContainerFormat::operator==( const ContainerFormat& rhs ) const
 	return *d_func() == *rhs.d_func();
 }
 
-ContainerFormat ContainerFormat::fromIndex( int index )
-{
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->visualizationIndexes().contains( index ) )
-		return ContainerFormat( index,
-				b->visualizationName( index ),
-				b->visualizationDescription( index ) );
-	else
-		return ContainerFormat(); //isValid() == false
-}
+NAMEDESCRIPTIONFROMINDEX( ContainerFormat, containerFormat )
 
 } // namespace Phonon
 

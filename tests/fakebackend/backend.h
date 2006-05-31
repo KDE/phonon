@@ -20,7 +20,7 @@
 #ifndef Phonon_FAKE_BACKEND_H
 #define Phonon_FAKE_BACKEND_H
 
-#include "../../ifaces/backend.h"
+#include <kdelibs_export.h>
 #include <QList>
 #include <QPointer>
 #include <QStringList>
@@ -29,103 +29,86 @@ class KUrl;
 
 namespace Phonon
 {
-namespace Ifaces
-{
-	class MediaObject;
-	class AvCapture;
-	class ByteStream;
-
-	class AudioPath;
-	class AudioEffect;
-	class VolumeFaderEffect;
-	class AudioOutput;
-	class AudioDataOutput;
-	class Visualization;
-
-	class VideoPath;
-	class VideoEffect;
-	class VideoDataOutput;
-}
 namespace Fake
 {
 	class AudioOutput;
 
-	class PHONON_FAKE_EXPORT Backend : public Ifaces::Backend
+	class PHONON_FAKE_EXPORT Backend : public QObject
 	{
 		Q_OBJECT
 		public:
 			Backend( QObject* parent, const QStringList& args );
 			virtual ~Backend();
 
-			virtual Ifaces::MediaObject*      createMediaObject( QObject* parent );
-			virtual Ifaces::MediaQueue*       createMediaQueue( QObject* parent );
-			virtual Ifaces::AvCapture*        createAvCapture( QObject* parent );
-			virtual Ifaces::ByteStream*       createByteStream( QObject* parent );
+			Q_INVOKABLE QObject*      createMediaObject( QObject* parent );
+			Q_INVOKABLE QObject*       createMediaQueue( QObject* parent );
+			Q_INVOKABLE QObject*        createAvCapture( QObject* parent );
+			Q_INVOKABLE QObject*       createByteStream( QObject* parent );
 
-			virtual Ifaces::AudioPath*        createAudioPath( QObject* parent );
-			virtual Ifaces::AudioEffect*      createAudioEffect( int effectId, QObject* parent );
-			virtual Ifaces::VolumeFaderEffect* createVolumeFaderEffect( QObject* parent );
-			virtual Ifaces::AudioOutput*      createAudioOutput( QObject* parent );
-			virtual Ifaces::AudioDataOutput*  createAudioDataOutput( QObject* parent );
-			virtual Ifaces::Visualization*    createVisualization( QObject* parent );
+			Q_INVOKABLE QObject*        createAudioPath( QObject* parent );
+			Q_INVOKABLE QObject*      createAudioEffect( int effectId, QObject* parent );
+			Q_INVOKABLE QObject* createVolumeFaderEffect( QObject* parent );
+			Q_INVOKABLE QObject*      createAudioOutput( QObject* parent );
+			Q_INVOKABLE QObject*  createAudioDataOutput( QObject* parent );
+			Q_INVOKABLE QObject*    createVisualization( QObject* parent );
 
-			virtual Ifaces::VideoPath*        createVideoPath( QObject* parent );
-			virtual Ifaces::VideoEffect*      createVideoEffect( int effectId, QObject* parent );
-			virtual Ifaces::BrightnessControl* createBrightnessControl( QObject* parent );
-			virtual Ifaces::VideoDataOutput*  createVideoDataOutput( QObject* parent );
+			Q_INVOKABLE QObject*        createVideoPath( QObject* parent );
+			Q_INVOKABLE QObject*      createVideoEffect( int effectId, QObject* parent );
+			Q_INVOKABLE QObject* createBrightnessControl( QObject* parent );
+			Q_INVOKABLE QObject*  createVideoDataOutput( QObject* parent );
 
-			virtual bool supportsVideo() const;
-			virtual bool supportsOSD() const;
-			virtual bool supportsFourcc( quint32 fourcc ) const;
-			virtual bool supportsSubtitles() const;
-			virtual const QStringList& knownMimeTypes() const;
+			Q_INVOKABLE bool supportsVideo() const;
+			Q_INVOKABLE bool supportsOSD() const;
+			Q_INVOKABLE bool supportsFourcc( quint32 fourcc ) const;
+			Q_INVOKABLE bool supportsSubtitles() const;
+			Q_INVOKABLE QStringList knownMimeTypes() const;
 
-			virtual void freeSoundcardDevices();
+			void freeSoundcardDevices();
 
-			virtual QSet<int> audioOutputDeviceIndexes() const;
-			virtual QString audioOutputDeviceName( int index ) const;
-			virtual QString audioOutputDeviceDescription( int index ) const;
+			Q_INVOKABLE QSet<int> audioOutputDeviceIndexes() const;
+			Q_INVOKABLE QString audioOutputDeviceName( int index ) const;
+			Q_INVOKABLE QString audioOutputDeviceDescription( int index ) const;
 
-			virtual QSet<int> audioCaptureDeviceIndexes() const;
-			virtual QString audioCaptureDeviceName( int index ) const;
-			virtual QString audioCaptureDeviceDescription( int index ) const;
-			virtual int audioCaptureDeviceVideoIndex( int index ) const;
+			Q_INVOKABLE QSet<int> audioCaptureDeviceIndexes() const;
+			Q_INVOKABLE QString audioCaptureDeviceName( int index ) const;
+			Q_INVOKABLE QString audioCaptureDeviceDescription( int index ) const;
+			Q_INVOKABLE qint32 audioCaptureDeviceVideoIndex( int index ) const;
 
-			virtual QSet<int> videoOutputDeviceIndexes() const;
-			virtual QString videoOutputDeviceName( int index ) const;
-			virtual QString videoOutputDeviceDescription( int index ) const;
+			Q_INVOKABLE QSet<int> videoOutputDeviceIndexes() const;
+			Q_INVOKABLE QString videoOutputDeviceName( int index ) const;
+			Q_INVOKABLE QString videoOutputDeviceDescription( int index ) const;
 
-			virtual QSet<int> videoCaptureDeviceIndexes() const;
-			virtual QString videoCaptureDeviceName( int index ) const;
-			virtual QString videoCaptureDeviceDescription( int index ) const;
-			virtual int videoCaptureDeviceAudioIndex( int index ) const;
+			Q_INVOKABLE QSet<int> videoCaptureDeviceIndexes() const;
+			Q_INVOKABLE QString videoCaptureDeviceName( int index ) const;
+			Q_INVOKABLE QString videoCaptureDeviceDescription( int index ) const;
+			Q_INVOKABLE qint32 videoCaptureDeviceAudioIndex( int index ) const;
 
-			virtual QSet<int> visualizationIndexes() const;
-			virtual QString visualizationName( int index ) const;
-			virtual QString visualizationDescription( int index ) const;
+			Q_INVOKABLE QSet<int> visualizationIndexes() const;
+			Q_INVOKABLE QString visualizationName( int index ) const;
+			Q_INVOKABLE QString visualizationDescription( int index ) const;
 
-			virtual QSet<int> audioEffectIndexes() const;
-			virtual QString audioEffectName( int index ) const;
-			virtual QString audioEffectDescription( int index ) const;
+			Q_INVOKABLE QSet<int> audioEffectIndexes() const;
+			Q_INVOKABLE QString audioEffectName( int index ) const;
+			Q_INVOKABLE QString audioEffectDescription( int index ) const;
 
-			virtual QSet<int> videoEffectIndexes() const;
-			virtual QString videoEffectName( int index ) const;
-			virtual QString videoEffectDescription( int index ) const;
+			Q_INVOKABLE QSet<int> videoEffectIndexes() const;
+			Q_INVOKABLE QString videoEffectName( int index ) const;
+			Q_INVOKABLE QString videoEffectDescription( int index ) const;
 
-			virtual QSet<int> audioCodecIndexes() const;
-			virtual QString audioCodecName( int index ) const;
-			virtual QString audioCodecDescription( int index ) const;
+			Q_INVOKABLE QSet<int> audioCodecIndexes() const;
+			Q_INVOKABLE QString audioCodecName( int index ) const;
+			Q_INVOKABLE QString audioCodecDescription( int index ) const;
 
-			virtual QSet<int> videoCodecIndexes() const;
-			virtual QString videoCodecName( int index ) const;
-			virtual QString videoCodecDescription( int index ) const;
+			Q_INVOKABLE QSet<int> videoCodecIndexes() const;
+			Q_INVOKABLE QString videoCodecName( int index ) const;
+			Q_INVOKABLE QString videoCodecDescription( int index ) const;
 
-			virtual QSet<int> containerFormatIndexes() const;
-			virtual QString containerFormatName( int index ) const;
-			virtual QString containerFormatDescription( int index ) const;
+			Q_INVOKABLE QSet<int> containerFormatIndexes() const;
+			Q_INVOKABLE QString containerFormatName( int index ) const;
+			Q_INVOKABLE QString containerFormatDescription( int index ) const;
 
-			virtual const char* uiLibrary() const;
-			//virtual const char* uiSymbol() const;
+			Q_INVOKABLE char const* uiLibrary() const;
+			// Q_INVOKABLE char* uiSymbol() const;
 
 		private:
 			QStringList m_supportedMimeTypes;

@@ -21,18 +21,12 @@
 #define ABSTRACTMEDIAPRODUCER_P_H
 
 #include "abstractmediaproducer.h"
-#include "ifaces/abstractmediaproducer.h"
 #include "base_p.h"
 #include <QHash>
 #include <QString>
 
 namespace Phonon
 {
-	namespace Ifaces
-	{
-		class AudioPath;
-		class VideoPath;
-	}
 class AbstractMediaProducerPrivate : public BasePrivate
 {
 	K_DECLARE_PUBLIC( AbstractMediaProducer )
@@ -45,13 +39,13 @@ class AbstractMediaProducerPrivate : public BasePrivate
 		{ }
 
 		State state;
-		long currentTime;
-		long tickInterval;
+		qint64 currentTime;
+		qint32 tickInterval;
 		QList<VideoPath*> videoPaths;
 		QList<AudioPath*> audioPaths;
-		QHash<Ifaces::AudioPath*, QString> selectedAudioStream;
-		QHash<Ifaces::VideoPath*, QString> selectedVideoStream;
-		QHash<Ifaces::VideoPath*, QString> selectedSubtitleStream;
+		QHash<AudioPath*, QString> selectedAudioStream;
+		QHash<VideoPath*, QString> selectedVideoStream;
+		QHash<VideoPath*, QString> selectedSubtitleStream;
 };
 } //namespace Phonon
 

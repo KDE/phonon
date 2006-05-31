@@ -19,9 +19,9 @@
 #ifndef Phonon_FAKE_VOLUMEFADEREFFECT_H
 #define Phonon_FAKE_VOLUMEFADEREFFECT_H
 
-#include "../../ifaces/volumefadereffect.h"
 #include <QTime>
 #include "audioeffect.h"
+#include <phonon/volumefadereffect.h>
 
 namespace Phonon
 {
@@ -30,18 +30,18 @@ namespace Fake
 	/**
 	 * \author Matthias Kretz <kretz@kde.org>
 	 */
-	class VolumeFaderEffect : public AudioEffect, virtual public Ifaces::VolumeFaderEffect
+	class VolumeFaderEffect : public AudioEffect
 	{
 		Q_OBJECT
 		public:
 			VolumeFaderEffect( QObject* parent );
-			virtual ~VolumeFaderEffect();
+			~VolumeFaderEffect();
 
-			virtual float volume() const;
-			virtual void setVolume( float volume );
-			virtual Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const;
-			virtual void setFadeCurve( Phonon::VolumeFaderEffect::FadeCurve curve );
-			virtual void fadeTo( float volume, int fadeTime );
+			Q_INVOKABLE float volume() const;
+			Q_INVOKABLE void setVolume( float volume );
+			Q_INVOKABLE Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const;
+			Q_INVOKABLE void setFadeCurve( Phonon::VolumeFaderEffect::FadeCurve curve );
+			Q_INVOKABLE void fadeTo( float volume, int fadeTime );
 
 		private:
 			float m_volume;

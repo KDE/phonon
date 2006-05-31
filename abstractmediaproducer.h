@@ -31,11 +31,6 @@ namespace Phonon
 	class AudioPath;
 	class AbstractMediaProducerPrivate;
 
-	namespace Ifaces
-	{
-		class AbstractMediaProducer;
-	}
-
 	/**
 	 * @short Common interface for all media sources.
 	 *

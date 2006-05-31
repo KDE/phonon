@@ -18,7 +18,6 @@
 */
 #include "videopath.h"
 #include "videopath_p.h"
-#include "ifaces/videopath.h"
 #include "factory.h"
 
 #include "videoeffect.h"
@@ -43,11 +42,16 @@ bool VideoPath::addOutput( AbstractVideoOutput* videoOutput )
 	if( d->outputs.contains( videoOutput ) )
 		return false;
 
-	if( iface() && d->iface()->addOutput( videoOutput->iface() ) )
+	if( iface() )
 	{
-		videoOutput->addDestructionHandler( this );
-		d->outputs << videoOutput;
-		return true;
+		bool success;
+		BACKEND_GET1( bool, success, "addOutput", QObject*, videoOutput->iface() );
+		if( success )
+		{
+			videoOutput->addDestructionHandler( this );
+			d->outputs << videoOutput;
+			return true;
+		}
 	}
 	return false;
 }
@@ -58,10 +62,15 @@ bool VideoPath::removeOutput( AbstractVideoOutput* videoOutput )
 	if( !d->outputs.contains( videoOutput ) )
 		return false;
 
-	if( iface()->removeOutput( videoOutput->iface() ) )
+	if( d->backendObject )
 	{
-		d->outputs.removeAll( videoOutput );
-		return true;
+		bool success;
+		BACKEND_GET1( bool, success, "removeOutput", QObject*, videoOutput->iface() );
+		if( success )
+		{
+			d->outputs.removeAll( videoOutput );
+			return true;
+		}
 	}
 	return false;
 }
@@ -80,15 +89,19 @@ bool VideoPath::insertEffect( VideoEffect* newEffect, VideoEffect* insertBefore 
 	if( d->effects.contains( newEffect ) )
 		return false;
 
-	if( iface() && d->iface()->insertEffect( newEffect->iface(), 
-                                             insertBefore ?  insertBefore->iface() : 0L) )
+	if( iface() )
 	{
-		newEffect->addDestructionHandler( this );
-		if( insertBefore )
-			d->effects.insert( d->effects.indexOf( insertBefore ), newEffect );
-		else
-			d->effects << newEffect;
-		return true;
+		bool success;
+		BACKEND_GET2( bool, success, "insertEffect", QObject*, newEffect->iface(), QObject*, insertBefore ? insertBefore->iface() : 0 );
+		if( success )
+		{
+			newEffect->addDestructionHandler( this );
+			if( insertBefore )
+				d->effects.insert( d->effects.indexOf( insertBefore ), newEffect );
+			else
+				d->effects << newEffect;
+			return true;
+		}
 	}
 	return false;
 }
@@ -99,10 +112,15 @@ bool VideoPath::removeEffect( VideoEffect* effect )
 	if( !d->effects.contains( effect ) )
 		return false;
 
-	if( iface()->removeEffect( effect->iface() ) )
+	if( d->backendObject )
 	{
-		d->effects.removeAll( effect );
-		return true;
+		bool success;
+		BACKEND_GET1( bool, success, "removeEffect", QObject*, effect->iface() );
+		if( success )
+		{
+			d->effects.removeAll( effect );
+			return true;
+		}
 	}
 	return false;
 }
@@ -121,18 +139,25 @@ bool VideoPathPrivate::aboutToDeleteIface()
 void VideoPath::setupIface()
 {
 	K_D( VideoPath );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 
 	// set up attributes
+	bool success;
 	QList<AbstractVideoOutput*> outputList = d->outputs;
 	foreach( AbstractVideoOutput* output, outputList )
-		if( !d->iface()->addOutput( output->iface() ) )
+	{
+		BACKEND_GET1( bool, success, "addOutput", QObject*, output->iface() );
+		if( !success )
 			d->outputs.removeAll( output );
+	}
 
 	QList<VideoEffect*> effectList = d->effects;
 	foreach( VideoEffect* effect, effectList )
-		if( !d->iface()->insertEffect( effect->iface() ) )
+	{
+		BACKEND_GET1( bool, success, "insertEffect", QObject*, effect->iface() );
+		if( !success )
 			d->effects.removeAll( effect );
+	}
 }
 
 void VideoPath::phononObjectDestroyed( Base* o )
@@ -146,14 +171,14 @@ void VideoPath::phononObjectDestroyed( Base* o )
 	VideoEffect* videoEffect = static_cast<VideoEffect*>( o );
 	if( d->outputs.contains( output ) )
 	{
-		if( d->iface() )
-			d->iface()->removeOutput( output->iface() );
+		if( d->backendObject )
+			BACKEND_CALL1( "removeOutput", QObject*, output->iface() );
 		d->outputs.removeAll( output );
 	}
 	else if( d->effects.contains( videoEffect ) )
 	{
-		if( d->iface() )
-			d->iface()->removeEffect( videoEffect->iface() );
+		if( d->backendObject )
+			BACKEND_CALL1( "removeEffect", QObject*, videoEffect->iface() );
 		d->effects.removeAll( videoEffect );
 	}
 }

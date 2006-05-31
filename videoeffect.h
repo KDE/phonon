@@ -30,10 +30,6 @@ class QString;
 namespace Phonon
 {
 	class VideoEffectPrivate;
-	namespace Ifaces
-	{
-		class VideoEffect;
-	}
 
 	class PHONONCORE_EXPORT VideoEffect : public QObject, public Effect, public Base
 	{
@@ -76,16 +72,6 @@ namespace Phonon
 			 * \endcode
 			 */
 			void setupIface();
-
-		private:
-			/**
-			 * \internal
-			 * Returns the Iface object. If the object does not exist it tries to
-			 * create it before returning.
-			 *
-			 * \return the Iface object, might return \c 0
-			 */
-			Ifaces::VideoEffect* iface();
 
 		protected:
 			virtual QVariant value( int parameterId ) const;

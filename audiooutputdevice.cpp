@@ -22,7 +22,7 @@
 #include <QSet>
 #include "audiooutputdevice_p.h"
 #include "factory.h"
-#include "ifaces/backend.h"
+#include "phonondefs.h"
 
 namespace Phonon
 {
@@ -37,16 +37,7 @@ AudioOutputDevice::AudioOutputDevice( const AudioOutputDevice& rhs )
 {
 }
 
-AudioOutputDevice AudioOutputDevice::fromIndex( int index )
-{
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->audioOutputDeviceIndexes().contains( index ) )
-		return AudioOutputDevice( index,
-				b->audioOutputDeviceName( index ),
-				b->audioOutputDeviceDescription( index ) );
-	else
-		return AudioOutputDevice(); //isValid() == false
-}
+NAMEDESCRIPTIONFROMINDEX( AudioOutputDevice, audioOutputDevice )
 
 AudioOutputDevice::AudioOutputDevice( int index, const QString& name, const QString& description )
 	: NameDescriptionTuple( *new AudioOutputDevicePrivate, index, name, description )

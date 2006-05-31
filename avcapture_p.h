@@ -21,7 +21,6 @@
 #define AVCAPTURE_P_H
 
 #include "avcapture.h"
-#include "ifaces/avcapture.h"
 #include "abstractmediaproducer_p.h"
 
 namespace Phonon

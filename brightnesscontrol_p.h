@@ -22,7 +22,6 @@
 
 #include "brightnesscontrol.h"
 #include "videoeffect_p.h"
-#include "ifaces/brightnesscontrol.h"
 
 namespace Phonon
 {

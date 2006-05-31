@@ -19,9 +19,6 @@
 
 #include "abstractmediaproducer.h"
 #include "abstractmediaproducer_p.h"
-#include "ifaces/abstractmediaproducer.h"
-#include "ifaces/audiopath.h"
-#include "ifaces/videopath.h"
 #include "factory.h"
 
 #include "videopath.h"
@@ -51,11 +48,16 @@ bool AbstractMediaProducer::addVideoPath( VideoPath* videoPath )
 	if( d->videoPaths.contains( videoPath ) )
 		return false;
 
-	if( iface() && d->iface()->addVideoPath( videoPath->iface() ) )
+	if( iface() )
 	{
-		videoPath->addDestructionHandler( this );
-		d->videoPaths.append( videoPath );
-		return true;
+		bool success;
+		BACKEND_GET1( bool, success, "addVideoPath", QObject*, videoPath->iface() );
+		if( success )
+		{
+			videoPath->addDestructionHandler( this );
+			d->videoPaths.append( videoPath );
+			return true;
+		}
 	}
 	return false;
 }
@@ -66,122 +68,60 @@ bool AbstractMediaProducer::addAudioPath( AudioPath* audioPath )
 	if( d->audioPaths.contains( audioPath ) )
 		return false;
 
-	if( iface() && d->iface()->addAudioPath( audioPath->iface() ) )
+	if( iface() )
 	{
-		audioPath->addDestructionHandler( this );
-		d->audioPaths.append( audioPath );
-		return true;
+		bool success;
+		BACKEND_GET1( bool, success, "addAudioPath", QObject*, audioPath->iface() );
+		if( success )
+		{
+			audioPath->addDestructionHandler( this );
+			d->audioPaths.append( audioPath );
+			return true;
+		}
 	}
 	return false;
 }
 
-State AbstractMediaProducer::state() const
-{
-	K_D( const AbstractMediaProducer );
-	return d->iface() ? d->iface()->state() : d->state;
-}
-
-bool AbstractMediaProducer::hasVideo() const
-{
-	K_D( const AbstractMediaProducer );
-	return d->iface() ? d->iface()->hasVideo() : false;
-}
-
-bool AbstractMediaProducer::seekable() const
-{
-	K_D( const AbstractMediaProducer );
-	return d->iface() ? d->iface()->seekable() : false;
-}
-
-qint64 AbstractMediaProducer::currentTime() const
-{
-	K_D( const AbstractMediaProducer );
-	return d->iface() ? d->iface()->currentTime() : d->currentTime;
-}
-
-qint32 AbstractMediaProducer::tickInterval() const
-{
-	K_D( const AbstractMediaProducer );
-	return d->iface() ? d->iface()->tickInterval() : d->tickInterval;
-}
-
-QString AbstractMediaProducer::selectedAudioStream( AudioPath* audioPath ) const
-{
-	K_D( const AbstractMediaProducer );
-	return d->iface() ? d->iface()->selectedAudioStream( audioPath->iface() ) : d->selectedAudioStream[ audioPath->iface() ];
-}
-
-QString AbstractMediaProducer::selectedVideoStream( VideoPath* videoPath ) const
-{
-	K_D( const AbstractMediaProducer );
-	return d->iface() ? d->iface()->selectedVideoStream( videoPath->iface() ) : d->selectedVideoStream[ videoPath->iface() ];
-}
-
-QString AbstractMediaProducer::selectedSubtitleStream( VideoPath* videoPath ) const
-{
-	K_D( const AbstractMediaProducer );
-	return d->iface() ? d->iface()->selectedSubtitleStream( videoPath->iface() ) : d->selectedSubtitleStream[ videoPath->iface() ];
-}
-
-QStringList AbstractMediaProducer::availableAudioStreams() const
-{
-	K_D( const AbstractMediaProducer );
-	if( d->iface() )
-		return d->iface()->availableAudioStreams();
-	return QStringList();
-}
-
-QStringList AbstractMediaProducer::availableVideoStreams() const
-{
-	K_D( const AbstractMediaProducer );
-	if( d->iface() )
-		return d->iface()->availableVideoStreams();
-	return QStringList();
-}
-
-QStringList AbstractMediaProducer::availableSubtitleStreams() const
-{
-	K_D( const AbstractMediaProducer );
-	if( d->iface() )
-		return d->iface()->availableSubtitleStreams();
-	return QStringList();
-}
+PHONON_GETTER( AbstractMediaProducer, Phonon::State, state, d->state )
+PHONON_GETTER( AbstractMediaProducer, bool, hasVideo, false )
+PHONON_GETTER( AbstractMediaProducer, bool, seekable, false )
+PHONON_GETTER( AbstractMediaProducer, qint64, currentTime, d->currentTime )
+PHONON_GETTER( AbstractMediaProducer, qint32, tickInterval, d->tickInterval )
+PHONON_GETTER1( AbstractMediaProducer, QString, selectedAudioStream,    d->selectedAudioStream[    audioPath ], AudioPath*, audioPath )
+PHONON_GETTER1( AbstractMediaProducer, QString, selectedVideoStream,    d->selectedVideoStream[    videoPath ], VideoPath*, videoPath )
+PHONON_GETTER1( AbstractMediaProducer, QString, selectedSubtitleStream, d->selectedSubtitleStream[ videoPath ], VideoPath*, videoPath )
+PHONON_GETTER( AbstractMediaProducer, QStringList, availableAudioStreams, QStringList() )
+PHONON_GETTER( AbstractMediaProducer, QStringList, availableVideoStreams, QStringList() )
+PHONON_GETTER( AbstractMediaProducer, QStringList, availableSubtitleStreams, QStringList() )
 
 void AbstractMediaProducer::selectAudioStream( const QString& streamName, AudioPath* audioPath )
 {
 	K_D( AbstractMediaProducer );
 	if( iface() )
-		d->iface()->selectAudioStream( streamName, audioPath->iface() );
+		BACKEND_CALL2( "selectAudioStream", QString, streamName, const QObject*, audioPath->iface() );
 	else
-		d->selectedAudioStream[ audioPath->iface() ] = streamName;
+		d->selectedAudioStream[ audioPath ] = streamName;
 }
 
 void AbstractMediaProducer::selectVideoStream( const QString& streamName, VideoPath* videoPath )
 {
 	K_D( AbstractMediaProducer );
 	if( iface() )
-		d->iface()->selectVideoStream( streamName, videoPath->iface() );
+		BACKEND_CALL2( "selectVideoStream", QString, streamName, const QObject*, videoPath->iface() );
 	else
-		d->selectedVideoStream[ videoPath->iface() ] = streamName;
+		d->selectedVideoStream[ videoPath ] = streamName;
 }
 
 void AbstractMediaProducer::selectSubtitleStream( const QString& streamName, VideoPath* videoPath )
 {
 	K_D( AbstractMediaProducer );
 	if( iface() )
-		d->iface()->selectSubtitleStream( streamName, videoPath->iface() );
+		BACKEND_CALL2( "selectSubtitleStream", QString, streamName, const QObject*, videoPath->iface() );
 	else
-		d->selectedSubtitleStream[ videoPath->iface() ] = streamName;
+		d->selectedSubtitleStream[ videoPath ] = streamName;
 }
 
-void AbstractMediaProducer::setTickInterval( qint32 newTickInterval )
-{
-	K_D( AbstractMediaProducer );
-	if( d->iface() )
-		d->iface()->setTickInterval( newTickInterval );
-	else
-		d->tickInterval = newTickInterval;
-}
+PHONON_SETTER( AbstractMediaProducer, setTickInterval, tickInterval, qint32 )
 
 const QList<VideoPath*>& AbstractMediaProducer::videoPaths() const
 {
@@ -199,21 +139,21 @@ void AbstractMediaProducer::play()
 {
 	K_D( AbstractMediaProducer );
 	if( iface() )
-		d->iface()->play();
+		BACKEND_CALL( "play" );
 }
 
 void AbstractMediaProducer::pause()
 {
 	K_D( AbstractMediaProducer );
 	if( iface() )
-		d->iface()->pause();
+		BACKEND_CALL( "pause" );
 }
 
 void AbstractMediaProducer::stop()
 {
 	K_D( AbstractMediaProducer );
 	if( iface() )
-		d->iface()->stop();
+		BACKEND_CALL( "stop" );
 }
 
 void AbstractMediaProducer::seek( qint64 time )
@@ -222,18 +162,18 @@ void AbstractMediaProducer::seek( qint64 time )
 	State s = state();
 	if( iface() && ( s == Phonon::PlayingState || s == Phonon::BufferingState || s == Phonon::PausedState ) )
 	{
-		d->iface()->seek( time );
+		BACKEND_CALL1( "seek", qint64, time );
 	}
 }
 
 bool AbstractMediaProducerPrivate::aboutToDeleteIface()
 {
 	//kDebug( 600 ) << k_funcinfo << endl;
-	if( iface() )
+	if( backendObject )
 	{
-		state = iface()->state();
-		currentTime = iface()->currentTime();
-		tickInterval = iface()->tickInterval();
+		pBACKEND_GET( Phonon::State, state, "state" );
+		pBACKEND_GET( qint64, currentTime, "currentTime" );
+		pBACKEND_GET( qint32, tickInterval, "tickInterval" );
 	}
 	return true;
 }
@@ -241,19 +181,28 @@ bool AbstractMediaProducerPrivate::aboutToDeleteIface()
 void AbstractMediaProducer::setupIface()
 {
 	K_D( AbstractMediaProducer );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 	//kDebug( 600 ) << k_funcinfo << endl;
 
-	connect( d->iface()->qobject(), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ) );
-	connect( d->iface()->qobject(), SIGNAL( tick( qint64 ) ), SIGNAL( tick( qint64 ) ) );
+	connect( d->backendObject, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SIGNAL( stateChanged( Phonon::State, Phonon::State ) ) );
+	connect( d->backendObject, SIGNAL( tick( qint64 ) ), SIGNAL( tick( qint64 ) ) );
 
 	// set up attributes
-	d->iface()->setTickInterval( d->tickInterval );
+	BACKEND_CALL1( "setTickInterval", qint32, d->tickInterval );
 
+	bool success;
 	foreach( AudioPath* a, d->audioPaths )
-		d->iface()->addAudioPath( a->iface() );
+	{
+		BACKEND_GET1( bool, success, "addAudioPath", QObject*, a->iface() );
+		if( !success )
+			d->audioPaths.remove( a );
+	}
 	foreach( VideoPath* v, d->videoPaths )
-		d->iface()->addVideoPath( v->iface() );
+	{
+		BACKEND_GET1( bool, success, "addVideoPath", QObject*, v->iface() );
+		if( !success )
+			d->videoPaths.remove( v );
+	}
 
 	switch( d->state )
 	{
@@ -269,24 +218,24 @@ void AbstractMediaProducer::setupIface()
 			QTimer::singleShot( 0, this, SLOT( resumePause() ) );
 			break;
 	}
-	d->state = d->iface()->state();
+	BACKEND_GET( Phonon::State, d->state, "state" );
 }
 
 void AbstractMediaProducer::resumePlay()
 {
 	K_D( AbstractMediaProducer );
-	d->iface()->play();
+	BACKEND_CALL( "play" );
 	if( d->currentTime > 0 )
-		d->iface()->seek( d->currentTime );
+		BACKEND_CALL1( "seek", qint64, d->currentTime );
 }
 
 void AbstractMediaProducer::resumePause()
 {
 	K_D( AbstractMediaProducer );
-	d->iface()->play();
+	BACKEND_CALL( "play" );
 	if( d->currentTime > 0 )
-		d->iface()->seek( d->currentTime );
-	d->iface()->pause();
+		BACKEND_CALL1( "seek", qint64, d->currentTime );
+	BACKEND_CALL( "pause" );
 }
 
 void AbstractMediaProducer::phononObjectDestroyed( Base* o )
@@ -300,14 +249,14 @@ void AbstractMediaProducer::phononObjectDestroyed( Base* o )
 	VideoPath* videoPath = static_cast<VideoPath*>( o );
 	if( d->audioPaths.contains( audioPath ) )
 	{
-		if( d->iface() )
-			d->iface()->removeAudioPath( audioPath->iface() );
+		if( d->backendObject )
+			BACKEND_CALL1( "removeAudioPath", QObject*, audioPath->iface() );
 		d->audioPaths.removeAll( audioPath );
 	}
 	else if( d->videoPaths.contains( videoPath ) )
 	{
-		if( d->iface() )
-			d->iface()->removeVideoPath( videoPath->iface() );
+		if( d->backendObject )
+			BACKEND_CALL1( "removeVideoPath", QObject*, videoPath->iface() );
 		d->videoPaths.removeAll( videoPath );
 	}
 }

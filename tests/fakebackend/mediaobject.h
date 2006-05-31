@@ -20,7 +20,6 @@
 #define Phonon_FAKE_MEDIAOBJECT_H
 
 #include "abstractmediaproducer.h"
-#include "../../ifaces/mediaobject.h"
 #include <kurl.h>
 
 class KUrl;
@@ -29,25 +28,25 @@ namespace Phonon
 {
 namespace Fake
 {
-	class MediaObject : public AbstractMediaProducer, virtual public Ifaces::MediaObject
+	class MediaObject : public AbstractMediaProducer
 	{
 		Q_OBJECT
 		public:
 			MediaObject( QObject* parent );
-			virtual ~MediaObject();
-			virtual KUrl url() const;
-			virtual qint64 totalTime() const;
-			//virtual qint64 remainingTime() const;
-			virtual qint32 aboutToFinishTime() const;
-			virtual void setUrl( const KUrl& url );
-			virtual void setAboutToFinishTime( qint32 newAboutToFinishTime );
+			~MediaObject();
+			Q_INVOKABLE KUrl url() const;
+			Q_INVOKABLE qint64 totalTime() const;
+			Q_INVOKABLE qint64 remainingTime() const { return totalTime() - currentTime(); }
+			Q_INVOKABLE qint32 aboutToFinishTime() const;
+			Q_INVOKABLE void setUrl( const KUrl& url );
+			Q_INVOKABLE void setAboutToFinishTime( qint32 newAboutToFinishTime );
 
-			virtual void play();
-			virtual void pause();
-			virtual void seek( qint64 time );
+			Q_INVOKABLE void play();
+			Q_INVOKABLE void pause();
+			Q_INVOKABLE void seek( qint64 time );
 
 		public Q_SLOTS:
-			virtual void stop();
+			void stop();
 
 		Q_SIGNALS:
 			void finished();

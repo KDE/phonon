@@ -88,14 +88,14 @@ class PHONONCORE_EXPORT Visualization : public QObject, public Base, private Bas
 		 * short it tells you whether createParameterWidget() will return 0 or
 		 * not.
 		 */
-		bool hasParameterWidget() const;
+		//bool hasParameterWidget() const;
 
 		/**
 		 * Returns a widget that displays effect parameter controls to the user.
 		 *
 		 * \param parent The parent widget for the new widget.
 		 */
-		QWidget* createParameterWidget( QWidget* parent = 0 );
+		//QWidget* createParameterWidget( QWidget* parent = 0 );
 
 	private:
 		/**

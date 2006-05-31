@@ -19,7 +19,6 @@
 
 #include "base.h"
 #include "base_p.h"
-#include "ifaces/base.h"
 #include "factory.h"
 #include "basedestructionhandler.h"
 
@@ -29,7 +28,6 @@ namespace Phonon
 		: k_ptr( &d )
 	{
 		k_ptr->q_ptr = this;
-		k_ptr->setIface( 0 );
 		// cannot call k_ptr->createIface(); from here as that calls setupIface
 		// on the classes that inherit Base - and they're not constructed at
 		// this point
@@ -54,6 +52,14 @@ namespace Phonon
 	{
 		K_D( Base );
 		d->handlers.removeAll( handler );
+	}
+
+	QObject* Base::iface()
+	{
+		K_D( Base );
+		if( !d->backendObject )
+			d->createIface();
+		return d->backendObject;
 	}
 } //namespace Phonon
 // vim: sw=4 ts=4 noet

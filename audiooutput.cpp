@@ -18,7 +18,6 @@
 */
 #include "audiooutput.h"
 #include "audiooutput_p.h"
-#include "ifaces/audiooutput.h"
 #include "factory.h"
 #include "audiooutputdevice.h"
 
@@ -43,20 +42,8 @@ void AudioOutput::setName( const QString& newName )
 	d->name = newName;
 }
 
-float AudioOutput::volume() const
-{
-	K_D( const AudioOutput );
-	return d->iface() ? d->iface()->volume() : d->volume;
-}
-
-void AudioOutput::setVolume( float newVolume )
-{
-	K_D( AudioOutput );
-	if( d->iface() )
-		d->iface()->setVolume( newVolume );
-	else
-		d->volume = newVolume;
-}
+PHONON_GETTER( AudioOutput, float, volume, d->volume )
+PHONON_SETTER( AudioOutput, setVolume, volume, float )
 
 static const double log10over20 = 0.1151292546497022842; // ln(10) / 20
 
@@ -92,35 +79,40 @@ void AudioOutput::setCategory( Category c )
 AudioOutputDevice AudioOutput::outputDevice() const
 {
 	K_D( const AudioOutput );
-	return AudioOutputDevice::fromIndex( d->iface() ? d->iface()->outputDevice() : d->outputDeviceIndex );
+	int index;
+	if( d->backendObject )
+		BACKEND_GET( int, index, "outputDevice" );
+	else
+		index = d->outputDeviceIndex;
+	return AudioOutputDevice::fromIndex( index );
 }
 
 void AudioOutput::setOutputDevice( const AudioOutputDevice& newAudioOutputDevice )
 {
 	K_D( AudioOutput );
 	if( iface() )
-		d->iface()->setOutputDevice( newAudioOutputDevice.index() );
+		BACKEND_CALL1( "setOutputDevice", int, newAudioOutputDevice.index() );
 	else
 		d->outputDeviceIndex = newAudioOutputDevice.index();
 }
 
 bool AudioOutputPrivate::aboutToDeleteIface()
 {
-	if( iface() )
-		volume = iface()->volume();
+	if( backendObject )
+		pBACKEND_GET( float, volume, "volume" );
 	return AbstractAudioOutputPrivate::aboutToDeleteIface();
 }
 
 void AudioOutput::setupIface()
 {
 	K_D( AudioOutput );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 	AbstractAudioOutput::setupIface();
 
-	connect( d->iface()->qobject(), SIGNAL(volumeChanged(float)), SIGNAL(volumeChanged(float)) );
+	connect( d->backendObject, SIGNAL( volumeChanged( float ) ), SIGNAL( volumeChanged( float ) ) );
 
 	// set up attributes
-	d->iface()->setVolume( d->volume );
+	BACKEND_CALL1( "setVolume", float, d->volume );
 }
 
 } //namespace Phonon

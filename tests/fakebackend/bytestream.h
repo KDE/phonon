@@ -20,36 +20,36 @@
 #define Phonon_FAKE_BYTESTREAM_H
 
 #include "abstractmediaproducer.h"
-#include "../../ifaces/bytestream.h"
 class QTimer;
 
 namespace Phonon
 {
 namespace Fake
 {
-	class ByteStream : public AbstractMediaProducer, virtual public Ifaces::ByteStream
+	class ByteStream : public AbstractMediaProducer
 	{
 		Q_OBJECT
 		public:
 			ByteStream( QObject* parent );
-			virtual ~ByteStream();
+			~ByteStream();
 
-			virtual qint64 currentTime() const;
-			virtual qint64 totalTime() const;
-			virtual qint32 aboutToFinishTime() const;
-			virtual qint64 streamSize() const;
-			virtual bool streamSeekable() const;
-			virtual bool seekable() const;
+			Q_INVOKABLE qint64 currentTime() const;
+			Q_INVOKABLE qint64 remainingTime() const { return totalTime() - currentTime(); }
+			Q_INVOKABLE qint64 totalTime() const;
+			Q_INVOKABLE qint32 aboutToFinishTime() const;
+			Q_INVOKABLE qint64 streamSize() const;
+			Q_INVOKABLE bool streamSeekable() const;
+			Q_INVOKABLE bool seekable() const;
 
-			virtual void setStreamSeekable( bool );
-			virtual void writeData( const QByteArray& data );
-			virtual void setStreamSize( qint64 );
-			virtual void endOfData();
-			virtual void setAboutToFinishTime( qint32 );
+			Q_INVOKABLE void setStreamSeekable( bool );
+			Q_INVOKABLE void writeData( const QByteArray& data );
+			Q_INVOKABLE void setStreamSize( qint64 );
+			Q_INVOKABLE void endOfData();
+			Q_INVOKABLE void setAboutToFinishTime( qint32 );
 
-			virtual void play();
-			virtual void pause();
-			virtual void seek( qint64 time );
+			Q_INVOKABLE void play();
+			Q_INVOKABLE void pause();
+			Q_INVOKABLE void seek( qint64 time );
 
 		public Q_SLOTS:
 			virtual void stop();

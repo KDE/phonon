@@ -19,7 +19,6 @@
 #ifndef Phonon_FAKE_BRIGHTNESSCONTROL_H
 #define Phonon_FAKE_BRIGHTNESSCONTROL_H
 
-#include "../../ifaces/brightnesscontrol.h"
 #include <QTime>
 #include "videoeffect.h"
 
@@ -30,18 +29,19 @@ namespace Fake
 	/**
 	 * \author Matthias Kretz <kretz@kde.org>
 	 */
-	class BrightnessControl : public VideoEffect, virtual public Ifaces::BrightnessControl
+	class BrightnessControl : public VideoEffect
 	{
 		Q_OBJECT
 		public:
 			BrightnessControl( QObject* parent );
-			virtual ~BrightnessControl();
+			~BrightnessControl();
 
-			virtual int brightness() const;
-			virtual void setBrightness( int brightness );
+		public slots:
+			int brightness() const;
+			void setBrightness( int brightness );
 
-			virtual int lowerBound() const;
-			virtual int upperBound() const;
+			int lowerBound() const;
+			int upperBound() const;
 
 		private:
 			int m_brightness;

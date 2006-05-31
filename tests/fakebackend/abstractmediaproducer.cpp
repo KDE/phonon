@@ -27,8 +27,6 @@
 #include <QFile>
 #include <QByteArray>
 #include <QStringList>
-#include <phonon/ifaces/audiopath.h>
-#include <phonon/ifaces/videopath.h>
 
 namespace Phonon
 {
@@ -62,41 +60,41 @@ void AbstractMediaProducer::setBufferSize( int size )
 	//m_bufferSize = size;
 }
 
-bool AbstractMediaProducer::addVideoPath( Ifaces::VideoPath* videoPath )
+bool AbstractMediaProducer::addVideoPath( QObject* videoPath )
 {
 	//kDebug( 604 ) << k_funcinfo << endl;
 	Q_ASSERT( videoPath );
-	VideoPath* vp = qobject_cast<VideoPath*>( videoPath->qobject() );
+	VideoPath* vp = qobject_cast<VideoPath*>( videoPath );
 	Q_ASSERT( vp );
 	Q_ASSERT( !m_videoPathList.contains( vp ) );
 	m_videoPathList.append( vp );
 	return true;
 }
 
-bool AbstractMediaProducer::addAudioPath( Ifaces::AudioPath* audioPath )
+bool AbstractMediaProducer::addAudioPath( QObject* audioPath )
 {
 	//kDebug( 604 ) << k_funcinfo << endl;
 	Q_ASSERT( audioPath );
-	AudioPath* ap = qobject_cast<AudioPath*>( audioPath->qobject() );
+	AudioPath* ap = qobject_cast<AudioPath*>( audioPath );
 	Q_ASSERT( ap );
 	Q_ASSERT( !m_audioPathList.contains( ap ) );
 	m_audioPathList.append( ap );
 	return true;
 }
 
-void AbstractMediaProducer::removeVideoPath( Ifaces::VideoPath* videoPath )
+void AbstractMediaProducer::removeVideoPath( QObject* videoPath )
 {
 	Q_ASSERT( videoPath );
-	VideoPath* vp = qobject_cast<VideoPath*>( videoPath->qobject() );
+	VideoPath* vp = qobject_cast<VideoPath*>( videoPath );
 	Q_ASSERT( vp );
 	Q_ASSERT( m_videoPathList.contains( vp ) );
 	m_videoPathList.removeAll( vp );
 }
 
-void AbstractMediaProducer::removeAudioPath( Ifaces::AudioPath* audioPath )
+void AbstractMediaProducer::removeAudioPath( QObject* audioPath )
 {
 	Q_ASSERT( audioPath );
-	AudioPath* ap = qobject_cast<AudioPath*>( audioPath->qobject() );
+	AudioPath* ap = qobject_cast<AudioPath*>( audioPath );
 	Q_ASSERT( ap );
 	Q_ASSERT( m_audioPathList.contains( ap ) );
 	m_audioPathList.removeAll( ap );
@@ -176,34 +174,34 @@ QStringList AbstractMediaProducer::availableSubtitleStreams() const
 	return ret;
 }
 
-QString AbstractMediaProducer::selectedAudioStream( const Ifaces::AudioPath* audioPath ) const
+QString AbstractMediaProducer::selectedAudioStream( const QObject* audioPath ) const
 {
 	return m_selectedAudioStream[ audioPath ];
 }
 
-QString AbstractMediaProducer::selectedVideoStream( const Ifaces::VideoPath* videoPath ) const
+QString AbstractMediaProducer::selectedVideoStream( const QObject* videoPath ) const
 {
 	return m_selectedVideoStream[ videoPath ];
 }
 
-QString AbstractMediaProducer::selectedSubtitleStream( const Ifaces::VideoPath* videoPath ) const
+QString AbstractMediaProducer::selectedSubtitleStream( const QObject* videoPath ) const
 {
 	return m_selectedSubtitleStream[ videoPath ];
 }
 
-void AbstractMediaProducer::selectAudioStream( const QString& streamName, const Ifaces::AudioPath* audioPath )
+void AbstractMediaProducer::selectAudioStream( const QString& streamName, const QObject* audioPath )
 {
 	if( availableAudioStreams().contains( streamName ) )
 		m_selectedAudioStream[ audioPath ] = streamName;
 }
 
-void AbstractMediaProducer::selectVideoStream( const QString& streamName, const Ifaces::VideoPath* videoPath )
+void AbstractMediaProducer::selectVideoStream( const QString& streamName, const QObject* videoPath )
 {
 	if( availableVideoStreams().contains( streamName ) )
 		m_selectedVideoStream[ videoPath ] = streamName;
 }
 
-void AbstractMediaProducer::selectSubtitleStream( const QString& streamName, const Ifaces::VideoPath* videoPath )
+void AbstractMediaProducer::selectSubtitleStream( const QString& streamName, const QObject* videoPath )
 {
 	if( availableSubtitleStreams().contains( streamName ) )
 		m_selectedSubtitleStream[ videoPath ] = streamName;

@@ -21,7 +21,6 @@
 #include "videowidget_p.h"
 #include "factory.h"
 
-#include <phonon/ui/ifaces/videowidget.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <QAction>
@@ -56,25 +55,14 @@ void VideoWidget::init()
 	connect( d->fullScreenAction, SIGNAL( triggered( bool ) ), SLOT( setFullScreen( bool ) ) );
 }
 
-Ifaces::VideoWidget* VideoWidget::iface()
-{
-	K_D( VideoWidget );
-	if( !d->iface() )
-		d->createIface();
-	return d->iface();
-}
-
 void VideoWidgetPrivate::createIface()
 {
-	if( iface_ptr )
+	if( backendObject )
 		return;
 	K_Q( VideoWidget );
-	Ifaces::VideoWidget* iface = UiFactory::self()->createVideoWidget( q );
-	if( iface )
-	{
-		setIface( iface );
+	backendObject = UiFactory::self()->createVideoWidget( q );
+	if( backendObject )
 		q->setupIface();
-	}
 }
 
 void VideoWidget::setFullScreen( bool newFullScreen )
@@ -85,7 +73,7 @@ void VideoWidget::setFullScreen( bool newFullScreen )
 	// application?
 	if( ! d->fullScreenWidget )
 		d->fullScreenWidget = new FullScreenVideoWidget( this );
-	QWidget* w = iface() ? qobject_cast<QWidget*>( d->iface()->qobject() ) : 0;
+	QWidget* w = iface() ? qobject_cast<QWidget*>( d->backendObject ) : 0;
 	if( newFullScreen )
 	{
 		if( w )
@@ -127,10 +115,10 @@ bool VideoWidgetPrivate::aboutToDeleteIface()
 void VideoWidget::setupIface()
 {
 	K_D( VideoWidget );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 	AbstractVideoOutput::setupIface();
 
-	QWidget* w = qobject_cast<QWidget*>( d->iface()->qobject() );
+	QWidget* w = qobject_cast<QWidget*>( d->backendObject );
 	if( w )
 	{
 		w->addAction( d->fullScreenAction );

@@ -21,16 +21,13 @@
 
 #include "base.h"
 #include "phonondefs.h"
+#include <QObject>
 
 class QString;
 
 namespace Phonon
 {
 	class AbstractVideoOutputPrivate;
-	namespace Ifaces
-	{
-		class AbstractVideoOutput;
-	}
 
 	class PHONONCORE_EXPORT AbstractVideoOutput : public Base
 	{
@@ -61,16 +58,6 @@ namespace Phonon
 			 * \endcode
 			 */
 			void setupIface();
-
-		private:
-			/**
-			 * \internal
-			 * Returns the Iface object. If the object does not exist it tries to
-			 * create it before returning.
-			 *
-			 * \return the Iface object, might return \c 0
-			 */
-			Ifaces::AbstractVideoOutput* iface();
 	};
 } //namespace Phonon
 

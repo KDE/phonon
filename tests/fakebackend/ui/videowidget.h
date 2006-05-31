@@ -20,7 +20,6 @@
 #define Phonon_UI_FAKE_VIDEOWIDGET_H
 
 #include <QWidget>
-#include <phonon/ui/ifaces/videowidget.h>
 #include <phonon/videoframe.h>
 #include "../abstractvideooutput.h"
 #include <QPixmap>
@@ -31,20 +30,15 @@ namespace Phonon
 {
 namespace Fake
 {
-	class VideoWidget : public QWidget, virtual public Ifaces::VideoWidget, public Phonon::Fake::AbstractVideoOutput
+	class VideoWidget : public QWidget, public Phonon::Fake::AbstractVideoOutput
 	{
 		Q_OBJECT
 		public:
 			VideoWidget( QWidget* parent = 0 );
 
-			virtual void* internal1( void* = 0 ) { return static_cast<Phonon::Fake::AbstractVideoOutput*>( this ); }
-
 			// Fake specific:
+			virtual void* internal1( void* = 0 ) { return static_cast<Phonon::Fake::AbstractVideoOutput*>( this ); }
 			virtual void processFrame( Phonon::VideoFrame& frame );
-
-		public:
-			virtual QObject* qobject() { return this; }
-			virtual const QObject* qobject() const { return this; }
 
 		protected:
 			virtual void paintEvent( QPaintEvent* ev );

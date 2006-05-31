@@ -18,7 +18,6 @@
 */
 #include "audiopath.h"
 #include "audiopath_p.h"
-#include "ifaces/audiopath.h"
 #include "factory.h"
 
 #include "audioeffect.h"
@@ -43,11 +42,16 @@ bool AudioPath::addOutput( AbstractAudioOutput* audioOutput )
 	if( d->outputs.contains( audioOutput ) )
 		return false;
 
-	if( iface() && d->iface()->addOutput( audioOutput->iface() ) )
+	if( iface() )
 	{
-		audioOutput->addDestructionHandler( this );
-		d->outputs << audioOutput;
-		return true;
+		bool success;
+		BACKEND_GET1( bool, success, "addOutput", QObject*, audioOutput->iface() );
+		if( success )
+		{
+			audioOutput->addDestructionHandler( this );
+			d->outputs << audioOutput;
+			return true;
+		}
 	}
 	return false;
 }
@@ -58,10 +62,15 @@ bool AudioPath::removeOutput( AbstractAudioOutput* audioOutput )
 	if( !d->outputs.contains( audioOutput ) )
 		return false;
 
-	if( iface()->removeOutput( audioOutput->iface() ) )
+	if( d->backendObject )
 	{
-		d->outputs.removeAll( audioOutput );
-		return true;
+		bool success;
+		BACKEND_GET1( bool, success, "removeOutput", QObject*, audioOutput->iface() );
+		if( success )
+		{
+			d->outputs.removeAll( audioOutput );
+			return true;
+		}
 	}
 	return false;
 }
@@ -80,14 +89,19 @@ bool AudioPath::insertEffect( AudioEffect* newEffect, AudioEffect* insertBefore 
 	if( d->effects.contains( newEffect ) )
 		return false;
 
-	if( iface() && d->iface()->insertEffect( newEffect->iface(), insertBefore ? insertBefore->iface() : 0 ) )
+	if( iface() )
 	{
-		newEffect->addDestructionHandler( this );
-		if( insertBefore )
-			d->effects.insert( d->effects.indexOf( insertBefore ), newEffect );
-		else
-			d->effects << newEffect;
-		return true;
+		bool success;
+		BACKEND_GET2( bool, success, "insertEffect", QObject*, newEffect->iface(), QObject*, insertBefore ? insertBefore->iface() : 0 );
+		if( success )
+		{
+			newEffect->addDestructionHandler( this );
+			if( insertBefore )
+				d->effects.insert( d->effects.indexOf( insertBefore ), newEffect );
+			else
+				d->effects << newEffect;
+			return true;
+		}
 	}
 	return false;
 }
@@ -98,10 +112,15 @@ bool AudioPath::removeEffect( AudioEffect* effect )
 	if( !d->effects.contains( effect ) )
 		return false;
 
-	if( iface()->removeEffect( effect->iface() ) )
+	if( d->backendObject )
 	{
-		d->effects.removeAll( effect );
-		return true;
+		bool success;
+		BACKEND_GET1( bool, success, "removeEffect", QObject*, effect->iface() );
+		if( success )
+		{
+			d->effects.removeAll( effect );
+			return true;
+		}
 	}
 	return false;
 }
@@ -120,18 +139,25 @@ bool AudioPathPrivate::aboutToDeleteIface()
 void AudioPath::setupIface()
 {
 	K_D( AudioPath );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 
 	// set up attributes
+	bool success;
 	QList<AbstractAudioOutput*> outputList = d->outputs;
 	foreach( AbstractAudioOutput* output, outputList )
-		if( !d->iface()->addOutput( output->iface() ) )
+	{
+		BACKEND_GET1( bool, success, "addOutput", QObject*, output->iface() );
+		if( !success )
 			d->outputs.removeAll( output );
+	}
 
 	QList<AudioEffect*> effectList = d->effects;
 	foreach( AudioEffect* effect, effectList )
-		if( !d->iface()->insertEffect( effect->iface() ) )
+	{
+		BACKEND_GET1( bool, success, "insertEffect", QObject*, effect->iface() );
+		if( !success )
 			d->effects.removeAll( effect );
+	}
 }
 
 void AudioPath::phononObjectDestroyed( Base* o )
@@ -145,14 +171,14 @@ void AudioPath::phononObjectDestroyed( Base* o )
 	AudioEffect* audioEffect = static_cast<AudioEffect*>( o );
 	if( d->outputs.contains( output ) )
 	{
-		if( d->iface() )
-			d->iface()->removeOutput( output->iface() );
+		if( d->backendObject )
+			BACKEND_CALL1( "removeOutput", QObject*, output->iface() );
 		d->outputs.removeAll( output );
 	}
 	else if( d->effects.contains( audioEffect ) )
 	{
-		if( d->iface() )
-			d->iface()->removeEffect( audioEffect->iface() );
+		if( d->backendObject )
+			BACKEND_CALL1( "removeEffect", QObject*, audioEffect->iface() );
 		d->effects.removeAll( audioEffect );
 	}
 }

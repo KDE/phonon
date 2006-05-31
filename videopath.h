@@ -30,11 +30,6 @@ namespace Phonon
 	class VideoEffect;
 	class AbstractVideoOutput;
 
-	namespace Ifaces
-	{
-		class VideoPath;
-	}
-
 	/**
 	 * \short A class to route and process video data.
 	 *

@@ -18,7 +18,6 @@
 */
 
 #include "backendcapabilities.h"
-#include "ifaces/backend.h"
 #include "factory.h"
 #include "audiooutputdevice.h"
 #include "videooutputdevice.h"
@@ -35,6 +34,7 @@
 #include <QStringList>
 #include <kservicetypetrader.h>
 #include <kmimetype.h>
+#include "phonondefs.h"
 
 static KStaticDeleter<Phonon::BackendCapabilities> sd;
 
@@ -67,29 +67,30 @@ BackendCapabilities::~BackendCapabilities()
 	// d = 0;
 }
 
-bool BackendCapabilities::supportsVideo()
-{
-	const Ifaces::Backend* backend = Factory::self()->backend();
-	return backend ? backend->supportsVideo() : false;
+#define SUPPORTS( foo ) \
+bool BackendCapabilities::supports ## foo() \
+{ \
+	QObject* backendObject = Factory::self()->backend(); \
+	if( !backendObject ) \
+		return false; \
+	bool ret; \
+	pBACKEND_GET( bool, ret, "supports"#foo ); \
+	return ret; \
 }
 
-bool BackendCapabilities::supportsOSD()
-{
-	const Ifaces::Backend* backend = Factory::self()->backend();
-	return backend ? backend->supportsOSD() : false;
-}
-
-bool BackendCapabilities::supportsSubtitles()
-{
-	const Ifaces::Backend* backend = Factory::self()->backend();
-	return backend ? backend->supportsSubtitles() : false;
-}
+SUPPORTS( Video )
+SUPPORTS( OSD )
+SUPPORTS( Subtitles )
 
 QStringList BackendCapabilities::knownMimeTypes()
 {
-	const Ifaces::Backend* backend = Factory::self()->backend( false );
-	if( backend )
-		return backend->knownMimeTypes();
+	QObject* backendObject = Factory::self()->backend( false );
+	if( backendObject )
+	{
+		QStringList ret;
+		pBACKEND_GET( QStringList, ret, "knownMimeTypes" );
+		return ret;
+	}
 	else
 	{
 		const KService::List offers = KServiceTypeTrader::self()->query( "PhononBackend",
@@ -105,9 +106,13 @@ QStringList BackendCapabilities::knownMimeTypes()
 
 bool BackendCapabilities::isMimeTypeKnown( QString mimeType )
 {
-	const Ifaces::Backend* backend = Factory::self()->backend( false );
-	if( backend )
-		return backend->knownMimeTypes().contains( mimeType );
+	QObject* backendObject = Factory::self()->backend( false );
+	if( backendObject )
+	{
+		QStringList ret;
+		pBACKEND_GET( QStringList, ret, "knownMimeTypes" );
+		return ret.contains( mimeType );
+	}
 	else
 	{
 		const KService::List offers = KServiceTypeTrader::self()->query( "PhononBackend",
@@ -121,11 +126,12 @@ bool BackendCapabilities::isMimeTypeKnown( QString mimeType )
 #define availableDevicesImpl( classname, indexesMethod ) \
 QList<classname> BackendCapabilities::available ## classname ## s() \
 { \
-	const Ifaces::Backend* backend = Factory::self()->backend(); \
+	QObject* backendObject = Factory::self()->backend(); \
 	QList<classname> ret; \
-	if( backend ) \
+	if( backendObject ) \
 	{ \
-		QSet<int> deviceIndexes = backend->indexesMethod(); \
+		QSet<int> deviceIndexes; \
+		pBACKEND_GET( QSet<int>, deviceIndexes, #indexesMethod ); \
 		foreach( int i, deviceIndexes ) \
 			ret.append( classname::fromIndex( i ) ); \
 	} \
@@ -142,11 +148,12 @@ availableDevicesImpl( ContainerFormat, containerFormatIndexes )
 
 QList<AudioEffectDescription> BackendCapabilities::availableAudioEffects()
 {
-	const Ifaces::Backend* backend = Factory::self()->backend();
+	QObject* backendObject = Factory::self()->backend();
 	QList<AudioEffectDescription> ret;
-	if( backend )
+	if( backendObject )
 	{
-		QSet<int> deviceIndexes = backend->audioEffectIndexes();
+		QSet<int> deviceIndexes;
+		pBACKEND_GET( QSet<int>, deviceIndexes, "audioEffectIndexes" );
 		foreach( int i, deviceIndexes )
 			ret.append( AudioEffectDescription::fromIndex( i ) );
 	}
@@ -155,11 +162,12 @@ QList<AudioEffectDescription> BackendCapabilities::availableAudioEffects()
 
 QList<VideoEffectDescription> BackendCapabilities::availableVideoEffects()
 {
-	const Ifaces::Backend* backend = Factory::self()->backend();
+	QObject* backendObject = Factory::self()->backend();
 	QList<VideoEffectDescription> ret;
-	if( backend )
+	if( backendObject )
 	{
-		QSet<int> deviceIndexes = backend->videoEffectIndexes();
+		QSet<int> deviceIndexes;
+		pBACKEND_GET( QSet<int>, deviceIndexes, "videoEffectIndexes" );
 		foreach( int i, deviceIndexes )
 			ret.append( VideoEffectDescription::fromIndex( i ) );
 	}

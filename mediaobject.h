@@ -29,10 +29,6 @@ class KUrl;
 namespace Phonon
 {
 	class MediaObjectPrivate;
-	namespace Ifaces
-	{
-		class MediaObject;
-	}
 
 	/**
 	 * \short Interface for media playback of a given URL.

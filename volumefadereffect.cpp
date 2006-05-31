@@ -26,20 +26,8 @@ namespace Phonon
 {
 PHONON_HEIR_IMPL( VolumeFaderEffect, AudioEffect )
 
-float VolumeFaderEffect::volume() const
-{
-	K_D( const VolumeFaderEffect );
-	return d->iface() ? d->iface()->volume() : d->currentVolume;
-}
-
-void VolumeFaderEffect::setVolume( float volume )
-{
-	K_D( VolumeFaderEffect );
-	if( iface() )
-		d->iface()->setVolume( volume );
-	else
-		d->currentVolume = volume;
-}
+PHONON_GETTER( VolumeFaderEffect, float, volume, d->currentVolume )
+PHONON_SETTER( VolumeFaderEffect, setVolume, currentVolume, float )
 
 static const double log10over20 = 0.1151292546497022842; // ln(10) / 20
 
@@ -53,20 +41,8 @@ void VolumeFaderEffect::setVolumeDecibel( double newVolumeDecibel )
 	setVolume( exp( -newVolumeDecibel * log10over20 ) );
 }
 
-VolumeFaderEffect::FadeCurve VolumeFaderEffect::fadeCurve() const
-{
-	K_D( const VolumeFaderEffect );
-	return d->iface() ? d->iface()->fadeCurve() : d->fadeCurve;
-}
-
-void VolumeFaderEffect::setFadeCurve( FadeCurve curve )
-{
-	K_D( VolumeFaderEffect );
-	if( iface() )
-		d->iface()->setFadeCurve( curve );
-	else
-		d->fadeCurve = curve;
-}
+PHONON_GETTER( VolumeFaderEffect, Phonon::VolumeFaderEffect::FadeCurve, fadeCurve, d->fadeCurve )
+PHONON_SETTER( VolumeFaderEffect, setFadeCurve, fadeCurve, Phonon::VolumeFaderEffect::FadeCurve )
 
 void VolumeFaderEffect::fadeIn( int fadeTime )
 {
@@ -82,17 +58,17 @@ void VolumeFaderEffect::fadeTo( float volume, int fadeTime )
 {
 	K_D( VolumeFaderEffect );
 	if( iface() )
-		d->iface()->fadeTo( volume, fadeTime );
+		BACKEND_CALL2( "fadeTo", float, volume, int, fadeTime );
 	else
 		d->currentVolume = volume;
 }
 
 bool VolumeFaderEffectPrivate::aboutToDeleteIface()
 {
-	if( iface() )
+	if( backendObject )
 	{
-		currentVolume = iface()->volume();
-		fadeCurve = iface()->fadeCurve();
+		pBACKEND_GET( float, currentVolume, "volume" );
+		pBACKEND_GET( Phonon::VolumeFaderEffect::FadeCurve, fadeCurve, "fadeCurve" );
 	}
 	return true;
 }
@@ -100,11 +76,11 @@ bool VolumeFaderEffectPrivate::aboutToDeleteIface()
 void VolumeFaderEffect::setupIface()
 {
 	K_D( VolumeFaderEffect );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 
 	// set up attributes
-	d->iface()->setVolume( d->currentVolume );
-	d->iface()->setFadeCurve( d->fadeCurve );
+	BACKEND_CALL1( "setVolume", float, d->currentVolume );
+	BACKEND_CALL1( "setFadeCurve", Phonon::VolumeFaderEffect::FadeCurve, d->fadeCurve );
 }
 }
 

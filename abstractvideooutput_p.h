@@ -21,7 +21,6 @@
 #define ABSTRACTVIDEOOUTPUT_P_H
 
 #include "abstractvideooutput.h"
-#include "ifaces/abstractvideooutput.h"
 #include "base_p.h"
 #include <kdelibs_export.h>
 

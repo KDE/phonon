@@ -18,21 +18,6 @@
 */
 
 #include "factory.h"
-#include "ifaces/audiopath.h"
-#include "ifaces/audioeffect.h"
-#include "ifaces/volumefadereffect.h"
-#include "ifaces/audiooutput.h"
-#include "ifaces/audiodataoutput.h"
-#include "ifaces/visualization.h"
-#include "ifaces/videopath.h"
-#include "ifaces/videoeffect.h"
-#include "ifaces/brightnesscontrol.h"
-#include "ifaces/videodataoutput.h"
-#include "ifaces/backend.h"
-#include "ifaces/mediaobject.h"
-#include "ifaces/mediaqueue.h"
-#include "ifaces/avcapture.h"
-#include "ifaces/bytestream.h"
 #include "base_p.h"
 
 #include <kservicetypetrader.h>
@@ -44,8 +29,6 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 #include <kstaticdeleter.h>
-
-#include <dbus/qdbus.h>
 
 static KStaticDeleter<Phonon::Factory> sd;
 
@@ -84,7 +67,7 @@ class Factory::Private
 #endif
 				if( factory )
 				{
-					backend = ( Ifaces::Backend* )factory->create( 0, "Phonon::Ifaces::Backend" );
+					backend = factory->create();
 					if( 0 == backend )
 					{
 						QString e = i18n( "create method returned 0" );
@@ -129,7 +112,7 @@ class Factory::Private
 			}
 		}
 
-		Ifaces::Backend * backend;
+		QObject* backend;
 		KService::Ptr service;
 
 		QList<QObject*> objects;
@@ -149,10 +132,10 @@ Factory * Factory::self()
 }
 
 Factory::Factory()
-	: d( new Private )
+	: DCOPObject( "PhononFactory" )
+	, d( new Private )
 {
-	QDBus::sessionBus().connect(QString(), QString(), "org.kde.Phonon.Factory",
-			"phononBackendChanged", this, SLOT(phononBackendChanged()));
+	connectDCOPSignal( 0, 0, "phononBackendChanged()", "phononBackendChanged()", false);
 }
 
 Factory::~Factory()
@@ -161,7 +144,11 @@ Factory::~Factory()
 	emit deleteYourObjects();
 	foreach( BasePrivate* bp, d->basePrivateList )
 		bp->deleteIface();
-	qDeleteAll(d->objects);
+	foreach( QObject* o, d->objects )
+	{
+		//kDebug( 600 ) << "delete " << o << endl;
+		delete o;
+	}
 	delete d->backend;
 	delete d;
 }
@@ -221,14 +208,26 @@ void Factory::objectDestroyed( QObject * obj )
 }
 
 #define FACTORY_IMPL( classname ) \
-Ifaces::classname* Factory::create ## classname( QObject* parent ) \
+QObject* Factory::create ## classname( QObject* parent ) \
 { \
-	return backend() ? registerObject( d->backend->create ## classname( parent ) ) : 0; \
+	if( backend() ) \
+	{ \
+		QObject* ret; \
+		if( QMetaObject::invokeMethod( d->backend, "create"#classname, Qt::DirectConnection, Q_RETURN_ARG( QObject*, ret ), Q_ARG( QObject*, parent ) ) ) \
+			return registerQObject( ret ); \
+	} \
+	return 0; \
 }
 #define FACTORY_IMPL_1ARG( type1, classname ) \
-Ifaces::classname* Factory::create ## classname( type1 name1, QObject* parent ) \
+QObject* Factory::create ## classname( type1 name1, QObject* parent ) \
 { \
-	return backend() ? registerObject( d->backend->create ## classname( name1, parent ) ) : 0; \
+	if( backend() ) \
+	{ \
+		QObject* ret; \
+		if( QMetaObject::invokeMethod( d->backend, "create"#classname, Qt::DirectConnection, Q_RETURN_ARG( QObject*, ret ), Q_ARG( type1, name1 ), Q_ARG( QObject*, parent ) ) ) \
+			return registerQObject( ret ); \
+	} \
+	return 0; \
 }
 
 FACTORY_IMPL( MediaObject )
@@ -248,7 +247,7 @@ FACTORY_IMPL( VideoDataOutput )
 
 #undef FACTORY_IMPL
 
-const Ifaces::Backend* Factory::backend( bool createWhenNull )
+QObject* Factory::backend( bool createWhenNull )
 {
 	if( createWhenNull && d->backend == 0 )
 	{
@@ -265,14 +264,21 @@ const char* Factory::uiLibrary()
 {
 	if( !backend() )
 		return 0;
-	return d->backend->uiLibrary();
+	const char* ret = 0;
+	QMetaObject::invokeMethod( d->backend, "uiLibrary", Qt::DirectConnection, Q_RETURN_ARG( const char*, ret ) );
+	return ret;
 }
 
 const char* Factory::uiSymbol()
 {
 	if( !backend() )
 		return 0;
-	return d->backend->uiSymbol();
+	const char* ret = 0;
+	// the backend doesn't have to implement the symbol - the default factory
+	// symbol will be used then
+	if( QMetaObject::invokeMethod( d->backend, "uiSymbol", Qt::DirectConnection, Q_RETURN_ARG( const char*, ret ) ) )
+		return ret;
+	return 0;
 }
 
 QString Factory::backendName() const
@@ -315,16 +321,11 @@ QString Factory::backendWebsite() const
 		return QString();
 }
 
-template<class T> inline T* Factory::registerObject( T* o )
-{
-	registerQObject( o->qobject() );
-	return o;
-}
-
-void Factory::registerQObject( QObject* o )
+QObject* Factory::registerQObject( QObject* o )
 {
 	connect( o, SIGNAL( destroyed( QObject* ) ), SLOT( objectDestroyed( QObject* ) ) );
 	d->objects.append( o );
+	return o;
 }
 
 } //namespace Phonon

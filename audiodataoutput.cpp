@@ -18,7 +18,6 @@
 */
 #include "audiodataoutput.h"
 #include "audiodataoutput_p.h"
-#include "ifaces/audiodataoutput.h"
 #include "factory.h"
 
 namespace Phonon
@@ -26,47 +25,17 @@ namespace Phonon
 
 PHONON_HEIR_IMPL( AudioDataOutput, AbstractAudioOutput )
 
-AudioDataOutput::Format AudioDataOutput::format() const
-{
-	K_D( const AudioDataOutput );
-	return d->iface() ? d->iface()->format() : d->format;
-}
-
-int AudioDataOutput::dataSize() const
-{
-	K_D( const AudioDataOutput );
-	return d->iface() ? d->iface()->dataSize() : d->dataSize;
-}
-
-int AudioDataOutput::sampleRate() const
-{
-	K_D( const AudioDataOutput );
-	return d->iface() ? d->iface()->sampleRate() : -1;
-}
-
-void AudioDataOutput::setFormat( AudioDataOutput::Format newformat )
-{
-	K_D( AudioDataOutput );
-	if( iface() )
-		d->iface()->setFormat( newformat );
-	else
-		d->format = newformat;
-}
-
-void AudioDataOutput::setDataSize( int size )
-{
-	K_D( AudioDataOutput );
-	if( iface() )
-		d->iface()->setDataSize( size );
-	else
-		d->dataSize = size;
-}
+PHONON_GETTER( AudioDataOutput, Phonon::AudioDataOutput::Format, format, d->format )
+PHONON_GETTER( AudioDataOutput, int, dataSize, d->dataSize )
+PHONON_GETTER( AudioDataOutput, int, sampleRate, -1 )
+PHONON_SETTER( AudioDataOutput, setFormat, format, Phonon::AudioDataOutput::Format )
+PHONON_SETTER( AudioDataOutput, setDataSize, dataSize, int )
 
 bool AudioDataOutputPrivate::aboutToDeleteIface()
 {
-	Q_ASSERT( iface() );
-	format = iface()->format();
-	dataSize = iface()->dataSize();
+	Q_ASSERT( backendObject );
+	pBACKEND_GET( Phonon::AudioDataOutput::Format, format, "format" );
+	pBACKEND_GET( int, dataSize, "dataSize" );
 
 	return AbstractAudioOutputPrivate::aboutToDeleteIface();
 }
@@ -74,19 +43,19 @@ bool AudioDataOutputPrivate::aboutToDeleteIface()
 void AudioDataOutput::setupIface()
 {
 	K_D( AudioDataOutput );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 	AbstractAudioOutput::setupIface();
 
 	// set up attributes
-	d->iface()->setFormat( d->format );
-	d->iface()->setDataSize( d->dataSize );
-	connect( d->iface()->qobject(),
+	BACKEND_CALL1( "setFormat", Phonon::AudioDataOutput::Format, d->format );
+	BACKEND_CALL1( "setDataSize", int, d->dataSize );
+	connect( d->backendObject,
 			SIGNAL( dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >& ) ),
 			SIGNAL( dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >& ) ) );
-	connect( d->iface()->qobject(),
+	connect( d->backendObject,
 			SIGNAL( dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<float> >& ) ),
 			SIGNAL( dataReady( const QMap<Phonon::AudioDataOutput::Channel, QVector<float> >& ) ) );
-	connect( d->iface()->qobject(), SIGNAL( endOfMedia( int ) ), SIGNAL( endOfMedia( int ) ) );
+	connect( d->backendObject, SIGNAL( endOfMedia( int ) ), SIGNAL( endOfMedia( int ) ) );
 }
 
 } //namespace Phonon

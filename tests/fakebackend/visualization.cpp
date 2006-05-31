@@ -20,7 +20,6 @@
 #include "visualization.h"
 #include "audiopath.h"
 #include "abstractvideooutput.h"
-#include <phonon/ifaces/abstractvideooutput.h>
 
 namespace Phonon
 {
@@ -42,18 +41,18 @@ void Visualization::setVisualization( int newVisualization )
 	m_visualization = newVisualization;
 }
 
-void Visualization::setAudioPath( Ifaces::AudioPath* audioPath )
+void Visualization::setAudioPath( QObject* audioPath )
 {
 	Q_ASSERT( audioPath );
-	AudioPath* ap = qobject_cast<AudioPath*>( audioPath->qobject() );
+	AudioPath* ap = qobject_cast<AudioPath*>( audioPath );
 	Q_ASSERT( ap );
 	m_audioPath = ap;
 }
 
-void Visualization::setVideoOutput( Ifaces::AbstractVideoOutput* videoOutputIface )
+void Visualization::setVideoOutput( QObject* videoOutputIface )
 {
 	Q_ASSERT( videoOutputIface );
-	AbstractVideoOutput* vo = reinterpret_cast<Phonon::Fake::AbstractVideoOutput*>( videoOutputIface->internal1() );
+	AbstractVideoOutput* vo = reinterpret_cast<Phonon::Fake::AbstractVideoOutput*>( videoOutputIface );
 	Q_ASSERT( vo );
 	m_videoOutput = vo;
 }

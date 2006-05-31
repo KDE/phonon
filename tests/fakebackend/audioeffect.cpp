@@ -33,20 +33,26 @@ AudioEffect::AudioEffect( int effectId, QObject* parent )
 	{
 		case 0x7F000001:
 			m_effect = new DelayAudioEffect;
-			addParameter( 1, i18n( "time" ), 0,
-					m_effect->value( 1 ), 1.0, 15000.0,
-					i18n( "Set's the delay in milliseconds" ) );
-			addParameter( 2, i18n( "feedback" ), 0,
-					m_effect->value( 2 ), 0.0, 1.0 );
-			addParameter( 3, i18n( "level" ), 0,
-					m_effect->value( 3 ), 0.0, 1.0 );
+			m_parameterList.append( EffectParameter( 1, i18n( "time" ), 0,
+						m_effect->value( 1 ), 1.0, 15000.0,
+						i18n( "Set's the delay in milliseconds" ) ) );
+			m_parameterList.append( EffectParameter( 2, i18n( "feedback" ), 0,
+					m_effect->value( 2 ), 0.0, 1.0 ) );
+			m_parameterList.append( EffectParameter( 3, i18n( "level" ), 0,
+					m_effect->value( 3 ), 0.0, 1.0 ) );
 	}
+	qSort( m_parameterList );
 }
 
 AudioEffect::~AudioEffect()
 {
 	delete m_effect;
 	m_effect = 0;
+}
+
+QList<Phonon::EffectParameter> AudioEffect::parameterList() const
+{
+	return m_parameterList;
 }
 
 QVariant AudioEffect::value( int parameterId ) const

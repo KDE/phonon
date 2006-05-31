@@ -20,7 +20,7 @@
 #include "audioeffectdescription.h"
 #include "audioeffectdescription_p.h"
 #include "factory.h"
-#include "ifaces/backend.h"
+#include "phonondefs.h"
 
 #include <QString>
 #include <QSet>
@@ -54,16 +54,7 @@ bool AudioEffectDescription::operator==( const AudioEffectDescription& rhs ) con
 	return *d_func() == *rhs.d_func();
 }
 
-AudioEffectDescription AudioEffectDescription::fromIndex( int index )
-{
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->audioEffectIndexes().contains( index ) )
-		return AudioEffectDescription( index,
-				b->audioEffectName( index ),
-				b->audioEffectDescription( index ) );
-	else
-		return AudioEffectDescription(); //isValid() == false
-}
+NAMEDESCRIPTIONFROMINDEX( AudioEffectDescription, audioEffect )
 
 } // namespace Phonon
 

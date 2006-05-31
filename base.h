@@ -23,6 +23,7 @@
 #include "phonondefs.h"
 #include <kdelibs_export.h>
 
+class QObject;
 namespace Phonon
 {
 	class BasePrivate;
@@ -76,6 +77,15 @@ namespace Phonon
 			 * private data pointer
 			 */
 			BasePrivate* k_ptr;
+
+			/**
+			 * \internal
+			 * Returns the backend object. If the object does not exist it tries to
+			 * create it before returning.
+			 *
+			 * \return the Iface object, might return \c 0
+			 */
+			QObject* iface();
 	};
 } //namespace Phonon
 

@@ -36,34 +36,34 @@ AudioPath::~AudioPath()
 {
 }
 
-bool AudioPath::addOutput( Ifaces::AbstractAudioOutput* audioOutput )
+bool AudioPath::addOutput( QObject* audioOutput )
 {
 	Q_ASSERT( audioOutput );
-	AbstractAudioOutput* ao = qobject_cast<AbstractAudioOutput*>( audioOutput->qobject() );
+	AbstractAudioOutput* ao = qobject_cast<AbstractAudioOutput*>( audioOutput );
 	Q_ASSERT( ao );
 	Q_ASSERT( !m_outputs.contains( ao ) );
 	m_outputs.append( ao );
 	return true;
 }
 
-bool AudioPath::removeOutput( Ifaces::AbstractAudioOutput* audioOutput )
+bool AudioPath::removeOutput( QObject* audioOutput )
 {
 	Q_ASSERT( audioOutput );
-	AbstractAudioOutput* ao = qobject_cast<AbstractAudioOutput*>( audioOutput->qobject() );
+	AbstractAudioOutput* ao = qobject_cast<AbstractAudioOutput*>( audioOutput );
 	Q_ASSERT( ao );
 	Q_ASSERT( m_outputs.removeAll( ao ) > 0 );
 	return true;
 }
 
-bool AudioPath::insertEffect( Ifaces::AudioEffect* newEffect, Ifaces::AudioEffect* insertBefore )
+bool AudioPath::insertEffect( QObject* newEffect, QObject* insertBefore )
 {
 	Q_ASSERT( newEffect );
-	AudioEffect* ae = qobject_cast<AudioEffect*>( newEffect->qobject() );
+	AudioEffect* ae = qobject_cast<AudioEffect*>( newEffect );
 	Q_ASSERT( ae );
 	AudioEffect* before = 0;
 	if( insertBefore )
 	{
-		before = qobject_cast<AudioEffect*>( insertBefore->qobject() );
+		before = qobject_cast<AudioEffect*>( insertBefore );
 		Q_ASSERT( before );
 		if( !m_effects.contains( before ) )
 			return false;
@@ -75,10 +75,10 @@ bool AudioPath::insertEffect( Ifaces::AudioEffect* newEffect, Ifaces::AudioEffec
 	return true;
 }
 
-bool AudioPath::removeEffect( Ifaces::AudioEffect* effect )
+bool AudioPath::removeEffect( QObject* effect )
 {
 	Q_ASSERT( effect );
-	AudioEffect* ae = qobject_cast<AudioEffect*>( effect->qobject() );
+	AudioEffect* ae = qobject_cast<AudioEffect*>( effect );
 	Q_ASSERT( ae );
 	if( m_effects.removeAll( ae ) > 0 )
 		return true;

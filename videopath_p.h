@@ -21,7 +21,6 @@
 #define VIDEOPATH_P_H
 
 #include "videopath.h"
-#include "ifaces/videopath.h"
 #include "base_p.h"
 #include <QList>
 

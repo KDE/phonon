@@ -21,7 +21,6 @@
 #define PHONON_MEDIAQUEUE_P_H
 
 #include "mediaqueue.h"
-#include "ifaces/mediaqueue.h"
 #include "base_p.h"
 #include "mediaobject.h"
 

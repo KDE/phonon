@@ -18,8 +18,6 @@
 */
 
 #include "factory.h"
-#include "ifaces/videowidget.h"
-#include "ifaces/backend.h"
 #include "../factory.h"
 
 #include <QFile>
@@ -74,7 +72,7 @@ class UiFactory::Private
 			}
 			if( factory )
 			{
-				backend = static_cast<Ifaces::UiBackend*>( factory->create( 0, "Phonon::Ifaces::UiBackend" ) );
+				backend = factory->create();
 				if( 0 == backend )
 				{
 					QString e = i18n( "create method returned 0" );
@@ -96,7 +94,7 @@ class UiFactory::Private
 				KMessageBox::error( 0, i18n( "Unable to use the UI part of the loaded Multimedia Backend" ) );
 		}
 
-		Ifaces::UiBackend * backend;
+		QObject* backend;
 };
 
 UiFactory* UiFactory::m_self = 0;
@@ -133,20 +131,23 @@ void UiFactory::deleteNow()
 	delete this;
 }
 
-Ifaces::VideoWidget* UiFactory::createVideoWidget( QWidget* parent )
+QWidget* UiFactory::createVideoWidget( QWidget* parent )
 {
-	return d->backend ? registerObject( d->backend->createVideoWidget( parent ) ) : 0;
+	if( d->backend )
+	{
+		QWidget* ret;
+		if( QMetaObject::invokeMethod( d->backend, "createVideoWidget", Qt::DirectConnection, Q_RETURN_ARG( QWidget*, ret ), Q_ARG( QWidget*, parent ) ) )
+		{
+			Phonon::Factory::self()->registerQObject( ret );
+			return ret;
+		}
+	}
+	return 0;
 }
 
-const Ifaces::UiBackend* UiFactory::backend() const
+QObject* UiFactory::backend() const
 {
 	return d->backend;
-}
-
-template<class T> inline T* UiFactory::registerObject( T* o )
-{
-	Phonon::Factory::self()->registerQObject( o->qobject() );
-	return o;
 }
 
 } //namespace Phonon

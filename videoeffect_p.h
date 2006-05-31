@@ -21,7 +21,6 @@
 #define VIDEOEFFECT_P_H
 
 #include "videoeffect.h"
-#include "ifaces/videoeffect.h"
 #include "base_p.h"
 #include <QHash>
 #include <QVariant>

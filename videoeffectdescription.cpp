@@ -20,7 +20,7 @@
 #include "videoeffectdescription.h"
 #include "videoeffectdescription_p.h"
 #include "factory.h"
-#include "ifaces/backend.h"
+#include "phonondefs.h"
 
 #include <QString>
 #include <QSet>
@@ -54,16 +54,7 @@ bool VideoEffectDescription::operator==( const VideoEffectDescription& rhs ) con
 	return *d_func() == *rhs.d_func();
 }
 
-VideoEffectDescription VideoEffectDescription::fromIndex( int index )
-{
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->videoEffectIndexes().contains( index ) )
-		return VideoEffectDescription( index,
-				b->videoEffectName( index ),
-				b->videoEffectDescription( index ) );
-	else
-		return VideoEffectDescription(); //isValid() == false
-}
+NAMEDESCRIPTIONFROMINDEX( VideoEffectDescription, videoEffect )
 
 } // namespace Phonon
 

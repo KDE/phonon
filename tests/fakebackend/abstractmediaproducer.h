@@ -20,9 +20,9 @@
 #define Phonon_FAKE_ABSTRACTMEDIAPRODUCER_H
 
 #include <QObject>
-#include "../../ifaces/abstractmediaproducer.h"
 #include <QTime>
 #include <QList>
+#include <phonon/phononnamespace.h>
 #include "audiopath.h"
 #include "videopath.h"
 #include <QHash>
@@ -33,56 +33,47 @@ namespace Phonon
 {
 	class VideoFrame;
 
-namespace Ifaces
-{
-	class VideoPath;
-	class AudioPath;
-}
 namespace Fake
 {
-	class KDE_EXPORT AbstractMediaProducer : public QObject, virtual public Ifaces::AbstractMediaProducer
+	class KDE_EXPORT AbstractMediaProducer : public QObject
 	{
 		Q_OBJECT
 		public:
 			AbstractMediaProducer( QObject* parent );
-			virtual ~AbstractMediaProducer();
-			virtual bool addVideoPath( Ifaces::VideoPath* videoPath );
-			virtual bool addAudioPath( Ifaces::AudioPath* audioPath );
-			virtual void removeVideoPath( Ifaces::VideoPath* videoPath );
-			virtual void removeAudioPath( Ifaces::AudioPath* audioPath );
-			virtual State state() const;
-			virtual bool hasVideo() const;
-			virtual bool seekable() const;
-			virtual qint64 currentTime() const;
-			virtual qint32 tickInterval() const;
+			~AbstractMediaProducer();
+			Q_INVOKABLE bool addVideoPath( QObject* videoPath );
+			Q_INVOKABLE bool addAudioPath( QObject* audioPath );
+			Q_INVOKABLE void removeVideoPath( QObject* videoPath );
+			Q_INVOKABLE void removeAudioPath( QObject* audioPath );
+			Q_INVOKABLE Phonon::State state() const;
+			Q_INVOKABLE bool hasVideo() const;
+			Q_INVOKABLE bool seekable() const;
+			Q_INVOKABLE qint64 currentTime() const;
+			Q_INVOKABLE qint32 tickInterval() const;
 
-			virtual QStringList availableAudioStreams() const;
-			virtual QStringList availableVideoStreams() const;
-			virtual QStringList availableSubtitleStreams() const;
+			Q_INVOKABLE QStringList availableAudioStreams() const;
+			Q_INVOKABLE QStringList availableVideoStreams() const;
+			Q_INVOKABLE QStringList availableSubtitleStreams() const;
 
-			virtual QString selectedAudioStream( const Ifaces::AudioPath* audioPath ) const;
-			virtual QString selectedVideoStream( const Ifaces::VideoPath* videoPath ) const;
-			virtual QString selectedSubtitleStream( const Ifaces::VideoPath* videoPath ) const;
+			Q_INVOKABLE QString selectedAudioStream( const QObject* audioPath ) const;
+			Q_INVOKABLE QString selectedVideoStream( const QObject* videoPath ) const;
+			Q_INVOKABLE QString selectedSubtitleStream( const QObject* videoPath ) const;
 
-			virtual void selectAudioStream( const QString& streamName, const Ifaces::AudioPath* audioPath );
-			virtual void selectVideoStream( const QString& streamName, const Ifaces::VideoPath* videoPath );
-			virtual void selectSubtitleStream( const QString& streamName, const Ifaces::VideoPath* videoPath );
+			Q_INVOKABLE void selectAudioStream( const QString& streamName, const QObject* audioPath );
+			Q_INVOKABLE void selectVideoStream( const QString& streamName, const QObject* videoPath );
+			Q_INVOKABLE void selectSubtitleStream( const QString& streamName, const QObject* videoPath );
 
-			virtual void setTickInterval( qint32 newTickInterval );
-			virtual void play();
-			virtual void pause();
-			virtual void stop();
-			virtual void seek( qint64 time );
+			Q_INVOKABLE void setTickInterval( qint32 newTickInterval );
+			Q_INVOKABLE void play();
+			Q_INVOKABLE void pause();
+			Q_INVOKABLE void stop();
+			Q_INVOKABLE void seek( qint64 time );
 
 			void setBufferSize( int size );
 
 		Q_SIGNALS:
 			void stateChanged( Phonon::State newstate, Phonon::State oldstate );
 			void tick( qint64 time );
-
-		public:
-			virtual QObject* qobject() { return this; }
-			virtual const QObject* qobject() const { return this; }
 
 		protected:
 			void fillBuffer( QVector<float>* buffer );
@@ -105,9 +96,9 @@ namespace Fake
 			// for sound synthesis
 			float m_position, m_frequency;
 
-			QHash<const Ifaces::AudioPath*, QString> m_selectedAudioStream;
-			QHash<const Ifaces::VideoPath*, QString> m_selectedVideoStream;
-			QHash<const Ifaces::VideoPath*, QString> m_selectedSubtitleStream;
+			QHash<const QObject*, QString> m_selectedAudioStream;
+			QHash<const QObject*, QString> m_selectedVideoStream;
+			QHash<const QObject*, QString> m_selectedSubtitleStream;
 	};
 }} //namespace Phonon::Fake
 

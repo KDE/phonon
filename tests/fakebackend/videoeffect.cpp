@@ -18,6 +18,7 @@
 */
 
 #include "videoeffect.h"
+#include <QVariant>
 
 namespace Phonon
 {
@@ -30,6 +31,11 @@ VideoEffect::VideoEffect( int effectId, QObject* parent )
 
 VideoEffect::~VideoEffect()
 {
+}
+
+QList<Phonon::EffectParameter> VideoEffect::parameterList() const
+{
+	return m_parameterList;
 }
 
 QVariant VideoEffect::value( int parameterId ) const

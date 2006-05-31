@@ -20,30 +20,29 @@
 #define Phonon_FAKE_VIDEOEFFECT_H
 
 #include <QObject>
-#include <phonon/ifaces/videoeffect.h>
 #include <phonon/videoframe.h>
+#include <phonon/effectparameter.h>
 
 namespace Phonon
 {
 namespace Fake
 {
-	class VideoEffect : public QObject, virtual public Ifaces::VideoEffect
+	class VideoEffect : public QObject
 	{
 		Q_OBJECT
 		public:
 			VideoEffect( int effectId, QObject* parent );
-			virtual ~VideoEffect();
-			virtual QVariant value( int parameterId ) const;
-			virtual void setValue( int parameterId, QVariant newValue );
+			~VideoEffect();
+			Q_INVOKABLE QVariant value( int parameterId ) const;
+			Q_INVOKABLE void setValue( int parameterId, QVariant newValue );
 
-			// fake specific:
+			Q_INVOKABLE QList<EffectParameter> parameterList() const;
+
+			// Fake specific:
 			virtual void processFrame( Phonon::VideoFrame& frame );
 
-		public:
-			virtual QObject* qobject() { return this; }
-			virtual const QObject* qobject() const { return this; }
-
 		private:
+			QList<Phonon::EffectParameter> m_parameterList;
 	};
 }} //namespace Phonon::Fake
 

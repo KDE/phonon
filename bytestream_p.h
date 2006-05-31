@@ -21,7 +21,6 @@
 #define BYTESTREAM_P_H
 
 #include "bytestream.h"
-#include "ifaces/bytestream.h"
 #include "abstractmediaproducer_p.h"
 
 namespace Phonon
@@ -38,8 +37,8 @@ class ByteStreamPrivate : public AbstractMediaProducerPrivate
 		{
 		}
 
-		long aboutToFinishTime;
-		long streamSize;
+		qint32 aboutToFinishTime;
+		qint64 streamSize;
 		bool streamSeekable;
 };
 }

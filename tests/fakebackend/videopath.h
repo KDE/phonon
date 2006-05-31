@@ -20,7 +20,6 @@
 #define Phonon_FAKE_VIDEOPATH_H
 
 #include <QObject>
-#include <phonon/ifaces/videopath.h>
 #include <phonon/videoframe.h>
 #include <QList>
 
@@ -31,25 +30,21 @@ namespace Fake
 	class VideoEffect;
 	class AbstractVideoOutput;
 
-	class VideoPath : public QObject, virtual public Ifaces::VideoPath
+	class VideoPath : public QObject
 	{
 		Q_OBJECT
 		public:
 			VideoPath( QObject* parent );
-			virtual ~VideoPath();
+			~VideoPath();
 
 			// Operations:
-			virtual bool addOutput( Ifaces::AbstractVideoOutput* videoOutput );
-			virtual bool removeOutput( Ifaces::AbstractVideoOutput* videoOutput );
-			virtual bool insertEffect( Ifaces::VideoEffect* newEffect, Ifaces::VideoEffect* insertBefore = 0 );
-			virtual bool removeEffect( Ifaces::VideoEffect* effect );
+			Q_INVOKABLE bool addOutput( QObject* videoOutput );
+			Q_INVOKABLE bool removeOutput( QObject* videoOutput );
+			Q_INVOKABLE bool insertEffect( QObject* newEffect, QObject* insertBefore = 0 );
+			Q_INVOKABLE bool removeEffect( QObject* effect );
 
 			// fake specific
 			void processFrame( Phonon::VideoFrame& frame );
-
-		public:
-			virtual QObject* qobject() { return this; }
-			virtual const QObject* qobject() const { return this; }
 
 		private:
 			QList<VideoEffect*> m_effects;

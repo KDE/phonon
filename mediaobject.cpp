@@ -18,8 +18,6 @@
 */
 #include "mediaobject.h"
 #include "mediaobject_p.h"
-#include "ifaces/mediaobject.h"
-#include "ifaces/bytestream.h"
 #include "factory.h"
 
 #include <kdebug.h>
@@ -28,37 +26,10 @@ namespace Phonon
 {
 PHONON_HEIR_IMPL( MediaObject, AbstractMediaProducer )
 
-KUrl MediaObject::url() const
-{
-	K_D( const MediaObject );
-	if( d->bytestream )
-		return d->url;
-	return d->iface() ? d->iface()->url() : d->url;
-}
-
-qint64 MediaObject::totalTime() const
-{
-	K_D( const MediaObject );
-	if( d->bytestream )
-		return d->bytestream->totalTime();
-	return d->iface() ? d->iface()->totalTime() : -1;
-}
-
-qint64 MediaObject::remainingTime() const
-{
-	K_D( const MediaObject );
-	if( d->bytestream )
-		return d->bytestream->remainingTime();
-	return d->iface() ? d->iface()->remainingTime() : -1;
-}
-
-qint32 MediaObject::aboutToFinishTime() const
-{
-	K_D( const MediaObject );
-	if( d->bytestream )
-		return d->bytestream->aboutToFinishTime();
-	return d->iface() ? d->iface()->aboutToFinishTime() : d->aboutToFinishTime;
-}
+PHONON_GETTER( MediaObject, KUrl, url, d->url )
+PHONON_GETTER( MediaObject, qint64, totalTime, -1 )
+PHONON_GETTER( MediaObject, qint64, remainingTime, -1 )
+PHONON_GETTER( MediaObject, qint32, aboutToFinishTime, d->aboutToFinishTime )
 
 void MediaObject::setUrl( const KUrl& url )
 {
@@ -66,9 +37,9 @@ void MediaObject::setUrl( const KUrl& url )
 	d->url = url;
 	if( iface() )
 	{
-		d->iface()->stop(); // first call stop as that often is the expected state
+		BACKEND_CALL( "stop" ); // first call stop as that often is the expected state
 		                    // for setting a new URL
-		d->iface()->setUrl( url );
+		BACKEND_CALL1( "setUrl", KUrl, url );
 		if( state() == Phonon::ErrorState )
 		{
 			d->deleteIface();
@@ -80,26 +51,16 @@ void MediaObject::setUrl( const KUrl& url )
 	}
 }
 
-void MediaObject::setAboutToFinishTime( qint32 newAboutToFinishTime )
-{
-	K_D( MediaObject );
-	//kDebug( 600 ) << k_funcinfo << endl;
-	if( d->bytestream )
-		d->bytestream->setAboutToFinishTime( newAboutToFinishTime );
-	else if( iface() )
-		d->iface()->setAboutToFinishTime( newAboutToFinishTime );
-	else
-		d->aboutToFinishTime = newAboutToFinishTime;
-}
+PHONON_SETTER( MediaObject, setAboutToFinishTime, aboutToFinishTime, qint32 )
 
 void MediaObjectPrivate::setupKioStreaming()
 {
 	K_Q( MediaObject );
-	Q_ASSERT( bytestream == 0 );
-	bytestream = Factory::self()->createByteStream( q );
-	if( bytestream )
+	Q_ASSERT( backendObject == 0 );
+	backendObject = Factory::self()->createByteStream( q );
+	if( backendObject )
 	{
-		AbstractMediaProducerPrivate::setIface( static_cast<Ifaces::AbstractMediaProducer*>( bytestream ) );
+		QObject::connect( backendObject, SIGNAL( destroyed( QObject* ) ), q, SLOT( _k_cleanupByteStream() ) );
 		//setupIface for ByteStream
 		if( kiojob )
 			kiojob->kill();
@@ -112,15 +73,15 @@ void MediaObjectPrivate::setupKioStreaming()
 		QObject::connect( kiojob, SIGNAL( totalSize( KIO::Job*, KIO::filesize_t ) ),
 				q, SLOT( _k_bytestreamTotalSize( KIO::Job*, KIO::filesize_t ) ) );
 
-		QObject::connect( bytestream->qobject(), SIGNAL( finished() ), q, SIGNAL( finished() ) );
-		QObject::connect( bytestream->qobject(), SIGNAL( aboutToFinish( qint32 ) ), q, SIGNAL( aboutToFinish( qint32 ) ) );
-		QObject::connect( bytestream->qobject(), SIGNAL( length( qint64 ) ), q, SIGNAL( length( qint64 ) ) );
+		QObject::connect( backendObject, SIGNAL( finished() ), q, SIGNAL( finished() ) );
+		QObject::connect( backendObject, SIGNAL( aboutToFinish( qint32 ) ), q, SIGNAL( aboutToFinish( qint32 ) ) );
+		QObject::connect( backendObject, SIGNAL( length( qint64 ) ), q, SIGNAL( length( qint64 ) ) );
 
-		QObject::connect( bytestream->qobject(), SIGNAL( needData() ), q, SLOT( _k_bytestreamNeedData() ) );
-		QObject::connect( bytestream->qobject(), SIGNAL( enoughData() ), q, SLOT( _k_bytestreamEnoughData() ) );
+		QObject::connect( backendObject, SIGNAL( needData() ), q, SLOT( _k_bytestreamNeedData() ) );
+		QObject::connect( backendObject, SIGNAL( enoughData() ), q, SLOT( _k_bytestreamEnoughData() ) );
 
-		bytestream->setStreamSeekable( false ); //FIXME: KIO doesn't support seeking at this point
-		//connect( bytestream->qobject(), SIGNAL( seekStream( qint64 ), kiojob, SLOT(
+		pBACKEND_CALL1( "setStreamSeekable", bool, false ); //FIXME: KIO doesn't support seeking at this point
+		//connect( backendObject, SIGNAL( seekStream( qint64 ), kiojob, SLOT(
 
 		static_cast<AbstractMediaProducer*>( q )->setupIface();
 	}
@@ -140,14 +101,12 @@ void MediaObjectPrivate::_k_bytestreamEnoughData()
 
 void MediaObjectPrivate::_k_bytestreamData( KIO::Job*, const QByteArray& data )
 {
-	Q_ASSERT( bytestream );
-	bytestream->writeData( data );
+	pBACKEND_CALL1( "writeData", QByteArray, data );
 }
 
 void MediaObjectPrivate::_k_bytestreamResult( KIO::Job* job )
 {
-	Q_ASSERT( bytestream );
-	bytestream->endOfData();
+	pBACKEND_CALL( "endOfData" );
 	kiojob = 0;
 
 	if( job->error() )
@@ -158,21 +117,22 @@ void MediaObjectPrivate::_k_bytestreamResult( KIO::Job* job )
 
 void MediaObjectPrivate::_k_bytestreamTotalSize( KIO::Job*, KIO::filesize_t size )
 {
-	Q_ASSERT( bytestream );
-	bytestream->setStreamSize( size );
+	pBACKEND_CALL1( "setStreamSize", qint64, size );
+}
+
+void MediaObjectPrivate::_k_cleanupByteStream()
+{
+	if( kiojob )
+	{
+		kiojob->kill();
+		kiojob = 0;
+	}
 }
 
 bool MediaObjectPrivate::aboutToDeleteIface()
 {
 	//kDebug( 600 ) << k_funcinfo << endl;
-	if( bytestream )
-	{
-		aboutToFinishTime = bytestream->aboutToFinishTime();
-	}
-	else if( iface() )
-	{
-		aboutToFinishTime = iface()->aboutToFinishTime();
-	}
+	pBACKEND_GET( qint32, aboutToFinishTime, "aboutToFinishTime" );
 	return AbstractMediaProducerPrivate::aboutToDeleteIface();
 }
 
@@ -180,17 +140,17 @@ bool MediaObjectPrivate::aboutToDeleteIface()
 void MediaObject::setupIface()
 {
 	K_D( MediaObject );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 	//kDebug( 600 ) << k_funcinfo << endl;
 	AbstractMediaProducer::setupIface();
 
-	connect( d->iface()->qobject(), SIGNAL( finished() ), SIGNAL( finished() ) );
-	connect( d->iface()->qobject(), SIGNAL( aboutToFinish( qint32 ) ), SIGNAL( aboutToFinish( qint32 ) ) );
-	connect( d->iface()->qobject(), SIGNAL( length( qint64 ) ), SIGNAL( length( qint64 ) ) );
+	connect( d->backendObject, SIGNAL( finished() ), SIGNAL( finished() ) );
+	connect( d->backendObject, SIGNAL( aboutToFinish( qint32 ) ), SIGNAL( aboutToFinish( qint32 ) ) );
+	connect( d->backendObject, SIGNAL( length( qint64 ) ), SIGNAL( length( qint64 ) ) );
 
 	// set up attributes
 	if( !d->url.isEmpty() )
-		d->iface()->setUrl( d->url );
+		BACKEND_CALL1( "setUrl", KUrl, d->url );
 	if( state() == Phonon::ErrorState )
 	{
 		d->deleteIface();
@@ -200,7 +160,7 @@ void MediaObject::setupIface()
 		d->setupKioStreaming();
 		return;
 	}
-	d->iface()->setAboutToFinishTime( d->aboutToFinishTime );
+	BACKEND_CALL1( "setAboutToFinishTime", qint32, d->aboutToFinishTime );
 }
 
 } //namespace Phonon

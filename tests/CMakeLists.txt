@@ -12,6 +12,7 @@ MACRO( PHONON_DECLARE_TESTS )
 ENDMACRO( PHONON_DECLARE_TESTS )
 
 PHONON_DECLARE_TESTS(
+	methodtest
 	mediaobjecttest
 	audiopathtest
 	backendcapabilitiestest
@@ -22,6 +23,7 @@ PHONON_DECLARE_TESTS(
 	videocapturedevicetest
 	)
 
+add_test(methodtest ${EXECUTABLE_OUTPUT_PATH}/methodtest)
 add_test(backendcapabilitiestest ${EXECUTABLE_OUTPUT_PATH}/backendcapabilitiestest)
 add_test(audiopathtest ${EXECUTABLE_OUTPUT_PATH}/audiopathtest)
 add_test(audiooutputtest ${EXECUTABLE_OUTPUT_PATH}/audiooutputtest)

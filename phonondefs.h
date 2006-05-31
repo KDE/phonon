@@ -35,28 +35,10 @@
 protected: \
 	virtual bool aboutToDeleteIface(); \
 	virtual void createIface(); \
-	virtual void setIface( void* p ) \
-	{ \
-		iface_ptr = reinterpret_cast<Ifaces::classname*>( p ); \
-		baseclass##Private::setIface( static_cast<Ifaces::baseclass*>( iface_ptr ) ); \
-	} \
-private: \
-	Ifaces::classname* iface_ptr; \
-	inline Ifaces::classname* iface() { return iface_ptr; } \
-	inline const Ifaces::classname* iface() const { return iface_ptr; } \
 
 #define PHONON_PRIVATEABSTRACTCLASS( classname, baseclass ) \
 protected: \
 	virtual bool aboutToDeleteIface(); \
-	virtual void setIface( void* p ) \
-	{ \
-		iface_ptr = reinterpret_cast<Ifaces::classname*>( p ); \
-		baseclass##Private::setIface( static_cast<Ifaces::baseclass*>( iface_ptr ) ); \
-	} \
-private: \
-	Ifaces::classname* iface_ptr; \
-	inline Ifaces::classname* iface() { return iface_ptr; } \
-	inline const Ifaces::classname* iface() const { return iface_ptr; } \
 
 /**
  * \internal
@@ -103,16 +85,7 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	void setupIface(); \
-private: \
-	/**
-	 * \internal
-	 * Returns the Iface object. If the object does not exist it tries to
-	 * create it before returning.
-	 *
-	 * \return the Iface object, might return \c 0
-	 */ \
-	Ifaces::classname* iface(); \
+	void setupIface();
 
 /**
  * \internal
@@ -166,16 +139,7 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	void setupIface(); \
-private: \
-	/**
-	 * \internal
-	 * Returns the Iface object. If the object does not exist it tries to
-	 * create it before returning.
-	 *
-	 * \return the Iface object, might return \c 0
-	 */ \
-	Ifaces::classname* iface(); \
+	void setupIface();
 
 /**
  * \internal
@@ -223,30 +187,14 @@ protected: \
 	 * m_iface->setPropertyB( d->propertyB );
 	 * \endcode
 	 */ \
-	void setupIface(); \
-private: \
-	/**
-	 * \internal
-	 * Returns the Iface object. If the object does not exist it tries to
-	 * create it before returning.
-	 *
-	 * \return the Iface object, might return \c 0
-	 */ \
-	Ifaces::classname* iface(); \
+	void setupIface();
 
 #define PHONON_ABSTRACTBASE_IMPL( classname ) \
 classname::classname( classname ## Private& dd, QObject* parent ) \
 	: QObject( parent ) \
 	, Base( dd ) \
 { \
-} \
-Ifaces::classname* classname::iface() \
-{ \
-	K_D( classname ); \
-	if( !d->iface() ) \
-		d->createIface(); \
-	return d->iface(); \
-} \
+}
 
 #define PHONON_OBJECT_IMPL( classname ) \
 classname::classname( QObject* parent ) \
@@ -261,25 +209,15 @@ classname::classname( classname ## Private& dd, QObject* parent ) \
 	, Base( dd ) \
 { \
 } \
-Ifaces::classname* classname::iface() \
-{ \
-	K_D( classname ); \
-	if( !d->iface() ) \
-		d->createIface(); \
-	return d->iface(); \
-} \
 void classname ## Private::createIface() \
 { \
-	if( iface_ptr ) \
+	if( backendObject ) \
 		return; \
 	K_Q( classname ); \
-	Ifaces::classname* iface = Factory::self()->create ## classname( q ); \
-	if( iface ) \
-	{ \
-		setIface( iface ); \
+	backendObject = Factory::self()->create ## classname( q ); \
+	if( backendObject ) \
 		q->setupIface(); \
-	} \
-} \
+}
 
 #define PHONON_HEIR_IMPL( classname, parentclass ) \
 classname::classname( QObject* parent ) \
@@ -292,24 +230,86 @@ classname::classname( classname ## Private& dd, QObject* parent ) \
 	: parentclass( dd, parent ) \
 { \
 } \
-Ifaces::classname* classname::iface() \
-{ \
-	K_D( classname ); \
-	if( !d->iface() ) \
-		d->createIface(); \
-	return d->iface(); \
-} \
 void classname ## Private::createIface() \
 { \
-	if( iface_ptr ) \
+	if( backendObject ) \
 		return; \
 	K_Q( classname ); \
-	Ifaces::classname* iface = Factory::self()->create ## classname( q ); \
-	if( iface ) \
-	{ \
-		setIface( iface ); \
+	backendObject = Factory::self()->create ## classname( q ); \
+	if( backendObject ) \
 		q->setupIface(); \
-	} \
+}
+
+#define BACKEND_GET( returnType, returnVar, methodName ) \
+QMetaObject::invokeMethod( d->backendObject, methodName, Qt::DirectConnection, Q_RETURN_ARG( returnType, returnVar ) )
+#define BACKEND_GET1( returnType, returnVar, methodName, varType1, var1 ) \
+QMetaObject::invokeMethod( d->backendObject, methodName, Qt::DirectConnection, Q_RETURN_ARG( returnType, returnVar ), Q_ARG( varType1, var1 ) )
+#define BACKEND_GET2( returnType, returnVar, methodName, varType1, var1, varType2, var2 ) \
+QMetaObject::invokeMethod( d->backendObject, methodName, Qt::DirectConnection, Q_RETURN_ARG( returnType, returnVar ), Q_ARG( varType1, var1 ), Q_ARG( varType2, var2 ) )
+#define BACKEND_CALL( methodName ) \
+QMetaObject::invokeMethod( d->backendObject, methodName, Qt::DirectConnection )
+#define BACKEND_CALL1( methodName, varType1, var1 ) \
+QMetaObject::invokeMethod( d->backendObject, methodName, Qt::DirectConnection, Q_ARG( varType1, var1 ) )
+#define BACKEND_CALL2( methodName, varType1, var1, varType2, var2 ) \
+QMetaObject::invokeMethod( d->backendObject, methodName, Qt::DirectConnection, Q_ARG( varType1, var1 ), Q_ARG( varType2, var2 ) )
+
+#define pBACKEND_GET( returnType, returnVar, methodName ) \
+QMetaObject::invokeMethod( backendObject, methodName, Qt::DirectConnection, Q_RETURN_ARG( returnType, returnVar ) )
+#define pBACKEND_GET1( returnType, returnVar, methodName, varType1, var1 ) \
+QMetaObject::invokeMethod( backendObject, methodName, Qt::DirectConnection, Q_RETURN_ARG( returnType, returnVar ), Q_ARG( varType1, var1 ) )
+#define pBACKEND_GET2( returnType, returnVar, methodName, varType1, var1, varType2, var2 ) \
+QMetaObject::invokeMethod( backendObject, methodName, Qt::DirectConnection, Q_RETURN_ARG( returnType, returnVar ), Q_ARG( varType1, var1 ), Q_ARG( varType2, var2 ) )
+#define pBACKEND_CALL( methodName ) \
+QMetaObject::invokeMethod( backendObject, methodName, Qt::DirectConnection )
+#define pBACKEND_CALL1( methodName, varType1, var1 ) \
+QMetaObject::invokeMethod( backendObject, methodName, Qt::DirectConnection, Q_ARG( varType1, var1 ) )
+#define pBACKEND_CALL2( methodName, varType1, var1, varType2, var2 ) \
+QMetaObject::invokeMethod( backendObject, methodName, Qt::DirectConnection, Q_ARG( varType1, var1 ), Q_ARG( varType2, var2 ) )
+
+#define PHONON_GETTER( classname, rettype, name, retdefault ) \
+rettype classname::name() const \
+{ \
+	K_D( const classname ); \
+	if( !d->backendObject ) \
+		return retdefault; \
+	rettype ret; \
+	BACKEND_GET( rettype, ret, #name ); \
+	return ret; \
+}
+
+#define PHONON_GETTER1( classname, rettype, name, retdefault, argtype1, argvar1 ) \
+rettype classname::name( argtype1 argvar1 ) const \
+{ \
+	K_D( const classname ); \
+	if( !d->backendObject ) \
+		return retdefault; \
+	rettype ret; \
+	BACKEND_GET1( rettype, ret, #name, const QObject*, argvar1->iface() ); \
+	return ret; \
+}
+
+#define PHONON_SETTER( classname, functionname, privatevar, argtype1 ) \
+void classname::functionname( argtype1 x ) \
+{ \
+	K_D( classname ); \
+	if( iface() ) \
+		BACKEND_CALL1( #functionname, argtype1, x ); \
+	else \
+		d->privatevar = x; \
+}
+
+#define NAMEDESCRIPTIONFROMINDEX( classname, backendPrefix ) \
+classname classname::fromIndex( int index ) \
+{ \
+	QObject* b = Factory::self()->backend(); \
+	QSet<int> indexes; \
+	QMetaObject::invokeMethod( b, #backendPrefix"Indexes", Qt::DirectConnection, Q_RETURN_ARG( QSet<int>, indexes ) ); \
+	if( !indexes.contains( index ) ) \
+		return classname(); \
+	QString name, description; \
+	QMetaObject::invokeMethod( b, #backendPrefix"Name", Qt::DirectConnection, Q_RETURN_ARG( QString, name ), Q_ARG( int, index ) ); \
+	QMetaObject::invokeMethod( b, #backendPrefix"Description", Qt::DirectConnection, Q_RETURN_ARG( QString, description ), Q_ARG( int, index ) ); \
+	return classname( index, name, description ); \
 }
 
 #endif // PHONONDEFS_H

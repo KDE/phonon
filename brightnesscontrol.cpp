@@ -30,8 +30,8 @@ PHONON_HEIR_IMPL( BrightnessControl, VideoEffect )
 QList<EffectParameter> BrightnessControl::parameterList() const
 {
 	QList<EffectParameter> ret;
-	EffectParameter par( 1, EffectParameter::IntegerHint, lowerBound(), upperBound(),
-			0, i18n( "Brightness" ), i18n( "controls the brightness of the video images" ) );
+	EffectParameter par( 1, i18n( "Brightness" ), EffectParameter::IntegerHint, 0,
+			lowerBound(), upperBound(), i18n( "controls the brightness of the video images" ) );
 	par.setEffect( const_cast<BrightnessControl*>( this ) );
 	return ret;
 }
@@ -49,51 +49,27 @@ void BrightnessControl::setValue( int parameterId, QVariant newValue )
 		setBrightness( newValue.toInt() );
 }
 
-int BrightnessControl::brightness() const
-{
-	K_D( const BrightnessControl );
-	return d->iface() ? d->iface()->brightness() : d->brightness;
-}
-
-int BrightnessControl::lowerBound() const
-{
-	K_D( const BrightnessControl );
-	return d->iface() ? d->iface()->lowerBound() : -1000;
-}
-
-int BrightnessControl::upperBound() const
-{
-	K_D( const BrightnessControl );
-	return d->iface() ? d->iface()->upperBound() : 1000;
-}
-
-void BrightnessControl::setBrightness( int brightness )
-{
-	K_D( BrightnessControl );
-	if( iface() )
-		d->iface()->setBrightness( brightness );
-	else
-		d->brightness = brightness;
-}
+PHONON_GETTER( BrightnessControl, int, brightness, d->brightness )
+PHONON_GETTER( BrightnessControl, int, lowerBound, -1000 )
+PHONON_GETTER( BrightnessControl, int, upperBound,  1000 )
+PHONON_SETTER( BrightnessControl, setBrightness, brightness, int )
 
 bool BrightnessControlPrivate::aboutToDeleteIface()
 {
-	if( iface() )
-	{
-		brightness = iface()->brightness();
-	}
+	if( backendObject )
+		pBACKEND_GET( int, brightness, "brightness" );
 	return true;
 }
 
 void BrightnessControl::setupIface()
 {
 	K_D( BrightnessControl );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 
 	// set up attributes
-	d->iface()->setBrightness( d->brightness );
+	BACKEND_CALL1( "setBrightness", int, d->brightness );
 }
-}
+} // namespace Phonon
 
 #include "brightnesscontrol.moc"
 // vim: sw=4 ts=4 noet

@@ -1,11 +1,9 @@
 
-add_subdirectory( ifaces )
 add_subdirectory( tests )
 
 ########### next target ###############
 
 set(phononui_LIB_SRCS
-   ifaces/backend.cpp
    factory.cpp
    videowidget.cpp
    seekslider.cpp

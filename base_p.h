@@ -21,17 +21,12 @@
 #define PHONON_BASE_P_H
 
 #include "base.h"
-#include "ifaces/base.h"
 #include <QList>
 #include "basedestructionhandler.h"
 #include "factory.h"
 
 namespace Phonon
 {
-	namespace Ifaces
-	{
-		class Base;
-	}
 
 class BasePrivate
 {
@@ -39,6 +34,7 @@ class BasePrivate
 	friend class Phonon::Factory;
 	protected:
 		BasePrivate()
+			: backendObject( 0 )
 		{
 			Factory::self()->registerFrontendObject( this );
 		}
@@ -46,7 +42,8 @@ class BasePrivate
 		virtual ~BasePrivate()
 		{
 			Factory::self()->deregisterFrontendObject( this );
-			delete iface_ptr;
+			delete backendObject;
+			backendObject = 0;
 		}
 
 		/**
@@ -56,10 +53,10 @@ class BasePrivate
 		 */
 		void deleteIface()
 		{
-			if( iface_ptr && aboutToDeleteIface() )
+			if( backendObject && aboutToDeleteIface() )
 			{
-				delete iface_ptr;
-				setIface( 0 );
+				delete backendObject;
+				backendObject = 0;
 			}
 		}
 
@@ -81,15 +78,10 @@ class BasePrivate
 		 */
 		virtual void createIface() = 0;
 
-		virtual void setIface( void* p )
-		{
-			iface_ptr = reinterpret_cast<Ifaces::Base*>( p );
-		}
-
 		Base* q_ptr;
+		QObject* backendObject;
 
 	private:
-		Ifaces::Base* iface_ptr;
 		QList<BaseDestructionHandler*> handlers;
 };
 } //namespace Phonon

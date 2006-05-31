@@ -31,7 +31,6 @@
 #include "../audiocodec.h"
 #include "../videocodec.h"
 #include "../containerformat.h"
-#include "../ifaces/backend.h"
 #include <QStringList>
 #include <QSet>
 
@@ -42,25 +41,41 @@ void BackendCapabilitiesTest::initTestCase()
 	QVERIFY( BackendCapabilities::self() );
 }
 
-#define VERIFY_TUPLE( classname, availableMethod, indexMethod ) \
-QVERIFY( BackendCapabilities::availableMethod().size() >= 0 ); \
-for( int i = 0; i < BackendCapabilities::availableMethod().size(); ++i ) \
-{ \
-	classname device = BackendCapabilities::availableMethod().at( i ); \
-	QVERIFY( device.index() >= 0 ); \
-	QVERIFY( Factory::self()->backend()->indexMethod().contains( device.index() ) ); \
-	QVERIFY( !device.name().isEmpty() ); \
-} do {} while( false )
-
-void BackendCapabilitiesTest::sensibleValues()
+void BackendCapabilitiesTest::checkMimeTypes()
 {
-	//if( BackendCapabilities::supportsVideo() ) create VideoWidget and such - needs UI libs
+	QVERIFY( Factory::self()->backend( false ) == 0 );
 	QStringList mimeTypes = BackendCapabilities::knownMimeTypes();
 	QVERIFY( mimeTypes.size() > 0 ); // a backend that doesn't know any mimetypes is useless
 	foreach( QString mimeType, mimeTypes ) {
 		qDebug( "%s", qPrintable( mimeType ) );
 		QVERIFY( BackendCapabilities::isMimeTypeKnown( mimeType ) );
 	}
+	QVERIFY( Factory::self()->backend( false ) == 0 ); // the backend should not have been created at this point
+	QVERIFY( Factory::self()->backend( true ) != 0 );  // create the backend
+	QStringList realMimeTypes = BackendCapabilities::knownMimeTypes(); // this list has to be a subset of the one before
+	foreach( QString mimeType, realMimeTypes ) {
+		qDebug( "%s", qPrintable( mimeType ) );
+		QVERIFY( BackendCapabilities::isMimeTypeKnown( mimeType ) );
+		QVERIFY( mimeTypes.contains( mimeType ) );
+	}
+}
+
+#define VERIFY_TUPLE( classname, availableMethod, indexMethod ) \
+QVERIFY( BackendCapabilities::availableMethod().size() >= 0 ); \
+for( int i = 0; i < BackendCapabilities::availableMethod().size(); ++i ) \
+{ \
+	classname device = BackendCapabilities::availableMethod().at( i ); \
+	QVERIFY( device.index() >= 0 ); \
+	QObject* backend = Factory::self()->backend(); \
+	QSet<int> indexes; \
+	QMetaObject::invokeMethod( backend, #indexMethod, Qt::DirectConnection, Q_RETURN_ARG( QSet<int>, indexes ) ); \
+	QVERIFY( indexes.contains( device.index() ) ); \
+	QVERIFY( !device.name().isEmpty() ); \
+} do {} while( false )
+
+void BackendCapabilitiesTest::sensibleValues()
+{
+	//if( BackendCapabilities::supportsVideo() ) create VideoWidget and such - needs UI libs
 	VERIFY_TUPLE( AudioOutputDevice, availableAudioOutputDevices, audioOutputDeviceIndexes );
 	VERIFY_TUPLE( AudioCaptureDevice, availableAudioCaptureDevices, audioCaptureDeviceIndexes );
 	VERIFY_TUPLE( VideoOutputDevice, availableVideoOutputDevices, videoOutputDeviceIndexes );

@@ -43,43 +43,18 @@ void MediaQueue::setNext( MediaObject* next )
 		kWarning( 600 ) << "MediaQueue::setNext called overriding another MediaObject that was waiting" << endl;
 	d->next = next;
 	if( iface() )
-		d->iface()->setNext( next->iface() );
+		BACKEND_CALL1( "setNext", QObject*, next->iface() );
 }
 
-qint32 MediaQueue::timeBetweenMedia() const
-{
-	K_D( const MediaQueue );
-	return d->iface() ? d->iface()->timeBetweenMedia() : d->timeBetweenMedia;
-}
-
-void MediaQueue::setTimeBetweenMedia( qint32 milliseconds )
-{
-	K_D( MediaQueue );
-	if( iface() )
-		d->iface()->setTimeBetweenMedia( milliseconds );
-	else
-		d->timeBetweenMedia = milliseconds;
-}
-
-bool MediaQueue::doCrossfade() const
-{
-	K_D( const MediaQueue );
-	return d->iface() ? d->iface()->doCrossfade() : d->doCrossfade;
-}
-
-void MediaQueue::setDoCrossfade( bool doCrossfade )
-{
-	K_D( MediaQueue );
-	if( iface() )
-		d->iface()->setDoCrossfade( doCrossfade );
-	else
-		d->doCrossfade = doCrossfade;
-}
+PHONON_GETTER( MediaQueue, qint32, timeBetweenMedia, d->timeBetweenMedia )
+PHONON_SETTER( MediaQueue, setTimeBetweenMedia, timeBetweenMedia, qint32 )
+PHONON_GETTER( MediaQueue, bool, doCrossfade, d->doCrossfade )
+PHONON_SETTER( MediaQueue, setDoCrossfade, doCrossfade, bool )
 
 bool MediaQueuePrivate::aboutToDeleteIface()
 {
-	doCrossfade = iface()->doCrossfade();
-	timeBetweenMedia = iface()->timeBetweenMedia();
+	pBACKEND_GET( bool, doCrossfade, "doCrossfade" );
+	pBACKEND_GET( qint32, timeBetweenMedia, "timeBetweenMedia" );
 	return true;
 }
 
@@ -94,9 +69,9 @@ void MediaQueuePrivate::_k_needNextMediaObject()
 void MediaQueue::setupIface()
 {
 	K_D( MediaQueue );
-	Q_ASSERT( d->iface() );
+	Q_ASSERT( d->backendObject );
 
-	connect( d->iface()->qobject(), SIGNAL( needNextMediaObject() ), SLOT( _k_needNextMediaObject() ) );
+	connect( d->backendObject, SIGNAL( needNextMediaObject() ), SLOT( _k_needNextMediaObject() ) );
 }
 } // namespace Phonon
 

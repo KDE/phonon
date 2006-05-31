@@ -20,7 +20,7 @@
 #define Phonon_FAKE_AUDIODATAOUTPUT_H
 
 #include "abstractaudiooutput.h"
-#include "../../ifaces/audiodataoutput.h"
+#include <phonon/audiodataoutput.h>
 #include <QVector>
 
 namespace Phonon
@@ -30,19 +30,21 @@ namespace Fake
 	/**
 	 * \author Matthias Kretz <kretz@kde.org>
 	 */
-	class AudioDataOutput : public AbstractAudioOutput, virtual public Ifaces::AudioDataOutput
+	class AudioDataOutput : public AbstractAudioOutput
 	{
 		Q_OBJECT
 		public:
 			AudioDataOutput( QObject* parent );
 			~AudioDataOutput();
 
-			virtual Phonon::AudioDataOutput::Format format() const;
-			virtual int dataSize() const;
-			virtual int sampleRate() const;
-			virtual void setFormat( Phonon::AudioDataOutput::Format format );
-			virtual void setDataSize( int size );
+		public slots:
+			Phonon::AudioDataOutput::Format format() const;
+			int dataSize() const;
+			int sampleRate() const;
+			void setFormat( Phonon::AudioDataOutput::Format format );
+			void setDataSize( int size );
 
+		public:
 			// Fake specific:
 			virtual void processBuffer( const QVector<float>& buffer );
 

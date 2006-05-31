@@ -21,33 +21,25 @@
 #define PHONON_FAKE_VISUALIZATION_H
 
 #include <QObject>
-#include <phonon/ifaces/visualization.h>
 
 namespace Phonon
 {
-namespace Ifaces
-{
-	class AudioPath;
-	class AbstractVideoOutput;
-}
 namespace Fake
 {
 	class AudioPath;
 	class AbstractVideoOutput;
 
-class Visualization : public QObject, virtual public Ifaces::Visualization
+class Visualization : public QObject
 {
 	Q_OBJECT
 	public:
 		Visualization( QObject* parent = 0 );
-		virtual int visualization() const;
-		virtual void setVisualization( int newVisualization );
-		virtual void setAudioPath( Ifaces::AudioPath* audioPath );
-		virtual void setVideoOutput( Ifaces::AbstractVideoOutput* videoOutput );
 
-	public:
-		virtual QObject* qobject() { return this; }
-		virtual const QObject* qobject() const { return this; }
+	public slots:
+		int visualization() const;
+		void setVisualization( int newVisualization );
+		void setAudioPath( QObject* audioPath );
+		void setVideoOutput( QObject* videoOutput );
 
 	private:
 		int m_visualization;

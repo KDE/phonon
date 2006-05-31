@@ -27,11 +27,6 @@ class KUrl;
 
 namespace Phonon
 {
-namespace Ifaces
-{
-	class UiBackend;
-	class VideoWidget;
-}
 
 /**
  * \brief Factory to access the GUI dependent part of the Backend.
@@ -64,12 +59,12 @@ class PHONONUI_EXPORT UiFactory : public QObject
 		 *
 		 * \return a pointer to the Ifaces::VideoWidget the backend provides
 		 */
-		Ifaces::VideoWidget* createVideoWidget( QWidget* parent = 0 );
+		QWidget* createVideoWidget( QWidget* parent = 0 );
 
 		/**
 		 * \return a pointer to the backend interface.
 		 */
-		const Ifaces::UiBackend* backend() const;
+		QObject* backend() const;
 
 	Q_SIGNALS:
 		/**
@@ -98,13 +93,6 @@ class PHONONUI_EXPORT UiFactory : public QObject
 		 */
 		UiFactory();
 		~UiFactory();
-
-	protected:
-		/**
-		 * \internal
-		 * Gets the QObject interface and calls Phonon::Factory::registerQObject
-		 */
-		template<class T> T* registerObject( T* o );
 
 	private Q_SLOTS:
 		/**

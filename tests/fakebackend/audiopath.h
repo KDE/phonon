@@ -20,7 +20,6 @@
 #define Phonon_FAKE_AUDIOPATH_H
 
 #include <QObject>
-#include "../../ifaces/audiopath.h"
 #include <QList>
 
 namespace Phonon
@@ -30,24 +29,20 @@ namespace Fake
 	class AudioEffect;
 	class AbstractAudioOutput;
 
-	class AudioPath : public QObject, virtual public Ifaces::AudioPath
+	class AudioPath : public QObject
 	{
 		Q_OBJECT
 		public:
 			AudioPath( QObject* parent );
-			virtual ~AudioPath();
+			~AudioPath();
 
-			virtual bool addOutput( Ifaces::AbstractAudioOutput* audioOutput );
-			virtual bool removeOutput( Ifaces::AbstractAudioOutput* audioOutput );
-			virtual bool insertEffect( Ifaces::AudioEffect* newEffect, Ifaces::AudioEffect* insertBefore = 0 );
-			virtual bool removeEffect( Ifaces::AudioEffect* effect );
+			Q_INVOKABLE bool addOutput( QObject* audioOutput );
+			Q_INVOKABLE bool removeOutput( QObject* audioOutput );
+			Q_INVOKABLE bool insertEffect( QObject* newEffect, QObject* insertBefore = 0 );
+			Q_INVOKABLE bool removeEffect( QObject* effect );
 
 			// fake specific
 			void processBuffer( const QVector<float>& buffer );
-
-		public:
-			virtual QObject* qobject() { return this; }
-			virtual const QObject* qobject() const { return this; }
 
 		private:
 			QList<AudioEffect*> m_effects;

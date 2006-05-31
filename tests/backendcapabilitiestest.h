@@ -26,6 +26,7 @@ class BackendCapabilitiesTest : public QObject
 	Q_OBJECT
 	private Q_SLOTS:
 		void initTestCase();
+		void checkMimeTypes();
 		void sensibleValues();
 		void checkSignals();
 		void cleanupTestCase();

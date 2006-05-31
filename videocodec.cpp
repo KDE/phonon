@@ -20,7 +20,7 @@
 #include "videocodec.h"
 #include "videocodec_p.h"
 #include "factory.h"
-#include "ifaces/backend.h"
+#include "phonondefs.h"
 
 #include <QString>
 #include <QSet>
@@ -54,16 +54,7 @@ bool VideoCodec::operator==( const VideoCodec& rhs ) const
 	return *d_func() == *rhs.d_func();
 }
 
-VideoCodec VideoCodec::fromIndex( int index )
-{
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->visualizationIndexes().contains( index ) )
-		return VideoCodec( index,
-				b->visualizationName( index ),
-				b->visualizationDescription( index ) );
-	else
-		return VideoCodec(); //isValid() == false
-}
+NAMEDESCRIPTIONFROMINDEX( VideoCodec, videoCodec )
 
 } // namespace Phonon
 

@@ -20,7 +20,7 @@
 #include "audiocodec.h"
 #include "audiocodec_p.h"
 #include "factory.h"
-#include "ifaces/backend.h"
+#include "phonondefs.h"
 
 #include <QString>
 #include <QSet>
@@ -54,16 +54,7 @@ bool AudioCodec::operator==( const AudioCodec& rhs ) const
 	return *d_func() == *rhs.d_func();
 }
 
-AudioCodec AudioCodec::fromIndex( int index )
-{
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->visualizationIndexes().contains( index ) )
-		return AudioCodec( index,
-				b->visualizationName( index ),
-				b->visualizationDescription( index ) );
-	else
-		return AudioCodec(); //isValid() == false
-}
+NAMEDESCRIPTIONFROMINDEX( AudioCodec, audioCodec )
 
 } // namespace Phonon
 

@@ -20,25 +20,23 @@
 #define Phonon_FAKE_AVCAPTURECAPTURE_H
 
 #include "abstractmediaproducer.h"
-#include "../../ifaces/avcapture.h"
 
 namespace Phonon
 {
 namespace Fake
 {
-	class AvCapture : public AbstractMediaProducer, virtual public Ifaces::AvCapture
+	class AvCapture : public AbstractMediaProducer
 	{
 		Q_OBJECT
 		public:
 			AvCapture( QObject* parent );
-			virtual ~AvCapture();
+			~AvCapture();
 
-			virtual int audioCaptureDevice() const;
-			virtual int setAudioCaptureDevice( int index );
-			virtual int videoCaptureDevice() const;
-			virtual int setVideoCaptureDevice( int index );
-
-		private:
+		public slots:
+			int audioCaptureDevice() const;
+			void setAudioCaptureDevice( int index );
+			int videoCaptureDevice() const;
+			void setVideoCaptureDevice( int index );
 	};
 }} //namespace Phonon::Fake
 

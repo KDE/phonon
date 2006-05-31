@@ -20,28 +20,29 @@
 #define Phonon_FAKE_AUDIOOUTPUT_H
 
 #include "abstractaudiooutput.h"
-#include "../../ifaces/audiooutput.h"
 #include <QFile>
 
 namespace Phonon
 {
 namespace Fake
 {
-	class AudioOutput : public AbstractAudioOutput, virtual public Ifaces::AudioOutput
+	class AudioOutput : public AbstractAudioOutput
 	{
 		Q_OBJECT
 		public:
 			AudioOutput( QObject* parent );
-			virtual ~AudioOutput();
+			~AudioOutput();
 
+		public slots:
 			// Attributes Getters:
-			virtual float volume() const;
-			virtual int outputDevice() const;
+			float volume() const;
+			int outputDevice() const;
 
 			// Attributes Setters:
-			virtual void setVolume( float newVolume );
-			virtual void setOutputDevice( int newDevice );
+			void setVolume( float newVolume );
+			void setOutputDevice( int newDevice );
 
+		public:
 			virtual void processBuffer( const QVector<float>& buffer );
 
 			void openDevice();

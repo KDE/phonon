@@ -22,7 +22,7 @@
 #include <QSet>
 #include "videooutputdevice_p.h"
 #include "factory.h"
-#include "ifaces/backend.h"
+#include "phonondefs.h"
 
 namespace Phonon
 {
@@ -37,16 +37,7 @@ VideoOutputDevice::VideoOutputDevice( const VideoOutputDevice& rhs )
 {
 }
 
-VideoOutputDevice VideoOutputDevice::fromIndex( int index )
-{
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->videoOutputDeviceIndexes().contains( index ) )
-		return VideoOutputDevice( index,
-				b->videoOutputDeviceName( index ),
-				b->videoOutputDeviceDescription( index ) );
-	else
-		return VideoOutputDevice(); //isValid() == false
-}
+NAMEDESCRIPTIONFROMINDEX( VideoOutputDevice, videoOutputDevice )
 
 VideoOutputDevice::VideoOutputDevice( int index, const QString& name, const QString& description )
 	: NameDescriptionTuple( *new VideoOutputDevicePrivate, index, name, description )

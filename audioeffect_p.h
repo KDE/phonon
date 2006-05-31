@@ -21,7 +21,6 @@
 #define AUDIOEFFECT_P_H
 
 #include "audioeffect.h"
-#include "ifaces/audioeffect.h"
 #include "base_p.h"
 #include <QHash>
 #include <QVariant>

@@ -23,7 +23,6 @@
 #include "audiocapturedevice.h"
 #include "backendcapabilities.h"
 #include "factory.h"
-#include "ifaces/backend.h"
 #include <QSet>
 
 namespace Phonon
@@ -41,14 +40,17 @@ VideoCaptureDevice::VideoCaptureDevice( const VideoCaptureDevice& rhs )
 
 VideoCaptureDevice VideoCaptureDevice::fromIndex( int index )
 {
-	const Ifaces::Backend* b = Factory::self()->backend();
-	if( b->videoCaptureDeviceIndexes().contains( index ) )
-		return VideoCaptureDevice( index,
-				b->videoCaptureDeviceName( index ),
-				b->videoCaptureDeviceDescription( index ),
-				b->videoCaptureDeviceAudioIndex( index ) );
-	else
+	QObject* b = Factory::self()->backend();
+	QSet<int> indexes;
+	QMetaObject::invokeMethod( b, "videoCaptureDeviceIndexes", Qt::DirectConnection, Q_RETURN_ARG( QSet<int>, indexes ) );
+	if( !indexes.contains( index ) )
 		return VideoCaptureDevice(); //isValid() == false
+	QString name, description;
+	int videoIndex;
+	QMetaObject::invokeMethod( b, "videoCaptureDeviceName", Qt::DirectConnection, Q_RETURN_ARG( QString, name ), Q_ARG( int, index ) );
+	QMetaObject::invokeMethod( b, "videoCaptureDeviceDescription", Qt::DirectConnection, Q_RETURN_ARG( QString, description ), Q_ARG( int, index ) );
+	QMetaObject::invokeMethod( b, "videoCaptureDeviceAudioIndex", Qt::DirectConnection, Q_RETURN_ARG( qint32, videoIndex ), Q_ARG( int, index ) );
+	return VideoCaptureDevice( index, name, description, videoIndex );
 }
 
 VideoCaptureDevice::VideoCaptureDevice( int index, const QString& name, const QString& description, int audioIndex )

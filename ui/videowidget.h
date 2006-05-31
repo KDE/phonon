@@ -29,10 +29,6 @@ namespace Phonon
 {
 class AbstractVideoOutput;
 
-	namespace Ifaces
-	{
-		class VideoWidget;
-	}
 	class VideoWidgetPrivate;
 	/**
 	 * \short Widget to display video.
@@ -96,7 +92,6 @@ class AbstractVideoOutput;
 
 		private:
 			void init();
-			Ifaces::VideoWidget* iface();
 	};
 } //namespace Phonon
 

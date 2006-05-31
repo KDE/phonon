@@ -22,32 +22,12 @@
 
 #include <QObject>
 
+#include <dcopobject.h>
 #include <kstaticdeleter.h>
 #include <kdelibs_export.h>
 
 namespace Phonon
 {
-	namespace Ifaces
-	{
-		class MediaObject;
-		class MediaQueue;
-		class AvCapture;
-		class ByteStream;
-
-		class AudioEffect;
-		class VolumeFaderEffect;
-		class AudioPath;
-		class AudioOutput;
-		class AudioDataOutput;
-		class Visualization;
-
-		class VideoEffect;
-		class BrightnessControl;
-		class VideoPath;
-		class VideoDataOutput;
-
-		class Backend;
-	}
 	class BasePrivate;
 
 /**
@@ -62,7 +42,7 @@ namespace Phonon
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONONCORE_EXPORT Factory : public QObject
+class PHONONCORE_EXPORT Factory : public QObject, public DCOPObject
 {
 	friend void ::KStaticDeleter<Factory>::destructObject();
 	friend class Phonon::BasePrivate;
@@ -83,88 +63,88 @@ class PHONONCORE_EXPORT Factory : public QObject
 		 *
 		 * \return a pointer to the Ifaces::MediaObject the backend provides
 		 */
-		Ifaces::MediaObject* createMediaObject( QObject* parent = 0 );
+		QObject* createMediaObject( QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::MediaQueue.
 		 *
 		 * \return a pointer to the Ifaces::MediaQueue the backend provides
 		 */
-		Ifaces::MediaQueue* createMediaQueue( QObject* parent = 0 );
+		QObject* createMediaQueue( QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::AvCapture.
 		 *
 		 * \return a pointer to the Ifaces::AvCapture the backend provides
 		 */
-		Ifaces::AvCapture* createAvCapture( QObject* parent = 0 );
+		QObject* createAvCapture( QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::ByteStream.
 		 *
 		 * \return a pointer to the Ifaces::ByteStream the backend provides
 		 */
-		Ifaces::ByteStream* createByteStream( QObject* parent = 0 );
-
+		QObject* createByteStream( QObject* parent = 0 );
+		
 		/**
 		 * Create a new Ifaces::AudioPath.
 		 *
 		 * \return a pointer to the Ifaces::AudioPath the backend provides
 		 */
-		Ifaces::AudioPath* createAudioPath( QObject* parent = 0 );
+		QObject* createAudioPath( QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::AudioEffect.
 		 *
 		 * \return a pointer to the Ifaces::AudioEffect the backend provides
 		 */
-		Ifaces::AudioEffect* createAudioEffect( int effectId, QObject* parent = 0 );
+		QObject* createAudioEffect( int effectId, QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::VolumeFaderEffect.
 		 *
 		 * \return a pointer to the Ifaces::VolumeFaderEffect the backend provides
 		 */
-		Ifaces::VolumeFaderEffect* createVolumeFaderEffect( QObject* parent = 0 );
+		QObject* createVolumeFaderEffect( QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::AudioOutput.
 		 *
 		 * \return a pointer to the Ifaces::AudioOutput the backend provides
 		 */
-		Ifaces::AudioOutput* createAudioOutput( QObject* parent = 0 );
+		QObject* createAudioOutput( QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::AudioDataOutput.
 		 *
 		 * \return a pointer to the Ifaces::AudioDataOutput the backend provides
 		 */
-		Ifaces::AudioDataOutput* createAudioDataOutput( QObject* parent = 0 );
+		QObject* createAudioDataOutput( QObject* parent = 0 );
 
 		/**
 		 * Create a new Ifaces::Visualization.
 		 *
 		 * \return a pointer to the Ifaces::Visualization the backend provides
 		 */
-		Ifaces::Visualization* createVisualization( QObject* parent = 0 );
+		QObject* createVisualization( QObject* parent = 0 );
 
 		/**
 		 * Create a new Ifaces::VideoPath.
 		 *
 		 * \return a pointer to the Ifaces::VideoPath the backend provides
 		 */
-		Ifaces::VideoPath* createVideoPath( QObject* parent = 0 );
+		QObject* createVideoPath( QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::VideoEffect.
 		 *
 		 * \return a pointer to the Ifaces::VideoEffect the backend provides
 		 */
-		Ifaces::VideoEffect* createVideoEffect( int effectId, QObject* parent = 0 );
-		Ifaces::BrightnessControl* createBrightnessControl( QObject* parent = 0 );
+		QObject* createVideoEffect( int effectId, QObject* parent = 0 );
+		QObject* createBrightnessControl( QObject* parent = 0 );
 		/**
 		 * Create a new Ifaces::VideoDataOutput.
 		 *
 		 * \return a pointer to the Ifaces::VideoDataOutput the backend provides
 		 */
-		Ifaces::VideoDataOutput* createVideoDataOutput( QObject* parent = 0 );
+		QObject* createVideoDataOutput( QObject* parent = 0 );
 
 		/**
 		 * \return a pointer to the backend interface.
 		 */
-		const Ifaces::Backend* backend( bool createWhenNull = true );
+		QObject* backend( bool createWhenNull = true );
 
 		/**
 		 * \copydoc Phonon::Ifaces::Backend::uiLibrary()
@@ -174,7 +154,7 @@ class PHONONCORE_EXPORT Factory : public QObject
 		 * \copydoc Phonon::Ifaces::Backend::uiSymbol()
 		 */
 		const char* uiSymbol();
-
+		
 		/**
 		 * Get the name of the Backend. It's the name from the .desktop file.
 		 */
@@ -232,18 +212,12 @@ class PHONONCORE_EXPORT Factory : public QObject
 		Factory();
 		~Factory();
 
-	protected:
-		/**
-		 * \internal
-		 * Gets the QObject interface and calls registerQObject
-		 */
-		template<class T> T* registerObject( T* o );
 	public:
 		/**
 		 * \internal
 		 * registers the backend object
 		 */
-		void registerQObject( QObject* o );
+		QObject* registerQObject( QObject* o );
 
 	private Q_SLOTS:
 		/**
@@ -259,23 +233,24 @@ class PHONONCORE_EXPORT Factory : public QObject
 		class Private;
 		Private * d;
 
-	private Q_SLOTS:
+	K_DCOP
+	k_dcop:
 		/**
 		 * \internal
 		 * This is called via DCOP when the user changes the Phonon Backend.
 		 */
 		void phononBackendChanged();
 
-//X		It is probably better if we can get away with internal handling of
-//X		freeing the soundcard device when it's not needed anymore and
-//X		providing an IPC method to stop all MediaProducers -> free all
-//X		devices
-//X		/**
-//X		 * \internal
-//X		 * This is called when the application needs to free the soundcard
-//X		 * device(s).
-//X		 */
-//X		void freeSoundcardDevices();
+//X 		It is probably better if we can get away with internal handling of
+//X 		freeing the soundcard device when it's not needed anymore and
+//X 		providing an IPC method to stop all MediaProducers -> free all
+//X 		devices
+//X 		/**
+//X 		 * \internal
+//X 		 * This is called when the application needs to free the soundcard
+//X 		 * device(s).
+//X 		 */
+//X 		void freeSoundcardDevices();
 };
 } // namespace Phonon
 

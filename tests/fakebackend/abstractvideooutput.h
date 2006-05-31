@@ -32,6 +32,7 @@ class AbstractVideoOutput
 	public:
 		virtual ~AbstractVideoOutput() {}
 		virtual void processFrame( Phonon::VideoFrame& frame ) = 0;
+		virtual void* internal1( void* = 0 ) { return 0; }
 };
 
 }} //namespace Phonon::Fake

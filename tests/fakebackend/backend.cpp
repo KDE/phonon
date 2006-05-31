@@ -36,7 +36,7 @@
 #include <QSet>
 #include "videodataoutput.h"
 
-typedef KGenericFactory<Phonon::Fake::Backend, Phonon::Ifaces::Backend> FakeBackendFactory;
+typedef KGenericFactory<Phonon::Fake::Backend, Phonon::Fake::Backend> FakeBackendFactory;
 K_EXPORT_COMPONENT_FACTORY( phonon_fake, FakeBackendFactory( "fakebackend" ) )
 
 namespace Phonon
@@ -45,7 +45,7 @@ namespace Fake
 {
 
 Backend::Backend( QObject* parent, const QStringList& )
-	: Ifaces::Backend( parent )
+	: QObject( parent )
 {
 }
 
@@ -53,74 +53,74 @@ Backend::~Backend()
 {
 }
 
-Ifaces::MediaObject*      Backend::createMediaObject( QObject* parent )
+QObject*      Backend::createMediaObject( QObject* parent )
 {
 	return new MediaObject( parent );
 }
 
-Ifaces::MediaQueue*       Backend::createMediaQueue( QObject* parent )
+QObject*       Backend::createMediaQueue( QObject* parent )
 {
 	return new MediaQueue( parent );
 }
 
-Ifaces::AvCapture*        Backend::createAvCapture( QObject* parent )
+QObject*        Backend::createAvCapture( QObject* parent )
 {
 	return new AvCapture( parent );
 }
 
-Ifaces::ByteStream*       Backend::createByteStream( QObject* parent )
+QObject*       Backend::createByteStream( QObject* parent )
 {
 	return new ByteStream( parent );
 }
 
-Ifaces::AudioPath*        Backend::createAudioPath( QObject* parent )
+QObject*        Backend::createAudioPath( QObject* parent )
 {
 	return new AudioPath( parent );
 }
 
-Ifaces::AudioEffect*      Backend::createAudioEffect( int effectId, QObject* parent )
+QObject*      Backend::createAudioEffect( int effectId, QObject* parent )
 {
 	return new AudioEffect( effectId, parent );
 }
 
-Ifaces::VolumeFaderEffect*      Backend::createVolumeFaderEffect( QObject* parent )
+QObject*      Backend::createVolumeFaderEffect( QObject* parent )
 {
 	return new VolumeFaderEffect( parent );
 }
 
-Ifaces::AudioOutput*      Backend::createAudioOutput( QObject* parent )
+QObject*      Backend::createAudioOutput( QObject* parent )
 {
 	AudioOutput* ao = new AudioOutput( parent );
 	m_audioOutputs.append( ao );
 	return ao;
 }
 
-Ifaces::AudioDataOutput*  Backend::createAudioDataOutput( QObject* parent )
+QObject*  Backend::createAudioDataOutput( QObject* parent )
 {
 	return new AudioDataOutput( parent );
 }
 
-Ifaces::Visualization*    Backend::createVisualization( QObject* parent )
+QObject*    Backend::createVisualization( QObject* parent )
 {
 	return new Visualization( parent );
 }
 
-Ifaces::VideoPath*        Backend::createVideoPath( QObject* parent )
+QObject*        Backend::createVideoPath( QObject* parent )
 {
 	return new VideoPath( parent );
 }
 
-Ifaces::VideoEffect*      Backend::createVideoEffect( int effectId, QObject* parent )
+QObject*      Backend::createVideoEffect( int effectId, QObject* parent )
 {
 	return new VideoEffect( effectId, parent );
 }
 
-Ifaces::BrightnessControl* Backend::createBrightnessControl( QObject* parent )
+QObject* Backend::createBrightnessControl( QObject* parent )
 {
 	return new BrightnessControl( parent );
 }
 
-Ifaces::VideoDataOutput*  Backend::createVideoDataOutput( QObject* parent )
+QObject*  Backend::createVideoDataOutput( QObject* parent )
 {
 	return new VideoDataOutput( parent );
 }
@@ -151,7 +151,7 @@ bool Backend::supportsSubtitles() const
 	return false;
 }
 
-const QStringList& Backend::knownMimeTypes() const
+QStringList Backend::knownMimeTypes() const
 {
 	if( m_supportedMimeTypes.isEmpty() )
 		const_cast<Backend*>( this )->m_supportedMimeTypes
@@ -419,7 +419,7 @@ QString Backend::containerFormatDescription( int index ) const
 	return QString();
 }
 
-const char* Backend::uiLibrary() const
+char const* Backend::uiLibrary() const
 {
 	return "phonon_fakeui";
 }
