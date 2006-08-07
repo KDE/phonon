@@ -26,6 +26,7 @@
 #include "audiopath.h"
 #include "videopath.h"
 #include <QHash>
+#include <phonon/mediaproducerinterface.h>
 
 class QTimer;
 
@@ -35,39 +36,40 @@ namespace Phonon
 
 namespace Fake
 {
-	class KDE_EXPORT AbstractMediaProducer : public QObject
+	class KDE_EXPORT AbstractMediaProducer : public QObject, public Phonon::MediaProducerInterface
 	{
 		Q_OBJECT
+		Q_INTERFACES( Phonon::MediaProducerInterface )
 		public:
 			AbstractMediaProducer( QObject* parent );
 			~AbstractMediaProducer();
-			Q_INVOKABLE bool addVideoPath( QObject* videoPath );
-			Q_INVOKABLE bool addAudioPath( QObject* audioPath );
-			Q_INVOKABLE void removeVideoPath( QObject* videoPath );
-			Q_INVOKABLE void removeAudioPath( QObject* audioPath );
-			Q_INVOKABLE Phonon::State state() const;
-			Q_INVOKABLE bool hasVideo() const;
-			Q_INVOKABLE bool seekable() const;
-			Q_INVOKABLE qint64 currentTime() const;
-			Q_INVOKABLE qint32 tickInterval() const;
+			bool addVideoPath( QObject* videoPath );
+			bool addAudioPath( QObject* audioPath );
+			void removeVideoPath( QObject* videoPath );
+			void removeAudioPath( QObject* audioPath );
+			Phonon::State state() const;
+			bool hasVideo() const;
+			bool isSeekable() const;
+			qint64 currentTime() const;
+			qint32 tickInterval() const;
 
-			Q_INVOKABLE QStringList availableAudioStreams() const;
-			Q_INVOKABLE QStringList availableVideoStreams() const;
-			Q_INVOKABLE QStringList availableSubtitleStreams() const;
+			QStringList availableAudioStreams() const;
+			QStringList availableVideoStreams() const;
+			QStringList availableSubtitleStreams() const;
 
-			Q_INVOKABLE QString selectedAudioStream( const QObject* audioPath ) const;
-			Q_INVOKABLE QString selectedVideoStream( const QObject* videoPath ) const;
-			Q_INVOKABLE QString selectedSubtitleStream( const QObject* videoPath ) const;
+			QString selectedAudioStream( const QObject* audioPath ) const;
+			QString selectedVideoStream( const QObject* videoPath ) const;
+			QString selectedSubtitleStream( const QObject* videoPath ) const;
 
-			Q_INVOKABLE void selectAudioStream( const QString& streamName, const QObject* audioPath );
-			Q_INVOKABLE void selectVideoStream( const QString& streamName, const QObject* videoPath );
-			Q_INVOKABLE void selectSubtitleStream( const QString& streamName, const QObject* videoPath );
+			void selectAudioStream( const QString& streamName, const QObject* audioPath );
+			void selectVideoStream( const QString& streamName, const QObject* videoPath );
+			void selectSubtitleStream( const QString& streamName, const QObject* videoPath );
 
-			Q_INVOKABLE void setTickInterval( qint32 newTickInterval );
-			Q_INVOKABLE void play();
-			Q_INVOKABLE void pause();
-			Q_INVOKABLE void stop();
-			Q_INVOKABLE void seek( qint64 time );
+			void setTickInterval( qint32 newTickInterval );
+			void play();
+			void pause();
+			void stop();
+			void seek( qint64 time );
 
 			void setBufferSize( int size );
 

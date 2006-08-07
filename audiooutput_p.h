@@ -31,7 +31,7 @@ namespace Phonon
 class AudioOutputPrivate : public AbstractAudioOutputPrivate
 {
 	K_DECLARE_PUBLIC( AudioOutput )
-	PHONON_PRIVATECLASS( AudioOutput, AbstractAudioOutput )
+	PHONON_PRIVATECLASS( AbstractAudioOutput )
 	protected:
 		AudioOutputPrivate()
 			: volume( 1.0 )

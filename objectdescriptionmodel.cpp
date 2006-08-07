@@ -22,30 +22,39 @@
 #include <QList>
 #include "objectdescription.h"
 
+#ifdef Q_D
+#undef Q_D
+#endif
+#define Q_D(Class) Class##Private<type> * const d = d_func()
+
 namespace Phonon
 {
 
-ObjectDescriptionModel::ObjectDescriptionModel( QObject* parent )
+template<ObjectDescriptionType type>
+ObjectDescriptionModel<type>::ObjectDescriptionModel( QObject* parent )
 	: QAbstractListModel( parent )
-	, d_ptr( new ObjectDescriptionModelPrivate )
+	, d_ptr( new ObjectDescriptionModelPrivate<type> )
 {
 	d_ptr->q_ptr = this;
 }
 
-ObjectDescriptionModel::~ObjectDescriptionModel()
+template<ObjectDescriptionType type>
+ObjectDescriptionModel<type>::~ObjectDescriptionModel()
 {
 	delete d_ptr;
 	d_ptr = 0;
 }
 
-void ObjectDescriptionModel::setModelData( const QList<ObjectDescription>& newData )
+template<ObjectDescriptionType type>
+void ObjectDescriptionModel<type>::setModelData( const QList<ObjectDescription<type> >& newData )
 {
 	Q_D( ObjectDescriptionModel );
 	d->data = newData;
 	reset();
 }
 
-int ObjectDescriptionModel::rowCount( const QModelIndex& parent ) const
+template<ObjectDescriptionType type>
+int ObjectDescriptionModel<type>::rowCount( const QModelIndex& parent ) const
 {
 	if( parent.isValid() )
 		return 0;
@@ -54,7 +63,8 @@ int ObjectDescriptionModel::rowCount( const QModelIndex& parent ) const
 	return d->data.size();
 }
 
-QVariant ObjectDescriptionModel::data( const QModelIndex& index, int role ) const
+template<ObjectDescriptionType type>
+QVariant ObjectDescriptionModel<type>::data( const QModelIndex& index, int role ) const
 {
 	Q_D( const ObjectDescriptionModel );
 	if( !index.isValid() || index.row() >= d->data.size() || index.column() != 0 )
@@ -74,7 +84,8 @@ QVariant ObjectDescriptionModel::data( const QModelIndex& index, int role ) cons
 	}
 }
 
-void ObjectDescriptionModel::moveUp( const QModelIndex& index )
+template<ObjectDescriptionType type>
+void ObjectDescriptionModel<type>::moveUp( const QModelIndex& index )
 {
 	Q_D( ObjectDescriptionModel );
 	if( !index.isValid() || index.row() >= d->data.size() || index.row() < 1 || index.column() != 0 )
@@ -89,7 +100,8 @@ void ObjectDescriptionModel::moveUp( const QModelIndex& index )
 	emit dataChanged( above, index );
 }
 
-void ObjectDescriptionModel::moveDown( const QModelIndex& index )
+template<ObjectDescriptionType type>
+void ObjectDescriptionModel<type>::moveDown( const QModelIndex& index )
 {
 	Q_D( ObjectDescriptionModel );
 	if( !index.isValid() || index.row() >= d->data.size() - 1 || index.column() != 0 )
@@ -104,7 +116,8 @@ void ObjectDescriptionModel::moveDown( const QModelIndex& index )
 	emit dataChanged( index, below );
 }
 
-QList<int> ObjectDescriptionModel::tupleIndexOrder() const
+template<ObjectDescriptionType type>
+QList<int> ObjectDescriptionModel<type>::tupleIndexOrder() const
 {
 	Q_D( const ObjectDescriptionModel );
 	QList<int> ret;
@@ -113,12 +126,43 @@ QList<int> ObjectDescriptionModel::tupleIndexOrder() const
 	return ret;
 }
 
-int ObjectDescriptionModel::tupleIndexAtPositionIndex( int positionIndex ) const
+template<ObjectDescriptionType type>
+int ObjectDescriptionModel<type>::tupleIndexAtPositionIndex( int positionIndex ) const
 {
 	return d_func()->data.at( positionIndex ).index();
 }
 
+#define PHONON_INSTANCIATE_ALL_FUNCTIONS( T ) \
+do { \
+	QList<ObjectDescription<T> > data; \
+	ObjectDescriptionModel<T> a; \
+	a.setModelData( data ); \
+	a.rowCount(); \
+	a.data( QModelIndex() ); \
+	a.moveUp( QModelIndex() ); \
+	a.moveDown( QModelIndex() ); \
+	a.tupleIndexOrder(); \
+	a.tupleIndexAtPositionIndex( 0 ); \
+} while( false )
+
+namespace {
+	void _k_instanciateAllTemplateFunctions()
+	{
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( AudioOutputDeviceType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( AudioCaptureDeviceType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VideoOutputDeviceType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VideoCaptureDeviceType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( AudioEffectType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VideoEffectType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( AudioCodecType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VideoCodecType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( ContainerFormatType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VisualizationType );
+	}
 }
 
-#include "objectdescriptionmodel.moc"
+#undef PHONON_INSTANCIATE_ALL_FUNCTIONS
+
+}
+
 // vim: sw=4 ts=4 noet

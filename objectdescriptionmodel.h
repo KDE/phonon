@@ -22,12 +22,13 @@
 
 #include <QAbstractListModel>
 #include <kdelibs_export.h>
+#include "objectdescription.h"
 
 template<class t> class QList;
 
 namespace Phonon
 {
-	class ObjectDescription;
+	template<ObjectDescriptionType type>
 	class ObjectDescriptionModelPrivate;
 
 	/**
@@ -60,10 +61,13 @@ namespace Phonon
 	 *
 	 * \author Matthias Kretz <kretz@kde.org>
 	 */
+	template<ObjectDescriptionType type>
 	class PHONONCORE_EXPORT ObjectDescriptionModel : public QAbstractListModel
 	{
-		Q_OBJECT
-		Q_DECLARE_PRIVATE( ObjectDescriptionModel )
+		//Q_OBJECT
+		inline ObjectDescriptionModelPrivate<type>* d_func() { return reinterpret_cast<ObjectDescriptionModelPrivate<type> *>(d_ptr); } \
+		inline const ObjectDescriptionModelPrivate<type>* d_func() const { return reinterpret_cast<const ObjectDescriptionModelPrivate<type> *>(d_ptr); } \
+		friend class ObjectDescriptionModelPrivate<type>;
 		public:
 			/**
 			 * Constructs a ObjectDescription model with the
@@ -78,7 +82,7 @@ namespace Phonon
 			 *
 			 * All previous model data is cleared.
 			 */
-			void setModelData( const QList<ObjectDescription>& data );
+			void setModelData( const QList<ObjectDescription<type> >& data );
 
 			/**
 			 * Returns the number of rows in the model. This value corresponds
@@ -145,8 +149,20 @@ namespace Phonon
 			int tupleIndexAtPositionIndex( int positionIndex ) const;
 
 		protected:
-			ObjectDescriptionModelPrivate* d_ptr;
+			ObjectDescriptionModelPrivate<type>* d_ptr;
 	};
+
+	typedef ObjectDescriptionModel<AudioOutputDeviceType> AudioOutputDeviceModel;
+	typedef ObjectDescriptionModel<AudioCaptureDeviceType> AudioCaptureDeviceModel;
+	typedef ObjectDescriptionModel<VideoOutputDeviceType> VideoOutputDeviceModel;
+	typedef ObjectDescriptionModel<VideoCaptureDeviceType> VideoCaptureDeviceModel;
+	typedef ObjectDescriptionModel<AudioEffectType> AudioEffectDescriptionModel;
+	typedef ObjectDescriptionModel<VideoEffectType> VideoEffectDescriptionModel;
+	typedef ObjectDescriptionModel<AudioCodecType> AudioCodecDescriptionModel;
+	typedef ObjectDescriptionModel<VideoCodecType> VideoCodecDescriptionModel;
+	typedef ObjectDescriptionModel<ContainerFormatType> ContainerFormatDescriptionModel;
+	typedef ObjectDescriptionModel<VisualizationType> VisualizationDescriptionModel;
+
 }
 
 #endif // PHONON_OBJECTDESCRIPTIONMODEL_H

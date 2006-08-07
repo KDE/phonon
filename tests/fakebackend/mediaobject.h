@@ -36,7 +36,6 @@ namespace Fake
 			~MediaObject();
 			Q_INVOKABLE KUrl url() const;
 			Q_INVOKABLE qint64 totalTime() const;
-			Q_INVOKABLE qint64 remainingTime() const { return totalTime() - currentTime(); }
 			Q_INVOKABLE qint32 aboutToFinishTime() const;
 			Q_INVOKABLE void setUrl( const KUrl& url );
 			Q_INVOKABLE void setAboutToFinishTime( qint32 newAboutToFinishTime );

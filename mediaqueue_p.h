@@ -21,30 +21,27 @@
 #define PHONON_MEDIAQUEUE_P_H
 
 #include "mediaqueue.h"
-#include "base_p.h"
-#include "mediaobject.h"
+#include "mediaobject_p.h"
 
 namespace Phonon
 {
 
-class MediaQueuePrivate : public BasePrivate
+class MediaQueuePrivate : public MediaObjectPrivate
 {
 	K_DECLARE_PUBLIC( MediaQueue )
-	PHONON_PRIVATECLASS( MediaQueue, Base )
+	PHONON_PRIVATECLASS( Base )
 	protected:
 		MediaQueuePrivate()
-			: current( 0 )
-			, next( 0 )
+			: doCrossfade( true )
 			, timeBetweenMedia( 0 ) //gapless playback
-			, doCrossfade( true )
 		{
 		}
 
-		void _k_needNextMediaObject();
-		MediaObject* current;
-		MediaObject* next;
-		qint32 timeBetweenMedia;
+		void _k_needNextUrl();
+
+		KUrl nextUrl;
 		bool doCrossfade;
+		qint32 timeBetweenMedia;
 };
 } // namespace Phonon
 

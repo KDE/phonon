@@ -20,15 +20,18 @@
 #include "bytestream.h"
 #include "bytestream_p.h"
 #include "factory.h"
+#include "bytestreaminterface.h"
 
+#define PHONON_CLASSNAME ByteStream
+#define PHONON_INTERFACENAME ByteStreamInterface
 namespace Phonon
 {
-PHONON_HEIR_IMPL( ByteStream, AbstractMediaProducer )
+PHONON_HEIR_IMPL( AbstractMediaProducer )
 
-PHONON_GETTER( ByteStream, qint64, totalTime, -1 )
-PHONON_GETTER( ByteStream, qint32, aboutToFinishTime, d->aboutToFinishTime )
-PHONON_GETTER( ByteStream, qint64, streamSize, d->streamSize )
-PHONON_GETTER( ByteStream, bool, streamSeekable, d->streamSeekable )
+PHONON_GETTER( qint64, totalTime, -1 )
+PHONON_GETTER( qint32, aboutToFinishTime, d->aboutToFinishTime )
+PHONON_GETTER( qint64, streamSize, d->streamSize )
+PHONON_GETTER( bool, streamSeekable, d->streamSeekable )
 
 qint64 ByteStream::remainingTime() const
 {
@@ -41,15 +44,24 @@ qint64 ByteStream::remainingTime() const
 	return totalTime() - currentTime();
 }
 
-PHONON_SETTER( ByteStream, setStreamSeekable, streamSeekable, bool )
-PHONON_SETTER( ByteStream, setStreamSize, streamSize, qint64 )
-PHONON_SETTER( ByteStream, setAboutToFinishTime, aboutToFinishTime, qint32 )
+PHONON_SETTER( setStreamSeekable, streamSeekable, bool )
+PHONON_SETTER( setStreamSize, streamSize, qint64 )
+PHONON_SETTER( setAboutToFinishTime, aboutToFinishTime, qint32 )
+
+/*inline void** ByteStreamPrivate::writeDataParameters( const QByteArray& data )
+{
+	void* param[] = { 0, static_cast<const void*>( &data ), 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	return param;
+}*/
 
 void ByteStream::writeData( const QByteArray& data )
 {
 	K_D( ByteStream );
 	if( iface() )
-		BACKEND_CALL1( "writeData", QByteArray, data );
+	{
+		ByteStreamInterface* bs = qobject_cast<ByteStreamInterface*>( d->backendObject );
+		bs->writeData( data );
+	}
 }
 
 void ByteStream::endOfData()

@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2004-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,21 +17,22 @@
 
 */
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-#include "testwidget.h"
+#ifndef PHONON_MEDIAOBJECTINTERFACE_H
+#define PHONON_MEDIAOBJECTINTERFACE_H
 
-int main( int argc, char ** argv )
+namespace Phonon
 {
-	KAboutData about( "phonontest", "KDE Multimedia Test",
-			"0.2", "Testprogram",
-			KAboutData::License_LGPL, 0 );
-	about.addAuthor( "Matthias Kretz", 0, "kretz@kde.org" );
-	KCmdLineArgs::init( argc, argv, &about );
-	KApplication app;
-	TestWidget foo;
-	return app.exec();
+class MediaObjectInterface
+{
+	public:
+		virtual ~MediaObjectInterface() {}
+		virtual qint64 totalTime() const = 0;
+		virtual KUrl url() const = 0;
+		virtual void setUrl( const KUrl& url ) = 0;
+};
 }
 
-// vim: sw=4 ts=4 noet
+Q_DECLARE_INTERFACE( Phonon::MediaObjectInterface, "org.kde.Phonon.MediaObjectInterface/0.1" )
+
+#endif // PHONON_MEDIAOBJECTINTERFACE_H
+// vim: sw=4 ts=4 noet tw=80

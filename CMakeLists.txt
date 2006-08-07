@@ -94,6 +94,8 @@ install( FILES
 	backendcapabilities.h
 	phonondefs.h
 	bytestreaminterface.h
+	mediaproducerinterface.h
+	mediaobjectinterface.h
 	DESTINATION ${INCLUDE_INSTALL_DIR}/phonon)
 install( FILES  phononbackend.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
 

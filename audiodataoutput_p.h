@@ -28,7 +28,7 @@ namespace Phonon
 class AudioDataOutputPrivate : public AbstractAudioOutputPrivate
 {
 	K_DECLARE_PUBLIC( AudioDataOutput )
-	PHONON_PRIVATECLASS( AudioDataOutput, AbstractAudioOutput )
+	PHONON_PRIVATECLASS( AbstractAudioOutput )
 	protected:
 		AudioDataOutputPrivate()
 			: format( AudioDataOutput::IntegerFormat )

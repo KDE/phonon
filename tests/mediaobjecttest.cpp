@@ -74,6 +74,10 @@ void MediaObjectTest::stopPlayback( Phonon::State currentState )
 	Phonon::State newstate = qvariant_cast<Phonon::State>( args.at( 0 ) );
 	Phonon::State oldstate = qvariant_cast<Phonon::State>( args.at( 1 ) );
 	QCOMPARE( oldstate, currentState );
+	if( newstate == Phonon::LoadingState )
+	{
+
+	}
 	QCOMPARE( newstate, Phonon::StoppedState );
 	QCOMPARE( m_media->state(), Phonon::StoppedState );
 }
@@ -245,7 +249,7 @@ void MediaObjectTest::testSeek()
 	startPlayback();
 	qint64 c = m_media->currentTime();
 	qint64 r = m_media->remainingTime();
-	if( m_media->seekable() )
+	if( m_media->isSeekable() )
 		if( r > 0 )
 		{
 			qint64 s = c + r/2;
@@ -293,7 +297,7 @@ void MediaObjectTest::testAboutToFinish()
 	QSignalSpy aboutToFinishSpy( m_media, SIGNAL( aboutToFinish( qint32 ) ) );
 	QSignalSpy finishSpy( m_media, SIGNAL( finished() ) );
 	startPlayback();
-	if( m_media->seekable() )
+	if( m_media->isSeekable() )
 		m_media->seek( m_media->totalTime() - 1000 );
 	while( aboutToFinishSpy.count() == 0 && ( m_media->state() == Phonon::PlayingState || m_media->state() == Phonon::BufferingState ) )
 		QCoreApplication::processEvents();

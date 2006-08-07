@@ -28,7 +28,7 @@ namespace Phonon
 class BrightnessControlPrivate : public VideoEffectPrivate
 {
 	K_DECLARE_PUBLIC( BrightnessControl )
-	PHONON_PRIVATECLASS( BrightnessControl, VideoEffect )
+	PHONON_PRIVATECLASS( VideoEffect )
 	protected:
 		BrightnessControlPrivate()
 			: brightness( 0 )

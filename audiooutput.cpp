@@ -27,6 +27,8 @@
 #include <kaboutdata.h>
 #include <cmath>
 
+#define PHONON_CLASSNAME AudioOutput
+
 namespace Phonon
 {
 AudioOutput::AudioOutput( Phonon::Category category, QObject* parent )
@@ -62,8 +64,8 @@ void AudioOutput::setName( const QString& newName )
 	d->name = newName;
 }
 
-PHONON_GETTER( AudioOutput, float, volume, d->volume )
-PHONON_SETTER( AudioOutput, setVolume, volume, float )
+PHONON_GETTER( float, volume, d->volume )
+PHONON_SETTER( setVolume, volume, float )
 
 static const double log10over20 = 0.1151292546497022842; // ln(10) / 20
 
@@ -83,7 +85,7 @@ Category AudioOutput::category() const
 	return d->category;
 }
 
-ObjectDescription AudioOutput::outputDevice() const
+AudioOutputDevice AudioOutput::outputDevice() const
 {
 	K_D( const AudioOutput );
 	int index;
@@ -91,10 +93,10 @@ ObjectDescription AudioOutput::outputDevice() const
 		BACKEND_GET( int, index, "outputDevice" );
 	else
 		index = d->outputDeviceIndex;
-	return ObjectDescription::fromIndex( ObjectDescription::AudioOutputDevice, index );
+	return AudioOutputDevice::fromIndex( index );
 }
 
-void AudioOutput::setOutputDevice( const ObjectDescription& newAudioOutputDevice )
+void AudioOutput::setOutputDevice( const AudioOutputDevice& newAudioOutputDevice )
 {
 	K_D( AudioOutput );
 	if( iface() )

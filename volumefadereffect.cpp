@@ -22,12 +22,14 @@
 #include "factory.h"
 #include <cmath>
 
+#define PHONON_CLASSNAME VolumeFaderEffect
+
 namespace Phonon
 {
-PHONON_HEIR_IMPL( VolumeFaderEffect, AudioEffect )
+PHONON_HEIR_IMPL( AudioEffect )
 
-PHONON_GETTER( VolumeFaderEffect, float, volume, d->currentVolume )
-PHONON_SETTER( VolumeFaderEffect, setVolume, currentVolume, float )
+PHONON_GETTER( float, volume, d->currentVolume )
+PHONON_SETTER( setVolume, currentVolume, float )
 
 static const double log10over20 = 0.1151292546497022842; // ln(10) / 20
 
@@ -41,8 +43,8 @@ void VolumeFaderEffect::setVolumeDecibel( double newVolumeDecibel )
 	setVolume( exp( -newVolumeDecibel * log10over20 ) );
 }
 
-PHONON_GETTER( VolumeFaderEffect, Phonon::VolumeFaderEffect::FadeCurve, fadeCurve, d->fadeCurve )
-PHONON_SETTER( VolumeFaderEffect, setFadeCurve, fadeCurve, Phonon::VolumeFaderEffect::FadeCurve )
+PHONON_GETTER( Phonon::VolumeFaderEffect::FadeCurve, fadeCurve, d->fadeCurve )
+PHONON_SETTER( setFadeCurve, fadeCurve, Phonon::VolumeFaderEffect::FadeCurve )
 
 void VolumeFaderEffect::fadeIn( int fadeTime )
 {

@@ -1,3 +1,3 @@
-addMethod( "QSet<int>", "objectDescriptionIndexes(ObjectDescription::Type)" );
-addMethod( "QString", "objectDescriptionDescription(ObjectDescription::Type,int)" );
-addMethod( "QString", "objectDescriptionName(ObjectDescription::Type,int)" );
+addMethod( "QString", "objectDescriptionDescription(ObjectDescriptionType,int)" );
+addMethod( "QSet<int>", "objectDescriptionIndexes(ObjectDescriptionType)" );
+addMethod( "QString", "objectDescriptionName(ObjectDescriptionType,int)" );

@@ -44,7 +44,7 @@ class OutputDeviceChoice : public QWidget, private Ui::OutputDeviceChoice
 		void updateButtonsEnabled();
 
 	private:
-		Phonon::ObjectDescriptionModel m_notificationModel, m_musicModel,
+		Phonon::AudioOutputDeviceModel m_notificationModel, m_musicModel,
 			m_videoModel, m_communicationModel;
 };
 

@@ -27,74 +27,119 @@
 namespace Phonon
 {
 
-ObjectDescription::ObjectDescription()
-	: d( new ObjectDescriptionPrivate( ObjectDescription::AudioOutputDevice, -1, QString(), QString() ) )
+template<ObjectDescriptionType T>
+ObjectDescription<T>::ObjectDescription()
+	: d( new ObjectDescriptionPrivate( -1, QString(), QString() ) )
 {
 }
 
-ObjectDescription::ObjectDescription( Type type, int index, const QString& name, const QString& description )
-	: d( new ObjectDescriptionPrivate( type, index, name, description ) )
+template<ObjectDescriptionType T>
+ObjectDescription<T>::ObjectDescription( int index, const QString& name, const QString& description )
+	: d( new ObjectDescriptionPrivate( index, name, description ) )
 {
 }
 
-ObjectDescription::ObjectDescription( const ObjectDescription& rhs )
+template<ObjectDescriptionType T>
+ObjectDescription<T>::ObjectDescription( const ObjectDescription<T>& rhs )
 	: d( rhs.d )
 {
 }
 
-ObjectDescription::~ObjectDescription()
+template<ObjectDescriptionType T>
+ObjectDescription<T>::~ObjectDescription()
 {
 }
 
-ObjectDescription& ObjectDescription::operator=( const ObjectDescription& rhs )
+template<ObjectDescriptionType T>
+ObjectDescription<T>& ObjectDescription<T>::operator=( const ObjectDescription<T>& rhs )
 {
 	d = rhs.d;
 	return *this;
 }
 
-bool ObjectDescription::operator==( const ObjectDescription& otherDescription ) const
+template<ObjectDescriptionType T>
+bool ObjectDescription<T>::operator==( const ObjectDescription<T>& otherDescription ) const
 {
 	return *d == *otherDescription.d;
 }
 
-int ObjectDescription::index() const
+template<ObjectDescriptionType T>
+int ObjectDescription<T>::index() const
 {
 	return d->index;
 }
 
-const QString& ObjectDescription::name() const
+template<ObjectDescriptionType T>
+const QString& ObjectDescription<T>::name() const
 {
 	return d->name;
 }
 
-const QString& ObjectDescription::description() const
+template<ObjectDescriptionType T>
+const QString& ObjectDescription<T>::description() const
 {
 	return d->description;
 }
 
-bool ObjectDescription::isValid() const
+template<ObjectDescriptionType T>
+bool ObjectDescription<T>::isValid() const
 {
 	return d->index != -1;
 }
 
-ObjectDescription ObjectDescription::fromIndex( Type type, int index )
+template<ObjectDescriptionType T>
+ObjectDescription<T> ObjectDescription<T>::fromIndex( int index )
 {
 	QObject* b = Factory::self()->backend();
 	QSet<int> indexes;
 	QMetaObject::invokeMethod( b, "objectDescriptionIndexes", Qt::DirectConnection, Q_RETURN_ARG( QSet<int>, indexes ),
-			Q_ARG( ObjectDescription::Type, type ) );
+			Q_ARG( ObjectDescriptionType, T ) );
 	if( !indexes.contains( index ) )
-		return ObjectDescription(); //isValid() == false
+		return ObjectDescription<T>(); //isValid() == false
 	QString name, description;
 	//int videoIndex;
 	QMetaObject::invokeMethod( b, "objectDescriptionName", Qt::DirectConnection, Q_RETURN_ARG( QString, name ),
-			Q_ARG( ObjectDescription::Type, type ), Q_ARG( int, index ) );
+			Q_ARG( ObjectDescriptionType, T ), Q_ARG( int, index ) );
 	QMetaObject::invokeMethod( b, "objectDescriptionDescription", Qt::DirectConnection, Q_RETURN_ARG( QString, description ),
-			Q_ARG( ObjectDescription::Type, type ), Q_ARG( int, index ) );
+			Q_ARG( ObjectDescriptionType, T ), Q_ARG( int, index ) );
 	//QMetaObject::invokeMethod( b, "objectDescriptionVideoIndex", Qt::DirectConnection, Q_RETURN_ARG( qint32, videoIndex ),
-			//Q_ARG( ObjectDescription::Type, type ), Q_ARG( int, index ) );
-	return ObjectDescription( type, index, name, description );
+			//Q_ARG( ObjectDescriptionType, T ), Q_ARG( int, index ) );
+	return ObjectDescription<T>( index, name, description );
 }
+
+#define PHONON_INSTANCIATE_ALL_FUNCTIONS( T ) \
+do { \
+	ObjectDescription<T> a = ObjectDescription<T>::fromIndex( 0 ); \
+	ObjectDescription<T> b; \
+	b = a; \
+	ObjectDescription<T> c( b ); \
+	if( a == b ) \
+	{ \
+		return; \
+	} \
+	a.name(); \
+	a.description(); \
+	a.index(); \
+	a.isValid(); \
+} while( false )
+
+namespace {
+	void _k_instanciateAllTemplateFunctions()
+	{
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( AudioOutputDeviceType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( AudioCaptureDeviceType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VideoOutputDeviceType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VideoCaptureDeviceType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( AudioEffectType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VideoEffectType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( AudioCodecType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VideoCodecType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( ContainerFormatType );
+		PHONON_INSTANCIATE_ALL_FUNCTIONS( VisualizationType );
+	}
+}
+
+#undef PHONON_INSTANCIATE_ALL_FUNCTIONS
 
 } //namespace Phonon
 // vim: sw=4 ts=4 noet

@@ -199,7 +199,7 @@ void ByteStream::consumeStream()
 		else if( !m_aboutToFinishEmitted && m_bufferSize <= m_aboutToFinishBytes )
 		{
 			m_aboutToFinishEmitted = true;
-			emit aboutToFinish( remainingTime() );
+			emit aboutToFinish( totalTime() - currentTime() );
 		}
 	}
 	else
@@ -208,7 +208,7 @@ void ByteStream::consumeStream()
 				&& m_streamSize - m_streamPosition <= m_aboutToFinishBytes )
 		{
 			m_aboutToFinishEmitted = true;
-			emit aboutToFinish( remainingTime() );
+			emit aboutToFinish( totalTime() - currentTime() );
 		}
 		if( m_bufferSize < 50 / 3 * 5000 ) // try to keep a buffer of more than 5s
 			emit needData();

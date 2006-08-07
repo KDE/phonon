@@ -24,13 +24,13 @@
 #include "phonondefs.h"
 #include <QObject>
 #include "basedestructionhandler.h"
+#include "objectdescription.h"
 
 namespace Phonon
 {
 	class VisualizationPrivate;
 	class AudioPath;
 	class AbstractVideoOutput;
-	class ObjectDescription;
 
 /**
  * \short A class to create visual effects from an audio signal.
@@ -43,7 +43,7 @@ namespace Phonon
  * The following example code takes the first effect from the list and uses that
  * to display a visualization on a new VideoWidget.
  * \code
- * QList<ObjectDescription> list = BackendCapabilities::availableVisualizationEffects();
+ * QList<VisualizationDescription> list = BackendCapabilities::availableVisualizationEffects();
  * if( list.size() > 0 )
  * {
  *   VideoWidget* visWidget = new VideoWidget( parent );
@@ -63,7 +63,7 @@ class PHONONCORE_EXPORT Visualization : public QObject, public Base
 	Q_OBJECT
 	K_DECLARE_PRIVATE( Visualization )
 	PHONON_OBJECT( Visualization )
-	Q_PROPERTY( ObjectDescription visualization READ visualization WRITE setVisualization )
+	Q_PROPERTY( VisualizationDescription visualization READ visualization WRITE setVisualization )
 
 	public:
 		~Visualization();
@@ -74,8 +74,8 @@ class PHONONCORE_EXPORT Visualization : public QObject, public Base
 		AbstractVideoOutput* videoOutput() const;
 		void setVideoOutput( AbstractVideoOutput* output );
 
-		ObjectDescription visualization() const;
-		void setVisualization( const ObjectDescription& newVisualization );
+		VisualizationDescription visualization() const;
+		void setVisualization( const VisualizationDescription& newVisualization );
 
 		/**
 		 * Returns whether the selected visualization effect can be configured

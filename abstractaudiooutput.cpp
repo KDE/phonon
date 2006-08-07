@@ -20,10 +20,12 @@
 #include "abstractaudiooutput_p.h"
 #include "factory.h"
 
+#define PHONON_CLASSNAME AbstractAudioOutput
+
 namespace Phonon
 {
 
-PHONON_ABSTRACTBASE_IMPL( AbstractAudioOutput )
+PHONON_ABSTRACTBASE_IMPL
 
 bool AbstractAudioOutputPrivate::aboutToDeleteIface()
 {

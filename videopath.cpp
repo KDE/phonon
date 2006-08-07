@@ -23,9 +23,11 @@
 #include "videoeffect.h"
 #include "abstractvideooutput.h"
 
+#define PHONON_CLASSNAME VideoPath
+
 namespace Phonon
 {
-PHONON_OBJECT_IMPL( VideoPath )
+PHONON_OBJECT_IMPL
 
 VideoPath::~VideoPath()
 {

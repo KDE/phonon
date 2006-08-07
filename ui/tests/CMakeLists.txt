@@ -6,7 +6,7 @@ kde4_add_executable(seekslider ${seekslider_SRCS})
 target_link_libraries(seekslider  ${KDE4_KDECORE_LIBS} phononui ${QT_QTTEST_LIBRARY} )
 endif(KDE4_BUILD_TESTS)
 
-set(guitest_SRCS main.cpp testwidget.cpp )
+set(guitest_SRCS guitest.cpp )
 kde4_automoc(${guitest_SRCS})
 if(KDE4_BUILD_TESTS)
 kde4_add_executable(guitest ${guitest_SRCS})

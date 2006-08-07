@@ -66,9 +66,9 @@ namespace Fake
 
 			void freeSoundcardDevices();
 
-			Q_INVOKABLE QSet<int> objectDescriptionIndexes( ObjectDescription::Type type ) const;
-			Q_INVOKABLE QString objectDescriptionName( ObjectDescription::Type type, int index ) const;
-			Q_INVOKABLE QString objectDescriptionDescription( ObjectDescription::Type type, int index ) const;
+			Q_INVOKABLE QSet<int> objectDescriptionIndexes( ObjectDescriptionType type ) const;
+			Q_INVOKABLE QString objectDescriptionName( ObjectDescriptionType type, int index ) const;
+			Q_INVOKABLE QString objectDescriptionDescription( ObjectDescriptionType type, int index ) const;
 
 			Q_INVOKABLE char const* uiLibrary() const;
 			// Q_INVOKABLE char* uiSymbol() const;

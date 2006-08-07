@@ -20,6 +20,9 @@
 #include "methodtest.h"
 #include "../factory.h"
 #include <qtest_kde.h>
+#include <phonon/bytestreaminterface.h>
+#include <phonon/mediaproducerinterface.h>
+#include <phonon/mediaobjectinterface.h>
 
 using namespace Phonon;
 
@@ -92,6 +95,26 @@ void MethodTest::checkVideoEffectMethods()       { checkMethods( Factory::self()
 void MethodTest::checkVideoPathMethods()         { checkMethods( Factory::self()->createVideoPath() ); }
 void MethodTest::checkVisualizationMethods()     { checkMethods( Factory::self()->createVisualization() ); }
 void MethodTest::checkVolumeFaderEffectMethods() { checkMethods( Factory::self()->createVolumeFaderEffect() ); }
+
+void MethodTest::checkByteStreamInterfaces()
+{
+	QObject* backendObject = Factory::self()->createByteStream();
+	QVERIFY( qobject_cast<Phonon::ByteStreamInterface*>( backendObject ) != 0 );
+	QVERIFY( qobject_cast<Phonon::MediaProducerInterface*>( backendObject ) != 0 );
+}
+
+void MethodTest::checkMediaObjectInterfaces()
+{
+	QObject* backendObject = Factory::self()->createMediaObject();
+	QVERIFY( qobject_cast<Phonon::MediaProducerInterface*>( backendObject ) != 0 );
+	QVERIFY( qobject_cast<Phonon::MediaObjectInterface*>( backendObject ) != 0 );
+}
+
+void MethodTest::checkAvCapturetInterfaces()
+{
+	QObject* backendObject = Factory::self()->createAvCapture();
+	QVERIFY( qobject_cast<Phonon::MediaProducerInterface*>( backendObject ) != 0 );
+}
 
 void MethodTest::addColumns()
 {

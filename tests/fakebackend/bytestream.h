@@ -20,21 +20,22 @@
 #define Phonon_FAKE_BYTESTREAM_H
 
 #include "abstractmediaproducer.h"
+#include <phonon/bytestreaminterface.h>
 class QTimer;
 
 namespace Phonon
 {
 namespace Fake
 {
-	class ByteStream : public AbstractMediaProducer
+	class ByteStream : public AbstractMediaProducer, public Phonon::ByteStreamInterface
 	{
 		Q_OBJECT
+		Q_INTERFACES( Phonon::ByteStreamInterface )
 		public:
 			ByteStream( QObject* parent );
 			~ByteStream();
 
 			Q_INVOKABLE qint64 currentTime() const;
-			Q_INVOKABLE qint64 remainingTime() const { return totalTime() - currentTime(); }
 			Q_INVOKABLE qint64 totalTime() const;
 			Q_INVOKABLE qint32 aboutToFinishTime() const;
 			Q_INVOKABLE qint64 streamSize() const;
@@ -42,9 +43,9 @@ namespace Fake
 			Q_INVOKABLE bool seekable() const;
 
 			Q_INVOKABLE void setStreamSeekable( bool );
-			Q_INVOKABLE void writeData( const QByteArray& data );
+			            void writeData( const QByteArray& data );
 			Q_INVOKABLE void setStreamSize( qint64 );
-			Q_INVOKABLE void endOfData();
+			            void endOfData();
 			Q_INVOKABLE void setAboutToFinishTime( qint32 );
 
 			Q_INVOKABLE void play();

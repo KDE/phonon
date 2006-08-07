@@ -29,25 +29,23 @@ namespace Phonon
 	class ObjectDescriptionPrivate : public QSharedData
 	{
 		public:
-			ObjectDescriptionPrivate( ObjectDescription::Type _type, int _index, const QString& _name, const QString& _desc )
+			ObjectDescriptionPrivate( int _index, const QString& _name, const QString& _desc )
 				: index( _index )
 				, name( _name )
 				, description( _desc )
-				, type( _type )
 			{
 			}
 
 			bool operator==( const ObjectDescriptionPrivate& rhs ) const
 			{
-				if( type == rhs.type && index == rhs.index && ( name != rhs.name || description != rhs.description ) )
+				if( index == rhs.index && ( name != rhs.name || description != rhs.description ) )
 					kError( 600 ) << "Same index (" << index <<
 						"), but different name/description. This is a bug in the Phonon backend." << endl;
-				return type == rhs.type && index == rhs.index;// && name == rhs.name && description == rhs.description;
+				return index == rhs.index;// && name == rhs.name && description == rhs.description;
 			}
 
 			int index;
 			QString name, description;
-			ObjectDescription::Type type;
 	};
 } // namespace Phonon
 

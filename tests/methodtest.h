@@ -56,6 +56,9 @@ class MethodTest : public QObject
 		void checkVisualizationMethods();
 		void checkVolumeFaderEffectMethods_data();
 		void checkVolumeFaderEffectMethods();
+		void checkByteStreamInterfaces();
+		void checkMediaObjectInterfaces();
+		void checkAvCapturetInterfaces();
 
 	private:
 		void addColumns();

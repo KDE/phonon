@@ -23,6 +23,7 @@
 #include <kdelibs_export.h>
 #include "phonondefs.h"
 #include "phononnamespace.h"
+#include "objectdescription.h"
 
 class QString;
 
@@ -30,7 +31,6 @@ class AudioOutputAdaptor;
 namespace Phonon
 {
 	class AudioOutputPrivate;
-	class ObjectDescription;
 
 	/**
 	 * \short Class for audio output to the soundcard.
@@ -85,7 +85,7 @@ namespace Phonon
 		 *
 		 * \see outputDeviceChanged
 		 */
-		Q_PROPERTY( ObjectDescription outputDevice READ outputDevice WRITE setOutputDevice )
+		Q_PROPERTY( AudioOutputDevice outputDevice READ outputDevice WRITE setOutputDevice )
 		public:
 			/**
 			 * Creates a new AudioOutput that defines output to a physical
@@ -114,7 +114,7 @@ namespace Phonon
 			 * \see AudioOutput( Phonon::Category, QObject* )
 			 */
 			Phonon::Category category() const;
-			ObjectDescription outputDevice() const;
+			AudioOutputDevice outputDevice() const;
 
 		protected:
 			/**
@@ -130,7 +130,7 @@ namespace Phonon
 			float volume() const;
 			void setVolume( float newVolume );
 			void setVolumeDecibel( double newVolumeDecibel );
-			void setOutputDevice( const ObjectDescription& newAudioOutputDevice );
+			void setOutputDevice( const AudioOutputDevice& newAudioOutputDevice );
 
 		Q_SIGNALS:
 			/**
@@ -150,7 +150,7 @@ namespace Phonon
 			 *
 			 * \see outputDevice
 			 */
-			void outputDeviceChanged( const ObjectDescription& newAudioOutputDevice );
+			void outputDeviceChanged( const AudioOutputDevice& newAudioOutputDevice );
 	};
 } //namespace Phonon
 

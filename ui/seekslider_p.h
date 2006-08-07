@@ -24,6 +24,9 @@
 #include <QHBoxLayout>
 #include <QSlider>
 #include <QLabel>
+#include <kicontheme.h>
+#include <kiconloader.h>
+#include <QPixmap>
 
 namespace Phonon
 {
@@ -38,17 +41,23 @@ class SeekSliderPrivate
 			, icon( parent )
 			, media( 0 )
 			, ticking( false )
+			, iconPixmap( SmallIcon( "player_time", 16, K3Icon::DefaultState ) )
+			, disabledIconPixmap( SmallIcon( "player_time", 16, K3Icon::DisabledState ) )
 		{
 		}
 
 		SeekSlider* q_ptr;
 		
 	private:
+		void setEnabled( bool );
+
 		QHBoxLayout layout;
 		QSlider slider;
 		QLabel icon;
 		AbstractMediaProducer* media;
 		bool ticking;
+		QPixmap iconPixmap;
+		QPixmap disabledIconPixmap;
 };
 } // namespace Phonon
 

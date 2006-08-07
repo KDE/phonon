@@ -30,7 +30,7 @@ namespace Phonon
 class VideoEffectPrivate : public BasePrivate
 {
 	K_DECLARE_PUBLIC( VideoEffect )
-	PHONON_PRIVATECLASS( VideoEffect, Base )
+	PHONON_PRIVATECLASS( Base )
 	protected:
 		VideoEffectPrivate()
 		{

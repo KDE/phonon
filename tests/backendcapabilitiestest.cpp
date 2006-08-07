@@ -51,15 +51,16 @@ void BackendCapabilitiesTest::checkMimeTypes()
 	}
 }
 
-#define VERIFY_TUPLE( type ) \
-QVERIFY( BackendCapabilities::available ## type ## s().size() >= 0 ); \
-for( int i = 0; i < BackendCapabilities::available ## type ## s().size(); ++i ) \
+#define VERIFY_TUPLE( T ) \
+QVERIFY( BackendCapabilities::available ## T ## s().size() >= 0 ); \
+for( int i = 0; i < BackendCapabilities::available ## T ## s().size(); ++i ) \
 { \
-	ObjectDescription device = BackendCapabilities::available ## type ## s().at( i ); \
+	ObjectDescription<T ## Type> device = BackendCapabilities::available ## T ## s().at( i ); \
 	QVERIFY( device.index() >= 0 ); \
 	QObject* backend = Factory::self()->backend(); \
 	QSet<int> indexes; \
-	QMetaObject::invokeMethod( backend, "objectDescriptionIndexes", Qt::DirectConnection, Q_RETURN_ARG( QSet<int>, indexes ), Q_ARG( ObjectDescription::Type, ObjectDescription::type ) ); \
+	QMetaObject::invokeMethod( backend, "objectDescriptionIndexes", Qt::DirectConnection, \
+			Q_RETURN_ARG( QSet<int>, indexes ), Q_ARG( ObjectDescriptionType, Phonon::T ## Type ) ); \
 	QVERIFY( indexes.contains( device.index() ) ); \
 	QVERIFY( !device.name().isEmpty() ); \
 } do {} while( false )

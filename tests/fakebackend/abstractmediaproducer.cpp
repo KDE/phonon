@@ -112,7 +112,7 @@ bool AbstractMediaProducer::hasVideo() const
 	return false;
 }
 
-bool AbstractMediaProducer::seekable() const
+bool AbstractMediaProducer::isSeekable() const
 {
 	//kDebug( 604 ) << k_funcinfo << endl;
 	return true;
@@ -233,7 +233,7 @@ void AbstractMediaProducer::stop()
 void AbstractMediaProducer::seek( qint64 time )
 {
 	//kDebug( 604 ) << k_funcinfo << endl;
-	if( seekable() )
+	if( isSeekable() )
 	{
 		switch( state() )
 		{

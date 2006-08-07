@@ -25,7 +25,7 @@
 #include <QStringList>
 #include <kservicetypetrader.h>
 #include <kmimetype.h>
-#include "phonondefs.h"
+#include "phonondefs_p.h"
 
 static KStaticDeleter<Phonon::BackendCapabilities> sd;
 
@@ -95,7 +95,7 @@ QStringList BackendCapabilities::knownMimeTypes()
 	}
 }
 
-bool BackendCapabilities::isMimeTypeKnown( QString mimeType )
+bool BackendCapabilities::isMimeTypeKnown( const QString& mimeType )
 {
 	QObject* backendObject = Factory::self()->backend( false );
 	if( backendObject )
@@ -114,17 +114,32 @@ bool BackendCapabilities::isMimeTypeKnown( QString mimeType )
 	}
 }
 
-#define availableDevicesImpl( type ) \
-QList<ObjectDescription> BackendCapabilities::available ## type ## s() \
+#define availableDevicesImpl( T ) \
+QList<T> BackendCapabilities::available ## T ## s() \
 { \
 	QObject* backendObject = Factory::self()->backend(); \
-	QList<ObjectDescription> ret; \
+	QList<T> ret; \
 	if( backendObject ) \
 	{ \
 		QSet<int> deviceIndexes; \
-		pBACKEND_GET1( QSet<int>, deviceIndexes, "objectDescriptionIndexes", ObjectDescription::Type, ObjectDescription::type ); \
+		pBACKEND_GET1( QSet<int>, deviceIndexes, "objectDescriptionIndexes", ObjectDescriptionType, Phonon::T ## Type ); \
 		foreach( int i, deviceIndexes ) \
-			ret.append( ObjectDescription::fromIndex( ObjectDescription::type, i ) ); \
+			ret.append( T::fromIndex( i ) ); \
+	} \
+	return ret; \
+}
+
+#define availableDevicesImpl2( T ) \
+QList<T ## Description> BackendCapabilities::available ## T ## s() \
+{ \
+	QObject* backendObject = Factory::self()->backend(); \
+	QList<T ## Description> ret; \
+	if( backendObject ) \
+	{ \
+		QSet<int> deviceIndexes; \
+		pBACKEND_GET1( QSet<int>, deviceIndexes, "objectDescriptionIndexes", ObjectDescriptionType, Phonon::T ## Type ); \
+		foreach( int i, deviceIndexes ) \
+			ret.append( T ## Description::fromIndex( i ) ); \
 	} \
 	return ret; \
 }
@@ -132,12 +147,12 @@ availableDevicesImpl( AudioOutputDevice )
 availableDevicesImpl( AudioCaptureDevice )
 availableDevicesImpl( VideoOutputDevice )
 availableDevicesImpl( VideoCaptureDevice )
-availableDevicesImpl( Visualization )
-availableDevicesImpl( AudioCodec )
-availableDevicesImpl( VideoCodec )
-availableDevicesImpl( ContainerFormat )
-availableDevicesImpl( AudioEffect )
-availableDevicesImpl( VideoEffect )
+availableDevicesImpl2( Visualization )
+availableDevicesImpl2( AudioCodec )
+availableDevicesImpl2( VideoCodec )
+availableDevicesImpl2( ContainerFormat )
+availableDevicesImpl2( AudioEffect )
+availableDevicesImpl2( VideoEffect )
 
 void BackendCapabilities::_k_slotBackendChanged()
 {

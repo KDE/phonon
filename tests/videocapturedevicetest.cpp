@@ -29,12 +29,12 @@ void VideoCaptureDeviceTest::initTestCase()
 
 void VideoCaptureDeviceTest::sensibleValues()
 {
-	ObjectDescription a;
+	VideoCaptureDevice a;
 	QCOMPARE( a.isValid(), false );
-	ObjectDescription b( a );
+	VideoCaptureDevice b( a );
 	QCOMPARE( a, b );
 	QCOMPARE( b.isValid(), false );
-	ObjectDescription c = ObjectDescription::fromIndex( ObjectDescription::VideoCaptureDevice, 1 ); //no backend loaded -> invalid
+	VideoCaptureDevice c = VideoCaptureDevice::fromIndex( 1 ); //no backend loaded -> invalid
 	QCOMPARE( c.isValid(), false );
 	c = a;
 	QCOMPARE( a, c );

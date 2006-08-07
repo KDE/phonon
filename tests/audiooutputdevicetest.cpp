@@ -29,12 +29,12 @@ void AudioOutputDeviceTest::initTestCase()
 
 void AudioOutputDeviceTest::sensibleValues()
 {
-	ObjectDescription a;
+	AudioOutputDevice a;
 	QCOMPARE( a.isValid(), false );
-	ObjectDescription b( a );
+	AudioOutputDevice b( a );
 	QCOMPARE( a, b );
 	QCOMPARE( b.isValid(), false );
-	ObjectDescription c = ObjectDescription::fromIndex( ObjectDescription::AudioOutputDevice, 1 ); //no backend loaded -> invalid
+	AudioOutputDevice c = AudioOutputDevice::fromIndex( 1 ); //no backend loaded -> invalid
 	QCOMPARE( c.isValid(), false );
 	c = a;
 	QCOMPARE( a, c );

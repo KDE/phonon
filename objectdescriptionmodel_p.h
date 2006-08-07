@@ -27,13 +27,14 @@
 namespace Phonon
 {
 
+template<ObjectDescriptionType type>
 class ObjectDescriptionModelPrivate
 {
-	Q_DECLARE_PUBLIC( ObjectDescriptionModel )
+	Q_DECLARE_PUBLIC( ObjectDescriptionModel<type> )
 	protected:
-		ObjectDescriptionModel* q_ptr;
+		ObjectDescriptionModel<type>* q_ptr;
 
-		QList<ObjectDescription> data;
+		QList<ObjectDescription<type> > data;
 };
 
 }

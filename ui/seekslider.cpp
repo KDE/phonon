@@ -21,8 +21,6 @@
 #include "seekslider_p.h"
 #include "../abstractmediaproducer.h"
 #include <kdebug.h>
-#include <kiconloader.h>
-#include <QPixmap>
 
 namespace Phonon
 {
@@ -34,8 +32,7 @@ SeekSlider::SeekSlider( QWidget* parent )
 	Q_D( SeekSlider );
 	d->layout.setMargin( 0 );
 	d->layout.setSpacing( 2 );
-	d->slider.setEnabled( false );
-	d->icon.setPixmap( SmallIcon( "player_time" ) );
+	d->setEnabled( false );
 	d->layout.addWidget( &d->icon );
 	d->layout.addWidget( &d->slider );
 }
@@ -47,8 +44,7 @@ SeekSlider::SeekSlider( SeekSliderPrivate& _d, QWidget* parent )
 	Q_D( SeekSlider );
 	d->layout.setMargin( 0 );
 	d->layout.setSpacing( 2 );
-	d->slider.setEnabled( false );
-	d->icon.setPixmap( SmallIcon( "player_time" ) );
+	d->setEnabled( false );
 	d->layout.addWidget( &d->icon );
 	d->layout.addWidget( &d->slider );
 }
@@ -94,12 +90,18 @@ void SeekSlider::length( qint64 msec )
 	d->slider.setRange( 0, msec );
 }
 
+void SeekSliderPrivate::setEnabled( bool x )
+{
+	slider.setEnabled( x );
+	icon.setPixmap( x ? iconPixmap : disabledIconPixmap );
+}
+
 void SeekSlider::stateChanged( State newstate )
 {
 	Q_D( SeekSlider );
-	if( !d->media->seekable() )
+	if( !d->media->isSeekable() )
 	{
-		d->slider.setEnabled( false );
+		d->setEnabled( false );
 		return;
 	}
 	switch( newstate )
@@ -113,12 +115,12 @@ void SeekSlider::stateChanged( State newstate )
 			}
 		case Phonon::BufferingState:
 		case Phonon::PausedState:
-			d->slider.setEnabled( true );
+			d->setEnabled( true );
 			break;
 		case Phonon::StoppedState:
 		case Phonon::LoadingState:
 		case Phonon::ErrorState:
-			d->slider.setEnabled( false );
+			d->setEnabled( false );
 			d->slider.setValue( 0 );
 			break;
 	}
@@ -128,7 +130,7 @@ void SeekSlider::mediaDestroyed()
 {
 	Q_D( SeekSlider );
 	d->media = 0;
-	d->slider.setEnabled( false );
+	d->setEnabled( false );
 }
 
 bool SeekSlider::isIconVisible() const

@@ -24,6 +24,7 @@
 #include <QList>
 #include "basedestructionhandler.h"
 #include "factory.h"
+#include "phonondefs_p.h"
 
 namespace Phonon
 {

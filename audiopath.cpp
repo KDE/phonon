@@ -23,9 +23,11 @@
 #include "audioeffect.h"
 #include "abstractaudiooutput.h"
 
+#define PHONON_CLASSNAME AudioPath
+
 namespace Phonon
 {
-PHONON_OBJECT_IMPL( AudioPath )
+PHONON_OBJECT_IMPL
 
 AudioPath::~AudioPath()
 {

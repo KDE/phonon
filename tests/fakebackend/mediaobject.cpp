@@ -110,7 +110,7 @@ void MediaObject::emitTick()
 		if( m_aboutToFinishNotEmitted )
 		{
 			m_aboutToFinishNotEmitted = false;
-			emit aboutToFinish( remainingTime() );
+			emit aboutToFinish( totalTime() - currentTime() );
 		}
 	}
 	if( currentTime() >= totalTime() ) // finished

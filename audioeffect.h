@@ -54,9 +54,9 @@ namespace Phonon
 			 *
 			 * \param parent QObject parent
 			 */
-			AudioEffect( const ObjectDescription& type, QObject* parent = 0 );
+			AudioEffect( const AudioEffectDescription& type, QObject* parent = 0 );
 
-			ObjectDescription type() const;
+			AudioEffectDescription type() const;
 			virtual QList<EffectParameter> parameterList() const;
 
 		protected:
@@ -66,7 +66,7 @@ namespace Phonon
 			 * Constructs new audio effect with private data \p dd and a
 			 * \p parent.
 			 */
-			AudioEffect( AudioEffectPrivate& dd, QObject* parent, const ObjectDescription& type = ObjectDescription() );
+			AudioEffect( AudioEffectPrivate& dd, QObject* parent, const AudioEffectDescription& type = AudioEffectDescription() );
 
 			/**
 			 * \internal

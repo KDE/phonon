@@ -45,7 +45,17 @@ class MediaObjectPrivate : public AbstractMediaProducerPrivate
 		{
 		}
 
+		~MediaObjectPrivate()
+		{
+			if( kiojob )
+			{
+				kiojob->kill();
+				kiojob = 0;
+			}
+		}
+
 		void setupKioStreaming();
+		void setupKioJob();
 		void _k_bytestreamNeedData();
 		void _k_bytestreamEnoughData();
 		void _k_bytestreamData( KIO::Job*, const QByteArray& );

@@ -24,7 +24,7 @@
 namespace Phonon
 {
 
-VideoEffect::VideoEffect( const ObjectDescription& type, QObject* parent )
+VideoEffect::VideoEffect( const VideoEffectDescription& type, QObject* parent )
 	: QObject( parent )
 	, Base( *new VideoEffectPrivate )
 {
@@ -33,7 +33,7 @@ VideoEffect::VideoEffect( const ObjectDescription& type, QObject* parent )
 	d->createIface();
 }
 
-VideoEffect::VideoEffect( VideoEffectPrivate& dd, QObject* parent, const ObjectDescription& type )
+VideoEffect::VideoEffect( VideoEffectPrivate& dd, QObject* parent, const VideoEffectDescription& type )
 	: QObject( parent )
 	, Base( dd )
 {
@@ -51,10 +51,10 @@ void VideoEffectPrivate::createIface()
 		q->setupIface();
 }
 
-ObjectDescription VideoEffect::type() const
+VideoEffectDescription VideoEffect::type() const
 {
 	K_D( const VideoEffect );
-	return ObjectDescription::fromIndex( ObjectDescription::VideoEffect, d->type );
+	return VideoEffectDescription::fromIndex( d->type );
 }
 
 QList<EffectParameter> VideoEffect::parameterList() const

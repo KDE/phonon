@@ -20,49 +20,84 @@
 #ifndef PHONON_MEDIAQUEUE_H
 #define PHONON_MEDIAQUEUE_H
 
-#include <QObject>
 #include <kdelibs_export.h>
-#include "base.h"
 #include "mediaobject.h"
 
 namespace Phonon
 {
-namespace Ifaces
-{
-	class MediaQueue;
-}
 
 class MediaQueuePrivate;
-class PHONONCORE_EXPORT MediaQueue : public QObject, public Base
+/**
+ * \brief Class that queues playback of media with high precision (e.g. gapless
+ * playback)
+ *
+ * Using a %MediaQueue object you can achieve high precision queuing of media
+ * doing either a predefined pause between tracks, gapless playback, overlapping
+ * playback or crossfades.
+ *
+ * In general you'll set up one %MediaQueue object and connect to the
+ * needNextMediaObject signal. When this signal is emitted you have to provide
+ * the next MediaObject calling setNext.
+ * \code
+ * m_mediaQueue = new MediaQueue( this );
+ * m_mediaQueue->setUrl( m_playlist->nextUrl() );
+ * m_mediaQueue->setNextUrl( m_playlist->nextUrl() );
+ * connect( m_mediaQueue, SIGNAL(needNextUrl()), SLOT(prepareNextUrl()) );
+ * \endcode
+ *
+ * The slot could look like this:
+ * \code
+ * void MyClass::prepareNextUrl()
+ * {
+ *   m_mediaQueue->setNextUrl( m_playlist->nextUrl() );
+ * }
+ * \endcode
+ *
+ * \author Matthias Kretz <kretz@kde.org>
+ */
+class PHONONCORE_EXPORT MediaQueue : public MediaObject
 {
 	K_DECLARE_PRIVATE( MediaQueue )
 	Q_OBJECT
-	PHONON_OBJECT( MediaQueue )
-	Q_PROPERTY( qint32 timeBetweenMedia READ timeBetweenMedia WRITE setTimeBetweenMedia )
-	Q_PROPERTY( bool doCrossfade READ doCrossfade WRITE setDoCrossfade )
-	public:
-		MediaObject* current() const;
-		MediaObject* next() const;
+	PHONON_HEIR( MediaQueue )
 
-		void setNext( MediaObject* next );
+	/**
+	 * Time between the end of the first media and the start of the next
+	 * media. A value of 0ms means gapless playback. A value less than zero
+	 * means that the next song will start playing while the first is about
+	 * to finish.
+	 *
+	 * Defaults to 0 (gapless playback)
+	 */
+	Q_PROPERTY( qint32 timeBetweenMedia READ timeBetweenMedia WRITE setTimeBetweenMedia )
+
+	/**
+	 * If the timeBetweenMedia is less than 0 this property determines whether a
+	 * crossfade is done or not.
+	 *
+	 * Defaults to \c true (crossfades if timeBetweenMedia < 0)
+	 */
+	Q_PROPERTY( bool doCrossfade READ doCrossfade WRITE setDoCrossfade )
+
+	/**
+	 * The URL for the media to be played after the current one.
+	 */
+	Q_PROPERTY( KUrl nextUrl READ nextUrl WRITE setNextUrl )
+	public:
+		KUrl nextUrl() const;
+		void setNextUrl( const KUrl& nextUrl );
 
 		qint32 timeBetweenMedia() const;
-		/**
-		 * Time between the end of the first media and the start of the next
-		 * media. A value of 0ms means gapless playback. A value less than zero
-		 * means that the next song will start playing while the first is about
-		 * to finish.
-		 */
 		void setTimeBetweenMedia( qint32 milliseconds );
 
 		bool doCrossfade() const;
 		void setDoCrossfade( bool doCrossfade );
 
 	Q_SIGNALS:
-		void needNextMediaObject();
+		void needNextUrl();
 
 	private:
-		Q_PRIVATE_SLOT( k_func(), void _k_needNextMediaObject() )
+		Q_PRIVATE_SLOT( k_func(), void _k_needNextUrl() )
 };
 
 } // namespace Phonon

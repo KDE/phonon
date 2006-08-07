@@ -24,13 +24,13 @@
 
 #include <kdelibs_export.h>
 #include <kstaticdeleter.h>
+#include "objectdescription.h"
 
 template<class T> class QList;
 class QStringList;
 
 namespace Phonon
 {
-class ObjectDescription;
 
 /**
  * Singleton class describing the capabilities of the Backend.
@@ -44,9 +44,10 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 	Q_OBJECT
 	public:
 		/**
-		 * Use this function to get an instance of Factory.
+		 * Use this function to get the QObject pointer for connecting the
+		 * capabilitiesChanged signal.
 		 *
-		 * \return a pointer to the BackendCapabilities instance. If no instance exists until now then
+		 * \return a pointer to the BackendCapabilities instance. If no instance existed before a new
 		 * one is created.
 		 */
 		static BackendCapabilities* self();
@@ -90,7 +91,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 *
 		 * \see knownMimeTypes();
 		 */
-		static bool isMimeTypeKnown( QString mimeType );
+		static bool isMimeTypeKnown( const QString& mimeType );
 
 #if 0
 		/**
@@ -123,7 +124,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of AudioOutputDevice objects that give a name and
 		 * description for every supported audio output device.
 		 */
-		static QList<ObjectDescription> availableAudioOutputDevices();
+		static QList<AudioOutputDevice> availableAudioOutputDevices();
 
 		/**
 		 * Returns the audio capture devices the backend supports.
@@ -131,7 +132,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of AudioCaptureDevice objects that give a name and
 		 * description for every supported audio capture device.
 		 */
-		static QList<ObjectDescription> availableAudioCaptureDevices();
+		static QList<AudioCaptureDevice> availableAudioCaptureDevices();
 
 		/**
 		 * Returns the video output devices the backend supports.
@@ -139,7 +140,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of VideoOutputDevice objects that give a name and
 		 * description for every supported video output device.
 		 */
-		static QList<ObjectDescription> availableVideoOutputDevices();
+		static QList<VideoOutputDevice> availableVideoOutputDevices();
 
 		/**
 		 * Returns the video capture devices the backend supports.
@@ -147,7 +148,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of VideoCaptureDevice objects that give a name and
 		 * description for every supported video capture device.
 		 */
-		static QList<ObjectDescription> availableVideoCaptureDevices();
+		static QList<VideoCaptureDevice> availableVideoCaptureDevices();
 
 		/**
 		 * Returns the visualization effects the backend supports.
@@ -155,7 +156,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of VisualizationEffect objects that give a name and
 		 * description for every supported visualization effect.
 		 */
-		static QList<ObjectDescription> availableVisualizations();
+		static QList<VisualizationDescription> availableVisualizations();
 
 		/**
 		 * Returns descriptions for the audio effects the backend supports.
@@ -163,7 +164,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of AudioEffectDescription objects that give a name and
 		 * description for every supported audio effect.
 		 */
-		static QList<ObjectDescription> availableAudioEffects();
+		static QList<AudioEffectDescription> availableAudioEffects();
 
 		/**
 		 * Returns descriptions for the video effects the backend supports.
@@ -171,7 +172,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of VideoEffectDescription objects that give a name and
 		 * description for every supported video effect.
 		 */
-		static QList<ObjectDescription> availableVideoEffects();
+		static QList<VideoEffectDescription> availableVideoEffects();
 
 		/**
 		 * Returns descriptions for the audio codecs the backend supports.
@@ -179,7 +180,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of AudioCodec objects that give a name and
 		 * description for every supported audio codec.
 		 */
-		static QList<ObjectDescription> availableAudioCodecs();
+		static QList<AudioCodecDescription> availableAudioCodecs();
 
 		/**
 		 * Returns descriptions for the video codecs the backend supports.
@@ -187,7 +188,7 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of VideoCodec objects that give a name and
 		 * description for every supported video codec.
 		 */
-		static QList<ObjectDescription> availableVideoCodecs();
+		static QList<VideoCodecDescription> availableVideoCodecs();
 
 		/**
 		 * Returns descriptions for the container formats the backend supports.
@@ -195,12 +196,17 @@ class PHONONCORE_EXPORT BackendCapabilities : public QObject
 		 * \return A list of ContainerFormat objects that give a name and
 		 * description for every supported container format.
 		 */
-		static QList<ObjectDescription> availableContainerFormats();
+		static QList<ContainerFormatDescription> availableContainerFormats();
 
 	Q_SIGNALS:
 		/**
 		 * This signal is emitted if the capabilities have changed. This can
 		 * happen if the user has requested a backend change.
+		 *
+		 * To connect to this signal use the self function:
+		 * \code
+		 * QObject::connect( BackendCapabilities::self(), SIGNAL(capabilitiesChanged()), ...
+		 * \endcode
 		 */
 		void capabilitiesChanged();
 

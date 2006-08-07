@@ -23,9 +23,11 @@
 #include "effectparameter.h"
 #include <klocale.h>
 
+#define PHONON_CLASSNAME BrightnessControl
+
 namespace Phonon
 {
-PHONON_HEIR_IMPL( BrightnessControl, VideoEffect )
+PHONON_HEIR_IMPL( VideoEffect )
 
 QList<EffectParameter> BrightnessControl::parameterList() const
 {
@@ -49,10 +51,10 @@ void BrightnessControl::setValue( int parameterId, QVariant newValue )
 		setBrightness( newValue.toInt() );
 }
 
-PHONON_GETTER( BrightnessControl, int, brightness, d->brightness )
-PHONON_GETTER( BrightnessControl, int, lowerBound, -1000 )
-PHONON_GETTER( BrightnessControl, int, upperBound,  1000 )
-PHONON_SETTER( BrightnessControl, setBrightness, brightness, int )
+PHONON_GETTER( int, brightness, d->brightness )
+PHONON_GETTER( int, lowerBound, -1000 )
+PHONON_GETTER( int, upperBound,  1000 )
+PHONON_SETTER( setBrightness, brightness, int )
 
 bool BrightnessControlPrivate::aboutToDeleteIface()
 {

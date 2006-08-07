@@ -29,6 +29,20 @@ namespace Phonon
 {
 	class ObjectDescriptionPrivate;
 
+	enum ObjectDescriptionType
+	{
+		AudioOutputDeviceType,
+		AudioCaptureDeviceType,
+		VideoOutputDeviceType,
+		VideoCaptureDeviceType,
+		AudioEffectType,
+		VideoEffectType,
+		AudioCodecType,
+		VideoCodecType,
+		ContainerFormatType,
+		VisualizationType
+	};
+
 /**
  * \short Provides a tuple of enduser visible name and description.
  *
@@ -41,25 +55,12 @@ namespace Phonon
  * \see AudioCaptureDevice
  * \see VideoCaptureDevice
  */
+template<ObjectDescriptionType T>
 class PHONONCORE_EXPORT ObjectDescription
 {
 	public:
-		enum Type
-		{
-			AudioOutputDevice,
-			AudioCaptureDevice,
-			VideoOutputDevice,
-			VideoCaptureDevice,
-			AudioEffect,
-			VideoEffect,
-			AudioCodec,
-			VideoCodec,
-			ContainerFormat,
-			Visualization
-		};
-
-		ObjectDescription( const ObjectDescription& rhs );
-		ObjectDescription& operator=( const ObjectDescription& rhs );
+		ObjectDescription( const ObjectDescription<T>& rhs );
+		ObjectDescription<T>& operator=( const ObjectDescription<T>& rhs );
 		ObjectDescription();
 		~ObjectDescription();
 
@@ -67,7 +68,7 @@ class PHONONCORE_EXPORT ObjectDescription
 		 * Returns \c true if this ObjectDescription describes the same
 		 * as \p otherDescription; otherwise returns \c false.
 		 */
-		bool operator==( const ObjectDescription& otherDescription ) const;
+		bool operator==( const ObjectDescription<T>& otherDescription ) const;
 
 		/**
 		 * Returns the name of the capture source.
@@ -105,17 +106,15 @@ class PHONONCORE_EXPORT ObjectDescription
 		 * \internal
 		 * Returns a new description object that describes the
 		 * device/effect/codec/...  with the given \p index.
-		 *
-		 * \param type The type of description you want.
 		 */
-		static ObjectDescription fromIndex( Type type, int index );
+		static ObjectDescription<T> fromIndex( int index );
 
 	protected:
 		/**
 		 * \internal
 		 * Sets the data.
 		 */
-		ObjectDescription( Type type, int index, const QString& name, const QString& description );
+		ObjectDescription( int index, const QString& name, const QString& description );
 
 	private:
 		/**
@@ -124,6 +123,18 @@ class PHONONCORE_EXPORT ObjectDescription
 		 */
 		QSharedDataPointer<ObjectDescriptionPrivate> d;
 };
+
+typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;
+typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
+typedef ObjectDescription<VideoOutputDeviceType> VideoOutputDevice;
+typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
+typedef ObjectDescription<AudioEffectType> AudioEffectDescription;
+typedef ObjectDescription<VideoEffectType> VideoEffectDescription;
+typedef ObjectDescription<AudioCodecType> AudioCodecDescription;
+typedef ObjectDescription<VideoCodecType> VideoCodecDescription;
+typedef ObjectDescription<ContainerFormatType> ContainerFormatDescription;
+typedef ObjectDescription<VisualizationType> VisualizationDescription;
+
 } //namespace Phonon
 
 #endif // PHONON_OBJECTDESCRIPTION_H

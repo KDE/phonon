@@ -20,16 +20,18 @@
 #include "audiodataoutput_p.h"
 #include "factory.h"
 
+#define PHONON_CLASSNAME AudioDataOutput
+
 namespace Phonon
 {
 
-PHONON_HEIR_IMPL( AudioDataOutput, AbstractAudioOutput )
+PHONON_HEIR_IMPL( AbstractAudioOutput )
 
-PHONON_GETTER( AudioDataOutput, Phonon::AudioDataOutput::Format, format, d->format )
-PHONON_GETTER( AudioDataOutput, int, dataSize, d->dataSize )
-PHONON_GETTER( AudioDataOutput, int, sampleRate, -1 )
-PHONON_SETTER( AudioDataOutput, setFormat, format, Phonon::AudioDataOutput::Format )
-PHONON_SETTER( AudioDataOutput, setDataSize, dataSize, int )
+PHONON_GETTER( Phonon::AudioDataOutput::Format, format, d->format )
+PHONON_GETTER( int, dataSize, d->dataSize )
+PHONON_GETTER( int, sampleRate, -1 )
+PHONON_SETTER( setFormat, format, Phonon::AudioDataOutput::Format )
+PHONON_SETTER( setDataSize, dataSize, int )
 
 bool AudioDataOutputPrivate::aboutToDeleteIface()
 {

@@ -24,13 +24,14 @@
 #include "base_p.h"
 #include <QHash>
 #include <QString>
+#include <QMultiMap>
 
 namespace Phonon
 {
 class AbstractMediaProducerPrivate : public BasePrivate, private BaseDestructionHandler
 {
 	K_DECLARE_PUBLIC( AbstractMediaProducer )
-	PHONON_PRIVATEABSTRACTCLASS( AbstractMediaProducer, Base )
+	PHONON_PRIVATEABSTRACTCLASS( Base )
 	protected:
 		AbstractMediaProducerPrivate()
 			: state( Phonon::LoadingState )
@@ -46,10 +47,12 @@ class AbstractMediaProducerPrivate : public BasePrivate, private BaseDestruction
 		QHash<AudioPath*, QString> selectedAudioStream;
 		QHash<VideoPath*, QString> selectedVideoStream;
 		QHash<VideoPath*, QString> selectedSubtitleStream;
+		QMultiMap<QString, QString> metaData;
 
 	private:
 		void _k_resumePlay();
 		void _k_resumePause();
+		void _k_metaDataChanged( const QMultiMap<QString, QString>& );
 
 		virtual void phononObjectDestroyed( Base* );
 };

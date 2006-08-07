@@ -162,43 +162,43 @@ QStringList Backend::knownMimeTypes() const
 	return m_supportedMimeTypes;
 }
 
-QSet<int> Backend::objectDescriptionIndexes( ObjectDescription::Type type ) const
+QSet<int> Backend::objectDescriptionIndexes( ObjectDescriptionType type ) const
 {
 	QSet<int> set;
 	switch( type )
 	{
-		case ObjectDescription::AudioOutputDevice:
+		case Phonon::AudioOutputDeviceType:
 			set << 10000 << 10001;
 			break;
-		case ObjectDescription::AudioCaptureDevice:
+		case Phonon::AudioCaptureDeviceType:
 			set << 20000 << 20001;
 			break;
-		case ObjectDescription::VideoOutputDevice:
+		case Phonon::VideoOutputDeviceType:
 			set << 40000 << 40001 << 40002 << 40003;
 			break;
-		case ObjectDescription::VideoCaptureDevice:
+		case Phonon::VideoCaptureDeviceType:
 			set << 30000 << 30001;
 			break;
-		case ObjectDescription::Visualization:
-		case ObjectDescription::AudioCodec:
-		case ObjectDescription::VideoCodec:
-		case ObjectDescription::ContainerFormat:
+		case Phonon::VisualizationType:
+		case Phonon::AudioCodecType:
+		case Phonon::VideoCodecType:
+		case Phonon::ContainerFormatType:
 			break;
-		case ObjectDescription::AudioEffect:
+		case Phonon::AudioEffectType:
 			set << 0x7F000001;
 			break;
-		case ObjectDescription::VideoEffect:
+		case Phonon::VideoEffectType:
 			set << 0x7E000001;
 			break;
 	}
 	return set;
 }
 
-QString Backend::objectDescriptionName( ObjectDescription::Type type, int index ) const
+QString Backend::objectDescriptionName( ObjectDescriptionType type, int index ) const
 {
 	switch( type )
 	{
-		case ObjectDescription::AudioOutputDevice:
+		case Phonon::AudioOutputDeviceType:
 			switch( index )
 			{
 				case 10000:
@@ -207,7 +207,7 @@ QString Backend::objectDescriptionName( ObjectDescription::Type type, int index 
 					return "USB Headset";
 			}
 			break;
-		case ObjectDescription::AudioCaptureDevice:
+		case Phonon::AudioCaptureDeviceType:
 			switch( index )
 			{
 				case 20000:
@@ -216,7 +216,7 @@ QString Backend::objectDescriptionName( ObjectDescription::Type type, int index 
 					return "DV";
 			}
 			break;
-		case ObjectDescription::VideoOutputDevice:
+		case Phonon::VideoOutputDeviceType:
 			switch( index )
 			{
 				case 40000:
@@ -229,7 +229,7 @@ QString Backend::objectDescriptionName( ObjectDescription::Type type, int index 
 					return "SDL";
 			}
 			break;
-		case ObjectDescription::VideoCaptureDevice:
+		case Phonon::VideoCaptureDeviceType:
 			switch( index )
 			{
 				case 30000:
@@ -240,22 +240,22 @@ QString Backend::objectDescriptionName( ObjectDescription::Type type, int index 
 					return QString();
 			}
 			break;
-		case ObjectDescription::Visualization:
+		case Phonon::VisualizationType:
 			break;
-		case ObjectDescription::AudioCodec:
+		case Phonon::AudioCodecType:
 			break;
-		case ObjectDescription::VideoCodec:
+		case Phonon::VideoCodecType:
 			break;
-		case ObjectDescription::ContainerFormat:
+		case Phonon::ContainerFormatType:
 			break;
-		case ObjectDescription::AudioEffect:
+		case Phonon::AudioEffectType:
 			switch( index )
 			{
 				case 0x7F000001:
 					return "Delay";
 			}
 			break;
-		case ObjectDescription::VideoEffect:
+		case Phonon::VideoEffectType:
 			switch( index )
 			{
 				case 0x7E000001:
@@ -266,13 +266,13 @@ QString Backend::objectDescriptionName( ObjectDescription::Type type, int index 
 	return QString();
 }
 
-QString Backend::objectDescriptionDescription( ObjectDescription::Type type, int index ) const
+QString Backend::objectDescriptionDescription( ObjectDescriptionType type, int index ) const
 {
 	switch( type )
 	{
-		case ObjectDescription::AudioOutputDevice:
+		case Phonon::AudioOutputDeviceType:
 			break;
-		case ObjectDescription::AudioCaptureDevice:
+		case Phonon::AudioCaptureDeviceType:
 			switch( index )
 			{
 				case 20000:
@@ -281,9 +281,9 @@ QString Backend::objectDescriptionDescription( ObjectDescription::Type type, int
 					return "second description";
 			}
 			break;
-		case ObjectDescription::VideoOutputDevice:
+		case Phonon::VideoOutputDeviceType:
 			break;
-		case ObjectDescription::VideoCaptureDevice:
+		case Phonon::VideoCaptureDeviceType:
 			switch( index )
 			{
 				case 30000:
@@ -294,22 +294,22 @@ QString Backend::objectDescriptionDescription( ObjectDescription::Type type, int
 					return QString();
 			}
 			break;
-		case ObjectDescription::Visualization:
+		case Phonon::VisualizationType:
 			break;
-		case ObjectDescription::AudioCodec:
+		case Phonon::AudioCodecType:
 			break;
-		case ObjectDescription::VideoCodec:
+		case Phonon::VideoCodecType:
 			break;
-		case ObjectDescription::ContainerFormat:
+		case Phonon::ContainerFormatType:
 			break;
-		case ObjectDescription::AudioEffect:
+		case Phonon::AudioEffectType:
 			switch( index )
 			{
 				case 0x7F000001:
 					return "Simple delay effect with time, feedback and level controls.";
 			}
 			break;
-		case ObjectDescription::VideoEffect:
+		case Phonon::VideoEffectType:
 			switch( index )
 			{
 				case 0x7E000001:

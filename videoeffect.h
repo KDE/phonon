@@ -44,9 +44,9 @@ namespace Phonon
 			 *
 			 * \param parent QObject parent
 			 */
-			VideoEffect( const ObjectDescription& type, QObject* parent = 0 );
+			VideoEffect( const VideoEffectDescription& type, QObject* parent = 0 );
 
-			ObjectDescription type() const;
+			VideoEffectDescription type() const;
 			virtual QList<EffectParameter> parameterList() const;
 
 		protected:
@@ -56,7 +56,7 @@ namespace Phonon
 			 * Constructs new video effect with private data \p dd and a
 			 * \p parent.
 			 */
-			VideoEffect( VideoEffectPrivate& dd, QObject* parent, const ObjectDescription& type = ObjectDescription() );
+			VideoEffect( VideoEffectPrivate& dd, QObject* parent, const VideoEffectDescription& type = VideoEffectDescription() );
 
 			/**
 			 * \internal

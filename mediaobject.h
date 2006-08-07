@@ -85,7 +85,11 @@ namespace Phonon
 			qint32 aboutToFinishTime() const;
 
 		public Q_SLOTS:
-			// Attributes Setters:
+			/**
+			 * \reimp
+			 */
+			void stop();
+
 			/**
 			 * Set the URL the MediaObject should use as media data source.
 			 *
@@ -140,12 +144,16 @@ namespace Phonon
 			 */
 			void length( qint64 length );
 
+		protected:
+			MediaObject( Phonon::MediaObjectPrivate& dd, QObject* parent );
+
 		private:
 			Q_PRIVATE_SLOT( k_func(), void _k_bytestreamNeedData() )
 			Q_PRIVATE_SLOT( k_func(), void _k_bytestreamEnoughData() )
 			Q_PRIVATE_SLOT( k_func(), void _k_bytestreamData( KIO::Job*, const QByteArray& ) )
 			Q_PRIVATE_SLOT( k_func(), void _k_bytestreamResult( KJob* ) )
 			Q_PRIVATE_SLOT( k_func(), void _k_bytestreamTotalSize( KJob*, qulonglong ) )
+			Q_PRIVATE_SLOT( k_func(), void _k_cleanupByteStream() )
 	};
 } //namespace Phonon
 

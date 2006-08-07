@@ -30,7 +30,7 @@ namespace Phonon
 class VideoDataOutputPrivate : public AbstractVideoOutputPrivate
 {
 	K_DECLARE_PUBLIC( VideoDataOutput )
-	PHONON_PRIVATECLASS( VideoDataOutput, AbstractVideoOutput )
+	PHONON_PRIVATECLASS( AbstractVideoOutput )
 	protected:
 		VideoDataOutputPrivate()
 			: format( 0x00000000 ) //BI_RGB TODO: what should be the default?

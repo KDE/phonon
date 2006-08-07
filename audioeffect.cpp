@@ -23,7 +23,7 @@
 
 namespace Phonon
 {
-AudioEffect::AudioEffect( const ObjectDescription& type, QObject* parent )
+AudioEffect::AudioEffect( const AudioEffectDescription& type, QObject* parent )
 	: QObject( parent )
 	, Base( *new AudioEffectPrivate )
 {
@@ -32,7 +32,7 @@ AudioEffect::AudioEffect( const ObjectDescription& type, QObject* parent )
 	d->createIface();
 }
 
-AudioEffect::AudioEffect( AudioEffectPrivate& dd, QObject* parent, const ObjectDescription& type )
+AudioEffect::AudioEffect( AudioEffectPrivate& dd, QObject* parent, const AudioEffectDescription& type )
 	: QObject( parent )
 	, Base( dd )
 {
@@ -50,10 +50,10 @@ void AudioEffectPrivate::createIface()
 		q->setupIface();
 }
 
-ObjectDescription AudioEffect::type() const
+AudioEffectDescription AudioEffect::type() const
 {
 	K_D( const AudioEffect );
-	return ObjectDescription::fromIndex( ObjectDescription::AudioEffect, d->type );
+	return AudioEffectDescription::fromIndex( d->type );
 }
 
 QList<EffectParameter> AudioEffect::parameterList() const

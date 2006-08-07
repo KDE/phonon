@@ -23,9 +23,11 @@
 #include "audiopath.h"
 #include "abstractvideooutput.h"
 
+#define PHONON_CLASSNAME Visualization
+
 namespace Phonon
 {
-PHONON_OBJECT_IMPL( Visualization )
+PHONON_OBJECT_IMPL
 
 Visualization::~Visualization()
 {
@@ -66,7 +68,7 @@ void Visualization::setVideoOutput( AbstractVideoOutput* videoOutput )
 		BACKEND_CALL1( "setVideoOutput", QObject*, videoOutput->iface() );
 }
 
-ObjectDescription Visualization::visualization() const
+VisualizationDescription Visualization::visualization() const
 {
 	K_D( const Visualization );
 	int index;
@@ -74,10 +76,10 @@ ObjectDescription Visualization::visualization() const
 		BACKEND_GET( int, index, "visualization" );
 	else
 		index = d->visualizationIndex;
-	return ObjectDescription::fromIndex( ObjectDescription::Visualization, index );
+	return VisualizationDescription::fromIndex( index );
 }
 
-void Visualization::setVisualization( const ObjectDescription& newVisualization )
+void Visualization::setVisualization( const VisualizationDescription& newVisualization )
 {
 	K_D( Visualization );
 	if( iface() )

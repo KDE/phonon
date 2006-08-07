@@ -30,7 +30,7 @@ namespace Phonon
 class AudioEffectPrivate : public BasePrivate
 {
 	K_DECLARE_PUBLIC( AudioEffect )
-	PHONON_PRIVATECLASS( AudioEffect, Base )
+	PHONON_PRIVATECLASS( Base )
 	protected:
 		AudioEffectPrivate()
 		{

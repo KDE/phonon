@@ -21,6 +21,8 @@
 #include "factory.h"
 #include <QSize>
 
+#define PHONON_CLASSNAME VideoDataOutput
+
 namespace Phonon
 {
 
@@ -42,7 +44,7 @@ void VideoDataOutputPrivate::createIface()
 		q->setupIface();
 }
 
-PHONON_GETTER( VideoDataOutput, quint32, format, d->format )
+PHONON_GETTER( quint32, format, d->format )
 
 bool VideoDataOutput::formatSupported( quint32 fourcc )
 {
@@ -56,10 +58,10 @@ bool VideoDataOutput::formatSupported( quint32 fourcc )
 	return false;
 }
 
-PHONON_GETTER( VideoDataOutput, int, frameRate, d->frameRate )
-PHONON_SETTER( VideoDataOutput, setFrameRate, frameRate, int )
-PHONON_SETTER( VideoDataOutput, setFormat, format, quint32 )
-PHONON_GETTER( VideoDataOutput, QSize, frameSize, d->frameSize )
+PHONON_GETTER( int, frameRate, d->frameRate )
+PHONON_SETTER( setFrameRate, frameRate, int )
+PHONON_SETTER( setFormat, format, quint32 )
+PHONON_GETTER( QSize, frameSize, d->frameSize )
 
 void VideoDataOutput::setFrameSize( const QSize& size, Qt::AspectRatioMode aspectRatioMode )
 {

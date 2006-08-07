@@ -46,6 +46,30 @@ namespace Phonon
 		Q_OBJECT
 		K_DECLARE_PRIVATE( AbstractMediaProducer )
 		PHONON_ABSTRACTBASE( AbstractMediaProducer )
+
+		/**
+		 * \brief The time interval in milliseconds between two ticks.
+		 *
+		 * The %tick interval is the time that elapses between the emission of two tick signals.
+		 * If you set the interval to @c 0 the tick signal gets disabled. The %tick
+		 * interval defaults to @c 0 (disabled).
+		 *
+		 * @warning The back-end is free to choose a different tick interval close
+		 * to what you asked for. This means that the following code @em may @em fail:
+		 * \code
+		 * int x = 200;
+		 * producer->setTickInterval( x );
+		 * Q_ASSERT( x == producer->tickInterval() );
+		 * \endcode
+		 * On the other hand the following is guaranteed:
+		 * \code
+		 * int x = 200;
+		 * producer->setTickInterval( x );
+		 * Q_ASSERT( x >= producer->tickInterval() && x <= 2*producer->tickInterval() );
+		 * \endcode
+		 *
+		 * @see tick
+		 */
 		Q_PROPERTY( qint32 tickInterval READ tickInterval WRITE setTickInterval )
 		public:
 			~AbstractMediaProducer();
@@ -119,7 +143,7 @@ namespace Phonon
 			 *
 			 * @return Whether the current media may be seeked.
 			 */
-			bool seekable() const;
+			bool isSeekable() const;
 
 			/**
 			 * Get the current time (in milliseconds) of the file currently being played.
@@ -128,18 +152,6 @@ namespace Phonon
 			 */
 			qint64 currentTime() const;
 
-			// TODO: document the freedom of the backend to choose the
-			// tickInterval
-			/**
-			 * Return the time interval in milliseconds between two ticks.
-			 *
-			 * @return Returns the tick interval that it was set to (might not
-			 * be the same as you asked for, but then it will be less but more
-			 * than half of what you asked for).
-			 *
-			 * @see setTickInterval
-			 * @see tick
-			 */
 			qint32 tickInterval() const;
 
 			/**
@@ -220,6 +232,10 @@ namespace Phonon
 			 */
 			QStringList availableSubtitleStreams() const;
 
+			QStringList metaDataKeys() const;
+			QString metaDataItem( const QString& key ) const;
+			QStringList metaDataItems( const QString& key ) const;
+
 		public Q_SLOTS:
 			/**
 			 * Selects an audio stream from the media.
@@ -277,16 +293,6 @@ namespace Phonon
 			 */
 			void selectSubtitleStream( const QString& streamName, VideoPath* videoPath = 0 );
 
-			/**
-			 * Change the interval the tick signal is emitted. If you set
-			 * @p newTickInterval to @c 0 the signal gets disabled. The tick
-			 * interval defaults to @c 0, meaning it is disabled.
-			 *
-			 * @param newTickInterval tick interval in milliseconds
-			 *
-			 * @see tickInterval
-			 * @see tick
-			 */
 			void setTickInterval( qint32 newTickInterval );
 
 			/**
@@ -333,9 +339,20 @@ namespace Phonon
 			 */
 			void tick( qint64 time );
 
+			/**
+			 * This signal is emitted whenever the audio/video data that is
+			 * being played is associated with new meta data. E.g. for radio
+			 * streams this happens when the next song is played.
+			 *
+			 * You can get the new meta data with the methods metaDataItem and
+			 * metaDataItems.
+			 */
+			void metaDataChanged();
+
 		private:
 			Q_PRIVATE_SLOT( k_func(), void _k_resumePlay() )
 			Q_PRIVATE_SLOT( k_func(), void _k_resumePause() )
+			Q_PRIVATE_SLOT( k_func(), void _k_metaDataChanged( const QMultiMap<QString, QString>& ) )
 	};
 } //namespace Phonon
 
