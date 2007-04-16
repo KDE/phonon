@@ -42,19 +42,20 @@ AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
     // select hardware device according to the category
     d->outputDeviceIndex = GlobalConfig().audioOutputDeviceFor(d->category);
 
-    d->createIface();
+    d->createBackendObject();
     new AudioOutputAdaptor(this);
     for (int i = 0; !QDBusConnection::sessionBus().registerObject("/AudioOutputs/" + QString::number(i), this); ++i);
 }
 
-void AudioOutputPrivate::createIface()
+void AudioOutputPrivate::createBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
         return;
     K_Q(AudioOutput);
-    backendObject = Factory::createAudioOutput(q);
-    if (backendObject)
-        q->setupIface();
+    m_backendObject = Factory::createAudioOutput(q);
+    if (m_backendObject) {
+        setupBackendObject();
+    }
 }
 
 QString AudioOutput::name() const
@@ -73,7 +74,7 @@ void AudioOutput::setVolume(float volume)
 {
     K_D(AudioOutput);
     d->volume = volume;
-    if (iface() && !d->muted) {
+    if (k_ptr->backendObject() && !d->muted) {
         INTERFACE_CALL(setVolume(volume));
     } else {
         emit volumeChanged(volume);
@@ -83,7 +84,7 @@ void AudioOutput::setVolume(float volume)
 float AudioOutput::volume() const
 {
     K_D(const AudioOutput);
-    if(d->muted || !d->backendObject) {
+    if(d->muted || !d->m_backendObject) {
         return d->volume;
     }
     return INTERFACE_CALL(volume());
@@ -135,7 +136,7 @@ AudioOutputDevice AudioOutput::outputDevice() const
 {
     K_D(const AudioOutput);
     int index;
-    if (d->backendObject)
+    if (d->m_backendObject)
         index = INTERFACE_CALL(outputDevice());
     else
         index = d->outputDeviceIndex;
@@ -152,41 +153,41 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
         d->outputDeviceOverridden = true;
         d->outputDeviceIndex = newAudioOutputDevice.index();
     }
-    if (iface()) {
+    if (k_ptr->backendObject()) {
         return INTERFACE_CALL(setOutputDevice(d->outputDeviceIndex));
     }
     return true;
 }
 
-bool AudioOutputPrivate::aboutToDeleteIface()
+bool AudioOutputPrivate::aboutToDeleteBackendObject()
 {
-    if (backendObject) {
+    if (m_backendObject) {
         volume = pINTERFACE_CALL(volume());
     }
-    return AbstractAudioOutputPrivate::aboutToDeleteIface();
+    return AbstractAudioOutputPrivate::aboutToDeleteBackendObject();
 }
 
-void AudioOutput::setupIface()
+void AudioOutputPrivate::setupBackendObject()
 {
-    K_D(AudioOutput);
-    Q_ASSERT(d->backendObject);
-    AbstractAudioOutput::setupIface();
+    Q_Q(AudioOutput);
+    Q_ASSERT(m_backendObject);
+    AbstractAudioOutputPrivate::setupBackendObject();
 
-    connect(d->backendObject, SIGNAL(volumeChanged(float)), SLOT(_k_volumeChanged(float)));
-    connect(d->backendObject, SIGNAL(audioDeviceFailed()), SLOT(_k_audioDeviceFailed()));
+    QObject::connect(m_backendObject, SIGNAL(volumeChanged(float)), q, SLOT(_k_volumeChanged(float)));
+    QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()), q, SLOT(_k_audioDeviceFailed()));
 
     // set up attributes
-    INTERFACE_CALL(setVolume(d->volume));
+    pINTERFACE_CALL(setVolume(volume));
 
     // if the output device is not available and the device was not explicitly set
-    if (!INTERFACE_CALL(setOutputDevice(d->outputDeviceIndex)) && !d->outputDeviceOverridden) {
+    if (!pINTERFACE_CALL(setOutputDevice(outputDeviceIndex)) && !outputDeviceOverridden) {
         // fall back in the preference list of output devices
-        QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(d->category);
-        if (d->outputDeviceIndex == deviceList.takeFirst()) { // removing the first device so that
+        QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category);
+        if (outputDeviceIndex == deviceList.takeFirst()) { // removing the first device so that
             // if it's the same device as the one we tried we only try all the following
             foreach (int devIndex, deviceList) {
-                if (INTERFACE_CALL(setOutputDevice(devIndex))) {
-                    d->handleAutomaticDeviceChange(devIndex, AudioOutputPrivate::FallbackChange);
+                if (pINTERFACE_CALL(setOutputDevice(devIndex))) {
+                    handleAutomaticDeviceChange(devIndex, AudioOutputPrivate::FallbackChange);
                     break; // found one that works
                 }
             }

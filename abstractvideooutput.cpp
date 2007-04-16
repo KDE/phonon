@@ -18,7 +18,6 @@
 */
 #include "abstractvideooutput.h"
 #include "abstractvideooutput_p.h"
-#include "factory.h"
 
 namespace Phonon
 {
@@ -28,17 +27,4 @@ AbstractVideoOutput::AbstractVideoOutput(AbstractVideoOutputPrivate &d)
 {
 }
 
-bool AbstractVideoOutputPrivate::aboutToDeleteIface()
-{
-    return true;
-}
-
-void AbstractVideoOutput::setupIface()
-{
-    K_D(AbstractVideoOutput);
-    Q_ASSERT(d->backendObject);
-}
-
-} //namespace Phonon
-
-// vim: sw=4 ts=4 tw=80
+} // namespace Phonon

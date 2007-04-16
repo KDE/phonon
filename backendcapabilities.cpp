@@ -43,8 +43,8 @@ BackendCapabilities::Notifier *BackendCapabilities::notifier()
 #define SUPPORTS(foo) \
 bool BackendCapabilities::supports ## foo() \
 { \
-    QObject *backendObject = Factory::backend(); \
-    if (!backendObject) \
+    QObject *m_backendObject = Factory::backend(); \
+    if (!m_backendObject) \
         return false; \
     bool ret; \
     pBACKEND_GET(bool, ret, "supports"#foo); \
@@ -57,8 +57,8 @@ SUPPORTS(Subtitles)
 
 QStringList BackendCapabilities::knownMimeTypes()
 {
-    QObject *backendObject = Factory::backend(false);
-    if (backendObject)
+    QObject *m_backendObject = Factory::backend(false);
+    if (m_backendObject)
     {
         QStringList ret;
         pBACKEND_GET(QStringList, ret, "knownMimeTypes");
@@ -79,8 +79,8 @@ QStringList BackendCapabilities::knownMimeTypes()
 
 bool BackendCapabilities::isMimeTypeKnown(const QString &mimeType)
 {
-    QObject *backendObject = Factory::backend(false);
-    if (backendObject)
+    QObject *m_backendObject = Factory::backend(false);
+    if (m_backendObject)
     {
         QStringList ret;
         pBACKEND_GET(QStringList, ret, "knownMimeTypes");

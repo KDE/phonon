@@ -26,11 +26,6 @@
 #include "guiinterface.h"
 #include <QStringList>
 
-#ifdef Q_D
-#undef Q_D
-#endif
-#define Q_D(Class) Class##Private<type> * const d = d_func()
-
 #if Q_MOC_OUTPUT_REVISION != 59
 #ifdef __GNUC__
 #warning "Parts of this file were written to resemble the output of the moc"
@@ -133,28 +128,153 @@ int ObjectDescriptionModel<type>::qt_metacall(QMetaObject::Call _c, int _id, voi
 }
 */
 
-template<ObjectDescriptionType type>
-ObjectDescriptionModel<type>::ObjectDescriptionModel(QObject *parent)
-    : QAbstractListModel(parent)
-    , d_ptr(new ObjectDescriptionModelPrivate<type>)
+int ObjectDescriptionModelBase::rowCount(const QModelIndex &parent) const
+{
+    if (parent.isValid())
+        return 0;
+
+    Q_D(const ObjectDescriptionModelBase);
+    return d->size();
+}
+
+QVariant ObjectDescriptionModelBase::data(const QModelIndex &index, int role) const
+{
+    Q_D(const ObjectDescriptionModelBase);
+    if (!index.isValid() || index.row() >= d->size() || index.column() != 0)
+        return QVariant();
+
+    switch(role)
+    {
+    case Qt::EditRole:
+    case Qt::DisplayRole:
+        return d->at(index.row()).name();
+        break;
+    case Qt::ToolTipRole:
+        return d->at(index.row()).description();
+        break;
+    case Qt::DecorationRole:
+        {
+            QVariant icon = d->at(index.row()).property("icon");
+            if (icon.isValid()) {
+                if (icon.type() == QVariant::String) {
+                    return GuiInterface::instance()->icon(icon.toString());
+                } else if (icon.type() == QVariant::Icon) {
+                    return icon;
+                }
+            }
+        }
+        return QVariant();
+    default:
+        return QVariant();
+}
+}
+
+Qt::ItemFlags ObjectDescriptionModelBase::flags(const QModelIndex &index) const
+{
+    Q_D(const ObjectDescriptionModelBase);
+    if(!index.isValid() || index.row() >= d->size() || index.column() != 0) {
+        return Qt::ItemIsDropEnabled;
+    }
+
+    QVariant available = d->at(index.row()).property("available");
+    if (available.isValid() && available.type() == QVariant::Bool && !available.toBool()) {
+        return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    }
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+}
+
+QList<int> ObjectDescriptionModelBase::tupleIndexOrder() const
+{
+    Q_D(const ObjectDescriptionModelBase);
+    QList<int> ret;
+    for (int i = 0; i < d->size(); ++i) {
+        ret.append(d->at(i).index());
+    }
+    return ret;
+}
+
+int ObjectDescriptionModelBase::tupleIndexAtPositionIndex(int positionIndex) const
+{
+    return d_func()->at(positionIndex).index();
+}
+
+QMimeData *ObjectDescriptionModelBase::mimeData(const QModelIndexList &indexes) const
+{
+    Q_D(const ObjectDescriptionModelBase);
+
+    QMimeData *mimeData = new QMimeData;
+    QByteArray encodedData;
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    QModelIndexList::const_iterator end = indexes.constEnd();
+    QModelIndexList::const_iterator index = indexes.constBegin();
+    for(; index!=end; ++index) {
+        if ((*index).isValid()) {
+            stream << d->at((*index).row()).index();
+        }
+    }
+    //kDebug(600) << k_funcinfo << "setting mimeData to " << encodedData << endl;
+    mimeData->setData(mimeTypes().first(), encodedData);
+    return mimeData;
+}
+
+void ObjectDescriptionModelBase::moveUp(const QModelIndex &index)
+{
+    Q_D(ObjectDescriptionModelBase);
+    if (!index.isValid() || index.row() >= d->size() || index.row() < 1 || index.column() != 0)
+        return;
+
+    emit layoutAboutToBeChanged();
+    QModelIndex above = index.sibling(index.row() - 1, index.column());
+    d->swap(index.row(), above.row());
+    QModelIndexList from, to;
+    from << index << above;
+    to << above << index;
+    changePersistentIndexList(from, to);
+    emit layoutChanged();
+}
+
+void ObjectDescriptionModelBase::moveDown(const QModelIndex &index)
+{
+    Q_D(ObjectDescriptionModelBase);
+    if (!index.isValid() || index.row() >= d->size() - 1 || index.column() != 0)
+        return;
+
+    emit layoutAboutToBeChanged();
+    QModelIndex below = index.sibling(index.row() + 1, index.column());
+    d->swap(index.row(), below.row());
+    QModelIndexList from, to;
+    from << index << below;
+    to << below << index;
+    changePersistentIndexList(from, to);
+    emit layoutChanged();
+}
+
+#undef Q_D
+#define Q_D(Class) Class##Private<type> *const d = d_func()
+
+ObjectDescriptionModelBase::ObjectDescriptionModelBase(ObjectDescriptionModelBasePrivate *dd, QObject *parent)
+    : QAbstractListModel(parent),
+    d_ptr(dd)
 {
     d_ptr->q_ptr = this;
+}
+
+template<ObjectDescriptionType type>
+ObjectDescriptionModel<type>::ObjectDescriptionModel(QObject *parent)
+    : ObjectDescriptionModelBase(new ObjectDescriptionModelPrivate<type>, parent)
+{
 }
 
 template<ObjectDescriptionType type>
 ObjectDescriptionModel<type>::ObjectDescriptionModel(const QList<ObjectDescription<type> > &data, QObject *parent)
-    : QAbstractListModel(parent),
-    d_ptr(new ObjectDescriptionModelPrivate<type>)
+    : ObjectDescriptionModelBase(new ObjectDescriptionModelPrivate<type>, parent)
 {
-    d_ptr->q_ptr = this;
     setModelData(data);
 }
 
-template<ObjectDescriptionType type>
-ObjectDescriptionModel<type>::~ObjectDescriptionModel()
+ObjectDescriptionModelBase::~ObjectDescriptionModelBase()
 {
     delete d_ptr;
-    d_ptr = 0;
 }
 
 template<ObjectDescriptionType type>
@@ -180,114 +300,6 @@ ObjectDescription<type> ObjectDescriptionModel<type>::modelData(const QModelInde
         return ObjectDescription<type>();
     }
     return d->data.at(index.row());
-}
-
-template<ObjectDescriptionType type>
-int ObjectDescriptionModel<type>::rowCount(const QModelIndex &parent) const
-{
-    if (parent.isValid())
-        return 0;
-
-    Q_D(const ObjectDescriptionModel);
-    return d->data.size();
-}
-
-template<ObjectDescriptionType type>
-QVariant ObjectDescriptionModel<type>::data(const QModelIndex &index, int role) const
-{
-    Q_D(const ObjectDescriptionModel);
-    if (!index.isValid() || index.row() >= d->data.size() || index.column() != 0)
-        return QVariant();
-
-    switch(role)
-    {
-    case Qt::EditRole:
-    case Qt::DisplayRole:
-        return d->data.at(index.row()).name();
-        break;
-    case Qt::ToolTipRole:
-        return d->data.at(index.row()).description();
-        break;
-    case Qt::DecorationRole:
-        {
-            QVariant icon = d->data.at(index.row()).property("icon");
-            if (icon.isValid()) {
-                if (icon.type() == QVariant::String) {
-                    return GuiInterface::instance()->icon(icon.toString());
-                } else if (icon.type() == QVariant::Icon) {
-                    return icon;
-                }
-            }
-        }
-        return QVariant();
-    default:
-        return QVariant();
-}
-}
-
-template<ObjectDescriptionType type>
-Qt::ItemFlags ObjectDescriptionModel<type>::flags(const QModelIndex &index) const
-{
-    Q_D(const ObjectDescriptionModel);
-    if(!index.isValid() || index.row() >= d->data.size() || index.column() != 0) {
-        return Qt::ItemIsDropEnabled;
-    }
-
-    QVariant available = d->data.at(index.row()).property("available");
-    if (available.isValid() && available.type() == QVariant::Bool && !available.toBool()) {
-        return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-    }
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-}
-
-template<ObjectDescriptionType type>
-void ObjectDescriptionModel<type>::moveUp(const QModelIndex &index)
-{
-    Q_D(ObjectDescriptionModel);
-    if (!index.isValid() || index.row() >= d->data.size() || index.row() < 1 || index.column() != 0)
-        return;
-
-    emit layoutAboutToBeChanged();
-    QModelIndex above = index.sibling(index.row() - 1, index.column());
-    d->data.swap(index.row(), above.row());
-    QModelIndexList from, to;
-    from << index << above;
-    to << above << index;
-    changePersistentIndexList(from, to);
-    emit layoutChanged();
-}
-
-template<ObjectDescriptionType type>
-void ObjectDescriptionModel<type>::moveDown(const QModelIndex &index)
-{
-    Q_D(ObjectDescriptionModel);
-    if (!index.isValid() || index.row() >= d->data.size() - 1 || index.column() != 0)
-        return;
-
-    emit layoutAboutToBeChanged();
-    QModelIndex below = index.sibling(index.row() + 1, index.column());
-    d->data.swap(index.row(), below.row());
-    QModelIndexList from, to;
-    from << index << below;
-    to << below << index;
-    changePersistentIndexList(from, to);
-    emit layoutChanged();
-}
-
-template<ObjectDescriptionType type>
-QList<int> ObjectDescriptionModel<type>::tupleIndexOrder() const
-{
-    Q_D(const ObjectDescriptionModel);
-    QList<int> ret;
-    for (int i = 0; i < d->data.size(); ++i)
-        ret.append(d->data.at(i).index());
-    return ret;
-}
-
-template<ObjectDescriptionType type>
-int ObjectDescriptionModel<type>::tupleIndexAtPositionIndex(int positionIndex) const
-{
-    return d_func()->data.at(positionIndex).index();
 }
 
 template<ObjectDescriptionType type>
@@ -379,38 +391,19 @@ QStringList ObjectDescriptionModel<type>::mimeTypes() const
     return QStringList(QLatin1String("application/x-phonon-objectdescription") + QString::number(static_cast<int>(type)));
 }
 
-template<ObjectDescriptionType type>
-QMimeData *ObjectDescriptionModel<type>::mimeData(const QModelIndexList &indexes) const
-{
-    Q_D(const ObjectDescriptionModel);
-
-    QMimeData *mimeData = new QMimeData;
-    QByteArray encodedData;
-    QDataStream stream(&encodedData, QIODevice::WriteOnly);
-    QModelIndexList::const_iterator end = indexes.constEnd();
-    QModelIndexList::const_iterator index = indexes.constBegin();
-    for(; index!=end; ++index) {
-        if ((*index).isValid()) {
-            ObjectDescription<type> item = d->data.at((*index).row());
-            stream << item.index();
-        }
-    }
-    //kDebug(600) << k_funcinfo << "setting mimeData to " << encodedData << endl;
-    mimeData->setData(mimeTypes().first(), encodedData);
-    return mimeData;
-}
-
-template class ObjectDescriptionModel<AudioOutputDeviceType>;
-template class ObjectDescriptionModel<AudioCaptureDeviceType>;
-template class ObjectDescriptionModel<VideoOutputDeviceType>;
-template class ObjectDescriptionModel<VideoCaptureDeviceType>;
-template class ObjectDescriptionModel<AudioEffectType>;
-template class ObjectDescriptionModel<VideoEffectType>;
-template class ObjectDescriptionModel<AudioCodecType>;
-template class ObjectDescriptionModel<VideoCodecType>;
-template class ObjectDescriptionModel<ContainerFormatType>;
-template class ObjectDescriptionModel<VisualizationType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<AudioOutputDeviceType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<AudioCaptureDeviceType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<VideoOutputDeviceType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<VideoCaptureDeviceType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<AudioEffectType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<VideoEffectType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<AudioCodecType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<VideoCodecType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<ContainerFormatType>;
+template class PHONONCORE_EXPORT ObjectDescriptionModel<VisualizationType>;
 
 }
 
-// vim: sw=4 ts=4
+// for enable-final:
+#undef Q_D
+#define Q_D(Class) Class##Private *const d = d_func()

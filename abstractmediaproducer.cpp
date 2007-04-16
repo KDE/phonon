@@ -48,7 +48,7 @@ PHONON_ABSTRACTBASE_IMPL
 AbstractMediaProducer::~AbstractMediaProducer()
 {
     K_D(AbstractMediaProducer);
-    if (d->backendObject) {
+    if (d->m_backendObject) {
         switch (state()) {
         case PlayingState:
         case BufferingState:
@@ -73,8 +73,8 @@ bool AbstractMediaProducer::addVideoPath(VideoPath *videoPath)
     if (d->videoPaths.contains(videoPath))
         return false;
 
-    if (iface() && videoPath->iface()) {
-        if (qobject_cast<MediaProducerInterface *>(d->backendObject)->addVideoPath(videoPath->iface()))
+    if (k_ptr->backendObject() && videoPath->k_ptr->backendObject()) {
+        if (qobject_cast<MediaProducerInterface *>(d->m_backendObject)->addVideoPath(videoPath->k_ptr->backendObject()))
         {
             d->addDestructionHandler(videoPath, d);
             d->videoPaths.append(videoPath);
@@ -90,8 +90,8 @@ bool AbstractMediaProducer::addAudioPath(AudioPath *audioPath)
     if (d->audioPaths.contains(audioPath))
         return false;
 
-    if (iface() && audioPath->iface()) {
-        if (qobject_cast<MediaProducerInterface *>(d->backendObject)->addAudioPath(audioPath->iface()))
+    if (k_ptr->backendObject() && audioPath->k_ptr->backendObject()) {
+        if (qobject_cast<MediaProducerInterface *>(d->m_backendObject)->addAudioPath(audioPath->k_ptr->backendObject()))
         {
             d->addDestructionHandler(audioPath, d);
             d->audioPaths.append(audioPath);
@@ -104,7 +104,7 @@ bool AbstractMediaProducer::addAudioPath(AudioPath *audioPath)
 Phonon::State AbstractMediaProducer::state() const
 {
     K_D(const AbstractMediaProducer);
-    if (!d->backendObject || d->errorOverride) {
+    if (!d->m_backendObject || d->errorOverride) {
         return d->state;
     }
     return INTERFACE_CALL(state());
@@ -125,8 +125,8 @@ PHONON_INTERFACE_GETTER(QStringList, availableSubtitleStreams, QStringList())
 void AbstractMediaProducer::selectAudioStream(const QString &streamName, AudioPath *audioPath)
 {
     K_D(AbstractMediaProducer);
-    if (iface() && audioPath->iface()) {
-        INTERFACE_CALL(selectAudioStream(streamName, audioPath->iface()));
+    if (k_ptr->backendObject() && audioPath->k_ptr->backendObject()) {
+        INTERFACE_CALL(selectAudioStream(streamName, audioPath->k_ptr->backendObject()));
     } else {
         d->selectedAudioStream[audioPath] = streamName;
     }
@@ -135,8 +135,8 @@ void AbstractMediaProducer::selectAudioStream(const QString &streamName, AudioPa
 void AbstractMediaProducer::selectVideoStream(const QString &streamName, VideoPath *videoPath)
 {
     K_D(AbstractMediaProducer);
-    if (iface() && videoPath->iface()) {
-        INTERFACE_CALL(selectVideoStream(streamName, videoPath->iface()));
+    if (k_ptr->backendObject() && videoPath->k_ptr->backendObject()) {
+        INTERFACE_CALL(selectVideoStream(streamName, videoPath->k_ptr->backendObject()));
     } else {
         d->selectedVideoStream[videoPath] = streamName;
     }
@@ -145,8 +145,8 @@ void AbstractMediaProducer::selectVideoStream(const QString &streamName, VideoPa
 void AbstractMediaProducer::selectSubtitleStream(const QString &streamName, VideoPath *videoPath)
 {
     K_D(AbstractMediaProducer);
-    if (iface() && videoPath->iface()) {
-        INTERFACE_CALL(selectSubtitleStream(streamName, videoPath->iface()));
+    if (k_ptr->backendObject() && videoPath->k_ptr->backendObject()) {
+        INTERFACE_CALL(selectSubtitleStream(streamName, videoPath->k_ptr->backendObject()));
     } else {
         d->selectedSubtitleStream[videoPath] = streamName;
     }
@@ -167,21 +167,21 @@ QList<AudioPath *> AbstractMediaProducer::audioPaths() const
 void AbstractMediaProducer::play()
 {
     K_D(AbstractMediaProducer);
-    if (iface())
+    if (k_ptr->backendObject())
         INTERFACE_CALL(play());
 }
 
 void AbstractMediaProducer::pause()
 {
     K_D(AbstractMediaProducer);
-    if (iface())
+    if (k_ptr->backendObject())
         INTERFACE_CALL(pause());
 }
 
 void AbstractMediaProducer::stop()
 {
     K_D(AbstractMediaProducer);
-    if (iface())
+    if (k_ptr->backendObject())
     {
         INTERFACE_CALL(stop());
     }
@@ -191,7 +191,7 @@ void AbstractMediaProducer::seek(qint64 time)
 {
     K_D(AbstractMediaProducer);
     State s = state();
-    if (iface() && (s == Phonon::PlayingState || s == Phonon::BufferingState || s == Phonon::PausedState))
+    if (k_ptr->backendObject() && (s == Phonon::PlayingState || s == Phonon::BufferingState || s == Phonon::PausedState))
         INTERFACE_CALL(seek(time));
 }
 
@@ -224,8 +224,8 @@ PHONONCORE_EXPORT
 bool AbstractMediaProducer::hasInterface<TrackInterface>() const
 {
     K_D(const AbstractMediaProducer);
-    if (d->backendObject) {
-        return qobject_cast<AddonInterface *>(d->backendObject)
+    if (d->m_backendObject) {
+        return qobject_cast<AddonInterface *>(d->m_backendObject)
             ->hasInterface(AddonInterface::TrackInterface);
     }
     return false;
@@ -236,8 +236,8 @@ PHONONCORE_EXPORT
 bool AbstractMediaProducer::hasInterface<ChapterInterface>() const
 {
     K_D(const AbstractMediaProducer);
-    if (d->backendObject) {
-        return qobject_cast<AddonInterface *>(d->backendObject)
+    if (d->m_backendObject) {
+        return qobject_cast<AddonInterface *>(d->m_backendObject)
             ->hasInterface(AddonInterface::ChapterInterface);
     }
     return false;
@@ -248,8 +248,8 @@ PHONONCORE_EXPORT
 bool AbstractMediaProducer::hasInterface<NavigationInterface>() const
 {
     K_D(const AbstractMediaProducer);
-    if (d->backendObject) {
-        return qobject_cast<AddonInterface *>(d->backendObject)
+    if (d->m_backendObject) {
+        return qobject_cast<AddonInterface *>(d->m_backendObject)
             ->hasInterface(AddonInterface::NavigationInterface);
     }
     return false;
@@ -260,102 +260,11 @@ PHONONCORE_EXPORT
 bool AbstractMediaProducer::hasInterface<AngleInterface>() const
 {
     K_D(const AbstractMediaProducer);
-    if (d->backendObject) {
-        return qobject_cast<AddonInterface *>(d->backendObject)
+    if (d->m_backendObject) {
+        return qobject_cast<AddonInterface *>(d->m_backendObject)
             ->hasInterface(AddonInterface::AngleInterface);
     }
     return false;
-}
-
-bool AbstractMediaProducerPrivate::aboutToDeleteIface()
-{
-    //kDebug(600) << k_funcinfo << endl;
-    if (backendObject)
-    {
-        state = pINTERFACE_CALL(state());
-        currentTime = pINTERFACE_CALL(currentTime());
-        tickInterval = pINTERFACE_CALL(tickInterval());
-    }
-    return true;
-}
-
-void AbstractMediaProducer::setupIface()
-{
-    K_D(AbstractMediaProducer);
-    Q_ASSERT(d->backendObject);
-    //kDebug(600) << k_funcinfo << endl;
-
-    connect(d->backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), SIGNAL(stateChanged(Phonon::State, Phonon::State)));
-    connect(d->backendObject, SIGNAL(tick(qint64)), SIGNAL(tick(qint64)));
-    connect(d->backendObject, SIGNAL(metaDataChanged(const QMultiMap<QString, QString> &)), SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)));
-    connect(d->backendObject, SIGNAL(seekableChanged(bool)), SIGNAL(seekableChanged(bool)));
-    connect(d->backendObject, SIGNAL(hasVideoChanged(bool)), SIGNAL(hasVideoChanged(bool)));
-    connect(d->backendObject, SIGNAL(bufferStatus(int)), SIGNAL(bufferStatus(int)));
-
-    // set up attributes
-    INTERFACE_CALL(setTickInterval(d->tickInterval));
-
-    foreach (AudioPath *a, d->audioPaths)
-    {
-        if (!a->iface() || !INTERFACE_CALL(addAudioPath(a->iface()))) {
-            d->audioPaths.removeAll(a);
-        }
-    }
-    foreach (VideoPath *v, d->videoPaths)
-    {
-        if (!v->iface() || !INTERFACE_CALL(addVideoPath(v->iface()))) {
-            d->videoPaths.removeAll(v);
-        }
-    }
-
-    switch(d->state)
-    {
-    case LoadingState:
-    case StoppedState:
-    case ErrorState:
-        break;
-    case PlayingState:
-    case BufferingState:
-        QTimer::singleShot(0, this, SLOT(_k_resumePlay()));
-        break;
-    case PausedState:
-        QTimer::singleShot(0, this, SLOT(_k_resumePause()));
-        break;
-    }
-    const State backendState = INTERFACE_CALL(state());
-    if (d->state != backendState && d->state != ErrorState) {
-        // careful: if d->state is ErrorState we might be switching from a
-        // MediaObject to a ByteStream for KIO fallback. In that case the state
-        // change to ErrorState was already suppressed.
-        kDebug(600) << "emitting a state change because the backend object has been replaced" << endl;
-        emit stateChanged(backendState, d->state);
-        d->state = backendState;
-    }
-
-    foreach (FrontendInterfacePrivate *f, d->interfaceList) {
-        f->_backendObjectChanged();
-    }
-}
-
-void AbstractMediaProducerPrivate::_k_resumePlay()
-{
-    qobject_cast<MediaProducerInterface *>(backendObject)->play();
-    if (currentTime > 0)
-        qobject_cast<MediaProducerInterface *>(backendObject)->seek(currentTime);
-}
-
-void AbstractMediaProducerPrivate::_k_resumePause()
-{
-    qobject_cast<MediaProducerInterface *>(backendObject)->play();
-    if (currentTime > 0)
-        qobject_cast<MediaProducerInterface *>(backendObject)->seek(currentTime);
-    qobject_cast<MediaProducerInterface *>(backendObject)->pause();
-}
-
-void AbstractMediaProducerPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &newMetaData)
-{
-    metaData = newMetaData;
-    emit q_func()->metaDataChanged();
 }
 
 QStringList AbstractMediaProducer::metaDataKeys() const
@@ -370,33 +279,8 @@ QStringList AbstractMediaProducer::metaDataItems(const QString &key) const
     return d->metaData.values(key);
 }
 
-void AbstractMediaProducerPrivate::phononObjectDestroyed(Base *o)
-{
-    // this method is called from Phonon::Base::~Base(), meaning the AudioPath
-    // dtor has already been called, also virtual functions don't work anymore
-    // (therefore qobject_cast can only downcast from Base)
-    Q_ASSERT(o);
-    AudioPath *audioPath = static_cast<AudioPath *>(o);
-    VideoPath *videoPath = static_cast<VideoPath *>(o);
-    if (audioPaths.contains(audioPath))
-    {
-        if (backendObject && audioPath->iface()) {
-            pINTERFACE_CALL(removeAudioPath(audioPath->iface()));
-        }
-        audioPaths.removeAll(audioPath);
-    }
-    else if (videoPaths.contains(videoPath))
-    {
-        if (backendObject && videoPath->iface()) {
-            pINTERFACE_CALL(removeVideoPath(videoPath->iface()));
-        }
-        videoPaths.removeAll(videoPath);
-    }
-}
-
 } //namespace Phonon
 
 #include "abstractmediaproducer.moc"
 #undef PHONON_CLASSNAME
 #undef PHONON_INTERFACENAME
-// vim: sw=4 ts=4 tw=80

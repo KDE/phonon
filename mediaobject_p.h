@@ -34,8 +34,10 @@ class MediaObjectPrivate : public AbstractMediaProducerPrivate
 {
     friend class KioFallbackImpl;
     K_DECLARE_PUBLIC(MediaObject)
-    PHONON_PRIVATECLASS
     protected:
+        virtual bool aboutToDeleteBackendObject();
+        virtual void createBackendObject();
+        PHONONCORE_EXPORT void setupBackendObject();
         MediaObjectPrivate()
             : media(MediaObject::None),
             aboutToFinishTime(0),

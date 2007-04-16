@@ -70,15 +70,6 @@ namespace Phonon
              */
             BasePrivate *const k_ptr;
 
-            /**
-             * \internal
-             * Returns the backend object. If the object does not exist it tries to
-             * create it before returning.
-             *
-             * \return the Iface object, might return \c 0
-             */
-            QObject *iface();
-
         private:
             Base(const Base &);
             Base &operator=(const Base &);

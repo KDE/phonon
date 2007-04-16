@@ -45,20 +45,19 @@ PHONON_GETTER(int, upperBound,  1000)
 PHONON_SETTER(setBrightness, brightness, int)
 */
 
-bool DeinterlaceFilterPrivate::aboutToDeleteIface()
+bool DeinterlaceFilterPrivate::aboutToDeleteBackendObject()
 {
-    //if(backendObject)
+    //if(m_backendObject)
         //pBACKEND_GET(int, brightness, "brightness");
     return true;
 }
 
-void DeinterlaceFilter::setupIface()
+void DeinterlaceFilterPrivate::setupBackendObject()
 {
-    K_D(DeinterlaceFilter);
-    Q_ASSERT(d->backendObject);
+    Q_ASSERT(m_backendObject);
 
     // set up attributes
-    //BACKEND_CALL1("setBrightness", int, d->brightness);
+    //pBACKEND_CALL1("setBrightness", int, d->brightness);
 }
 } // namespace Phonon
 

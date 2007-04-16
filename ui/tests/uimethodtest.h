@@ -37,8 +37,8 @@ class UiMethodTest : public QObject
         void addColumns();
         void addMethod(const char *returnType, const char *signature, bool optional = false);
                 void addSignal(const char *signature);
-        void checkMethods(QObject *backendObject);
-        QObject *backendObject;
+        void checkMethods(QObject *m_backendObject);
+        QObject *m_backendObject;
         const QMetaObject *meta;
 };
 #endif // PHONON_UIMETHODTEST_H

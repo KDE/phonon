@@ -27,13 +27,25 @@
 namespace Phonon
 {
 
+class ObjectDescriptionModelBasePrivate
+{
+    Q_DECLARE_PUBLIC(ObjectDescriptionModelBase)
+    protected:
+        virtual ~ObjectDescriptionModelBasePrivate() {}
+        virtual int size() const = 0;
+        virtual const ObjectDescriptionBase &at(int) const = 0;
+        virtual void swap(int, int) = 0;
+        ObjectDescriptionModelBase *q_ptr;
+};
+
 template<ObjectDescriptionType type>
-class ObjectDescriptionModelPrivate
+class ObjectDescriptionModelPrivate : public ObjectDescriptionModelBasePrivate
 {
     Q_DECLARE_PUBLIC(ObjectDescriptionModel<type>)
     protected:
-        ObjectDescriptionModel<type> *q_ptr;
-
+        int size() const { return data.size(); }
+        const ObjectDescriptionBase &at(int x) const { return data.at(x); }
+        void swap(int x, int y) { data.swap(x, y); }
         QList<ObjectDescription<type> > data;
 };
 

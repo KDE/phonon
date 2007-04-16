@@ -34,10 +34,18 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
     PHONON_PRIVATECLASS
     public:
         void deviceListChanged();
+        inline static AudioOutputPrivate *cast(BasePrivate *x)
+        {
+            if (x && x->castId == BasePrivate::AudioOutputType) {
+                return static_cast<AudioOutputPrivate *>(x);
+            }
+            return 0;
+        }
 
     protected:
-        AudioOutputPrivate()
-            : volume(1.0),
+        AudioOutputPrivate(CastId castId = BasePrivate::AudioOutputType)
+            : AbstractAudioOutputPrivate(castId),
+            volume(1.0),
             outputDeviceIndex(-1),
             deviceBeforeFallback(-1),
             outputDeviceOverridden(false),

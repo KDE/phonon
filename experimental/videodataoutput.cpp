@@ -33,17 +33,18 @@ VideoDataOutput::VideoDataOutput(QObject *parent)
     , AbstractVideoOutput(*new VideoDataOutputPrivate)
 {
     K_D(VideoDataOutput);
-    d->createIface();
+    d->createBackendObject();
 }
 
-void VideoDataOutputPrivate::createIface()
+void VideoDataOutputPrivate::createBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
         return;
     K_Q(VideoDataOutput);
-    backendObject = Factory::createVideoDataOutput(q);
-    if (backendObject)
-        q->setupIface();
+    m_backendObject = Factory::createVideoDataOutput(q);
+    if (m_backendObject) {
+        setupBackendObject();
+    }
 }
 
 PHONON_GETTER(quint32, format, d->format)
@@ -71,7 +72,7 @@ void VideoDataOutput::setFrameSize(const QSize &size, Qt::AspectRatioMode aspect
     d->frameSize = size;
     d->frameAspectRatioMode = aspectRatioMode;
 
-    if (iface())
+    if (k_ptr->backendObject())
     {
         QSize newsize;
         BACKEND_GET(QSize, newsize, "naturalFrameSize");
@@ -85,26 +86,26 @@ void VideoDataOutput::setFrameSize(int width, int height, Qt::AspectRatioMode as
     setFrameSize(QSize(width, height), aspectRatioMode);
 }
 
-bool VideoDataOutputPrivate::aboutToDeleteIface()
+bool VideoDataOutputPrivate::aboutToDeleteBackendObject()
 {
-    Q_ASSERT(backendObject);
+    Q_ASSERT(m_backendObject);
     pBACKEND_GET(quint32, format, "format");
 
-    return AbstractVideoOutputPrivate::aboutToDeleteIface();
+    return AbstractVideoOutputPrivate::aboutToDeleteBackendObject();
 }
 
-void VideoDataOutput::setupIface()
+void VideoDataOutputPrivate::setupBackendObject()
 {
-    K_D(VideoDataOutput);
-    Q_ASSERT(d->backendObject);
-    AbstractVideoOutput::setupIface();
+    Q_Q(VideoDataOutput);
+    Q_ASSERT(m_backendObject);
+    //AbstractVideoOutputPrivate::setupBackendObject();
 
     // set up attributes
-    BACKEND_CALL1("setFormat", quint32, d->format);
-    //d->backendObject->setDisplayLatency(d->displayLatency);
-    connect(d->backendObject, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)),
-            SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)));
-    connect(d->backendObject, SIGNAL(endOfMedia()), SIGNAL(endOfMedia()));
+    pBACKEND_CALL1("setFormat", quint32, format);
+    //m_backendObject->setDisplayLatency(displayLatency);
+    QObject::connect(m_backendObject, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)),
+            q, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)));
+    QObject::connect(m_backendObject, SIGNAL(endOfMedia()), q, SIGNAL(endOfMedia()));
 }
 
 } // namespace Experimental

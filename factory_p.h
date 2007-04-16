@@ -36,7 +36,7 @@ class FactoryPrivate : public Phonon::Factory::Sender
         bool createBackend(KService::Ptr newService);
         void createBackend();
 
-        QPointer<QObject> backendObject;
+        QPointer<QObject> m_backendObject;
         KService::Ptr service;
 
         QList<QObject *> objects;

@@ -129,8 +129,9 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 {
     K_DECLARE_PUBLIC(VideoWidget)
     protected:
-        virtual bool aboutToDeleteIface();
-        virtual void createIface();
+        virtual bool aboutToDeleteBackendObject();
+        virtual void createBackendObject();
+        void setupBackendObject();
 
         void _k_cursorTimeout();
 

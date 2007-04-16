@@ -44,10 +44,10 @@ AngleInterface::AngleInterface(AbstractMediaProducer *mp)
     d->_backendObjectChanged();
 }
 
-void AngleInterfacePrivate::backendObjectChanged(QObject *backendObject)
+void AngleInterfacePrivate::backendObjectChanged(QObject *m_backendObject)
 {
-    QObject::connect(backendObject, SIGNAL(angleChanged(int)), q, SIGNAL(angleChanged(int)));
-    QObject::connect(backendObject, SIGNAL(availableAnglesChanged(int)), q, SIGNAL(availableAnglesChanged(int)));
+    QObject::connect(m_backendObject, SIGNAL(angleChanged(int)), q, SIGNAL(angleChanged(int)));
+    QObject::connect(m_backendObject, SIGNAL(availableAnglesChanged(int)), q, SIGNAL(availableAnglesChanged(int)));
 }
 
 AngleInterface::~AngleInterface()

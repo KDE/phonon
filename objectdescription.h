@@ -47,32 +47,14 @@ namespace Phonon
         VisualizationType
     };
 
-/**
- * \short Provides a tuple of enduser visible name and description.
- *
- * Some parts give the enduser choices, e.g. what source to capture audio from.
- * These choices are described by the name and description methods of this class
- * and identified with the id method. Subclasses then define additional
- * information like which audio and video choices belong together.
- *
- * \author Matthias Kretz <kretz@kde.org>
- * \see AudioCaptureDevice
- * \see VideoCaptureDevice
- */
-template<ObjectDescriptionType T>
-class PHONONCORE_EXPORT ObjectDescription
+class PHONONCORE_EXPORT ObjectDescriptionBase
 {
     public:
-        ObjectDescription(const ObjectDescription<T> &rhs);
-        ObjectDescription<T> &operator=(const ObjectDescription<T> &rhs);
-        ObjectDescription();
-        ~ObjectDescription();
-
         /**
          * Returns \c true if this ObjectDescription describes the same
          * as \p otherDescription; otherwise returns \c false.
          */
-        bool operator==(const ObjectDescription<T> &otherDescription) const;
+        bool operator==(const ObjectDescriptionBase &otherDescription) const;
 
         /**
          * Returns the name of the capture source.
@@ -108,19 +90,48 @@ class PHONONCORE_EXPORT ObjectDescription
         QList<QByteArray> propertyNames() const;
 
         /**
-         * A unique identifier for this capture source. Used internally
-         * to distinguish between the capture sources.
-         *
-         * \return An integer that uniquely identifies every capture
-         * source.
-         */
-        int index() const;
-
-        /**
          * Returns \c true if the Tuple is valid (index != -1); otherwise returns
          * \c false.
          */
         bool isValid() const;
+
+        /**
+         * A unique identifier for this device/. Used internally
+         * to distinguish between the devices/.
+         *
+         * \return An integer that uniquely identifies every device/
+         */
+        int index() const;
+
+    protected:
+        ObjectDescriptionBase(ObjectDescriptionPrivate * = 0);
+        ObjectDescriptionBase(const ObjectDescriptionBase &rhs);
+        ~ObjectDescriptionBase();
+
+        /**
+         * \internal
+         * The data is implicitly shared.
+         */
+        QSharedDataPointer<ObjectDescriptionPrivate> d;
+};
+
+/**
+ * \short Provides a tuple of enduser visible name and description.
+ *
+ * Some parts give the enduser choices, e.g. what source to capture audio from.
+ * These choices are described by the name and description methods of this class
+ * and identified with the id method. Subclasses then define additional
+ * information like which audio and video choices belong together.
+ *
+ * \author Matthias Kretz <kretz@kde.org>
+ * \see AudioCaptureDevice
+ * \see VideoCaptureDevice
+ */
+template<ObjectDescriptionType T>
+class PHONONCORE_EXPORT ObjectDescription : public ObjectDescriptionBase
+{
+    public:
+        ObjectDescription<T> &operator=(const ObjectDescription<T> &rhs);
 
         /**
          * \internal
@@ -128,20 +139,6 @@ class PHONONCORE_EXPORT ObjectDescription
          * device/effect/codec/...  with the given \p index.
          */
         static ObjectDescription<T> fromIndex(int index);
-
-    protected:
-        /**
-         * \internal
-         * Sets the data.
-         */
-        ObjectDescription(int index, const QHash<QByteArray, QVariant> &properties);
-
-    private:
-        /**
-         * \internal
-         * The data is implicitly shared.
-         */
-        QSharedDataPointer<ObjectDescriptionPrivate> d;
 };
 
 typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;

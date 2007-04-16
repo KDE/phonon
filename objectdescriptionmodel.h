@@ -30,6 +30,93 @@ namespace Phonon
 {
     template<ObjectDescriptionType type>
     class ObjectDescriptionModelPrivate;
+    class ObjectDescriptionModelBasePrivate;
+
+    class PHONONCORE_EXPORT ObjectDescriptionModelBase : public QAbstractListModel
+    {
+        Q_DECLARE_PRIVATE(ObjectDescriptionModelBase)
+        public:
+            /**
+             * Returns the number of rows in the model. This value corresponds
+             * to the size of the list passed through setModelData.
+             *
+             * \param parent The optional \p parent argument is used in most models to specify
+             * the parent of the rows to be counted. Because this is a list if a
+             * valid parent is specified the result will always be 0.
+             *
+             * Reimplemented from QAbstractItemModel.
+             *
+             * \see QAbstractItemModel::rowCount
+             */
+            int rowCount(const QModelIndex &parent = QModelIndex()) const;
+
+            /**
+             * Returns data from the item with the given \p index for the specified
+             * \p role.
+             * If the view requests an invalid index, an invalid variant is
+             * returned.
+             *
+             * Reimplemented from QAbstractItemModel.
+             *
+             * \see QAbstractItemModel::data
+             * \see Qt::ItemDataRole
+             */
+            QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+            /**
+             * Reimplemented to show unavailable devices as disabled (but still
+             * selectable).
+             */
+            Qt::ItemFlags flags(const QModelIndex &index) const;
+
+            /**
+             * Returns a list of indexes in the same order as they are in the
+             * model. The indexes come from the ObjectDescription::index
+             * method.
+             *
+             * This is useful to let the user define a list of preference.
+             */
+            QList<int> tupleIndexOrder() const;
+
+            /**
+             * Returns the ObjectDescription::index for the tuple
+             * at the given position \p positionIndex. For example a
+             * QComboBox will give you the currentIndex as the
+             * position in the list. But to select the according
+             * AudioOutputDevice using AudioOutputDevice::fromIndex
+             * you can use this method.
+             *
+             * \param positionIndex The position in the list.
+             */
+            int tupleIndexAtPositionIndex(int positionIndex) const;
+
+            /**
+             * Returns the MIME data that dropMimeData() can use to create new
+             * items.
+             */
+            QMimeData *mimeData(const QModelIndexList &indexes) const;
+
+            /**
+             * Moves the item at the given \p index up. In the resulting list
+             * the items at index.row() and index.row() - 1 are swapped.
+             *
+             * Connected views are updated automatically.
+             */
+            void moveUp(const QModelIndex &index);
+
+            /**
+             * Moves the item at the given \p index down. In the resulting list
+             * the items at index.row() and index.row() + 1 are swapped.
+             *
+             * Connected views are updated automatically.
+             */
+            void moveDown(const QModelIndex &index);
+
+        protected:
+            ~ObjectDescriptionModelBase();
+            ObjectDescriptionModelBase(ObjectDescriptionModelBasePrivate *dd, QObject *parent);
+            ObjectDescriptionModelBasePrivate *const d_ptr;
+    };
 
     /**
      * \short The ObjectDescriptionModel class provides a model from
@@ -66,15 +153,15 @@ namespace Phonon
      * \author Matthias Kretz <kretz@kde.org>
      */
     template<ObjectDescriptionType type>
-    class PHONONCORE_EXPORT ObjectDescriptionModel : public QAbstractListModel
+    class PHONONCORE_EXPORT ObjectDescriptionModel : public ObjectDescriptionModelBase
     {
-        inline ObjectDescriptionModelPrivate<type> *d_func() { return reinterpret_cast<ObjectDescriptionModelPrivate<type> *>(d_ptr); } \
-        inline const ObjectDescriptionModelPrivate<type> *d_func() const { return reinterpret_cast<const ObjectDescriptionModelPrivate<type> *>(d_ptr); } \
+        KDE_NO_EXPORT inline ObjectDescriptionModelPrivate<type> *d_func() {
+            return reinterpret_cast<ObjectDescriptionModelPrivate<type> *>(d_ptr); }
+        KDE_NO_EXPORT inline const ObjectDescriptionModelPrivate<type> *d_func() const {
+            return reinterpret_cast<const ObjectDescriptionModelPrivate<type> *>(d_ptr); }
         friend class ObjectDescriptionModelPrivate<type>;
         public:
-#if QT_VERSION >= 0x040300
             Q_OBJECT_CHECK
-#endif
             /** \internal */
             static const QMetaObject staticMetaObject;
             /** \internal */
@@ -95,8 +182,6 @@ namespace Phonon
              */
             explicit ObjectDescriptionModel(const QList<ObjectDescription<type> > &data, QObject *parent = 0);
 
-            virtual ~ObjectDescriptionModel();
-
             /**
              * Sets the model data using the list provided by \p data.
              *
@@ -116,76 +201,6 @@ namespace Phonon
              * Returns one ObjectDescription of the model data for the given \p index.
              */
             ObjectDescription<type> modelData(const QModelIndex &index) const;
-
-            /**
-             * Returns the number of rows in the model. This value corresponds
-             * to the size of the list passed through setModelData.
-             *
-             * \param parent The optional \p parent argument is used in most models to specify
-             * the parent of the rows to be counted. Because this is a list if a
-             * valid parent is specified the result will always be 0.
-             *
-             * Reimplemented from QAbstractItemModel.
-             *
-             * \see QAbstractItemModel::rowCount
-             */
-            int rowCount(const QModelIndex &parent = QModelIndex()) const;
-
-            /**
-             * Returns data from the item with the given \p index for the specified
-             * \p role.
-             * If the view requests an invalid index, an invalid variant is
-             * returned.
-             *
-             * Reimplemented from QAbstractItemModel.
-             *
-             * \see QAbstractItemModel::data
-             * \see Qt::ItemDataRole
-             */
-            QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-            /**
-             * Reimplemented to show unavailable devices as disabled (but still
-             * selectable).
-             */
-            Qt::ItemFlags flags(const QModelIndex &index) const;
-
-            /**
-             * Moves the item at the given \p index up. In the resulting list
-             * the items at index.row() and index.row() - 1 are swapped.
-             *
-             * Connected views are updated automatically.
-             */
-            void moveUp(const QModelIndex &index);
-
-            /**
-             * Moves the item at the given \p index down. In the resulting list
-             * the items at index.row() and index.row() + 1 are swapped.
-             *
-             * Connected views are updated automatically.
-             */
-            void moveDown(const QModelIndex &index);
-
-            /**
-             * Returns a list of indexes in the same order as they are in the
-             * model. The indexes come from the ObjectDescription::index
-             * method.
-             *
-             * This is useful to let the user define a list of preference.
-             */
-            QList<int> tupleIndexOrder() const;
-
-            /**
-             * Returns the ObjectDescription::index for the tuple
-             * at the given position \p positionIndex. For example a
-             * QComboBox will give you the currentIndex as the
-             * position in the list. But to select the according
-             * AudioOutputDevice using AudioOutputDevice::fromIndex
-             * you can use this method.
-             *
-             * \param positionIndex The position in the list.
-             */
-            int tupleIndexAtPositionIndex(int positionIndex) const;
 
             /**
              * This model supports drag and drop to copy or move
@@ -216,15 +231,6 @@ namespace Phonon
              * it only supports one type used internally.
              */
             QStringList mimeTypes() const;
-
-            /**
-             * Returns the MIME data that dropMimeData() can use to create new
-             * items.
-             */
-            QMimeData *mimeData(const QModelIndexList &indexes) const;
-
-        protected:
-            ObjectDescriptionModelPrivate<type> *d_ptr;
     };
 
     typedef ObjectDescriptionModel<AudioOutputDeviceType> AudioOutputDeviceModel;

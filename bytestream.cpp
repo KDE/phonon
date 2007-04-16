@@ -36,7 +36,7 @@ PHONON_GETTER(bool, streamSeekable, d->streamSeekable)
 qint64 ByteStream::remainingTime() const
 {
     K_D(const ByteStream);
-    if (!d->backendObject)
+    if (!d->m_backendObject)
         return -1;
     qint64 ret;
     if (BACKEND_GET(qint64, ret, "remainingTime"))
@@ -57,9 +57,9 @@ PHONON_SETTER(setAboutToFinishTime, aboutToFinishTime, qint32)
 void ByteStream::writeData(const QByteArray &data)
 {
     K_D(ByteStream);
-    if (iface())
+    if (k_ptr->backendObject())
     {
-        ByteStreamInterface *bs = qobject_cast<ByteStreamInterface *>(d->backendObject);
+        ByteStreamInterface *bs = qobject_cast<ByteStreamInterface *>(d->m_backendObject);
         bs->writeData(data);
     }
 }
@@ -67,35 +67,35 @@ void ByteStream::writeData(const QByteArray &data)
 void ByteStream::endOfData()
 {
     K_D(ByteStream);
-    if (iface())
+    if (k_ptr->backendObject())
         INTERFACE_CALL(endOfData());
 }
 
-bool ByteStreamPrivate::aboutToDeleteIface()
+bool ByteStreamPrivate::aboutToDeleteBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
     {
         pBACKEND_GET(qint32, aboutToFinishTime, "aboutToFinishTime");
         pBACKEND_GET(qint64, streamSize, "streamSize");
         pBACKEND_GET(bool, streamSeekable, "streamSeekable");
     }
-    return AbstractMediaProducerPrivate::aboutToDeleteIface();
+    return AbstractMediaProducerPrivate::aboutToDeleteBackendObject();
 }
 
-void ByteStream::setupIface()
+void ByteStreamPrivate::setupBackendObject()
 {
-    K_D(ByteStream);
-    Q_ASSERT(d->backendObject);
-    AbstractMediaProducer::setupIface();
+    Q_Q(ByteStream);
+    Q_ASSERT(m_backendObject);
+    AbstractMediaProducerPrivate::setupBackendObject();
 
-    connect(d->backendObject, SIGNAL(finished()), SIGNAL(finished()));
-    connect(d->backendObject, SIGNAL(aboutToFinish(qint32)), SIGNAL(aboutToFinish(qint32)));
-    connect(d->backendObject, SIGNAL(length(qint64)), SIGNAL(length(qint64)));
-    connect(d->backendObject, SIGNAL(needData()), SIGNAL(needData()));
-    connect(d->backendObject, SIGNAL(enoughData()), SIGNAL(enoughData()));
-    connect(d->backendObject, SIGNAL(seekStream(qint64)), SIGNAL(seekStream(qint64)));
+    QObject::connect(m_backendObject, SIGNAL(finished()), q, SIGNAL(finished()));
+    QObject::connect(m_backendObject, SIGNAL(aboutToFinish(qint32)), q, SIGNAL(aboutToFinish(qint32)));
+    QObject::connect(m_backendObject, SIGNAL(length(qint64)), q, SIGNAL(length(qint64)));
+    QObject::connect(m_backendObject, SIGNAL(needData()), q, SIGNAL(needData()));
+    QObject::connect(m_backendObject, SIGNAL(enoughData()), q, SIGNAL(enoughData()));
+    QObject::connect(m_backendObject, SIGNAL(seekStream(qint64)), q, SIGNAL(seekStream(qint64)));
 
-    BACKEND_CALL1("setAboutToFinishTime", qint32, d->aboutToFinishTime);
+    pBACKEND_CALL1("setAboutToFinishTime", qint32, aboutToFinishTime);
 }
 
 } //namespace Phonon

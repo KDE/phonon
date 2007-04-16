@@ -56,21 +56,7 @@ protected: \
      *
      * \param parent Standard QObject parent.
      */ \
-    classname(classname ## Private &dd, QObject *parent); \
-    /**
-     * \internal
-     * After construction of the Iface object this method is called
-     * throughout the complete class hierarchy in order to set up the
-     * properties that were already set on the public interface.
-     *
-     * An example implementation could look like this:
-     * \code
-     * ParentClass::setupIface();
-     * m_iface->setPropertyA(d->propertyA);
-     * m_iface->setPropertyB(d->propertyB);
-     * \endcode
-     */ \
-    void setupIface();
+    classname(classname ## Private &dd, QObject *parent);
 
 /**
  * \internal
@@ -102,22 +88,7 @@ public: \
      *
      * \param parent QObject parent
      */ \
-    classname(QObject *parent = 0); \
-protected: \
-    /**
-     * \internal
-     * After construction of the Iface object this method is called
-     * throughout the complete class hierarchy in order to set up the
-     * properties that were already set on the public interface.
-     *
-     * An example implementation could look like this:
-     * \code
-     * ParentClass::setupIface();
-     * m_iface->setPropertyA(d->propertyA);
-     * m_iface->setPropertyB(d->propertyB);
-     * \endcode
-     */ \
-    void setupIface();
+    classname(QObject *parent = 0);
 
 /**
  * \internal
@@ -150,16 +121,5 @@ public: \
      * \param parent QObject parent
      */ \
     classname(QObject *parent = 0); \
-protected: \
-    /**
-     * \internal
-     * After construction of the Iface object this method is called
-     * throughout the complete class hierarchy in order to set up the
-     * properties that were already set on the frontend objects.
-     *
-     * In the implementation don't forget to call the parent implementation
-     * of this method.
-     */ \
-    void setupIface();
 
 #endif // PHONONDEFS_H

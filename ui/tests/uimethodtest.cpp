@@ -54,11 +54,11 @@ void UiMethodTest::addSignal(const char *signature)
     QTest::newRow(signature) << QByteArray() << QByteArray(signature) << false << true;
 }
 
-void UiMethodTest::checkMethods(QObject *backendObject)
+void UiMethodTest::checkMethods(QObject *m_backendObject)
 {
-    if (!backendObject)
+    if (!m_backendObject)
         QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    const QMetaObject *meta = backendObject->metaObject();
+    const QMetaObject *meta = m_backendObject->metaObject();
 
     QFETCH(QByteArray, returnType);
     QFETCH(QByteArray, signature);

@@ -30,7 +30,7 @@ namespace Phonon
 {
 class FrontendInterfacePrivate;
 
-class PHONONCORE_EXPORT AbstractMediaProducerPrivate : public BasePrivate, private BaseDestructionHandler
+class AbstractMediaProducerPrivate : public BasePrivate, private BaseDestructionHandler
 {
     K_DECLARE_PUBLIC(AbstractMediaProducer)
     PHONON_PRIVATEABSTRACTCLASS

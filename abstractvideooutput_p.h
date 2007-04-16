@@ -20,13 +20,12 @@
 #ifndef ABSTRACTVIDEOOUTPUT_P_H
 #define ABSTRACTVIDEOOUTPUT_P_H
 
-#include "phonon_export.h"
 #include "abstractvideooutput.h"
 #include "base_p.h"
 
 namespace Phonon
 {
-class PHONONCORE_EXPORT AbstractVideoOutputPrivate : public BasePrivate
+class AbstractVideoOutputPrivate : public BasePrivate
 {
     K_DECLARE_PUBLIC(AbstractVideoOutput)
     PHONON_PRIVATEABSTRACTCLASS

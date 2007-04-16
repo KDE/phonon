@@ -42,7 +42,7 @@ MediaObject::MediaObject(Phonon::MediaObjectPrivate &dd, QObject *parent)
 KUrl MediaObject::url() const
 {
     K_D(const MediaObject);
-    MediaObjectInterface *iface = qobject_cast<MediaObjectInterface *>(d->backendObject);
+    MediaObjectInterface *iface = qobject_cast<MediaObjectInterface *>(d->m_backendObject);
     if (iface) {
         return iface->url();
     }
@@ -54,7 +54,7 @@ PHONON_GETTER(qint32, aboutToFinishTime, d->aboutToFinishTime)
 qint64 MediaObject::totalTime() const
 {
     K_D(const MediaObject);
-    if (!d->backendObject)
+    if (!d->m_backendObject)
         return -1;
     if (d->kiofallback) {
         return d->kiofallback->totalTime();
@@ -65,7 +65,7 @@ qint64 MediaObject::totalTime() const
 qint64 MediaObject::remainingTime() const
 {
     K_D(const MediaObject);
-    if (!d->backendObject)
+    if (!d->m_backendObject)
         return -1;
     qint64 ret;
     if (!BACKEND_GET(qint64, ret, "remainingTime"))
@@ -80,7 +80,7 @@ void MediaObject::setUrl(const KUrl &url)
     K_D(MediaObject);
     d->media = None;
     d->url = url;
-    if (iface())
+    if (k_ptr->backendObject())
     {
         stop(); // first call stop as that often is the expected state
                 // for setting a new URL
@@ -88,8 +88,8 @@ void MediaObject::setUrl(const KUrl &url)
 //X             if (!d->kiofallback) {
 //X                 d->kiofallback = GuiInterface::instance()->newKioFallback(this);
 //X                 if (d->kiofallback) {
-//X                     // iface() is a MediaObject, we want a ByteStream
-//X                     d->deleteIface();
+//X                     // k_ptr->backendObject() is a MediaObject, we want a ByteStream
+//X                     d->deleteBackendObject();
 //X                     if (d->state == PlayingState || d->state == PausedState || d->state == BufferingState) {
 //X                         emit stateChanged(StoppedState, d->state);
 //X                         d->state = StoppedState;
@@ -100,7 +100,7 @@ void MediaObject::setUrl(const KUrl &url)
 //X                 }
 //X             }
 //X         }
-        MediaObjectInterface *iface = qobject_cast<MediaObjectInterface *>(d->backendObject);
+        MediaObjectInterface *iface = qobject_cast<MediaObjectInterface *>(d->m_backendObject);
         if (iface)
         {
             iface->setUrl(url);
@@ -114,13 +114,13 @@ void MediaObject::setUrl(const KUrl &url)
         // now we might end up with d->state == PlayingState because the stop
         // call above is async and so we might be deleting a playing ByteStream.
         // To fix this we change state to StoppedState manually.
-        d->deleteIface();
+        d->deleteBackendObject();
         if (d->state == PlayingState || d->state == PausedState || d->state == BufferingState) {
             emit stateChanged(StoppedState, d->state);
             d->state = StoppedState;
         }
-        d->createIface();
-        // createIface will set up a ByteStream (in setupIface) if needed
+        d->createBackendObject();
+        // createBackendObject will set up a ByteStream (in setupIface) if needed
     }
 }
 
@@ -136,16 +136,16 @@ void MediaObject::openMedia(Media media, const QString &mediaDevice)
     d->url.clear();
     d->media = media;
     d->mediaDevice = mediaDevice;
-    if (iface()) {
+    if (k_ptr->backendObject()) {
         stop();
-        if (!qobject_cast<MediaObjectInterface *>(d->backendObject)) {
-            // backendObject is a ByteStream
-            d->deleteIface();
+        if (!qobject_cast<MediaObjectInterface *>(d->m_backendObject)) {
+            // m_backendObject is a ByteStream
+            d->deleteBackendObject();
             if (d->state == PlayingState || d->state == PausedState || d->state == BufferingState) {
                 emit stateChanged(StoppedState, d->state);
                 d->state = StoppedState;
             }
-            d->createIface(); // calls openMedia in setupIface
+            d->createBackendObject(); // calls openMedia in setupIface
         } else {
             INTERFACE_CALL(openMedia(media, mediaDevice));
         }
@@ -154,12 +154,12 @@ void MediaObject::openMedia(Media media, const QString &mediaDevice)
 
 PHONON_SETTER(setAboutToFinishTime, aboutToFinishTime, qint32)
 
-bool MediaObjectPrivate::aboutToDeleteIface()
+bool MediaObjectPrivate::aboutToDeleteBackendObject()
 {
     //kDebug(600) << k_funcinfo << endl;
     pBACKEND_GET(qint32, aboutToFinishTime, "aboutToFinishTime");
-    if (AbstractMediaProducerPrivate::aboutToDeleteIface()) {
-        if (qobject_cast<ByteStreamInterface *>(backendObject)) {
+    if (AbstractMediaProducerPrivate::aboutToDeleteBackendObject()) {
+        if (qobject_cast<ByteStreamInterface *>(m_backendObject)) {
             // the next backend object we'll handle is a MediaObject, so delete the
             // KioFallback object
             delete kiofallback;
@@ -185,7 +185,7 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
         }
         errorString = q->errorString();
         kDebug(600) << "backend MediaObject reached ErrorState, trying ByteStream now" << endl;
-        deleteIface();
+        deleteBackendObject();
         ignoreLoadingToBufferingStateChange = false;
         switch (oldstate) {
         case Phonon::BufferingState:
@@ -232,30 +232,30 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
 }
 
 // setupIface is also called for ByteStream
-void MediaObject::setupIface()
+void MediaObjectPrivate::setupBackendObject()
 {
-    K_D(MediaObject);
-    Q_ASSERT(d->backendObject);
+    Q_Q(MediaObject);
+    Q_ASSERT(m_backendObject);
     //kDebug(600) << k_funcinfo << endl;
-    AbstractMediaProducer::setupIface();
+    AbstractMediaProducerPrivate::setupBackendObject();
 
     // disconnect what AbstractMediaProducer::setupIface connected to filter out
     // the LoadingState -> ErrorState change on setUrl
-    disconnect(d->backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
-    connect(d->backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), SLOT(_k_stateChanged(Phonon::State, Phonon::State)));
+    QObject::disconnect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)));
 
-    connect(d->backendObject, SIGNAL(finished()), SIGNAL(finished()));
-    connect(d->backendObject, SIGNAL(aboutToFinish(qint32)), SIGNAL(aboutToFinish(qint32)));
-    connect(d->backendObject, SIGNAL(length(qint64)), SIGNAL(length(qint64)));
+    QObject::connect(m_backendObject, SIGNAL(finished()), q, SIGNAL(finished()));
+    QObject::connect(m_backendObject, SIGNAL(aboutToFinish(qint32)), q, SIGNAL(aboutToFinish(qint32)));
+    QObject::connect(m_backendObject, SIGNAL(length(qint64)), q, SIGNAL(length(qint64)));
 
     // set up attributes
-    BACKEND_CALL1("setAboutToFinishTime", qint32, d->aboutToFinishTime);
-    if(!d->url.isEmpty() && !d->kiofallback) {
-        INTERFACE_CALL(setUrl(d->url));
+    pBACKEND_CALL1("setAboutToFinishTime", qint32, aboutToFinishTime);
+    if(!url.isEmpty() && !kiofallback) {
+        pINTERFACE_CALL(setUrl(url));
         // if the state changes to ErrorState it will be handled in
         // _k_stateChanged and a ByteStream will be used.
-    } else if (d->media != None) {
-        INTERFACE_CALL(openMedia(d->media, d->mediaDevice));
+    } else if (media != MediaObject::None) {
+        pINTERFACE_CALL(openMedia(media, mediaDevice));
     }
 }
 

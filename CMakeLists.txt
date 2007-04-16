@@ -29,6 +29,7 @@ set(phononcore_LIB_SRCS
 	phononnamespace.cpp
 	base.cpp
 	abstractmediaproducer.cpp
+	abstractmediaproducer_p.cpp
 	mediaobject.cpp
 	mediaqueue.cpp
 	bytestream.cpp
@@ -43,8 +44,10 @@ set(phononcore_LIB_SRCS
 	brightnesscontrol.cpp
 	deinterlacefilter.cpp
 	abstractaudiooutput.cpp
+	abstractaudiooutput_p.cpp
 	audiooutput.cpp
 	abstractvideooutput.cpp
+	abstractvideooutput_p.cpp
 	audioplayer.cpp
 	backendcapabilities.cpp
 	globalconfig.cpp

@@ -8,6 +8,9 @@ set(phononexperimental_LIB_SRCS
     audiodataoutput.cpp
     videodataoutput.cpp
     visualization.cpp
+    ../abstractmediaproducer_p.cpp
+    ../abstractaudiooutput_p.cpp
+    ../abstractvideooutput_p.cpp
    )
 kde4_automoc(${phononexperimental_LIB_SRCS})
 kde4_add_library(phononexperimental SHARED ${phononexperimental_LIB_SRCS})

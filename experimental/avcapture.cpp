@@ -34,7 +34,7 @@ AudioCaptureDevice AvCapture::audioCaptureDevice() const
 {
     K_D(const AvCapture);
     int index;
-    if (d->backendObject)
+    if (d->m_backendObject)
         BACKEND_GET(int, index, "audioCaptureDevice");
     else
         index = d->audioCaptureDevice;
@@ -44,7 +44,7 @@ AudioCaptureDevice AvCapture::audioCaptureDevice() const
 void AvCapture::setAudioCaptureDevice(const AudioCaptureDevice &audioCaptureDevice)
 {
     K_D(AvCapture);
-    if (d->backendObject)
+    if (d->m_backendObject)
         BACKEND_CALL1("setAudioCaptureDevice", int, audioCaptureDevice.index());
     else
         d->audioCaptureDevice = audioCaptureDevice.index();
@@ -53,7 +53,7 @@ void AvCapture::setAudioCaptureDevice(const AudioCaptureDevice &audioCaptureDevi
 void AvCapture::setAudioCaptureDevice(int audioCaptureDeviceIndex)
 {
     K_D(AvCapture);
-    if (d->backendObject)
+    if (d->m_backendObject)
         BACKEND_CALL1("setAudioCaptureDevice", int, audioCaptureDeviceIndex);
     else
         d->audioCaptureDevice = audioCaptureDeviceIndex;
@@ -63,7 +63,7 @@ VideoCaptureDevice AvCapture::videoCaptureDevice() const
 {
     K_D(const AvCapture);
     int index;
-    if (d->backendObject)
+    if (d->m_backendObject)
         BACKEND_GET(int, index, "videoCaptureDevice");
     else
         index = d->videoCaptureDevice;
@@ -73,7 +73,7 @@ VideoCaptureDevice AvCapture::videoCaptureDevice() const
 void AvCapture::setVideoCaptureDevice(const VideoCaptureDevice &videoCaptureDevice)
 {
     K_D(AvCapture);
-    if (d->backendObject)
+    if (d->m_backendObject)
         BACKEND_CALL1("setVideoCaptureDevice", int, videoCaptureDevice.index());
     else
         d->videoCaptureDevice = videoCaptureDevice.index();
@@ -82,28 +82,27 @@ void AvCapture::setVideoCaptureDevice(const VideoCaptureDevice &videoCaptureDevi
 void AvCapture::setVideoCaptureDevice(int videoCaptureDeviceIndex)
 {
     K_D(AvCapture);
-    if (d->backendObject)
+    if (d->m_backendObject)
         BACKEND_CALL1("setVideoCaptureDevice", int, videoCaptureDeviceIndex);
     else
         d->videoCaptureDevice = videoCaptureDeviceIndex;
 }
 
-bool AvCapturePrivate::aboutToDeleteIface()
+bool AvCapturePrivate::aboutToDeleteBackendObject()
 {
     pBACKEND_GET(int, audioCaptureDevice, "audioCaptureDevice");
     pBACKEND_GET(int, videoCaptureDevice, "videoCaptureDevice");
-    return AbstractMediaProducerPrivate::aboutToDeleteIface();
+    return AbstractMediaProducerPrivate::aboutToDeleteBackendObject();
 }
 
-void AvCapture::setupIface()
+void AvCapturePrivate::setupBackendObject()
 {
-    K_D(AvCapture);
-    Q_ASSERT(d->backendObject);
-    AbstractMediaProducer::setupIface();
+    Q_ASSERT(m_backendObject);
+    AbstractMediaProducerPrivate::setupBackendObject();
 
     // set up attributes
-    BACKEND_CALL1("setAudioCaptureDevice", int, d->audioCaptureDevice);
-    BACKEND_CALL1("setVideoCaptureDevice", int, d->videoCaptureDevice);
+    pBACKEND_CALL1("setAudioCaptureDevice", int, audioCaptureDevice);
+    pBACKEND_CALL1("setVideoCaptureDevice", int, videoCaptureDevice);
 }
 
 } // namespace Experimental

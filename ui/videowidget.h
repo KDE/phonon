@@ -62,6 +62,14 @@ namespace Experimental
          * writeable.
          *
          * By default the widget is not shown in fullScreen.
+         *
+         * \warning When switching the video to fullscreen using setFullScreen
+         * your application loses control over the widget that actually shows
+         * the video (which is then shown as a toplevel window while your
+         * application still uses this widget). If you only need to capture key
+         * events the event forwarding done internally should suffice for your
+         * needs. If you need to map mouse coordinates or add widgets (that are
+         * not overlays) you should probably handle fullscreen yourself.
          */
         Q_PROPERTY(bool fullScreen READ isFullScreen WRITE setFullScreen)
         /**
@@ -155,11 +163,6 @@ namespace Experimental
              * a \p parent.
              */
             VideoWidget(VideoWidgetPrivate &d, QWidget *parent);
-            
-            /**
-             * \copydoc Phonon::AbstractVideoOutput::setupIface
-             */
-            void setupIface();
 
             void mouseMoveEvent(QMouseEvent *);
 

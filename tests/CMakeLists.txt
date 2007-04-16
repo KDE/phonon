@@ -60,16 +60,16 @@ PHONON_BUILD_TESTS_FAKE(
 	)
 PHONON_EXECUTE_TESTS(
 	methodtest_fake
-	mediaobjecttest_fake
 	audiopathtest_fake
 	backendcapabilitiestest_fake
 	audiooutputtest_fake
 	audiooutputdevicetest_fake
 	audiocapturedevicetest_fake
 	videocapturedevicetest_fake
+	audiodevicelisttest
+	mediaobjecttest_fake
 	#bytestreamtest_fake
 	bytestreamtest2_fake
-	audiodevicelisttest
 	)
 
 ENDIF(KDE4_BUILD_TESTS)

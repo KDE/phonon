@@ -69,7 +69,7 @@ class MethodTest : public QObject
         void addColumns();
         void addMethod(const char *returnType, const char *signature, bool optional = false);
         void addSignal(const char *signature);
-        void checkMethods(QObject *backendObject);
+        void checkMethods(QObject *m_backendObject);
 };
 #endif // PHONON_METHODTEST_H
 

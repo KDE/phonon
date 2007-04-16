@@ -114,43 +114,43 @@ void MethodTest::checkVolumeFaderEffectMethods() { checkMethods(Factory::createV
 
 void MethodTest::checkByteStreamInterfaces()
 {
-    QObject *backendObject = Factory::createByteStream();
-    if (!backendObject)
+    QObject *m_backendObject = Factory::createByteStream();
+    if (!m_backendObject)
         QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    QVERIFY(qobject_cast<Phonon::ByteStreamInterface *>(backendObject) != 0);
-    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(backendObject) != 0);
-    QVERIFY(qobject_cast<Phonon::MediaObjectInterface *>(backendObject) == 0);
-    QVERIFY(qobject_cast<Phonon::AddonInterface *>(backendObject) != 0);
-    delete backendObject;
+    QVERIFY(qobject_cast<Phonon::ByteStreamInterface *>(m_backendObject) != 0);
+    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(m_backendObject) != 0);
+    QVERIFY(qobject_cast<Phonon::MediaObjectInterface *>(m_backendObject) == 0);
+    QVERIFY(qobject_cast<Phonon::AddonInterface *>(m_backendObject) != 0);
+    delete m_backendObject;
 }
 
 void MethodTest::checkMediaObjectInterfaces()
 {
-    QObject *backendObject = Factory::createMediaObject();
-    if (!backendObject)
+    QObject *m_backendObject = Factory::createMediaObject();
+    if (!m_backendObject)
         QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(backendObject) != 0);
-    QVERIFY(qobject_cast<Phonon::MediaObjectInterface *>(backendObject) != 0);
-    QVERIFY(qobject_cast<Phonon::AddonInterface *>(backendObject) != 0);
-    delete backendObject;
+    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(m_backendObject) != 0);
+    QVERIFY(qobject_cast<Phonon::MediaObjectInterface *>(m_backendObject) != 0);
+    QVERIFY(qobject_cast<Phonon::AddonInterface *>(m_backendObject) != 0);
+    delete m_backendObject;
 }
 
 void MethodTest::checkAvCapturetInterfaces()
 {
-    QObject *backendObject = Factory::createAvCapture();
-    if (!backendObject)
+    QObject *m_backendObject = Factory::createAvCapture();
+    if (!m_backendObject)
         QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(backendObject) != 0);
-    delete backendObject;
+    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(m_backendObject) != 0);
+    delete m_backendObject;
 }
 
 void MethodTest::checkAudioOutputInterface()
 {
-    QObject *backendObject = Factory::createAudioOutput();
-    if (!backendObject)
+    QObject *m_backendObject = Factory::createAudioOutput();
+    if (!m_backendObject)
         QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    QVERIFY(qobject_cast<Phonon::AudioOutputInterface *>(backendObject) != 0);
-    delete backendObject;
+    QVERIFY(qobject_cast<Phonon::AudioOutputInterface *>(m_backendObject) != 0);
+    delete m_backendObject;
 }
 
 void MethodTest::addColumns()
@@ -174,11 +174,11 @@ void MethodTest::addSignal(const char *signature)
     QTest::newRow(signature) << QByteArray() << QByteArray(signature) << false << true;
 }
 
-void MethodTest::checkMethods(QObject *backendObject)
+void MethodTest::checkMethods(QObject *m_backendObject)
 {
-    if (!backendObject)
+    if (!m_backendObject)
         QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    const QMetaObject *meta = backendObject->metaObject();
+    const QMetaObject *meta = m_backendObject->metaObject();
 
     QFETCH(QByteArray, returnType);
     QFETCH(QByteArray, signature);

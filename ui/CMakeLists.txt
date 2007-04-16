@@ -12,6 +12,7 @@ set(phononui_LIB_SRCS
    effectwidget.cpp
    guiimpl.cpp
    kiofallbackimpl.cpp
+    ../abstractvideooutput_p.cpp
    )
 kde4_automoc(${phononui_LIB_SRCS})
 kde4_add_library(phononui SHARED ${phononui_LIB_SRCS})

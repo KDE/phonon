@@ -35,9 +35,33 @@ class BasePrivate
     K_DECLARE_PUBLIC(Base)
     friend class Phonon::FactoryPrivate;
     protected:
-        BasePrivate()
-            : q_ptr(0),
-            backendObject(0)
+        enum CastId {
+            BasePrivateType,
+            AbstractAudioOutputPrivateType,
+            AudioOutputType
+        };
+    public:
+        /**
+         * Returns the backend object. If the object does not exist it tries to
+         * create it before returning.
+         *
+         * \return the Iface object, might return \c 0
+         */
+        QObject *backendObject()
+        {
+            if (!m_backendObject) {
+                createBackendObject();
+            }
+            return m_backendObject;
+        }
+
+        const CastId castId;
+
+    protected:
+        BasePrivate(CastId _castId = BasePrivateType)
+            : castId(_castId),
+            q_ptr(0),
+            m_backendObject(0)
         {
             Factory::registerFrontendObject(this);
         }
@@ -45,8 +69,8 @@ class BasePrivate
         virtual ~BasePrivate()
         {
             Factory::deregisterFrontendObject(this);
-            delete backendObject;
-            backendObject = 0;
+            delete m_backendObject;
+            m_backendObject = 0;
         }
 
         /**
@@ -54,16 +78,15 @@ class BasePrivate
          * This method cleanly deletes the Iface object. It is called on
          * destruction and before a backend change.
          */
-        void deleteIface()
+        void deleteBackendObject()
         {
-            if (backendObject && aboutToDeleteIface())
-            {
-                delete backendObject;
-                backendObject = 0;
+            if (m_backendObject && aboutToDeleteBackendObject()) {
+                delete m_backendObject;
+                m_backendObject = 0;
             }
         }
 
-        virtual bool aboutToDeleteIface() = 0;
+        virtual bool aboutToDeleteBackendObject() = 0;
 
         /**
          * \internal
@@ -79,12 +102,8 @@ class BasePrivate
          *
          * \see slotCreateIface
          */
-        virtual void createIface() = 0;
+        virtual void createBackendObject() = 0;
 
-        Base *q_ptr;
-        QObject *backendObject;
-
-    protected:
         /**
          * \internal
          * This class has its own destroyed signal since some cleanup calls
@@ -114,6 +133,9 @@ class BasePrivate
         {
             from->k_ptr->handlers.removeAll(handler);
         }
+
+        Base *q_ptr;
+        QObject *m_backendObject;
 
     private:
         QList<BaseDestructionHandler *> handlers;

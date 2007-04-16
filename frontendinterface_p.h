@@ -43,12 +43,12 @@ class FrontendInterfacePrivate
         virtual void backendObjectChanged(QObject *iface) = 0;
         void _backendObjectChanged() {
             kDebug(600) << k_funcinfo << endl;
-            QObject *x = media->iface();
+            QObject *x = media->k_ptr->backendObject();
             if (x) {
                 backendObjectChanged(x);
             }
         }
-        AddonInterface *iface() { return qobject_cast<AddonInterface *>(media->iface()); }
+        AddonInterface *iface() { return qobject_cast<AddonInterface *>(media->k_ptr->backendObject()); }
 
         QPointer<AbstractMediaProducer> media;
 };

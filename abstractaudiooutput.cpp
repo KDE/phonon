@@ -27,19 +27,6 @@ namespace Phonon
 
 PHONON_ABSTRACTBASE_IMPL
 
-bool AbstractAudioOutputPrivate::aboutToDeleteIface()
-{
-    return true;
-}
-
-void AbstractAudioOutput::setupIface()
-{
-    K_D(AbstractAudioOutput);
-    Q_ASSERT(d->backendObject);
-
-    // set up attributes
-}
-
 } //namespace Phonon
 
 #include "abstractaudiooutput.moc"

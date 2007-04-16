@@ -29,6 +29,7 @@ namespace Phonon
 namespace Experimental
 {
     class Visualization;
+    class VisualizationPrivate;
 } // namespace Experimental
 
     class AudioPathPrivate;
@@ -61,6 +62,7 @@ namespace Experimental
         friend class AbstractMediaProducer;
         friend class AbstractMediaProducerPrivate;
         friend class Experimental::Visualization;
+        friend class Experimental::VisualizationPrivate;
         K_DECLARE_PRIVATE(AudioPath)
         Q_OBJECT
         PHONON_OBJECT(AudioPath)

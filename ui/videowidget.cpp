@@ -35,7 +35,7 @@ VideoWidget::VideoWidget(QWidget *parent)
 {
     K_D(VideoWidget);
     d->init();
-    d->createIface();
+    d->createBackendObject();
 }
 
 VideoWidget::VideoWidget(VideoWidgetPrivate &dd, QWidget *parent)
@@ -63,7 +63,7 @@ void VideoWidgetPrivate::init()
 void VideoWidget::mouseMoveEvent(QMouseEvent *)
 {
     K_D(VideoWidget);
-    if (iface()) {
+    if (k_ptr->backendObject()) {
         QWidget *w = 0;
         BACKEND_GET(QWidget *, w, "widget");
         if (w && Qt::BlankCursor == w->cursor().shape()) {
@@ -75,7 +75,7 @@ void VideoWidget::mouseMoveEvent(QMouseEvent *)
 
 void VideoWidgetPrivate::_k_cursorTimeout()
 {
-    if (backendObject) {
+    if (m_backendObject) {
         QWidget *w = 0;
         pBACKEND_GET(QWidget *, w, "widget");
         if (w && Qt::ArrowCursor == w->cursor().shape()) {
@@ -83,14 +83,15 @@ void VideoWidgetPrivate::_k_cursorTimeout()
         }
     }
 }
-void VideoWidgetPrivate::createIface()
+void VideoWidgetPrivate::createBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
         return;
     K_Q(VideoWidget);
-    backendObject = UiFactory::self()->createVideoWidget(q);
-    if (backendObject)
-        q->setupIface();
+    m_backendObject = UiFactory::self()->createVideoWidget(q);
+    if (m_backendObject) {
+        setupBackendObject();
+    }
 }
 
 #define PHONON_CLASSNAME VideoWidget
@@ -110,7 +111,7 @@ void VideoWidget::setFullScreen(bool newFullScreen)
     if (! d->fullScreenWidget)
         d->fullScreenWidget = new FullScreenVideoWidget(this);
     QWidget *w = 0;
-    if (iface())
+    if (k_ptr->backendObject())
         BACKEND_GET(QWidget *, w, "widget");
     if (newFullScreen)
     {
@@ -141,41 +142,40 @@ void VideoWidget::enterFullScreen()
     setFullScreen(true);
 }
 
-bool VideoWidgetPrivate::aboutToDeleteIface()
+bool VideoWidgetPrivate::aboutToDeleteBackendObject()
 {
     pBACKEND_GET(Phonon::VideoWidget::AspectRatio, aspectRatio, "aspectRatio");
     pBACKEND_GET(Phonon::VideoWidget::ScaleMode, scaleMode, "scaleMode");
-    return AbstractVideoOutputPrivate::aboutToDeleteIface();
+    return AbstractVideoOutputPrivate::aboutToDeleteBackendObject();
 }
 
-void VideoWidget::setupIface()
+void VideoWidgetPrivate::setupBackendObject()
 {
-    K_D(VideoWidget);
-    Q_ASSERT(d->backendObject);
-    AbstractVideoOutput::setupIface();
-    kDebug(602) << "calling setAspectRatio on the backend " << d->aspectRatio << endl;
-    BACKEND_CALL1("setAspectRatio", Phonon::VideoWidget::AspectRatio, d->aspectRatio);
-    BACKEND_CALL1("setScaleMode", Phonon::VideoWidget::ScaleMode, d->scaleMode);
+    Q_Q(VideoWidget);
+    Q_ASSERT(m_backendObject);
+    //AbstractVideoOutputPrivate::setupBackendObject();
+    kDebug(602) << "calling setAspectRatio on the backend " << aspectRatio << endl;
+    pBACKEND_CALL1("setAspectRatio", Phonon::VideoWidget::AspectRatio, aspectRatio);
+    pBACKEND_CALL1("setScaleMode", Phonon::VideoWidget::ScaleMode, scaleMode);
 
     QWidget *w = 0;
-    BACKEND_GET(QWidget *, w, "widget");
-    if (w)
-    {
-        w->addAction(d->fullScreenAction);
-        d->layout.addWidget(w);
-        setSizePolicy(w->sizePolicy());
+    pBACKEND_GET(QWidget *, w, "widget");
+    if (w) {
+        w->addAction(fullScreenAction);
+        layout.addWidget(w);
+        q->setSizePolicy(w->sizePolicy());
     }
 
     int cap = 0;
-    if (BACKEND_GET(int, cap, "overlayCapabilities")) {
-        setProperty("_k_overlayCapabilities", cap);
+    if (pBACKEND_GET(int, cap, "overlayCapabilities")) {
+        q->setProperty("_k_overlayCapabilities", cap);
     }
 }
 
 /*
 QSize VideoWidget::sizeHint()
 {
-    if (iface())
+    if (k_ptr->backendObject())
     {
         QWidget *w = 0;
         BACKEND_GET(QWidget *, w, "widget");
@@ -187,7 +187,7 @@ QSize VideoWidget::sizeHint()
 
 QSize VideoWidget::minimumSizeHint()
 {
-    if (iface())
+    if (k_ptr->backendObject())
     {
         QWidget *w = 0;
         BACKEND_GET(QWidget *, w, "widget");

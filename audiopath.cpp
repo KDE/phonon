@@ -44,9 +44,9 @@ bool AudioPath::addOutput(AbstractAudioOutput *audioOutput)
     if (d->outputs.contains(audioOutput))
         return false;
 
-    if (iface() && audioOutput->iface()) {
+    if (k_ptr->backendObject() && audioOutput->k_ptr->backendObject()) {
         bool success;
-        BACKEND_GET1(bool, success, "addOutput", QObject *, audioOutput->iface());
+        BACKEND_GET1(bool, success, "addOutput", QObject *, audioOutput->k_ptr->backendObject());
         if (success)
         {
             d->addDestructionHandler(audioOutput, d);
@@ -63,9 +63,9 @@ bool AudioPath::removeOutput(AbstractAudioOutput *audioOutput)
     if (!d->outputs.contains(audioOutput))
         return false;
 
-    if (d->backendObject && audioOutput->iface()) {
+    if (d->m_backendObject && audioOutput->k_ptr->backendObject()) {
         bool success;
-        BACKEND_GET1(bool, success, "removeOutput", QObject *, audioOutput->iface());
+        BACKEND_GET1(bool, success, "removeOutput", QObject *, audioOutput->k_ptr->backendObject());
         if (success)
         {
             d->outputs.removeAll(audioOutput);
@@ -89,9 +89,9 @@ bool AudioPath::insertEffect(AudioEffect *newEffect, AudioEffect *insertBefore)
     if (d->effects.contains(newEffect))
         return false;
 
-    if (iface() && newEffect->iface()) {
+    if (k_ptr->backendObject() && newEffect->k_ptr->backendObject()) {
         bool success;
-        BACKEND_GET2(bool, success, "insertEffect", QObject *, newEffect->iface(), QObject *, insertBefore ? insertBefore->iface() : 0);
+        BACKEND_GET2(bool, success, "insertEffect", QObject *, newEffect->k_ptr->backendObject(), QObject *, insertBefore ? insertBefore->k_ptr->backendObject() : 0);
         if (success)
         {
             d->addDestructionHandler(newEffect, d);
@@ -111,10 +111,10 @@ bool AudioPath::removeEffect(AudioEffect *effect)
     if (!d->effects.contains(effect))
         return false;
 
-    if (d->backendObject)
+    if (d->m_backendObject)
     {
         bool success;
-        BACKEND_GET1(bool, success, "removeEffect", QObject *, effect->iface());
+        BACKEND_GET1(bool, success, "removeEffect", QObject *, effect->k_ptr->backendObject());
         if (success)
         {
             d->effects.removeAll(effect);
@@ -130,40 +130,39 @@ const QList<AudioEffect *> &AudioPath::effects() const
     return d->effects;
 }
 
-bool AudioPathPrivate::aboutToDeleteIface()
+bool AudioPathPrivate::aboutToDeleteBackendObject()
 {
     return true;
 }
 
-void AudioPath::setupIface()
+void AudioPathPrivate::setupBackendObject()
 {
-    K_D(AudioPath);
-    Q_ASSERT(d->backendObject);
+    Q_ASSERT(m_backendObject);
 
     // set up attributes
     bool success;
-    QList<AbstractAudioOutput *> outputList = d->outputs;
-    foreach (AbstractAudioOutput *output, outputList)
-    {
-        if (output->iface()) {
-            BACKEND_GET1(bool, success, "addOutput", QObject *, output->iface());
+    QList<AbstractAudioOutput *> outputList = outputs;
+    foreach (AbstractAudioOutput *output, outputList) {
+        if (output->k_ptr->backendObject()) {
+            pBACKEND_GET1(bool, success, "addOutput", QObject *, output->k_ptr->backendObject());
         } else {
             success = false;
         }
-        if (!success)
-            d->outputs.removeAll(output);
+        if (!success) {
+            outputs.removeAll(output);
+        }
     }
 
-    QList<AudioEffect *> effectList = d->effects;
-    foreach (AudioEffect *effect, effectList)
-    {
-        if (effect->iface()) {
-            BACKEND_GET1(bool, success, "insertEffect", QObject *, effect->iface());
+    QList<AudioEffect *> effectList = effects;
+    foreach (AudioEffect *effect, effectList) {
+        if (effect->k_ptr->backendObject()) {
+            pBACKEND_GET1(bool, success, "insertEffect", QObject *, effect->k_ptr->backendObject());
         } else {
             success = false;
         }
-        if (!success)
-            d->effects.removeAll(effect);
+        if (!success) {
+            effects.removeAll(effect);
+        }
     }
 }
 
@@ -177,15 +176,15 @@ void AudioPathPrivate::phononObjectDestroyed(Base *o)
     AudioEffect *audioEffect = static_cast<AudioEffect *>(o);
     if (outputs.contains(output))
     {
-        if (backendObject && output->iface()) {
-            pBACKEND_CALL1("removeOutput", QObject *, output->iface());
+        if (m_backendObject && output->k_ptr->backendObject()) {
+            pBACKEND_CALL1("removeOutput", QObject *, output->k_ptr->backendObject());
         }
         outputs.removeAll(output);
     }
     else if (effects.contains(audioEffect))
     {
-        if (backendObject && audioEffect->iface()) {
-            pBACKEND_CALL1("removeEffect", QObject *, audioEffect->iface());
+        if (m_backendObject && audioEffect->k_ptr->backendObject()) {
+            pBACKEND_CALL1("removeEffect", QObject *, audioEffect->k_ptr->backendObject());
         }
         effects.removeAll(audioEffect);
     }

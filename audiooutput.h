@@ -125,15 +125,6 @@ namespace Phonon
             AudioOutputDevice outputDevice() const;
             bool isMuted() const;
 
-        protected:
-            /**
-             * \internal
-             * After construction of the Iface object this method is called
-             * throughout the complete class hierarchy in order to set up the
-             * properties that were already set on the frontend objects.
-             */
-            void setupIface();
-
         public Q_SLOTS:
             void setName(const QString &newName);
             float volume() const;

@@ -469,7 +469,7 @@ namespace Phonon
              *
              * \param percentFilled A number between 0 and 100 telling you how
              *                      much the buffer is filled.
-             */
+             */ // other names: bufferingProgress
             void bufferStatus(int percentFilled);
 
         private:

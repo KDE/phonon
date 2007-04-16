@@ -31,7 +31,7 @@ PHONON_GETTER(KUrl, nextUrl, d->nextUrl)
 void MediaQueue::setNextUrl(const KUrl &url)
 {
     K_D(MediaQueue);
-    if (iface())
+    if (k_ptr->backendObject())
         BACKEND_CALL1("setNextUrl", KUrl, url);
     else
         d->nextUrl = url;
@@ -42,7 +42,7 @@ PHONON_SETTER(setDoCrossfade, doCrossfade, bool)
 PHONON_GETTER(qint32, timeBetweenMedia, d->timeBetweenMedia)
 PHONON_SETTER(setTimeBetweenMedia, timeBetweenMedia, qint32)
 
-bool MediaQueuePrivate::aboutToDeleteIface()
+bool MediaQueuePrivate::aboutToDeleteBackendObject()
 {
     pBACKEND_GET(KUrl, nextUrl, "nextUrl");
     pBACKEND_GET(bool, doCrossfade, "doCrossfade");
@@ -57,16 +57,16 @@ void MediaQueuePrivate::_k_needNextUrl()
     emit q->needNextUrl();
 }
 
-void MediaQueue::setupIface()
+void MediaQueuePrivate::setupBackendObject()
 {
-    K_D(MediaQueue);
-    Q_ASSERT(d->backendObject);
-    MediaObject::setupIface();
+    Q_Q(MediaQueue);
+    Q_ASSERT(m_backendObject);
+    MediaObjectPrivate::setupBackendObject();
 
-    connect(d->backendObject, SIGNAL(needNextUrl()), SLOT(_k_needNextUrl()));
-    BACKEND_CALL1("setNextUrl", KUrl, d->nextUrl);
-    BACKEND_CALL1("setDoCrossfade", bool, d->doCrossfade);
-    BACKEND_CALL1("setTimeBetweenMedia", qint32, d->timeBetweenMedia);
+    QObject::connect(m_backendObject, SIGNAL(needNextUrl()), q, SLOT(_k_needNextUrl()));
+    pBACKEND_CALL1("setNextUrl", KUrl, nextUrl);
+    pBACKEND_CALL1("setDoCrossfade", bool, doCrossfade);
+    pBACKEND_CALL1("setTimeBetweenMedia", qint32, timeBetweenMedia);
 }
 } // namespace Phonon
 

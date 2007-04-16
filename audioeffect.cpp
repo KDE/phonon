@@ -29,7 +29,7 @@ AudioEffect::AudioEffect(const AudioEffectDescription &type, QObject *parent)
 {
     K_D(AudioEffect);
     d->type = type.index();
-    d->createIface();
+    d->createBackendObject();
 }
 
 AudioEffect::AudioEffect(AudioEffectPrivate &dd, QObject *parent, const AudioEffectDescription &type)
@@ -40,14 +40,14 @@ AudioEffect::AudioEffect(AudioEffectPrivate &dd, QObject *parent, const AudioEff
     d->type = type.index();
 }
 
-void AudioEffectPrivate::createIface()
+void AudioEffectPrivate::createBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
         return;
     K_Q(AudioEffect);
-    backendObject = Factory::createAudioEffect(type, q);
-    if (backendObject)
-        q->setupIface();
+    m_backendObject = Factory::createAudioEffect(type, q);
+    if (m_backendObject)
+        setupBackendObject();
 }
 
 AudioEffectDescription AudioEffect::type() const
@@ -63,7 +63,7 @@ QList<EffectParameter> AudioEffect::parameterList() const
     // there should be an iface object, but better be safe for those backend
     // switching corner-cases: when the backend switches the new backend might
     // not support this effect -> no iface object
-    if (d->backendObject)
+    if (d->m_backendObject)
     {
         BACKEND_GET(QList<EffectParameter>, ret, "parameterList");
         for (int i = 0; i < ret.size(); ++i)
@@ -75,7 +75,7 @@ QList<EffectParameter> AudioEffect::parameterList() const
 QVariant AudioEffect::value(int parameterId) const
 {
     K_D(const AudioEffect);
-    if (!d->backendObject)
+    if (!d->m_backendObject)
         return d->parameterValues[parameterId];
     QVariant ret;
     BACKEND_GET1(QVariant, ret, "value", int, parameterId);
@@ -85,15 +85,15 @@ QVariant AudioEffect::value(int parameterId) const
 void AudioEffect::setValue(int parameterId, QVariant newValue)
 {
     K_D(AudioEffect);
-    if (iface())
+    if (k_ptr->backendObject())
         BACKEND_CALL2("setValue", int, parameterId, QVariant, newValue);
     else
         d->parameterValues[parameterId] = newValue;
 }
 
-bool AudioEffectPrivate::aboutToDeleteIface()
+bool AudioEffectPrivate::aboutToDeleteBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
     {
         QList<EffectParameter> plist;
         pBACKEND_GET(QList<EffectParameter>, plist, "parameterList");
@@ -103,17 +103,16 @@ bool AudioEffectPrivate::aboutToDeleteIface()
     return true;
 }
 
-void AudioEffect::setupIface()
+void AudioEffectPrivate::setupBackendObject()
 {
-    K_D(AudioEffect);
-    Q_ASSERT(d->backendObject);
+    Q_ASSERT(m_backendObject);
 
     // set up attributes
     QList<EffectParameter> plist;
-    BACKEND_GET(QList<EffectParameter>, plist, "parameterList");
+    pBACKEND_GET(QList<EffectParameter>, plist, "parameterList");
     foreach (EffectParameter p, plist)
-        if (d->parameterValues.contains(p.id()))
-            p.setValue(d->parameterValues[p.id()]);
+        if (parameterValues.contains(p.id()))
+            p.setValue(parameterValues[p.id()]);
 }
 
 } //namespace Phonon

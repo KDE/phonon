@@ -30,6 +30,7 @@ namespace Phonon
 namespace Experimental
 {
     class Visualization;
+    class VisualizationPrivate;
 } // namespace Experimental
 
     class AbstractVideoOutputPrivate;
@@ -39,6 +40,7 @@ namespace Experimental
         friend class VideoPath;
         friend class VideoPathPrivate;
         friend class Experimental::Visualization;
+        friend class Experimental::VisualizationPrivate;
         K_DECLARE_PRIVATE(AbstractVideoOutput)
         protected:
             /**
@@ -48,21 +50,6 @@ namespace Experimental
              * \param parent Standard QObject parent.
              */
             AbstractVideoOutput(AbstractVideoOutputPrivate &d);
-
-            /**
-             * \internal
-             * After construction of the Iface object this method is called
-             * throughout the complete class hierarchy in order to set up the
-             * properties that were already set on the public interface.
-             *
-             * An example implementation could look like this:
-             * \code
-             * ParentClass::setupIface();
-             * m_iface->setPropertyA(d->propertyA);
-             * m_iface->setPropertyB(d->propertyB);
-             * \endcode
-             */
-            void setupIface();
     };
 } //namespace Phonon
 

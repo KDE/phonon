@@ -72,38 +72,38 @@ void KioFallbackImpl::setupKioStreaming()
 {
     MediaObject *q = static_cast<MediaObject *>(parent());
     MediaObjectPrivate *d = q->k_func();
-    Q_ASSERT(d->backendObject == 0);
+    Q_ASSERT(d->m_backendObject == 0);
 
-    d->backendObject = Factory::createByteStream(q);
-    if (!d->backendObject) {
+    d->m_backendObject = Factory::createByteStream(q);
+    if (!d->m_backendObject) {
         return;
     }
 
-    connect(d->backendObject, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupByteStream()));
+    connect(d->m_backendObject, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupByteStream()));
     setupKioJob();
     m_endOfDataSent = false;
 
     // reinitialize the KIO job when the playback has finished
     // if (do pre-buffering) {
-    connect(d->backendObject, SIGNAL(finished()), this, SLOT(setupKioJob()));
+    connect(d->m_backendObject, SIGNAL(finished()), this, SLOT(setupKioJob()));
     // }
 
     //setupIface for ByteStream
-    connect(d->backendObject, SIGNAL(needData()), this, SLOT(bytestreamNeedData()));
-    connect(d->backendObject, SIGNAL(enoughData()), this, SLOT(bytestreamEnoughData()));
-    connect(d->backendObject, SIGNAL(seekStream(qint64)), this, SLOT(bytestreamSeekStream(qint64)));
+    connect(d->m_backendObject, SIGNAL(needData()), this, SLOT(bytestreamNeedData()));
+    connect(d->m_backendObject, SIGNAL(enoughData()), this, SLOT(bytestreamEnoughData()));
+    connect(d->m_backendObject, SIGNAL(seekStream(qint64)), this, SLOT(bytestreamSeekStream(qint64)));
 
     //TODO handle redirection ...
 
-    q->setupIface();
+    d->setupBackendObject();
 }
 
 void KioFallbackImpl::setupKioJob()
 {
     MediaObject *q = static_cast<MediaObject *>(parent());
     MediaObjectPrivate *d = q->k_func();
-    Q_ASSERT(d->backendObject);
-    Q_ASSERT(qobject_cast<ByteStreamInterface *>(d->backendObject));
+    Q_ASSERT(d->m_backendObject);
+    Q_ASSERT(qobject_cast<ByteStreamInterface *>(d->m_backendObject));
 
     if (m_kiojob) {
         m_kiojob->kill();
@@ -178,7 +178,7 @@ void KioFallbackImpl::bytestreamData(KIO::Job *, const QByteArray &data)
 
     MediaObject *q = static_cast<MediaObject *>(parent());
     MediaObjectPrivate *d = q->k_func();
-    Q_ASSERT(d->backendObject);
+    Q_ASSERT(d->m_backendObject);
 
     if (data.isEmpty()) {
         m_reading = false;

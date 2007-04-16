@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,33 +17,14 @@
 
 */
 
-#include "base.h"
-#include "base_p.h"
-#include "factory.h"
-#include "basedestructionhandler.h"
+#include "abstractvideooutput_p.h"
 
 namespace Phonon
 {
-    Base::Base(BasePrivate &d)
-        : k_ptr(&d)
-    {
-        k_ptr->q_ptr = this;
-        // cannot call k_ptr->createBackendObject(); from here as that calls setupIface
-        // on the classes that inherit Base - and they're not constructed at
-        // this point
-    }
 
-    Base::~Base()
-    {
-        K_D(Base);
-        foreach (BaseDestructionHandler *handler, d->handlers)
-            handler->phononObjectDestroyed(this);
-        delete k_ptr;
-    }
+bool AbstractVideoOutputPrivate::aboutToDeleteBackendObject()
+{
+    return true;
+}
 
-    bool Base::isValid()
-    {
-        return(k_ptr->backendObject() != 0);
-    }
 } //namespace Phonon
-// vim: sw=4 ts=4

@@ -108,7 +108,7 @@ class Parser
       parserstate = PARSER_RETURN_TYPE
       depth = 0
       tokenize do |token|
-        #puts token
+        #STDERR.puts token
         lasttoken = thistoken
         thistoken = token
         token = token[1..-1] if token[0,9] == "pBACKEND_"
@@ -153,8 +153,8 @@ class Parser
           when PARSER4_OPENING_PAREN
             parserstate = PARSER4_SENDER if token == '('
           when PARSER4_SENDER
-            # d->backendObject or only backendObject
-            parserstate = PARSER4_COMMA_1 if token == 'backendObject'
+            # d->m_backendObject or only m_backendObject
+            parserstate = PARSER4_COMMA_1 if token == 'm_backendObject'
             parserstate = PARSER4_PRIVATE_SENDER if token == 'd'
           when PARSER4_PRIVATE_SENDER
             parserstate = PARSER4_SENDER if token == '->'
@@ -398,7 +398,7 @@ class Parser
         next if line[0..1] == "//"
         next if line[0,1] == "#" # ignore preprocessor statements
         line.split(/(\b|\s+)/).each do |token|
-          #puts token
+          #STDERR.puts "string: #{instring} comment: #{incomment} token: '#{token}'"
           if instring
             indexOfEscapedQuote = token.index '\\"'
             if indexOfEscapedQuote != nil
@@ -464,35 +464,42 @@ class Parser
           end
           semicolon = token.index ';'
           if not semicolon
-            if token.length > 1
-              while token[0,1] == '(' or token[0,1] == ')' or token[0,1] == "'" or token[0,1] == '&'
-                yield token[0,1]
-                token = token[1..-1]
-              end
-              if token.length == 0
-              elsif token.length == 1
-                yield token
-              elsif token[-1,1] == ',' or token[-1,1] == "'"
-                yield token[0..-2]
-                yield token[-1,1]
-              else
-                yield token
-              end
-            else
-              yield token
-            end
+            tokenize2(token) { |i| yield i }
           elsif semicolon > 0
-            yield token[0..semicolon-1]
+            tokenize2(token[0..semicolon-1]) { |i| yield i }
             yield ';'
-            yield token[semicolon+1..-1] if token.length > semicolon + 1
+            if token.length > semicolon + 1
+              tokenize2(token[semicolon+1..-1]) { |i| yield i }
+            end
           elsif (semicolon == 0 and token.length > 1)
-            yield token[0,1]
-            yield token[1..-1]
+            yield ';'
+            tokenize2(token[1..-1]) { |i| yield i }
           else
             yield token # a single ;
           end
         end
       end
+    end
+
+    def tokenize2(token)
+      if token.length > 1
+        #STDERR.puts "long token: #{token}"
+        while token[0,1] == '(' or token[0,1] == ')' or token[0,1] == "'" or token[0,1] == '&'
+          yield token[0,1]
+          token = token[1..-1]
+          #STDERR.puts "less long token: #{token}"
+        end
+        return if token.empty?
+        if token.length == 1
+          yield token
+          return
+        elsif token[-1,1] == ',' or token[-1,1] == "'"
+          yield token[0..-2]
+          yield token[-1,1]
+          return
+        end
+      end
+      yield token
     end
 end
 

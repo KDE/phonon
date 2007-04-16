@@ -43,10 +43,10 @@ TrackInterface::TrackInterface(AbstractMediaProducer *mp)
     d->_backendObjectChanged();
 }
 
-void TrackInterfacePrivate::backendObjectChanged(QObject *backendObject)
+void TrackInterfacePrivate::backendObjectChanged(QObject *m_backendObject)
 {
-    QObject::connect(backendObject, SIGNAL(trackChanged(int)), q, SIGNAL(trackChanged(int)));
-    QObject::connect(backendObject, SIGNAL(availableTracksChanged(int)), q, SIGNAL(availableTracksChanged(int)));
+    QObject::connect(m_backendObject, SIGNAL(trackChanged(int)), q, SIGNAL(trackChanged(int)));
+    QObject::connect(m_backendObject, SIGNAL(availableTracksChanged(int)), q, SIGNAL(availableTracksChanged(int)));
 }
 
 TrackInterface::~TrackInterface()

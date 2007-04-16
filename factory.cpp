@@ -56,7 +56,7 @@ const KComponentData &Factory::componentData()
 
 void Factory::createBackend(const QString &library, const QString &version)
 {
-    Q_ASSERT(!globalFactory->backendObject);
+    Q_ASSERT(!globalFactory->m_backendObject);
 
     QString additionalConstraints = QLatin1String(" and Library == '") + library + QLatin1Char('\'');
     if (!version.isEmpty()) {
@@ -107,8 +107,8 @@ bool FactoryPrivate::createBackend(KService::Ptr newService)
         return false;
     }
 
-    backendObject = factory->create();
-    if (0 == backendObject) {
+    m_backendObject = factory->create();
+    if (0 == m_backendObject) {
         QString errorReason = i18n("create method returned 0");
         kError(600) << "Can not create backend object from factory for " <<
             newService->name() << ", " << newService->library() << ":\n" << errorReason << endl;
@@ -125,7 +125,7 @@ bool FactoryPrivate::createBackend(KService::Ptr newService)
     service = newService;
     kDebug(600) << "using backend: " << newService->name() << endl;
 
-    connect(backendObject, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
+    connect(m_backendObject, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
             SLOT(objectDescriptionChanged(ObjectDescriptionType)));
 
     return true;
@@ -148,7 +148,7 @@ void FactoryPrivate::createBackend()
 }
 
 FactoryPrivate::FactoryPrivate()
-    : backendObject(0)
+    : m_backendObject(0)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
@@ -163,13 +163,13 @@ FactoryPrivate::~FactoryPrivate()
     emit aboutToBeDestroyed();
 
     foreach (BasePrivate *bp, basePrivateList) {
-        bp->deleteIface();
+        bp->deleteBackendObject();
     }
     if (objects.size() > 0) {
         kError(600) << "The backend objects are not deleted as was requested." << endl;
         qDeleteAll(objects);
     }
-    delete backendObject;
+    delete m_backendObject;
 }
 
 void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
@@ -179,7 +179,7 @@ void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
     case AudioOutputDeviceType:
         // tell all AudioOutput objects to check their output device preference
         foreach (BasePrivate *obj, globalFactory->basePrivateList) {
-            AudioOutputPrivate *output = dynamic_cast<AudioOutputPrivate *>(obj);
+            AudioOutputPrivate *output = AudioOutputPrivate::cast(obj);
             if (output) {
                 output->deviceListChanged();
             }
@@ -212,9 +212,9 @@ void Factory::deregisterFrontendObject(BasePrivate *bp)
 
 void FactoryPrivate::phononBackendChanged()
 {
-    if (backendObject) {
+    if (m_backendObject) {
         foreach (BasePrivate *bp, basePrivateList) {
-            bp->deleteIface();
+            bp->deleteBackendObject();
         }
         if (objects.size() > 0) {
             kWarning(600) << "we were asked to change the backend but the application did\n"
@@ -224,16 +224,16 @@ void FactoryPrivate::phononBackendChanged()
             // in case there were objects deleted give 'em a chance to recreate
             // them now
             foreach (BasePrivate *bp, basePrivateList) {
-                bp->createIface();
+                bp->createBackendObject();
             }
             return;
         }
-        delete backendObject;
-        backendObject = 0;
+        delete m_backendObject;
+        m_backendObject = 0;
     }
     createBackend();
     foreach (BasePrivate *bp, basePrivateList) {
-        bp->createIface();
+        bp->createBackendObject();
     }
     emit backendChanged();
 }
@@ -288,14 +288,14 @@ FACTORY_IMPL(VideoDataOutput)
 
 QObject *Factory::backend(bool createWhenNull)
 {
-    if (createWhenNull && globalFactory->backendObject == 0) {
+    if (createWhenNull && globalFactory->m_backendObject == 0) {
         globalFactory->createBackend();
         // XXX: might create "reentrancy" problems:
         // a method calls this method and is called again because the
         // backendChanged signal is emitted
         emit globalFactory->backendChanged();
     }
-    return globalFactory->backendObject;
+    return globalFactory->m_backendObject;
 }
 
 const char *Factory::uiLibrary()
@@ -304,7 +304,7 @@ const char *Factory::uiLibrary()
         return 0;
     }
     const char *ret = 0;
-    QMetaObject::invokeMethod(globalFactory->backendObject, "uiLibrary", Qt::DirectConnection, Q_RETURN_ARG(const char *, ret));
+    QMetaObject::invokeMethod(globalFactory->m_backendObject, "uiLibrary", Qt::DirectConnection, Q_RETURN_ARG(const char *, ret));
     return ret;
 }
 
@@ -315,7 +315,7 @@ const char *Factory::uiSymbol()
     const char *ret = 0;
     // the backend doesn't have to implement the symbol - the default factory
     // symbol will be used then
-    if (QMetaObject::invokeMethod(globalFactory->backendObject, "uiSymbol", Qt::DirectConnection, Q_RETURN_ARG(const char *, ret)))
+    if (QMetaObject::invokeMethod(globalFactory->m_backendObject, "uiSymbol", Qt::DirectConnection, Q_RETURN_ARG(const char *, ret)))
         return ret;
     return 0;
 }

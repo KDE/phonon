@@ -30,7 +30,7 @@ VideoEffect::VideoEffect(const VideoEffectDescription &type, QObject *parent)
 {
     K_D(VideoEffect);
     d->type = type.index();
-    d->createIface();
+    d->createBackendObject();
 }
 
 VideoEffect::VideoEffect(VideoEffectPrivate &dd, QObject *parent, const VideoEffectDescription &type)
@@ -41,14 +41,15 @@ VideoEffect::VideoEffect(VideoEffectPrivate &dd, QObject *parent, const VideoEff
     d->type = type.index();
 }
 
-void VideoEffectPrivate::createIface()
+void VideoEffectPrivate::createBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
         return;
     K_Q(VideoEffect);
-    backendObject = Factory::createVideoEffect(type, q);
-    if (backendObject)
-        q->setupIface();
+    m_backendObject = Factory::createVideoEffect(type, q);
+    if (m_backendObject) {
+        setupBackendObject();
+    }
 }
 
 VideoEffectDescription VideoEffect::type() const
@@ -64,7 +65,7 @@ QList<EffectParameter> VideoEffect::parameterList() const
     // there should be an iface object, but better be safe for those backend
     // switching corner-cases: when the backend switches the new backend might
     // not support this effect -> no iface object
-    if (d->backendObject)
+    if (d->m_backendObject)
     {
         BACKEND_GET(QList<EffectParameter>, ret, "parameterList");
         for (int i = 0; i < ret.size(); ++i)
@@ -76,7 +77,7 @@ QList<EffectParameter> VideoEffect::parameterList() const
 QVariant VideoEffect::value(int parameterId) const
 {
     K_D(const VideoEffect);
-    if (!d->backendObject)
+    if (!d->m_backendObject)
         return d->parameterValues[parameterId];
     QVariant ret;
     BACKEND_GET1(QVariant, ret, "value", int, parameterId);
@@ -86,15 +87,15 @@ QVariant VideoEffect::value(int parameterId) const
 void VideoEffect::setValue(int parameterId, QVariant newValue)
 {
     K_D(VideoEffect);
-    if (iface())
+    if (k_ptr->backendObject())
         BACKEND_CALL2("setValue", int, parameterId, QVariant, newValue);
     else
         d->parameterValues[parameterId] = newValue;
 }
 
-bool VideoEffectPrivate::aboutToDeleteIface()
+bool VideoEffectPrivate::aboutToDeleteBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
     {
         QList<EffectParameter> plist;
         pBACKEND_GET(QList<EffectParameter>, plist, "parameterList");
@@ -104,17 +105,18 @@ bool VideoEffectPrivate::aboutToDeleteIface()
     return true;
 }
 
-void VideoEffect::setupIface()
+void VideoEffectPrivate::setupBackendObject()
 {
-    K_D(VideoEffect);
-    Q_ASSERT(d->backendObject);
+    Q_ASSERT(m_backendObject);
 
     // set up attributes
     QList<EffectParameter> plist;
-    BACKEND_GET(QList<EffectParameter>, plist, "parameterList");
-    foreach (EffectParameter p, plist)
-        if (d->parameterValues.contains(p.id()))
-            p.setValue(d->parameterValues[p.id()]);
+    pBACKEND_GET(QList<EffectParameter>, plist, "parameterList");
+    foreach (EffectParameter p, plist) {
+        if (parameterValues.contains(p.id())) {
+            p.setValue(parameterValues[p.id()]);
+        }
+    }
 }
 
 } //namespace Phonon

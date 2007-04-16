@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -34,13 +34,30 @@ void VideoCaptureDeviceTest::sensibleValues()
     VideoCaptureDevice a;
     QCOMPARE(a.isValid(), false);
     VideoCaptureDevice b(a);
-    QCOMPARE(a, b);
     QCOMPARE(b.isValid(), false);
-    VideoCaptureDevice c = VideoCaptureDevice::fromIndex(1); //no backend loaded -> invalid
-    QCOMPARE(c.isValid(), false);
-    c = a;
-    QCOMPARE(a, c);
-    QCOMPARE(b, c);
+    b = a;
+    QCOMPARE(b.isValid(), false);
+
+    if (Factory::backendName() == QLatin1String("Fake")) {
+        VideoCaptureDevice c = VideoCaptureDevice::fromIndex(30000);
+        QCOMPARE(c.isValid(), true);
+        QCOMPARE(c.index(), 30000);
+        QCOMPARE(c.name(), QString("USB Webcam"));
+        QCOMPARE(c.description(), QString("first description"));
+        b = VideoCaptureDevice::fromIndex(30001);
+        QCOMPARE(b.isValid(), true);
+        QCOMPARE(b.index(), 30001);
+        QCOMPARE(b.name(), QString("DV"));
+        QCOMPARE(b.description(), QString("second description"));
+        QCOMPARE(a.isValid(), false);
+        a = c;
+        QCOMPARE(a, c);
+        QCOMPARE(a.isValid(), true);
+        QCOMPARE(a.index(), 30000);
+        QCOMPARE(a.name(), QString("USB Webcam"));
+        QCOMPARE(a.description(), QString("first description"));
+    //} else {
+    }
 }
 
 void VideoCaptureDeviceTest::cleanupTestCase()

@@ -29,26 +29,17 @@
 namespace Phonon
 {
 
-template<ObjectDescriptionType T>
-ObjectDescription<T>::ObjectDescription()
-    : d(new ObjectDescriptionPrivate(-1, QHash<QByteArray, QVariant>()))
+ObjectDescriptionBase::ObjectDescriptionBase(ObjectDescriptionPrivate *dd)
+    : d(dd)
 {
 }
 
-template<ObjectDescriptionType T>
-ObjectDescription<T>::ObjectDescription(int index, const QHash<QByteArray, QVariant> &properties)
-    : d(new ObjectDescriptionPrivate(index, properties))
-{
-}
-
-template<ObjectDescriptionType T>
-ObjectDescription<T>::ObjectDescription(const ObjectDescription<T> &rhs)
+ObjectDescriptionBase::ObjectDescriptionBase(const ObjectDescriptionBase &rhs)
     : d(rhs.d)
 {
 }
 
-template<ObjectDescriptionType T>
-ObjectDescription<T>::~ObjectDescription()
+ObjectDescriptionBase::~ObjectDescriptionBase()
 {
 }
 
@@ -59,59 +50,61 @@ ObjectDescription<T> &ObjectDescription<T>::operator=(const ObjectDescription<T>
     return *this;
 }
 
-template<ObjectDescriptionType T>
-bool ObjectDescription<T>::operator==(const ObjectDescription<T> &otherDescription) const
+bool ObjectDescriptionBase::operator==(const ObjectDescriptionBase &otherDescription) const
 {
+    Q_ASSERT(isValid());
+    Q_ASSERT(otherDescription.isValid());
     return *d == *otherDescription.d;
 }
 
-template<ObjectDescriptionType T>
-int ObjectDescription<T>::index() const
+int ObjectDescriptionBase::index() const
 {
+    Q_ASSERT(isValid());
     return d->index;
 }
 
-template<ObjectDescriptionType T>
-const QString &ObjectDescription<T>::name() const
+const QString &ObjectDescriptionBase::name() const
 {
+    Q_ASSERT(isValid());
     return d->name;
 }
 
-template<ObjectDescriptionType T>
-const QString &ObjectDescription<T>::description() const
+const QString &ObjectDescriptionBase::description() const
 {
+    Q_ASSERT(isValid());
     return d->description;
 }
 
-template<ObjectDescriptionType T>
-QVariant ObjectDescription<T>::property(const char *name) const
+QVariant ObjectDescriptionBase::property(const char *name) const
 {
+    Q_ASSERT(isValid());
     return d->properties.value(name);
 }
 
-template<ObjectDescriptionType T>
-QList<QByteArray> ObjectDescription<T>::propertyNames() const
+QList<QByteArray> ObjectDescriptionBase::propertyNames() const
 {
+    Q_ASSERT(isValid());
     return d->properties.keys();
 }
 
-template<ObjectDescriptionType T>
-bool ObjectDescription<T>::isValid() const
+bool ObjectDescriptionBase::isValid() const
 {
-    return d->index != -1;
+    return d.constData() != 0;
 }
 
 template<ObjectDescriptionType T>
 ObjectDescription<T> ObjectDescription<T>::fromIndex(int index)
 {
+    ObjectDescription<T> ret; //isValid() == false
+
     QObject *b = Factory::backend();
     BackendInterface *iface = qobject_cast<BackendInterface *>(b);
     QSet<int> indexes = iface->objectDescriptionIndexes(T);
-    if (!indexes.contains(index)) {
-        return ObjectDescription<T>(); //isValid() == false
+    if (indexes.contains(index)) {
+        QHash<QByteArray, QVariant> properties = iface->objectDescriptionProperties(T, index);
+        ret.d = new ObjectDescriptionPrivate(index, properties);
     }
-    QHash<QByteArray, QVariant> properties = iface->objectDescriptionProperties(T, index);
-    return ObjectDescription<T>(index, properties);
+    return ret;
 }
 
 template class ObjectDescription<AudioOutputDeviceType>;

@@ -44,10 +44,10 @@ ChapterInterface::ChapterInterface(AbstractMediaProducer *mp)
     d->_backendObjectChanged();
 }
 
-void ChapterInterfacePrivate::backendObjectChanged(QObject *backendObject)
+void ChapterInterfacePrivate::backendObjectChanged(QObject *m_backendObject)
 {
-    QObject::connect(backendObject, SIGNAL(chapterChanged(int)), q, SIGNAL(chapterChanged(int)));
-    QObject::connect(backendObject, SIGNAL(availableChaptersChanged(int)), q, SIGNAL(availableChaptersChanged(int)));
+    QObject::connect(m_backendObject, SIGNAL(chapterChanged(int)), q, SIGNAL(chapterChanged(int)));
+    QObject::connect(m_backendObject, SIGNAL(availableChaptersChanged(int)), q, SIGNAL(availableChaptersChanged(int)));
 }
 
 ChapterInterface::~ChapterInterface()

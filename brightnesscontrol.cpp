@@ -56,20 +56,19 @@ PHONON_GETTER(int, lowerBound, -1000)
 PHONON_GETTER(int, upperBound,  1000)
 PHONON_SETTER(setBrightness, brightness, int)
 
-bool BrightnessControlPrivate::aboutToDeleteIface()
+bool BrightnessControlPrivate::aboutToDeleteBackendObject()
 {
-    if (backendObject)
+    if (m_backendObject)
         pBACKEND_GET(int, brightness, "brightness");
     return true;
 }
 
-void BrightnessControl::setupIface()
+void BrightnessControlPrivate::setupBackendObject()
 {
-    K_D(BrightnessControl);
-    Q_ASSERT(d->backendObject);
+    Q_ASSERT(m_backendObject);
 
     // set up attributes
-    BACKEND_CALL1("setBrightness", int, d->brightness);
+    pBACKEND_CALL1("setBrightness", int, brightness);
 }
 } // namespace Phonon
 

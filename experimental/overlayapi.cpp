@@ -19,6 +19,7 @@
 
 #include "overlayapi.h"
 #include "overlayapi_p.h"
+#include "../base_p.h"
 #include "../phonondefs_p.h"
 #include "../ui/videowidget.h"
 
@@ -56,8 +57,8 @@ OverlayApi::OverlayTypes OverlayApi::overlayCapabilities() const
 bool OverlayApi::createOverlay(QWidget *widget, OverlayType type)
 {
     Q_D(OverlayApi);
-    QObject *backendObject = d->videowidget->iface();
-    if (!backendObject) {
+    QObject *m_backendObject = d->videowidget->k_ptr->backendObject();
+    if (!m_backendObject) {
         return false;
     }
 
