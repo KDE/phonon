@@ -64,6 +64,6 @@ void VideoCaptureDeviceTest::cleanupTestCase()
 {
 }
 
-QTEST_KDEMAIN(VideoCaptureDeviceTest, NoGUI)
+QTEST_KDEMAIN_CORE(VideoCaptureDeviceTest)
 #include "videocapturedevicetest.moc"
 // vim: sw=4 ts=4

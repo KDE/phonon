@@ -11,7 +11,7 @@ MACRO(PHONON_BUILD_TESTS)
 	FOREACH(_testname ${ARGN})
 		kde4_automoc(${_testname}.cpp)
 		kde4_add_executable(${_testname} NOGUI ${_testname}.cpp)
-		target_link_libraries(${_testname} ${KDE4_PHONONUI_LIBS} ${QT_QTTEST_LIBRARY})
+		target_link_libraries(${_testname} ${KDE4_PHONON_LIBS} ${QT_QTTEST_LIBRARY})
 	ENDFOREACH(_testname)
 ENDMACRO(PHONON_BUILD_TESTS)
 
@@ -20,7 +20,7 @@ MACRO(PHONON_BUILD_TESTS_FAKE)
 	FOREACH(_testname ${ARGN})
 		kde4_automoc(${_testname}.cpp)
 		kde4_add_executable(${_testname}_fake NOGUI ${_testname}.cpp)
-		target_link_libraries(${_testname}_fake ${KDE4_PHONONUI_LIBS} ${QT_QTTEST_LIBRARY})
+		target_link_libraries(${_testname}_fake ${KDE4_PHONON_LIBS} ${QT_QTTEST_LIBRARY})
 		SET_TARGET_PROPERTIES(${_testname}_fake PROPERTIES COMPILE_FLAGS -DUSE_FAKE_BACKEND)
 	ENDFOREACH(_testname)
 ENDMACRO(PHONON_BUILD_TESTS_FAKE)
@@ -32,7 +32,7 @@ MACRO(PHONON_EXECUTE_TESTS)
 ENDMACRO(PHONON_EXECUTE_TESTS)
 
 PHONON_BUILD_TESTS(
-	methodtest
+	mediasourcetest
 	mediaobjecttest
 	audiopathtest
 	backendcapabilitiestest
@@ -40,14 +40,18 @@ PHONON_BUILD_TESTS(
 	audiooutputdevicetest
 	audiocapturedevicetest
 	videocapturedevicetest
-	bytestreamtest
-	bytestreamtest2
+	#bytestreamtest
+	#bytestreamtest2
 	audiodevicelisttest
+	seekslider
+	guitest
+	mediaplayer
 	)
 target_link_libraries(audiodevicelisttest ${KDE4_KAUDIODEVICELIST_LIBS})
+target_link_libraries(mediaplayer ${KDE4_KDEUI_LIBS})
+target_link_libraries(guitest ${KDE4_KIO_LIBS})
 
 PHONON_BUILD_TESTS_FAKE(
-	methodtest
 	mediaobjecttest
 	audiopathtest
 	backendcapabilitiestest
@@ -55,11 +59,12 @@ PHONON_BUILD_TESTS_FAKE(
 	audiooutputdevicetest
 	audiocapturedevicetest
 	videocapturedevicetest
-	bytestreamtest
-	bytestreamtest2
+	#bytestreamtest
+	#bytestreamtest2
+	seekslider
 	)
 PHONON_EXECUTE_TESTS(
-	methodtest_fake
+	mediasourcetest
 	audiopathtest_fake
 	backendcapabilitiestest_fake
 	audiooutputtest_fake
@@ -70,7 +75,18 @@ PHONON_EXECUTE_TESTS(
 	mediaobjecttest_fake
 	#bytestreamtest_fake
 	bytestreamtest2_fake
+	seekslider_fake
 	)
+
+#methodtest does not link against libphonon
+kde4_automoc(methodtest.cpp)
+kde4_add_executable(methodtest NOGUI methodtest.cpp ../factory.cpp ../phononnamespace.cpp)
+target_link_libraries(methodtest ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
+SET_TARGET_PROPERTIES(methodtest PROPERTIES COMPILE_FLAGS -DPHONON_METHODTEST)
+kde4_add_executable(methodtest_fake NOGUI methodtest.cpp ../factory.cpp ../phononnamespace.cpp)
+target_link_libraries(methodtest_fake ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
+SET_TARGET_PROPERTIES(methodtest_fake PROPERTIES COMPILE_FLAGS "-DUSE_FAKE_BACKEND -DPHONON_METHODTEST")
+add_test(methodtest_fake ${EXECUTABLE_OUTPUT_PATH}/methodtest_fake)
 
 ENDIF(KDE4_BUILD_TESTS)
 

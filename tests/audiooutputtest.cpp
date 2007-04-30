@@ -44,58 +44,58 @@ void AudioOutputTest::checkName()
 void AudioOutputTest::checkVolume()
 {
     AudioOutput ao(Phonon::NotificationCategory, this);
-    QSignalSpy volumeSignalSpy(&ao, SIGNAL(volumeChanged(float)));
-    float v = 1.0;
-    QCOMPARE(ao.volume(), v);
+    QSignalSpy volumeSignalSpy(&ao, SIGNAL(volumeChanged(qreal)));
+    qreal v = 1.0;
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(volumeSignalSpy.size(), 0);
     for (v = 0.0; v <= 10.0; v += 0.01)
     {
         ao.setVolume(v);
-        QCOMPARE(ao.volume(), v);
+        QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
         QCOMPARE(volumeSignalSpy.size(), 1);
-        QCOMPARE(qvariant_cast<float>(volumeSignalSpy.takeFirst().at(0)), v);
+        QCOMPARE(qvariant_cast<float>(volumeSignalSpy.takeFirst().at(0)), static_cast<float>(v));
     }
 }
 
 void AudioOutputTest::checkMute()
 {
     AudioOutput ao(Phonon::CommunicationCategory, this);
-    QSignalSpy volumeSignalSpy(&ao, SIGNAL(volumeChanged(float)));
+    QSignalSpy volumeSignalSpy(&ao, SIGNAL(volumeChanged(qreal)));
     QSignalSpy muteSignalSpy(&ao, SIGNAL(mutedChanged(bool)));
-    float v = 1.0;
-    QCOMPARE(ao.volume(), v);
+    qreal v = 1.0;
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), false);
 
     ao.setMuted(true);
     QCOMPARE(volumeSignalSpy.size(), 0);
     QCOMPARE(muteSignalSpy.size(), 1);
-    QCOMPARE(ao.volume(), v);
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), true);
     QCOMPARE(muteSignalSpy.takeFirst().at(0).toBool(), true);
 
     ao.setMuted(true);
     QCOMPARE(volumeSignalSpy.size(), 0);
     QCOMPARE(muteSignalSpy.size(), 0);
-    QCOMPARE(ao.volume(), v);
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), true);
 
     ao.setMuted(false);
     QCOMPARE(volumeSignalSpy.size(), 0);
     QCOMPARE(muteSignalSpy.size(), 1);
-    QCOMPARE(ao.volume(), v);
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), false);
     QCOMPARE(muteSignalSpy.takeFirst().at(0).toBool(), false);
 
     ao.setMuted(false);
     QCOMPARE(volumeSignalSpy.size(), 0);
     QCOMPARE(muteSignalSpy.size(), 0);
-    QCOMPARE(ao.volume(), v);
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), false);
 
     ao.setMuted(true);
     QCOMPARE(volumeSignalSpy.size(), 0);
     QCOMPARE(muteSignalSpy.size(), 1);
-    QCOMPARE(ao.volume(), v);
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), true);
     QCOMPARE(muteSignalSpy.takeFirst().at(0).toBool(), true);
 
@@ -103,20 +103,20 @@ void AudioOutputTest::checkMute()
     ao.setVolume(v);
     QCOMPARE(volumeSignalSpy.size(), 1);
     QCOMPARE(muteSignalSpy.size(), 0);
-    QCOMPARE(ao.volume(), v);
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), true);
-    QCOMPARE(qvariant_cast<float>(volumeSignalSpy.takeFirst().at(0)), v);
+    QCOMPARE(qvariant_cast<float>(volumeSignalSpy.takeFirst().at(0)), static_cast<float>(v));
 
     ao.setMuted(true);
     QCOMPARE(volumeSignalSpy.size(), 0);
     QCOMPARE(muteSignalSpy.size(), 0);
-    QCOMPARE(ao.volume(), v);
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), true);
 
     ao.setMuted(false);
     QCOMPARE(volumeSignalSpy.size(), 0);
     QCOMPARE(muteSignalSpy.size(), 1);
-    QCOMPARE(ao.volume(), v);
+    QCOMPARE(static_cast<float>(ao.volume()), static_cast<float>(v));
     QCOMPARE(ao.isMuted(), false);
     QCOMPARE(muteSignalSpy.takeFirst().at(0).toBool(), false);
 }
@@ -134,6 +134,6 @@ void AudioOutputTest::cleanupTestCase()
 {
 }
 
-QTEST_KDEMAIN(AudioOutputTest, NoGUI)
+QTEST_KDEMAIN_CORE(AudioOutputTest)
 #include "audiooutputtest.moc"
 // vim: sw=4 ts=4

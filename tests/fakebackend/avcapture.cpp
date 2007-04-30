@@ -24,7 +24,7 @@ namespace Phonon
 namespace Fake
 {
 AvCapture::AvCapture(QObject *parent)
-    : AbstractMediaProducer(parent)
+    : MediaProducer(parent)
 {
 }
 

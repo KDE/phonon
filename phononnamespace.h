@@ -36,10 +36,27 @@
  */
 namespace Phonon
 {
+    enum DiscType {
+        NoDisc,
+        Cd,
+        Dvd,
+        Vcd
+    };
+
+    enum MetaData {
+        ArtistMetaData,
+        AlbumMetaData,
+        TitleMetaData,
+        DateMetaData,
+        GenreMetaData,
+        TracknumberMetaData,
+        DescriptionMetaData
+    };
+
     /**
      * The state the media producing object is in at the moment.
      *
-     * \see AbstractMediaProducer
+     * \see MediaProducer
      */
     enum State
     {
@@ -126,12 +143,12 @@ namespace Phonon
     /**
      * Tells your program how to recover from an error.
      *
-     * \see AbstractMediaProducer::errorType()
+     * \see MediaProducer::errorType()
      */
     enum ErrorType {
         /**
-         * No error. AbstractMediaProducer::errorType() returns this if
-         * AbstractMediaProducer::state() != Phonon::ErrorState.
+         * No error. MediaProducer::errorType() returns this if
+         * MediaProducer::state() != Phonon::ErrorState.
          */
         NoError = 0,
         /**
@@ -150,7 +167,7 @@ namespace Phonon
      * Returns a (translated) string to show to the user identifying the given
      * Category.
      */
-    PHONONCORE_EXPORT QString categoryToString(Category c);
+    PHONON_EXPORT QString categoryToString(Category c);
 } //namespace Phonon
 
 class kdbgstream;
@@ -158,7 +175,7 @@ class kdbgstream;
 /**
  * Implements needed operator to use Phonon::State with kDebug
  */
-inline PHONONCORE_EXPORT kdbgstream &operator<<(kdbgstream  & stream, const Phonon::State state)
+inline PHONON_EXPORT kdbgstream &operator<<(kdbgstream  & stream, const Phonon::State state)
 {
     switch(state)
     {

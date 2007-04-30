@@ -27,14 +27,13 @@
 
 namespace Phonon
 {
-PHONON_HEIR_IMPL(VideoEffect)
+PHONON_HEIR_IMPL(Effect)
 
 QList<EffectParameter> BrightnessControl::parameterList() const
 {
     QList<EffectParameter> ret;
     EffectParameter par(1, i18n("Brightness"), EffectParameter::IntegerHint, 0,
             lowerBound(), upperBound(), i18n("controls the brightness of the video images"));
-    par.setEffect(const_cast<BrightnessControl *>(this));
     return ret;
 }
 

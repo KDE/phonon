@@ -20,14 +20,15 @@
 #ifndef PHONON_RTPRECEIVER_H
 #define PHONON_RTPRECEIVER_H
 
-#include "../abstractmediaproducer.h"
+#include "../mediaobject.h"
+#include "../phonondefs.h"
 
 namespace Phonon
 {
 namespace Experimental
 {
 
-class RtpReceiver : public AbstractMediaProducer
+class RtpReceiver : public MediaProducer
 {
     Q_OBJECT
     K_DECLARE_PRIVATE(RtpReceiver)

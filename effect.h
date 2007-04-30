@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,60 +16,113 @@
     Boston, MA 02110-1301, USA.
 
 */
-
 #ifndef PHONON_EFFECT_H
 #define PHONON_EFFECT_H
 
-#include "phonon_export.h"
-#include <QVariant>
+#include "phonondefs.h"
+#include <QObject>
+#include "objectdescription.h"
 
+class QString;
 template<class T> class QList;
 
 namespace Phonon
 {
+    class EffectParameter;
+    class EffectPrivate;
 
-class EffectParameter;
+    /**
+     * \short Effects that can be inserted into an AudioPath or a VideoPath.
+     * An effect is a special object which can perform
+     * transformations on the specified path. Examples may include simple
+     * modifiers such as fading or pitch shifting, or more complex mathematical
+     * transformations.
+     *
+     * In order to use an effect, insert it into the path as follows:
+     * \code
+     * AudioPath *path = new AudioPath(this);
+     * AudioEffect *effect = new AudioEffect(this);
+     * path->insertEffect(effect);
+     * \endcode
+     *
+     * The effect will immediately begin applying it's transformations on
+     * the path. To stop it, remove the Effect from the path.
+     *
+     * \warning This class is not finished.
+     *
+     * \author Matthias Kretz <kretz@kde.org>
+     */
+    class PHONON_EXPORT Effect : public QObject
+    {
+        friend class AudioPath;
+        friend class VideoPath;
+        friend class AudioPathPrivate;
+        friend class VideoPathPrivate;
+        Q_OBJECT
+        K_DECLARE_PRIVATE(Effect)
 
-/**
- * \internal
- *
- * \brief Common interface for audio and video effects.
- *
- * This class is an implementation detail: In order for the Ui::EffectWidget and
- * EffectParameter classes to work for both AudioEffect and VideoEffect objects
- * this common interface is used.
- *
- * \see AudioEffect
- * \see VideoEffect
- *
- * \author Matthias Kretz <kretz@kde.org>
- */
-class PHONONCORE_EXPORT Effect
-{
-    friend class EffectParameter;
-    public:
-        virtual ~Effect();
+        public:
+            ~Effect();
 
-        /**
-         * Returns a list of all parameters of the effect.
-         *
-         * \see EffectParameter
-         */
-        virtual QList<EffectParameter> parameterList() const = 0;
+            enum Type {
+                AudioEffect,
+                VideoEffect
+            };
 
-    protected:
-        /**
-         * Gets the value of the parameter with the id \p parameterId.
-         */
-        KDE_NO_EXPORT virtual QVariant value(int parameterId) const = 0;
+            /**
+             * QObject constructor.
+             *
+             * \param description An AudioEffectDescription object to determine the
+             * type of effect. See \ref
+             * BackendCapabilities::availableAudioEffects().
+             * \param parent QObject parent
+             */
+            explicit Effect(const AudioEffectDescription &description, QObject *parent = 0);
 
-        /**
-         * Sets the value of the parameter with the id \p parameterId.
-         */
-        KDE_NO_EXPORT virtual void setValue(int parameterId, QVariant newValue) = 0;
-};
+            /**
+             * QObject constructor.
+             *
+             * \param description A VideoEffectDescription object to determine the
+             * type of effect. See \ref
+             * BackendCapabilities::availableVideoEffects().
+             * \param parent QObject parent
+             */
+            explicit Effect(const VideoEffectDescription &description, QObject *parent = 0);
 
-} // namespace Phonon
+            Type type() const;
 
-#endif // PHONON_EFFECT_H
+            /**
+             * Returns the audio description of this effect. This is the same type as was
+             * passed to the constructor.
+             */
+            AudioEffectDescription audioDescription() const;
+
+            /**
+             * Returns the video description of this effect. This is the same type as was
+             * passed to the constructor.
+             */
+            VideoEffectDescription videoDescription() const;
+
+            /**
+             * Returns a list of parameters that this effect provides to control
+             * its behaviour.
+             *
+             * \see EffectParameter
+             * \see EffectWidget
+             */
+            QList<EffectParameter> allDescriptions() const;
+            EffectParameter description(int index) const;
+            int parameterCount() const;
+
+            QVariant parameterValue(int index) const;
+            void setParameterValue(int index, const QVariant &value);
+
+        protected:
+            Effect(EffectPrivate &dd, QObject *parent);
+
+            EffectPrivate *const k_ptr;
+    };
+} //namespace Phonon
+
 // vim: sw=4 ts=4 tw=80
+#endif // PHONON_EFFECT_H

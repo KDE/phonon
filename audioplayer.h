@@ -24,7 +24,7 @@
 #include "phononnamespace.h"
 #include <QObject>
 
-class KUrl;
+class QUrl;
 
 namespace Phonon
 {
@@ -48,7 +48,7 @@ namespace Phonon
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONONCORE_EXPORT AudioPlayer : public QObject
+class PHONON_EXPORT AudioPlayer : public QObject
 {
     Q_OBJECT
     public:
@@ -102,7 +102,7 @@ class PHONONCORE_EXPORT AudioPlayer : public QObject
          * When there's already a media playing (or paused) it will be stopped
          * (the finished signal will not be emitted).
          */
-        void load(const KUrl &url);
+        void load(const QUrl &url);
 
         /**
          * Play the media at the given URL. Starts playback as fast as possible.
@@ -120,7 +120,7 @@ class PHONONCORE_EXPORT AudioPlayer : public QObject
          * load and play calls so that the backend can start preloading the
          * media and fill audio buffers.
          */
-        void play(const KUrl &url);
+        void play(const QUrl &url);
         /**
          * Continues playback of a paused media. Restarts playback of a stopped
          * media.

@@ -25,7 +25,7 @@
 #include <QtCore/QString>
 #include <QtCore/QSharedData>
 #include <QtCore/QVariant>
-#include <kdebug.h>
+#include "phononnamespace_p.h"
 
 namespace Phonon
 {
@@ -43,7 +43,7 @@ namespace Phonon
             bool operator==(const ObjectDescriptionPrivate &rhs) const
             {
                 if (index == rhs.index && (name != rhs.name || description != rhs.description))
-                    kError(600) << "Same index (" << index <<
+                    pError() << "Same index (" << index <<
                         "), but different name/description. This is a bug in the Phonon backend." << endl;
                 return index == rhs.index;// && name == rhs.name && description == rhs.description;
             }

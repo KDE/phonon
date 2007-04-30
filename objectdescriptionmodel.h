@@ -21,6 +21,7 @@
 #define PHONON_OBJECTDESCRIPTIONMODEL_H
 
 #include "phonon_export.h"
+#include "phonondefs.h"
 #include "objectdescription.h"
 #include <QAbstractListModel>
 
@@ -32,9 +33,9 @@ namespace Phonon
     class ObjectDescriptionModelPrivate;
     class ObjectDescriptionModelBasePrivate;
 
-    class PHONONCORE_EXPORT ObjectDescriptionModelBase : public QAbstractListModel
+    class PHONON_EXPORT ObjectDescriptionModelBase : public QAbstractListModel
     {
-        Q_DECLARE_PRIVATE(ObjectDescriptionModelBase)
+        K_DECLARE_PRIVATE(ObjectDescriptionModelBase)
         public:
             /**
              * Returns the number of rows in the model. This value corresponds
@@ -115,7 +116,7 @@ namespace Phonon
         protected:
             ~ObjectDescriptionModelBase();
             ObjectDescriptionModelBase(ObjectDescriptionModelBasePrivate *dd, QObject *parent);
-            ObjectDescriptionModelBasePrivate *const d_ptr;
+            ObjectDescriptionModelBasePrivate *const k_ptr;
     };
 
     /**
@@ -153,12 +154,12 @@ namespace Phonon
      * \author Matthias Kretz <kretz@kde.org>
      */
     template<ObjectDescriptionType type>
-    class PHONONCORE_EXPORT ObjectDescriptionModel : public ObjectDescriptionModelBase
+    class PHONON_EXPORT ObjectDescriptionModel : public ObjectDescriptionModelBase
     {
-        KDE_NO_EXPORT inline ObjectDescriptionModelPrivate<type> *d_func() {
-            return reinterpret_cast<ObjectDescriptionModelPrivate<type> *>(d_ptr); }
-        KDE_NO_EXPORT inline const ObjectDescriptionModelPrivate<type> *d_func() const {
-            return reinterpret_cast<const ObjectDescriptionModelPrivate<type> *>(d_ptr); }
+        KDE_NO_EXPORT inline ObjectDescriptionModelPrivate<type> *k_func() {
+            return reinterpret_cast<ObjectDescriptionModelPrivate<type> *>(k_ptr); }
+        KDE_NO_EXPORT inline const ObjectDescriptionModelPrivate<type> *k_func() const {
+            return reinterpret_cast<const ObjectDescriptionModelPrivate<type> *>(k_ptr); }
         friend class ObjectDescriptionModelPrivate<type>;
         public:
             Q_OBJECT_CHECK

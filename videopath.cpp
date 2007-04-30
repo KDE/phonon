@@ -20,8 +20,10 @@
 #include "videopath_p.h"
 #include "factory.h"
 
-#include "videoeffect.h"
+#include "effect.h"
+#include "effect_p.h"
 #include "abstractvideooutput.h"
+#include "abstractvideooutput_p.h"
 
 #define PHONON_CLASSNAME VideoPath
 
@@ -33,9 +35,10 @@ VideoPath::~VideoPath()
 {
     K_D(VideoPath);
     foreach (AbstractVideoOutput *vo, d->outputs)
-        d->removeDestructionHandler(vo, d);
-    foreach (VideoEffect *ve, d->effects)
-        d->removeDestructionHandler(ve, d);
+        vo->k_ptr->removeDestructionHandler(d);
+    foreach (Effect *ve, d->effects)
+        ve->k_ptr->removeDestructionHandler(d);
+    delete k_ptr;
 }
 
 bool VideoPath::addOutput(AbstractVideoOutput *videoOutput)
@@ -49,7 +52,7 @@ bool VideoPath::addOutput(AbstractVideoOutput *videoOutput)
         BACKEND_GET1(bool, success, "addOutput", QObject *, videoOutput->k_ptr->backendObject());
         if (success)
         {
-            d->addDestructionHandler(videoOutput, d);
+            videoOutput->k_ptr->addDestructionHandler(d);
             d->outputs << videoOutput;
             return true;
         }
@@ -81,8 +84,12 @@ const QList<AbstractVideoOutput *> &VideoPath::outputs() const
     return d->outputs;
 }
 
-bool VideoPath::insertEffect(VideoEffect *newEffect, VideoEffect *insertBefore)
+bool VideoPath::insertEffect(Effect *newEffect, Effect *insertBefore)
 {
+    if (newEffect->type() != Effect::VideoEffect || (insertBefore && insertBefore->type() != Effect::VideoEffect)) {
+        qWarning("VideoPath::insertEffect: Inserting an audio effect into a video path does not work!");
+        return false;
+    }
     // effects may be added multiple times, but that means the objects are
     // different (the class is still the same)
     K_D(VideoPath);
@@ -94,7 +101,7 @@ bool VideoPath::insertEffect(VideoEffect *newEffect, VideoEffect *insertBefore)
         BACKEND_GET2(bool, success, "insertEffect", QObject *, newEffect->k_ptr->backendObject(), QObject *, insertBefore ? insertBefore->k_ptr->backendObject() : 0);
         if (success)
         {
-            d->addDestructionHandler(newEffect, d);
+            newEffect->k_ptr->addDestructionHandler(d);
             if (insertBefore)
                 d->effects.insert(d->effects.indexOf(insertBefore), newEffect);
             else
@@ -105,7 +112,7 @@ bool VideoPath::insertEffect(VideoEffect *newEffect, VideoEffect *insertBefore)
     return false;
 }
 
-bool VideoPath::removeEffect(VideoEffect *effect)
+bool VideoPath::removeEffect(Effect *effect)
 {
     K_D(VideoPath);
     if (!d->effects.contains(effect))
@@ -124,7 +131,7 @@ bool VideoPath::removeEffect(VideoEffect *effect)
     return false;
 }
 
-const QList<VideoEffect *> &VideoPath::effects() const
+const QList<Effect *> &VideoPath::effects() const
 {
     K_D(const VideoPath);
     return d->effects;
@@ -153,8 +160,8 @@ void VideoPathPrivate::setupBackendObject()
         }
     }
 
-    QList<VideoEffect *> effectList = effects;
-    foreach (VideoEffect *effect, effectList) {
+    QList<Effect *> effectList = effects;
+    foreach (Effect *effect, effectList) {
         if (effect->k_ptr->backendObject()) {
             pBACKEND_GET1(bool, success, "insertEffect", QObject *, effect->k_ptr->backendObject());
         } else {
@@ -166,27 +173,28 @@ void VideoPathPrivate::setupBackendObject()
     }
 }
 
-void VideoPathPrivate::phononObjectDestroyed(Base *o)
+void VideoPathPrivate::phononObjectDestroyed(BasePrivate *bp)
 {
-    // this method is called from Phonon::Base::~Base(), meaning the VideoEffect
-    // dtor has already been called, also virtual functions don't work anymore
-    // (therefore qobject_cast can only downcast from Base)
-    Q_ASSERT(o);
-    AbstractVideoOutput *output = static_cast<AbstractVideoOutput *>(o);
-    VideoEffect *videoEffect = static_cast<VideoEffect *>(o);
-    if (outputs.contains(output))
-    {
-        if (m_backendObject && output->k_ptr->backendObject()) {
-            pBACKEND_CALL1("removeOutput", QObject *, output->k_ptr->backendObject());
+    // this method is called from Phonon::BasePrivate::~BasePrivate(), meaning the Effect
+    // dtor has already been called and the private class is down to BasePrivate
+    Q_ASSERT(bp);
+    foreach (AbstractVideoOutput *ao, outputs) {
+        if (ao->k_ptr == bp) {
+            if (m_backendObject && bp->backendObject()) {
+                pBACKEND_CALL1("removeOutput", QObject *, bp->backendObject());
+            }
+            outputs.removeAll(ao);
+            return;
         }
-        outputs.removeAll(output);
     }
-    else if (effects.contains(videoEffect))
-    {
-        if (m_backendObject && videoEffect->k_ptr->backendObject()) {
-            pBACKEND_CALL1("removeEffect", QObject *, videoEffect->k_ptr->backendObject());
+    foreach (Effect *ae, effects) {
+        if (ae->k_ptr == bp) {
+            if (m_backendObject && bp->backendObject()) {
+                pBACKEND_CALL1("removeEffect", QObject *, bp->backendObject());
+            }
+            effects.removeAll(ae);
+            return;
         }
-        effects.removeAll(videoEffect);
     }
 }
 

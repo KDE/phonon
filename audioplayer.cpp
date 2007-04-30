@@ -21,7 +21,8 @@
 #include "mediaobject.h"
 #include "audiopath.h"
 #include "audiooutput.h"
-#include <kurl.h>
+#include "mediasource.h"
+#include <QtCore/qurl.h>
 
 namespace Phonon
 {
@@ -37,7 +38,7 @@ class AudioPlayer::Private
         MediaObject *player;
         AudioPath *path;
         AudioOutput *output;
-        KUrl url;
+        QUrl url;
 
         void _k_stateChanged(Phonon::State, Phonon::State);
 };
@@ -64,14 +65,14 @@ AudioPlayer::~AudioPlayer()
     delete d->output;
 }
 
-void AudioPlayer::load(const KUrl &url)
+void AudioPlayer::load(const QUrl &url)
 {
     // new URL
-    d->player->setUrl(url);
+    d->player->setCurrentSource(url);
     d->url = url;
 }
 
-void AudioPlayer::play(const KUrl &url)
+void AudioPlayer::play(const QUrl &url)
 {
     if (url == d->url)
     {
@@ -80,8 +81,8 @@ void AudioPlayer::play(const KUrl &url)
         return;
     }
     // new URL
-    d->player->setUrl(url);
-        
+    d->player->setCurrentSource(url);
+
     if (ErrorState == d->player->state())
         return;
 

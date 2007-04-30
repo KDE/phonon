@@ -19,9 +19,11 @@
 
 #include "visualization.h"
 #include "visualization_p.h"
-#include "objectdescription.h"
-#include "audiopath.h"
-#include "abstractvideooutput.h"
+#include "../objectdescription.h"
+#include "../audiopath.h"
+#include "../audiopath_p.h"
+#include "../abstractvideooutput.h"
+#include "../abstractvideooutput_p.h"
 
 #define PHONON_CLASSNAME Visualization
 
@@ -35,9 +37,10 @@ Visualization::~Visualization()
 {
     K_D(Visualization);
     if(d->audioPath)
-        d->removeDestructionHandler(d->audioPath, d);
+        d->audioPath->k_ptr->removeDestructionHandler(d);
     if(d->videoOutput)
-        d->removeDestructionHandler(d->videoOutput, d);
+        d->videoOutput->k_ptr->removeDestructionHandler(d);
+    delete k_ptr;
 }
 
 AudioPath *Visualization::audioPath() const
@@ -50,7 +53,7 @@ void Visualization::setAudioPath(AudioPath *audioPath)
 {
     K_D(Visualization);
     d->audioPath = audioPath;
-    d->addDestructionHandler(d->audioPath, d);
+    d->audioPath->k_ptr->addDestructionHandler(d);
     if (k_ptr->backendObject())
         BACKEND_CALL1("setAudioPath", QObject *, audioPath->k_ptr->backendObject());
 }
@@ -65,7 +68,7 @@ void Visualization::setVideoOutput(AbstractVideoOutput *videoOutput)
 {
     K_D(Visualization);
     d->videoOutput = videoOutput;
-    d->addDestructionHandler(videoOutput, d);
+    d->videoOutput->k_ptr->addDestructionHandler(d);
     if (k_ptr->backendObject())
         BACKEND_CALL1("setVideoOutput", QObject *, videoOutput->k_ptr->backendObject());
 }
@@ -116,20 +119,17 @@ QWidget *Visualization::createParameterWidget(QWidget *parent)
 }
 */
 
-void VisualizationPrivate::phononObjectDestroyed(Base *o)
+void VisualizationPrivate::phononObjectDestroyed(BasePrivate *bp)
 {
-    // this method is called from Phonon::Base::~Base(), meaning the AudioEffect
-    // dtor has already been called, also virtual functions don't work anymore
-    // (therefore qobject_cast can only downcast from Base)
-    Q_ASSERT(o);
-    AudioPath *path = static_cast<AudioPath *>(o);
-    AbstractVideoOutput *output = static_cast<AbstractVideoOutput *>(o);
-    if (audioPath == path)
+    // this method is called from Phonon::BasePrivate::~BasePrivate(), meaning the AudioEffect
+    // dtor has already been called and the private class is down to BasePrivate
+    Q_ASSERT(bp);
+    if (audioPath->k_ptr == bp)
     {
         pBACKEND_CALL1("setAudioPath", QObject *, static_cast<QObject *>(0));
         audioPath = 0;
     }
-    else if (videoOutput == output)
+    else if (videoOutput->k_ptr == bp)
     {
         pBACKEND_CALL1("setVideoOutput", QObject *, static_cast<QObject *>(0));
         videoOutput = 0;

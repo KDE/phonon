@@ -21,19 +21,22 @@
 #define PHONON_VOLUMEFADEREFFECT_P_H
 
 #include "volumefadereffect.h"
-#include "audioeffect_p.h"
+#include "effect_p.h"
 
 namespace Phonon
 {
-class VolumeFaderEffectPrivate : public AudioEffectPrivate
+class VolumeFaderEffectPrivate : public EffectPrivate
 {
-    K_DECLARE_PUBLIC(VolumeFaderEffect)
+    Q_DECLARE_PUBLIC(VolumeFaderEffect)
     PHONON_PRIVATECLASS
     protected:
         VolumeFaderEffectPrivate()
             : currentVolume(1.0)
             , fadeCurve(VolumeFaderEffect::Fade3Decibel)
         {
+            type = Effect::AudioEffect;
+            id = -1; // ### check how to get the correct id
+            // ############# parameter functions are incorrect
         }
 
         float currentVolume;

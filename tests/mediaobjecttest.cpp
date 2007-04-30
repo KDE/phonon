@@ -29,6 +29,7 @@
 
 #include <unistd.h>
 #include "loadfakebackend.h"
+#include <kurl.h>
 
 const qint64 ALLOWED_TIME_FOR_SEEKING = 1000; // 1s
 const qint64 ALLOWED_SEEK_INACCURACY = 300; // 0.3s
@@ -49,12 +50,12 @@ static qint32 castQVariantToInt32(const QVariant &variant)
 void MediaObjectTest::init()
 {
     if (m_media->state() == Phonon::ErrorState) {
-        m_media->setUrl(m_url);
+        m_media->setCurrentSource(m_url);
         if (m_media->state() == Phonon::ErrorState) {
-            waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+            QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
         }
         if (m_media->state() == Phonon::LoadingState) {
-            waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+            QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
         }
         m_stateChangedSignalSpy->clear();
     }
@@ -82,7 +83,7 @@ void MediaObjectTest::startPlayback(Phonon::State currentState)
     m_media->play();
     while (s != Phonon::PlayingState) {
         if (m_stateChangedSignalSpy->isEmpty()) {
-            waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+            QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
         }
         while (!m_stateChangedSignalSpy->isEmpty()) {
             QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
@@ -104,7 +105,7 @@ void MediaObjectTest::stopPlayback(Phonon::State currentState)
     m_media->stop();
     while (s != Phonon::StoppedState) {
         if (m_stateChangedSignalSpy->isEmpty()) {
-            waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+            QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
         }
         while (!m_stateChangedSignalSpy->isEmpty()) {
             QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
@@ -129,7 +130,7 @@ void MediaObjectTest::pausePlayback()
     m_media->pause();
     while (s != Phonon::PausedState) {
         if (m_stateChangedSignalSpy->isEmpty()) {
-            waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+            QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
         }
         while (!m_stateChangedSignalSpy->isEmpty()) {
             QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
@@ -147,23 +148,13 @@ void MediaObjectTest::pausePlayback()
     QCOMPARE(m_media->state(), Phonon::PausedState);
 }
 
-void MediaObjectTest::waitForSignal(QObject *obj, const char *signalName, int timeout)
-{
-    QEventLoop loop;
-    connect(obj, signalName, &loop, SLOT(quit()));
-    if (timeout > 0) {
-        QTimer::singleShot(timeout, &loop, SLOT(quit()));
-    }
-    loop.exec();
-}
-
 void MediaObjectTest::initTestCase()
 {
 #ifdef USE_FAKE_BACKEND
     Phonon::loadFakeBackend();
     m_url.setUrl("file:///foo.ogg");
 #else
-    m_url.setUrl(getenv("PHONON_TESTURL"));
+    m_url = KUrl(getenv("PHONON_TESTURL"));
     if (!m_url.isValid())
         QFAIL("You need to set PHONON_TESTURL to a valid URL");
 #endif
@@ -179,19 +170,21 @@ void MediaObjectTest::initTestCase()
 
 void MediaObjectTest::setMedia()
 {
-    QSignalSpy lengthSignalSpy(m_media, SIGNAL(length(qint64)));
-    QVERIFY(m_media->url().isEmpty());
+    QSignalSpy totalTimeChangedSignalSpy(m_media, SIGNAL(totalTimeChanged(qint64)));
+    QVERIFY(m_media->queue().isEmpty());
+    QCOMPARE(m_media->currentSource().type(), MediaSource::Invalid);
     QCOMPARE(m_media->state(), Phonon::LoadingState);
     QCOMPARE(m_stateChangedSignalSpy->count(), 0);
-    m_media->setUrl(m_url);
-    QCOMPARE(m_url, m_media->url());
+    m_media->setCurrentSource(m_url);
+    QCOMPARE(m_media->currentSource().type(), MediaSource::Url);
+    QCOMPARE(m_media->currentSource().url(), m_url);
     int emits = m_stateChangedSignalSpy->count();
     Phonon::State s = m_media->state();
     if (s == Phonon::LoadingState)
     {
         // still in LoadingState, there should be no state change
         QCOMPARE(emits, 0);
-        waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+        QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
         emits = m_stateChangedSignalSpy->count();
         s = m_media->state();
     }
@@ -210,9 +203,9 @@ void MediaObjectTest::setMedia()
         QCOMPARE(Phonon::StoppedState, s);
         QCOMPARE(m_stateChangedSignalSpy->count(), 0);
 
-        // check for length signal
-        QVERIFY(lengthSignalSpy.count() > 0);
-        args = lengthSignalSpy.takeLast();
+        // check for totalTimeChanged signal
+        QVERIFY(totalTimeChangedSignalSpy.count() > 0);
+        args = totalTimeChangedSignalSpy.takeLast();
         QCOMPARE(m_media->totalTime(), castQVariantToInt64(args.at(0)));
     }
     else
@@ -224,7 +217,7 @@ void MediaObjectTest::setMedia()
 void MediaObjectTest::checkForDefaults()
 {
     QCOMPARE(m_media->tickInterval(), qint32(0));
-    QCOMPARE(m_media->aboutToFinishTime(), qint32(0));
+    QCOMPARE(m_media->prefinishMark(), qint32(0));
 }
 
 void MediaObjectTest::stopToStop()
@@ -232,6 +225,7 @@ void MediaObjectTest::stopToStop()
     QCOMPARE(m_stateChangedSignalSpy->count(), 0);
     QCOMPARE(m_media->state(), Phonon::StoppedState);
     m_media->stop();
+    QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 2000);
     QCOMPARE(m_stateChangedSignalSpy->count(), 0);
     QCOMPARE(m_media->state(), Phonon::StoppedState);
 }
@@ -241,14 +235,17 @@ void MediaObjectTest::stopToPause()
     QCOMPARE(m_stateChangedSignalSpy->count(), 0);
     QCOMPARE(m_media->state(), Phonon::StoppedState);
     m_media->pause();
-    QCOMPARE(m_stateChangedSignalSpy->count(), 0);
-    QCOMPARE(m_media->state(), Phonon::StoppedState);
+    if (m_stateChangedSignalSpy->isEmpty()) {
+        QVERIFY(QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 6000));
+    }
+    QCOMPARE(m_stateChangedSignalSpy->count(), 1);
+    QCOMPARE(m_media->state(), Phonon::PausedState);
 }
 
 void MediaObjectTest::stopToPlay()
 {
     startPlayback();
-    ::sleep(1);
+    QTest::kWaitForSignal(m_media, SIGNAL(finished()), 1000);
     stopPlayback(Phonon::PlayingState);
 }
 
@@ -402,7 +399,7 @@ void MediaObjectTest::testSeek()
 //X             c = m_media->currentTime();
 //X             r = m_media->remainingTime();
 //X             while (c < s) {
-//X                 waitForSignal(m_media, SIGNAL(tick(qint64)), ALLOWED_TIME_FOR_SEEKING);
+//X                 QTest::kWaitForSignal(m_media, SIGNAL(tick(qint64)), ALLOWED_TIME_FOR_SEEKING);
 //X                 c = m_media->currentTime();
 //X                 r = m_media->remainingTime();
 //X                 elapsed = timer.elapsed();
@@ -449,45 +446,45 @@ void MediaObjectTest::testSeek()
     stopPlayback(Phonon::PlayingState);
 }
 
-void MediaObjectTest::testAboutToFinish()
+void MediaObjectTest::testPrefinishMark()
 {
-    const qint32 requestedAboutToFinishTime = 2000;
-    m_media->setAboutToFinishTime(requestedAboutToFinishTime);
-    QCOMPARE(m_media->aboutToFinishTime(), requestedAboutToFinishTime);
-    QSignalSpy aboutToFinishSpy(m_media, SIGNAL(aboutToFinish(qint32)));
+    const qint32 requestedPrefinishMarkTime = 2000;
+    m_media->setPrefinishMark(requestedPrefinishMarkTime);
+    QCOMPARE(m_media->prefinishMark(), requestedPrefinishMarkTime);
+    QSignalSpy prefinishMarkReachedSpy(m_media, SIGNAL(prefinishMarkReached(qint32)));
     QSignalSpy finishSpy(m_media, SIGNAL(finished()));
     startPlayback();
     State s = m_media->state();
     if (m_media->isSeekable()) {
-        m_media->seek(m_media->totalTime() - 4000 - requestedAboutToFinishTime); // give it 4 seconds
+        m_media->seek(m_media->totalTime() - 4000 - requestedPrefinishMarkTime); // give it 4 seconds
     }
     int wait = 10000;
-    while (aboutToFinishSpy.count() == 0 && (m_media->state() == Phonon::PlayingState ||
+    while (prefinishMarkReachedSpy.count() == 0 && (m_media->state() == Phonon::PlayingState ||
                 m_media->state() == Phonon::BufferingState)) {
         wait = qMax(1000, wait / 2);
-        waitForSignal(m_media, SIGNAL(aboutToFinish(qint32)), wait);
+        QTest::kWaitForSignal(m_media, SIGNAL(prefinishMarkReached(qint32)), wait);
     }
     // at this point the media should be about to finish playing
     qint64 r = m_media->remainingTime();
     Phonon::State state = m_media->state();
-    QCOMPARE(aboutToFinishSpy.count(), 1);
-    const qint32 aboutToFinishTime = castQVariantToInt32(aboutToFinishSpy.first().at(0));
-    QVERIFY(aboutToFinishTime <= requestedAboutToFinishTime + 150); // allow it to be up to 150ms too early
-    qDebug() << "received aboutToFinishTime" << aboutToFinishTime << ", requested" << requestedAboutToFinishTime;
+    QCOMPARE(prefinishMarkReachedSpy.count(), 1);
+    const qint32 prefinishMark = castQVariantToInt32(prefinishMarkReachedSpy.first().at(0));
+    QVERIFY(prefinishMark <= requestedPrefinishMarkTime + 150); // allow it to be up to 150ms too early
+    qDebug() << "received prefinishMark" << prefinishMark << ", requested" << requestedPrefinishMarkTime;
     if (state == Phonon::PlayingState || state == Phonon::BufferingState) {
-        if (r > aboutToFinishTime) {
+        if (r > prefinishMark) {
             qDebug() << "remainingTime =" << r;
-            QFAIL("remainingTime needs to be less than or equal to aboutToFinishTime");
+            QFAIL("remainingTime needs to be less than or equal to prefinishMark");
         }
-        QVERIFY(r <= aboutToFinishTime);
-        waitForSignal(m_media, SIGNAL(finished()));
+        QVERIFY(r <= prefinishMark);
+        QTest::kWaitForSignal(m_media, SIGNAL(finished()));
     } else {
-        QVERIFY(aboutToFinishTime >= 0);
+        QVERIFY(prefinishMark >= 0);
     }
     QCOMPARE(finishSpy.count(), 1);
 
-    m_media->setAboutToFinishTime(0);
-    QCOMPARE(m_media->aboutToFinishTime(), qint32(0));
+    m_media->setPrefinishMark(0);
+    QCOMPARE(m_media->prefinishMark(), qint32(0));
 
     while (m_stateChangedSignalSpy->count() > 1) {
         QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
@@ -507,7 +504,7 @@ void MediaObjectTest::testAboutToFinish()
     QCOMPARE(newstate, Phonon::StoppedState);
     QCOMPARE(m_media->state(), Phonon::StoppedState);
     QCoreApplication::processEvents();
-    QCOMPARE(aboutToFinishSpy.count(), 1);
+    QCOMPARE(prefinishMarkReachedSpy.count(), 1);
 }
 
 void MediaObjectTest::setMediaAndPlay()
@@ -515,11 +512,11 @@ void MediaObjectTest::setMediaAndPlay()
     m_stateChangedSignalSpy->clear();
     QCOMPARE(m_stateChangedSignalSpy->count(), 0);
 
-    QSignalSpy lengthSignalSpy(m_media, SIGNAL(length(qint64)));
-    QVERIFY(!m_media->url().isEmpty());
+    QSignalSpy totalTimeChangedSignalSpy(m_media, SIGNAL(totalTimeChanged(qint64)));
+    QVERIFY(m_media->currentSource().type() != MediaSource::Invalid);
     Phonon::State state = m_media->state();
     QVERIFY(state == Phonon::StoppedState || state == Phonon::PlayingState);
-    m_media->setUrl(m_url);
+    m_media->setCurrentSource(m_url);
     // before calling play() we better make sure that if play() finishes very fast that we don't get
     // called again
     disconnect(m_media, SIGNAL(finished()), this, SLOT(setMediaAndPlay()));
@@ -539,7 +536,7 @@ void MediaObjectTest::setMediaAndPlay()
         QVERIFY(oldstate == Phonon::StoppedState || oldstate == Phonon::PlayingState);
         QCOMPARE(state, newstate);
 
-        waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+        QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
         emits = m_stateChangedSignalSpy->count();
         state = m_media->state();
         QCOMPARE(emits, 1);
@@ -558,9 +555,9 @@ void MediaObjectTest::setMediaAndPlay()
         QCOMPARE(Phonon::StoppedState, state);
         QCOMPARE(m_stateChangedSignalSpy->count(), 0);
 
-        // check for length signal
-        QVERIFY(lengthSignalSpy.count() > 0);
-        args = lengthSignalSpy.takeLast();
+        // check for totalTimeChanged signal
+        QVERIFY(totalTimeChangedSignalSpy.count() > 0);
+        args = totalTimeChangedSignalSpy.takeLast();
         QCOMPARE(m_media->totalTime(), castQVariantToInt64(args.at(0)));
         */
 
@@ -574,7 +571,7 @@ void MediaObjectTest::testPlayOnFinish()
     if (m_media->isSeekable()) {
         m_media->seek(m_media->totalTime() - 4000);
     }
-    waitForSignal(this, SIGNAL(continueTestPlayOnFinish()), 4000);
+    QTest::kWaitForSignal(this, SIGNAL(continueTestPlayOnFinish()), 4000);
     ::sleep(1);
     stopPlayback(Phonon::PlayingState);
 }
@@ -585,12 +582,12 @@ void MediaObjectTest::testPlayBeforeFinish()
     QCOMPARE(m_stateChangedSignalSpy->size(), 0);
     Phonon::State state = m_media->state();
     QCOMPARE(state, Phonon::PlayingState);
-    m_media->setUrl(m_url);
+    m_media->setCurrentSource(m_url);
     m_media->play();
     if (m_stateChangedSignalSpy->isEmpty()) {
-        waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 4000);
+        QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 4000);
         if (0 == m_stateChangedSignalSpy->size()) {
-            QFAIL("no state change after setUrl() and play() were called");
+            QFAIL("no state change after setCurrentSource() and play() were called");
         }
     }
     // first (optional) state to reach is StoppedState
@@ -600,9 +597,9 @@ void MediaObjectTest::testPlayBeforeFinish()
     state = qvariant_cast<Phonon::State>(args.at(0));
     if (state == Phonon::StoppedState) {
         if (m_stateChangedSignalSpy->isEmpty()) {
-            waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 4000);
+            QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 4000);
             if (0 == m_stateChangedSignalSpy->size()) {
-                QFAIL("no state change after StoppedState after setUrl() and play() were called");
+                QFAIL("no state change after StoppedState after setCurrentSource() and play() were called");
             }
         }
         // next LoadingState
@@ -613,9 +610,9 @@ void MediaObjectTest::testPlayBeforeFinish()
     }
     QCOMPARE(state, Phonon::LoadingState);
     if (m_stateChangedSignalSpy->isEmpty()) {
-        waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 4000);
+        QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 4000);
         if (0 == m_stateChangedSignalSpy->size()) {
-            QFAIL("no state change after LoadingState after setUrl() and play() were called");
+            QFAIL("no state change after LoadingState after setCurrentSource() and play() were called");
         }
     }
     // next either BufferingState or PlayingState
@@ -624,9 +621,9 @@ void MediaObjectTest::testPlayBeforeFinish()
     QCOMPARE(oldstate, state);
     state = qvariant_cast<Phonon::State>(args.at(0));
     if (state == Phonon::BufferingState && m_stateChangedSignalSpy->isEmpty()) {
-        waitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 4000); // buffering can take a while
+        QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 4000); // buffering can take a while
         if (0 == m_stateChangedSignalSpy->size()) {
-            QFAIL("no state change after BufferingState after setUrl() and play() were called");
+            QFAIL("no state change after BufferingState after setCurrentSource() and play() were called");
         }
         args = m_stateChangedSignalSpy->takeFirst();
         oldstate = qvariant_cast<Phonon::State>(args.at(1));
@@ -689,7 +686,7 @@ void MediaObjectTest::testTickSignal()
                 QFAIL("no tick signals are being received");
             }
             s2 = start2.elapsed();
-            waitForSignal(m_media, SIGNAL(tick(qint64)), 2000);
+            QTest::kWaitForSignal(m_media, SIGNAL(tick(qint64)), 2000);
         }
         stopPlayback(Phonon::PlayingState);
     }
@@ -792,6 +789,6 @@ void MediaObjectTest::cleanupTestCase()
     delete m_media;
 }
 
-QTEST_KDEMAIN(MediaObjectTest, NoGUI)
+QTEST_KDEMAIN_CORE(MediaObjectTest)
 #include "mediaobjecttest.moc"
 // vim: sw=4 ts=4

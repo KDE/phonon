@@ -1,2 +1,2 @@
-addSignal("volumeChanged(float)");
+addSignal("volumeChanged(qreal)");
 addSignal("audioDeviceFailed()");

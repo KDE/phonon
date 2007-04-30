@@ -16,7 +16,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
-#include <kdebug.h>
+#include "phononnamespace_p.h"
 
 /*
  * Implementation of adaptor class AudioOutputAdaptor

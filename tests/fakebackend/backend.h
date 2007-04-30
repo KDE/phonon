@@ -43,22 +43,18 @@ namespace Fake
             Backend(QObject *parent, const QStringList &args);
             virtual ~Backend();
 
-            QObject *createObject0(BackendInterface::Class0, QObject *parent);
-            QObject *createObject1(BackendInterface::Class1, QObject *parent, QVariant arg1);
+            QObject *createObject(BackendInterface::Class, QObject *parent, const QList<QVariant> &args);
 
             Q_INVOKABLE bool supportsVideo() const;
             Q_INVOKABLE bool supportsOSD() const;
             Q_INVOKABLE bool supportsFourcc(quint32 fourcc) const;
             Q_INVOKABLE bool supportsSubtitles() const;
-            Q_INVOKABLE QStringList knownMimeTypes() const;
+            Q_INVOKABLE QStringList availableMimeTypes() const;
 
             void freeSoundcardDevices();
 
             QSet<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
             QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
-
-            Q_INVOKABLE char const *uiLibrary() const;
-            // Q_INVOKABLE char *uiSymbol() const;
 
         Q_SIGNALS:
             void objectDescriptionChanged(ObjectDescriptionType);

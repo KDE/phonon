@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2
@@ -30,39 +30,33 @@ class MethodTest : public QObject
         void initTestCase() { Phonon::loadFakeBackend(); }
         void checkBackendInterface();
 
-        void checkAudioDataOutputMethods_data();
-        void checkAudioDataOutputMethods();
+//X         void checkAudioDataOutputMethods_data();
+//X         void checkAudioDataOutputMethods();
+        void checkVideoEffectMethods_data();
+        void checkVideoEffectMethods();
         void checkAudioEffectMethods_data();
         void checkAudioEffectMethods();
         void checkAudioOutputMethods_data();
         void checkAudioOutputMethods();
         void checkAudioPathMethods_data();
         void checkAudioPathMethods();
-        void checkAvCaptureMethods_data();
-        void checkAvCaptureMethods();
         void checkBackendMethods_data();
         void checkBackendMethods();
         void checkBrightnessControlMethods_data();
         void checkBrightnessControlMethods();
-        void checkByteStreamMethods_data();
-        void checkByteStreamMethods();
         void checkMediaObjectMethods_data();
         void checkMediaObjectMethods();
-        void checkMediaQueueMethods_data();
-        void checkMediaQueueMethods();
-        void checkVideoDataOutputMethods_data();
-        void checkVideoDataOutputMethods();
-        void checkVideoEffectMethods_data();
-        void checkVideoEffectMethods();
+//X         void checkVideoDataOutputMethods_data();
+//X         void checkVideoDataOutputMethods();
         void checkVideoPathMethods_data();
         void checkVideoPathMethods();
-        void checkVisualizationMethods_data();
-        void checkVisualizationMethods();
+//X         void checkVisualizationMethods_data();
+//X         void checkVisualizationMethods();
         void checkVolumeFaderEffectMethods_data();
         void checkVolumeFaderEffectMethods();
-        void checkByteStreamInterfaces();
+        void checkVideoWidgetMethods_data();
+        void checkVideoWidgetMethods();
         void checkMediaObjectInterfaces();
-        void checkAvCapturetInterfaces();
         void checkAudioOutputInterface();
 
     private:

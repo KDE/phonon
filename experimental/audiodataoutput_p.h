@@ -30,7 +30,7 @@ namespace Experimental
 
 class AudioDataOutputPrivate : public AbstractAudioOutputPrivate
 {
-    K_DECLARE_PUBLIC(AudioDataOutput)
+    Q_DECLARE_PUBLIC(AudioDataOutput)
     PHONON_PRIVATECLASS
     protected:
         AudioDataOutputPrivate()

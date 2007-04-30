@@ -27,16 +27,7 @@
 
 namespace Phonon
 {
-PHONON_HEIR_IMPL(VideoEffect)
-
-QList<EffectParameter> DeinterlaceFilter::parameterList() const
-{
-    QList<EffectParameter> ret;
-    //EffectParameter par(1, i18n("Brightness"), EffectParameter::IntegerHint, 0,
-            //lowerBound(), upperBound(), i18n("controls the brightness of the video images"));
-    //par.setEffect(const_cast<DeinterlaceFilter *>(this));
-    return ret;
-}
+PHONON_HEIR_IMPL(Effect)
 
 /*
 PHONON_GETTER(int, brightness, d->brightness)

@@ -32,7 +32,7 @@ namespace Phonon
 namespace Fake
 {
 ByteStream::ByteStream(QObject *parent)
-    : AbstractMediaProducer(parent)
+    : MediaProducer(parent)
     , m_bufferSize(0)
     , m_streamPosition(0)
     , m_eof(false)
@@ -116,7 +116,7 @@ void ByteStream::setAboutToFinishTime(qint32 t)
 
 void ByteStream::play()
 {
-    AbstractMediaProducer::play();
+    MediaProducer::play();
     m_streamConsumeTimer->start(300);
     if (state() == Phonon::LoadingState)
     {
@@ -128,7 +128,7 @@ void ByteStream::play()
 void ByteStream::pause()
 {
     if (state() == Phonon::PlayingState || state() == Phonon::BufferingState) {
-        AbstractMediaProducer::pause();
+        MediaProducer::pause();
         m_streamConsumeTimer->stop();
     }
 }
@@ -138,7 +138,7 @@ void ByteStream::stop()
     if (state() == Phonon::LoadingState)
         return;
 
-    AbstractMediaProducer::stop();
+    MediaProducer::stop();
     m_streamConsumeTimer->stop();
     m_streamPosition = 0;
 }
@@ -167,7 +167,7 @@ void ByteStream::seek(qint64 time)
         m_bufferSize = dataEnd - newDataPosition;
     m_aboutToFinishEmitted = false;
 
-    AbstractMediaProducer::seek(currentTime());
+    MediaProducer::seek(currentTime());
 }
 
 void ByteStream::consumeStream()

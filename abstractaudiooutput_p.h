@@ -27,11 +27,13 @@ namespace Phonon
 {
 class AbstractAudioOutputPrivate : public BasePrivate
 {
-    K_DECLARE_PUBLIC(AbstractAudioOutput)
+    Q_DECLARE_PUBLIC(AbstractAudioOutput)
     PHONON_PRIVATEABSTRACTCLASS
     protected:
+        AbstractAudioOutput *q_ptr;
         AbstractAudioOutputPrivate(CastId castId = AbstractAudioOutputPrivateType)
-            : BasePrivate(castId)
+            : BasePrivate(castId),
+            q_ptr(0)
         {
         }
 };

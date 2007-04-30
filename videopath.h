@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,15 +19,14 @@
 #ifndef Phonon_VIDEOPATH_H
 #define Phonon_VIDEOPATH_H
 
-#include "base.h"
+#include "phonon_export.h"
 #include "phonondefs.h"
 #include <QObject>
-#include "basedestructionhandler.h"
 
 namespace Phonon
 {
     class VideoPathPrivate;
-    class VideoEffect;
+    class Effect;
     class AbstractVideoOutput;
 
     /**
@@ -36,7 +35,7 @@ namespace Phonon
      * This class is used to define where the video data is sent to, what
      * effects are applied and what video channel (angle) is to be used.
      *
-     * For simple usage an instance of this class is added to an AbstractMediaProducer
+     * For simple usage an instance of this class is added to an MediaProducer
      * and an AbstractAudioOutput subclass (such as AudioOutput) added with addOutput.
      * @code
      * VideoPath *path = new VideoPath(this);
@@ -44,16 +43,16 @@ namespace Phonon
      * path->addOutput(videoOutput);
      * @endcode
      *
-     * It is best to add the path to an AbstractMediaProducer after
+     * It is best to add the path to an MediaProducer after
      * construction, before calling any other methods.
      *
      * \author Matthias Kretz <kretz@kde.org>
      * \see AudioPath
      */
-    class PHONONCORE_EXPORT VideoPath : public QObject, public Base
+    class PHONON_EXPORT VideoPath : public QObject
     {
-        friend class AbstractMediaProducer;
-        friend class AbstractMediaProducerPrivate;
+        friend class MediaProducer;
+        friend class MediaProducerPrivate;
         K_DECLARE_PRIVATE(VideoPath)
         Q_OBJECT
         PHONON_OBJECT(VideoPath)
@@ -113,7 +112,7 @@ namespace Phonon
              * You may insert effects of the same class as often as you like,
              * but if you insert the same object, the call will fail.
              *
-             * \param newEffect An object of a subclass of VideoEffect.
+             * \param newEffect An Effect object.
              *
              * \param insertBefore If you already inserted an effect you can
              * tell with this parameter in which order the video data gets
@@ -126,9 +125,9 @@ namespace Phonon
              * inserted.
              *
              * \see removeEffect
-             * \see VideoEffect
+             * \see Effect
              */
-            bool insertEffect(VideoEffect *newEffect, VideoEffect *insertBefore = 0);
+            bool insertEffect(Effect *newEffect, Effect *insertBefore = 0);
 
             /**
              * Removes an effect from the video path.
@@ -144,10 +143,10 @@ namespace Phonon
              *
              * \see insertEffect
              */
-            bool removeEffect(VideoEffect *effect);
+            bool removeEffect(Effect *effect);
 
             /**
-             * Returns a list of VideoEffect objects that are currently
+             * Returns a list of Effect objects that are currently
              * used as effects. The order in the list determines the order the
              * video signal is sent through the effects.
              *
@@ -156,7 +155,7 @@ namespace Phonon
              * \see insertEffect
              * \see removeEffect
              */
-            const QList<VideoEffect *> &effects() const;
+            const QList<Effect *> &effects() const;
     };
 } //namespace Phonon
 

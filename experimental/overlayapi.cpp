@@ -21,7 +21,8 @@
 #include "overlayapi_p.h"
 #include "../base_p.h"
 #include "../phonondefs_p.h"
-#include "../ui/videowidget.h"
+#include "../videowidget.h"
+#include "../abstractvideooutput_p.h"
 
 #include <QVariant>
 
@@ -32,21 +33,21 @@ namespace Experimental
 
 OverlayApi::OverlayApi(VideoWidget *parent)
     : QObject(parent),
-    d_ptr(new OverlayApiPrivate)
+    k_ptr(new OverlayApiPrivate)
 {
-    Q_D(OverlayApi);
+    K_D(OverlayApi);
     d->q_ptr = this;
     d->videowidget = parent;
 }
 
 OverlayApi::~OverlayApi()
 {
-    delete d_ptr;
+    delete k_ptr;
 }
 
 OverlayApi::OverlayTypes OverlayApi::overlayCapabilities() const
 {
-    Q_D(const OverlayApi);
+    K_D(const OverlayApi);
     QVariant v = d->videowidget->property("_k_overlayCapabilities");
     if (v.isValid()) {
         return static_cast<OverlayType>(v.toInt());
@@ -56,7 +57,7 @@ OverlayApi::OverlayTypes OverlayApi::overlayCapabilities() const
 
 bool OverlayApi::createOverlay(QWidget *widget, OverlayType type)
 {
-    Q_D(OverlayApi);
+    K_D(OverlayApi);
     QObject *m_backendObject = d->videowidget->k_ptr->backendObject();
     if (!m_backendObject) {
         return false;

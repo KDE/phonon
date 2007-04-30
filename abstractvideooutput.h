@@ -19,8 +19,8 @@
 #ifndef Phonon_ABSTRACTVIDEOOUTPUTBASE_H
 #define Phonon_ABSTRACTVIDEOOUTPUTBASE_H
 
-#include "base.h"
 #include "phonondefs.h"
+#include "phonon_export.h"
 #include <QObject>
 
 class QString;
@@ -35,7 +35,7 @@ namespace Experimental
 
     class AbstractVideoOutputPrivate;
 
-    class PHONONCORE_EXPORT AbstractVideoOutput : public Base
+    class PHONON_EXPORT AbstractVideoOutput
     {
         friend class VideoPath;
         friend class VideoPathPrivate;
@@ -50,6 +50,10 @@ namespace Experimental
              * \param parent Standard QObject parent.
              */
             AbstractVideoOutput(AbstractVideoOutputPrivate &d);
+
+            ~AbstractVideoOutput();
+
+            AbstractVideoOutputPrivate *const k_ptr;
     };
 } //namespace Phonon
 

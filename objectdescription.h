@@ -23,7 +23,7 @@
 #include "phonon_export.h"
 
 #include <QtGlobal>
-#include <QSharedDataPointer>
+#include <QExplicitlySharedDataPointer>
 #include <QVariant>
 #include <QByteArray>
 #include <QList>
@@ -47,7 +47,7 @@ namespace Phonon
         VisualizationType
     };
 
-class PHONONCORE_EXPORT ObjectDescriptionBase
+class PHONON_EXPORT ObjectDescriptionBase
 {
     public:
         /**
@@ -112,7 +112,7 @@ class PHONONCORE_EXPORT ObjectDescriptionBase
          * \internal
          * The data is implicitly shared.
          */
-        QSharedDataPointer<ObjectDescriptionPrivate> d;
+        QExplicitlySharedDataPointer<ObjectDescriptionPrivate> d;
 
     private:
         ObjectDescriptionBase &operator=(const ObjectDescriptionBase &rhs);
@@ -131,7 +131,7 @@ class PHONONCORE_EXPORT ObjectDescriptionBase
  * \see VideoCaptureDevice
  */
 template<ObjectDescriptionType T>
-class PHONONCORE_EXPORT ObjectDescription : public ObjectDescriptionBase
+class PHONON_EXPORT ObjectDescription : public ObjectDescriptionBase
 {
     public:
         ObjectDescription<T> &operator=(const ObjectDescription<T> &rhs);

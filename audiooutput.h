@@ -44,7 +44,7 @@ namespace Phonon
      * \author Matthias Kretz <kretz@kde.org>
      * \see Phonon::Ui::VolumeSlider
      */
-    class PHONONCORE_EXPORT AudioOutput : public AbstractAudioOutput
+    class PHONON_EXPORT AudioOutput : public AbstractAudioOutput
     {
         friend class FactoryPrivate;
         friend class ::AudioOutputAdaptor;
@@ -58,13 +58,12 @@ namespace Phonon
          */
         Q_PROPERTY(QString name READ name WRITE setName)
         /**
-         * This is the current volume of the output as voltage factor.
-         *
-         * 1.0 means 100%, 0.5 means 50% voltage/25% power, 0.0 means 0%
+         * This is the current loudness of the output (it is using Stevens' law
+         * to calculate the change in voltage internally).
          *
          * \see volumeDecibel
          */
-        Q_PROPERTY(float volume READ volume WRITE setVolume NOTIFY volumeChanged)
+        Q_PROPERTY(qreal volume READ volume WRITE setVolume NOTIFY volumeChanged)
         /**
          * This is the current volume of the output in decibel.
          *
@@ -74,7 +73,7 @@ namespace Phonon
          *
          * \see volume
          */
-        Q_PROPERTY(double volumeDecibel READ volumeDecibel WRITE setVolumeDecibel)
+        Q_PROPERTY(qreal volumeDecibel READ volumeDecibel WRITE setVolumeDecibel)
         /**
          * This property holds the (hardware) destination for the output.
          *
@@ -114,7 +113,8 @@ namespace Phonon
              */
             explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
             QString name() const;
-            double volumeDecibel() const;
+            qreal volume() const;
+            qreal volumeDecibel() const;
 
             /**
              * Returns the category of this output.
@@ -127,9 +127,8 @@ namespace Phonon
 
         public Q_SLOTS:
             void setName(const QString &newName);
-            float volume() const;
-            void setVolume(float newVolume);
-            void setVolumeDecibel(double newVolumeDecibel);
+            void setVolume(qreal newVolume);
+            void setVolumeDecibel(qreal newVolumeDecibel);
             bool setOutputDevice(const AudioOutputDevice &newAudioOutputDevice);
             void setMuted(bool mute);
 
@@ -140,7 +139,7 @@ namespace Phonon
              * this is important
              * to keep a widget showing the current volume up to date.
              */
-            void volumeChanged(float newVolume);
+            void volumeChanged(qreal newVolume);
 
             /**
              * This signal is emitted when the muted property has changed. As
@@ -161,7 +160,7 @@ namespace Phonon
             void outputDeviceChanged(const AudioOutputDevice &newAudioOutputDevice);
 
         private:
-            Q_PRIVATE_SLOT(k_func(), void _k_volumeChanged(float))
+            Q_PRIVATE_SLOT(k_func(), void _k_volumeChanged(qreal))
             Q_PRIVATE_SLOT(k_func(), void _k_revertFallback())
             Q_PRIVATE_SLOT(k_func(), void _k_audioDeviceFailed())
     };

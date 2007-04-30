@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -20,15 +20,10 @@
 #ifndef PHONONDEFS_P_H
 #define PHONONDEFS_P_H
 
+#define K_D(Class) Class##Private *const d = k_func()
+
 #define PHONON_CONCAT_HELPER_INTERNAL(x, y) x ## y
 #define PHONON_CONCAT_HELPER(x, y) PHONON_CONCAT_HELPER_INTERNAL(x, y)
-
-#define K_DECLARE_PUBLIC(classname) \
-    inline classname *q_func() { return static_cast<classname *>(q_ptr); } \
-    inline const classname *q_func() const { return static_cast<classname *>(q_ptr); } \
-    friend class classname;
-#define K_D(classname) PHONON_CONCAT_HELPER(classname, Private) *const d = k_func()
-#define K_Q(classname) classname *const q = q_func()
 
 #define PHONON_PRIVATECLASS \
 protected: \
@@ -70,41 +65,51 @@ protected: \
 #define PHONON_ABSTRACTBASE_IMPL \
 PHONON_CLASSNAME::PHONON_CLASSNAME(PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) &dd, QObject *parent) \
     : QObject(parent) \
-    , Base(dd) \
+    , k_ptr(&dd) \
 { \
+    k_ptr->q_ptr = this; \
+} \
+bool PHONON_CLASSNAME::isValid() const \
+{ \
+    return (k_func()->m_backendObject != 0); \
 }
 
 #define PHONON_OBJECT_IMPL \
 PHONON_CLASSNAME::PHONON_CLASSNAME(QObject *parent) \
     : QObject(parent) \
-    , Base(*new PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)()) \
+    , k_ptr(new PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)()) \
 { \
-    K_D(PHONON_CLASSNAME); \
+    PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
+    d->q_ptr = this; \
     d->createBackendObject(); \
 } \
 void PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)::createBackendObject() \
 { \
     if (m_backendObject) \
         return; \
-    K_Q(PHONON_CLASSNAME); \
+    Q_Q(PHONON_CLASSNAME); \
     m_backendObject = Factory::PHONON_CONCAT_HELPER(create, PHONON_CLASSNAME)(q); \
     if (m_backendObject) { \
         setupBackendObject(); \
     } \
+} \
+bool PHONON_CLASSNAME::isValid() const \
+{ \
+    return (k_func()->m_backendObject != 0); \
 }
 
 #define PHONON_HEIR_IMPL(parentclass) \
 PHONON_CLASSNAME::PHONON_CLASSNAME(QObject *parent) \
     : parentclass(*new PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private), parent) \
 { \
-    K_D(PHONON_CLASSNAME); \
+    PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
     d->createBackendObject(); \
 } \
 void PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)::createBackendObject() \
 { \
     if (m_backendObject) \
         return; \
-    K_Q(PHONON_CLASSNAME); \
+    Q_Q(PHONON_CLASSNAME); \
     m_backendObject = Factory::PHONON_CONCAT_HELPER(create, PHONON_CLASSNAME)(q); \
     if (m_backendObject) { \
         setupBackendObject(); \
@@ -146,7 +151,7 @@ qobject_cast<PHONON_INTERFACENAME *>(m_backendObject)->function
 #define PHONON_GETTER(rettype, name, retdefault) \
 rettype PHONON_CLASSNAME::name() const \
 { \
-    K_D(const PHONON_CLASSNAME); \
+    const PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
     if (!d->m_backendObject) \
         return retdefault; \
     rettype ret; \
@@ -157,7 +162,7 @@ rettype PHONON_CLASSNAME::name() const \
 #define PHONON_INTERFACE_GETTER(rettype, name, retdefault) \
 rettype PHONON_CLASSNAME::name() const \
 { \
-    K_D(const PHONON_CLASSNAME); \
+    const PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
     if (!d->m_backendObject) \
         return retdefault; \
     return qobject_cast<PHONON_INTERFACENAME *>(d->m_backendObject)->name(); \
@@ -166,7 +171,7 @@ rettype PHONON_CLASSNAME::name() const \
 #define PHONON_GETTER1(rettype, name, retdefault, argtype1, argvar1) \
 rettype PHONON_CLASSNAME::name(argtype1 argvar1) const \
 { \
-    K_D(const PHONON_CLASSNAME); \
+    const PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
     if (!d->m_backendObject) \
         return retdefault; \
     rettype ret; \
@@ -177,7 +182,7 @@ rettype PHONON_CLASSNAME::name(argtype1 argvar1) const \
 #define PHONON_INTERFACE_GETTER1(rettype, name, retdefault, argtype1, argvar1) \
 rettype PHONON_CLASSNAME::name(argtype1 argvar1) const \
 { \
-    K_D(const PHONON_CLASSNAME); \
+    const PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
     if (!d->m_backendObject) \
         return retdefault; \
     return qobject_cast<PHONON_INTERFACENAME *>(d->m_backendObject)->name(argvar1->k_ptr->backendObject()); \
@@ -186,7 +191,7 @@ rettype PHONON_CLASSNAME::name(argtype1 argvar1) const \
 #define PHONON_SETTER(functionname, privatevar, argtype1) \
 void PHONON_CLASSNAME::functionname(argtype1 x) \
 { \
-    K_D(PHONON_CLASSNAME); \
+    PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
     d->privatevar = x; \
     if (k_ptr->backendObject()) { \
         BACKEND_CALL1(#functionname, argtype1, x); \
@@ -196,7 +201,7 @@ void PHONON_CLASSNAME::functionname(argtype1 x) \
 #define PHONON_INTERFACE_SETTER(functionname, privatevar, argtype1) \
 void PHONON_CLASSNAME::functionname(argtype1 x) \
 { \
-    K_D(PHONON_CLASSNAME); \
+    PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
     d->privatevar = x; \
     if (k_ptr->backendObject()) { \
         qobject_cast<PHONON_INTERFACENAME *>(d->m_backendObject)->functionname(x); \

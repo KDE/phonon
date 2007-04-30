@@ -21,7 +21,7 @@
 #define PHONON_VOLUMEFADEREFFECT_H
 
 #include "phonon_export.h"
-#include "audioeffect.h"
+#include "effect.h"
 
 namespace Phonon
 {
@@ -38,7 +38,7 @@ namespace Phonon
      * \author Matthias Kretz <kretz@kde.org>
      * \see AudioOutput::volume
      */
-    class PHONONCORE_EXPORT VolumeFaderEffect : public AudioEffect
+    class PHONON_EXPORT VolumeFaderEffect : public Effect
     {
         Q_OBJECT
         K_DECLARE_PRIVATE(VolumeFaderEffect)

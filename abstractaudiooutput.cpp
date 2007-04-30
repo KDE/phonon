@@ -27,6 +27,11 @@ namespace Phonon
 
 PHONON_ABSTRACTBASE_IMPL
 
+AbstractAudioOutput::~AbstractAudioOutput()
+{
+    delete k_ptr;
+}
+
 } //namespace Phonon
 
 #include "abstractaudiooutput.moc"

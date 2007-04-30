@@ -21,17 +21,20 @@
 #define PHONON_DEINTERLACEFILTER_P_H
 
 #include "deinterlacefilter.h"
-#include "videoeffect_p.h"
+#include "effect_p.h"
 
 namespace Phonon
 {
-class DeinterlaceFilterPrivate : public VideoEffectPrivate
+class DeinterlaceFilterPrivate : public EffectPrivate
 {
-    K_DECLARE_PUBLIC(DeinterlaceFilter)
+    Q_DECLARE_PUBLIC(DeinterlaceFilter)
     PHONON_PRIVATECLASS
     protected:
         DeinterlaceFilterPrivate()
         {
+            type = Effect::VideoEffect;
+            id = -1; // ### check how to get the correct id
+            // ############# parameter functions are incorrect
         }
 };
 }

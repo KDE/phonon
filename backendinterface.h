@@ -36,7 +36,7 @@ namespace Phonon
  * \ingroup Backend
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONONCORE_EXPORT BackendInterface
+class BackendInterface
 {
     public:
         virtual ~BackendInterface() {}
@@ -44,11 +44,8 @@ class PHONONCORE_EXPORT BackendInterface
         /**
          * Classes that take no additional arguments
          */
-        enum Class0 {
+        enum Class {
             MediaObjectClass,
-            MediaQueueClass,
-            AvCaptureClass,
-            ByteStreamClass,
             AudioPathClass,
             VolumeFaderEffectClass,
             AudioOutputClass,
@@ -57,12 +54,7 @@ class PHONONCORE_EXPORT BackendInterface
             VideoPathClass,
             BrightnessControlClass,
             VideoDataOutputClass,
-            DeinterlaceFilterClass
-        };
-        /**
-         * Classes that take one additional argument
-         */
-        enum Class1 {
+            DeinterlaceFilterClass,
             /**
              * Takes an additional int that specifies the effect Id.
              */
@@ -70,7 +62,8 @@ class PHONONCORE_EXPORT BackendInterface
             /**
              * Takes an additional int that specifies the effect Id.
              */
-            VideoEffectClass
+            VideoEffectClass,
+            VideoWidgetClass
         };
 
         /**
@@ -78,22 +71,15 @@ class PHONONCORE_EXPORT BackendInterface
          *
          * \param c The requested class.
          * \param parent The parent object.
-         */
-        virtual QObject *createObject0(Class0 c, QObject *parent) = 0;
-        /**
-         * Returns a new instance of the requested class.
-         *
-         * \param c The requested class.
-         * \param parent The parent object.
          * \param arg1 An additional argument (documented in \ref Class1).
          */
-        virtual QObject *createObject1(Class1 c, QObject *parent, QVariant arg1) = 0;
+        virtual QObject *createObject(Class c, QObject *parent, const QList<QVariant> &args = QList<QVariant>()) = 0;
 
         virtual QSet<int> objectDescriptionIndexes(ObjectDescriptionType type) const = 0;
         virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
 };
 } // namespace Phonon
 
-Q_DECLARE_INTERFACE(Phonon::BackendInterface, "org.kde.Phonon.BackendInterface/0.2")
+Q_DECLARE_INTERFACE(Phonon::BackendInterface, "BackendInterface2.phonon.kde.org")
 
 #endif // PHONON_BACKENDINTERFACE_H

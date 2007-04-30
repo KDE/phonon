@@ -95,6 +95,6 @@ void AudioPathTest::cleanupTestCase()
     //delete m_media;
 }
 
-QTEST_KDEMAIN(AudioPathTest, NoGUI)
+QTEST_KDEMAIN_CORE(AudioPathTest)
 #include "audiopathtest.moc"
 // vim: sw=4 ts=4

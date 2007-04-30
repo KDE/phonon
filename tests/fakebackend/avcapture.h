@@ -19,13 +19,13 @@
 #ifndef Phonon_FAKE_AVCAPTURECAPTURE_H
 #define Phonon_FAKE_AVCAPTURECAPTURE_H
 
-#include "abstractmediaproducer.h"
+#include "mediaproducer.h"
 
 namespace Phonon
 {
 namespace Fake
 {
-    class AvCapture : public AbstractMediaProducer
+    class AvCapture : public MediaProducer
     {
         Q_OBJECT
         public:

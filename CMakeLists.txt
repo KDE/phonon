@@ -15,31 +15,26 @@ IF(ALSA_VERSION_STR AND NOT WIN32)
     ENDIF(VERSION_LESS)
 ENDIF(ALSA_VERSION_STR AND NOT WIN32)
 
-add_subdirectory( ui )
 add_subdirectory( tests )
 add_subdirectory( kcm )
-add_subdirectory( examples )
+#add_subdirectory( examples )
 add_subdirectory(experimental)
 
 ########### next target ###############
 
-set(phononcore_LIB_SRCS
+set(phonon_LIB_SRCS
 	objectdescription.cpp
 	objectdescriptionmodel.cpp
 	phononnamespace.cpp
-	base.cpp
-	abstractmediaproducer.cpp
-	abstractmediaproducer_p.cpp
+	mediasource.cpp
+	abstractmediastream.cpp
+	streaminterface.cpp
 	mediaobject.cpp
-	mediaqueue.cpp
-	bytestream.cpp
 	audiopath.cpp
 	videopath.cpp
-	effect.cpp
 	effectparameter.cpp
-	audioeffect.cpp
+	effect.cpp
 	volumefadereffect.cpp
-	videoeffect.cpp
 	audiooutputadaptor.cpp
 	brightnesscontrol.cpp
 	deinterlacefilter.cpp
@@ -52,22 +47,22 @@ set(phononcore_LIB_SRCS
 	backendcapabilities.cpp
 	globalconfig.cpp
 	factory.cpp
-	kiofallback.cpp
-	guiinterface.cpp
-	trackinterface.cpp
-	chapterinterface.cpp
-	navigationinterface.cpp
-	angleinterface.cpp
+	mediacontroller.cpp
+	videowidget.cpp
+	videoplayer.cpp
+	seekslider.cpp
+	volumeslider.cpp
+	effectwidget.cpp
 	)
 
-kde4_automoc(${phononcore_LIB_SRCS})
+kde4_automoc(${phonon_LIB_SRCS})
 
-kde4_add_library(phononcore SHARED ${phononcore_LIB_SRCS})
+kde4_add_library(phonon SHARED ${phonon_LIB_SRCS})
 
-target_link_libraries(phononcore ${KDE4_KDECORE_LIBS})
+target_link_libraries(phonon ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS})
 
-set_target_properties(phononcore PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
-install(TARGETS phononcore  DESTINATION ${LIB_INSTALL_DIR} )
+set_target_properties(phonon PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+install(TARGETS phonon  DESTINATION ${LIB_INSTALL_DIR} )
 
 
 ########### install files ###############
@@ -77,21 +72,15 @@ install( FILES
 	objectdescription.h
 	objectdescriptionmodel.h
 	phononnamespace.h
-	base.h
-	basedestructionhandler.h
-	abstractmediaproducer.h
+	mediasource.h
+	abstractmediastream.h
+	streaminterface.h
 	mediaobject.h
-	mediaqueue.h
-	bytestream.h
-	trackinterface.h
-	chapterinterface.h
 	audiopath.h
 	videopath.h
-	effect.h
 	effectparameter.h
-	audioeffect.h
+	effect.h
 	volumefadereffect.h
-	videoeffect.h
 	brightnesscontrol.h
 	deinterlacefilter.h
 	abstractaudiooutput.h
@@ -100,16 +89,16 @@ install( FILES
 	audioplayer.h
 	backendcapabilities.h
 	phonondefs.h
-	bytestreaminterface.h
 	backendinterface.h
-	mediaproducerinterface.h
 	mediaobjectinterface.h
 	audiooutputinterface.h
 	addoninterface.h
-	trackinterface.h
-	chapterinterface.h
-	navigationinterface.h
-	angleinterface.h
+	mediacontroller.h
+	videowidget.h
+	videoplayer.h
+	seekslider.h
+	volumeslider.h
+	effectwidget.h
 	DESTINATION ${INCLUDE_INSTALL_DIR}/phonon)
 install( FILES  phononbackend.desktop  DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
 install( FILES org.kde.Phonon.AudioOutput.xml DESTINATION ${DBUS_INTERFACES_DIR} )
@@ -121,6 +110,7 @@ install(FILES phonon.notifyrc DESTINATION ${DATA_INSTALL_DIR}/phonon)
 set(kaudiodevicelist_LIB_SRCS
 	audiodevice.cpp
 	audiodeviceenumerator.cpp
+	phononnamespace.cpp
 	)
 kde4_automoc(${kaudiodevicelist_LIB_SRCS})
 kde4_add_library(kaudiodevicelist SHARED ${kaudiodevicelist_LIB_SRCS})
@@ -133,5 +123,17 @@ install(FILES
 	audiodevice.h
 	audiodeviceenumerator.h
 	DESTINATION ${INCLUDE_INSTALL_DIR}/phonon)
+
+##########################################################################
+include_directories(${KDE4_KIO_INCLUDES})
+set(kde_PART_SRCS
+	kdepluginfactory.cpp
+	kiomediastream.cpp
+	)
+kde4_automoc(${kde_PART_SRCS})
+kde4_add_plugin(kde ${kde_PART_SRCS})
+target_link_libraries(kde ${KDE4_PHONON_LIBS} ${KDE4_KIO_LIBS})
+set_target_properties(kde PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE  SKIP_BUILD_RPATH TRUE BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH ${LIB_INSTALL_DIR})
+install(TARGETS kde DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/phonon_platform)
 
 # vim: noet

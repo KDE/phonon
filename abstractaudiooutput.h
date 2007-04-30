@@ -19,21 +19,23 @@
 #ifndef Phonon_ABSTRACTAUDIOOUTPUTBASE_H
 #define Phonon_ABSTRACTAUDIOOUTPUTBASE_H
 
-#include "base.h"
 #include "phonondefs.h"
+#include "phonon_export.h"
 #include <QObject>
 
 namespace Phonon
 {
     class AbstractAudioOutputPrivate;
 
-    class PHONONCORE_EXPORT AbstractAudioOutput : public QObject, public Base
+    class PHONON_EXPORT AbstractAudioOutput : public QObject
     {
         friend class AudioPath;
         friend class AudioPathPrivate;
         Q_OBJECT
         K_DECLARE_PRIVATE(AbstractAudioOutput)
         PHONON_ABSTRACTBASE(AbstractAudioOutput)
+        public:
+            ~AbstractAudioOutput();
     };
 } //namespace Phonon
 

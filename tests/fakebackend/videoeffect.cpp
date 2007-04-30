@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -33,18 +33,34 @@ VideoEffect::~VideoEffect()
 {
 }
 
-QList<Phonon::EffectParameter> VideoEffect::parameterList() const
+QList<Phonon::EffectParameter> VideoEffect::allDescriptions() const
 {
     return m_parameterList;
 }
 
-QVariant VideoEffect::value(int parameterId) const
+EffectParameter VideoEffect::description(int i) const
 {
-    return QVariant(); // invalid
+    return m_parameterList[i];
 }
 
-void VideoEffect::setValue(int parameterId, QVariant newValue)
+int VideoEffect::parameterCount() const
 {
+    return m_parameterList.size();
+}
+
+QVariant VideoEffect::parameterValue(int i) const
+{
+//X     if (m_effect) {
+//X         return m_effect->value(m_parameterList[i].id());
+//X     }
+    return QVariant();
+}
+
+void VideoEffect::setParameterValue(int i, const QVariant &v)
+{
+//X     if (m_effect) {
+//X         return m_effect->setValue(m_parameterList[i].id(), v);
+//X     }
 }
 
 void VideoEffect::processFrame(Phonon::Experimental::VideoFrame &frame)

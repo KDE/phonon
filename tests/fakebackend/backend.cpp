@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,9 +19,6 @@
 
 #include "backend.h"
 #include "mediaobject.h"
-#include "mediaqueue.h"
-#include "avcapture.h"
-#include "bytestream.h"
 #include "audiopath.h"
 #include "audioeffect.h"
 #include "audiooutput.h"
@@ -36,6 +33,7 @@
 #include <QSet>
 #include "videodataoutput.h"
 #include <QVariant>
+#include "videowidget.h"
 
 typedef KGenericFactory<Phonon::Fake::Backend, Phonon::Fake::Backend> FakeBackendFactory;
 K_EXPORT_COMPONENT_FACTORY(phonon_fake, FakeBackendFactory("fakebackend"))
@@ -54,17 +52,11 @@ Backend::~Backend()
 {
 }
 
-QObject *Backend::createObject0(BackendInterface::Class0 c, QObject *parent)
+QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const QList<QVariant> &args)
 {
     switch (c) {
     case MediaObjectClass:
         return new MediaObject(parent);
-    case MediaQueueClass:
-        return new MediaQueue(parent);
-    case AvCaptureClass:
-        return new AvCapture(parent);
-    case ByteStreamClass:
-        return new ByteStream(parent);
     case AudioPathClass:
         return new AudioPath(parent);
     case VolumeFaderEffectClass:
@@ -87,17 +79,12 @@ QObject *Backend::createObject0(BackendInterface::Class0 c, QObject *parent)
         return new VideoDataOutput(parent);
     case DeinterlaceFilterClass:
         return 0;//new DeinterlaceFilter(parent);
-    }
-    return 0;
-}
-
-QObject *Backend::createObject1(BackendInterface::Class1 c, QObject *parent, QVariant arg1)
-{
-    switch (c) {
     case AudioEffectClass:
-        return new AudioEffect(arg1.toInt(), parent);
+        return new AudioEffect(args[0].toInt(), parent);
     case VideoEffectClass:
-        return new VideoEffect(arg1.toInt(), parent);
+        return new VideoEffect(args[0].toInt(), parent);
+    case VideoWidgetClass:
+        return new VideoWidget(qobject_cast<QWidget *>(parent));
     }
     return 0;
 }
@@ -128,7 +115,7 @@ bool Backend::supportsSubtitles() const
     return false;
 }
 
-QStringList Backend::knownMimeTypes() const
+QStringList Backend::availableMimeTypes() const
 {
     if (m_supportedMimeTypes.isEmpty())
         const_cast<Backend *>(this)->m_supportedMimeTypes
@@ -251,11 +238,6 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
         break;
     }
     return ret;
-}
-
-char const *Backend::uiLibrary() const
-{
-    return "phonon_fakeui";
 }
 
 void Backend::freeSoundcardDevices()

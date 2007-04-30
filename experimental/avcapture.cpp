@@ -28,7 +28,7 @@ namespace Phonon
 namespace Experimental
 {
 
-PHONON_HEIR_IMPL(AbstractMediaProducer)
+PHONON_HEIR_IMPL(MediaProducer)
 
 AudioCaptureDevice AvCapture::audioCaptureDevice() const
 {
@@ -92,13 +92,13 @@ bool AvCapturePrivate::aboutToDeleteBackendObject()
 {
     pBACKEND_GET(int, audioCaptureDevice, "audioCaptureDevice");
     pBACKEND_GET(int, videoCaptureDevice, "videoCaptureDevice");
-    return AbstractMediaProducerPrivate::aboutToDeleteBackendObject();
+    return MediaProducerPrivate::aboutToDeleteBackendObject();
 }
 
 void AvCapturePrivate::setupBackendObject()
 {
     Q_ASSERT(m_backendObject);
-    AbstractMediaProducerPrivate::setupBackendObject();
+    MediaProducerPrivate::setupBackendObject();
 
     // set up attributes
     pBACKEND_CALL1("setAudioCaptureDevice", int, audioCaptureDevice);

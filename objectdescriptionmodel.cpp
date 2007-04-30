@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,12 +19,14 @@
 
 #include "objectdescriptionmodel.h"
 #include "objectdescriptionmodel_p.h"
+#include "phonondefs_p.h"
 #include <QList>
 #include "objectdescription.h"
-#include <kdebug.h>
+#include "phononnamespace_p.h"
 #include <QMimeData>
-#include "guiinterface.h"
 #include <QStringList>
+#include <QIcon>
+#include "factory.h"
 
 #if Q_MOC_OUTPUT_REVISION != 59
 #ifdef __GNUC__
@@ -133,13 +135,13 @@ int ObjectDescriptionModelBase::rowCount(const QModelIndex &parent) const
     if (parent.isValid())
         return 0;
 
-    Q_D(const ObjectDescriptionModelBase);
+    K_D(const ObjectDescriptionModelBase);
     return d->size();
 }
 
 QVariant ObjectDescriptionModelBase::data(const QModelIndex &index, int role) const
 {
-    Q_D(const ObjectDescriptionModelBase);
+    K_D(const ObjectDescriptionModelBase);
     if (!index.isValid() || index.row() >= d->size() || index.column() != 0)
         return QVariant();
 
@@ -157,7 +159,7 @@ QVariant ObjectDescriptionModelBase::data(const QModelIndex &index, int role) co
             QVariant icon = d->at(index.row()).property("icon");
             if (icon.isValid()) {
                 if (icon.type() == QVariant::String) {
-                    return GuiInterface::instance()->icon(icon.toString());
+                    return Factory::icon(icon.toString());
                 } else if (icon.type() == QVariant::Icon) {
                     return icon;
                 }
@@ -171,7 +173,7 @@ QVariant ObjectDescriptionModelBase::data(const QModelIndex &index, int role) co
 
 Qt::ItemFlags ObjectDescriptionModelBase::flags(const QModelIndex &index) const
 {
-    Q_D(const ObjectDescriptionModelBase);
+    K_D(const ObjectDescriptionModelBase);
     if(!index.isValid() || index.row() >= d->size() || index.column() != 0) {
         return Qt::ItemIsDropEnabled;
     }
@@ -185,7 +187,7 @@ Qt::ItemFlags ObjectDescriptionModelBase::flags(const QModelIndex &index) const
 
 QList<int> ObjectDescriptionModelBase::tupleIndexOrder() const
 {
-    Q_D(const ObjectDescriptionModelBase);
+    K_D(const ObjectDescriptionModelBase);
     QList<int> ret;
     for (int i = 0; i < d->size(); ++i) {
         ret.append(d->at(i).index());
@@ -195,12 +197,12 @@ QList<int> ObjectDescriptionModelBase::tupleIndexOrder() const
 
 int ObjectDescriptionModelBase::tupleIndexAtPositionIndex(int positionIndex) const
 {
-    return d_func()->at(positionIndex).index();
+    return k_func()->at(positionIndex).index();
 }
 
 QMimeData *ObjectDescriptionModelBase::mimeData(const QModelIndexList &indexes) const
 {
-    Q_D(const ObjectDescriptionModelBase);
+    K_D(const ObjectDescriptionModelBase);
 
     QMimeData *mimeData = new QMimeData;
     QByteArray encodedData;
@@ -212,14 +214,14 @@ QMimeData *ObjectDescriptionModelBase::mimeData(const QModelIndexList &indexes) 
             stream << d->at((*index).row()).index();
         }
     }
-    //kDebug(600) << k_funcinfo << "setting mimeData to " << encodedData << endl;
+    //pDebug() << Q_FUNC_INFO << "setting mimeData to " << encodedData;
     mimeData->setData(mimeTypes().first(), encodedData);
     return mimeData;
 }
 
 void ObjectDescriptionModelBase::moveUp(const QModelIndex &index)
 {
-    Q_D(ObjectDescriptionModelBase);
+    K_D(ObjectDescriptionModelBase);
     if (!index.isValid() || index.row() >= d->size() || index.row() < 1 || index.column() != 0)
         return;
 
@@ -235,7 +237,7 @@ void ObjectDescriptionModelBase::moveUp(const QModelIndex &index)
 
 void ObjectDescriptionModelBase::moveDown(const QModelIndex &index)
 {
-    Q_D(ObjectDescriptionModelBase);
+    K_D(ObjectDescriptionModelBase);
     if (!index.isValid() || index.row() >= d->size() - 1 || index.column() != 0)
         return;
 
@@ -249,14 +251,14 @@ void ObjectDescriptionModelBase::moveDown(const QModelIndex &index)
     emit layoutChanged();
 }
 
-#undef Q_D
-#define Q_D(Class) Class##Private<type> *const d = d_func()
+#undef K_D
+#define K_D(Class) Class##Private<type> *const d = k_func()
 
 ObjectDescriptionModelBase::ObjectDescriptionModelBase(ObjectDescriptionModelBasePrivate *dd, QObject *parent)
     : QAbstractListModel(parent),
-    d_ptr(dd)
+    k_ptr(dd)
 {
-    d_ptr->q_ptr = this;
+    k_ptr->q_ptr = this;
 }
 
 template<ObjectDescriptionType type>
@@ -274,13 +276,13 @@ ObjectDescriptionModel<type>::ObjectDescriptionModel(const QList<ObjectDescripti
 
 ObjectDescriptionModelBase::~ObjectDescriptionModelBase()
 {
-    delete d_ptr;
+    delete k_ptr;
 }
 
 template<ObjectDescriptionType type>
 void ObjectDescriptionModel<type>::setModelData(const QList<ObjectDescription<type> > &newData)
 {
-    Q_D(ObjectDescriptionModel);
+    K_D(ObjectDescriptionModel);
     d->data = newData;
     reset();
 }
@@ -288,14 +290,14 @@ void ObjectDescriptionModel<type>::setModelData(const QList<ObjectDescription<ty
 template<ObjectDescriptionType type>
 QList<ObjectDescription<type> > ObjectDescriptionModel<type>::modelData() const
 {
-    Q_D(const ObjectDescriptionModel);
+    K_D(const ObjectDescriptionModel);
     return d->data;
 }
 
 template<ObjectDescriptionType type>
 ObjectDescription<type> ObjectDescriptionModel<type>::modelData(const QModelIndex &index) const
 {
-    Q_D(const ObjectDescriptionModel);
+    K_D(const ObjectDescriptionModel);
     if (!index.isValid() || index.row() >= d->data.size() || index.column() != 0) {
         return ObjectDescription<type>();
     }
@@ -305,7 +307,7 @@ ObjectDescription<type> ObjectDescriptionModel<type>::modelData(const QModelInde
 template<ObjectDescriptionType type>
 Qt::DropActions ObjectDescriptionModel<type>::supportedDropActions() const
 {
-    //kDebug(600) << k_funcinfo << endl;
+    //pDebug() << Q_FUNC_INFO;
     return Qt::CopyAction | Qt::MoveAction;
 }
 
@@ -315,14 +317,14 @@ bool ObjectDescriptionModel<type>::dropMimeData(const QMimeData *data, Qt::DropA
 {
     Q_UNUSED(action);
     Q_UNUSED(column);
-    //kDebug(600) << k_funcinfo << data << action << row << column << parent << endl;
+    //pDebug() << Q_FUNC_INFO << data << action << row << column << parent;
 
     QString format = mimeTypes().first();
     if (!data->hasFormat(format)) {
         return false;
     }
 
-    Q_D(ObjectDescriptionModel);
+    K_D(ObjectDescriptionModel);
     if (parent.isValid()) {
         row = parent.row();
     } else {
@@ -354,8 +356,8 @@ bool ObjectDescriptionModel<type>::dropMimeData(const QMimeData *data, Qt::DropA
 template<ObjectDescriptionType type>
 bool ObjectDescriptionModel<type>::removeRows(int row, int count, const QModelIndex &parent)
 {
-    //kDebug(600) << k_funcinfo << row << count << parent << endl;
-    Q_D(ObjectDescriptionModel);
+    //pDebug() << Q_FUNC_INFO << row << count << parent;
+    K_D(ObjectDescriptionModel);
     if (parent.isValid() || row + count > d->data.size()) {
         return false;
     }
@@ -371,8 +373,8 @@ bool ObjectDescriptionModel<type>::removeRows(int row, int count, const QModelIn
 template<ObjectDescriptionType type>
 bool ObjectDescriptionModel<type>::insertRows(int row, int count, const QModelIndex &parent)
 {
-    kDebug(600) << k_funcinfo << row << count << parent << endl;
-    Q_D(ObjectDescriptionModel);
+    pDebug() << Q_FUNC_INFO << row << count << parent;
+    K_D(ObjectDescriptionModel);
     if (parent.isValid() || row < 0 || row > d->data.size()) {
         return false;
     }
@@ -391,19 +393,19 @@ QStringList ObjectDescriptionModel<type>::mimeTypes() const
     return QStringList(QLatin1String("application/x-phonon-objectdescription") + QString::number(static_cast<int>(type)));
 }
 
-template class PHONONCORE_EXPORT ObjectDescriptionModel<AudioOutputDeviceType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<AudioCaptureDeviceType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<VideoOutputDeviceType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<VideoCaptureDeviceType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<AudioEffectType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<VideoEffectType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<AudioCodecType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<VideoCodecType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<ContainerFormatType>;
-template class PHONONCORE_EXPORT ObjectDescriptionModel<VisualizationType>;
+template class PHONON_EXPORT ObjectDescriptionModel<AudioOutputDeviceType>;
+template class PHONON_EXPORT ObjectDescriptionModel<AudioCaptureDeviceType>;
+template class PHONON_EXPORT ObjectDescriptionModel<VideoOutputDeviceType>;
+template class PHONON_EXPORT ObjectDescriptionModel<VideoCaptureDeviceType>;
+template class PHONON_EXPORT ObjectDescriptionModel<AudioEffectType>;
+template class PHONON_EXPORT ObjectDescriptionModel<VideoEffectType>;
+template class PHONON_EXPORT ObjectDescriptionModel<AudioCodecType>;
+template class PHONON_EXPORT ObjectDescriptionModel<VideoCodecType>;
+template class PHONON_EXPORT ObjectDescriptionModel<ContainerFormatType>;
+template class PHONON_EXPORT ObjectDescriptionModel<VisualizationType>;
 
 }
 
 // for enable-final:
-#undef Q_D
-#define Q_D(Class) Class##Private *const d = d_func()
+#undef K_D
+#define K_D(Class) Class##Private *const d = k_func()

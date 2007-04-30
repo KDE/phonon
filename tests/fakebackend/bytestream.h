@@ -19,7 +19,7 @@
 #ifndef Phonon_FAKE_BYTESTREAM_H
 #define Phonon_FAKE_BYTESTREAM_H
 
-#include "abstractmediaproducer.h"
+#include "mediaproducer.h"
 #include <phonon/bytestreaminterface.h>
 class QTimer;
 
@@ -27,7 +27,7 @@ namespace Phonon
 {
 namespace Fake
 {
-    class ByteStream : public AbstractMediaProducer, public Phonon::ByteStreamInterface
+    class ByteStream : public MediaProducer, public Phonon::ByteStreamInterface
     {
         Q_OBJECT
         Q_INTERFACES(Phonon::ByteStreamInterface)

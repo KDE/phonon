@@ -55,13 +55,13 @@ SUPPORTS(Video)
 SUPPORTS(OSD)
 SUPPORTS(Subtitles)
 
-QStringList BackendCapabilities::knownMimeTypes()
+QStringList BackendCapabilities::availableMimeTypes()
 {
-    QObject *m_backendObject = Factory::backend(false);
+    QObject *m_backendObject = Factory::backend(true);
     if (m_backendObject)
     {
         QStringList ret;
-        pBACKEND_GET(QStringList, ret, "knownMimeTypes");
+        pBACKEND_GET(QStringList, ret, "availableMimeTypes");
         return ret;
     }
     else
@@ -77,13 +77,13 @@ QStringList BackendCapabilities::knownMimeTypes()
     }
 }
 
-bool BackendCapabilities::isMimeTypeKnown(const QString &mimeType)
+bool BackendCapabilities::isMimeTypeAvailable(const QString &mimeType)
 {
     QObject *m_backendObject = Factory::backend(false);
     if (m_backendObject)
     {
         QStringList ret;
-        pBACKEND_GET(QStringList, ret, "knownMimeTypes");
+        pBACKEND_GET(QStringList, ret, "availableMimeTypes");
         return ret.contains(mimeType);
     }
     else

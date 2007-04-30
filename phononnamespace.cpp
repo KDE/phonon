@@ -18,7 +18,7 @@
 */
 
 #include "phononnamespace.h"
-#include <kdebug.h>
+#include "phononnamespace_p.h"
 #include <klocale.h>
 
 namespace Phonon
@@ -57,5 +57,17 @@ Q_CONSTRUCTOR_FUNCTION(registerPhononMetaTypes)
 #else
 static const int _Phonon_registerMetaTypes = registerPhononMetaTypes();
 #endif
+
+Phonon::GlobalData::GlobalData()
+{
+    showDebugOutput = !qgetenv("PHONON_DEBUG").isEmpty();
+}
+
+Q_GLOBAL_STATIC(Phonon::GlobalData, globalInstance)
+
+Phonon::GlobalData *Phonon::GlobalData::instance()
+{
+    return globalInstance();
+}
 
 // vim: sw=4 ts=4

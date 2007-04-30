@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include "export.h"
+#include "../phonondefs.h"
 
 class QImage;
 
@@ -35,7 +36,7 @@ class OverlayApiPrivate;
 class PHONONEXPERIMENTAL_EXPORT OverlayApi : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(OverlayApi)
+    K_DECLARE_PRIVATE(OverlayApi)
     Q_ENUMS(OverlayType)
     public:
         OverlayApi(VideoWidget *parent);
@@ -79,6 +80,10 @@ class PHONONEXPERIMENTAL_EXPORT OverlayApi : public QObject
          * the widget.
          * @return whether the creation was successful
          */
+        //virtual void drawOverlay(QPainter *);
+        //bool createOverlay(QGraphicsScene);
+        // QGraphicsView::setViewport(VideoWidget*)
+        // VideoWidget::setOverlayEnabled(bool)
         bool createOverlay(QWidget *widget, OverlayType type);
 
         /**
@@ -91,7 +96,7 @@ class PHONONEXPERIMENTAL_EXPORT OverlayApi : public QObject
         void setBackgroundForOpaqueOverlay(const QImage &image);
 
     protected:
-        OverlayApiPrivate *const d_ptr;
+        OverlayApiPrivate *const k_ptr;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(OverlayApi::OverlayTypes)

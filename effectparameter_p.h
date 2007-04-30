@@ -29,7 +29,6 @@ namespace Phonon
 class EffectParameterPrivate : public QSharedData
 {
     public:
-        Effect *effect;
         int parameterId;
         QVariant min;
         QVariant max;

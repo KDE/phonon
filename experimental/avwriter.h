@@ -21,6 +21,7 @@
 #define PHONON_AVWRITER_H
 
 #include "export.h"
+#include "../phonondefs.h"
 #include "../abstractaudiooutput.h"
 #include "../abstractvideooutput.h"
 
@@ -42,7 +43,7 @@ class AvWriterPrivate;
 class PHONONEXPERIMENTAL_EXPORT AvWriter : public QObject
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(AvWriter)
+    K_DECLARE_PRIVATE(AvWriter)
     Q_PROPERTY(ContainerFormat containerFormat READ containerFormat WRITE setContainerFormat)
     Q_PROPERTY(KUrl url READ url WRITE setUrl)
     public:

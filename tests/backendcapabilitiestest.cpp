@@ -49,22 +49,24 @@ void BackendCapabilitiesTest::checkMimeTypes()
         mimeTypes.removeAll("PhononBackend");
     }
 #else
-    QStringList mimeTypes = BackendCapabilities::knownMimeTypes();
+    QVERIFY(Factory::backend(false) == 0); // the backend should not have been created at this point
+    QStringList mimeTypes = BackendCapabilities::availableMimeTypes();
+    QVERIFY(Factory::backend(false) != 0); // the backend should have been created at this point
 #endif
     QVERIFY(mimeTypes.size() > 0); // a backend that doesn't know any mimetypes is useless
     foreach (QString mimeType, mimeTypes) {
         qDebug("%s", qPrintable(mimeType));
-        QVERIFY(BackendCapabilities::isMimeTypeKnown(mimeType));
+        QVERIFY(BackendCapabilities::isMimeTypeAvailable(mimeType));
     }
-    QVERIFY(Factory::backend(false) == 0); // the backend should not have been created at this point
 #ifdef USE_FAKE_BACKEND
+    QVERIFY(Factory::backend(false) == 0); // the backend should not have been created at this point
     Phonon::loadFakeBackend();
-#endif
     QVERIFY(Factory::backend(true) != 0);  // create the backend
-    QStringList realMimeTypes = BackendCapabilities::knownMimeTypes(); // this list has to be a subset of the one before
+#endif
+    QStringList realMimeTypes = BackendCapabilities::availableMimeTypes(); // this list has to be a subset of the one before
     foreach (QString mimeType, realMimeTypes) {
         qDebug("%s", qPrintable(mimeType));
-        QVERIFY(BackendCapabilities::isMimeTypeKnown(mimeType));
+        QVERIFY(BackendCapabilities::isMimeTypeAvailable(mimeType));
         QVERIFY(mimeTypes.contains(mimeType));
     }
 }
@@ -109,6 +111,6 @@ void BackendCapabilitiesTest::cleanupTestCase()
 {
 }
 
-QTEST_KDEMAIN(BackendCapabilitiesTest, NoGUI)
+QTEST_KDEMAIN_CORE(BackendCapabilitiesTest)
 #include "backendcapabilitiestest.moc"
 // vim: sw=4 ts=4

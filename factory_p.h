@@ -21,11 +21,14 @@
 #define PHONON_FACTORY_P_H
 
 #include "factory.h"
+#include "objectdescription.h"
+
 #include <QPointer>
-#include <kcomponentdata.h>
+#include <kservice.h>
 
 namespace Phonon
 {
+class PluginFactory;
 class FactoryPrivate : public Phonon::Factory::Sender
 {
     friend QObject *Factory::backend(bool);
@@ -35,13 +38,14 @@ class FactoryPrivate : public Phonon::Factory::Sender
         ~FactoryPrivate();
         bool createBackend(KService::Ptr newService);
         void createBackend();
+        PluginFactory *pluginFactory();
 
         QPointer<QObject> m_backendObject;
+        PluginFactory *m_pluginFactory;
         KService::Ptr service;
 
         QList<QObject *> objects;
         QList<BasePrivate *> basePrivateList;
-        KComponentData componentData;
 
     private Q_SLOTS:
         /**

@@ -20,6 +20,7 @@
 #ifndef AUDIOPATH_P_H
 #define AUDIOPATH_P_H
 
+#include "phonondefs.h"
 #include "audiopath.h"
 #include "base_p.h"
 #include <QList>
@@ -28,18 +29,20 @@ namespace Phonon
 {
 class AudioPathPrivate : public BasePrivate, private BaseDestructionHandler
 {
-    K_DECLARE_PUBLIC(AudioPath)
+    Q_DECLARE_PUBLIC(AudioPath)
     PHONON_PRIVATECLASS
     protected:
+        AudioPath *q_ptr;
         AudioPathPrivate()
+            : q_ptr(0)
         {
         }
 
         QList<AbstractAudioOutput *> outputs;
-        QList<AudioEffect *> effects;
+        QList<Effect *> effects;
 
     private:
-        virtual void phononObjectDestroyed(Base *);
+        virtual void phononObjectDestroyed(BasePrivate *);
 };
 }
 

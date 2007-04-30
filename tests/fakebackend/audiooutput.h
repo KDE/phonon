@@ -37,11 +37,11 @@ namespace Fake
 
         public Q_SLOTS:
             // Attributes Getters:
-            float volume() const;
+            qreal volume() const;
             int outputDevice() const;
 
             // Attributes Setters:
-            void setVolume(float newVolume);
+            void setVolume(qreal newVolume);
             bool setOutputDevice(int newDevice);
 
         public:
@@ -51,11 +51,11 @@ namespace Fake
             void closeDevice();
 
         Q_SIGNALS:
-            void volumeChanged(float newVolume);
+            void volumeChanged(qreal newVolume);
             void audioDeviceFailed();
 
         private:
-            float m_volume;
+            qreal m_volume;
             int m_device;
             QFile m_dsp;
     };

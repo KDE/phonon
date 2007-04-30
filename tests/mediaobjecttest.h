@@ -21,9 +21,9 @@
 #define MEDIAOBJECTTEST_H
 
 #include <QObject>
-#include <kurl.h>
 #include <phonon/mediaobject.h>
 #include <QtTest/QSignalSpy>
+#include <QUrl>
 
 class MediaObjectTest : public QObject
 {
@@ -54,7 +54,7 @@ class MediaObjectTest : public QObject
 
         void testTickSignal();
         void testSeek();
-        void testAboutToFinish();
+        void testPrefinishMark();
         void testPlayOnFinish();
         void testPlayBeforeFinish();
 
@@ -68,10 +68,9 @@ class MediaObjectTest : public QObject
         void startPlayback(Phonon::State currentState = Phonon::StoppedState);
         void stopPlayback(Phonon::State currentState);
         void pausePlayback();
-        void waitForSignal(QObject *obj, const char *signalName, int timeout = 0);
         void testOneSeek(qint64 seekTo);
 
-        KUrl m_url;
+        QUrl m_url;
         Phonon::MediaObject *m_media;
         QSignalSpy *m_stateChangedSignalSpy;
 };

@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -20,10 +20,10 @@
 #ifndef PHONONDEFS_H
 #define PHONONDEFS_H
 
-#define K_DECLARE_PRIVATE(classname) \
-    inline classname ## Private *k_func() { return reinterpret_cast<classname ## Private *>(k_ptr); } \
-    inline const classname ## Private *k_func() const { return reinterpret_cast<classname ## Private *>(k_ptr); } \
-    friend class classname ## Private;
+#define K_DECLARE_PRIVATE(Class) \
+    inline Class##Private* k_func() { return reinterpret_cast<Class##Private *>(k_ptr); } \
+    inline const Class##Private* k_func() const { return reinterpret_cast<const Class##Private *>(k_ptr); } \
+    friend class Class##Private;
 
 /**
  * \internal
@@ -56,7 +56,17 @@ protected: \
      *
      * \param parent Standard QObject parent.
      */ \
-    classname(classname ## Private &dd, QObject *parent);
+    classname(classname ## Private &dd, QObject *parent); \
+    /**
+     * Tells whether the backend provides an implementation of this
+     * class.
+     *
+     * \return \c true if backend provides an implementation
+     * \return \c false if the object is not implemented by the backend
+     */ \
+    bool isValid() const; \
+    classname##Private *const k_ptr; \
+private:
 
 /**
  * \internal
@@ -88,7 +98,17 @@ public: \
      *
      * \param parent QObject parent
      */ \
-    classname(QObject *parent = 0);
+    classname(QObject *parent = 0); \
+    /**
+     * Tells whether the backend provides an implementation of this
+     * class.
+     *
+     * \return \c true if backend provides an implementation
+     * \return \c false if the object is not implemented by the backend
+     */ \
+    bool isValid() const; \
+    classname##Private *const k_ptr; \
+private:
 
 /**
  * \internal

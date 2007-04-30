@@ -45,7 +45,7 @@ AudioOutput::~AudioOutput()
 {
 }
 
-float AudioOutput::volume() const
+qreal AudioOutput::volume() const
 {
     return m_volume;
 }
@@ -55,7 +55,7 @@ int AudioOutput::outputDevice() const
     return m_device;
 }
 
-void AudioOutput::setVolume(float newVolume)
+void AudioOutput::setVolume(qreal newVolume)
 {
     m_volume = newVolume;
     emit volumeChanged(m_volume);

@@ -20,19 +20,18 @@
 #ifndef PHONON_ADDONINTERFACE_H
 #define PHONON_ADDONINTERFACE_H
 
-#include "phonon_export.h"
 #include <QList>
 #include <QVariant>
 
 namespace Phonon
 {
 /**
- * \short Interface for Menu, Chapter, Angle and Track control.
+ * \short Interface for Menu, Chapter, Angle and Title/Track control.
  *
  * \ingroup Backend
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONONCORE_EXPORT AddonInterface
+class AddonInterface
 {
     public:
         virtual ~AddonInterface() {}
@@ -41,7 +40,7 @@ class PHONONCORE_EXPORT AddonInterface
             NavigationInterface = 1,
             ChapterInterface    = 2,
             AngleInterface      = 3,
-            TrackInterface      = 4
+            TitleInterface      = 4
         };
 
         enum NavigationCommand {
@@ -57,12 +56,12 @@ class PHONONCORE_EXPORT AddonInterface
             angle,
             setAngle
         };
-        enum TrackCommand {
-            availableTracks,
-            track,
-            setTrack,
-            autoplayTracks,
-            setAutoplayTracks
+        enum TitleCommand {
+            availableTitles,
+            title,
+            setTitle,
+            autoplayTitles,
+            setAutoplayTitles
         };
 
         virtual bool hasInterface(Interface interface) const = 0;

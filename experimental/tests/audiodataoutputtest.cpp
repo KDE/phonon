@@ -65,7 +65,7 @@ void AudioDataOutputTest::testFormat()
 
     MediaObject media(this);
     KUrl url(getenv("PHONON_TESTURL"));
-    media.setUrl(url);
+    media.setCurrentSource(url);
     AudioPath path(this);
     media.addAudioPath(&path);
     path.addOutput(&test);

@@ -21,18 +21,21 @@
 #define PHONON_BRIGHTNESSCONTROL_P_H
 
 #include "brightnesscontrol.h"
-#include "videoeffect_p.h"
+#include "effect_p.h"
 
 namespace Phonon
 {
-class BrightnessControlPrivate : public VideoEffectPrivate
+class BrightnessControlPrivate : public EffectPrivate
 {
-    K_DECLARE_PUBLIC(BrightnessControl)
+    Q_DECLARE_PUBLIC(BrightnessControl)
     PHONON_PRIVATECLASS
     protected:
         BrightnessControlPrivate()
             : brightness(0)
         {
+            type = Effect::VideoEffect;
+            id = -1; // ### check how to get the correct id
+            // ############# parameter functions are incorrect
         }
 
         int brightness;

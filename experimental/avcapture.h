@@ -20,7 +20,7 @@
 #define PHONON_AVCAPTURE_H
 
 #include "export.h"
-#include "../abstractmediaproducer.h"
+#include "../mediaobject.h"
 #include "../phonondefs.h"
 #include "../objectdescription.h"
 
@@ -49,7 +49,7 @@ namespace Experimental
      * @see BackendCapabilities::availableAudioCaptureDevices
      * @see BackendCapabilities::availableVideoCaptureDevices
      */
-    class PHONONEXPERIMENTAL_EXPORT AvCapture : public AbstractMediaProducer
+    class PHONONEXPERIMENTAL_EXPORT AvCapture : public MediaProducer
     {
         Q_OBJECT
         K_DECLARE_PRIVATE(AvCapture)

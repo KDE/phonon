@@ -31,19 +31,19 @@ namespace Phonon
  * \ingroup Backend
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONONCORE_EXPORT AudioOutputInterface
+class AudioOutputInterface
 {
     public:
         virtual ~AudioOutputInterface() {}
 
-        virtual float volume() const = 0;
-        virtual void setVolume(float) = 0;
+        virtual qreal volume() const = 0;
+        virtual void setVolume(qreal) = 0;
 
         virtual int outputDevice() const = 0;
         virtual bool setOutputDevice(int) = 0;
 };
 } // namespace Phonon
 
-Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface, "org.kde.Phonon.AudioOutputInterface/0.1")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface, "AudioOutputInterface2.phonon.kde.org")
 
 #endif // PHONON_AUDIOOUTPUTINTERFACE_H

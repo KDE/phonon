@@ -30,7 +30,7 @@ namespace Phonon
 {
 class AudioOutputPrivate : public AbstractAudioOutputPrivate
 {
-    K_DECLARE_PUBLIC(AudioOutput)
+    Q_DECLARE_PUBLIC(AudioOutput)
     PHONON_PRIVATECLASS
     public:
         void deviceListChanged();
@@ -51,11 +51,7 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
             outputDeviceOverridden(false),
             muted(false)
         {
-            const KAboutData *ad = KGlobal::mainComponent().aboutData();
-            if (ad)
-                name = ad->programName();
-            else
-                name = KGlobal::mainComponent().componentName();
+            name = Factory::applicationName();
         }
 
         enum DeviceChangeType {
@@ -64,12 +60,12 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         };
         void handleAutomaticDeviceChange(int newIndex, DeviceChangeType type);
 
-        void _k_volumeChanged(float);
+        void _k_volumeChanged(qreal);
         void _k_revertFallback();
         void _k_audioDeviceFailed();
 
     private:
-        float volume;
+        qreal volume;
         Category category;
         QString name;
         int outputDeviceIndex;

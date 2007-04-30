@@ -27,9 +27,9 @@ namespace Experimental
 
 AvWriter::AvWriter(QObject *parent)
     : QObject(parent)
-    , d_ptr(new AvWriterPrivate)
+    , k_ptr(new AvWriterPrivate)
 {
-    Q_D(AvWriter);
+    K_D(AvWriter);
     d->q_ptr = this;
 }
 

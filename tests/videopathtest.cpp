@@ -25,7 +25,7 @@
 
 using namespace Phonon;
 
-Q_DECLARE_METATYPE(Phonon::State)
+K_DECLARE_METATYPE(Phonon::State)
 
 void VideoPathTest::initTestCase()
 {

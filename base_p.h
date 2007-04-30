@@ -20,7 +20,6 @@
 #ifndef PHONON_BASE_P_H
 #define PHONON_BASE_P_H
 
-#include "base.h"
 #include <QList>
 #include "basedestructionhandler.h"
 #include "factory.h"
@@ -32,7 +31,6 @@ namespace Phonon
 
 class BasePrivate
 {
-    K_DECLARE_PUBLIC(Base)
     friend class AudioOutputPrivate;
     friend class Phonon::FactoryPrivate;
     protected:
@@ -61,7 +59,6 @@ class BasePrivate
     protected:
         BasePrivate(CastId _castId = BasePrivateType)
             : castId(_castId),
-            q_ptr(0),
             m_backendObject(0)
         {
             Factory::registerFrontendObject(this);
@@ -69,6 +66,9 @@ class BasePrivate
 
         virtual ~BasePrivate()
         {
+            foreach (BaseDestructionHandler *handler, handlers) {
+                handler->phononObjectDestroyed(this);
+            }
             Factory::deregisterFrontendObject(this);
             delete m_backendObject;
             m_backendObject = 0;
@@ -105,6 +105,7 @@ class BasePrivate
          */
         virtual void createBackendObject() = 0;
 
+    public:
         /**
          * \internal
          * This class has its own destroyed signal since some cleanup calls
@@ -115,9 +116,9 @@ class BasePrivate
          * As this class cannot derive from QObject a simple handler
          * interface is used.
          */
-        void addDestructionHandler(Base *to, BaseDestructionHandler *handler)
+        void addDestructionHandler(BaseDestructionHandler *handler)
         {
-            to->k_ptr->handlers.append(handler);
+            handlers.append(handler);
         }
 
         /**
@@ -130,12 +131,12 @@ class BasePrivate
          * As this class cannot derive from QObject a simple handler
          * interface is used.
          */
-        void removeDestructionHandler(Base *from, BaseDestructionHandler *handler)
+        void removeDestructionHandler(BaseDestructionHandler *handler)
         {
-            from->k_ptr->handlers.removeAll(handler);
+            handlers.removeAll(handler);
         }
 
-        Base *q_ptr;
+    protected:
         QObject *m_backendObject;
 
     private:

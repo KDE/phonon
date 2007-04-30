@@ -21,7 +21,7 @@
 #define PHONON_DEINTERLACEFILTER_H
 
 #include "phonon_export.h"
-#include "videoeffect.h"
+#include "effect.h"
 
 namespace Phonon
 {
@@ -32,13 +32,11 @@ class DeinterlaceFilterPrivate;
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONONCORE_EXPORT DeinterlaceFilter : public VideoEffect
+class PHONON_EXPORT DeinterlaceFilter : public Effect
 {
     Q_OBJECT
     K_DECLARE_PRIVATE(DeinterlaceFilter)
     PHONON_HEIR(DeinterlaceFilter)
-    public:
-        virtual QList<EffectParameter> parameterList() const;
 };
 } //namespace Phonon
 

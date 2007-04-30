@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,10 +19,9 @@
 #ifndef Phonon_AUDIOPATH_H
 #define Phonon_AUDIOPATH_H
 
-#include "base.h"
+#include "phonon_export.h"
 #include "phonondefs.h"
 #include <QObject>
-#include "basedestructionhandler.h"
 
 namespace Phonon
 {
@@ -33,7 +32,7 @@ namespace Experimental
 } // namespace Experimental
 
     class AudioPathPrivate;
-    class AudioEffect;
+    class Effect;
     class AbstractAudioOutput;
 
     /**
@@ -42,7 +41,7 @@ namespace Experimental
      * This class is used to define where the audio data is sent to, what
      * effects are applied and what audio channels is to be used.
      *
-     * For simple usage an instance of this class is added to an AbstractMediaProducer
+     * For simple usage an instance of this class is added to an MediaProducer
      * and an AbstractAudioOutput subclass (such as AudioOutput) added with
      * addOutput.
      * \code
@@ -51,16 +50,16 @@ namespace Experimental
      * path->addOutput(audioOutput);
      * \endcode
      *
-     * It is best to add the path to an AbstractMediaProducer after
+     * It is best to add the path to an MediaProducer after
      * construction, before calling any other methods.
      *
      * \author Matthias Kretz <kretz@kde.org>
      * \see VideoPath
      */
-    class PHONONCORE_EXPORT AudioPath : public QObject, public Base
+    class PHONON_EXPORT AudioPath : public QObject
     {
-        friend class AbstractMediaProducer;
-        friend class AbstractMediaProducerPrivate;
+        friend class MediaProducer;
+        friend class MediaProducerPrivate;
         friend class Experimental::Visualization;
         friend class Experimental::VisualizationPrivate;
         K_DECLARE_PRIVATE(AudioPath)
@@ -127,7 +126,7 @@ namespace Experimental
              * You may insert effects of the same class as often as you like,
              * but if you insert the same object, the call will fail.
              *
-             * \param newEffect An object of a subclass of AudioEffect.
+             * \param newEffect An Effect object.
              *
              * \param insertBefore If you already inserted an effect you can
              * tell with this parameter in which order the audio data gets
@@ -142,7 +141,7 @@ namespace Experimental
              * \see removeEffect
              * \see effects
              */
-            bool insertEffect(AudioEffect *newEffect, AudioEffect *insertBefore = 0);
+            bool insertEffect(Effect *newEffect, Effect *insertBefore = 0);
 
             /**
              * Removes an effect from the audio path.
@@ -159,10 +158,10 @@ namespace Experimental
              * \see insertEffect
              * \see effects
              */
-            bool removeEffect(AudioEffect *effect);
+            bool removeEffect(Effect *effect);
 
             /**
-             * Returns a list of AudioEffect objects that are currently
+             * Returns a list of Effect objects that are currently
              * used as effects. The order in the list determines the order the
              * audio signal is sent through the effects.
              *
@@ -171,7 +170,7 @@ namespace Experimental
              * \see insertEffect
              * \see removeEffect
              */
-            const QList<AudioEffect *> &effects() const;
+            const QList<Effect *> &effects() const;
     };
 } //namespace Phonon
 

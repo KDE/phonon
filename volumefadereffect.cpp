@@ -26,7 +26,7 @@
 
 namespace Phonon
 {
-PHONON_HEIR_IMPL(AudioEffect)
+PHONON_HEIR_IMPL(Effect)
 
 PHONON_GETTER(float, volume, d->currentVolume)
 PHONON_SETTER(setVolume, currentVolume, float)

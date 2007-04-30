@@ -20,9 +20,9 @@
 #include "audiodeviceenumerator.h"
 #include "audiodeviceenumerator_p.h"
 #include "audiodevice_p.h"
-#include <kdebug.h>
+#include "phononnamespace_p.h"
 #include <QDir>
-#include <solid/devicemanager.h>
+#include <solid/devicenotifier.h>
 #include <solid/device.h>
 #include <solid/audiohw.h>
 #include <kconfiggroup.h>
@@ -42,8 +42,8 @@ AudioDeviceEnumeratorPrivate::AudioDeviceEnumeratorPrivate()
 {
     config = KSharedConfig::openConfig("phonondevicesrc", KConfig::NoGlobals);
     findDevices();
-    QObject::connect(&Solid::DeviceManager::self(), SIGNAL(deviceAdded(const QString &)), &q, SLOT(_k_deviceAdded(const QString &)));
-    QObject::connect(&Solid::DeviceManager::self(), SIGNAL(deviceRemoved(const QString &)), &q, SLOT(_k_deviceRemoved(const QString &)));
+    QObject::connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(const QString &)), &q, SLOT(_k_deviceAdded(const QString &)));
+    QObject::connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(const QString &)), &q, SLOT(_k_deviceRemoved(const QString &)));
 }
 
 AudioDeviceEnumerator *AudioDeviceEnumerator::self()
@@ -76,11 +76,9 @@ void AudioDeviceEnumeratorPrivate::findDevices()
     */
 
     // ask Solid for the available audio hardware
-    Solid::DeviceManager &manager = Solid::DeviceManager::self();
-
     QSet<QString> alreadyFoundCards;
 
-    Solid::DeviceList devices = manager.findDevicesFromQuery("AudioHw.deviceType  & 'AudioInput|AudioOutput'");
+    QList<Solid::Device> devices = Solid::Device::listFromQuery("AudioHw.deviceType  & 'AudioInput|AudioOutput'");
     foreach (Solid::Device device, devices) {
         AudioDevice dev(device, config);
         if (dev.isValid()) {
@@ -124,9 +122,8 @@ void AudioDeviceEnumeratorPrivate::findDevices()
 
 void AudioDeviceEnumeratorPrivate::_k_deviceAdded(const QString &udi)
 {
-    kDebug(603) << k_funcinfo << udi << endl;
-    Solid::DeviceManager &manager = Solid::DeviceManager::self();
-    Solid::Device _device = manager.findDevice(udi);
+    pDebug() << Q_FUNC_INFO << udi;
+    Solid::Device _device(udi);
     Solid::AudioHw *audiohw = _device.as<Solid::AudioHw>();
     if (audiohw && (audiohw->deviceType()  & (Solid::AudioHw::AudioInput | Solid::AudioHw::AudioOutput))) {
         // an audio i/o device was plugged in
@@ -136,7 +133,7 @@ void AudioDeviceEnumeratorPrivate::_k_deviceAdded(const QString &udi)
                 foreach (const AudioDevice &listedDev, capturedevicelist) {
                     if (listedDev == dev && !listedDev.isAvailable()) {
                         // listedDev is the same devices as dev but shown as unavailable
-                        kDebug(603) << "removing from capturedevicelist: " << listedDev.cardName() << endl;
+                        pDebug() << "removing from capturedevicelist: " << listedDev.cardName();
                         capturedevicelist.removeAll(listedDev);
                         break;
                     }
@@ -147,14 +144,14 @@ void AudioDeviceEnumeratorPrivate::_k_deviceAdded(const QString &udi)
                 foreach (const AudioDevice &listedDev, playbackdevicelist) {
                     if (listedDev == dev && !listedDev.isAvailable()) {
                         // listedDev is the same devices as dev but shown as unavailable
-                        kDebug(603) << "removing from playbackdevicelist: " << listedDev.cardName() << endl;
+                        pDebug() << "removing from playbackdevicelist: " << listedDev.cardName();
                         playbackdevicelist.removeAll(listedDev);
                         break;
                     }
                 }
                 playbackdevicelist << dev;
             }
-            kDebug(603) << "emit q.devicePlugged " << dev.cardName() << endl;
+            pDebug() << "emit q.devicePlugged " << dev.cardName();
             emit q.devicePlugged(dev);
         }
     }
@@ -162,12 +159,12 @@ void AudioDeviceEnumeratorPrivate::_k_deviceAdded(const QString &udi)
 
 void AudioDeviceEnumeratorPrivate::_k_deviceRemoved(const QString &udi)
 {
-    kDebug(603) << k_funcinfo << udi << endl;
+    pDebug() << Q_FUNC_INFO << udi;
     AudioDevice dev;
     foreach (const AudioDevice &listedDev, capturedevicelist) {
         if (listedDev.udi() == udi && listedDev.isAvailable()) {
             // listedDev is the same devices as was removed
-            kDebug(603) << "removing from capturedevicelist: " << listedDev.cardName() << endl;
+            pDebug() << "removing from capturedevicelist: " << listedDev.cardName();
             dev = listedDev;
             capturedevicelist.removeAll(listedDev);
             break;
@@ -176,7 +173,7 @@ void AudioDeviceEnumeratorPrivate::_k_deviceRemoved(const QString &udi)
     foreach (const AudioDevice &listedDev, playbackdevicelist) {
         if (listedDev.udi() == udi && listedDev.isAvailable()) {
             // listedDev is the same devices as was removed
-            kDebug(603) << "removing from playbackdevicelist: " << listedDev.cardName() << endl;
+            pDebug() << "removing from playbackdevicelist: " << listedDev.cardName();
             dev = listedDev;
             playbackdevicelist.removeAll(listedDev);
             break;
@@ -184,7 +181,7 @@ void AudioDeviceEnumeratorPrivate::_k_deviceRemoved(const QString &udi)
     }
 
     if (dev.isValid()) {
-        kDebug(603) << "emit q.deviceUnplugged " << dev.cardName() << endl;
+        pDebug() << "emit q.deviceUnplugged " << dev.cardName();
         emit q.deviceUnplugged(dev);
     }
 }
@@ -200,13 +197,13 @@ void AudioDeviceEnumeratorPrivate::findAsoundrcDevices(const QString &fileName)
     int depth = 0;
     while (!asoundrcStream.atEnd()) {
         line = asoundrcStream.readLine().simplified();
-        //kDebug(603) << "'" << line << "'" << endl;
+        //pDebug() << "'" << line << "'";
         if (line.startsWith('#')) {
             continue; //skip comment lines
         }
         if (line.contains('#')) { // truncate comments at the end of the line
             line = line.left(line.indexOf('#'));
-            //kDebug(603) << "'" << line << "'" << endl;
+            //pDebug() << "'" << line << "'";
         }
         words = line.split(' ', QString::SkipEmptyParts);
         foreach (QString word, words) {

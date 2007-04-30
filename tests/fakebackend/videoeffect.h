@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -33,10 +33,12 @@ namespace Fake
         public:
             VideoEffect(int effectId, QObject *parent);
             ~VideoEffect();
-            Q_INVOKABLE QVariant value(int parameterId) const;
-            Q_INVOKABLE void setValue(int parameterId, QVariant newValue);
 
-            Q_INVOKABLE QList<EffectParameter> parameterList() const;
+            Q_INVOKABLE QList<EffectParameter> allDescriptions() const;
+            Q_INVOKABLE EffectParameter description(int) const;
+            Q_INVOKABLE int parameterCount() const;
+            Q_INVOKABLE QVariant parameterValue(int) const;
+            Q_INVOKABLE void setParameterValue(int, const QVariant &);
 
             // Fake specific:
             virtual void processFrame(Phonon::Experimental::VideoFrame &frame);

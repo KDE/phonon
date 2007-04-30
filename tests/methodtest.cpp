@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2
@@ -20,8 +20,7 @@
 #include "methodtest.h"
 #include "../factory.h"
 #include <qtest_kde.h>
-#include <phonon/bytestreaminterface.h>
-#include <phonon/mediaproducerinterface.h>
+#include <phonon/streaminterface.h>
 #include <phonon/mediaobjectinterface.h>
 #include <phonon/backendinterface.h>
 #include <phonon/audiooutputinterface.h>
@@ -34,12 +33,15 @@ void MethodTest::checkBackendInterface()
     QVERIFY(qobject_cast<Phonon::BackendInterface *>(Factory::backend()) != 0);
 }
 
-void MethodTest::checkAudioDataOutputMethods_data() { addColumns();
-#include "methods/abstractaudiooutput.cpp"
-#include "../experimental/tests/methods/audiodataoutput.cpp"
+//X void MethodTest::checkAudioDataOutputMethods_data() { addColumns();
+//X #include "methods/abstractaudiooutput.cpp"
+//X #include "../experimental/tests/methods/audiodataoutput.cpp"
+//X }
+void MethodTest::checkVideoEffectMethods_data() { addColumns();
+#include "methods/effect.cpp"
 }
 void MethodTest::checkAudioEffectMethods_data() { addColumns();
-#include "methods/audioeffect.cpp"
+#include "methods/effect.cpp"
 }
 void MethodTest::checkAudioOutputMethods_data() { addColumns();
 #include "methods/abstractaudiooutput.cpp"
@@ -47,10 +49,6 @@ void MethodTest::checkAudioOutputMethods_data() { addColumns();
 }
 void MethodTest::checkAudioPathMethods_data() { addColumns();
 #include "methods/audiopath.cpp"
-}
-void MethodTest::checkAvCaptureMethods_data() { addColumns();
-#include "methods/abstractmediaproducer.cpp"
-#include "../experimental/tests/methods/avcapture.cpp"
 }
 void MethodTest::checkBackendMethods_data() { addColumns();
 #include "methods/factory.cpp"
@@ -61,86 +59,47 @@ addMethod("bool", "supportsFourcc(quint32)");
 void MethodTest::checkBrightnessControlMethods_data() { addColumns();
 #include "methods/brightnesscontrol.cpp"
 }
-void MethodTest::checkByteStreamMethods_data() { addColumns();
-#include "methods/abstractmediaproducer.cpp"
-#include "methods/bytestream.cpp"
-#include "methods/trackinterface.cpp"
-#include "methods/chapterinterface.cpp"
-#include "methods/angleinterface.cpp"
-#include "methods/navigationinterface.cpp"
-}
 void MethodTest::checkMediaObjectMethods_data() { addColumns();
-#include "methods/abstractmediaproducer.cpp"
 #include "methods/mediaobject.cpp"
-#include "methods/trackinterface.cpp"
-#include "methods/chapterinterface.cpp"
-#include "methods/angleinterface.cpp"
-#include "methods/navigationinterface.cpp"
+#include "methods/mediacontroller.cpp"
 }
-void MethodTest::checkMediaQueueMethods_data() { addColumns();
-#include "methods/mediaqueue.cpp"
-}
-void MethodTest::checkVideoDataOutputMethods_data() { addColumns();
-#include "methods/abstractvideooutput.cpp"
-#include "../experimental/tests/methods/videodataoutput.cpp"
-}
-void MethodTest::checkVideoEffectMethods_data() { addColumns();
-#include "methods/videoeffect.cpp"
-}
+//X void MethodTest::checkVideoDataOutputMethods_data() { addColumns();
+//X #include "methods/abstractvideooutput.cpp"
+//X #include "../experimental/tests/methods/videodataoutput.cpp"
+//X }
 void MethodTest::checkVideoPathMethods_data() { addColumns();
 #include "methods/videopath.cpp"
 }
-void MethodTest::checkVisualizationMethods_data() { addColumns();
-#include "../experimental/tests/methods/visualization.cpp"
-}
+//X void MethodTest::checkVisualizationMethods_data() { addColumns();
+//X #include "../experimental/tests/methods/visualization.cpp"
+//X }
 void MethodTest::checkVolumeFaderEffectMethods_data() { addColumns();
 #include "methods/volumefadereffect.cpp"
 }
-void MethodTest::checkAudioDataOutputMethods()   { checkMethods(Factory::createAudioDataOutput()); }
+void MethodTest::checkVideoWidgetMethods_data() { addColumns();
+#include "methods/videowidget.cpp"
+}
+//X void MethodTest::checkAudioDataOutputMethods()   { checkMethods(Factory::createAudioDataOutput()); }
 void MethodTest::checkAudioEffectMethods()       { checkMethods(Factory::createAudioEffect(1)); }
+void MethodTest::checkVideoEffectMethods()       { checkMethods(Factory::createVideoEffect(1)); }
 void MethodTest::checkAudioOutputMethods()       { checkMethods(Factory::createAudioOutput()); }
 void MethodTest::checkAudioPathMethods()         { checkMethods(Factory::createAudioPath()); }
-void MethodTest::checkAvCaptureMethods()         { checkMethods(Factory::createAvCapture()); }
 void MethodTest::checkBackendMethods()           { checkMethods(Factory::backend()); }
 void MethodTest::checkBrightnessControlMethods() { checkMethods(Factory::createBrightnessControl()); }
-void MethodTest::checkByteStreamMethods()        { checkMethods(Factory::createByteStream()); }
 void MethodTest::checkMediaObjectMethods()       { checkMethods(Factory::createMediaObject()); }
-void MethodTest::checkMediaQueueMethods()        { checkMethods(Factory::createMediaQueue()); }
-void MethodTest::checkVideoDataOutputMethods()   { checkMethods(Factory::createVideoDataOutput()); }
-void MethodTest::checkVideoEffectMethods()       { checkMethods(Factory::createVideoEffect(1)); }
+//X void MethodTest::checkVideoDataOutputMethods()   { checkMethods(Factory::createVideoDataOutput()); }
 void MethodTest::checkVideoPathMethods()         { checkMethods(Factory::createVideoPath()); }
-void MethodTest::checkVisualizationMethods()     { checkMethods(Factory::createVisualization()); }
+//X void MethodTest::checkVisualizationMethods()     { checkMethods(Factory::createVisualization()); }
 void MethodTest::checkVolumeFaderEffectMethods() { checkMethods(Factory::createVolumeFaderEffect()); }
-
-void MethodTest::checkByteStreamInterfaces()
-{
-    QObject *m_backendObject = Factory::createByteStream();
-    if (!m_backendObject)
-        QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    QVERIFY(qobject_cast<Phonon::ByteStreamInterface *>(m_backendObject) != 0);
-    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(m_backendObject) != 0);
-    QVERIFY(qobject_cast<Phonon::MediaObjectInterface *>(m_backendObject) == 0);
-    QVERIFY(qobject_cast<Phonon::AddonInterface *>(m_backendObject) != 0);
-    delete m_backendObject;
-}
+void MethodTest::checkVideoWidgetMethods()       { checkMethods(Factory::createVideoWidget()); }
 
 void MethodTest::checkMediaObjectInterfaces()
 {
     QObject *m_backendObject = Factory::createMediaObject();
     if (!m_backendObject)
         QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(m_backendObject) != 0);
     QVERIFY(qobject_cast<Phonon::MediaObjectInterface *>(m_backendObject) != 0);
     QVERIFY(qobject_cast<Phonon::AddonInterface *>(m_backendObject) != 0);
-    delete m_backendObject;
-}
-
-void MethodTest::checkAvCapturetInterfaces()
-{
-    QObject *m_backendObject = Factory::createAvCapture();
-    if (!m_backendObject)
-        QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
-    QVERIFY(qobject_cast<Phonon::MediaProducerInterface *>(m_backendObject) != 0);
     delete m_backendObject;
 }
 
@@ -202,6 +161,6 @@ void MethodTest::checkMethods(QObject *m_backendObject)
     }
 }
 
-QTEST_KDEMAIN(MethodTest, NoGUI)
+QTEST_KDEMAIN(MethodTest, GUI)
 #include "methodtest.moc"
 // vim: sw=4 ts=4

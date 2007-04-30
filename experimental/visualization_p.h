@@ -29,13 +29,15 @@ namespace Experimental
 {
 class VisualizationPrivate : public BasePrivate, private BaseDestructionHandler
 {
-    K_DECLARE_PUBLIC(Visualization)
+    Q_DECLARE_PUBLIC(Visualization)
     PHONON_PRIVATECLASS
     protected:
+        Visualization *q_ptr;
         VisualizationPrivate()
-            : audioPath(0)
-            , videoOutput(0)
-            , visualizationIndex(-1) // invalid
+            : q_ptr(0),
+            audioPath(0),
+            videoOutput(0),
+            visualizationIndex(-1) // invalid
         {
         }
 
@@ -44,7 +46,7 @@ class VisualizationPrivate : public BasePrivate, private BaseDestructionHandler
         int visualizationIndex;
 
     private:
-        void phononObjectDestroyed(Base *);
+        void phononObjectDestroyed(BasePrivate *);
 };
 } // namespace Experimental
 } // namespace Phonon

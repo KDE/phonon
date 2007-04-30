@@ -31,7 +31,7 @@ namespace Experimental
 {
 class VideoDataOutputPrivate : public AbstractVideoOutputPrivate
 {
-    K_DECLARE_PUBLIC(VideoDataOutput)
+    Q_DECLARE_PUBLIC(VideoDataOutput)
     PHONON_PRIVATECLASS
     protected:
         VideoDataOutputPrivate()

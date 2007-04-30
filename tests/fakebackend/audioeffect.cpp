@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -50,22 +50,34 @@ AudioEffect::~AudioEffect()
     m_effect = 0;
 }
 
-QList<Phonon::EffectParameter> AudioEffect::parameterList() const
+QList<Phonon::EffectParameter> AudioEffect::allDescriptions() const
 {
     return m_parameterList;
 }
 
-QVariant AudioEffect::value(int parameterId) const
+EffectParameter AudioEffect::description(int i) const
 {
-    if (m_effect)
-        return m_effect->value(parameterId);
-    return QVariant(); // invalid
+    return m_parameterList[i];
 }
 
-void AudioEffect::setValue(int parameterId, QVariant newValue)
+int AudioEffect::parameterCount() const
 {
-    if (m_effect)
-        m_effect->setValue(parameterId, newValue);
+    return m_parameterList.size();
+}
+
+QVariant AudioEffect::parameterValue(int i) const
+{
+    if (m_effect) {
+        return m_effect->value(m_parameterList[i].id());
+    }
+    return QVariant();
+}
+
+void AudioEffect::setParameterValue(int i, const QVariant &v)
+{
+    if (m_effect) {
+        return m_effect->setValue(m_parameterList[i].id(), v);
+    }
 }
 
 void AudioEffect::processBuffer(QVector<float> &buffer)

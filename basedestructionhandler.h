@@ -19,6 +19,7 @@
 
 #ifndef BASEDESTRUCTIONHANDLER_H
 #define BASEDESTRUCTIONHANDLER_H
+
 namespace Phonon
 {
 /**
@@ -29,11 +30,11 @@ namespace Phonon
  * \author Matthias Kretz <kretz@kde.org>
  */
 
-class Base;
+class BasePrivate;
 
 class BaseDestructionHandler
 {
-    friend class Base;
+    friend class BasePrivate;
 
 public:
     virtual ~BaseDestructionHandler() {}
@@ -43,7 +44,7 @@ protected:
      * called from Base::~Base if this object was registered
      * using BasePrivate::addDestructionHandler().
      */
-    virtual void phononObjectDestroyed(Base *) = 0;
+    virtual void phononObjectDestroyed(BasePrivate *) = 0;
 };
 }
 

@@ -65,6 +65,6 @@ void AudioCaptureDeviceTest::cleanupTestCase()
 {
 }
 
-QTEST_KDEMAIN(AudioCaptureDeviceTest, NoGUI)
+QTEST_KDEMAIN_CORE(AudioCaptureDeviceTest)
 #include "audiocapturedevicetest.moc"
 // vim: sw=4 ts=4

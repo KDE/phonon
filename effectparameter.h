@@ -21,10 +21,10 @@
 #define PHONON_EFFECTPARAMETER_H
 
 #include "phonon_export.h"
-#include <ksharedptr.h>
 
 
 #include <QVariant>
+#include <QExplicitlySharedDataPointer>
 
 namespace Phonon
 {
@@ -40,7 +40,7 @@ class AudioEffect;
  * \see AudioEffect
  * \see VideoEffect
  */
-class PHONONCORE_EXPORT EffectParameter
+class PHONON_EXPORT EffectParameter
 {
     friend class AudioEffect;
     friend class AudioEffectPrivate;
@@ -52,17 +52,8 @@ class PHONONCORE_EXPORT EffectParameter
          * \internal
          *
          * Creates an invalid effect parameter.
-         *
-         * \see isValid()
          */
         EffectParameter();
-
-        /**
-         * \internal
-         *
-         * A parameter that has no pointer to an effect is invalid.
-         */
-        bool isValid() const;
 
         /**
          * The name of the parameter. Can be used as the label.
@@ -128,29 +119,6 @@ class PHONONCORE_EXPORT EffectParameter
          * The default value.
          */
         QVariant defaultValue() const;
-
-        /**
-         * The current value of the parameter.
-         */
-        QVariant value() const;
-
-        /**
-         * Sets the new value for the parameter.
-         *
-         * \param newValue Depending on the isIntegerControl() hint the QVariant
-         * is expected either as an integer or a double.
-         */
-        void setValue(QVariant newValue);
-
-        /**
-         * Equality operator
-         */
-        bool operator==(const EffectParameter &rhs) const;
-
-        /**
-         * Inequality operator
-         */
-        inline bool operator!=(const EffectParameter &rhs) const { return ! operator==(rhs); }
 
         /**
          * \internal
@@ -229,13 +197,6 @@ class PHONONCORE_EXPORT EffectParameter
                 const QVariant &defaultValue, const QVariant &min = QVariant(),
                 const QVariant &max = QVariant(), const QString &description = QString());
 
-    protected:
-        /**
-         * \internal
-         * Sets the pointer to the Effect object for value() and setValue().
-         */
-        void setEffect(Effect *effect);
-
         /**
          * \internal
          *
@@ -247,7 +208,7 @@ class PHONONCORE_EXPORT EffectParameter
         /**
          * The data is implicitly shared.
          */
-        KSharedPtr<EffectParameterPrivate> d;
+        QExplicitlySharedDataPointer<EffectParameterPrivate> d;
 };
 
 } // namespace Phonon

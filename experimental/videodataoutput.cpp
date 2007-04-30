@@ -40,7 +40,7 @@ void VideoDataOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    K_Q(VideoDataOutput);
+    Q_Q(VideoDataOutput);
     m_backendObject = Factory::createVideoDataOutput(q);
     if (m_backendObject) {
         setupBackendObject();

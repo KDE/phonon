@@ -23,7 +23,7 @@
 #include "audiooutputadaptor.h"
 #include "globalconfig.h"
 #include "audiooutputinterface.h"
-#include "guiinterface.h"
+#include "phononnamespace_p.h"
 
 #include <cmath>
 #include <klocale.h>
@@ -51,7 +51,7 @@ void AudioOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    K_Q(AudioOutput);
+    Q_Q(AudioOutput);
     m_backendObject = Factory::createAudioOutput(q);
     if (m_backendObject) {
         setupBackendObject();
@@ -70,37 +70,45 @@ void AudioOutput::setName(const QString &newName)
     d->name = newName;
 }
 
-void AudioOutput::setVolume(float volume)
+void AudioOutput::setVolume(qreal volume)
 {
     K_D(AudioOutput);
     d->volume = volume;
     if (k_ptr->backendObject() && !d->muted) {
-        INTERFACE_CALL(setVolume(volume));
+        // using Stevens' power law loudness is proportional to (sound pressure)^0.67
+        // sound pressure is proportional to voltage:
+        // p² \prop P \prop V²
+        // => if a factor for loudness of x is requested
+        INTERFACE_CALL(setVolume(pow(volume, 1.4925373)));
     } else {
         emit volumeChanged(volume);
     }
 }
 
-float AudioOutput::volume() const
+qreal AudioOutput::volume() const
 {
     K_D(const AudioOutput);
-    if(d->muted || !d->m_backendObject) {
+    if (d->muted || !d->m_backendObject) {
         return d->volume;
     }
-    return INTERFACE_CALL(volume());
+    return pow(INTERFACE_CALL(volume()), 0.67);
 }
 
 #ifndef PHONON_LOG10OVER20
 #define PHONON_LOG10OVER20
-static const double log10over20 = 0.1151292546497022842; // ln(10) / 20
+static const qreal log10over20 = 0.1151292546497022842; // ln(10) / 20
 #endif // PHONON_LOG10OVER20
 
-double AudioOutput::volumeDecibel() const
+qreal AudioOutput::volumeDecibel() const
 {
-    return -log(volume()) / log10over20;
+    K_D(const AudioOutput);
+    if (d->muted || !d->m_backendObject) {
+        return -log(d->volume) / log10over20;
+    }
+    return -0.67 * log(INTERFACE_CALL(volume())) / log10over20;
 }
 
-void AudioOutput::setVolumeDecibel(double newVolumeDecibel)
+void AudioOutput::setVolumeDecibel(qreal newVolumeDecibel)
 {
     setVolume(exp(-newVolumeDecibel * log10over20));
 }
@@ -119,7 +127,7 @@ void AudioOutput::setMuted(bool mute)
             d->muted = mute;
             INTERFACE_CALL(setVolume(0.0));
         } else {
-            INTERFACE_CALL(setVolume(d->volume));
+            INTERFACE_CALL(setVolume(pow(d->volume, 1.4925373)));
             d->muted = mute;
         }
         emit mutedChanged(mute);
@@ -173,7 +181,7 @@ void AudioOutputPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
     AbstractAudioOutputPrivate::setupBackendObject();
 
-    QObject::connect(m_backendObject, SIGNAL(volumeChanged(float)), q, SLOT(_k_volumeChanged(float)));
+    QObject::connect(m_backendObject, SIGNAL(volumeChanged(qreal)), q, SLOT(_k_volumeChanged(qreal)));
     QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()), q, SLOT(_k_audioDeviceFailed()));
 
     // set up attributes
@@ -198,11 +206,11 @@ void AudioOutputPrivate::setupBackendObject()
     }
 }
 
-void AudioOutputPrivate::_k_volumeChanged(float newVolume)
+void AudioOutputPrivate::_k_volumeChanged(qreal newVolume)
 {
     if (!muted) {
         Q_Q(AudioOutput);
-        emit q->volumeChanged(newVolume);
+        emit q->volumeChanged(pow(newVolume, 0.67));
     }
 }
 
@@ -219,7 +227,7 @@ void AudioOutputPrivate::_k_revertFallback()
 
 void AudioOutputPrivate::_k_audioDeviceFailed()
 {
-    kDebug(600) << k_funcinfo << endl;
+    pDebug() << Q_FUNC_INFO;
     // outputDeviceIndex identifies a failing device
     // fall back in the preference list of output devices
     QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category);
@@ -236,7 +244,7 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
 
 void AudioOutputPrivate::deviceListChanged()
 {
-    kDebug(600) << k_funcinfo << endl;
+    pDebug() << Q_FUNC_INFO;
     // let's see if there's a usable device higher in the preference list
     QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category);
     foreach (int devIndex, deviceList) {
@@ -269,7 +277,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(int newIndex, DeviceChangeT
                 "which just became available and has higher preference.", device2.name());
         break;
     }
-    GuiInterface::instance()->notification("AudioDeviceFallback", text,
+    Factory::notification("AudioDeviceFallback", text,
             QStringList(i18n("Revert back to device '%1'", device1.name())),
             q, SLOT(_k_revertFallback()));
 }

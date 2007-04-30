@@ -21,7 +21,8 @@
 #define PHONON_FRONTENDINTERFACEPRIVATE_H
 
 #include "addoninterface.h"
-#include "abstractmediaproducer_p.h"
+#include "mediaobject_p.h"
+#include "phononnamespace_p.h"
 #include <QtCore/QPointer>
 
 namespace Phonon
@@ -29,20 +30,20 @@ namespace Phonon
 class FrontendInterfacePrivate
 {
     public:
-        FrontendInterfacePrivate(AbstractMediaProducer *mp) : media(mp) {
+        FrontendInterfacePrivate(MediaObject *mp) : media(mp) {
             Q_ASSERT(media);
-            AbstractMediaProducerPrivate *d = media->k_func();
+            MediaObjectPrivate *d = media->k_func();
             d->interfaceList << this;
         }
         virtual ~FrontendInterfacePrivate() {
             if (media) {
-                AbstractMediaProducerPrivate *d = media->k_func();
+                MediaObjectPrivate *d = media->k_func();
                 d->interfaceList << this;
             }
         }
         virtual void backendObjectChanged(QObject *iface) = 0;
         void _backendObjectChanged() {
-            kDebug(600) << k_funcinfo << endl;
+            pDebug() << Q_FUNC_INFO;
             QObject *x = media->k_ptr->backendObject();
             if (x) {
                 backendObjectChanged(x);
@@ -50,7 +51,7 @@ class FrontendInterfacePrivate
         }
         AddonInterface *iface() { return qobject_cast<AddonInterface *>(media->k_ptr->backendObject()); }
 
-        QPointer<AbstractMediaProducer> media;
+        QPointer<MediaObject> media;
 };
 } // namespace Phonon
 

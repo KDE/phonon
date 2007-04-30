@@ -21,7 +21,7 @@
 #define PHONON_BRIGHTNESSCONTROL_H
 
 #include "phonon_export.h"
-#include "videoeffect.h"
+#include "effect.h"
 
 namespace Phonon
 {
@@ -32,7 +32,7 @@ namespace Phonon
      *
      * \author Matthias Kretz <kretz@kde.org>
      */
-    class PHONONCORE_EXPORT BrightnessControl : public VideoEffect
+    class PHONON_EXPORT BrightnessControl : public Effect
     {
         Q_OBJECT
         K_DECLARE_PRIVATE(BrightnessControl)

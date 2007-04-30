@@ -65,6 +65,6 @@ void AudioOutputDeviceTest::cleanupTestCase()
 {
 }
 
-QTEST_KDEMAIN(AudioOutputDeviceTest, NoGUI)
+QTEST_KDEMAIN_CORE(AudioOutputDeviceTest)
 #include "audiooutputdevicetest.moc"
 // vim: sw=4 ts=4
