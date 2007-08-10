@@ -23,6 +23,7 @@
 #include "../factory.h"
 #include <QtCore/QUrl>
 #include <QtTest>
+#include <stdlib.h>
 
 namespace Phonon
 {

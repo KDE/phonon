@@ -46,7 +46,7 @@ namespace Fake
 
         public:
             // Fake specific:
-            virtual void processBuffer(const QVector<float> &buffer);
+            virtual void processBuffer(QVector<float> &buffer);
 
         signals:
             void dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<qint16> > &data);

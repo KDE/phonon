@@ -47,49 +47,12 @@ void VideoDataOutputPrivate::createBackendObject()
     }
 }
 
-PHONON_GETTER(quint32, format, d->format)
 
-bool VideoDataOutput::formatSupported(quint32 fourcc)
-{
-    QObject *backend = Factory::backend();
-    if (backend)
-    {
-        bool ret;
-        QMetaObject::invokeMethod(backend, "supportsFourcc", Q_RETURN_ARG(bool, ret), Q_ARG(quint32, fourcc));
-        return ret;
-    }
-    return false;
-}
-
-PHONON_GETTER(int, frameRate, d->frameRate)
-PHONON_SETTER(setFrameRate, frameRate, int)
-PHONON_SETTER(setFormat, format, quint32)
-PHONON_GETTER(QSize, frameSize, d->frameSize)
-
-void VideoDataOutput::setFrameSize(const QSize &size, Qt::AspectRatioMode aspectRatioMode)
-{
-    K_D(VideoDataOutput);
-    d->frameSize = size;
-    d->frameAspectRatioMode = aspectRatioMode;
-
-    if (k_ptr->backendObject())
-    {
-        QSize newsize;
-        BACKEND_GET(QSize, newsize, "naturalFrameSize");
-        newsize.scale(size, aspectRatioMode);
-        BACKEND_CALL1("setFrameSize", QSize, newsize);
-    }
-}
-
-void VideoDataOutput::setFrameSize(int width, int height, Qt::AspectRatioMode aspectRatioMode)
-{
-    setFrameSize(QSize(width, height), aspectRatioMode);
-}
+PHONON_GETTER(int, latency, d->latency)
 
 bool VideoDataOutputPrivate::aboutToDeleteBackendObject()
 {
     Q_ASSERT(m_backendObject);
-    pBACKEND_GET(quint32, format, "format");
 
     return AbstractVideoOutputPrivate::aboutToDeleteBackendObject();
 }
@@ -100,12 +63,39 @@ void VideoDataOutputPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
 
-    // set up attributes
-    pBACKEND_CALL1("setFormat", quint32, format);
-    //m_backendObject->setDisplayLatency(displayLatency);
-    QObject::connect(m_backendObject, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)),
-            q, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)));
+    //QObject::connect(m_backendObject, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)),
+    //        q, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)));
+
+    QObject::connect(m_backendObject, SIGNAL(displayFrame(qint64, qint64)),
+                     q, SIGNAL(displayFrame(qint64, qint64)));
     QObject::connect(m_backendObject, SIGNAL(endOfMedia()), q, SIGNAL(endOfMedia()));
+}
+
+bool VideoDataOutput::isRunning() const
+{
+     K_D(const VideoDataOutput);
+     //return d->m_backendObject->isRunning();
+     return false;
+}
+
+VideoFrame VideoDataOutput::frameForTime(qint64 timestamp)
+{
+    //return d->m_backendObject->frameForTime(timestamp);
+}
+
+void VideoDataOutput::setRunning(bool running)
+{
+    //return d->m_backendObject->setRunning(running);
+}
+
+void VideoDataOutput::start()
+{
+    //return d->m_backendObject->setRunning(true);
+}
+
+void VideoDataOutput::stop()
+{
+    //return d->m_backendObject->setRunning(false);
 }
 
 } // namespace Experimental

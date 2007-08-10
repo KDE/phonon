@@ -24,6 +24,7 @@
 #include "objectdescription.h"
 
 #include <QtCore/QtGlobal>
+#include <QtCore/QSet>
 
 class QVariant;
 
@@ -46,8 +47,6 @@ namespace Phonon
  *     switch (c) {
  *     case MediaObjectClass:
  *         return new MediaObject(parent);
- *     case AudioPathClass:
- *         return new AudioPath(parent);
  *     case VolumeFaderEffectClass:
  *         return new VolumeFaderEffect(parent);
  *     case AudioOutputClass:
@@ -56,18 +55,10 @@ namespace Phonon
  *         return new AudioDataOutput(parent);
  *     case VisualizationClass:
  *         return new Visualization(parent);
- *     case VideoPathClass:
- *         return new VideoPath(parent);
- *     case BrightnessControlClass:
- *         return new BrightnessControl(parent);
  *     case VideoDataOutputClass:
  *         return new VideoDataOutput(parent);
- *     case DeinterlaceFilterClass:
- *         return new DeinterlaceFilter(parent);
- *     case AudioEffectClass:
- *         return new AudioEffect(args[0].toInt(), parent);
- *     case VideoEffectClass:
- *         return new VideoEffect(args[0].toInt(), parent);
+ *     case EffectClass:
+ *         return new Effect(args[0].toInt(), parent);
  *     case VideoWidgetClass:
  *         return new VideoWidget(qobject_cast<QWidget *>(parent));
  *     }
@@ -96,11 +87,8 @@ namespace Phonon
  *     case Phonon::VideoCodecType:
  *     case Phonon::ContainerFormatType:
  *         break;
- *     case Phonon::AudioEffectType:
+ *     case Phonon::EffectType:
  *         set << 0x7F000001;
- *         break;
- *     case Phonon::VideoEffectType:
- *         set << 0x7E000001;
  *         break;
  *     }
  *     return set;
@@ -156,19 +144,11 @@ namespace Phonon
  *         break;
  *     case Phonon::ContainerFormatType:
  *         break;
- *     case Phonon::AudioEffectType:
+ *     case Phonon::EffectType:
  *         switch (index) {
  *         case 0x7F000001:
  *             ret.insert("name", QLatin1String("Delay"));
  *             ret.insert("description", QLatin1String("Simple delay effect with time, feedback and level controls."));
- *             break;
- *         }
- *         break;
- *     case Phonon::VideoEffectType:
- *         switch (index) {
- *         case 0x7E000001:
- *             ret.insert("name", QLatin1String("VideoEffect1"));
- *             ret.insert("description", QLatin1String("Description 1"));
  *             break;
  *         }
  *         break;
@@ -199,10 +179,6 @@ class BackendInterface
              */
             MediaObjectClass,
             /**
-             * Request to return a %AudioPath object.
-             */
-            AudioPathClass,
-            /**
              * Request to return a %VolumeFaderEffect object.
              */
             VolumeFaderEffectClass,
@@ -219,33 +195,15 @@ class BackendInterface
              */
             VisualizationClass,
             /**
-             * Request to return a %VideoPath object.
-             */
-            VideoPathClass,
-            /**
-             * Request to return a %BrightnessControl object.
-             */
-            BrightnessControlClass,
-            /**
              * Request to return a %VideoDataOutput object.
              */
             VideoDataOutputClass,
             /**
-             * Request to return a %DeinterlaceFilter object.
-             */
-            DeinterlaceFilterClass,
-            /**
-             * Request to return a %AudioEffect object.
+             * Request to return a %Effect object.
              *
              * Takes an additional int that specifies the effect Id.
              */
-            AudioEffectClass,
-            /**
-             * Request to return a %VideoEffect object.
-             *
-             * Takes an additional int that specifies the effect Id.
-             */
-            VideoEffectClass,
+            EffectClass,
             /**
              * Request to return a %VideoWidget object.
              */
@@ -285,9 +243,37 @@ class BackendInterface
          * \param index The unique identifier that is returned from objectDescriptionIndexes
          */
         virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
+
+        /**
+         * When this function is called the nodes given in the parameter list should not lose any
+         * signal data when connections are changed.
+         */
+        virtual bool startConnectionChange(QSet<QObject *>) = 0;
+
+        /**
+         * Defines a signal connection between the two given nodes.
+         */
+        virtual bool connectNodes(QObject *, QObject *) = 0;
+
+        /**
+         * Cuts a signal connection between the two given nodes.
+         */
+        virtual bool disconnectNodes(QObject *, QObject *) = 0;
+
+        /**
+         * When this function is called the nodes given in the parameter list may lose
+         * signal data when a port is not connected.
+         */
+        virtual bool endConnectionChange(QSet<QObject *>) = 0;
+
+        /**
+         * gets all available mime types
+         */
+        virtual QStringList availableMimeTypes() const = 0;
+
 };
 } // namespace Phonon
 
-Q_DECLARE_INTERFACE(Phonon::BackendInterface, "BackendInterface2.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::BackendInterface, "BackendInterface3.phonon.kde.org")
 
 #endif // PHONON_BACKENDINTERFACE_H

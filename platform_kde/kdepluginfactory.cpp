@@ -20,6 +20,7 @@
 #include "kdepluginfactory.h"
 #include "kiomediastream.h"
 
+#include <QtCore/QFile>
 #include <QtCore/QtPlugin>
 #include <QtCore/QCoreApplication>
 
@@ -105,7 +106,7 @@ QString KdePlatformPlugin::applicationName() const
     return KGlobal::mainComponent().componentName();
 }
 
-#define PHONON_LOAD_BACKEND_GLOBAL 0
+#undef PHONON_LOAD_BACKEND_GLOBAL
 
 QObject *KdePlatformPlugin::createBackend(KService::Ptr newService)
 {

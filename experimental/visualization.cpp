@@ -20,10 +20,8 @@
 #include "visualization.h"
 #include "visualization_p.h"
 #include "../objectdescription.h"
-#include "../audiopath.h"
-#include "../audiopath_p.h"
-#include "../abstractvideooutput.h"
-#include "../abstractvideooutput_p.h"
+#include "../path.h"
+#include "../factory.h"
 
 #define PHONON_CLASSNAME Visualization
 
@@ -35,62 +33,26 @@ PHONON_OBJECT_IMPL
 
 Visualization::~Visualization()
 {
-    K_D(Visualization);
-    if(d->audioPath)
-        d->audioPath->k_ptr->removeDestructionHandler(d);
-    if(d->videoOutput)
-        d->videoOutput->k_ptr->removeDestructionHandler(d);
-    delete k_ptr;
-}
-
-AudioPath *Visualization::audioPath() const
-{
-    K_D(const Visualization);
-    return d->audioPath;
-}
-
-void Visualization::setAudioPath(AudioPath *audioPath)
-{
-    K_D(Visualization);
-    d->audioPath = audioPath;
-    d->audioPath->k_ptr->addDestructionHandler(d);
-    if (k_ptr->backendObject())
-        BACKEND_CALL1("setAudioPath", QObject *, audioPath->k_ptr->backendObject());
-}
-
-AbstractVideoOutput *Visualization::videoOutput() const
-{
-    K_D(const Visualization);
-    return d->videoOutput;
-}
-
-void Visualization::setVideoOutput(AbstractVideoOutput *videoOutput)
-{
-    K_D(Visualization);
-    d->videoOutput = videoOutput;
-    d->videoOutput->k_ptr->addDestructionHandler(d);
-    if (k_ptr->backendObject())
-        BACKEND_CALL1("setVideoOutput", QObject *, videoOutput->k_ptr->backendObject());
 }
 
 VisualizationDescription Visualization::visualization() const
 {
     K_D(const Visualization);
+    if (!d->m_backendObject) {
+        return d->description;
+    }
     int index;
-    if (d->m_backendObject)
-        BACKEND_GET(int, index, "visualization");
-    else
-        index = d->visualizationIndex;
+    BACKEND_GET(int, index, "visualization");
     return VisualizationDescription::fromIndex(index);
 }
 
 void Visualization::setVisualization(const VisualizationDescription &newVisualization)
 {
     K_D(Visualization);
-    if (k_ptr->backendObject())
+    d->description = newVisualization;
+    if (k_ptr->backendObject()) {
         BACKEND_CALL1("setVisualization", int, newVisualization.index());
-    else
-        d->visualizationIndex = newVisualization.index();
+    }
 }
 
 /*
@@ -119,10 +81,12 @@ QWidget *Visualization::createParameterWidget(QWidget *parent)
 }
 */
 
-void VisualizationPrivate::phononObjectDestroyed(BasePrivate *bp)
+void VisualizationPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 {
-    // this method is called from Phonon::BasePrivate::~BasePrivate(), meaning the AudioEffect
-    // dtor has already been called and the private class is down to BasePrivate
+    Q_UNUSED(bp);
+    // this method is called from Phonon::MediaNodePrivate::~MediaNodePrivate(), meaning the AudioEffect
+    // dtor has already been called and the private class is down to MediaNodePrivate
+    /*
     Q_ASSERT(bp);
     if (audioPath->k_ptr == bp)
     {
@@ -134,12 +98,11 @@ void VisualizationPrivate::phononObjectDestroyed(BasePrivate *bp)
         pBACKEND_CALL1("setVideoOutput", QObject *, static_cast<QObject *>(0));
         videoOutput = 0;
     }
+    */
 }
 
 bool VisualizationPrivate::aboutToDeleteBackendObject()
 {
-    if (m_backendObject)
-        pBACKEND_GET(int, visualizationIndex, "visualization");
     return true;
 }
 
@@ -147,11 +110,13 @@ void VisualizationPrivate::setupBackendObject()
 {
     Q_ASSERT(m_backendObject);
 
-    pBACKEND_CALL1("setVisualization", int, visualizationIndex);
+    pBACKEND_CALL1("setVisualization", int, description.index());
+    /*
     if (audioPath)
         pBACKEND_CALL1("setAudioPath", QObject *, audioPath->k_ptr->backendObject());
     if (videoOutput)
         pBACKEND_CALL1("setVideoOutput", QObject *, videoOutput->k_ptr->backendObject());
+        */
 }
 
 } // namespace Experimental

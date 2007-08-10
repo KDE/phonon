@@ -19,12 +19,10 @@
 
 #include "videoplayer.h"
 #include "mediaobject.h"
-#include "audiopath.h"
 #include "audiooutput.h"
-#include "videopath.h"
 #include "videowidget.h"
+#include "path.h"
 #include <QtGui/QBoxLayout>
-#include <QtCore/QUrl>
 
 namespace Phonon
 {
@@ -38,12 +36,10 @@ class VideoPlayerPrivate
         }
 
         MediaObject *player;
-        AudioPath *apath;
-        VideoPath *vpath;
         AudioOutput *aoutput;
         VideoWidget *voutput;
 
-        QUrl url;
+        MediaSource src;
 
         void _k_stateChanged(Phonon::State, Phonon::State);
 };
@@ -55,17 +51,14 @@ VideoPlayer::VideoPlayer(Phonon::Category category, QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     d->aoutput = new AudioOutput(category, this);
-    d->apath = new AudioPath(this);
-    d->apath->addOutput(d->aoutput);
 
     d->voutput = new VideoWidget(this);
     layout->addWidget(d->voutput);
-    d->vpath = new VideoPath(this);
-    d->vpath->addOutput(d->voutput);
+
 
     d->player = new MediaObject(this);
-    d->player->addAudioPath(d->apath);
-    d->player->addVideoPath(d->vpath);
+    Phonon::createPath(d->player, d->aoutput);
+    Phonon::createPath(d->player, d->voutput);
 
     connect(d->player, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
             SLOT(_k_stateChanged(Phonon::State, Phonon::State)));
@@ -76,38 +69,38 @@ VideoPlayer::~VideoPlayer()
 {
 }
 
-void VideoPlayer::load(const QString &filename)
+MediaObject *VideoPlayer::mediaObject() const
 {
-    load(QUrl::fromLocalFile(filename));
+    return d->player;
 }
 
-void VideoPlayer::load(const QUrl &url)
+AudioOutput *VideoPlayer::audioOutput() const
 {
-    // new URL
-    d->player->setCurrentSource(url);
-    d->url = url;
+    return d->aoutput;
 }
 
-void VideoPlayer::play(const QString &filename)
+VideoWidget *VideoPlayer::videoWidget() const
 {
-    play(QUrl::fromLocalFile(filename));
+    return d->voutput;
 }
 
-void VideoPlayer::play(const QUrl &url)
+void VideoPlayer::load(const MediaSource &source)
 {
-    if (url == d->url)
-    {
+    d->player->setCurrentSource(source);
+}
+
+void VideoPlayer::play(const MediaSource &source)
+{
+    if (source == d->player->currentSource()) {
         if (!isPlaying())
             d->player->play();
         return;
     }
     // new URL
-    d->player->setCurrentSource(url);
+    d->player->setCurrentSource(source);
         
     if (ErrorState == d->player->state())
         return;
-
-    d->url = url;
 
     if (StoppedState == d->player->state())
         d->player->play();
@@ -115,7 +108,7 @@ void VideoPlayer::play(const QUrl &url)
 
 void VideoPlayer::play()
 {
-    play(d->url);
+    d->player->play();
 }
 
 void VideoPlayer::pause()

@@ -108,7 +108,7 @@ int GlobalConfig::audioOutputDeviceFor(Phonon::Category category) const
     return ret.first();
 }
 
-QList<int> GlobalConfig::audioCaptureDeviceList() const
+/*QList<int> GlobalConfig::audioCaptureDeviceList() const
 {
     //First we lookup the available devices directly from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
@@ -147,7 +147,7 @@ QList<int> GlobalConfig::audioCaptureDeviceList() const
 int GlobalConfig::audioCaptureDevice() const
 {
     return audioCaptureDeviceList().first();
-}
+}*/
 
 } // namespace Phonon
 

@@ -17,24 +17,29 @@
 
 */
 
-#ifndef OVERLAYAPI_P_H
-#define OVERLAYAPI_P_H
-
-#include "overlayapi.h"
+#ifndef AUDIONODE_H
+#define AUDIONODE_H
 
 namespace Phonon
 {
-namespace Experimental
+namespace Fake
 {
-class OverlayApiPrivate
+
+class AudioNode
 {
-    Q_DECLARE_PUBLIC(OverlayApi)
-    protected:
-        OverlayApi *q_ptr;
-        VideoWidget *videowidget;
+    public:
+        AudioNode() : m_hasInput(false) {}
+        virtual ~AudioNode() {}
+        virtual void processBuffer(QVector<float> &buffer) = 0;
+        bool hasInput() const { return m_hasInput; }
+        void setHasInput(bool x) { m_hasInput = x; }
+    private:
+        bool m_hasInput;
 };
-} // namespace Experimental
+
+} // namespace Fake
 } // namespace Phonon
 
-#endif // OVERLAYAPI_P_H
-// vim: sw=4 sts=4 et tw=100
+Q_DECLARE_INTERFACE(Phonon::Fake::AudioNode, "FakeAudioNode.phonon.kde.org")
+
+#endif // AUDIONODE_H

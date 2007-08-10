@@ -21,16 +21,15 @@
 #define ABSTRACTVIDEOOUTPUT_P_H
 
 #include "abstractvideooutput.h"
-#include "base_p.h"
+#include "medianode_p.h"
+#include "phonondefs_p.h"
 
 namespace Phonon
 {
-class AbstractVideoOutputPrivate : public BasePrivate
+class AbstractVideoOutputPrivate : public MediaNodePrivate
 {
     Q_DECLARE_PUBLIC(AbstractVideoOutput)
     PHONON_PRIVATEABSTRACTCLASS
-    protected:
-        AbstractVideoOutput *q_ptr;
 };
 } //namespace Phonon
 

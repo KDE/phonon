@@ -19,9 +19,6 @@
 
 #include "mediaobject.h"
 #include <QtCore/QTimer>
-#include <kdebug.h>
-#include "videopath.h"
-#include "audiopath.h"
 #include "stream.h"
 #include "../../abstractmediastream_p.h"
 #include <QtCore/QVector>
@@ -29,6 +26,8 @@
 #include <QtCore/QFile>
 #include <QtCore/QByteRef>
 #include <QtCore/QStringList>
+#include "audionode.h"
+#include "videonode.h"
 
 namespace Phonon
 {
@@ -47,7 +46,7 @@ MediaObject::MediaObject(QObject *parent)
     , m_lastSamplesMissing(0)
     , m_position(0.0f)
     , m_frequency(440.0f)
-    , m_prefinishMarkReachedNotEmitted(true)
+    , m_prefinishMarkReachedNotEmitted(true), m_waiting(0)
 {
     //kDebug(604) << k_funcinfo;
     connect(m_tickTimer, SIGNAL(timeout()), SLOT(emitTick()));
@@ -56,46 +55,6 @@ MediaObject::MediaObject(QObject *parent)
 MediaObject::~MediaObject()
 {
     //kDebug(604) << k_funcinfo;
-}
-
-bool MediaObject::addVideoPath(QObject *videoPath)
-{
-    //kDebug(604) << k_funcinfo;
-    Q_ASSERT(videoPath);
-    VideoPath *vp = qobject_cast<VideoPath *>(videoPath);
-    Q_ASSERT(vp);
-    Q_ASSERT(!m_videoPathList.contains(vp));
-    m_videoPathList.append(vp);
-    return true;
-}
-
-bool MediaObject::addAudioPath(QObject *audioPath)
-{
-    //kDebug(604) << k_funcinfo;
-    Q_ASSERT(audioPath);
-    AudioPath *ap = qobject_cast<AudioPath *>(audioPath);
-    Q_ASSERT(ap);
-    Q_ASSERT(!m_audioPathList.contains(ap));
-    m_audioPathList.append(ap);
-    return true;
-}
-
-void MediaObject::removeVideoPath(QObject *videoPath)
-{
-    Q_ASSERT(videoPath);
-    VideoPath *vp = qobject_cast<VideoPath *>(videoPath);
-    Q_ASSERT(vp);
-    Q_ASSERT(m_videoPathList.contains(vp));
-    m_videoPathList.removeAll(vp);
-}
-
-void MediaObject::removeAudioPath(QObject *audioPath)
-{
-    Q_ASSERT(audioPath);
-    AudioPath *ap = qobject_cast<AudioPath *>(audioPath);
-    Q_ASSERT(ap);
-    Q_ASSERT(m_audioPathList.contains(ap));
-    m_audioPathList.removeAll(ap);
 }
 
 State MediaObject::state() const
@@ -286,17 +245,18 @@ void MediaObject::fillBuffer(QVector<float> *buffer)
 
 void MediaObject::fillFrameData(Phonon::Experimental::VideoFrame *frame)
 {
-    static quint32 frameCount = 0;
-    quint8 *dataPtr = reinterpret_cast<quint8 *>(frame->data.data());
-    for (int y = 0; y < frame->height; ++y)
-        for (int x = 0; x < frame->width; ++x)
-        {
-             *dataPtr++ = static_cast<quint8>(0xff);
-             *dataPtr++ = static_cast<quint8>((x + frameCount) * 2 / 3); //red
-             *dataPtr++ = static_cast<quint8>(y + frameCount); //green
-             *dataPtr++ = static_cast<quint8>(frameCount / 2); //blue
-        }
-    ++frameCount;
+    Q_UNUSED(frame);
+//X    static quint32 frameCount = 0;
+//X    quint8 *dataPtr = reinterpret_cast<quint8 *>(frame->data.data());
+//X    for (int y = 0; y < frame->height; ++y)
+//X        for (int x = 0; x < frame->width; ++x)
+//X        {
+//X             *dataPtr++ = static_cast<quint8>(0xff);
+//X             *dataPtr++ = static_cast<quint8>((x + frameCount) * 2 / 3); //red
+//X             *dataPtr++ = static_cast<quint8>(y + frameCount); //green
+//X             *dataPtr++ = static_cast<quint8>(frameCount / 2); //blue
+//X        }
+//X    ++frameCount;
 }
 
 qint64 MediaObject::totalTime() const
@@ -320,6 +280,12 @@ void MediaObject::setTransitionTime(qint32 time)
 {
     m_transitionTime = time;
 }
+
+qint64 MediaObject::remainingTime() const
+{
+    return totalTime() - currentTime();
+}
+
 
 MediaSource MediaObject::source() const
 {
@@ -346,12 +312,12 @@ void MediaObject::setSource(const MediaSource &source)
         }
         break;
     case MediaSource::LocalFile:
-        if (m_source.filename().isEmpty()) {
+        if (m_source.fileName().isEmpty()) {
             return;
         }
         break;
     case MediaSource::Stream:
-        Stream *s = new Stream(m_source, this);
+        //Stream *s = new Stream(m_source, this);
         //Q_ASSERT(qobject_cast<Stream *>(m_source.stream()->d_ptr->streamInterface));
         break;
     }
@@ -444,27 +410,30 @@ void MediaObject::emitTick()
         emit tick(currentTime());
         tickInterval = m_tickInterval;
     }
-    QVector<float> buffer(m_bufferSize);
-    Experimental::VideoFrame frame;
-    frame.fourcc = 0x00000000;
-    frame.width = 320;
-    frame.height = 240;
-    frame.depth = 24;
-    frame.bpp = 8;
-    frame.data.resize(frame.width * frame.height * 4);
+/*    if (m_waiting == 0) {
+        QVector<float> buffer(m_bufferSize);
+        Experimental::VideoFrame frame;
+        frame.width = 320;
+        frame.height = 240;
+        frame.colorspace = Experimental::VideoFrame::Format_RGBA8;
+        frame.data.resize(frame.width * frame.height * 4);
 
-    const int availableSamples = tickInterval * SAMPLE_RATE / 1000 + m_lastSamplesMissing;
-    const int bufferCount = availableSamples / m_bufferSize;
-    m_lastSamplesMissing = availableSamples - bufferCount * m_bufferSize;
-    for (int i = 0; i < bufferCount; ++i)
-    {
-        fillBuffer(&buffer);
-        foreach (AudioPath *ap, m_audioPathList)
-            ap->processBuffer(buffer);
-        fillFrameData(&frame);
-        foreach (VideoPath *vp, m_videoPathList)
-            vp->processFrame(frame);
+        const int availableSamples = tickInterval * SAMPLE_RATE / 1000 + m_lastSamplesMissing;
+        const int bufferCount = availableSamples / m_bufferSize;
+        m_lastSamplesMissing = availableSamples - bufferCount * m_bufferSize;
+        for (int i = 0; i < bufferCount; ++i)
+        {
+            fillBuffer(&buffer);
+            foreach (AudioNode *an, m_audioNodes) {
+                an->processBuffer(buffer);
+            }
+            fillFrameData(&frame);
+            foreach (VideoNode *vn, m_videoNodes) {
+                vn->processFrame(frame);
+            }
+        }
     }
+*/
     if (currentTime() >= totalTime() - m_prefinishMark) { // about to finish
         if (m_prefinishMarkReachedNotEmitted) {
             m_prefinishMarkReachedNotEmitted = false;
@@ -477,8 +446,43 @@ void MediaObject::emitTick()
         emit finished();
     }
 }
+bool MediaObject::wait()
+{
+    ++m_waiting;
+    return true;
+}
+
+bool MediaObject::done()
+{
+    --m_waiting;
+    return true;
+}
+
+void MediaObject::addAudioNode(AudioNode *node)
+{
+    m_audioNodes << node;
+    node->setHasInput(true);
+}
+
+void MediaObject::addVideoNode(VideoNode *node)
+{
+    m_videoNodes << node;
+    node->setHasInput(true);
+}
+
+bool MediaObject::removeAudioNode(AudioNode *node)
+{
+    node->setHasInput(false);
+    return 1 == m_audioNodes.removeAll(node);
+}
+
+bool MediaObject::removeVideoNode(VideoNode *node)
+{
+    node->setHasInput(false);
+    return 1 == m_videoNodes.removeAll(node);
+}
 
 }}
 
-#include "mediaobject.moc"
+#include "moc_mediaobject.cpp"
 // vim: sw=4 ts=4

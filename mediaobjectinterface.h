@@ -65,34 +65,6 @@ class MediaObjectInterface
         virtual ~MediaObjectInterface() {}
 
         /**
-         * Adds an AudioPath object to tell where to send the audio data.
-         *
-         * The frontend class ensures that the \p audioPath is unique,
-         * meaning the AudioPath object has not been added to this object.
-         */
-        virtual bool addAudioPath(QObject *audioPath) = 0;
-        /**
-         * Adds a VideoPath object to tell where to send the video data (and
-         * render the subtitle if one is selected).
-         *
-         * The frontend class ensures that the \p videoPath is unique,
-         * meaning the VideoPath object has not been added to this object.
-         */
-        virtual bool addVideoPath(QObject *videoPath) = 0;
-        /**
-         * Removes the AudioPath object from the flow graph. This function will
-         * only be called with a valid \p audioPath, meaning that the path has been
-         * added to this object before.
-         */
-        virtual void removeAudioPath(QObject *audioPath) = 0;
-        /**
-         * Removes the VideoPath object from the flow graph. This function will
-         * only be called with a valid \p videoPath, meaning that the path has been
-         * added to this object before.
-         */
-        virtual void removeVideoPath(QObject *videoPath) = 0;
-
-        /**
          * Lists the available audio streams the media provides. The strings are
          * what is shown to the user and often just consist of the stream name
          * encoded into the media file.
@@ -105,7 +77,7 @@ class MediaObjectInterface
          *
          * \returns A list of names for the available audio streams.
          */
-        virtual QStringList availableAudioStreams() const = 0;
+        //virtual QList<AudioStreamDescription> availableAudioStreams() const = 0;
         /**
          * Lists the available video streams the media provides. The strings are
          * what is shown to the user and often just consist of the stream name
@@ -119,7 +91,7 @@ class MediaObjectInterface
          *
          * \returns A list of names for the available video streams.
          */
-        virtual QStringList availableVideoStreams() const = 0;
+        //virtual QList<VideoStreamDescription> availableVideoStreams() const = 0;
         /**
          * Lists the available subtitle streams the media provides. The strings are
          * what is shown to the user and often just consist of the stream name
@@ -133,59 +105,41 @@ class MediaObjectInterface
          *
          * \returns A list of names for the available subtitle streams.
          */
-        virtual QStringList availableSubtitleStreams() const = 0;
+        //virtual QList<SubtitleStreamDescription> availableSubtitleStreams() const = 0;
 
         /**
-         * Returns the selected audio stream for the given AudioPath object.
+         * Returns the selected audio stream.
          */
-        virtual QString currentAudioStream(const QObject *audioPath) const = 0;
+        //virtual AudioStreamDescription currentAudioStream() const = 0;
         /**
-         * Returns the selected video stream for the given VideoPath object.
+         * Returns the selected video stream.
          */
-        virtual QString currentVideoStream(const QObject *videoPath) const = 0;
+        //virtual VideoStreamDescription currentVideoStream() const = 0;
         /**
-         * Returns the selected subtitle stream for the given VideoPath object.
+         * Returns the selected subtitle stream.
          */
-        virtual QString currentSubtitleStream(const QObject *videoPath) const = 0;
+        //virtual SubtitleStreamDescription currentSubtitleStream() const = 0;
 
         /**
-         * Selects one audio stream for the selected AudioPath object.
+         * Selects one audio stream.
          *
-         * \param streamName name of the stream as returned by
-         * availableAudioStreams.
+         * \param stream description of the audio stream.
          *
-         * \param audioPath If \p 0 the audio stream should be used for all
-         * connected AudioPath objects. Else the audio stream selection should only
-         * be made for the one specified AudioPath. This way the user can request
-         * different audio streams for different audio paths/outputs.
          */
-        virtual void setCurrentAudioStream(const QString &streamName,const QObject *audioPath) = 0;
+        //virtual void setCurrentAudioStream(const AudioStreamDescription &stream) = 0;
         /**
-         * Selects one video stream for the selected VideoPath object.
+         * Selects one video stream.
          *
-         * \param streamName name of the stream as returned by
-         * availableVideoStreams.
-         *
-         * \param videoPath If \p 0 the video stream should be used for all
-         * connected VideoPath objects. Else the video stream selection should only
-         * be made for the one specified VideoPath. This way the user can request
-         * different video streams for different video paths/outputs.
+         * \param stream description of the video stream.
          */
-        virtual void setCurrentVideoStream(const QString &streamName,const QObject *videoPath) = 0;
+        //virtual void setCurrentVideoStream(const VideoStreamDescription &stream) = 0;
         /**
-         * Selects one subtitle stream for the selected VideoPath object. By
-         * default normally no subtitle is selected, but depending on the media
-         * this may be different.
+         * Selects one subtitle stream. By default normally no subtitle is selected,
+         * but depending on the media this may be different.
          *
-         * \param streamName name of the stream as returned by
-         * availableSubtitleStreams.
-         *
-         * \param videoPath If \p 0 the video stream should be used for all
-         * connected VideoPath objects. Else the video stream selection should only
-         * be made for the one specified VideoPath. This way the user can request
-         * different video streams for different video paths/outputs.
+         * \param stream description of the subtitle stream.
          */
-        virtual void setCurrentSubtitleStream(const QString &streamName,const QObject *videoPath) = 0;
+        //virtual void setCurrentSubtitleStream(const SubtitleStreamDescription &stream) = 0;
 
         /**
          * Requests the playback to start.
@@ -329,6 +283,13 @@ class MediaObjectInterface
          * and the playback should stop normally.
          */
         virtual void setNextSource(const MediaSource &source) = 0;
+
+        virtual qint64 remainingTime() const { return totalTime() - currentTime(); }
+        virtual qint32 prefinishMark() const = 0;
+        virtual void setPrefinishMark(qint32) = 0;
+
+        virtual qint32 transitionTime() const = 0;
+        virtual void setTransitionTime(qint32) = 0;
 };
 }
 

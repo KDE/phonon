@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,33 +17,32 @@
 
 */
 
-#ifndef VIDEOPATH_P_H
-#define VIDEOPATH_P_H
+#ifndef VIDEONODE_H
+#define VIDEONODE_H
 
-#include "videopath.h"
-#include "base_p.h"
-#include <QtCore/QList>
+#include <QtPlugin>
+
 
 namespace Phonon
 {
-class VideoPathPrivate : public BasePrivate, private BaseDestructionHandler
+namespace Fake
 {
-    Q_DECLARE_PUBLIC(VideoPath)
-    PHONON_PRIVATECLASS
-    protected:
-        VideoPath *q_ptr;
-        VideoPathPrivate()
-            : q_ptr(0)
-        {
-        }
 
-        QList<AbstractVideoOutput *> outputs;
-        QList<Effect *> effects;
-
+class VideoNode
+{
+    public:
+        VideoNode() : m_hasInput(false) {}
+        virtual ~VideoNode() {}
+        virtual void processFrame(Phonon::Experimental::VideoFrame &frame) = 0;
+        bool hasInput() const { return m_hasInput; }
+        void setHasInput(bool x) { m_hasInput = x; }
     private:
-        virtual void phononObjectDestroyed(BasePrivate *);
+        bool m_hasInput;
 };
-} //namespace Phonon
 
-#endif // VIDEOPATH_P_H
-// vim: sw=4 ts=4 tw=80
+} // namespace Fake
+} // namespace Phonon
+
+Q_DECLARE_INTERFACE(Phonon::Fake::VideoNode, "FakeVideoNode.phonon.kde.org")
+
+#endif // VIDEONODE_H

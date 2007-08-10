@@ -19,17 +19,16 @@
 #ifndef Phonon_FAKE_MEDIAOBJECT_H
 #define Phonon_FAKE_MEDIAOBJECT_H
 
-#include <kurl.h>
+#include <qurl.h>
 #include <phonon/mediaobjectinterface.h>
 #include <phonon/addoninterface.h>
+#include <phonon/experimental/videoframe.h>
 #include <QtCore/QHash>
 #include <QtCore/QString>
 #include <QtCore/QVariant>
 #include <QtCore/QObject>
-#include <phonon/experimental/videoframe.h>
 #include <QtCore/QDate>
 
-class KUrl;
 class QTimer;
 
 namespace Phonon
@@ -39,6 +38,8 @@ namespace Fake
     class AudioPath;
     class VideoPath;
     class Stream;
+    class AudioNode;
+    class VideoNode;
 
     class MediaObject : public QObject, public MediaObjectInterface, public AddonInterface
     {
@@ -48,10 +49,6 @@ namespace Fake
         public:
             MediaObject(QObject *parent);
             ~MediaObject();
-            bool addVideoPath(QObject *videoPath);
-            bool addAudioPath(QObject *audioPath);
-            void removeVideoPath(QObject *videoPath);
-            void removeAudioPath(QObject *audioPath);
             Phonon::State state() const;
             bool hasVideo() const;
             bool isSeekable() const;
@@ -82,19 +79,29 @@ namespace Fake
             bool hasInterface(Interface) const { return false; }
             QVariant interfaceCall(Interface, int, const QList<QVariant> &) { return QVariant(); }
 
-            KUrl url() const;
+            QUrl url() const;
             qint64 totalTime() const;
-            Q_INVOKABLE qint32 prefinishMark() const;
-            Q_INVOKABLE void setPrefinishMark(qint32 newPrefinishMark);
+            qint32 prefinishMark() const;
+            void setPrefinishMark(qint32 newPrefinishMark);
 
-            Q_INVOKABLE qint32 transitionTime() const;
-            Q_INVOKABLE void setTransitionTime(qint32);
+            qint32 transitionTime() const;
+            void setTransitionTime(qint32);
 
-            //void setUrl(const KUrl &url);
+            qint64 remainingTime() const;
+
+            //void setUrl(const QUrl &url);
             //void openMedia(Phonon::MediaObject::Media media, const QString &mediaDevice);
             MediaSource source() const;
             void setSource(const MediaSource &source);
             void setNextSource(const MediaSource &source);
+
+            // fake specific:
+            bool wait();
+            bool done();
+            void addAudioNode(AudioNode *);
+            void addVideoNode(VideoNode *);
+            bool removeAudioNode(AudioNode *);
+            bool removeVideoNode(VideoNode *);
 
         Q_SIGNALS:
             void stateChanged(Phonon::State newstate, Phonon::State oldstate);
@@ -132,8 +139,8 @@ namespace Fake
             qint32 m_tickInterval;
             QTime m_startTime, m_pauseTime;
             int m_bufferSize;
-            QList<AudioPath *> m_audioPathList;
-            QList<VideoPath *> m_videoPathList;
+            QList<AudioNode *> m_audioNodes;
+            QList<VideoNode *> m_videoNodes;
             int m_lastSamplesMissing;
 
             // for sound synthesis
@@ -146,6 +153,7 @@ namespace Fake
             qint32 m_prefinishMark;
             qint32 m_transitionTime;
             bool m_prefinishMarkReachedNotEmitted;
+            int m_waiting;
     };
 }} //namespace Phonon::Fake
 

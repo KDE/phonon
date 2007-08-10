@@ -38,6 +38,17 @@ namespace Experimental
      */
     struct PHONONEXPERIMENTAL_EXPORT VideoFrame
     {
+        enum Format {
+            Format_YUV422,
+            Format_YUV420,
+            Format_RGBA8,
+            //Format_RGBA8_Premultiplied,
+            //Format_RGBA16F,
+            //Format_RGBA32F,
+            //Colorspace_XVYCC
+        };
+        //Qt::HANDLE handle() const;
+
         QByteArray data;
         /**
          * The width of the video frame in pixels.
@@ -48,17 +59,9 @@ namespace Experimental
          */
         int height;
         /**
-         * The FOURCC (four character code) identifying the data format.
+         * Colorspace of the frame
          */
-        quint32 fourcc;
-        /**
-         * The color depth in bits.
-         */
-        int depth;
-        /**
-         * The number of bits per pixel.
-         */
-        int bpp;
+        Format colorspace;
     };
 } // namespace Experimental
 } // namespace Phonon

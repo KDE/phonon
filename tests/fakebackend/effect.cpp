@@ -17,70 +17,68 @@
 
 */
 
-#include "audioeffect.h"
-#include <klocale.h>
+#include "effect.h"
 #include "delayaudioeffect.h"
 
 namespace Phonon
 {
 namespace Fake
 {
-AudioEffect::AudioEffect(int effectId, QObject *parent)
-    : QObject(parent)
-    , m_effect(0)
+Effect::Effect(int effectId, QObject *parent)
+    : QObject(parent), m_sink(0), m_effect(0)
 {
     switch(effectId)
     {
     case 0x7F000001:
         m_effect = new DelayAudioEffect;
-        m_parameterList.append(EffectParameter(1, i18n("time"), 0,
-                    m_effect->value(1), 1.0, 15000.0,
-                    i18n("Set's the delay in milliseconds")));
-        m_parameterList.append(EffectParameter(2, i18n("feedback"), 0,
+        m_parameterList.append(EffectParameter(1, "time", 0,
+                    m_effect->value(1), 1.0, 15000.0, QVariantList(),
+                    "Set's the delay in milliseconds"));
+        m_parameterList.append(EffectParameter(2, "feedback", 0,
                 m_effect->value(2), 0.0, 1.0));
-        m_parameterList.append(EffectParameter(3, i18n("level"), 0,
+        m_parameterList.append(EffectParameter(3, "level", 0,
                 m_effect->value(3), 0.0, 1.0));
     }
     qSort(m_parameterList);
 }
 
-AudioEffect::~AudioEffect()
+Effect::~Effect()
 {
     delete m_effect;
     m_effect = 0;
 }
 
-QList<Phonon::EffectParameter> AudioEffect::allDescriptions() const
+QList<Phonon::EffectParameter> Effect::parameters() const
 {
     return m_parameterList;
 }
 
-EffectParameter AudioEffect::description(int i) const
-{
-    return m_parameterList[i];
-}
-
-int AudioEffect::parameterCount() const
-{
-    return m_parameterList.size();
-}
-
-QVariant AudioEffect::parameterValue(int i) const
+QVariant Effect::parameterValue(const EffectParameter &p) const
 {
     if (m_effect) {
-        return m_effect->value(m_parameterList[i].id());
+        return m_effect->value(p.id());
     }
     return QVariant();
 }
 
-void AudioEffect::setParameterValue(int i, const QVariant &v)
+bool Effect::setAudioSink(AudioNode *node)
+{
+    if (m_sink != 0 && node != 0)
+        return false;
+
+    m_sink = node;
+    return true;
+}
+
+
+void Effect::setParameterValue(const EffectParameter &p, const QVariant &v)
 {
     if (m_effect) {
-        return m_effect->setValue(m_parameterList[i].id(), v);
+        return m_effect->setValue(p.id(), v);
     }
 }
 
-void AudioEffect::processBuffer(QVector<float> &buffer)
+void Effect::processBuffer(QVector<float> &buffer)
 {
     if (m_effect)
         m_effect->processBuffer(buffer);
@@ -88,5 +86,5 @@ void AudioEffect::processBuffer(QVector<float> &buffer)
 
 }} //namespace Phonon::Fake
 
-#include "audioeffect.moc"
+#include "moc_effect.cpp"
 // vim: sw=4 ts=4

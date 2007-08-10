@@ -20,20 +20,17 @@ set(phonon_LIB_SRCS
 	abstractmediastream.cpp
 	streaminterface.cpp
 	mediaobject.cpp
-	audiopath.cpp
-	videopath.cpp
+   medianode.cpp
+   path.cpp
 	effectparameter.cpp
 	effect.cpp
 	volumefadereffect.cpp
 	audiooutputadaptor.cpp
-	brightnesscontrol.cpp
-	deinterlacefilter.cpp
 	abstractaudiooutput.cpp
 	abstractaudiooutput_p.cpp
 	audiooutput.cpp
 	abstractvideooutput.cpp
 	abstractvideooutput_p.cpp
-	audioplayer.cpp
 	backendcapabilities.cpp
 	globalconfig.cpp
 	factory.cpp
@@ -71,16 +68,15 @@ install( FILES
 	streaminterface.h
 	mediaobject.h
    audiooutput.h
-	audiopath.h
-	videopath.h
+   medianode.h
+   path.h
 	effectparameter.h
 	effect.h
+   effectinterface.h
 	volumefadereffect.h
-	brightnesscontrol.h
-	deinterlacefilter.h
+   volumefaderinterface.h
 	abstractaudiooutput.h
 	abstractvideooutput.h
-	audioplayer.h
 	backendcapabilities.h
 	phonondefs.h
 	backendinterface.h
@@ -89,6 +85,7 @@ install( FILES
 	addoninterface.h
 	mediacontroller.h
 	videowidget.h
+   videowidgetinterface.h
 	videoplayer.h
 	seekslider.h
 	volumeslider.h

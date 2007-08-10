@@ -21,6 +21,7 @@
 
 #include "phonondefs.h"
 #include "phonon_export.h"
+#include "medianode.h"
 #include <QtCore/QObject>
 
 class QString;
@@ -40,10 +41,8 @@ namespace Experimental
      *
      * \see VideoWidget
      */
-    class PHONON_EXPORT AbstractVideoOutput
+    class PHONON_EXPORT AbstractVideoOutput : public MediaNode
     {
-        friend class VideoPath;
-        friend class VideoPathPrivate;
         friend class Experimental::Visualization;
         friend class Experimental::VisualizationPrivate;
         K_DECLARE_PRIVATE(AbstractVideoOutput)
@@ -55,10 +54,6 @@ namespace Experimental
              * \param parent Standard QObject parent.
              */
             AbstractVideoOutput(AbstractVideoOutputPrivate &d);
-
-            ~AbstractVideoOutput();
-
-            AbstractVideoOutputPrivate *const k_ptr;
     };
 } //namespace Phonon
 

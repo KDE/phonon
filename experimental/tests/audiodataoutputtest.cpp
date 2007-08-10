@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,16 +17,27 @@
 
 */
 
-#include "audiodataoutputtest.h"
 #include "../audiodataoutput.h"
 #include "../../mediaobject.h"
-#include "../../audiopath.h"
+#include "../../path.h"
 #include "../../audiooutput.h"
 #include "../../tests/loadfakebackend.h"
 
 #include <qtest_kde.h>
 #include <cstdlib>
 #include <QtCore/QUrl>
+#include <QtCore/QObject>
+
+class AudioDataOutputTest : public QObject
+{
+    Q_OBJECT
+    private slots:
+        void initTestCase();
+        void testSampleRate();
+        void testFormat();
+        void testDataSize();
+        void cleanupTestCase();
+};
 
 using namespace Phonon;
 using namespace Phonon::Experimental;
@@ -68,11 +79,9 @@ void AudioDataOutputTest::testFormat()
     MediaObject media(this);
     QUrl url(testUrl());
     media.setCurrentSource(url);
-    AudioPath path(this);
-    media.addAudioPath(&path);
-    path.addOutput(&test);
-    QVERIFY(media.audioPaths().contains(&path));
-    QVERIFY(path.outputs().contains(&test));
+    Path path = createPath(&media, &test);
+    QVERIFY(media.outputPaths().contains(path));
+    QVERIFY(test.inputPaths().contains(path));
 
     QCOMPARE(floatReadySpy.size(), 0);
     QCOMPARE(intReadySpy.size(), 0);
@@ -120,4 +129,3 @@ void AudioDataOutputTest::cleanupTestCase()
 
 QTEST_MAIN(AudioDataOutputTest)
 #include "audiodataoutputtest.moc"
-// vim: sw=4 ts=4

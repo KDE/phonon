@@ -35,11 +35,7 @@ namespace Phonon
     /** \class AudioOutput audiooutput.h Phonon/AudioOutput
      * \short Class for audio output to the soundcard.
      *
-     * Use this class to define the audio output. Example:
-     * \code
-     * m_audioOutput = new AudioOutput(Phonon::MusicCategory, this);
-     * m_audioPath->addOutput(m_audioOutput);
-     * \endcode
+     * Use this class to define the audio output.
      *
      * \ingroup Frontend
      * \author Matthias Kretz <kretz@kde.org>

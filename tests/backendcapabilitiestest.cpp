@@ -83,15 +83,23 @@ void BackendCapabilitiesTest::sensibleValues()
     BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
     //if (BackendCapabilities::supportsVideo()) create VideoWidget and such - needs UI libs
     VERIFY_TUPLE(AudioOutputDevice);
+    /*
     VERIFY_TUPLE(AudioCaptureDevice);
     VERIFY_TUPLE(VideoOutputDevice);
     VERIFY_TUPLE(VideoCaptureDevice);
     VERIFY_TUPLE(Visualization);
-    VERIFY_TUPLE(AudioEffect);
-    VERIFY_TUPLE(VideoEffect);
     VERIFY_TUPLE(AudioCodec);
     VERIFY_TUPLE(VideoCodec);
     VERIFY_TUPLE(ContainerFormat);
+    */
+
+    for (int i = 0; i < BackendCapabilities::availableAudioEffects().size(); ++i) {
+        ObjectDescription<EffectType> device = BackendCapabilities::availableAudioEffects().at(i);
+        QVERIFY(device.index() >= 0);
+        QSet<int> indexes = iface->objectDescriptionIndexes(Phonon::EffectType);
+        QVERIFY(indexes.contains(device.index()));
+        QVERIFY(!device.name().isEmpty());
+    }
 }
 
 void BackendCapabilitiesTest::checkSignals()

@@ -39,10 +39,10 @@ class AbstractMediaStream;
  * Note that all constructors of this class are implicit, so that you can simply write
  * \code
  * MediaObject m;
- * QString filename("/home/foo/bar.ogg");
+ * QString fileName("/home/foo/bar.ogg");
  * QUrl url("http://www.example.com/stream.mp3");
  * QBuffer *someBuffer;
- * m.setCurrentSource(filename);
+ * m.setCurrentSource(fileName);
  * m.setCurrentSource(url);
  * m.setCurrentSource(someBuffer);
  * m.setCurrentSource(Phonon::Cd);
@@ -85,11 +85,13 @@ class PHONON_EXPORT MediaSource
              *
              * \see AbstractMediaStream
              */
-            Stream,
-            /**
+            Stream
+/*          post 4.0:
+            / **
              * Links multiple MediaSource objects together.
-             */
+             * /
             Link
+*/
         };
         /**
          * Creates an invalid MediaSource object.
@@ -101,9 +103,9 @@ class PHONON_EXPORT MediaSource
         /**
          * Creates a MediaSource object for a local file or a Qt resource.
          *
-         * \param filename file name of a local media file or a Qt resource that was compiled in.
+         * \param fileName file name of a local media file or a Qt resource that was compiled in.
          */
-        MediaSource(const QString &filename); //krazy:exclude=explicit
+        MediaSource(const QString &fileName); //krazy:exclude=explicit
 
         /**
          * Creates a MediaSource object for a URL.
@@ -183,7 +185,7 @@ class PHONON_EXPORT MediaSource
          * Returns the file name of the MediaSource if type() == LocalFile; otherwise returns
          * QString().
          */
-        QString filename() const;
+        QString fileName() const;
 
         /**
          * Returns the url of the MediaSource if type() == URL or type() == LocalFile; otherwise
@@ -212,8 +214,10 @@ class PHONON_EXPORT MediaSource
         //AudioCaptureDevice audioCaptureDevice() const;
         //VideoCaptureDevice videoCaptureDevice() const;
 
+/*      post 4.0:
         MediaSource(const QList<MediaSource> &mediaList);
         QList<MediaSource> substreams() const;
+*/
 
     private:
         QExplicitlySharedDataPointer<MediaSourcePrivate> d;

@@ -31,22 +31,16 @@ namespace Phonon
 
 class Effect;
 class EffectParameterPrivate;
-class AudioEffect;
 
 /** \class EffectParameter effectparameter.h Phonon/EffectParameter
  * \brief This class describes one parameter of an effect.
  *
  * \ingroup PhononEffects
  * \author Matthias Kretz <kretz@kde.org>
- * \see AudioEffect
- * \see VideoEffect
+ * \see Effect
  */
 class PHONON_EXPORT EffectParameter
 {
-    friend class AudioEffect;
-    friend class AudioEffectPrivate;
-    friend class VideoEffect;
-    friend class VideoEffectPrivate;
     friend class BrightnessControl;
     public:
         /**
@@ -75,13 +69,11 @@ class PHONON_EXPORT EffectParameter
         const QString &description() const;
 
         /**
-         * Returns whether the parameter should be considered a boolean toggle.
+         * Returns the parameter type.
          *
-         * \return \c true: all values are booleans
-         * \return \c false: all values are doubles or integers depending on
-         * isIntegerControl()
+         * usually it will be QVariant::Int or QVariant::Double or QVariant::Bool
          */
-        bool isToggleControl() const;
+        QVariant::Type type() const;
 
         /**
          * Returns whether the parameter should be
@@ -90,15 +82,6 @@ class PHONON_EXPORT EffectParameter
          */
         bool isLogarithmicControl() const;
 
-        /**
-         * Returns whether the parameter should be displayed as integers using
-         * a stepped control.
-         *
-         * \return \c true: all values are integers
-         * \return \c false: all values are doubles or booleans depending on
-         * isToggleControl()
-         */
-        bool isIntegerControl() const;
 
         /**
          * The minimum value to be used for the control to edit the parameter.
@@ -122,6 +105,14 @@ class PHONON_EXPORT EffectParameter
         QVariant defaultValue() const;
 
         /**
+         * The possible values to be used for the control to edit the parameter.
+         *
+         * if the value of this parameter is to be picked from predefined values
+         * this returns the list (otherwise it returns an empty QVariantList).
+         */
+        QVariantList possibleValues() const;
+
+        /**
          * \internal
          * compares the ids of the parameters
          */
@@ -132,6 +123,12 @@ class PHONON_EXPORT EffectParameter
          * compares the ids of the parameters
          */
         bool operator>(const EffectParameter &rhs) const;
+
+        /**
+         * \internal
+         * compares the ids of the parameters
+         */
+        bool operator==(const EffectParameter &rhs) const;
 
         /* dtor, cctor and operator= for forward decl of EffectParameterPrivate */
         ~EffectParameter();
@@ -196,7 +193,8 @@ class PHONON_EXPORT EffectParameter
          */
         EffectParameter(int parameterId, const QString &name, EffectParameter::Hints hints,
                 const QVariant &defaultValue, const QVariant &min = QVariant(),
-                const QVariant &max = QVariant(), const QString &description = QString());
+                const QVariant &max = QVariant(), const QVariantList &values = QVariantList(),
+                const QString &description = QString());
 
         /**
          * \internal
@@ -211,6 +209,8 @@ class PHONON_EXPORT EffectParameter
          */
         QExplicitlySharedDataPointer<EffectParameterPrivate> d;
 };
+
+uint PHONON_EXPORT qHash (const EffectParameter &param);
 
 } // namespace Phonon
 

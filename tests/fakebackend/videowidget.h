@@ -22,6 +22,7 @@
 #include <QtGui/QWidget>
 #include <phonon/experimental/videoframe.h>
 #include <phonon/videowidget.h>
+#include <phonon/videowidgetinterface.h>
 #include "abstractvideooutput.h"
 #include <QtGui/QPixmap>
 
@@ -31,26 +32,33 @@ namespace Phonon
 {
 namespace Fake
 {
-    class VideoWidget : public QWidget, public Phonon::Fake::AbstractVideoOutput
+    class VideoWidget : public QWidget, public Phonon::VideoWidgetInterface, public Phonon::Fake::AbstractVideoOutput
     {
         Q_OBJECT
-        Q_INTERFACES(Phonon::Fake::AbstractVideoOutput)
+            Q_INTERFACES(Phonon::VideoWidgetInterface Phonon::Fake::AbstractVideoOutput Phonon::Fake::VideoNode)
         public:
             VideoWidget(QWidget *parent = 0);
 
-            Q_INVOKABLE Phonon::VideoWidget::AspectRatio aspectRatio() const;
-            Q_INVOKABLE void setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio);
-            Q_INVOKABLE Phonon::VideoWidget::ScaleMode scaleMode() const;
-            Q_INVOKABLE void setScaleMode(Phonon::VideoWidget::ScaleMode);
+            Phonon::VideoWidget::AspectRatio aspectRatio() const;
+            void setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio);
+            Phonon::VideoWidget::ScaleMode scaleMode() const;
+            void setScaleMode(Phonon::VideoWidget::ScaleMode);
+            qreal brightness() const;
+            void setBrightness(qreal);
+            qreal contrast() const;
+            void setContrast(qreal);
+            qreal hue() const;
+            void setHue(qreal);
+            qreal saturation() const;
+            void setSaturation(qreal);
 
             // Fake specific:
-            virtual void *internal1(void * = 0) { return static_cast<Phonon::Fake::AbstractVideoOutput *>(this); }
             virtual void processFrame(Phonon::Experimental::VideoFrame &frame);
 
         public slots:
             QWidget *widget() { return this; }
-            int overlayCapabilities() const;
-            bool createOverlay(QWidget *widget, int type);
+            //int overlayCapabilities() const;
+            //bool createOverlay(QWidget *widget, int type);
 
         protected:
             virtual void childEvent(QChildEvent *event);
@@ -64,6 +72,7 @@ namespace Fake
             QSize m_videoSize;
             Phonon::VideoWidget::AspectRatio m_aspectRatio;
             Phonon::VideoWidget::ScaleMode m_scaleMode;
+            qreal m_brightness, m_hue, m_contrast, m_saturation;
     };
 }} //namespace Phonon::Fake
 

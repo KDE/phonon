@@ -16,26 +16,27 @@
     Boston, MA 02110-1301, USA.
 
 */
+#include "phonondefs_p.h"
 #include "mediaobject.h"
 #include "mediaobject_p.h"
-
-#include "videopath.h"
-#include "videopath_p.h"
-#include "audiopath.h"
-#include "audiopath_p.h"
 
 #include "factory.h"
 #include "mediaobjectinterface.h"
 #include "frontendinterface_p.h"
 #include "mediasource.h"
 #include "abstractmediastream.h"
+#include "audiooutput.h"
 #include "abstractmediastream_p.h"
+#include "phonondefs_p.h"
 
 #include <QtCore/QStringList>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QUrl>
+#include <QtCore/QTimer>
 
 #include "phononnamespace_p.h"
 #include "platform_p.h"
+#include "phonondefs_p.h"
 
 #define PHONON_CLASSNAME MediaObject
 #define PHONON_INTERFACENAME MediaObjectInterface
@@ -60,71 +61,6 @@ MediaObject::~MediaObject()
             break;
         }
     }
-    foreach (VideoPath *vp, d->videoPaths) {
-        vp->k_ptr->removeDestructionHandler(d);
-    }
-    foreach (AudioPath *ap, d->audioPaths) {
-        ap->k_ptr->removeDestructionHandler(d);
-    }
-    delete k_ptr;
-}
-
-bool MediaObject::addVideoPath(VideoPath *videoPath)
-{
-    K_D(MediaObject);
-    if (d->videoPaths.contains(videoPath)) {
-        return false;
-    }
-
-    if (k_ptr->backendObject() && videoPath->k_ptr->backendObject()) {
-        if (INTERFACE_CALL(addVideoPath(videoPath->k_ptr->backendObject()))) {
-            videoPath->k_ptr->addDestructionHandler(d);
-            d->videoPaths.append(videoPath);
-            return true;
-        }
-    }
-    return false;
-}
-
-bool MediaObject::addAudioPath(AudioPath *audioPath)
-{
-    K_D(MediaObject);
-    if (d->audioPaths.contains(audioPath)) {
-        return false;
-    }
-
-    if (k_ptr->backendObject() && audioPath->k_ptr->backendObject()) {
-        if (INTERFACE_CALL(addAudioPath(audioPath->k_ptr->backendObject()))) {
-            audioPath->k_ptr->addDestructionHandler(d);
-            d->audioPaths.append(audioPath);
-            return true;
-        }
-    }
-    return false;
-}
-
-bool MediaObject::removeVideoPath(VideoPath *videoPath)
-{
-    K_D(MediaObject);
-    if (!d->videoPaths.contains(videoPath) || !d->backendObject() || !videoPath->k_ptr->backendObject()) {
-        return false;
-    }
-
-    INTERFACE_CALL(removeVideoPath(videoPath->k_ptr->backendObject()));
-    d->videoPaths.removeAll(videoPath);
-    return true;
-}
-
-bool MediaObject::removeAudioPath(AudioPath *audioPath)
-{
-    K_D(MediaObject);
-    if (!d->audioPaths.contains(audioPath) || !d->backendObject() || !audioPath->k_ptr->backendObject()) {
-        return false;
-    }
-
-    INTERFACE_CALL(removeAudioPath(audioPath->k_ptr->backendObject()));
-    d->audioPaths.removeAll(audioPath);
-    return true;
 }
 
 Phonon::State MediaObject::state() const
@@ -141,54 +77,46 @@ PHONON_INTERFACE_GETTER(qint32, tickInterval, d->tickInterval)
 PHONON_INTERFACE_GETTER(bool, hasVideo, false)
 PHONON_INTERFACE_GETTER(bool, isSeekable, false)
 PHONON_INTERFACE_GETTER(qint64, currentTime, d->currentTime)
-PHONON_INTERFACE_GETTER1(QString, currentAudioStream,    d->currentAudioStream[   audioPath], AudioPath *, audioPath)
-PHONON_INTERFACE_GETTER1(QString, currentVideoStream,    d->currentVideoStream[   videoPath], VideoPath *, videoPath)
-PHONON_INTERFACE_GETTER1(QString, currentSubtitleStream, d->currentSubtitleStream[videoPath], VideoPath *, videoPath)
-PHONON_INTERFACE_GETTER(QStringList, availableAudioStreams, QStringList())
-PHONON_INTERFACE_GETTER(QStringList, availableVideoStreams, QStringList())
-PHONON_INTERFACE_GETTER(QStringList, availableSubtitleStreams, QStringList())
 
-void MediaObject::setCurrentAudioStream(const QString &streamName, AudioPath *audioPath)
+/*
+ * Substream manipulation will be done later
+
+PHONON_INTERFACE_GETTER(AudioStreamDescription, currentAudioStream,    d->currentAudioStream)
+PHONON_INTERFACE_GETTER(VideoStreamDescription, currentVideoStream,    d->currentVideoStream)
+PHONON_INTERFACE_GETTER(SubtitleStreamDescription, currentSubtitleStream, d->currentSubtitleStream)
+PHONON_INTERFACE_GETTER(QList<AudioStreamDescription>, availableAudioStreams, QList<AudioStreamDescription>())
+PHONON_INTERFACE_GETTER(QList<VideoStreamDescription>, availableVideoStreams, QList<VideoStreamDescription>())
+PHONON_INTERFACE_GETTER(QList<SubtitleStreamDescription>, availableSubtitleStreams, QList<SubtitleStreamDescription>())
+
+void MediaObject::setCurrentAudioStream(const AudioStreamDescription &stream)
 {
     K_D(MediaObject);
-    if (k_ptr->backendObject() && audioPath->k_ptr->backendObject()) {
-        INTERFACE_CALL(setCurrentAudioStream(streamName, audioPath->k_ptr->backendObject()));
+    if (k_ptr->backendObject()) {
+        INTERFACE_CALL(setCurrentAudioStream(stream));
     } else {
-        d->currentAudioStream[audioPath] = streamName;
+        d->currentAudioStream = stream;
     }
 }
 
-void MediaObject::setCurrentVideoStream(const QString &streamName, VideoPath *videoPath)
+void MediaObject::setCurrentVideoStream(const VideoStreamDescription &stream)
 {
     K_D(MediaObject);
-    if (k_ptr->backendObject() && videoPath->k_ptr->backendObject()) {
-        INTERFACE_CALL(setCurrentVideoStream(streamName, videoPath->k_ptr->backendObject()));
+    if (k_ptr->backendObject()) {
+        INTERFACE_CALL(setCurrentVideoStream(stream));
     } else {
-        d->currentVideoStream[videoPath] = streamName;
+        d->currentVideoStream = stream;
     }
 }
 
-void MediaObject::setCurrentSubtitleStream(const QString &streamName, VideoPath *videoPath)
+void MediaObject::setCurrentSubtitleStream(const SubtitleStreamDescription &stream)
 {
     K_D(MediaObject);
-    if (k_ptr->backendObject() && videoPath->k_ptr->backendObject()) {
-        INTERFACE_CALL(setCurrentSubtitleStream(streamName, videoPath->k_ptr->backendObject()));
+    if (k_ptr->backendObject()) {
+        INTERFACE_CALL(setCurrentSubtitleStream(stream));
     } else {
-        d->currentSubtitleStream[videoPath] = streamName;
+        d->currentSubtitleStream = stream;
     }
-}
-
-QList<VideoPath *> MediaObject::videoPaths() const
-{
-    K_D(const MediaObject);
-    return d->videoPaths;
-}
-
-QList<AudioPath *> MediaObject::audioPaths() const
-{
-    K_D(const MediaObject);
-    return d->audioPaths;
-}
+}*/
 
 void MediaObject::play()
 {
@@ -279,11 +207,11 @@ QMultiMap<QString, QString> MediaObject::metaData() const
     return d->metaData;
 }
 
-PHONON_GETTER(qint32, prefinishMark, d->prefinishMark)
-PHONON_SETTER(setPrefinishMark, prefinishMark, qint32)
+PHONON_INTERFACE_GETTER(qint32, prefinishMark, d->prefinishMark)
+PHONON_INTERFACE_SETTER(setPrefinishMark, prefinishMark, qint32)
 
-PHONON_GETTER(qint32, transitionTime, d->transitionTime)
-PHONON_SETTER(setTransitionTime, transitionTime, qint32)
+PHONON_INTERFACE_GETTER(qint32, transitionTime, d->transitionTime)
+PHONON_INTERFACE_SETTER(setTransitionTime, transitionTime, qint32)
 
 qint64 MediaObject::totalTime() const
 {
@@ -300,10 +228,7 @@ qint64 MediaObject::remainingTime() const
     if (!d->m_backendObject) {
         return -1;
     }
-    qint64 ret;
-    if (!BACKEND_GET(qint64, ret, "remainingTime")) {
-        ret = totalTime() - currentTime();
-    }
+    qint64 ret = INTERFACE_CALL(remainingTime());
     if (ret < 0) {
         return -1;
     }
@@ -430,8 +355,8 @@ void MediaObject::clearQueue()
 bool MediaObjectPrivate::aboutToDeleteBackendObject()
 {
     //pDebug() << Q_FUNC_INFO;
-    pBACKEND_GET(qint32, prefinishMark, "prefinishMark");
-    pBACKEND_GET(qint32, transitionTime, "transitionTime");
+    prefinishMark = pINTERFACE_CALL(prefinishMark());
+    transitionTime = pINTERFACE_CALL(transitionTime());
     //pDebug() << Q_FUNC_INFO;
     if (m_backendObject) {
         state = pINTERFACE_CALL(state());
@@ -549,19 +474,8 @@ void MediaObjectPrivate::setupBackendObject()
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));
-    pBACKEND_CALL1("setPrefinishMark", qint32, prefinishMark);
-    pBACKEND_CALL1("setTransitionTime", qint32, transitionTime);
-
-    foreach (AudioPath *a, audioPaths) {
-        if (!a->k_ptr->backendObject() || !pINTERFACE_CALL(addAudioPath(a->k_ptr->backendObject()))) {
-            audioPaths.removeAll(a);
-        }
-    }
-    foreach (VideoPath *v, videoPaths) {
-        if (!v->k_ptr->backendObject() || !pINTERFACE_CALL(addVideoPath(v->k_ptr->backendObject()))) {
-            videoPaths.removeAll(v);
-        }
-    }
+    pINTERFACE_CALL(setPrefinishMark(prefinishMark));
+    pINTERFACE_CALL(setTransitionTime(transitionTime));
 
     switch(state)
     {
@@ -621,28 +535,24 @@ void MediaObjectPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &n
     emit q_func()->metaDataChanged();
 }
 
-void MediaObjectPrivate::phononObjectDestroyed(BasePrivate *bp)
+void MediaObjectPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 {
     // this method is called from Phonon::Base::~Base(), meaning the AudioPath
     // dtor has already been called, also virtual functions don't work anymore
     // (therefore qobject_cast can only downcast from Base)
     Q_ASSERT(bp);
-    foreach (AudioPath *ap, audioPaths) {
-        if (ap->k_ptr == bp) {
-            if (m_backendObject && bp->backendObject()) {
-                pINTERFACE_CALL(removeAudioPath(bp->backendObject()));
-            }
-            audioPaths.removeAll(ap);
-        }
+    Q_UNUSED(bp);
+}
+
+MediaObject *createPlayer(Phonon::Category category, const MediaSource &source)
+{
+    MediaObject *mo = new MediaObject;
+    AudioOutput *ao = new AudioOutput(category, mo);
+    createPath(mo, ao);
+    if (source.type() != MediaSource::Invalid) {
+        mo->setCurrentSource(source);
     }
-    foreach (VideoPath *vp, videoPaths) {
-        if (vp->k_ptr == bp) {
-            if (m_backendObject && bp->backendObject()) {
-                pINTERFACE_CALL(removeVideoPath(bp->backendObject()));
-            }
-            videoPaths.removeAll(vp);
-        }
-    }
+    return mo;
 }
 
 } //namespace Phonon

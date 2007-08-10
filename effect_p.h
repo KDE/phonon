@@ -21,26 +21,26 @@
 #define EFFECT_P_H
 
 #include "effect.h"
-#include "base_p.h"
+#include "effectparameter.h"
+#include "medianode_p.h"
 #include <QtCore/QHash>
 #include <QtCore/QVariant>
+#include "phonondefs_p.h"
 
 namespace Phonon
 {
-class EffectPrivate : public BasePrivate
+class EffectPrivate : public MediaNodePrivate
 {
     Q_DECLARE_PUBLIC(Effect)
     PHONON_PRIVATECLASS
     protected:
-        Effect *q_ptr;
         EffectPrivate()
-            : q_ptr(0)
         {
         }
 
-        Effect::Type type;
-        int id;
-        QHash<int, QVariant> parameterValues;
+//X         Effect::Type type;
+        EffectDescription description;
+        QHash<EffectParameter, QVariant> parameterValues;
 };
 } //namespace Phonon
 

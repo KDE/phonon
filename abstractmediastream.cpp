@@ -151,9 +151,10 @@ void AbstractMediaStreamPrivate::setMediaObjectPrivate(MediaObjectPrivate *mop)
     }
 }
 
-void AbstractMediaStreamPrivate::phononObjectDestroyed(BasePrivate *bp)
+void AbstractMediaStreamPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 {
     Q_ASSERT(bp == mediaObjectPrivate);
+    Q_UNUSED(bp);
     mediaObjectPrivate = 0;
 }
 

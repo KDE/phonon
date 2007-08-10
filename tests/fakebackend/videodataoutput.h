@@ -49,15 +49,10 @@ namespace Fake
             QSize frameSize() const;
             void setFrameSize(const QSize &frameSize);
 
-            quint32 format() const;
-            void setFormat(quint32 fourcc);
-
             //int displayLatency() const;
             //void setDisplayLatency(int milliseconds);
 
         public:
-            virtual void *internal1(void * = 0) { return static_cast<Phonon::Fake::AbstractVideoOutput *>(this); }
-
             // Fake specific:
             virtual void processFrame(Phonon::Experimental::VideoFrame &frame);
 
@@ -66,7 +61,6 @@ namespace Fake
             void endOfMedia();
 
         private:
-            quint32 m_fourcc;
             QByteArray m_pendingData;
             //int m_latency;
             int m_frameRate;

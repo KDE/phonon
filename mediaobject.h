@@ -23,13 +23,11 @@
 #include "phonondefs.h"
 #include "phononnamespace.h"
 #include "mediasource.h"
+#include "medianode.h"
 
 namespace Phonon
 {
-    class VideoPath;
-    class AudioPath;
     class MediaObjectPrivate;
-    class MediaSource;
 
     /** \class MediaObject mediaobject.h Phonon/MediaObject
      * \short Interface for media playback of a given URL.
@@ -77,7 +75,7 @@ namespace Phonon
      * \ingroup Recording
      * \author Matthias Kretz <kretz@kde.org>
      */
-    class PHONON_EXPORT MediaObject : public QObject
+    class PHONON_EXPORT MediaObject : public QObject, public MediaNode
     {
         friend class MediaQueue;
         friend class FrontendInterfacePrivate;
@@ -156,84 +154,6 @@ namespace Phonon
             ~MediaObject();
 
             /**
-             * Add a VideoPath to process the video data of this media.
-             *
-             * The interface allows for a VideoPath to be added to multiple
-             * MediaObject objects and multiple VideoPath objects to
-             * be added to an MediaObject object.
-             *
-             * @warning Backends don't have to be able to add multiple
-             * VideoPaths or use a VideoPath for multiple MediaObject
-             * objects. If in doubt take care of the return value.
-             *
-             * @param videoPath The VideoPath that should process the video
-             * data.
-             *
-             * @return @c true if the VideoPath was successfully added
-             * @return @c false if the VideoPath could not be added. This can
-             * happen if the backend does not support multiple paths per
-             * MediaObject or VideoPath for multiple
-             * MediaObject.
-             *
-             * @see videoPaths
-             * \see removeVideoPath
-             */
-            bool addVideoPath(VideoPath *videoPath);
-
-            /**
-             * Add an AudioPath to process the audio data of this media.
-             *
-             * The interface allows for an AudioPath to be added to multiple
-             * MediaObject objects and multiple AudioPath objects to
-             * be added to an MediaObject object.
-             *
-             * @warning Backends don't have to be able to add multiple
-             * AudioPaths or use a AudioPath for multiple MediaObject
-             * objects. If in doubt take care of the return value.
-             *
-             * @param audioPath The AudioPath that should process the audio
-             * data.
-             *
-             * @return @c true if the AudioPath was successfully added
-             * @return @c false if the AudioPath could not be added. This can
-             * happen if the backend does not support multiple paths per
-             * MediaObject or AudioPath for multiple
-             * MediaObject.
-             *
-             * @see audioPaths
-             * \see removeAudioPath
-             */
-            bool addAudioPath(AudioPath *audioPath);
-
-            /**
-             * Removes a VideoPath.
-             *
-             * All VideoOutputs connected to this path will stop showing the
-             * video output of this media.
-             *
-             * \return \c true if the path was successfully removed.
-             * \return \c false if the path could not be removed. This can
-             * happen if the path was not connected.
-             *
-             * \see addVideoPath
-             */
-            bool removeVideoPath(VideoPath *videoPath);
-
-            /**
-             * Removes an AudioPath.
-             *
-             * All AudioOutputs connected to this path will stop playing the
-             * audio data of this media.
-             *
-             * \return \c true if the path was successfully removed.
-             * \return \c false if the path could not be removed. This can
-             * happen if the path was not connected.
-             *
-             * \see addAudioPath
-             */
-            bool removeAudioPath(AudioPath *audioPath);
-
-            /**
              * Get the current state.
              *
              * @return The state of the object.
@@ -298,57 +218,28 @@ namespace Phonon
             qint32 tickInterval() const;
 
             /**
-             * Returns the list of all connected VideoPath objects.
-             *
-             * \return A list of all connected VideoPath objects.
-             *
-             * \see addVideoPath
-             * \see removeVideoPath
-             */
-            QList<VideoPath *> videoPaths() const;
-
-            /**
-             * Returns the list of all connected AudioPath objects.
-             *
-             * \return A list of all connected AudioPath objects.
-             *
-             * \see addAudioPath
-             * \see removeAudioPath
-             */
-            QList<AudioPath *> audioPaths() const;
-
-            /**
-             * Returns the selected audio stream for the given AudioPath object.
-             *
-             * \param audioPath If 0 the default audio stream is returned. Else
-             * the audio stream for the given AudioPath object is returned.
+             * Returns the selected audio stream.
              *
              * \see availableAudioStreams
              * \see setCurrentAudioStream
              */
-            QString currentAudioStream(AudioPath *audioPath = 0) const;
+            //AudioStreamDescription currentAudioStream() const;
 
             /**
-             * Returns the selected video stream for the given VideoPath object.
-             *
-             * \param videoPath If 0 the default video stream is returned. Else
-             * the video stream for the given VideoPath object is returned.
+             * Returns the selected video stream.
              *
              * \see availableVideoStreams
              * \see setCurrentVideoStream
              */
-            QString currentVideoStream(VideoPath *videoPath = 0) const;
+            //VideoStreamDescription currentVideoStream() const;
 
             /**
-             * Returns the selected subtitle stream for the given VideoPath object.
-             *
-             * \param videoPath If 0 the default subtitle stream is returned. Else
-             * the subtitle stream for the given VideoPath object is returned.
+             * Returns the selected subtitle stream.
              *
              * \see availableSubtitleStreams
              * \see setCurrentSubtitleStream
              */
-            QString currentSubtitleStream(VideoPath *videoPath = 0) const;
+            //SubtitleStreamDescription currentSubtitleStream() const;
 
             /**
              * Returns the audio streams that can be selected by the user. The
@@ -357,7 +248,7 @@ namespace Phonon
              * \see selectedAudioStream
              * \see setCurrentAudioStream
              */
-            QStringList availableAudioStreams() const;
+            //QList<AudioStreamDescription> availableAudioStreams() const;
 
             /**
              * Returns the video streams that can be selected by the user. The
@@ -366,7 +257,7 @@ namespace Phonon
              * \see selectedVideoStream
              * \see setCurrentVideoStream
              */
-            QStringList availableVideoStreams() const;
+            //QList<VideoStreamDescription> availableVideoStreams() const;
 
             /**
              * Returns the subtitle streams that can be selected by the user. The
@@ -375,7 +266,7 @@ namespace Phonon
              * \see selectedSubtitleStream
              * \see setCurrentSubtitleStream
              */
-            QStringList availableSubtitleStreams() const;
+            //QList<SubtitleStreamDescription> availableSubtitleStreams() const;
 
             /**
              * Returns the strings associated with the given \p key.
@@ -539,57 +430,42 @@ namespace Phonon
              * Selects an audio stream from the media.
              *
              * Some media formats allow multiple audio streams to be stored in
-             * the same file. Normally only one should be played back. You can
-             * select the stream for all connected AudioPath objects or per
-             * AudioPath object. The latter allows to play, two or more
-             * different audio streams simultaneously.
+             * the same file. Normally only one should be played back.
              *
-             * \param streamName one string out of the list returned by availableAudioStreams()
-             * \param audioPath the AudioPath object for which the audio stream
-             * selection should be used
+             * \param stream Description of an audio stream
              *
              * \see availableAudioStreams()
              * \see selectedAudioStream()
              */
-            void setCurrentAudioStream(const QString &streamName, AudioPath *audioPath = 0);
+            //void setCurrentAudioStream(const AudioStreamDescription &stream);
 
             /**
              * Selects a video stream from the media.
              *
              * Some media formats allow multiple video streams to be stored in
-             * the same file. Normally only one should be played back. You can
-             * select the stream for all connected VideoPath objects or per
-             * VideoPath object. The latter allows to play, two or more
+             * the same file. Normally only one should be played back. 
+             * The latter allows to play, two or more
              * different video streams simultaneously.
              *
-             * \param streamName one string out of the list returned by availableVideoStreams()
-             * \param videoPath the VideoPath object for which the video stream
-             * selection should be used
+             * \param stream description of a video stream.
              *
              * \see availableVideoStreams()
              * \see selectedVideoStream()
              */
-            void setCurrentVideoStream(const QString &streamName, VideoPath *videoPath = 0);
+            //void setCurrentVideoStream(const VideoStreamDescription &stream);
 
             /**
              * Selects a subtitle stream from the media.
              *
              * Some media formats allow multiple subtitle streams to be stored in
-             * the same file. Normally only one should be displayed. You can
-             * select the stream for all connected VideoPath objects or per
-             * VideoPath object. The latter allows to display, two or more
-             * different subtitle streams simultaneously.
+             * the same file. Normally only one should be displayed.
              *
-             * \param streamName One string out of the list returned by
-             * availableSubtitleStreams(); if a \c null QString is passed no
-             * subtitles will be displayed.
-             * \param videoPath the VideoPath object for which the subtitle stream
-             * selection should be used
+             * \param stream description of a subtitle stream
              *
              * \see availableSubtitleStreams()
              * \see selectedSubtitleStream()
              */
-            void setCurrentSubtitleStream(const QString &streamName, VideoPath *videoPath = 0);
+            //void setCurrentSubtitleStream(const SubtitleStreamDescription &stream);
 
             void setTickInterval(qint32 newTickInterval);
 
@@ -798,6 +674,12 @@ namespace Phonon
             Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
             Q_PRIVATE_SLOT(k_func(), void _k_aboutToFinish())
     };
+
+    /**
+     * Convenience function to create a MediaObject and AudioOutput connected by
+     * a path.
+     */
+    PHONON_EXPORT MediaObject *createPlayer(Phonon::Category category, const MediaSource &source = MediaSource());
 } //namespace Phonon
 
 // vim: sw=4 ts=4 tw=80

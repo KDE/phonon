@@ -72,10 +72,8 @@ void EffectWidgetPrivate::autogenerateUi()
 {
     Q_Q(EffectWidget);
     QVBoxLayout *mainLayout = new QVBoxLayout(q);
-    for (int i = 0, count = effect->parameterCount();
-         i < count; ++i) {
-        EffectParameter para = effect->description(i);
-        QVariant value = effect->parameterValue(i);
+    foreach (EffectParameter para, effect->parameters()) {
+        QVariant value = effect->parameterValue(para);
         QHBoxLayout *pLayout = new QHBoxLayout;
         mainLayout->addLayout(pLayout);
 
@@ -85,7 +83,7 @@ void EffectWidgetPrivate::autogenerateUi()
         label->setToolTip(para.description());
 
         QWidget *control;
-        if (para.isToggleControl())
+        if (para.type() == QVariant::Bool)
         {
             QCheckBox *cb = new QCheckBox(q);
             control = cb;
@@ -94,7 +92,7 @@ void EffectWidgetPrivate::autogenerateUi()
         }
         else if (para.minimumValue().isValid() && para.maximumValue().isValid())
         {
-            if (para.isIntegerControl())
+            if (para.type() == QVariant::Int)
             {
                 QSpinBox *sb = new QSpinBox(q);
                 control = sb;
@@ -127,32 +125,32 @@ void EffectWidgetPrivate::autogenerateUi()
         control->setToolTip(para.description());
         label->setBuddy(control);
         pLayout->addWidget(control);
-        parameterIndexForObject.insert(control, i);
+        parameterForObject.insert(control, para);
     }
 }
 
 void EffectWidgetPrivate::_k_setToggleParameter(bool checked)
 {
     Q_Q(EffectWidget);
-    int idx = parameterIndexForObject.value(q->sender(), -1);
-    if (idx != -1)
-        effect->setParameterValue(idx, checked);
+    if (parameterForObject.contains(q->sender())) {
+        effect->setParameterValue(parameterForObject[q->sender()], checked);
+    }
 }
 
 void EffectWidgetPrivate::_k_setIntParameter(int value)
 {
     Q_Q(EffectWidget);
-    int idx = parameterIndexForObject.value(q->sender(), -1);
-    if (idx != -1)
-        effect->setParameterValue(idx, value);
+    if (parameterForObject.contains(q->sender())) {
+        effect->setParameterValue(parameterForObject[q->sender()], value);
+    }
 }
 
 void EffectWidgetPrivate::_k_setDoubleParameter(double value)
 {
     Q_Q(EffectWidget);
-    int idx = parameterIndexForObject.value(q->sender(), -1);
-    if (idx != -1)
-        effect->setParameterValue(idx, value);
+    if (parameterForObject.contains(q->sender())) {
+        effect->setParameterValue(parameterForObject[q->sender()], value);
+    }
 }
 
 } // namespace Phonon

@@ -36,7 +36,7 @@ namespace Phonon
 
         private:
             Effect *effect;
-            QHash<QObject *, int> parameterIndexForObject;
+            QHash<QObject *, EffectParameter> parameterForObject;
 
             void _k_setToggleParameter(bool checked);
             void _k_setIntParameter(int value);

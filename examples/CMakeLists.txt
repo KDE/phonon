@@ -11,12 +11,14 @@ MACRO(PHONON_DECLARE_EXAMPLES)
 ENDMACRO(PHONON_DECLARE_EXAMPLES)
 
 PHONON_DECLARE_EXAMPLES(
-    tutorial1
     tutorial2
     tutorial3
     tutorial4
+    #videoplayer
     #crossfade
     #videoplayandforget
     #pcmoutput
     #videoplayback
     )
+
+#target_link_libraries(videoplayer ${KDE4_KDEUI_LIBS})

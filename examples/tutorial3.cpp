@@ -21,10 +21,10 @@
 
 */
 
-#include <Phonon/AudioPath>
 #include <Phonon/AudioOutput>
 #include <Phonon/Global>
 #include <Phonon/MediaObject>
+#include <Phonon/Path>
 #include <Phonon/SeekSlider>
 #include <Phonon/VolumeSlider>
 
@@ -37,13 +37,6 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
-
-namespace Phonon
-{
-    class MediaObject;
-} // namespace Phonon
-
-class QModelIndex;
 
 class PlayerWidget : public QWidget
 {
@@ -82,10 +75,8 @@ void PlayerWidget::delayedInit()
 {
     if (!m_media) {
         m_media = new Phonon::MediaObject(this);
-        Phonon::AudioPath *audioPath = new Phonon::AudioPath(this);
         Phonon::AudioOutput *audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
-        m_media->addAudioPath(audioPath);
-        audioPath->addOutput(audioOutput);
+        createPath(m_media, audioOutput);
 
         QHBoxLayout *topLayout = new QHBoxLayout(this);
         QVBoxLayout *leftLayout = new QVBoxLayout(this);

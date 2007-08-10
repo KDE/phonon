@@ -83,8 +83,9 @@ inline void AudioDataOutput::convertAndEmit(const QVector<float> &buffer)
     }
 }
 
-void AudioDataOutput::processBuffer(const QVector<float> &buffer)
+void AudioDataOutput::processBuffer(QVector<float> &_buffer)
 {
+    const QVector<float> &buffer(_buffer);
     // TODO emit endOfMedia
     m_pendingData += buffer;
     if (m_pendingData.size() < m_dataSize)
@@ -108,5 +109,5 @@ void AudioDataOutput::processBuffer(const QVector<float> &buffer)
 
 }} //namespace Phonon::Fake
 
-#include "audiodataoutput.moc"
+#include "moc_audiodataoutput.cpp"
 // vim: sw=4 ts=4

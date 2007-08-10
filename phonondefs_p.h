@@ -66,23 +66,17 @@ protected: \
 
 #define PHONON_ABSTRACTBASE_IMPL \
 PHONON_CLASSNAME::PHONON_CLASSNAME(PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) &dd, QObject *parent) \
-    : QObject(parent) \
-    , k_ptr(&dd) \
+    : QObject(parent), \
+    MediaNode(dd) \
 { \
-    k_ptr->q_ptr = this; \
-} \
-bool PHONON_CLASSNAME::isValid() const \
-{ \
-    return (k_func()->m_backendObject != 0); \
 }
 
 #define PHONON_OBJECT_IMPL \
 PHONON_CLASSNAME::PHONON_CLASSNAME(QObject *parent) \
-    : QObject(parent) \
-    , k_ptr(new PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)()) \
+    : QObject(parent), \
+    MediaNode(*new PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)()) \
 { \
     PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private) *d = k_func(); \
-    d->q_ptr = this; \
     d->createBackendObject(); \
 } \
 void PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)::createBackendObject() \
@@ -94,10 +88,6 @@ void PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)::createBackendObject() \
     if (m_backendObject) { \
         setupBackendObject(); \
     } \
-} \
-bool PHONON_CLASSNAME::isValid() const \
-{ \
-    return (k_func()->m_backendObject != 0); \
 }
 
 #define PHONON_HEIR_IMPL(parentclass) \

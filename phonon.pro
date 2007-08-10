@@ -20,20 +20,12 @@ HEADERS += abstractaudiooutput.h \
            audiooutput.h \
            audiooutput_p.h \
            audiooutputinterface.h \
-           audiopath.h \
-           audiopath_p.h \
-           audioplayer.h \
            backendcapabilities.h \
            backendcapabilities_p.h \
            backendinterface.h \
-           base_p.h \
-           basedestructionhandler.h \
-           brightnesscontrol.h \
-           brightnesscontrol_p.h \
-           deinterlacefilter.h \
-           deinterlacefilter_p.h \
            effect.h \
            effect_p.h \
+           effectinterface.h \
            effectparameter.h \
            effectparameter_p.h \
            effectwidget.h \
@@ -45,6 +37,9 @@ HEADERS += abstractaudiooutput.h \
            iodevicestream.h \
            iodevicestream_p.h \
            mediacontroller.h \
+           medianode.h \
+           medianode_p.h \
+           medianodedestructionhandler.h \
            mediaobject.h \
            mediaobject_p.h \
            mediaobjectinterface.h \
@@ -54,6 +49,8 @@ HEADERS += abstractaudiooutput.h \
            objectdescription_p.h \
            objectdescriptionmodel.h \
            objectdescriptionmodel_p.h \
+           path.h \
+           path_p.h \
            phonondefs.h \
            phonondefs_p.h \
            phononnamespace.h \
@@ -64,13 +61,13 @@ HEADERS += abstractaudiooutput.h \
            seekslider_p.h \
            streaminterface.h \
            streaminterface_p.h \
-           videopath.h \
-           videopath_p.h \
            videoplayer.h \
            videowidget.h \
            videowidget_p.h \
+           videowidgetinterface.h \
            volumefadereffect.h \
            volumefadereffect_p.h \
+           volumefaderinterface.h \
            volumeslider.h \
            volumeslider_p.h
 SOURCES += abstractaudiooutput.cpp \
@@ -79,11 +76,7 @@ SOURCES += abstractaudiooutput.cpp \
            abstractvideooutput.cpp \
            abstractvideooutput_p.cpp \
            audiooutput.cpp \
-           audiopath.cpp \
-           audioplayer.cpp \
            backendcapabilities.cpp \
-           brightnesscontrol.cpp \
-           deinterlacefilter.cpp \
            effect.cpp \
            effectparameter.cpp \
            effectwidget.cpp \
@@ -91,15 +84,16 @@ SOURCES += abstractaudiooutput.cpp \
            globalconfig.cpp \
            iodevicestream.cpp \
            mediacontroller.cpp \
+           medianode.cpp \
            mediaobject.cpp \
            mediasource.cpp \
            objectdescription.cpp \
            objectdescriptionmodel.cpp \
+           path.cpp \
            phononnamespace.cpp \
            platform.cpp \
            seekslider.cpp \
            streaminterface.cpp \
-           videopath.cpp \
            videoplayer.cpp \
            videowidget.cpp \
            volumefadereffect.cpp \

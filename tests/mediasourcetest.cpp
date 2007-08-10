@@ -21,6 +21,8 @@
 #include "../abstractmediastream.h"
 #include "loadfakebackend.h"
 
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
 #include <QtCore/QUrl>
 #include <qtest_kde.h>
 #include <QtCore/QObject>
@@ -54,7 +56,7 @@ void MediaSourceTest::testLocalFile()
 
     MediaSource a(filename);
     QCOMPARE(a.type(), MediaSource::LocalFile);
-    QCOMPARE(a.filename(), filename);
+    QCOMPARE(a.fileName(), filename);
     QCOMPARE(a.url(), QUrl::fromLocalFile(filename));
     QCOMPARE(a.discType(), Phonon::NoDisc);
     QCOMPARE(a.stream(), stream);
@@ -69,7 +71,7 @@ void MediaSourceTest::testLocalFile()
     QCOMPARE(b, c);
 
     QCOMPARE(b.type(), MediaSource::LocalFile);
-    QCOMPARE(b.filename(), filename);
+    QCOMPARE(b.fileName(), filename);
     QCOMPARE(b.url(), QUrl::fromLocalFile(filename));
     QCOMPARE(b.discType(), Phonon::NoDisc);
     QCOMPARE(b.stream(), stream);
@@ -78,13 +80,22 @@ void MediaSourceTest::testLocalFile()
     //QCOMPARE(b.videoCaptureDevice(), VideoCaptureDevice());
 
     QCOMPARE(c.type(), MediaSource::LocalFile);
-    QCOMPARE(c.filename(), filename);
+    QCOMPARE(c.fileName(), filename);
     QCOMPARE(c.url(), QUrl::fromLocalFile(filename));
     QCOMPARE(c.discType(), Phonon::NoDisc);
     QCOMPARE(c.stream(), stream);
     QCOMPARE(c.deviceName(), QString());
     //QCOMPARE(c.audioCaptureDevice(), AudioCaptureDevice());
     //QCOMPARE(c.videoCaptureDevice(), VideoCaptureDevice());
+
+    //test that a relative file path is correctly set as an absolute URL
+    filename = "foo.ogg";
+    MediaSource relative(filename);
+    //QCOMPARE(relative.fileName(), filename);
+    QFileInfo urlInfo(relative.url().toLocalFile());
+    QVERIFY(urlInfo.isAbsolute());
+    QCOMPARE(urlInfo.fileName(), filename);
+    QCOMPARE(urlInfo.absolutePath(), QDir::currentPath());
 }
 
 void MediaSourceTest::testUrl()
@@ -94,7 +105,7 @@ void MediaSourceTest::testUrl()
 
     MediaSource a(url);
     QCOMPARE(a.type(), MediaSource::Url);
-    QCOMPARE(a.filename(), QString());
+    QCOMPARE(a.fileName(), QString());
     QCOMPARE(a.url(), url);
     QCOMPARE(a.discType(), Phonon::NoDisc);
     QCOMPARE(a.stream(), stream);
@@ -109,7 +120,7 @@ void MediaSourceTest::testUrl()
     QCOMPARE(b, c);
 
     QCOMPARE(b.type(), MediaSource::Url);
-    QCOMPARE(b.filename(), QString());
+    QCOMPARE(b.fileName(), QString());
     QCOMPARE(b.url(), url);
     QCOMPARE(b.discType(), Phonon::NoDisc);
     QCOMPARE(b.stream(), stream);
@@ -118,7 +129,7 @@ void MediaSourceTest::testUrl()
     //QCOMPARE(b.videoCaptureDevice(), VideoCaptureDevice());
 
     QCOMPARE(c.type(), MediaSource::Url);
-    QCOMPARE(c.filename(), QString());
+    QCOMPARE(c.fileName(), QString());
     QCOMPARE(c.url(), url);
     QCOMPARE(c.discType(), Phonon::NoDisc);
     QCOMPARE(c.stream(), stream);
@@ -136,7 +147,7 @@ void MediaSourceTest::testDiscType()
         MediaSource a(discType);
 
         QCOMPARE(a.type(), MediaSource::Disc);
-        QCOMPARE(a.filename(), QString());
+        QCOMPARE(a.fileName(), QString());
         QCOMPARE(a.url(), QUrl());
         QCOMPARE(a.discType(), discType);
         QCOMPARE(a.stream(), stream);
@@ -151,7 +162,7 @@ void MediaSourceTest::testDiscType()
         QCOMPARE(b, c);
 
         QCOMPARE(b.type(), MediaSource::Disc);
-        QCOMPARE(b.filename(), QString());
+        QCOMPARE(b.fileName(), QString());
         QCOMPARE(b.url(), QUrl());
         QCOMPARE(b.discType(), discType);
         QCOMPARE(b.stream(), stream);
@@ -160,7 +171,7 @@ void MediaSourceTest::testDiscType()
         //QCOMPARE(b.videoCaptureDevice(), VideoCaptureDevice());
 
         QCOMPARE(c.type(), MediaSource::Disc);
-        QCOMPARE(c.filename(), QString());
+        QCOMPARE(c.fileName(), QString());
         QCOMPARE(c.url(), QUrl());
         QCOMPARE(c.discType(), discType);
         QCOMPARE(c.stream(), stream);
@@ -184,7 +195,7 @@ void MediaSourceTest::testStream()
 
     MediaSource a(stream);
     QCOMPARE(a.type(), MediaSource::Stream);
-    QCOMPARE(a.filename(), QString());
+    QCOMPARE(a.fileName(), QString());
     QCOMPARE(a.url(), QUrl());
     QCOMPARE(a.discType(), Phonon::NoDisc);
     QCOMPARE(a.stream(), stream);
@@ -199,7 +210,7 @@ void MediaSourceTest::testStream()
     QCOMPARE(b, c);
 
     QCOMPARE(b.type(), MediaSource::Stream);
-    QCOMPARE(b.filename(), QString());
+    QCOMPARE(b.fileName(), QString());
     QCOMPARE(b.url(), QUrl());
     QCOMPARE(b.discType(), Phonon::NoDisc);
     QCOMPARE(b.stream(), stream);
@@ -208,7 +219,7 @@ void MediaSourceTest::testStream()
     //QCOMPARE(b.videoCaptureDevice(), VideoCaptureDevice());
 
     QCOMPARE(c.type(), MediaSource::Stream);
-    QCOMPARE(c.filename(), QString());
+    QCOMPARE(c.fileName(), QString());
     QCOMPARE(c.url(), QUrl());
     QCOMPARE(c.discType(), Phonon::NoDisc);
     QCOMPARE(c.stream(), stream);
@@ -235,7 +246,7 @@ void MediaSourceTest::testIODevice()
 
     MediaSource a(buffer);
     QCOMPARE(a.type(), MediaSource::Stream);
-    QCOMPARE(a.filename(), QString());
+    QCOMPARE(a.fileName(), QString());
     QCOMPARE(a.url(), QUrl());
     QCOMPARE(a.discType(), Phonon::NoDisc);
     QVERIFY(a.stream() != 0);
@@ -250,7 +261,7 @@ void MediaSourceTest::testIODevice()
     QCOMPARE(b, c);
 
     QCOMPARE(b.type(), MediaSource::Stream);
-    QCOMPARE(b.filename(), QString());
+    QCOMPARE(b.fileName(), QString());
     QCOMPARE(b.url(), QUrl());
     QCOMPARE(b.discType(), Phonon::NoDisc);
     QVERIFY(b.stream() != 0);
@@ -259,7 +270,7 @@ void MediaSourceTest::testIODevice()
     //QCOMPARE(b.videoCaptureDevice(), VideoCaptureDevice());
 
     QCOMPARE(c.type(), MediaSource::Stream);
-    QCOMPARE(c.filename(), QString());
+    QCOMPARE(c.fileName(), QString());
     QCOMPARE(c.url(), QUrl());
     QCOMPARE(c.discType(), Phonon::NoDisc);
     QVERIFY(c.stream() != 0);
@@ -282,7 +293,7 @@ void MediaSourceTest::testQtResource()
     const QString filename(":/ogg/zero.ogg");
     MediaSource a(filename);
     QCOMPARE(a.type(), MediaSource::Stream);
-    QCOMPARE(a.filename(), QString());
+    QCOMPARE(a.fileName(), QString());
     QCOMPARE(a.url(), QUrl());
     QCOMPARE(a.discType(), Phonon::NoDisc);
     QVERIFY(a.stream() != 0);
@@ -297,7 +308,7 @@ void MediaSourceTest::testQtResource()
     QCOMPARE(b, c);
 
     QCOMPARE(b.type(), MediaSource::Stream);
-    QCOMPARE(b.filename(), QString());
+    QCOMPARE(b.fileName(), QString());
     QCOMPARE(b.url(), QUrl());
     QCOMPARE(b.discType(), Phonon::NoDisc);
     QVERIFY(b.stream() != 0);
@@ -306,7 +317,7 @@ void MediaSourceTest::testQtResource()
     //QCOMPARE(b.videoCaptureDevice(), VideoCaptureDevice());
 
     QCOMPARE(c.type(), MediaSource::Stream);
-    QCOMPARE(c.filename(), QString());
+    QCOMPARE(c.fileName(), QString());
     QCOMPARE(c.url(), QUrl());
     QCOMPARE(c.discType(), Phonon::NoDisc);
     QVERIFY(c.stream() != 0);

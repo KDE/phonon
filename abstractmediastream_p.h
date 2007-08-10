@@ -25,13 +25,13 @@
 #include "mediaobject_p.h"
 #include "streaminterface.h"
 
-#include "basedestructionhandler.h"
+#include "medianodedestructionhandler.h"
 
 class MediaObjectPrivate;
 
 namespace Phonon
 {
-class PHONON_EXPORT AbstractMediaStreamPrivate : private BaseDestructionHandler
+class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHandler
 {
     friend class MediaObject;
     Q_DECLARE_PUBLIC(AbstractMediaStream)
@@ -50,7 +50,7 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private BaseDestructionHandler
         }
         ~AbstractMediaStreamPrivate();
 
-        void phononObjectDestroyed(BasePrivate *);
+        void phononObjectDestroyed(MediaNodePrivate *);
 
         AbstractMediaStream *q_ptr;
         qint64 streamSize;

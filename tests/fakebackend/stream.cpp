@@ -97,5 +97,5 @@ void Stream::consumeStream(int msec)
 } // namespace Fake
 } // namespace Phonon
 
-#include "stream.moc"
+#include "moc_stream.cpp"
 // vim: sw=4 sts=4 et tw=100

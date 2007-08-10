@@ -27,6 +27,7 @@
 #include <QtCore/QLine>
 #include <QtCore/QPointer>
 
+#include <phonon/path.h>
 #include <phonon/phononnamespace.h>
 #include <phonon/mediacontroller.h>
 
@@ -39,14 +40,11 @@ class QProgressBar;
 namespace Phonon
 {
     class MediaObject;
-    class AudioPath;
     class AudioOutput;
-    class VideoPath;
     class VideoOutput;
     class VideoWidget;
     class SeekSlider;
     class VolumeSlider;
-    class VideoPath;
     class VideoWidget;
 }
 
@@ -151,9 +149,9 @@ class ProducerWidget : public QFrame
         QAbstractButton *m_pause, *m_play, *m_stop;
         MediaObject *m_media;
         qint64 m_length;
-        QList<AudioPath *> m_audioPaths;
+        QList<Path> m_audioPaths;
         QProgressBar *m_bufferProgress;
-        VideoPath *m_vpath;
+        Path m_vpath;
         VideoWidget *m_vout;
 
         QAbstractButton *m_titleButton;
@@ -175,7 +173,7 @@ class PathWidget : public QFrame
     public:
         PathWidget(QWidget *parent = 0);
 
-        AudioPath *path() const { return m_path; }
+        Path path() const { return m_path; }
         bool connectOutput(OutputWidget *w);
 
     private Q_SLOTS:
@@ -184,7 +182,7 @@ class PathWidget : public QFrame
         void effectToggled(bool checked);
 
     private:
-        AudioPath *m_path;
+        Path m_path;
         QComboBox *m_effectComboBox;
 };
 

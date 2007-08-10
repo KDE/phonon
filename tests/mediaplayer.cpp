@@ -50,16 +50,11 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     m_vwidget->addAction(fullScreenAction);
     connect(fullScreenAction, SIGNAL(toggled(bool)), m_vwidget, SLOT(setFullScreen(bool)));
 
-    m_vpath = new VideoPath(this);
-
     m_aoutput = new AudioOutput(Phonon::VideoCategory, this);
-    m_apath = new AudioPath(this);
 
     m_media = new MediaObject(this);
-    m_media->addVideoPath(m_vpath);
-    m_vpath->addOutput(m_vwidget);
-    m_media->addAudioPath(m_apath);
-    m_apath->addOutput(m_aoutput);
+    createPath(m_media, m_vwidget);
+    m_apath = createPath(m_media, m_aoutput);
 
     m_controls = new MediaControls(this);
     layout->addWidget(m_controls);
@@ -79,18 +74,12 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     }
     */
 
-    m_brightness = new BrightnessControl(this);
     QSlider *slider = new QSlider(this);
     layout->addWidget(slider);
     slider->setOrientation(Qt::Horizontal);
-    slider->setRange(m_brightness->lowerBound(), m_brightness->upperBound());
-    slider->setValue(m_brightness->brightness());
-    connect(slider, SIGNAL(valueChanged(int)), m_brightness, SLOT(setBrightness(int)));
-    m_vpath->insertEffect(m_brightness);
-
-    QCheckBox *deinterlaceCheck = new QCheckBox(this);
-    layout->addWidget(deinterlaceCheck);
-    connect(deinterlaceCheck, SIGNAL(toggled(bool)), SLOT(toggleDeinterlacing(bool)));
+    slider->setRange(-100, 100);
+    slider->setValue(static_cast<int>(m_vwidget->brightness() * 100));
+    connect(slider, SIGNAL(valueChanged(int)), this, SLOT(setBrightness(int)));
 
     QCheckBox *scaleModeCheck = new QCheckBox(this);
     layout->addWidget(scaleModeCheck);
@@ -107,6 +96,11 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     this->resize(width(), height() + 240 - m_vwidget->height());
 }
 
+void MediaPlayer::setBrightness(int b)
+{
+    m_vwidget->setBrightness(b * 0.01);
+}
+
 void MediaPlayer::switchAspectRatio(int x)
 {
     m_vwidget->setAspectRatio(static_cast<VideoWidget::AspectRatio>(x));
@@ -118,16 +112,6 @@ void MediaPlayer::toggleScaleMode(bool mode)
         m_vwidget->setScaleMode(VideoWidget::ScaleAndCrop);
     } else {
         m_vwidget->setScaleMode(VideoWidget::FitInView);
-    }
-}
-
-void MediaPlayer::toggleDeinterlacing(bool deint)
-{
-    if (deint) {
-        m_deinterlaceFilter = new DeinterlaceFilter(this);
-        m_vpath->insertEffect(m_deinterlaceFilter);
-    } else {
-        delete m_deinterlaceFilter;
     }
 }
 

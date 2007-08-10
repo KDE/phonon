@@ -34,5 +34,5 @@ AbstractAudioOutput::~AbstractAudioOutput()
 
 }} //namespace Phonon::Fake
 
-#include "abstractaudiooutput.moc"
+#include "moc_abstractaudiooutput.cpp"
 // vim: sw=4 ts=4

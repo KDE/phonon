@@ -22,12 +22,9 @@
 
 #include <QtGui/QWidget>
 #include <phonon/mediaobject.h>
-#include <phonon/videopath.h>
+#include <phonon/path.h>
 #include <phonon/audiooutput.h>
-#include <phonon/audiopath.h>
 #include <phonon/effect.h>
-#include <phonon/brightnesscontrol.h>
-#include <phonon/deinterlacefilter.h>
 #include <phonon/videowidget.h>
 #include "mediacontrols.h"
 #include <phonon/effectwidget.h>
@@ -42,21 +39,19 @@ class MediaPlayer : public QWidget
 
     private Q_SLOTS:
         void openEffectWidget();
-        void toggleDeinterlacing(bool);
         void toggleScaleMode(bool);
         void switchAspectRatio(int x);
+        void setBrightness(int b);
 
     private:
         Phonon::MediaObject *m_media;
-        Phonon::AudioPath *m_apath;
+        Phonon::Path m_apath;
         Phonon::AudioOutput *m_aoutput;
-        Phonon::VideoPath *m_vpath;
+        Phonon::Path m_vpath;
         Phonon::Effect *m_effect;
-        Phonon::BrightnessControl *m_brightness;
         Phonon::VideoWidget *m_vwidget;
         Phonon::MediaControls *m_controls;
         Phonon::EffectWidget *m_effectWidget;
-        Phonon::DeinterlaceFilter *m_deinterlaceFilter;
 };
 
 // vim: ts=4

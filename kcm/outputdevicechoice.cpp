@@ -114,9 +114,11 @@ OutputDeviceChoice::OutputDeviceChoice(QWidget *parent)
     outputItem->setEditable(false);
     outputItem->setSelectable(false);
     parentItem->appendRow(outputItem);
+    /*
     m_captureItem = new QStandardItem(i18n("Audio Capture"));
     m_captureItem->setEditable(false);
     parentItem->appendRow(m_captureItem);
+    */
 
     parentItem = outputItem;
     for (int i = 0; i <= Phonon::LastCategory; ++i) {
@@ -125,7 +127,7 @@ OutputDeviceChoice::OutputDeviceChoice(QWidget *parent)
         item->setEditable(false);
         parentItem->appendRow(item);
     }
-    parentItem = m_captureItem;
+    //parentItem = m_captureItem;
 
     categoryTree->setModel(&m_categoryModel);
     if (categoryTree->header()) {
@@ -143,10 +145,12 @@ OutputDeviceChoice::OutputDeviceChoice(QWidget *parent)
         connect(m_outputModel[i], SIGNAL(layoutChanged()), this, SIGNAL(changed()));
         connect(m_outputModel[i], SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SIGNAL(changed()));
     }
+    /*
     connect(&m_captureModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SIGNAL(changed()));
     connect(&m_captureModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SIGNAL(changed()));
     connect(&m_captureModel, SIGNAL(layoutChanged()), this, SIGNAL(changed()));
     connect(&m_captureModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), this, SIGNAL(changed()));
+    */
 
     connect(Phonon::BackendCapabilities::notifier(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(updateAudioOutputDevices()));
 
@@ -166,8 +170,10 @@ void OutputDeviceChoice::updateDeviceList()
     if (currentItem->type() == 1001) {
         CategoryItem *catItem = static_cast<CategoryItem *>(currentItem);
         deviceList->setModel(m_outputModel[catItem->category()]);
+        /*
     } else if (currentItem == m_captureItem) {
         deviceList->setModel(&m_captureModel);
+        */
     } else {
         deviceList->setModel(0);
     }
@@ -232,6 +238,7 @@ void OutputDeviceChoice::load()
         m_outputModel[i]->setModelData(orderedList);
     }
 
+    /*
     QList<Phonon::AudioCaptureDevice> list2 = Phonon::BackendCapabilities::availableAudioCaptureDevices();
     QList<int> order = captureDeviceGroup.value(QLatin1String("DeviceOrder"), QList<int>());
     QList<Phonon::AudioCaptureDevice> orderedList;
@@ -247,6 +254,7 @@ void OutputDeviceChoice::load()
         orderedList << dev;
     }
     m_captureModel.setModelData(orderedList);
+    */
 }
 
 void OutputDeviceChoice::save()
@@ -260,10 +268,12 @@ void OutputDeviceChoice::save()
             }
         }
     }
+    /*
     {
         QSettingsGroup globalGroup(&config, QLatin1String("AudioCaptureDevice"));
         globalGroup.setValue(QLatin1String("DeviceOrder"), m_captureModel.tupleIndexOrder());
     }
+    */
 }
 
 void OutputDeviceChoice::defaults()
@@ -273,8 +283,10 @@ void OutputDeviceChoice::defaults()
         m_outputModel[i]->setModelData(list);
     }
 
+    /*
     QList<Phonon::AudioCaptureDevice> list2 = Phonon::BackendCapabilities::availableAudioCaptureDevices();
     m_captureModel.setModelData(list2);
+    */
 }
 
 void OutputDeviceChoice::on_preferButton_clicked()
@@ -327,6 +339,7 @@ void OutputDeviceChoice::on_removeButton_clicked()
                 }
             }
         }
+        /*
     } else {
         Phonon::AudioCaptureDeviceModel *captureModel = qobject_cast<Phonon::AudioCaptureDeviceModel *>(model);
         if (captureModel && idx.isValid()) {
@@ -343,6 +356,7 @@ void OutputDeviceChoice::on_removeButton_clicked()
                 }
             }
         }
+        */
     }
 }
 

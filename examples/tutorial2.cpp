@@ -22,7 +22,7 @@
 */
 
 #include <Phonon/MediaObject>
-#include <Phonon/AudioPath>
+#include <Phonon/Path>
 #include <Phonon/AudioOutput>
 #include <Phonon/Global>
 
@@ -71,10 +71,8 @@ void MainWindow::delayedInit()
 {
     if (!m_media) {
         m_media = new Phonon::MediaObject(this);
-        Phonon::AudioPath *audioPath = new Phonon::AudioPath(this);
         Phonon::AudioOutput *audioOutput = new Phonon::AudioOutput(Phonon::MusicCategory, this);
-        m_media->addAudioPath(audioPath);
-        audioPath->addOutput(audioOutput);
+        createPath(m_media, audioOutput);
     }
 }
 

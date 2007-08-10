@@ -22,13 +22,15 @@
 
 #include "phonon_export.h"
 #include "phononnamespace.h"
+#include "mediasource.h"
 #include <QtGui/QWidget>
-
-class QUrl;
 
 namespace Phonon
 {
 class VideoPlayerPrivate;
+class MediaObject;
+class AudioOutput;
+class VideoWidget;
 
 /** \class VideoPlayer videoplayer.h Phonon/VideoPlayer
  * \short Playback class for simple tasks.
@@ -105,8 +107,7 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          * When there's already a media playing (or paused) it will be stopped
          * (the finished signal will not be emitted).
          */
-        void load(const QUrl &url);
-        void load(const QString &filename);
+        void load(const MediaSource &source);
 
         /**
          * Play the media at the given URL. Starts playback as fast as possible.
@@ -124,8 +125,7 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          * load and play calls so that the backend can start preloading the
          * media and fill audio buffers.
          */
-        void play(const QUrl &url);
-        void play(const QString &filename);
+        void play(const MediaSource &source);
 
         /**
          * Continues playback of a paused media. Restarts playback of a stopped
@@ -154,6 +154,22 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          * 1.0 means 100%, 0.5 means 50% voltage/25% power, 0.0 means 0%
          */
         void setVolume(float volume);
+
+        /**
+         * getter for the MediaObject.
+         */
+        MediaObject *mediaObject() const;
+
+        /**
+         * getter for the AudioOutput.
+         */
+        AudioOutput *audioOutput() const;
+
+        /**
+         * getter for the VideoWidget.
+         */
+        VideoWidget *videoWidget() const;
+
 
     Q_SIGNALS:
         /**

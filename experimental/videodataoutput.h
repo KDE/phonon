@@ -42,15 +42,10 @@ namespace Experimental
      * \short This class gives you the video data.
      *
      * This class implements a special AbstractVideoOutput that gives your
-     * application the video data. If you introduce latencies between receiving
-     * the frameReady signal and displaying the video frame you should call
-     * setDisplayLatency.
+     * application the video data.
      *
      * You can also use the video data for further processing (e.g. encoding and
      * saving to a file).
-     *
-     * The class supports different data formats. See the Format enum for what
-     * is available.
      *
      * \author Matthias Kretz <kretz@kde.org>
      */
@@ -59,84 +54,58 @@ namespace Experimental
         Q_OBJECT
         K_DECLARE_PRIVATE(VideoDataOutput)
         /**
-         * This property sets the dataformat you'd like to receive.
-         *
-         * The default format is Format_ARGB32.
-         *
-         * \see Format
+         * This property retrieves the nominal latency of the
+         * backend.
          */
-        Q_PROPERTY(quint32 format READ format WRITE setFormat)
-        //TODO: do we need properties for depth and bpp?
+        Q_PROPERTY(int latency READ latency)
 
         /**
-         * This property tells the backend how many milliseconds it
-         * takes for the video frame to be displayed after frameReady was
-         * emitted.
-         *
-         * In order to give the backend a chance to perfectly synchronize
-         * audio and video it needs to know how much time you need in order
-         * to display the video frame after it emitted the frameReady
-         * signal. If you render the video to screen immediately, setting the
-         * latency to 0 ms should be good enough.
-         *
-         * If set to -1 the backend may disregard this
-         * object when considering synchronization. Use -1 for cases where
-         * you don't use the video data for displaying it on the screen.
-         *
-         * The latency defaults to 0 ms.
+         * This property indicates the state of the data output.
          */
-        //Q_PROPERTY(int displayLatency READ displayLatency WRITE setDisplayLatency)
-
-        /**
-         * This property holds the size of the frame.
-         */
-        Q_PROPERTY(QSize frameSize READ frameSize WRITE setFrameSize)
-
-        /**
-         * This property holds the frame rate in Hz. The frame rate tells how
-         * many frameReady signals are emitted per second.
-         */
-        Q_PROPERTY(int frameRate READ frameRate WRITE setFrameRate)
+        Q_PROPERTY(bool running READ isRunning WRITE setRunning)
 
         PHONON_HEIR(VideoDataOutput)
-        public:
-            quint32 format() const;
-            void setFormat(quint32 format);
+    public:
+        int latency() const;
 
-            int frameRate() const;
-            void setFrameRate(int);
+        bool isRunning() const;
 
-            //int displayLatency() const;
-            //void setDisplayLatency(int milliseconds);
+        Phonon::Experimental::VideoFrame frameForTime(qint64 timestamp);
 
-            QSize frameSize() const;
-            void setFrameSize(const QSize &size, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
-            void setFrameSize(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio);
+    public slots:
+        void setRunning(bool running);
+        void start();
+        void stop();
 
-            /**
-             * Tells whether the FOURCC (four character code) is supported by
-             * the backend. If it is supported you can request the backend to
-             * send the video frames in this format.
-             */
-            static bool formatSupported(quint32 fourcc);
+    Q_SIGNALS:
+        /**
+         * Fixme: I don't think this makes sense, but I've been wrong before.
+         *
+         * Emitted whenever another dataSize number of samples are ready and
+         * format is set to IntegerFormat.
+         *
+         * If format is set to FloatFormat the signal is not emitted at all.
+         *
+         * \param frame An object of class VideoFrame holding the video data
+         * and some additional information.
+         * void frameReady(const Phonon::Experimental::VideoFrame &frame);
+         */
 
-        Q_SIGNALS:
-            /**
-             * Emitted whenever another dataSize number of samples are ready and
-             * format is set to IntegerFormat.
-             *
-             * If format is set to FloatFormat the signal is not emitted at all.
-             *
-             * \param frame An object of class VideoFrame holding the video data
-             * and some additional information.
-             */
-            void frameReady(const Phonon::Experimental::VideoFrame &frame);
+        /**
+         * The signal is emitted whenever a frame should be displayed.
+         * nowStamp is the current time, outStamp tells the users
+         * what time the frame should be displayed with.
+         *
+         * The relevant frames should be fetched and displayed using frameForTime
+         * method.
+         */
+        void displayFrame(qint64 nowStamp, qint64 outStamp);
 
-            /**
-             * This signal is emitted after the last frameReady signal of a
-             * media is emitted.
-             */
-            void endOfMedia();
+        /**
+         * This signal is emitted after the last frameReady signal of a
+         * media is emitted.
+         */
+        void endOfMedia();
     };
 
 } // namespace Experimental

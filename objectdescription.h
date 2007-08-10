@@ -62,42 +62,38 @@ namespace Phonon
          * devices even when they are unplugged and provide a unique identifier
          * that can make backends use the same identifiers.
          */
-        AudioCaptureDeviceType,
+        //AudioCaptureDeviceType,
         /**
          * Not used yet.
          */
-        VideoOutputDeviceType,
+        //VideoOutputDeviceType,
         /**
          * Not used yet.
          */
-        VideoCaptureDeviceType,
+        //VideoCaptureDeviceType,
         /**
-         * Lists all audio processing effects the backend supports.
+         * Lists all processing effects the backend supports.
          */
-        AudioEffectType,
-        /**
-         * Lists all video processing effects the backend supports.
-         */
-        VideoEffectType,
+        EffectType//,
         /**
          * Not used yet.
          */
-        AudioCodecType,
+        //AudioCodecType,
         /**
          * Not used yet.
          */
-        VideoCodecType,
+        //VideoCodecType,
         /**
          * Not used yet.
          */
-        ContainerFormatType,
+        //ContainerFormatType,
         /**
          * Not used yet.
          */
-        VisualizationType,
+        /*VisualizationType,
         AudioStreamType,
         VideoStreamType,
-        SubtitleStreamType
+        SubtitleStreamType*/
     };
 
 /** \internal
@@ -271,40 +267,39 @@ typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;
 /**
  * \ingroup BackendInformation
  */
-typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
+//typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
 /**
  * \ingroup BackendInformation
  */
-typedef ObjectDescription<VideoOutputDeviceType> VideoOutputDevice;
+//typedef ObjectDescription<VideoOutputDeviceType> VideoOutputDevice;
 /**
  * \ingroup BackendInformation
  */
-typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
+//typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
 /**
  * \ingroup BackendInformation
  */
-typedef ObjectDescription<AudioEffectType> AudioEffectDescription;
+typedef ObjectDescription<EffectType> EffectDescription;
 /**
  * \ingroup BackendInformation
  */
-typedef ObjectDescription<VideoEffectType> VideoEffectDescription;
+//typedef ObjectDescription<AudioCodecType> AudioCodecDescription;
 /**
  * \ingroup BackendInformation
  */
-typedef ObjectDescription<AudioCodecType> AudioCodecDescription;
+//typedef ObjectDescription<VideoCodecType> VideoCodecDescription;
 /**
  * \ingroup BackendInformation
  */
-typedef ObjectDescription<VideoCodecType> VideoCodecDescription;
+//typedef ObjectDescription<ContainerFormatType> ContainerFormatDescription;
 /**
  * \ingroup BackendInformation
  */
-typedef ObjectDescription<ContainerFormatType> ContainerFormatDescription;
-/**
- * \ingroup BackendInformation
- */
-typedef ObjectDescription<VisualizationType> VisualizationDescription;
-
+/*typedef ObjectDescription<VisualizationType> VisualizationDescription;
+typedef ObjectDescription<AudioStreamType> AudioStreamDescription;
+typedef ObjectDescription<VideoStreamType> VideoStreamDescription;
+typedef ObjectDescription<SubtitleStreamType> SubtitleStreamDescription;
+*/
 } //namespace Phonon
 
 #endif // PHONON_OBJECTDESCRIPTION_H

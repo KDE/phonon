@@ -192,7 +192,18 @@ namespace Phonon
      * Category.
      */
     PHONON_EXPORT QString categoryToString(Category c);
-} //namespace Phonon
+
+    // TODO: naming
+    /*enum MediaStreamType {
+        Audio = 1,
+        Video = 2,
+        StillImage = 4,
+        Subtitle = 8,
+        AllMedia = 0xFFFFFFFF
+    };
+    Q_DECLARE_FLAGS(MediaStreamTypes, MediaStreamType)*/
+} // namespace Phonon
+//Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::MediaStreamTypes)
 
 //X class kdbgstream;
 //X #include <kdebug.h>

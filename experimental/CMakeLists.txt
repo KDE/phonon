@@ -3,7 +3,6 @@ add_subdirectory( tests )
 
 ########### libphononexperimental ###############
 set(phononexperimental_LIB_SRCS
-    overlayapi.cpp
     audiodataoutput.cpp
     videodataoutput.cpp
     visualization.cpp
@@ -17,7 +16,6 @@ install(TARGETS phononexperimental DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install headers ###############
 install(FILES
-    overlayapi.h
     export.h
     audiodataoutput.h
     videoframe.h

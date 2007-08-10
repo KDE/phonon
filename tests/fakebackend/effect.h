@@ -16,37 +16,43 @@
     Boston, MA 02110-1301, USA.
 
 */
-#ifndef Phonon_FAKE_VIDEOEFFECT_H
-#define Phonon_FAKE_VIDEOEFFECT_H
+#ifndef Phonon_FAKE_AUDIOEFFECT_H
+#define Phonon_FAKE_AUDIOEFFECT_H
 
 #include <QtCore/QObject>
-#include <phonon/experimental/videoframe.h>
 #include <phonon/effectparameter.h>
+#include <phonon/effectinterface.h>
+#include "audionode.h"
 
 namespace Phonon
 {
 namespace Fake
 {
-    class VideoEffect : public QObject
+    class EffectInterface;
+
+    class Effect : public QObject, public Phonon::EffectInterface, public AudioNode
     {
         Q_OBJECT
+        Q_INTERFACES(Phonon::EffectInterface Phonon::Fake::AudioNode)
         public:
-            VideoEffect(int effectId, QObject *parent);
-            ~VideoEffect();
+            Effect(int effectId, QObject *parent);
+            ~Effect();
 
-            Q_INVOKABLE QList<EffectParameter> allDescriptions() const;
-            Q_INVOKABLE EffectParameter description(int) const;
-            Q_INVOKABLE int parameterCount() const;
-            Q_INVOKABLE QVariant parameterValue(int) const;
-            Q_INVOKABLE void setParameterValue(int, const QVariant &);
+            QList<EffectParameter> parameters() const;
+            QVariant parameterValue(const EffectParameter &) const;
+            void setParameterValue(const EffectParameter &, const QVariant &);
 
             // Fake specific:
-            virtual void processFrame(Phonon::Experimental::VideoFrame &frame);
+            virtual void processBuffer(QVector<float> &buffer);
+
+            bool setAudioSink(AudioNode *node);
 
         private:
+            AudioNode *m_sink;
+            Phonon::Fake::EffectInterface *m_effect;
             QList<Phonon::EffectParameter> m_parameterList;
     };
 }} //namespace Phonon::Fake
 
 // vim: sw=4 ts=4 tw=80
-#endif // Phonon_FAKE_VIDEOEFFECT_H
+#endif // Phonon_FAKE_AUDIOEFFECT_H

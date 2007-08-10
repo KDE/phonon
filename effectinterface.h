@@ -17,30 +17,27 @@
 
 */
 
-#ifndef PHONON_BRIGHTNESSCONTROL_P_H
-#define PHONON_BRIGHTNESSCONTROL_P_H
+#ifndef PHONON_EFFECTINTERFACE_H
+#define PHONON_EFFECTINTERFACE_H
 
-#include "brightnesscontrol.h"
-#include "effect_p.h"
+#include <QtCore/QVariant>
 
 namespace Phonon
 {
-class BrightnessControlPrivate : public EffectPrivate
-{
-    Q_DECLARE_PUBLIC(BrightnessControl)
-    PHONON_PRIVATECLASS
-    protected:
-        BrightnessControlPrivate()
-            : brightness(0)
-        {
-            type = Effect::VideoEffect;
-            id = -1; // ### check how to get the correct id
-            // ############# parameter functions are incorrect
-        }
+    class EffectParameter;
+    /**
+     * \author Matthias Kretz <kretz@kde.org>
+     */
+    class EffectInterface
+    {
+        public:
+            virtual ~EffectInterface() {}
+            virtual QList<EffectParameter> parameters() const = 0;
+            virtual QVariant parameterValue(const EffectParameter &) const = 0;
+            virtual void setParameterValue(const EffectParameter &, const QVariant &newValue) = 0;
+    };
+} //namespace Phonon::Fake
 
-        int brightness;
-};
-}
+Q_DECLARE_INTERFACE(Phonon::EffectInterface, "EffectInterface0.phonon.kde.org")
 
-#endif // PHONON_BRIGHTNESSCONTROL_P_H
-// vim: sw=4 ts=4 tw=80
+#endif // PHONON_EFFECTINTERFACE_H

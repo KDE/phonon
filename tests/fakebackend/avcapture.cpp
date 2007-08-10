@@ -54,5 +54,5 @@ void AvCapture::setVideoCaptureDevice(int index)
 
 }} //namespace Phonon::Fake
 
-#include "avcapture.moc"
+#include "moc_avcapture.cpp"
 // vim: sw=4 ts=4

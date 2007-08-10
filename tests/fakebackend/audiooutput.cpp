@@ -19,14 +19,13 @@
 
 #include "audiooutput.h"
 #include <QtCore/QVector>
-#include <kdebug.h>
 
-#include <phonon/config-alsa.h>
+//#include <phonon/config-alsa.h>
 
 #ifdef HAVE_SYS_SOUNDCARD_H
 #include <sys/soundcard.h>
 #endif
-#include <sys/ioctl.h>
+//#include <sys/ioctl.h>
 #include <iostream>
 
 namespace Phonon
@@ -68,8 +67,9 @@ bool AudioOutput::setOutputDevice(int newDevice)
     return true;
 }
 
-void AudioOutput::processBuffer(const QVector<float> &buffer)
+void AudioOutput::processBuffer(QVector<float> &_buffer)
 {
+    const QVector<float> &buffer(_buffer);
     // be nice to everybody using KDE with the fake backend and don't play this awful noise :)
     return;
 
@@ -141,5 +141,5 @@ void AudioOutput::closeDevice()
 
 }} //namespace Phonon::Fake
 
-#include "audiooutput.moc"
+#include "moc_audiooutput.cpp"
 // vim: sw=4 ts=4

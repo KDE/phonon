@@ -22,6 +22,7 @@
 #include "phonondefs.h"
 #include <QtCore/QObject>
 #include "objectdescription.h"
+#include "medianode.h"
 
 class QString;
 template<class T> class QList;
@@ -32,7 +33,7 @@ namespace Phonon
     class EffectPrivate;
 
     /** \class Effect effect.h Phonon/Effect
-     * \short Effects that can be inserted into an AudioPath or a VideoPath.
+     * \short Effects that can be inserted into a Path.
      * An effect is a special object which can perform
      * transformations on the specified path. Examples may include simple
      * modifiers such as fading or pitch shifting, or more complex mathematical
@@ -40,9 +41,9 @@ namespace Phonon
      *
      * In order to use an effect, insert it into the path as follows:
      * \code
-     * AudioPath *path = new AudioPath(this);
-     * AudioEffect *effect = new AudioEffect(this);
-     * path->insertEffect(effect);
+     * Path path = Phonon::createPath(...);
+     * Effect *effect = new Effect(this);
+     * path.insertEffect(effect);
      * \endcode
      *
      * The effect will immediately begin applying it's transformations on
@@ -51,56 +52,36 @@ namespace Phonon
      * \ingroup PhononEffects
      * \author Matthias Kretz <kretz@kde.org>
      */
-    class PHONON_EXPORT Effect : public QObject
+    class PHONON_EXPORT Effect : public QObject, public MediaNode
     {
-        friend class AudioPath;
-        friend class VideoPath;
-        friend class AudioPathPrivate;
-        friend class VideoPathPrivate;
         Q_OBJECT
         K_DECLARE_PRIVATE(Effect)
 
         public:
             ~Effect();
 
-            enum Type {
-                AudioEffect,
-                VideoEffect
-            };
+//X             enum Type {
+//X                 AudioEffect,
+//X                 VideoEffect
+//X             };
 
             /**
              * QObject constructor.
              *
-             * \param description An AudioEffectDescription object to determine the
+             * \param description An EffectDescription object to determine the
              * type of effect. See \ref
              * BackendCapabilities::availableAudioEffects().
              * \param parent QObject parent
              */
-            explicit Effect(const AudioEffectDescription &description, QObject *parent = 0);
+            explicit Effect(const EffectDescription &description, QObject *parent = 0);
+
+//X             Type type() const;
 
             /**
-             * QObject constructor.
-             *
-             * \param description A VideoEffectDescription object to determine the
-             * type of effect. See \ref
-             * BackendCapabilities::availableVideoEffects().
-             * \param parent QObject parent
-             */
-            explicit Effect(const VideoEffectDescription &description, QObject *parent = 0);
-
-            Type type() const;
-
-            /**
-             * Returns the audio description of this effect. This is the same type as was
+             * Returns the description of this effect. This is the same type as was
              * passed to the constructor.
              */
-            AudioEffectDescription audioDescription() const;
-
-            /**
-             * Returns the video description of this effect. This is the same type as was
-             * passed to the constructor.
-             */
-            VideoEffectDescription videoDescription() const;
+            EffectDescription description() const;
 
             /**
              * Returns a list of parameters that this effect provides to control
@@ -109,17 +90,13 @@ namespace Phonon
              * \see EffectParameter
              * \see EffectWidget
              */
-            QList<EffectParameter> allDescriptions() const;
-            EffectParameter description(int index) const;
-            int parameterCount() const;
+            QList<EffectParameter> parameters() const;
 
-            QVariant parameterValue(int index) const;
-            void setParameterValue(int index, const QVariant &value);
+            QVariant parameterValue(const EffectParameter&) const;
+            void setParameterValue(const EffectParameter&, const QVariant &value);
 
         protected:
             Effect(EffectPrivate &dd, QObject *parent);
-
-            EffectPrivate *const k_ptr;
     };
 } //namespace Phonon
 

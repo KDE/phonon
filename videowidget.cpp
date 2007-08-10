@@ -19,11 +19,14 @@
 
 #include "videowidget.h"
 #include "videowidget_p.h"
+#include "videowidgetinterface.h"
 #include "factory.h"
 #include "phonondefs_p.h"
 #include "phononnamespace_p.h"
 
 #include <QtGui/QAction>
+
+#define PHONON_INTERFACENAME VideoWidgetInterface
 
 namespace Phonon
 {
@@ -57,8 +60,7 @@ void VideoWidget::mouseMoveEvent(QMouseEvent *)
 {
     K_D(VideoWidget);
     if (k_ptr->backendObject()) {
-        QWidget *w = 0;
-        BACKEND_GET(QWidget *, w, "widget");
+        QWidget *w = INTERFACE_CALL(widget());
         if (w && Qt::BlankCursor == w->cursor().shape()) {
             w->unsetCursor();
             d->cursorTimer.start();
@@ -69,8 +71,7 @@ void VideoWidget::mouseMoveEvent(QMouseEvent *)
 void VideoWidgetPrivate::_k_cursorTimeout()
 {
     if (m_backendObject) {
-        QWidget *w = 0;
-        pBACKEND_GET(QWidget *, w, "widget");
+        QWidget *w = pINTERFACE_CALL(widget());
         if (w && Qt::ArrowCursor == w->cursor().shape()) {
             w->setCursor(Qt::BlankCursor);
         }
@@ -89,11 +90,23 @@ void VideoWidgetPrivate::createBackendObject()
 
 #define PHONON_CLASSNAME VideoWidget
 
-PHONON_GETTER(Phonon::VideoWidget::AspectRatio, aspectRatio, d->aspectRatio)
-PHONON_SETTER(setAspectRatio, aspectRatio, Phonon::VideoWidget::AspectRatio)
+PHONON_INTERFACE_GETTER(Phonon::VideoWidget::AspectRatio, aspectRatio, d->aspectRatio)
+PHONON_INTERFACE_SETTER(setAspectRatio, aspectRatio, Phonon::VideoWidget::AspectRatio)
 
-PHONON_GETTER(Phonon::VideoWidget::ScaleMode, scaleMode, d->scaleMode)
-PHONON_SETTER(setScaleMode, scaleMode, Phonon::VideoWidget::ScaleMode)
+PHONON_INTERFACE_GETTER(Phonon::VideoWidget::ScaleMode, scaleMode, d->scaleMode)
+PHONON_INTERFACE_SETTER(setScaleMode, scaleMode, Phonon::VideoWidget::ScaleMode)
+
+PHONON_INTERFACE_GETTER(qreal, brightness, d->brightness)
+PHONON_INTERFACE_SETTER(setBrightness, brightness, qreal)
+
+PHONON_INTERFACE_GETTER(qreal, contrast, d->contrast)
+PHONON_INTERFACE_SETTER(setContrast, contrast, qreal)
+
+PHONON_INTERFACE_GETTER(qreal, hue, d->hue)
+PHONON_INTERFACE_SETTER(setHue, hue, qreal)
+
+PHONON_INTERFACE_GETTER(qreal, saturation, d->saturation)
+PHONON_INTERFACE_SETTER(setSaturation, saturation, qreal)
 
 void VideoWidget::setFullScreen(bool newFullScreen)
 {
@@ -132,8 +145,8 @@ void VideoWidget::enterFullScreen()
 
 bool VideoWidgetPrivate::aboutToDeleteBackendObject()
 {
-    pBACKEND_GET(Phonon::VideoWidget::AspectRatio, aspectRatio, "aspectRatio");
-    pBACKEND_GET(Phonon::VideoWidget::ScaleMode, scaleMode, "scaleMode");
+    aspectRatio = pINTERFACE_CALL(aspectRatio());
+    scaleMode = pINTERFACE_CALL(scaleMode());
     return AbstractVideoOutputPrivate::aboutToDeleteBackendObject();
 }
 
@@ -143,19 +156,13 @@ void VideoWidgetPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
     pDebug() << "calling setAspectRatio on the backend " << aspectRatio;
-    pBACKEND_CALL1("setAspectRatio", Phonon::VideoWidget::AspectRatio, aspectRatio);
-    pBACKEND_CALL1("setScaleMode", Phonon::VideoWidget::ScaleMode, scaleMode);
+    pINTERFACE_CALL(setAspectRatio(aspectRatio));
+    pINTERFACE_CALL(setScaleMode(scaleMode));
 
-    QWidget *w = 0;
-    pBACKEND_GET(QWidget *, w, "widget");
+    QWidget *w = pINTERFACE_CALL(widget());
     if (w) {
         layout.addWidget(w);
         q->setSizePolicy(w->sizePolicy());
-    }
-
-    int cap = 0;
-    if (pBACKEND_GET(int, cap, "overlayCapabilities")) {
-        q->setProperty("_k_overlayCapabilities", cap);
     }
 }
 
@@ -164,8 +171,7 @@ QSize VideoWidget::sizeHint()
 {
     if (k_ptr->backendObject())
     {
-        QWidget *w = 0;
-        BACKEND_GET(QWidget *, w, "widget");
+        QWidget *w = pINTERFACE_CALL(widget());
         if (w)
             return w->sizeHint();
     }
@@ -176,8 +182,7 @@ QSize VideoWidget::minimumSizeHint()
 {
     if (k_ptr->backendObject())
     {
-        QWidget *w = 0;
-        BACKEND_GET(QWidget *, w, "widget");
+        QWidget *w = pINTERFACE_CALL(widget());
         if (w)
             return w->minimumSizeHint();
     }

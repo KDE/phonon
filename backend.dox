@@ -11,10 +11,6 @@
 
 \section Member Function Documentation
 
-\subsection phonon_Backend_supportsOSD bool supportsOSD()
-Tells whether the backend implements the OSD interfaces.
-TODO: Currently not used.
-
 \subsection phonon_Backend_supportsFourcc bool supportsFourcc( quint32 fourcc )
 Tells whether the FOURCC (four character code) is supported for
 the \ref phonon_VideoDataOutput "VideoDataOutput" interface. If you return \c true, you have to be
@@ -25,14 +21,6 @@ able to return VideoFrame objects accordingly from
 output video frames in the requested format.
 \returns \c false if the video frames can not be converted into the requested
 format.
-
-\subsection phonon_Backend_supportsSubtitles bool supportsSubtitles()
-TODO: Currently not used.
-
-\subsection phonon_Backend_supportsVideo bool supportsVideo()
-Tells whether the backend is audio only or can handle video files
-and display of videos.
-\returns \c false is VideoPath, VideoEffect and so on are not implemented.
 
 \subsection phonon_Backend_availableMimeTypes QStringList availableMimeTypes()
 Lists the MIME types the backend can read and decode.
@@ -89,12 +77,6 @@ Lists the MIME types the backend can read and decode.
 	capture devices belong together this index is used.
 	\returns If there is no associated audio capture device return -1.
 
-\page phonon_AudioPath The AudioPath Class
-\ingroup Backend
-
-\page phonon_VideoPath The VideoPath Class
-\ingroup Backend
-
 \page phonon_AudioDataOutput The AudioDataOutput Class
 \ingroup Backend
 
@@ -107,7 +89,7 @@ Lists the MIME types the backend can read and decode.
 \page phonon_VideoWidget The VideoWidget Class
 \ingroup Backend
 
-\page phonon_AudioEffect The AudioEffect Class
+\page phonon_Effect The Effect Class
 \ingroup Backend
 
 \page phonon_BrightnessControl The BrightnessControl Class

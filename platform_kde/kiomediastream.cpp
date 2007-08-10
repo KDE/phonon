@@ -155,18 +155,18 @@ void KioMediaStreamPrivate::_k_bytestreamResult(KJob *job)
         QString kioErrorString = job->errorString();
         kDebug(600) << "KIO Job error: " << kioErrorString;
         QObject::disconnect(kiojob, SIGNAL(data(KIO::Job *,const QByteArray &)),
-                q, SLOT(bytestreamData(KIO::Job *,const QByteArray &)));
+                q, SLOT(_k_bytestreamData(KIO::Job *,const QByteArray &)));
         QObject::disconnect(kiojob, SIGNAL(result(KJob *)),
-                q, SLOT(bytestreamResult(KJob *)));
+                q, SLOT(_k_bytestreamResult(KJob *)));
         KIO::FileJob *filejob = qobject_cast<KIO::FileJob *>(kiojob);
         if (filejob) {
             QObject::disconnect(kiojob, SIGNAL(open(KIO::Job *)),
-                    q, SLOT(bytestreamFileJobOpen(KIO::Job *)));
+                    q, SLOT(_k_bytestreamFileJobOpen(KIO::Job *)));
             QObject::disconnect(kiojob, SIGNAL(position(KIO::Job *, KIO::filesize_t)),
-                    q, SLOT(bytestreamSeekDone(KIO::Job *, KIO::filesize_t)));
+                    q, SLOT(_k_bytestreamSeekDone(KIO::Job *, KIO::filesize_t)));
         } else {
             QObject::disconnect(kiojob, SIGNAL(totalSize(KJob *, qulonglong)),
-                    q, SLOT(bytestreamTotalSize(KJob *,qulonglong)));
+                    q, SLOT(_k_bytestreamTotalSize(KJob *,qulonglong)));
         }
         // go to ErrorState - NormalError
         q->error(NormalError, kioErrorString);

@@ -45,7 +45,7 @@ namespace Fake
             bool setOutputDevice(int newDevice);
 
         public:
-            virtual void processBuffer(const QVector<float> &buffer);
+            virtual void processBuffer(QVector<float> &buffer);
 
             void openDevice();
             void closeDevice();

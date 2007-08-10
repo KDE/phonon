@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,29 +17,35 @@
 
 */
 
-#ifndef PHONON_DEINTERLACEFILTER_H
-#define PHONON_DEINTERLACEFILTER_H
-
-#include "phonon_export.h"
-#include "effect.h"
+#ifndef MEDIANODEDESTRUCTIONHANDLER_H
+#define MEDIANODEDESTRUCTIONHANDLER_H
 
 namespace Phonon
 {
-class DeinterlaceFilterPrivate;
-
-/** \class DeinterlaceFilter deinterlacefilter.h Phonon/DeinterlaceFilter
- * Video effect to deinterlace the image.
+/**
+ * \internal
  *
- * \ingroup PhononEffects
- * \ingroup PhononVideo
+ * Callback interface to keep track of Phonon frontend object destruction.
+ *
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONON_EXPORT DeinterlaceFilter : public Effect
-{
-    Q_OBJECT
-    K_DECLARE_PRIVATE(DeinterlaceFilter)
-    PHONON_HEIR(DeinterlaceFilter)
-};
-} //namespace Phonon
 
-#endif // PHONON_DEINTERLACEFILTER_H
+class MediaNodePrivate;
+
+class MediaNodeDestructionHandler
+{
+    friend class MediaNodePrivate;
+
+public:
+    virtual ~MediaNodeDestructionHandler() {}
+protected:
+    /**
+     * \internal
+     * called from Base::~Base if this object was registered
+     * using BasePrivate::addDestructionHandler().
+     */
+    virtual void phononObjectDestroyed(MediaNodePrivate *) = 0;
+};
+}
+
+#endif // MEDIANODEDESTRUCTIONHANDLER_H

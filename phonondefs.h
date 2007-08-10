@@ -57,16 +57,6 @@ protected: \
      * \param parent Standard QObject parent.
      */ \
     classname(classname ## Private &dd, QObject *parent); \
-    /**
-     * Tells whether the backend provides an implementation of this
-     * class.
-     *
-     * \return \c true if backend provides an implementation
-     * \return \c false if the object is not implemented by the backend
-     */ \
-    bool isValid() const; \
-protected: \
-    classname##Private *const k_ptr; \
 private:
 
 /**
@@ -98,16 +88,6 @@ public: \
      * Constructs an object with the given \p parent.
      */ \
     classname(QObject *parent = 0); \
-    /**
-     * Tells whether the backend provides an implementation of this
-     * class.
-     *
-     * \return \c true if backend provides an implementation
-     * \return \c false if the object is not implemented by the backend
-     */ \
-    bool isValid() const; \
-protected: \
-    classname##Private *const k_ptr; \
 private:
 
 /**

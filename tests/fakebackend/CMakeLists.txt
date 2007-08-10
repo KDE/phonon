@@ -2,14 +2,10 @@ set(phonon_fake_PART_SRCS
    abstractaudiooutput.cpp
    audiodataoutput.cpp
    delayaudioeffect.cpp
-   audioeffect.cpp
+   effect.cpp
    audiooutput.cpp
-   audiopath.cpp
    mediaobject.cpp
    stream.cpp
-   videoeffect.cpp
-   brightnesscontrol.cpp
-   videopath.cpp
    videodataoutput.cpp
    visualization.cpp
    backend.cpp

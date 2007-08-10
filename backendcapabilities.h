@@ -81,30 +81,29 @@ namespace BackendCapabilities
      */
     PHONON_EXPORT Notifier *notifier();
 
-    /**
-     * Tells whether the backend is audio only or can handle video files
-     * and display of videos.
-     *
-     * If the backend does not support video the classes
-     * VideoPath, VideoEffect and all AbstractVideoOutput subclasses won't
-     * do anything.
-     */
-    PHONON_EXPORT bool supportsVideo();
-
-    /**
-     * Tells whether the backend implements the OSD interfaces.
-     *
-     * \todo there's no interfaces for it at this point
-     */
-    PHONON_EXPORT bool supportsOSD();
-
-    /**
-     * Tells whether the backend supports subtitle rendering on the
-     * video output.
-     *
-     * \todo there's no interfaces for it at this point
-     */
-    PHONON_EXPORT bool supportsSubtitles();
+//X     /**
+//X      * Tells whether the backend is audio only or can handle video files
+//X      * and display of videos.
+//X      *
+//X      * If the backend does not support video all AbstractVideoOutput subclasses won't
+//X      * do anything.
+//X      */
+//X     PHONON_EXPORT bool supportsVideo();
+//X 
+//X     /**
+//X      * Tells whether the backend implements the OSD interfaces.
+//X      *
+//X      * \todo there's no interfaces for it at this point
+//X      */
+//X     PHONON_EXPORT bool supportsOSD();
+//X 
+//X     /**
+//X      * Tells whether the backend supports subtitle rendering on the
+//X      * video output.
+//X      *
+//X      * \todo there's no interfaces for it at this point
+//X      */
+//X     PHONON_EXPORT bool supportsSubtitles();
 
     /**
      * Returns a list of mime types that the Backend can decode.
@@ -161,7 +160,7 @@ namespace BackendCapabilities
      * \return A list of AudioCaptureDevice objects that give a name and
      * description for every supported audio capture device.
      */
-    PHONON_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevices();
+//    PHONON_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevices();
 
     /**
      * Returns the video output devices the backend supports.
@@ -169,7 +168,7 @@ namespace BackendCapabilities
      * \return A list of VideoOutputDevice objects that give a name and
      * description for every supported video output device.
      */
-    PHONON_EXPORT QList<VideoOutputDevice> availableVideoOutputDevices();
+//    PHONON_EXPORT QList<VideoOutputDevice> availableVideoOutputDevices();
 
     /**
      * Returns the video capture devices the backend supports.
@@ -177,7 +176,7 @@ namespace BackendCapabilities
      * \return A list of VideoCaptureDevice objects that give a name and
      * description for every supported video capture device.
      */
-    PHONON_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
+//    PHONON_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
 
     /**
      * Returns the visualization effects the backend supports.
@@ -185,7 +184,7 @@ namespace BackendCapabilities
      * \return A list of VisualizationEffect objects that give a name and
      * description for every supported visualization effect.
      */
-    PHONON_EXPORT QList<VisualizationDescription> availableVisualizations();
+//    PHONON_EXPORT QList<VisualizationDescription> availableVisualizations();
 
     /**
      * Returns descriptions for the audio effects the backend supports.
@@ -193,15 +192,15 @@ namespace BackendCapabilities
      * \return A list of AudioEffectDescription objects that give a name and
      * description for every supported audio effect.
      */
-    PHONON_EXPORT QList<AudioEffectDescription> availableAudioEffects();
+    PHONON_EXPORT QList<EffectDescription> availableAudioEffects();
 
-    /**
-     * Returns descriptions for the video effects the backend supports.
-     *
-     * \return A list of VideoEffectDescription objects that give a name and
-     * description for every supported video effect.
-     */
-    PHONON_EXPORT QList<VideoEffectDescription> availableVideoEffects();
+//X     /**
+//X      * Returns descriptions for the video effects the backend supports.
+//X      *
+//X      * \return A list of VideoEffectDescription objects that give a name and
+//X      * description for every supported video effect.
+//X      */
+//X     PHONON_EXPORT QList<EffectDescription> availableVideoEffects();
 
     /**
      * Returns descriptions for the audio codecs the backend supports.
@@ -209,7 +208,7 @@ namespace BackendCapabilities
      * \return A list of AudioCodec objects that give a name and
      * description for every supported audio codec.
      */
-    PHONON_EXPORT QList<AudioCodecDescription> availableAudioCodecs();
+//    PHONON_EXPORT QList<AudioCodecDescription> availableAudioCodecs();
 
     /**
      * Returns descriptions for the video codecs the backend supports.
@@ -217,7 +216,7 @@ namespace BackendCapabilities
      * \return A list of VideoCodec objects that give a name and
      * description for every supported video codec.
      */
-    PHONON_EXPORT QList<VideoCodecDescription> availableVideoCodecs();
+//    PHONON_EXPORT QList<VideoCodecDescription> availableVideoCodecs();
 
     /**
      * Returns descriptions for the container formats the backend supports.
@@ -225,7 +224,7 @@ namespace BackendCapabilities
      * \return A list of ContainerFormat objects that give a name and
      * description for every supported container format.
      */
-    PHONON_EXPORT QList<ContainerFormatDescription> availableContainerFormats();
+//    PHONON_EXPORT QList<ContainerFormatDescription> availableContainerFormats();
 } // namespace BackendCapabilities
 } // namespace Phonon
 

@@ -23,6 +23,11 @@
 namespace Phonon
 {
 
+uint qHash (const EffectParameter &param)
+{
+    return param.id();
+}
+
 EffectParameter::EffectParameter()
     : d(new EffectParameterPrivate)
 {
@@ -30,7 +35,7 @@ EffectParameter::EffectParameter()
 
 EffectParameter::EffectParameter(int parameterId, const QString &name, Hints hints,
         const QVariant &defaultValue, const QVariant &min, const QVariant &max,
-        const QString &description)
+        const QVariantList &values, const QString &description)
     : d(new EffectParameterPrivate)
 {
     d->parameterId = parameterId;
@@ -38,6 +43,7 @@ EffectParameter::EffectParameter(int parameterId, const QString &name, Hints hin
     d->max = max;
     d->defaultValue = defaultValue;
     d->name = name;
+    d->possibleValues = values;
     d->description = description;
     d->hints = hints;
 }
@@ -62,6 +68,11 @@ bool EffectParameter::operator<(const EffectParameter &rhs) const
     return d->parameterId < rhs.d->parameterId;
 }
 
+bool EffectParameter::operator==(const EffectParameter &rhs) const
+{
+    return d->parameterId == rhs.d->parameterId;
+}
+
 bool EffectParameter::operator>(const EffectParameter &rhs) const
 {
     return d->parameterId > rhs.d->parameterId;
@@ -77,19 +88,19 @@ const QString &EffectParameter::description() const
     return d->description;
 }
 
-bool EffectParameter::isToggleControl() const
-{
-    return d->hints  & ToggledHint;
-}
-
 bool EffectParameter::isLogarithmicControl() const
 {
     return d->hints  & LogarithmicHint;
 }
 
-bool EffectParameter::isIntegerControl() const
+QVariant::Type EffectParameter::type() const
 {
-    return d->hints  & IntegerHint;
+    return d->defaultValue.type();
+}
+
+QVariantList EffectParameter::possibleValues() const
+{
+    return d->possibleValues;
 }
 
 QVariant EffectParameter::minimumValue() const
@@ -106,26 +117,6 @@ QVariant EffectParameter::defaultValue() const
 {
     return d->defaultValue;
 }
-
-//X void EffectParameter::setValue(QVariant newValue)
-//X {
-//X     Q_ASSERT(d->effect);
-//X     if (isIntegerControl())
-//X     {
-//X         const int min = qvariant_cast<int>(d->min);
-//X         const int max = qvariant_cast<int>(d->max);
-//X         const int val = qvariant_cast<int>(newValue);
-//X         newValue = qBound(min, val, max);
-//X     }
-//X     else if (!isToggleControl()) // double
-//X     {
-//X         const double min = qvariant_cast<double>(d->min);
-//X         const double max = qvariant_cast<double>(d->max);
-//X         const double val = qvariant_cast<double>(newValue);
-//X         newValue = qBound(min, val, max);
-//X     } // bool doesn't need to be bounded :)
-//X     d->effect->setValue(d->parameterId, newValue);
-//X }
 
 int EffectParameter::id() const
 {

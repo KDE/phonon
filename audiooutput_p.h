@@ -31,16 +31,16 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
     Q_DECLARE_PUBLIC(AudioOutput)
     PHONON_PRIVATECLASS
     public:
-        inline static AudioOutputPrivate *cast(BasePrivate *x)
+        inline static AudioOutputPrivate *cast(MediaNodePrivate *x)
         {
-            if (x && x->castId == BasePrivate::AudioOutputType) {
+            if (x && x->castId == MediaNodePrivate::AudioOutputType) {
                 return static_cast<AudioOutputPrivate *>(x);
             }
             return 0;
         }
 
     protected:
-        AudioOutputPrivate(CastId castId = BasePrivate::AudioOutputType)
+        AudioOutputPrivate(CastId castId = MediaNodePrivate::AudioOutputType)
             : AbstractAudioOutputPrivate(castId),
             volume(1.0),
             outputDeviceIndex(-1),

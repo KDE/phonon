@@ -21,18 +21,17 @@
 #define PHONON_FAKE_ABSTRACTVIDEOOUTPUT_H
 
 #include <phonon/experimental/videoframe.h>
+#include "videonode.h"
 
 namespace Phonon
 {
 namespace Fake
 {
 
-class AbstractVideoOutput
+class AbstractVideoOutput : public VideoNode
 {
     public:
         virtual ~AbstractVideoOutput() {}
-        virtual void processFrame(Phonon::Experimental::VideoFrame &frame) = 0;
-        virtual void *internal1(void * = 0) { return 0; }
 };
 
 }} //namespace Phonon::Fake

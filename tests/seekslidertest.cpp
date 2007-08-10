@@ -20,7 +20,7 @@
 #include "loadfakebackend.h"
 #include "../seekslider.h"
 #include "../mediaobject.h"
-#include "../audiopath.h"
+#include "../path.h"
 #include "../audiooutput.h"
 
 #include <QtCore/QObject>
@@ -60,10 +60,7 @@ void SeekSliderTest::initTestCase()
     QVERIFY(qslider != 0);
     QVERIFY(qlabel != 0);
     media = new MediaObject(this);
-    AudioPath *ap = new AudioPath(media);
-    AudioOutput *ao = new AudioOutput(Phonon::MusicCategory, media);
-    media->addAudioPath(ap);
-    ap->addOutput(ao);
+    createPath(media, new AudioOutput(Phonon::MusicCategory, media));
 }
 
 void SeekSliderTest::testEnabled()

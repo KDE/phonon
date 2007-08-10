@@ -20,14 +20,10 @@
 #include "backend.h"
 
 #include "audiodataoutput.h"
-#include "audioeffect.h"
 #include "audiooutput.h"
-#include "audiopath.h"
-#include "brightnesscontrol.h"
+#include "effect.h"
 #include "mediaobject.h"
 #include "videodataoutput.h"
-#include "videoeffect.h"
-#include "videopath.h"
 #include "videowidget.h"
 #include "visualization.h"
 #include "volumefadereffect.h"
@@ -35,11 +31,14 @@
 #include <QtCore/QSet>
 #include <QtCore/QVariant>
 
+#ifdef PHONON_MAKE_QT_ONLY_BACKEND
+#include <QtCore/QtPlugin>
+Q_EXPORT_PLUGIN2(phonon_fake, Phonon::Fake::Backend);
+#else
 #include <kgenericfactory.h>
-#include <klocale.h>
-
 typedef KGenericFactory<Phonon::Fake::Backend, Phonon::Fake::Backend> FakeBackendFactory;
 K_EXPORT_COMPONENT_FACTORY(phonon_fake, FakeBackendFactory("fakebackend"))
+#endif
 
 namespace Phonon
 {
@@ -50,8 +49,8 @@ Backend::Backend(QObject *parent, const QStringList &)
     : QObject(parent)
 {
     setProperty("identifier",     QLatin1String("phonon_fake"));
-    setProperty("backendName",    i18n("Fake"));
-    setProperty("backendComment", i18n("Testing Backend"));
+    setProperty("backendName",    QLatin1String("Fake"));
+    setProperty("backendComment", QLatin1String("Testing Backend"));
     setProperty("backendVersion", QLatin1String("0.1"));
     setProperty("backendIcon",    QLatin1String(""));
     setProperty("backendWebsite", QLatin1String("http://multimedia.kde.org/"));
@@ -66,8 +65,6 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
     switch (c) {
     case MediaObjectClass:
         return new MediaObject(parent);
-    case AudioPathClass:
-        return new AudioPath(parent);
     case VolumeFaderEffectClass:
         return new VolumeFaderEffect(parent);
     case AudioOutputClass:
@@ -80,18 +77,10 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
         return new AudioDataOutput(parent);
     case VisualizationClass:
         return new Visualization(parent);
-    case VideoPathClass:
-        return new VideoPath(parent);
-    case BrightnessControlClass:
-        return new BrightnessControl(parent);
     case VideoDataOutputClass:
         return new VideoDataOutput(parent);
-    case DeinterlaceFilterClass:
-        return 0;//new DeinterlaceFilter(parent);
-    case AudioEffectClass:
-        return new AudioEffect(args[0].toInt(), parent);
-    case VideoEffectClass:
-        return new VideoEffect(args[0].toInt(), parent);
+    case EffectClass:
+        return new Effect(args[0].toInt(), parent);
     case VideoWidgetClass:
         return new VideoWidget(qobject_cast<QWidget *>(parent));
     }
@@ -147,7 +136,7 @@ QSet<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
             << 10006 << 10007
             << 10008 << 10009;
         break;
-    case Phonon::AudioCaptureDeviceType:
+/*    case Phonon::AudioCaptureDeviceType:
         set << 20000 << 20001;
         break;
     case Phonon::VideoOutputDeviceType:
@@ -160,12 +149,9 @@ QSet<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
     case Phonon::AudioCodecType:
     case Phonon::VideoCodecType:
     case Phonon::ContainerFormatType:
-        break;
-    case Phonon::AudioEffectType:
+        break;*/
+    case Phonon::EffectType:
         set << 0x7F000001;
-        break;
-    case Phonon::VideoEffectType:
-        set << 0x7E000001;
         break;
     }
     return set;
@@ -219,7 +205,7 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
             break;
         }
         break;
-    case Phonon::AudioCaptureDeviceType:
+/*    case Phonon::AudioCaptureDeviceType:
         switch (index) {
         case 20000:
             ret.insert("name", QLatin1String("Soundcard"));
@@ -266,8 +252,8 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
     case Phonon::VideoCodecType:
         break;
     case Phonon::ContainerFormatType:
-        break;
-    case Phonon::AudioEffectType:
+        break;*/
+    case Phonon::EffectType:
         switch (index) {
         case 0x7F000001:
             ret.insert("name", QLatin1String("Delay"));
@@ -275,16 +261,76 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
             break;
         }
         break;
-    case Phonon::VideoEffectType:
-        switch (index) {
-        case 0x7E000001:
-            ret.insert("name", QLatin1String("VideoEffect1"));
-            ret.insert("description", QLatin1String("Description 1"));
-            break;
-        }
-        break;
     }
     return ret;
+}
+
+bool Backend::startConnectionChange(QSet<QObject *> objects)
+{
+    bool success = true;
+    foreach (QObject *o, objects) {
+        MediaObject *mo = qobject_cast<MediaObject *>(o);
+        if (mo) {
+            success &= mo->wait();
+        }
+    }
+    return success;
+}
+
+bool Backend::connectNodes(QObject *source, QObject *sink)
+{
+    MediaObject *mo = qobject_cast<MediaObject *>(source);
+    AudioNode *an = qobject_cast<AudioNode *>(sink);
+    if (an && !an->hasInput()) {
+        if (mo)
+            mo->addAudioNode(an);
+        else if (Effect *ae = qobject_cast<Effect *>(source))
+            ae->setAudioSink(an);
+        else
+            return false;
+        return true;
+    }
+    VideoNode *vn = qobject_cast<VideoNode *>(sink);
+    if (vn && !vn->hasInput()) {
+        if (mo)
+            mo->addVideoNode(vn);
+        else
+            return false;
+        return true;
+    }
+    return false;
+}
+
+bool Backend::disconnectNodes(QObject *source, QObject *sink)
+{
+    MediaObject *mo = qobject_cast<MediaObject *>(source);
+
+    AudioNode *an = qobject_cast<AudioNode *>(sink);
+    if (an) {
+        if (mo)
+            return mo->removeAudioNode(an);
+        else if (Effect *ae = qobject_cast<Effect *>(source))
+            return ae->setAudioSink(0);
+        else
+            return false;
+    }
+    VideoNode *vn = qobject_cast<VideoNode *>(sink);
+    if (vn && mo) {
+        return mo->removeVideoNode(vn);
+    }
+    return false;
+}
+
+bool Backend::endConnectionChange(QSet<QObject *> objects)
+{
+    bool success = true;
+    foreach (QObject *o, objects) {
+        MediaObject *mo = qobject_cast<MediaObject *>(o);
+        if (mo) {
+            success &= mo->done();
+        }
+    }
+    return success;
 }
 
 void Backend::freeSoundcardDevices()
@@ -296,6 +342,4 @@ void Backend::freeSoundcardDevices()
 
 }}
 
-#include "backend.moc"
-
-// vim: sw=4 ts=4
+#include "moc_backend.cpp"

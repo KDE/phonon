@@ -20,17 +20,4 @@
 #ifndef AUDIODATAOUTPUTTEST_H
 #define AUDIODATAOUTPUTTEST_H
 
-#include <QtCore/QObject>
-
-class AudioDataOutputTest : public QObject
-{
-    Q_OBJECT
-    private slots:
-        void initTestCase();
-        void testSampleRate();
-        void testFormat();
-        void testDataSize();
-        void cleanupTestCase();
-};
-
 #endif // AUDIODATAOUTPUTTEST_H

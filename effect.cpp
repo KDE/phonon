@@ -19,43 +19,28 @@
 #include "effect.h"
 #include "effect_p.h"
 #include "effectparameter.h"
+#include "effectinterface.h"
 #include "factory.h"
+
+#define PHONON_INTERFACENAME EffectInterface
 
 namespace Phonon
 {
 Effect::~Effect()
 {
-    delete k_ptr;
 }
 
-Effect::Effect(const AudioEffectDescription &description, QObject *parent)
-    : QObject(parent)
-    , k_ptr(new EffectPrivate)
+Effect::Effect(const EffectDescription &description, QObject *parent)
+    : QObject(parent), MediaNode(*new EffectPrivate)
 {
     K_D(Effect);
-    d->q_ptr = this;
-    d->type = Effect::AudioEffect;
-    d->id = description.index();
-    d->createBackendObject();
-}
-
-Effect::Effect(const VideoEffectDescription &description, QObject *parent)
-    : QObject(parent)
-    , k_ptr(new EffectPrivate)
-{
-    K_D(Effect);
-    d->q_ptr = this;
-    d->type = Effect::VideoEffect;
-    d->id = description.index();
+    d->description = description;
     d->createBackendObject();
 }
 
 Effect::Effect(EffectPrivate &dd, QObject *parent)
-    : QObject(parent)
-    , k_ptr(&dd)
+    : QObject(parent), MediaNode(dd)
 {
-    K_D(Effect);
-    d->q_ptr = this;
 }
 
 void EffectPrivate::createBackendObject()
@@ -63,103 +48,60 @@ void EffectPrivate::createBackendObject()
     if (m_backendObject)
         return;
     Q_Q(Effect);
-    switch (type) {
-    case Effect::AudioEffect:
-        m_backendObject = Factory::createAudioEffect(id, q);
-        break;
-    case Effect::VideoEffect:
-        m_backendObject = Factory::createVideoEffect(id, q);
-        break;
-    }
+    m_backendObject = Factory::createEffect(description.index(), q);
     if (m_backendObject) {
         setupBackendObject();
     }
 }
 
-Effect::Type Effect::type() const
+//X Effect::Type Effect::type() const
+//X {
+//X     K_D(const Effect);
+//X     return d->type;
+//X }
+//X 
+EffectDescription Effect::description() const
 {
     K_D(const Effect);
-    return d->type;
+    return d->description;
 }
 
-AudioEffectDescription Effect::audioDescription() const
+QList<EffectParameter> Effect::parameters() const
 {
     K_D(const Effect);
-    if (d->type != Effect::AudioEffect)
-        return AudioEffectDescription();
-    return AudioEffectDescription::fromIndex(d->id);
-}
-
-VideoEffectDescription Effect::videoDescription() const
-{
-    K_D(const Effect);
-    if (d->type != Effect::VideoEffect)
-        return VideoEffectDescription();
-    return VideoEffectDescription::fromIndex(d->id);
-}
-
-QList<EffectParameter> Effect::allDescriptions() const
-{
-    K_D(const Effect);
-    QList<EffectParameter> ret;
     // there should be an iface object, but better be safe for those backend
     // switching corner-cases: when the backend switches the new backend might
     // not support this effect -> no iface object
     if (d->m_backendObject) {
-        BACKEND_GET(QList<EffectParameter>, ret, "allDescriptions");
+        return INTERFACE_CALL(parameters());
     }
-    return ret;
+    return QList<EffectParameter>();
 }
 
-EffectParameter Effect::description(int idx) const
-{
-    K_D(const Effect);
-    EffectParameter ret;
-    if (d->m_backendObject) {
-        BACKEND_GET1(EffectParameter, ret, "description", int, idx);
-    }
-    return ret;
-}
-
-int Effect::parameterCount() const
-{
-    K_D(const Effect);
-    if (d->m_backendObject) {
-        int ret;
-        BACKEND_GET(int, ret, "parameterCount");
-        return ret;
-    }
-    return 0;
-}
-
-QVariant Effect::parameterValue(int index) const
+QVariant Effect::parameterValue(const EffectParameter &param) const
 {
     K_D(const Effect);
     if (!d->m_backendObject) {
-        return d->parameterValues[index];
+        return d->parameterValues[param];
     }
-    QVariant ret;
-    BACKEND_GET1(QVariant, ret, "parameterValue", int, index);
-    return ret;
+    return INTERFACE_CALL(parameterValue(param));
 }
 
-void Effect::setParameterValue(int index, const QVariant &newValue)
+void Effect::setParameterValue(const EffectParameter &param, const QVariant &newValue)
 {
     K_D(Effect);
-    if (k_ptr->backendObject()) {
-        BACKEND_CALL2("setParameterValue", int, index, QVariant, newValue);
-    } else {
-        d->parameterValues[index] = newValue;
+    d->parameterValues[param] = newValue;
+    if (d->backendObject()) {
+        INTERFACE_CALL(setParameterValue(param, newValue));
     }
 }
 
 bool EffectPrivate::aboutToDeleteBackendObject()
 {
     if (m_backendObject) {
-        int count;
-        pBACKEND_GET(int, count, "parameterCount");
-        for (int i = 0; i < count; ++i) {
-            pBACKEND_GET1(QVariant, parameterValues[i], "parameterValue", int, i);
+        const QList<EffectParameter> parameters = pINTERFACE_CALL(parameters());
+        foreach (const EffectParameter &p, parameters) {
+            parameterValues[p] = pINTERFACE_CALL(parameterValue(p));
         }
     }
     return true;
@@ -170,10 +112,9 @@ void EffectPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
 
     // set up attributes
-    int count;
-    pBACKEND_GET(int, count, "parameterCount");
-    for (int i = 0; i < count; ++i) {
-        pBACKEND_CALL2("setParameterValue", int, i, QVariant, parameterValues[i]);
+    const QList<EffectParameter> parameters = pINTERFACE_CALL(parameters());
+    foreach (const EffectParameter &p, parameters) {
+        pINTERFACE_CALL(setParameterValue(p, parameterValues[p]));
     }
 }
 

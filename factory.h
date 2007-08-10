@@ -31,7 +31,7 @@ class QIcon;
 namespace Phonon
 {
     class PlatformPlugin;
-    class BasePrivate;
+    class MediaNodePrivate;
     class AbstractMediaStream;
 
 /**
@@ -80,17 +80,11 @@ namespace Factory
      */
     QObject *createMediaObject(QObject *parent = 0);
     /**
-     * Create a new backend object for a AudioPath.
+     * Create a new backend object for a Effect.
      *
-     * \return a pointer to the AudioPath the backend provides.
+     * \return a pointer to the Effect the backend provides.
      */
-    QObject *createAudioPath(QObject *parent = 0);
-    /**
-     * Create a new backend object for a AudioEffect.
-     *
-     * \return a pointer to the AudioEffect the backend provides.
-     */
-    QObject *createAudioEffect(int effectId, QObject *parent = 0);
+    QObject *createEffect(int effectId, QObject *parent = 0);
     /**
      * Create a new backend object for a VolumeFaderEffect.
      *
@@ -115,30 +109,6 @@ namespace Factory
      * \return a pointer to the Visualization the backend provides.
      */
     PHONON_EXPORT QObject *createVisualization(QObject *parent = 0);
-    /**
-     * Create a new backend object for a VideoPath.
-     *
-     * \return a pointer to the VideoPath the backend provides.
-     */
-    QObject *createVideoPath(QObject *parent = 0);
-    /**
-     * Create a new backend object for a VideoEffect.
-     *
-     * \return a pointer to the VideoEffect the backend provides.
-     */
-    QObject *createVideoEffect(int effectId, QObject *parent = 0);
-    /**
-     * Create a new backend object for a BrightnessControl.
-     *
-     * \return a pointer to the BrightnessControl the backend provides.
-     */
-    QObject *createBrightnessControl(QObject *parent = 0);
-    /**
-     * Create a new backend object for a BrightnessControl.
-     *
-     * \return a pointer to the BrightnessControl the backend provides.
-     */
-    QObject *createDeinterlaceFilter(QObject *parent = 0);
     /**
      * Create a new backend object for a VideoDataOutput.
      *
@@ -199,8 +169,8 @@ namespace Factory
 
     bool isMimeTypeAvailable(const QString &mimeType);
 
-    PHONON_EXPORT void registerFrontendObject(BasePrivate *);
-    PHONON_EXPORT void deregisterFrontendObject(BasePrivate *);
+    PHONON_EXPORT void registerFrontendObject(MediaNodePrivate *);
+    PHONON_EXPORT void deregisterFrontendObject(MediaNodePrivate *);
 
     PHONON_EXPORT void createBackend(const QString &library, const QString &version = QString());
 

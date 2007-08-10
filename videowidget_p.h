@@ -44,8 +44,12 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 
         VideoWidgetPrivate(VideoWidget *parent)
             : layout(parent),
-            aspectRatio(VideoWidget::AspectRatioAuto),
-            scaleMode(VideoWidget::FitInView)
+              aspectRatio(VideoWidget::AspectRatioAuto),
+              scaleMode(VideoWidget::FitInView),
+              brightness(0),
+              contrast(0),
+              hue(0),
+              saturation(0)
         {
             layout.setMargin(0);
             cursorTimer.setInterval(1000); // 1s timeout until the cursor disappears
@@ -57,6 +61,11 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
         VideoWidget::ScaleMode scaleMode;
         QTimer cursorTimer;
         bool changeFlags;
+
+        qreal brightness;
+        qreal contrast;
+        qreal hue;
+        qreal saturation;
 
     private:
         void init();

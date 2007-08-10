@@ -39,8 +39,7 @@ namespace Experimental
     /** \class VideoWidget videowidget.h Phonon/VideoWidget
      * \short Widget to display video.
      *
-     * This widget shows the video signal and provides an object that can be
-     * plugged into the VideoPath.
+     * This widget shows the video signal.
      *
      * \code
      * VideoWidget *vwidget = new VideoWidget(this);
@@ -94,6 +93,31 @@ namespace Experimental
          */
         Q_PROPERTY(ScaleMode scaleMode READ scaleMode WRITE setScaleMode)
 
+        /**
+         * This property holds brightness of the video.
+         *
+         * Default is 0. Acceptable values are in range of -1, 1.
+         */
+        Q_PROPERTY(qreal brightness READ brightness WRITE setBrightness)
+        /**
+         * This property holds the contrast of the video.
+         *
+         * Default is 0. Acceptable values are in range of -1, 1.
+         */
+        Q_PROPERTY(qreal contrast READ contrast WRITE setContrast)
+        /**
+         * This property holds the hue of the video.
+         *
+         * Default is 0. Acceptable values are in range of -1, 1.
+         */
+        Q_PROPERTY(qreal hue READ hue WRITE setHue)
+        /**
+         * This property holds saturation of the video.
+         *
+         * Default is 0. Acceptable values are in range of -1, 1.
+         */
+        Q_PROPERTY(qreal saturation READ saturation WRITE setSaturation)
+
         public:
             /**
              * Defines the width:height to be used for the video.
@@ -142,6 +166,11 @@ namespace Experimental
             AspectRatio aspectRatio() const;
             ScaleMode scaleMode() const;
 
+            qreal brightness() const;
+            qreal contrast() const;
+            qreal hue() const;
+            qreal saturation() const;
+
             //TODO: bar colors property
         public Q_SLOTS:
             void setFullScreen(bool fullscreen);
@@ -158,6 +187,11 @@ namespace Experimental
 
             void setAspectRatio(AspectRatio);
             void setScaleMode(ScaleMode);
+
+            void setBrightness(qreal value);
+            void setContrast(qreal value);
+            void setHue(qreal value);
+            void setSaturation(qreal value);
 
         protected:
             /**

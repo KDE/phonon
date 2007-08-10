@@ -21,13 +21,9 @@
 #define MEDIAOBJECT_P_H
 
 #include "mediaobject.h"
-#include "base_p.h"
-#include <QtCore/QUrl>
-#include <QtCore/QTimer>
-#include <QtCore/QHash>
+#include "medianode_p.h"
 #include <QtCore/QString>
-#include <QtCore/QMap>
-#include "basedestructionhandler.h"
+#include "medianodedestructionhandler.h"
 #include "mediasource.h"
 #include <QtCore/QQueue>
 
@@ -37,7 +33,7 @@ class KioFallback;
 class KioFallbackImpl;
 class FrontendInterfacePrivate;
 
-class MediaObjectPrivate : public BasePrivate, private BaseDestructionHandler
+class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestructionHandler
 {
     friend class KioFallbackImpl;
     friend class AbstractMediaStream;
@@ -48,7 +44,7 @@ class MediaObjectPrivate : public BasePrivate, private BaseDestructionHandler
     protected:
         virtual bool aboutToDeleteBackendObject();
         virtual void createBackendObject();
-        virtual void phononObjectDestroyed(BasePrivate *);
+        virtual void phononObjectDestroyed(MediaNodePrivate *);
         PHONON_EXPORT void setupBackendObject();
 
         void streamError(Phonon::ErrorType, const QString &);
@@ -59,15 +55,9 @@ class MediaObjectPrivate : public BasePrivate, private BaseDestructionHandler
         PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
 
         MediaObjectPrivate()
-            : q_ptr(0),
-            state(Phonon::LoadingState),
+            : state(Phonon::LoadingState),
             currentTime(0),
             tickInterval(0),
-            videoPaths(),
-            audioPaths(),
-            currentAudioStream(),
-            currentVideoStream(),
-            currentSubtitleStream(),
             metaData(),
             errorOverride(false),
             errorString(),
@@ -79,21 +69,16 @@ class MediaObjectPrivate : public BasePrivate, private BaseDestructionHandler
         {
         }
 
-        MediaObject *q_ptr;
         State state;
         qint64 currentTime;
         qint32 tickInterval;
-        QList<VideoPath *> videoPaths;
-        QList<AudioPath *> audioPaths;
-        QHash<AudioPath *, QString> currentAudioStream;
-        QHash<VideoPath *, QString> currentVideoStream;
-        QHash<VideoPath *, QString> currentSubtitleStream;
+        //AudioStreamDescription currentAudioStream;
+        //VideoStreamDescription currentVideoStream;
+        //SubtitleStreamDescription currentSubtitleStream;
         QMultiMap<QString, QString> metaData;
         bool errorOverride;
         QString errorString;
         ErrorType errorType;
-        QUrl url;
-        QString mediaDevice;
         qint32 prefinishMark;
         qint32 transitionTime;
         AbstractMediaStream *kiofallback;

@@ -18,7 +18,6 @@
 */
 
 #include "visualization.h"
-#include "audiopath.h"
 #include "abstractvideooutput.h"
 
 namespace Phonon
@@ -41,23 +40,7 @@ void Visualization::setVisualization(int newVisualization)
     m_visualization = newVisualization;
 }
 
-void Visualization::setAudioPath(QObject *audioPath)
-{
-    Q_ASSERT(audioPath);
-    AudioPath *ap = qobject_cast<AudioPath *>(audioPath);
-    Q_ASSERT(ap);
-    m_audioPath = ap;
-}
-
-void Visualization::setVideoOutput(QObject *videoOutputIface)
-{
-    Q_ASSERT(videoOutputIface);
-    AbstractVideoOutput *vo = qobject_cast<Phonon::Fake::AbstractVideoOutput *>(videoOutputIface);
-    Q_ASSERT(vo);
-    m_videoOutput = vo;
-}
-
 }} //namespace Phonon::Fake
 
-#include "visualization.moc"
+#include "moc_visualization.cpp"
 // vim: sw=4 ts=4

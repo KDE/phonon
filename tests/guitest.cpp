@@ -20,9 +20,8 @@
 #include "guitest.h"
 
 #include <phonon/mediaobject.h>
-#include <phonon/audiopath.h>
+#include <phonon/path.h>
 #include <phonon/audiooutput.h>
-#include <phonon/videopath.h>
 #include <phonon/backendcapabilities.h>
 #include <phonon/volumefadereffect.h>
 #include <phonon/videowidget.h>
@@ -265,7 +264,6 @@ void OutputWidget::deviceChange(int modelIndex)
 
 PathWidget::PathWidget(QWidget *parent)
     : QFrame(parent)
-    , m_path(new AudioPath(this))
 {
     setFrameShape(QFrame::Box);
     setFrameShadow(QFrame::Raised);
@@ -274,7 +272,7 @@ PathWidget::PathWidget(QWidget *parent)
 
     m_effectComboBox = new QComboBox(this);
     layout->addWidget(m_effectComboBox);
-    QList<AudioEffectDescription> effectList = BackendCapabilities::availableAudioEffects();
+    QList<EffectDescription> effectList = BackendCapabilities::availableAudioEffects();
     m_effectComboBox->setModel(new AudioEffectDescriptionModel(effectList, m_effectComboBox));
 
     QPushButton *addButton = new QPushButton(this);
@@ -294,16 +292,15 @@ void PathWidget::addEffect()
     if (current < 0) {
         return;
     }
-    QList<AudioEffectDescription> effectList = BackendCapabilities::availableAudioEffects();
+    QList<EffectDescription> effectList = BackendCapabilities::availableAudioEffects();
     if (current < effectList.size()) {
-        Effect *effect = new Effect(effectList[current], m_path);
+        Effect *effect = m_path.insertEffect(effectList[current]);
         QGroupBox *gb = new QGroupBox(effectList[current].name(), this);
         layout()->addWidget(gb);
         gb->setFlat(true);
         gb->setCheckable(true);
         gb->setChecked(true);
         (new QHBoxLayout(gb))->addWidget(new EffectWidget(effect, gb));
-        m_path->insertEffect(effect);
         gb->setProperty("AudioEffect", QVariant::fromValue(static_cast<QObject *>(effect)));
         connect(gb, SIGNAL(toggled(bool)), SLOT(effectToggled(bool)));
     }
@@ -328,25 +325,41 @@ void PathWidget::effectToggled(bool checked)
 
 void PathWidget::addVolumeFader()
 {
-    VolumeFaderEffect *effect = new VolumeFaderEffect(m_path);
+    VolumeFaderEffect *effect = new VolumeFaderEffect(this);
     QGroupBox *gb = new QGroupBox("VolumeFader", this);
     layout()->addWidget(gb);
     gb->setFlat(true);
     gb->setCheckable(true);
     gb->setChecked(true);
     (new QHBoxLayout(gb))->addWidget(new EffectWidget(effect, gb));
-    m_path->insertEffect(effect);
+    m_path.insertEffect(effect);
     gb->setProperty("AudioEffect", QVariant::fromValue(static_cast<QObject *>(effect)));
     connect(gb, SIGNAL(toggled(bool)), SLOT(effectToggled(bool)));
 }
 
 bool PathWidget::connectOutput(OutputWidget *w)
 {
-    return m_path->addOutput(w->output());
+    if (m_sink && m_path.isValid()) {
+        m_path.disconnect();
+    }
+    m_sink = w->output();
+    if (m_source) {
+        m_path = createPath(m_source, m_sink);
+        return m_path.isValid();
+    }
+    return true;
+}
+
+bool PathWidget::connectInput(MediaObject *m)
+{
+    m_source = m;
 }
 
 bool ProducerWidget::connectPath(PathWidget *w)
 {
+    if (m_audioPath)
+    m_audioPath = w->path;
+    return w->connectInput(m_media);
     if (m_media)
     {
         if (m_media->addAudioPath(w->path())) {
@@ -364,7 +377,6 @@ ProducerWidget::ProducerWidget(QWidget *parent)
     : QFrame(parent),
     m_media(0),
     m_length(-1),
-    m_vpath(0),
     m_vout(0),
     m_titleWidget(0),
     m_chapterWidget(0),
@@ -479,6 +491,7 @@ ProducerWidget::ProducerWidget(QWidget *parent)
 
 ProducerWidget::~ProducerWidget()
 {
+    delete m_vout;
     delete m_media;
 }
 
@@ -496,20 +509,16 @@ void ProducerWidget::tick(qint64 t)
 
 void ProducerWidget::checkVideoWidget()
 {
-    if (m_media->hasVideo() && BackendCapabilities::supportsVideo()) {
-        VideoPath *m_vpath = new VideoPath(m_media);
-        m_media->addVideoPath(m_vpath);
-        VideoWidget *m_vout = new VideoWidget(0);
+    if (m_media->hasVideo()) {
+        delete m_vout;
+        m_vout = new VideoWidget(0);
         m_vout->setAttribute(Qt::WA_QuitOnClose, false);
-        connect(m_vpath, SIGNAL(destroyed()), m_vout, SLOT(deleteLater()));
-        m_vpath->addOutput(m_vout);
-
         m_vout->setMinimumSize(160, 120);
         m_vout->resize(m_vout->sizeHint());
         m_vout->setFullScreen(false);
         m_vout->show();
-    } else if (m_vpath) {
-        delete m_vpath;
+
+        m_vpath = createPath(m_media, m_vout);
     }
 }
 

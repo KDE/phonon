@@ -18,13 +18,11 @@
 */
 
 #include "videowidget.h"
-#include <phonon/experimental/overlayapi.h>
 #include <QtCore/QEvent>
 #include <QtGui/QPalette>
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
 #include <QtGui/QBoxLayout>
-#include <kdebug.h>
 
 namespace Phonon
 {
@@ -32,7 +30,7 @@ namespace Fake
 {
 
 VideoWidget::VideoWidget(QWidget *parent)
-    : QWidget(parent), overlay(0)
+    : QWidget(parent), overlay(0), m_brightness(0.), m_hue(0.), m_contrast(0.), m_saturation(0.)
 {
     QPalette p = palette();
     p.setColor(QPalette::Window, Qt::blue);
@@ -97,45 +95,87 @@ void VideoWidget::setScaleMode(Phonon::VideoWidget::ScaleMode scaleMode)
     m_scaleMode = scaleMode;
 }
 
+qreal VideoWidget::brightness() const
+{
+    return m_brightness;
+}
+
+void VideoWidget::setBrightness(qreal b)
+{
+    m_brightness = b;
+}
+
+qreal VideoWidget::contrast() const
+{
+    return m_contrast;
+}
+
+void VideoWidget::setContrast(qreal c)
+{
+    m_contrast = c;
+}
+
+qreal VideoWidget::hue() const
+{
+    return m_hue;
+}
+
+void VideoWidget::setHue(qreal h)
+{
+    m_hue = h;
+}
+
+qreal VideoWidget::saturation() const
+{
+    return m_saturation;
+}
+
+void VideoWidget::setSaturation(qreal s)
+{
+    m_saturation = s;
+}
+
 void VideoWidget::processFrame(Phonon::Experimental::VideoFrame &frame)
 {
-    switch(frame.fourcc)
+    switch(frame.colorspace)
     {
-    case 0x00000000:
+    case Phonon::Experimental::VideoFrame::Format_RGBA8:
         {
-            QImage image(reinterpret_cast<uchar *>(frame.data.data()), frame.width, frame.height, QImage::Format_RGB32);
+            QImage image(reinterpret_cast<uchar *>(frame.data.data()), frame.width, frame.height,
+                         QImage::Format_RGB32);
             image = image.scaled(m_videoSize, Qt::IgnoreAspectRatio, Qt::FastTransformation);
             m_pixmap = QPixmap::fromImage(image);
             repaint();
         }
         break;
     default:
-        kError(604) << "video frame format not implemented" << endl;
+//        kError(604) << "video frame format not implemented" << endl;
+        break;
     }
 }
 
-int VideoWidget::overlayCapabilities() const
-{
-    return Experimental::OverlayApi::OverlayFull;
-}
-
-bool VideoWidget::createOverlay(QWidget *widget, int type)
-{
-    if ((overlay != 0) || (type != Experimental::OverlayApi::OverlayFull)) {
-        return false;
-    }
-
-    if (layout() == 0) {
-        QLayout *layout = new QVBoxLayout(this);
-        layout->setMargin(0);
-        setLayout(layout);
-    }
-
-    layout()->addWidget(widget);
-    overlay = widget;
-
-    return true;
-}
+//X int VideoWidget::overlayCapabilities() const
+//X {
+//X     return Experimental::OverlayApi::OverlayFull;
+//X }
+//X 
+//X bool VideoWidget::createOverlay(QWidget *widget, int type)
+//X {
+//X     if ((overlay != 0) || (type != Experimental::OverlayApi::OverlayFull)) {
+//X         return false;
+//X     }
+//X 
+//X     if (layout() == 0) {
+//X         QLayout *layout = new QVBoxLayout(this);
+//X         layout->setMargin(0);
+//X         setLayout(layout);
+//X     }
+//X 
+//X     layout()->addWidget(widget);
+//X     overlay = widget;
+//X 
+//X     return true;
+//X }
 
 void VideoWidget::childEvent(QChildEvent *event)
 {
@@ -144,7 +184,7 @@ void VideoWidget::childEvent(QChildEvent *event)
     QWidget::childEvent(event);
 }
 
-void VideoWidget::paintEvent(QPaintEvent *ev)
+void VideoWidget::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
     p.drawPixmap(0, 0, m_pixmap);
@@ -158,5 +198,5 @@ void VideoWidget::resizeEvent(QResizeEvent *ev)
 
 }} //namespace Phonon::Fake
 
-#include "videowidget.moc"
+#include "moc_videowidget.cpp"
 // vim: sw=4 ts=4

@@ -21,19 +21,18 @@
 #define PHONON_ABSTRACTAUDIOOUTPUT_P_H
 
 #include "abstractaudiooutput.h"
-#include "base_p.h"
+#include "medianode_p.h"
+#include "phonondefs_p.h"
 
 namespace Phonon
 {
-class AbstractAudioOutputPrivate : public BasePrivate
+class AbstractAudioOutputPrivate : public MediaNodePrivate
 {
     Q_DECLARE_PUBLIC(AbstractAudioOutput)
     PHONON_PRIVATEABSTRACTCLASS
     protected:
-        AbstractAudioOutput *q_ptr;
         AbstractAudioOutputPrivate(CastId castId = AbstractAudioOutputPrivateType)
-            : BasePrivate(castId),
-            q_ptr(0)
+            : MediaNodePrivate(castId)
         {
         }
 };

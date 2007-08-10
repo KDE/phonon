@@ -26,10 +26,9 @@
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
 #include <QtTest/QSignalSpy>
-#include <phonon/audiopath.h>
+#include <phonon/path.h>
 #include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
-#include <phonon/videopath.h>
 
 #include <cstdlib>
 #include <unistd.h>
@@ -70,10 +69,6 @@ class MediaObjectTest : public QObject
         void cleanupTestCase();
 
     private:
-        void setMedia();
-        void addPaths();
-        void initOutput();
-
         void startPlayback(Phonon::State currentState = Phonon::StoppedState);
         void stopPlayback(Phonon::State currentState);
         void pausePlayback();
@@ -101,6 +96,7 @@ static qint32 castQVariantToInt32(const QVariant &variant)
 
 void MediaObjectTest::init()
 {
+    QCOMPARE(m_media->outputPaths().size(), 1);
     if (m_media->state() == Phonon::ErrorState) {
         m_media->setCurrentSource(m_url);
         if (m_media->state() == Phonon::ErrorState) {
@@ -212,13 +208,6 @@ void MediaObjectTest::initTestCase()
     QVERIFY(m_stateChangedSignalSpy->isValid());
     m_stateChangedSignalSpy->clear();
 
-    setMedia();
-    addPaths();
-    initOutput();
-}
-
-void MediaObjectTest::setMedia()
-{
     QSignalSpy totalTimeChangedSignalSpy(m_media, SIGNAL(totalTimeChanged(qint64)));
     QVERIFY(m_media->queue().isEmpty());
     QCOMPARE(m_media->currentSource().type(), MediaSource::Invalid);
@@ -229,16 +218,14 @@ void MediaObjectTest::setMedia()
     QCOMPARE(m_media->currentSource().url(), m_url);
     int emits = m_stateChangedSignalSpy->count();
     Phonon::State s = m_media->state();
-    if (s == Phonon::LoadingState)
-    {
+    if (s == Phonon::LoadingState) {
         // still in LoadingState, there should be no state change
         QCOMPARE(emits, 0);
         QTest::kWaitForSignal(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
         emits = m_stateChangedSignalSpy->count();
         s = m_media->state();
     }
-    if (s != Phonon::LoadingState)
-    {
+    if (s != Phonon::LoadingState) {
         // there should exactly be one state change
         QCOMPARE(emits, 1);
         QList<QVariant> args = m_stateChangedSignalSpy->takeFirst();
@@ -247,8 +234,9 @@ void MediaObjectTest::setMedia()
 
         QCOMPARE(Phonon::LoadingState, oldstate);
         QCOMPARE(s, newstate);
-        if (Phonon::ErrorState == s)
+        if (Phonon::ErrorState == s) {
             QFAIL("Loading the URL put the MediaObject into the ErrorState. Check that PHONON_TESTURL is set to a valid URL.");
+        }
         QCOMPARE(Phonon::StoppedState, s);
         QCOMPARE(m_stateChangedSignalSpy->count(), 0);
 
@@ -256,11 +244,16 @@ void MediaObjectTest::setMedia()
         QVERIFY(totalTimeChangedSignalSpy.count() > 0);
         args = totalTimeChangedSignalSpy.takeLast();
         QCOMPARE(m_media->totalTime(), castQVariantToInt64(args.at(0)));
-    }
-    else
-    {
+    } else {
         QFAIL("Still in LoadingState after a stateChange signal was emitted. Cannot go on.");
     }
+
+    // AudioOutput is needed else the backend might have no time source
+    AudioOutput *audioOutput = new AudioOutput(Phonon::MusicCategory, this);
+    //audioOutput->setVolume(0.0f);
+    createPath(m_media, audioOutput);
+    QCOMPARE(m_media->outputPaths().size(), 1);
+    QCOMPARE(audioOutput->inputPaths().size(), 1);
 }
 
 void MediaObjectTest::checkForDefaults()
@@ -731,97 +724,6 @@ void MediaObjectTest::testTickSignal()
         }
         stopPlayback(Phonon::PlayingState);
     }
-}
-
-void MediaObjectTest::addPaths()
-{
-    AudioPath *a1 = new AudioPath(this);
-    AudioPath *a2 = new AudioPath(this);
-    VideoPath *v1 = new VideoPath(this);
-    VideoPath *v2 = new VideoPath(this);
-    QCOMPARE(m_media->audioPaths().size(), 0);
-    QCOMPARE(m_media->videoPaths().size(), 0);
-    m_media->addAudioPath(a1);
-    QCOMPARE(m_media->audioPaths().size(), 1); // one should always work
-    QVERIFY(m_media->audioPaths().contains(a1));
-    QCOMPARE(m_media->addAudioPath(a1), false); // adding the same one should not work
-    QCOMPARE(m_media->audioPaths().size(), 1);
-    QVERIFY(m_media->audioPaths().contains(a1));
-    if (m_media->addAudioPath(a2))
-    {
-        QCOMPARE(m_media->audioPaths().size(), 2);
-        QVERIFY(m_media->audioPaths().contains(a1));
-        QVERIFY(m_media->audioPaths().contains(a2));
-        QCOMPARE(m_media->addAudioPath(a1), false); // adding the same one should not work
-        QCOMPARE(m_media->audioPaths().size(), 2);
-        QCOMPARE(m_media->addAudioPath(a2), false); // adding the same one should not work
-        QCOMPARE(m_media->audioPaths().size(), 2);
-        delete a2;
-        QCOMPARE(m_media->audioPaths().size(), 1);
-        QVERIFY(m_media->audioPaths().contains(a1));
-        QVERIFY(!m_media->audioPaths().contains(a2));
-        a2 = new AudioPath(this);
-        QCOMPARE(m_media->addAudioPath(a2), true);
-        QCOMPARE(m_media->audioPaths().size(), 2);
-        QVERIFY(m_media->audioPaths().contains(a1));
-        QVERIFY(m_media->audioPaths().contains(a2));
-        delete a2;
-        QCOMPARE(m_media->audioPaths().size(), 1);
-        QVERIFY(m_media->audioPaths().contains(a1));
-        QVERIFY(!m_media->audioPaths().contains(a2));
-        a2 = 0;
-    }
-    else
-        QWARN("backend does not allow usage of more than one AudioPath");
-    delete a1;
-    QCOMPARE(m_media->audioPaths().size(), 0);
-    a1 = 0;
-
-    m_media->addVideoPath(v1);
-    QCOMPARE(m_media->videoPaths().size(), 1); // one should always work
-    QVERIFY(m_media->videoPaths().contains(v1));
-    QCOMPARE(m_media->addVideoPath(v1), false); // adding the same one should not work
-    QCOMPARE(m_media->videoPaths().size(), 1);
-    QVERIFY(m_media->videoPaths().contains(v1));
-    if (m_media->addVideoPath(v2))
-    {
-        QCOMPARE(m_media->videoPaths().size(), 2);
-        QVERIFY(m_media->videoPaths().contains(v1));
-        QVERIFY(m_media->videoPaths().contains(v2));
-        QCOMPARE(m_media->addVideoPath(v1), false); // adding the same one should not work
-        QCOMPARE(m_media->videoPaths().size(), 2);
-        QCOMPARE(m_media->addVideoPath(v2), false); // adding the same one should not work
-        QCOMPARE(m_media->videoPaths().size(), 2);
-        delete v2;
-        QCOMPARE(m_media->videoPaths().size(), 1);
-        QVERIFY(m_media->videoPaths().contains(v1));
-        QVERIFY(!m_media->videoPaths().contains(v2));
-        v2 = new VideoPath(this);
-        QCOMPARE(m_media->addVideoPath(v2), true);
-        QCOMPARE(m_media->videoPaths().size(), 2);
-        QVERIFY(m_media->videoPaths().contains(v1));
-        QVERIFY(m_media->videoPaths().contains(v2));
-        delete v2;
-        QCOMPARE(m_media->videoPaths().size(), 1);
-        QVERIFY(m_media->videoPaths().contains(v1));
-        QVERIFY(!m_media->videoPaths().contains(v2));
-        v2 = 0;
-    }
-    else
-        QWARN("backend does not allow usage of more than one VideoPath");
-    delete v1;
-    QCOMPARE(m_media->videoPaths().size(), 0);
-    v1 = 0;
-}
-
-void MediaObjectTest::initOutput()
-{
-    // AudioPath and AudioOutput are needed else the backend might finish in no time
-    AudioPath *audioPath = new AudioPath(this);
-    AudioOutput *audioOutput = new AudioOutput(Phonon::MusicCategory, this);
-    //audioOutput->setVolume(0.0f);
-    audioPath->addOutput(audioOutput);
-    m_media->addAudioPath(audioPath);
 }
 
 void MediaObjectTest::cleanupTestCase()

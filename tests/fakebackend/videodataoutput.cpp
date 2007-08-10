@@ -18,7 +18,6 @@
 */
 
 #include "videodataoutput.h"
-#include <kdebug.h>
 
 namespace Phonon
 {
@@ -31,11 +30,6 @@ VideoDataOutput::VideoDataOutput(QObject *parent)
 
 VideoDataOutput::~VideoDataOutput()
 {
-}
-
-quint32 VideoDataOutput::format() const
-{
-    return m_fourcc;
 }
 
 //X int VideoDataOutput::displayLatency() const
@@ -68,11 +62,6 @@ void VideoDataOutput::setFrameSize(const QSize &frameSize)
     m_frameSize = frameSize;
 }
 
-void VideoDataOutput::setFormat(quint32 fourcc)
-{
-    m_fourcc = fourcc;
-}
-
 //X void VideoDataOutput::setDisplayLatency(int milliseconds)
 //X {
 //X     m_latency = milliseconds;
@@ -80,14 +69,11 @@ void VideoDataOutput::setFormat(quint32 fourcc)
 
 void VideoDataOutput::processFrame(Phonon::Experimental::VideoFrame &frame)
 {
-    if (frame.fourcc == m_fourcc)
-        emit frameReady(frame);
-    else
-        kError(604) << "format conversion not implemented" << endl;
+    emit frameReady(frame);
     // TODO emit endOfMedia
 }
 
 }} //namespace Phonon::Fake
 
-#include "videodataoutput.moc"
+#include "moc_videodataoutput.cpp"
 // vim: sw=4 ts=4

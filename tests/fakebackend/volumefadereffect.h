@@ -20,8 +20,9 @@
 #define Phonon_FAKE_VOLUMEFADEREFFECT_H
 
 #include <QtCore/QDate>
-#include "audioeffect.h"
+#include "effect.h"
 #include <phonon/volumefadereffect.h>
+#include <phonon/volumefaderinterface.h>
 
 namespace Phonon
 {
@@ -30,22 +31,28 @@ namespace Fake
     /**
      * \author Matthias Kretz <kretz@kde.org>
      */
-    class VolumeFaderEffect : public AudioEffect
+    class VolumeFaderEffect : public Effect, public Phonon::VolumeFaderInterface
     {
         Q_OBJECT
+        Q_INTERFACES(Phonon::VolumeFaderInterface)
+
         public:
             VolumeFaderEffect(QObject *parent);
             ~VolumeFaderEffect();
 
-            Q_INVOKABLE float volume() const;
-            Q_INVOKABLE void setVolume(float volume);
-            Q_INVOKABLE Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const;
-            Q_INVOKABLE void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve curve);
-            Q_INVOKABLE void fadeTo(float volume, int fadeTime);
+            float volume() const;
+            void setVolume(float volume);
+            Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const;
+            void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve curve);
+            void fadeTo(float volume, int fadeTime);
+
+            void processBuffer(QVector<float> &buffer);
 
         private:
             float m_volume;
             float m_endvolume;
+            int m_fadePosition;
+            int m_fadeLength;
             int m_fadeTime;
             QTime m_fadeStart;
             Phonon::VolumeFaderEffect::FadeCurve m_fadeCurve;

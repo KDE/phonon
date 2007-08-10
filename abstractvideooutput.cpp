@@ -23,14 +23,8 @@ namespace Phonon
 {
 
 AbstractVideoOutput::AbstractVideoOutput(AbstractVideoOutputPrivate &d)
-    : k_ptr(&d)
+    : MediaNode(d)
 {
-    k_ptr->q_ptr = this;
-}
-
-AbstractVideoOutput::~AbstractVideoOutput()
-{
-    delete k_ptr;
 }
 
 } // namespace Phonon

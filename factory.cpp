@@ -21,7 +21,7 @@
 #include "factory_p.h"
 
 #include "backendinterface.h"
-#include "base_p.h"
+#include "medianode_p.h"
 #include "audiooutput.h"
 #include "audiooutput_p.h"
 #include "globalstatic_p.h"
@@ -63,6 +63,9 @@ bool FactoryPrivate::createBackend()
 #if defined(Q_WS_MAC)
         const QLatin1String pluginName("libphonon_qt7");
         const QLatin1String suffix("/phonon/");
+#elif defined(Q_WS_WIN)
+        const QLatin1String pluginName("libphonon_ds9");
+        const QLatin1String suffix("/phonon_backend/");
 #else
         const QLatin1String pluginName("xine");
         const QLatin1String suffix("/phonon_backend/");
@@ -115,7 +118,7 @@ FactoryPrivate::FactoryPrivate()
 
 FactoryPrivate::~FactoryPrivate()
 {
-    foreach (BasePrivate *bp, basePrivateList) {
+    foreach (MediaNodePrivate *bp, mediaNodePrivateList) {
         bp->deleteBackendObject();
     }
     if (objects.size() > 0) {
@@ -157,24 +160,24 @@ bool Factory::isMimeTypeAvailable(const QString &mimeType)
     return true; // the MIME type might be supported, let BackendCapabilities find out
 }
 
-void Factory::registerFrontendObject(BasePrivate *bp)
+void Factory::registerFrontendObject(MediaNodePrivate *bp)
 {
-    globalFactory->basePrivateList.prepend(bp); // inserted last => deleted first
+    globalFactory->mediaNodePrivateList.prepend(bp); // inserted last => deleted first
 }
 
-void Factory::deregisterFrontendObject(BasePrivate *bp)
+void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
 {
     // The Factory can already be cleaned up while there are other frontend objects still alive.
     // When those are deleted they'll call deregisterFrontendObject through ~BasePrivate
     if (!globalFactory.isDestroyed()) {
-        globalFactory->basePrivateList.removeAll(bp);
+        globalFactory->mediaNodePrivateList.removeAll(bp);
     }
 }
 
 void FactoryPrivate::phononBackendChanged()
 {
     if (m_backendObject) {
-        foreach (BasePrivate *bp, basePrivateList) {
+        foreach (MediaNodePrivate *bp, mediaNodePrivateList) {
             bp->deleteBackendObject();
         }
         if (objects.size() > 0) {
@@ -184,7 +187,7 @@ void FactoryPrivate::phononBackendChanged()
                 "backendswitching possible.";
             // in case there were objects deleted give 'em a chance to recreate
             // them now
-            foreach (BasePrivate *bp, basePrivateList) {
+            foreach (MediaNodePrivate *bp, mediaNodePrivateList) {
                 bp->createBackendObject();
             }
             return;
@@ -193,7 +196,7 @@ void FactoryPrivate::phononBackendChanged()
         m_backendObject = 0;
     }
     createBackend();
-    foreach (BasePrivate *bp, basePrivateList) {
+    foreach (MediaNodePrivate *bp, mediaNodePrivateList) {
         bp->createBackendObject();
     }
     emit backendChanged();
@@ -230,16 +233,11 @@ QObject *Factory::create ## classname(int arg1, QObject *parent) \
 }
 
 FACTORY_IMPL(MediaObject)
-FACTORY_IMPL(AudioPath)
-FACTORY_IMPL_1ARG(AudioEffect)
+FACTORY_IMPL_1ARG(Effect)
 FACTORY_IMPL(VolumeFaderEffect)
 FACTORY_IMPL(AudioOutput)
 FACTORY_IMPL(AudioDataOutput)
 FACTORY_IMPL(Visualization)
-FACTORY_IMPL(VideoPath)
-FACTORY_IMPL_1ARG(VideoEffect)
-FACTORY_IMPL(BrightnessControl)
-FACTORY_IMPL(DeinterlaceFilter)
 FACTORY_IMPL(VideoDataOutput)
 FACTORY_IMPL(VideoWidget)
 

@@ -46,8 +46,8 @@ class MediaSourcePrivate : public QSharedData
         Phonon::DiscType discType;
         QString deviceName;
         QPointer<AbstractMediaStream> stream;
-        AudioCaptureDevice audioCaptureDevice;
-        VideoCaptureDevice videoCaptureDevice;
+//        AudioCaptureDevice audioCaptureDevice;
+//        VideoCaptureDevice videoCaptureDevice;
         QFile *resourceFile;
         QList<MediaSource> linkedSources;
 };

@@ -20,21 +20,19 @@
 #define Phonon_FAKE_ABSTRACTAUDIOOUTPUTBASE_H
 
 #include <QtCore/QObject>
+#include "audionode.h"
 
 namespace Phonon
 {
 namespace Fake
 {
-    class AbstractAudioOutput : public QObject
+    class AbstractAudioOutput : public QObject, public AudioNode
     {
         Q_OBJECT
+        Q_INTERFACES(Phonon::Fake::AudioNode)
         public:
             AbstractAudioOutput(QObject *parent);
             virtual ~AbstractAudioOutput();
-
-            virtual void processBuffer(const QVector<float> &buffer) = 0;
-
-        private:
     };
 }} //namespace Phonon::Fake
 

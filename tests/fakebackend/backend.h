@@ -40,21 +40,26 @@ namespace Fake
         Q_OBJECT
         Q_INTERFACES(Phonon::BackendInterface)
         public:
-            Backend(QObject *parent, const QStringList &args);
+            Backend(QObject *parent = 0, const QStringList & = QStringList());
             virtual ~Backend();
 
             QObject *createObject(BackendInterface::Class, QObject *parent, const QList<QVariant> &args);
 
-            Q_INVOKABLE bool supportsVideo() const;
-            Q_INVOKABLE bool supportsOSD() const;
-            Q_INVOKABLE bool supportsFourcc(quint32 fourcc) const;
-            Q_INVOKABLE bool supportsSubtitles() const;
-            Q_INVOKABLE QStringList availableMimeTypes() const;
+            bool supportsVideo() const;
+            bool supportsOSD() const;
+            bool supportsFourcc(quint32 fourcc) const;
+            bool supportsSubtitles() const;
+            QStringList availableMimeTypes() const;
 
             void freeSoundcardDevices();
 
             QSet<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
             QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
+
+            bool startConnectionChange(QSet<QObject *>);
+            bool connectNodes(QObject *, QObject *);
+            bool disconnectNodes(QObject *, QObject *);
+            bool endConnectionChange(QSet<QObject *>);
 
         Q_SIGNALS:
             void objectDescriptionChanged(ObjectDescriptionType);

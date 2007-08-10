@@ -30,6 +30,9 @@
 #include <phonon/backendinterface.h>
 #include <phonon/audiooutputinterface.h>
 #include <phonon/addoninterface.h>
+#include <phonon/effectinterface.h>
+#include <phonon/videowidgetinterface.h>
+#include <phonon/volumefaderinterface.h>
 
 class MethodTest : public QObject
 {
@@ -40,24 +43,15 @@ class MethodTest : public QObject
 
 //X         void checkAudioDataOutputMethods_data();
 //X         void checkAudioDataOutputMethods();
-        void checkVideoEffectMethods_data();
-        void checkVideoEffectMethods();
-        void checkAudioEffectMethods_data();
-        void checkAudioEffectMethods();
+        void checkEffectInterface();
         void checkAudioOutputMethods_data();
         void checkAudioOutputMethods();
-        void checkAudioPathMethods_data();
-        void checkAudioPathMethods();
         void checkBackendMethods_data();
         void checkBackendMethods();
-        void checkBrightnessControlMethods_data();
-        void checkBrightnessControlMethods();
         void checkMediaObjectMethods_data();
         void checkMediaObjectMethods();
 //X         void checkVideoDataOutputMethods_data();
 //X         void checkVideoDataOutputMethods();
-        void checkVideoPathMethods_data();
-        void checkVideoPathMethods();
 //X         void checkVisualizationMethods_data();
 //X         void checkVisualizationMethods();
         void checkVolumeFaderEffectMethods_data();
@@ -87,27 +81,14 @@ void MethodTest::checkBackendInterface()
 //X #include "methods/abstractaudiooutput.cpp"
 //X #include "../experimental/tests/methods/audiodataoutput.cpp"
 //X }
-void MethodTest::checkVideoEffectMethods_data() { addColumns();
-#include "methods/effect.cpp"
-}
-void MethodTest::checkAudioEffectMethods_data() { addColumns();
-#include "methods/effect.cpp"
-}
 void MethodTest::checkAudioOutputMethods_data() { addColumns();
 #include "methods/abstractaudiooutput.cpp"
 #include "methods/audiooutput.cpp"
-}
-void MethodTest::checkAudioPathMethods_data() { addColumns();
-#include "methods/audiopath.cpp"
 }
 void MethodTest::checkBackendMethods_data() { addColumns();
 #include "methods/factory.cpp"
 #include "methods/objectdescription.cpp"
 #include "methods/backendcapabilities.cpp"
-addMethod("bool", "supportsFourcc(quint32)");
-}
-void MethodTest::checkBrightnessControlMethods_data() { addColumns();
-#include "methods/brightnesscontrol.cpp"
 }
 void MethodTest::checkMediaObjectMethods_data() { addColumns();
 #include "methods/mediaobject.cpp"
@@ -117,9 +98,6 @@ void MethodTest::checkMediaObjectMethods_data() { addColumns();
 //X #include "methods/abstractvideooutput.cpp"
 //X #include "../experimental/tests/methods/videodataoutput.cpp"
 //X }
-void MethodTest::checkVideoPathMethods_data() { addColumns();
-#include "methods/videopath.cpp"
-}
 //X void MethodTest::checkVisualizationMethods_data() { addColumns();
 //X #include "../experimental/tests/methods/visualization.cpp"
 //X }
@@ -130,18 +108,41 @@ void MethodTest::checkVideoWidgetMethods_data() { addColumns();
 #include "methods/videowidget.cpp"
 }
 //X void MethodTest::checkAudioDataOutputMethods()   { checkMethods(Factory::createAudioDataOutput()); }
-void MethodTest::checkAudioEffectMethods()       { checkMethods(Factory::createAudioEffect(1)); }
-void MethodTest::checkVideoEffectMethods()       { checkMethods(Factory::createVideoEffect(1)); }
 void MethodTest::checkAudioOutputMethods()       { checkMethods(Factory::createAudioOutput()); }
-void MethodTest::checkAudioPathMethods()         { checkMethods(Factory::createAudioPath()); }
 void MethodTest::checkBackendMethods()           { checkMethods(Factory::backend()); }
-void MethodTest::checkBrightnessControlMethods() { checkMethods(Factory::createBrightnessControl()); }
 void MethodTest::checkMediaObjectMethods()       { checkMethods(Factory::createMediaObject()); }
 //X void MethodTest::checkVideoDataOutputMethods()   { checkMethods(Factory::createVideoDataOutput()); }
-void MethodTest::checkVideoPathMethods()         { checkMethods(Factory::createVideoPath()); }
 //X void MethodTest::checkVisualizationMethods()     { checkMethods(Factory::createVisualization()); }
-void MethodTest::checkVolumeFaderEffectMethods() { checkMethods(Factory::createVolumeFaderEffect()); }
-void MethodTest::checkVideoWidgetMethods()       { checkMethods(Factory::createVideoWidget()); }
+
+void MethodTest::checkVolumeFaderEffectMethods() {
+    QObject *m_backendObject = Factory::createVolumeFaderEffect();
+    if (!m_backendObject) {
+        QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
+    }
+    //empty: checkMethods(m_backendObject);
+    QVERIFY(qobject_cast<Phonon::VolumeFaderInterface *>(m_backendObject) != 0);
+    delete m_backendObject;
+}
+
+void MethodTest::checkVideoWidgetMethods()       {
+    QObject *m_backendObject = Factory::createVideoWidget();
+    if (!m_backendObject) {
+        QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
+    }
+    //empty: checkMethods(m_backendObject);
+    QVERIFY(qobject_cast<Phonon::VideoWidgetInterface *>(m_backendObject) != 0);
+    delete m_backendObject;
+}
+
+void MethodTest::checkEffectInterface()
+{
+    QObject *m_backendObject = Factory::createEffect(1);
+    if (!m_backendObject) {
+        QSKIP("The back-end's create method returned 0. No tests possible.", SkipAll);
+    }
+    QVERIFY(qobject_cast<Phonon::EffectInterface *>(m_backendObject) != 0);
+    delete m_backendObject;
+}
 
 void MethodTest::checkMediaObjectInterfaces()
 {

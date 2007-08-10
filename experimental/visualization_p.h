@@ -21,32 +21,23 @@
 #define PHONON_VISUALIZATION_P_H
 
 #include "visualization.h"
-#include "../base_p.h"
+#include "../medianode_p.h"
+#include "../medianodedestructionhandler.h"
+#include "../phonondefs_p.h"
 
 namespace Phonon
 {
 namespace Experimental
 {
-class VisualizationPrivate : public BasePrivate, private BaseDestructionHandler
+class VisualizationPrivate : public MediaNodePrivate, private MediaNodeDestructionHandler
 {
     Q_DECLARE_PUBLIC(Visualization)
     PHONON_PRIVATECLASS
     protected:
-        Visualization *q_ptr;
-        VisualizationPrivate()
-            : q_ptr(0),
-            audioPath(0),
-            videoOutput(0),
-            visualizationIndex(-1) // invalid
-        {
-        }
-
-        AudioPath *audioPath;
-        AbstractVideoOutput *videoOutput;
-        int visualizationIndex;
+        VisualizationDescription description;
 
     private:
-        void phononObjectDestroyed(BasePrivate *);
+        void phononObjectDestroyed(MediaNodePrivate *);
 };
 } // namespace Experimental
 } // namespace Phonon

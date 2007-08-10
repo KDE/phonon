@@ -26,8 +26,6 @@ namespace Phonon
 {
 namespace Fake
 {
-    class AudioPath;
-    class AbstractVideoOutput;
 
 class Visualization : public QObject
 {
@@ -38,13 +36,9 @@ class Visualization : public QObject
     public Q_SLOTS:
         int visualization() const;
         void setVisualization(int newVisualization);
-        void setAudioPath(QObject *audioPath);
-        void setVideoOutput(QObject *videoOutput);
 
     private:
         int m_visualization;
-        AudioPath *m_audioPath;
-        AbstractVideoOutput *m_videoOutput;
 };
 
 }} //namespace Phonon::Fake

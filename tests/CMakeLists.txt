@@ -27,17 +27,17 @@ ENDMACRO(PHONON_EXECUTABLE_TESTS)
 
 PHONON_EXECUTABLE_TESTS(
 	mediaobjecttest
-	audiopathtest
+	pathtest
 	backendcapabilitiestest
 	audiooutputtest
 	audiooutputdevicetest
-	audiocapturedevicetest
-	videocapturedevicetest
+	#audiocapturedevicetest
+	#videocapturedevicetest
 	#bytestreamtest
 	#bytestreamtest2
 	seekslidertest
 	volumeslidertest
-	guitest
+	#guitest
 	mediaplayer
 	)
 
@@ -47,12 +47,12 @@ PHONON_UNIT_TESTS(
 
 PHONON_UNIT_TESTS_FAKE(
 	mediaobjecttest
-	audiopathtest
+	pathtest
 	backendcapabilitiestest
 	audiooutputtest
 	audiooutputdevicetest
-	audiocapturedevicetest
-	videocapturedevicetest
+	#audiocapturedevicetest
+	#videocapturedevicetest
 	#bytestreamtest
 	#bytestreamtest2
 	seekslidertest
@@ -61,14 +61,14 @@ PHONON_UNIT_TESTS_FAKE(
 target_link_libraries(backendcapabilitiestest ${KDE4_KDECORE_LIBS})
 target_link_libraries(audiodevicelisttest ${KDE4_KAUDIODEVICELIST_LIBS})
 target_link_libraries(mediaplayer ${KDE4_KDEUI_LIBS})
-target_link_libraries(guitest ${KDE4_KIO_LIBS})
+#target_link_libraries(guitest ${KDE4_KIO_LIBS})
 target_link_libraries(backendcapabilitiestest_fake ${KDE4_KDECORE_LIBS})
 #methodtest does not link against libphonon
 kde4_add_test_executable(methodtest methodtest.cpp ../factory.cpp ../phononnamespace.cpp)
-target_link_libraries(methodtest ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY}  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(methodtest ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY}  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} ${KDE4_PHONON_LIBS})
 SET_TARGET_PROPERTIES(methodtest PROPERTIES COMPILE_FLAGS "-DPHONON_METHODTEST -DPHONON_EXPORT=")
 kde4_add_unit_test(methodtest_fake methodtest.cpp ../factory.cpp ../phononnamespace.cpp)
-target_link_libraries(methodtest_fake ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY}  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(methodtest_fake ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY}  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} ${KDE4_PHONON_LIBS})
 SET_TARGET_PROPERTIES(methodtest_fake PROPERTIES COMPILE_FLAGS "-DUSE_FAKE_BACKEND -DPHONON_METHODTEST -DPHONON_EXPORT=")
 
 SET(mediasourcetest_SRCS mediasourcetest.cpp)

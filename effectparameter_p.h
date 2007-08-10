@@ -35,6 +35,7 @@ class EffectParameterPrivate : public QSharedData
         QVariant defaultValue;
         QString name;
         QString description;
+        QVariantList possibleValues;
         EffectParameter::Hints hints;
 };
 

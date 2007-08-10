@@ -34,8 +34,7 @@ class VolumeFaderEffectPrivate : public EffectPrivate
             : currentVolume(1.0)
             , fadeCurve(VolumeFaderEffect::Fade3Decibel)
         {
-            type = Effect::AudioEffect;
-            id = -1; // ### check how to get the correct id
+            // invalid EffectDescription
             // ############# parameter functions are incorrect
         }
 

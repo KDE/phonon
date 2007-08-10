@@ -24,6 +24,8 @@
 #include "../phonondefs.h"
 #include <QtCore/QObject>
 #include "../objectdescription.h"
+#include "../objectdescriptionmodel.h"
+#include "../medianode.h"
 
 namespace Phonon
 {
@@ -33,6 +35,12 @@ class AbstractVideoOutput;
 namespace Experimental
 {
     class VisualizationPrivate;
+
+enum {
+    VisualizationType = 0xfffffffe
+};
+typedef ObjectDescription<static_cast<Phonon::ObjectDescriptionType>(VisualizationType)> VisualizationDescription;
+typedef ObjectDescriptionModel<static_cast<Phonon::ObjectDescriptionType>(VisualizationType)> VisualizationDescriptionModel;
 
 /**
  * \short A class to create visual effects from an audio signal.
@@ -60,7 +68,7 @@ namespace Experimental
  * \see AudioDataOutput
  * \see BackendCapabilities::availableVisualizationEffects()
  */
-class PHONONEXPERIMENTAL_EXPORT Visualization : public QObject
+class PHONONEXPERIMENTAL_EXPORT Visualization : public QObject, public MediaNode
 {
     Q_OBJECT
     K_DECLARE_PRIVATE(Visualization)
@@ -69,12 +77,6 @@ class PHONONEXPERIMENTAL_EXPORT Visualization : public QObject
 
     public:
         ~Visualization();
-
-        AudioPath *audioPath() const;
-        void setAudioPath(AudioPath *audioPath);
-
-        AbstractVideoOutput *videoOutput() const;
-        void setVideoOutput(AbstractVideoOutput *output);
 
         VisualizationDescription visualization() const;
         void setVisualization(const VisualizationDescription &newVisualization);

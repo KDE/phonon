@@ -43,7 +43,7 @@ class FactoryPrivate : public Phonon::Factory::Sender
         bool m_noPlatformPlugin;
 
         QList<QObject *> objects;
-        QList<BasePrivate *> basePrivateList;
+        QList<MediaNodePrivate *> mediaNodePrivateList;
 
     private Q_SLOTS:
         /**

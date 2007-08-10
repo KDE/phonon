@@ -40,31 +40,27 @@ BackendCapabilities::Notifier *BackendCapabilities::notifier()
     return globalBCPrivate;
 }
 
+/*
 #define SUPPORTS(foo) \
 bool BackendCapabilities::supports ## foo() \
 { \
-    QObject *m_backendObject = Factory::backend(); \
-    if (!m_backendObject) \
+    if (BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend())) \
+        return backendIface->supports ## foo(); \
+    else \
         return false; \
-    bool ret; \
-    pBACKEND_GET(bool, ret, "supports"#foo); \
-    return ret; \
 }
 
 SUPPORTS(Video)
 SUPPORTS(OSD)
 SUPPORTS(Subtitles)
+*/
 
 QStringList BackendCapabilities::availableMimeTypes()
 {
-    QObject *m_backendObject = Factory::backend(true);
-    if (!m_backendObject) {
-        // no backend == no MIME type supported at all
+    if (BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend()))
+        return backendIface->availableMimeTypes();
+    else
         return QStringList();
-    }
-    QStringList ret;
-    pBACKEND_GET(QStringList, ret, "availableMimeTypes");
-    return ret;
 }
 
 bool BackendCapabilities::isMimeTypeAvailable(const QString &mimeType)
@@ -82,9 +78,7 @@ bool BackendCapabilities::isMimeTypeAvailable(const QString &mimeType)
         // no backend == no MIME type supported at all
         return false;
     }
-    QStringList ret;
-    pBACKEND_GET(QStringList, ret, "availableMimeTypes");
-    return ret.contains(mimeType);
+    return availableMimeTypes().contains(mimeType);
 }
 
 #define availableDevicesImpl(T) \
@@ -113,15 +107,26 @@ QList<T ## Description> BackendCapabilities::available ## T ## s() \
     return ret; \
 }
 availableDevicesImpl(AudioOutputDevice)
-availableDevicesImpl(AudioCaptureDevice)
+/*availableDevicesImpl(AudioCaptureDevice)
 availableDevicesImpl(VideoOutputDevice)
 availableDevicesImpl(VideoCaptureDevice)
 availableDevicesImpl2(Visualization)
 availableDevicesImpl2(AudioCodec)
 availableDevicesImpl2(VideoCodec)
-availableDevicesImpl2(ContainerFormat)
-availableDevicesImpl2(AudioEffect)
-availableDevicesImpl2(VideoEffect)
+availableDevicesImpl2(ContainerFormat)*/
+
+QList<EffectDescription> BackendCapabilities::availableAudioEffects()
+{
+    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
+    QList<EffectDescription> ret;
+    if (backendIface) {
+        QSet<int> deviceIndexes = backendIface->objectDescriptionIndexes(Phonon::EffectType);
+        foreach (int i, deviceIndexes) {
+            ret.append(EffectDescription::fromIndex(i));
+        }
+    }
+    return ret;
+}
 
 } // namespace Phonon
 

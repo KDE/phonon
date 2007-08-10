@@ -19,17 +19,21 @@
 
 #include "volumefadereffect.h"
 #include "volumefadereffect_p.h"
+#include "volumefaderinterface.h"
 #include "factory.h"
 #include <cmath>
 
 #define PHONON_CLASSNAME VolumeFaderEffect
+#define PHONON_INTERFACENAME VolumeFaderInterface
 
 namespace Phonon
 {
 PHONON_HEIR_IMPL(Effect)
 
-PHONON_GETTER(float, volume, d->currentVolume)
-PHONON_SETTER(setVolume, currentVolume, float)
+PHONON_INTERFACE_GETTER(float, volume, d->currentVolume)
+PHONON_INTERFACE_SETTER(setVolume, currentVolume, float)
+PHONON_INTERFACE_GETTER(Phonon::VolumeFaderEffect::FadeCurve, fadeCurve, d->fadeCurve)
+PHONON_INTERFACE_SETTER(setFadeCurve, fadeCurve, Phonon::VolumeFaderEffect::FadeCurve)
 
 #ifndef PHONON_LOG10OVER20
 #define PHONON_LOG10OVER20
@@ -46,8 +50,6 @@ void VolumeFaderEffect::setVolumeDecibel(double newVolumeDecibel)
     setVolume(exp(-newVolumeDecibel * log10over20));
 }
 
-PHONON_GETTER(Phonon::VolumeFaderEffect::FadeCurve, fadeCurve, d->fadeCurve)
-PHONON_SETTER(setFadeCurve, fadeCurve, Phonon::VolumeFaderEffect::FadeCurve)
 
 void VolumeFaderEffect::fadeIn(int fadeTime)
 {
@@ -63,17 +65,16 @@ void VolumeFaderEffect::fadeTo(float volume, int fadeTime)
 {
     K_D(VolumeFaderEffect);
     if (k_ptr->backendObject())
-        BACKEND_CALL2("fadeTo", float, volume, int, fadeTime);
+        INTERFACE_CALL(fadeTo(volume, fadeTime));
     else
         d->currentVolume = volume;
 }
 
 bool VolumeFaderEffectPrivate::aboutToDeleteBackendObject()
 {
-    if (m_backendObject)
-    {
-        pBACKEND_GET(float, currentVolume, "volume");
-        pBACKEND_GET(Phonon::VolumeFaderEffect::FadeCurve, fadeCurve, "fadeCurve");
+    if (m_backendObject) {
+        currentVolume = pINTERFACE_CALL(volume());
+        fadeCurve = pINTERFACE_CALL(fadeCurve());
     }
     return true;
 }
@@ -83,8 +84,8 @@ void VolumeFaderEffectPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
 
     // set up attributes
-    pBACKEND_CALL1("setVolume", float, currentVolume);
-    pBACKEND_CALL1("setFadeCurve", Phonon::VolumeFaderEffect::FadeCurve, fadeCurve);
+    pINTERFACE_CALL(setVolume(currentVolume));
+    pINTERFACE_CALL(setFadeCurve(fadeCurve));
 }
 }
 

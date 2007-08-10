@@ -18,14 +18,17 @@
 */
 
 #include "volumefadereffect.h"
+#include <QtCore/QVector>
 
 namespace Phonon
 {
 namespace Fake
 {
+static const int SAMPLE_RATE = 44100;
+static const float SAMPLE_RATE_FLOAT = 44100.0f;
+
 VolumeFaderEffect::VolumeFaderEffect(QObject *parent)
-    : AudioEffect(-1, parent)
-    , m_fadeTime(0)
+    : Effect(-1, parent), m_fadeTime(0)
 {
 }
 
@@ -72,9 +75,24 @@ void VolumeFaderEffect::fadeTo(float volume, int fadeTime)
     m_fadeStart.start();
     m_fadeTime = fadeTime;
     m_endvolume = volume;
+    m_fadePosition = 0;
+    m_fadeLength = fadeTime * SAMPLE_RATE;
+}
+
+void VolumeFaderEffect::processBuffer(QVector<float> &buffer)
+{
+    // ignore the fade curve and do a linear fade
+
+    int bufferPos = 0;
+    while (m_fadePosition < m_fadeLength) {
+        if (bufferPos > buffer.size()) {
+            return;
+        }
+        buffer[bufferPos++] *= ++m_fadePosition * (m_endvolume - m_volume) / m_fadeLength + m_volume;
+    }
 }
 
 }} //namespace Phonon::Fake
 
-#include "volumefadereffect.moc"
+#include "moc_volumefadereffect.cpp"
 // vim: sw=4 ts=4

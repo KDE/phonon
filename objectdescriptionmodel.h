@@ -339,15 +339,15 @@ namespace Phonon
     };
 
     typedef ObjectDescriptionModel<AudioOutputDeviceType> AudioOutputDeviceModel;
+    typedef ObjectDescriptionModel<EffectType> EffectDescriptionModel;
+/*    
     typedef ObjectDescriptionModel<AudioCaptureDeviceType> AudioCaptureDeviceModel;
     typedef ObjectDescriptionModel<VideoOutputDeviceType> VideoOutputDeviceModel;
     typedef ObjectDescriptionModel<VideoCaptureDeviceType> VideoCaptureDeviceModel;
-    typedef ObjectDescriptionModel<AudioEffectType> AudioEffectDescriptionModel;
-    typedef ObjectDescriptionModel<VideoEffectType> VideoEffectDescriptionModel;
     typedef ObjectDescriptionModel<AudioCodecType> AudioCodecDescriptionModel;
     typedef ObjectDescriptionModel<VideoCodecType> VideoCodecDescriptionModel;
     typedef ObjectDescriptionModel<ContainerFormatType> ContainerFormatDescriptionModel;
-    typedef ObjectDescriptionModel<VisualizationType> VisualizationDescriptionModel;
+    typedef ObjectDescriptionModel<VisualizationType> VisualizationDescriptionModel;*/
 
 }
 
