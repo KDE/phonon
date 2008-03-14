@@ -95,7 +95,7 @@ namespace Phonon
          * Not used yet.
          */
         /*VisualizationType,
-        /VideoStreamType,
+        VideoStreamType,
         AudioStreamType,
         SubtitleStreamType*/
     };
