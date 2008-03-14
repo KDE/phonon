@@ -78,7 +78,7 @@ namespace Phonon
         /**
          * Lists all processing effects the backend supports.
          */
-        EffectType,
+        EffectType
         /**
          * Not used yet.
          */
@@ -94,10 +94,10 @@ namespace Phonon
         /**
          * Not used yet.
          */
-        //VisualizationType,
-        //VideoStreamType,
+        /*VisualizationType,
+        /VideoStreamType,
         AudioStreamType,
-        SubtitleStreamType
+        SubtitleStreamType*/
     };
 
 /** \internal
@@ -316,14 +316,8 @@ typedef ObjectDescription<EffectType> EffectDescription;
  * \ingroup BackendInformation
  */
 //typedef ObjectDescription<VisualizationType> VisualizationDescription;
-typedef ObjectDescription<AudioStreamType> AudioStreamDescription;
-typedef ObjectDescription<SubtitleStreamType> SubtitleStreamDescription;
 
 } //namespace Phonon
-Q_DECLARE_METATYPE(Phonon::AudioStreamDescription)
-Q_DECLARE_METATYPE(QList<Phonon::AudioStreamDescription>)
-Q_DECLARE_METATYPE(Phonon::SubtitleStreamDescription)
-Q_DECLARE_METATYPE(QList<Phonon::SubtitleStreamDescription>)
 
 QT_END_NAMESPACE
 QT_END_HEADER
