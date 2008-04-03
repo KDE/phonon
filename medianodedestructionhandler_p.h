@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,35 +17,43 @@
 
 */
 
-#ifndef PHONON_IODEVICESTREAM_H
-#define PHONON_IODEVICESTREAM_H
+#ifndef MEDIANODEDESTRUCTIONHANDLER_P_H
+#define MEDIANODEDESTRUCTIONHANDLER_P_H
 
-#include "phonon/abstractmediastream.h"
+#include <QtCore/qglobal.h>
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
-class QIODevice;
-
 namespace Phonon
 {
+/**
+ * \internal
+ *
+ * Callback interface to keep track of Phonon frontend object destruction.
+ *
+ * \author Matthias Kretz <kretz@kde.org>
+ */
 
-class IODeviceStreamPrivate;
-class IODeviceStream : public AbstractMediaStream
+class MediaNodePrivate;
+
+class MediaNodeDestructionHandler
 {
-    Q_OBJECT
-    Q_DECLARE_PRIVATE(IODeviceStream)
-    public:
-        explicit IODeviceStream(QIODevice *ioDevice, QObject *parent = 0);
-        ~IODeviceStream();
+    friend class MediaNodePrivate;
 
-        void reset();
-        void needData();
-        void seekStream(qint64);
+public:
+    virtual ~MediaNodeDestructionHandler() {}
+protected:
+    /**
+     * \internal
+     * called from Base::~Base if this object was registered
+     * using BasePrivate::addDestructionHandler().
+     */
+    virtual void phononObjectDestroyed(MediaNodePrivate *) = 0;
 };
-} // namespace Phonon
+}
 
 QT_END_NAMESPACE
 QT_END_HEADER
 
-#endif // PHONON_IODEVICESTREAM_H
+#endif // MEDIANODEDESTRUCTIONHANDLER_P_H
