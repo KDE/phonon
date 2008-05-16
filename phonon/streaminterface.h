@@ -2,21 +2,18 @@
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -28,8 +25,6 @@
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 namespace Phonon
 {
@@ -111,11 +106,38 @@ class PHONON_EXPORT StreamInterface
 
         StreamInterfacePrivate *const d;
 };
+
+/**
+ * \warning Even though AbstractMediaStream2 may be used from any thread, StreamInterface2 still has
+ * to run in the main thread for compatibility with AbstractMediaStream.
+ */
+class PHONON_EXPORT StreamInterface2 : public QObject, public StreamInterface
+{
+    friend class StreamInterfacePrivate;
+    Q_OBJECT
+    public:
+        ~StreamInterface2();
+
+        /**
+         * Call this function to tell the AbstractMediaStream that you need more data. The data will
+         * arrive through writeData. Don't rely on writeData getting called from needData, though
+         * some AbstractMediaStream implementations might do so.
+         *
+         * Depending on the buffering you need you either treat needData as a replacement for a
+         * read call like QIODevice::read, or you start calling needData whenever your buffer
+         * reaches a certain lower threshold.
+         */
+        void needData(quint32);
+
+    protected:
+        StreamInterface2(QObject *parent = 0);
+
+    private:
+        Q_PRIVATE_SLOT(d, void _k_handleStreamEvent())
+};
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::StreamInterface, "StreamInterface1.phonon.kde.org")
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE
 QT_END_HEADER

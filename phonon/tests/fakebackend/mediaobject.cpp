@@ -2,21 +2,18 @@
     Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -254,7 +251,6 @@ void MediaObject::setSource(const MediaSource &source)
     setState(Phonon::LoadingState);
     switch (m_source.type()) {
     case MediaSource::Invalid:
-    case MediaSource::Empty:
         return;
     case MediaSource::Disc:
         Q_ASSERT(m_source.discType() != NoDisc);
@@ -275,7 +271,6 @@ void MediaObject::setSource(const MediaSource &source)
     metaData.insert("TITLE", "Fake video");
     metaData.insert("ARTIST", "Matthias Kretz");
     emit metaDataChanged(metaData);
-    emit currentSourceChanged(m_source);
     QTimer::singleShot(50, this, SLOT(loadingComplete()));
 }
 
@@ -393,7 +388,7 @@ void MediaObject::emitTick()
     if (currentTime() >= totalTime()) // finished
     {
         emit aboutToFinish();
-        if (m_nextSource.type() == MediaSource::Empty || m_nextSource.type() == MediaSource::Invalid) {
+        if (m_nextSource.type() == MediaSource::Invalid) {
             stop();
             emit finished();
         } else {
@@ -401,7 +396,6 @@ void MediaObject::emitTick()
             m_source = m_nextSource;
             m_nextSource = MediaSource();
             switch (m_source.type()) {
-            case MediaSource::Empty:
             case MediaSource::Invalid:
                 abort();
             case MediaSource::Disc:

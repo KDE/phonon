@@ -2,21 +2,18 @@
     Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -29,10 +26,10 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_VOLUMESLIDER
-
 namespace Phonon
 {
+
+
 VolumeSlider::VolumeSlider(QWidget *parent)
     : QWidget(parent),
     k_ptr(new VolumeSliderPrivate(this))
@@ -41,9 +38,7 @@ VolumeSlider::VolumeSlider(QWidget *parent)
 #ifndef QT_NO_TOOLTIP
     setToolTip(tr("Volume: %1%").arg(100));
 #endif
-#ifndef QT_NO_WHATSTHIS
     setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%, the rightmost is %1%").arg(100));
-#endif
 
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_sliderChanged(int)));
     connect(&d->muteButton, SIGNAL(clicked()), SLOT(_k_buttonClicked()));
@@ -59,9 +54,7 @@ VolumeSlider::VolumeSlider(AudioOutput *output, QWidget *parent)
 #ifndef QT_NO_TOOLTIP
     setToolTip(tr("Volume: %1%").arg(100));
 #endif
-#ifndef QT_NO_WHATSTHIS
     setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%, the rightmost is %1%").arg(100));
-#endif
 
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_sliderChanged(int)));
     connect(&d->muteButton, SIGNAL(clicked()), SLOT(_k_buttonClicked()));
@@ -113,10 +106,8 @@ void VolumeSlider::setMaximumVolume(qreal volume)
 {
     int max = static_cast<int>(volume * 100);
     k_ptr->slider.setMaximum(max);
-#ifndef QT_NO_WHATSTHIS
     setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%, the rightmost is %1%")
             .arg(max));
-#endif
 }
 
 Qt::Orientation VolumeSlider::orientation() const
@@ -130,7 +121,7 @@ void VolumeSlider::setOrientation(Qt::Orientation o)
     Qt::Alignment align = (o == Qt::Horizontal ? Qt::AlignVCenter : Qt::AlignHCenter);
     d->layout.setAlignment(&d->muteButton, align);
     d->layout.setAlignment(&d->slider, align);
-    d->layout.setDirection(o == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom);
+    d->layout.setDirection(o == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::BottomToTop);
     d->slider.setOrientation(o);
 }
 
@@ -252,8 +243,6 @@ void VolumeSlider::setSingleStep(int milliseconds)
 }
 
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_VOLUMESLIDER
 
 QT_END_NAMESPACE
 

@@ -1,32 +1,28 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005-2006, 2008 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
-#ifndef PHONON_EXPERIMENTAL_AVCAPTURE_H
-#define PHONON_EXPERIMENTAL_AVCAPTURE_H
+#ifndef PHONON_AVCAPTURE_H
+#define PHONON_AVCAPTURE_H
 
 #include "export.h"
-#include "../medianode.h"
+#include "../mediaobject.h"
 #include "../phonondefs.h"
-#include "objectdescription.h"
-#include "../phononnamespace.h"
+#include "../objectdescription.h"
 
 class QString;
 class QStringList;
@@ -53,11 +49,11 @@ namespace Experimental
      * @see BackendCapabilities::availableAudioCaptureDevices
      * @see BackendCapabilities::availableVideoCaptureDevices
      */
-    class PHONONEXPERIMENTAL_EXPORT AvCapture : public QObject, public Phonon::MediaNode
+    class PHONONEXPERIMENTAL_EXPORT AvCapture : public MediaProducer
     {
         Q_OBJECT
         K_DECLARE_PRIVATE(AvCapture)
-        PHONON_OBJECT(AvCapture)
+        PHONON_HEIR(AvCapture)
         Q_PROPERTY(AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
         Q_PROPERTY(VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
         public:
@@ -79,6 +75,7 @@ namespace Experimental
              */
             VideoCaptureDevice videoCaptureDevice() const;
 
+        public Q_SLOTS:
             /**
              * Sets the audio capture source to use.
              *
@@ -90,7 +87,18 @@ namespace Experimental
              * @see setAudioCaptureDevice(int)
              */
             void setAudioCaptureDevice(const AudioCaptureDevice &source);
-            void setAudioCaptureDevice(Phonon::Category category);
+
+            /**
+             * Sets the capture source to use.
+             *
+             * @param sourceIndex An index corresponding an object of class
+             * AudioCaptureDevice. A list of available objects can be queried from
+             * BackendCapabilities::availableAudioCaptureDevices.
+             *
+             * @see audioCaptureDevice
+             * @see setAudioCaptureDevice(const AudioCaptureDevice &)
+             */
+            void setAudioCaptureDevice(int sourceIndex);
 
             /**
              * Sets the video capture source to use.
@@ -103,21 +111,22 @@ namespace Experimental
              * @see setVideoCaptureDevice(int)
              */
             void setVideoCaptureDevice(const VideoCaptureDevice &source);
-            void setVideoCaptureDevice(Phonon::Category category);
-
-        public Q_SLOTS:
-            /**
-             * Start capture.
-             */
-            void start();
 
             /**
-             * Stop capture.
+             * Sets the capture source to use.
+             *
+             * @param sourceIndex An index corresponding an object of class
+             * VideoCaptureDevice. A list of available objects can be queried from
+             * BackendCapabilities::availableVideoCaptureDevices.
+             *
+             * @see videoCaptureDevice
+             * @see setVideoCaptureDevice(const VideoCaptureDevice &)
              */
-            void stop();
+            void setVideoCaptureDevice(int sourceIndex);
     };
 
 } // namespace Experimental
 } // namespace Phonon
 
-#endif // PHONON_EXPERIMENTAL_AVCAPTURE_H
+// vim: sw=4 ts=4 tw=80
+#endif // PHONON_AVCAPTURE_H

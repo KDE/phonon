@@ -2,21 +2,18 @@
     Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -31,8 +28,6 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-class AudioOutputAdaptor;
-
 class AudioOutputPrivate : public AbstractAudioOutputPrivate
 {
     Q_DECLARE_PUBLIC(AudioOutput)
@@ -46,24 +41,20 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
             return 0;
         }
         void init(Phonon::Category c);
-        QString getStreamUuid();
 
 
     protected:
         AudioOutputPrivate(CastId castId = MediaNodePrivate::AudioOutputType)
             : AbstractAudioOutputPrivate(castId),
-            name(Platform::applicationName()),
-            volume(Platform::loadVolume(name)),
-#ifndef QT_NO_DBUS
-            adaptor(0),
-#endif
+            volume(1.0),
+            outputDeviceIndex(-1),
             deviceBeforeFallback(-1),
             outputDeviceOverridden(false),
             muted(false)
         {
+            name = Platform::applicationName();
+            volume = Platform::loadVolume(name);
         }
-
-        ~AudioOutputPrivate();
 
         enum DeviceChangeType {
             FallbackChange,
@@ -77,14 +68,10 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         void _k_deviceListChanged();
 
     private:
-        QString name;
-        Phonon::AudioOutputDevice device;
         qreal volume;
-        QString streamUuid;
-#ifndef QT_NO_DBUS
-        Phonon::AudioOutputAdaptor *adaptor;
-#endif
         Category category;
+        QString name;
+        int outputDeviceIndex;
         int deviceBeforeFallback;
         bool outputDeviceOverridden;
         bool muted;

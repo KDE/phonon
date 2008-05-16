@@ -2,21 +2,18 @@
     Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -28,13 +25,10 @@
 #include "phononnamespace_p.h"
 
 #include <QtGui/QAction>
-#define IFACES4 VideoWidgetInterface44
-#define IFACES0 VideoWidgetInterface, IFACES4
-#define PHONON_INTERFACENAME IFACES0
+
+#define PHONON_INTERFACENAME VideoWidgetInterface
 
 QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon
 {
@@ -48,8 +42,6 @@ VideoWidget::VideoWidget(QWidget *parent)
     d->createBackendObject();
     setMouseTracking(true);
 }
-
-
 
 VideoWidget::VideoWidget(VideoWidgetPrivate &dd, QWidget *parent)
     : QWidget(parent),
@@ -101,15 +93,6 @@ PHONON_INTERFACE_SETTER(setHue, hue, qreal)
 PHONON_INTERFACE_GETTER(qreal, saturation, d->saturation)
 PHONON_INTERFACE_SETTER(setSaturation, saturation, qreal)
 
-
-QImage VideoWidget::snapshot() const {
-    K_D(const VideoWidget);
-    ConstIface<IFACES4> iface(d);
-    if(iface) return iface->snapshot();
-    return QImage(); // TODO not implemented in VideoInterface
-}
-
-
 void VideoWidget::setFullScreen(bool newFullScreen)
 {
     pDebug() << Q_FUNC_INFO << newFullScreen;
@@ -124,16 +107,8 @@ void VideoWidget::setFullScreen(bool newFullScreen)
             flags |= Qt::Window;
             flags ^= Qt::SubWindow;
             setWindowFlags(flags);
-#ifdef Q_WS_X11
-            // This works around a bug with Compiz
-            // as the window must be visible before we can set the state
-            show();
-            raise();
-            setWindowState( windowState() | Qt::WindowFullScreen ); // set
-#else
             setWindowState( windowState() | Qt::WindowFullScreen ); // set
             show();
-#endif
         }
     } else if (isFullScreen()) {
         flags ^= (Qt::Window | Qt::SubWindow); //clear the flags...
@@ -184,8 +159,6 @@ bool VideoWidget::event(QEvent *e)
 }
 
 } //namespace Phonon
-
-#endif //QT_NO_PHONON_VIDEO
 
 QT_END_NAMESPACE
 

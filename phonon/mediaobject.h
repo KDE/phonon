@@ -2,21 +2,18 @@
     Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 #ifndef Phonon_MEDIAOBJECT_H
@@ -47,7 +44,7 @@ namespace Phonon
      *
      * Notice that most functions of this class are asynchronous.
      * That means if you call play() the object only starts playing when the
-     * stateChanged() signal tells you that the object changed into PlayingState.
+     * stateChanged() signal tells you that the object changed into \ref PlayingState.
      * The states you can expect are documented for those methods.
      *
      * A common usage example is the following:
@@ -58,7 +55,7 @@ namespace Phonon
      * media->play();
      * \endcode
      *
-     * If you want to play more than one media file (one after another) you can
+     * If you want to play more that one media file (one after another) you can
      * either tell MediaObject about all those files
      * \code
      * media->setCurrentSource(":/sounds/startsound.ogg");
@@ -83,6 +80,7 @@ namespace Phonon
      */
     class PHONON_EXPORT MediaObject : public QObject, public MediaNode
     {
+        friend class MediaQueue;
         friend class FrontendInterfacePrivate;
         Q_OBJECT
         K_DECLARE_PRIVATE(MediaObject)
@@ -118,7 +116,7 @@ namespace Phonon
          * \warning For some media data the total time cannot be determined
          * accurately, therefore the accuracy of the prefinishMarkReached signal
          * can be bad sometimes. Still, it is better to use this method than to
-         * look at totalTime() and currentTime() to emulate the behaviour
+         * look at \ref totalTime and \ref currentTime to emulate the behaviour
          * because the backend might have more information available than your
          * application does through totalTime and currentTime.
          *
@@ -254,7 +252,7 @@ namespace Phonon
             /**
              * Returns the strings associated with the given \p key.
              *
-             * Same as above except that the keys are defined in the
+             * Same as above except that the keys are defined in the \ref
              * Phonon::MetaData enum.
              */
             QStringList metaData(Phonon::MetaData key) const;
@@ -288,8 +286,6 @@ namespace Phonon
              *
              * \param source The MediaSource object to the media data. You can
              * just as well use a QUrl or QString (for a local file) here.
-             * Setting an empty (invalid) source, will stop and remove the
-             * current source.
              *
              * \code
              * QUrl url("http://www.example.com/music.ogg");
@@ -302,7 +298,7 @@ namespace Phonon
 
             /**
              * Returns the queued media sources. This does list does not include
-             * the current source (returned by currentSource).
+             * the current source (returned by \ref currentSource).
              */
             QList<MediaSource> queue() const;
 
@@ -395,13 +391,13 @@ namespace Phonon
 
             /**
              * Requests playback of the media data to start. Playback only
-             * starts when stateChanged() signals that it goes into PlayingState,
+             * starts when stateChanged() signals that it goes into \ref PlayingState,
              * though.
              *
              * \par Possible states right after this call:
-             * \li BufferingState
-             * \li PlayingState
-             * \li ErrorState
+             * \li \ref BufferingState
+             * \li \ref PlayingState
+             * \li (\ref ErrorState)
              */
             void play();
 
@@ -409,9 +405,9 @@ namespace Phonon
              * Requests playback to pause. If it was paused before nothing changes.
              *
              * \par Possible states right after this call:
-             * \li PlayingState
-             * \li PausedState
-             * \li ErrorState
+             * \li \ref PlayingState
+             * \li \ref PausedState
+             * \li (\ref ErrorState)
              */
             void pause();
 
@@ -419,16 +415,16 @@ namespace Phonon
              * Requests playback to stop. If it was stopped before nothing changes.
              *
              * \par Possible states right after this call:
-             * \li the state it was in before (e.g. PlayingState)
-             * \li StoppedState
-             * \li ErrorState
+             * \li the state it was in before (e.g. \ref PlayingState)
+             * \li \ref StoppedState
+             * \li (\ref ErrorState)
              */
             void stop();
 
             /**
              * Requests a seek to the time indicated.
              *
-             * You can only seek if state() == PlayingState, BufferingState or PausedState.
+             * You can only seek if state() == \ref PlayingState, \ref BufferingState or \ref PausedState.
              *
              * The call is asynchronous, so currentTime can still be the old
              * value right after this method was called. If all you need is a
@@ -438,26 +434,19 @@ namespace Phonon
              * @param time The time in milliseconds where to continue playing.
              *
              * \par Possible states right after this call:
-             * \li BufferingState
-             * \li PlayingState
-             * \li ErrorState
+             * \li \ref BufferingState
+             * \li \ref PlayingState
+             * \li (\ref ErrorState)
              *
              * \see SeekSlider
              */
             void seek(qint64 time);
 
-            /**
-             * Stops and removes all playing and enqueued media sources.
-             *
-             * \see setCurrentSource
-             */
-            void clear();
-
         Q_SIGNALS:
             /**
              * Emitted when the state of the MediaObject has changed.
              * In case you're not interested in the old state you can also
-             * connect to a slot that only has one State argument.
+             * connect to a slot that only has one \ref State argument.
              *
              * @param newstate The state the Player is in now.
              * @param oldstate The state the Player was in before.
@@ -509,9 +498,7 @@ namespace Phonon
              *                          adding a VideoWidget will show an empty (black)
              *                          VideoWidget.
              */
-#ifndef QT_NO_PHONON_VIDEO
             void hasVideoChanged(bool hasVideo);
-#endif //QT_NO_PHONON_VIDEO
 
             /**
              * Tells about the status of the buffer.
@@ -546,7 +533,7 @@ namespace Phonon
 
             /**
              * Emitted when the MediaObject makes a transition to the next
-             * MediaSource in the queue().
+             * MediaSource in the \ref queue.
              *
              * In other words, it is emitted when an individual MediaSource is
              * finished.
@@ -559,7 +546,7 @@ namespace Phonon
             /**
              * Emitted before the playback of the whole queue stops. When this
              * signal is emitted you still have time to provide the next
-             * MediaSource (using enqueue()) so that playback continues.
+             * MediaSource (using \ref enqueue) so that playback continues.
              *
              * This signal can be used to provide the next MediaSource just in
              * time for the transition still to work.
@@ -604,9 +591,7 @@ namespace Phonon
             Q_PRIVATE_SLOT(k_func(), void _k_resumePlay())
             Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
             Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<QString, QString> &))
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             Q_PRIVATE_SLOT(k_func(), void _k_aboutToFinish())
             Q_PRIVATE_SLOT(k_func(), void _k_currentSourceChanged(const MediaSource &))
     };

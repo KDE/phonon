@@ -2,21 +2,18 @@
     Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -53,15 +50,13 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         virtual void phononObjectDestroyed(MediaNodePrivate *);
         PHONON_EXPORT void setupBackendObject();
 
+        void streamError(Phonon::ErrorType, const QString &);
         void _k_resumePlay();
         void _k_resumePause();
         void _k_metaDataChanged(const QMultiMap<QString, QString> &);
         void _k_aboutToFinish();
         void _k_currentSourceChanged(const MediaSource &);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        void streamError(Phonon::ErrorType, const QString &);
         PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
         MediaObjectPrivate()
             : currentTime(0),
@@ -70,16 +65,12 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             errorString(),
             prefinishMark(0),
             transitionTime(0), // gapless playback
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             kiofallback(0),
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            state(Phonon::LoadingState)
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            , errorType(Phonon::NormalError),
+            state(Phonon::LoadingState),
+            errorType(Phonon::NormalError),
             errorOverride(false),
             ignoreLoadingToBufferingStateChange(false),
             ignoreErrorToLoadingStateChange(false)
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
         }
 
@@ -89,19 +80,12 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         QString errorString;
         qint32 prefinishMark;
         qint32 transitionTime;
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         AbstractMediaStream *kiofallback;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        State state
-#ifdef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            ;
-#else
-            : 8;
+        State state : 8;
         ErrorType errorType : 4;
         bool errorOverride : 1;
         bool ignoreLoadingToBufferingStateChange : 1;
         bool ignoreErrorToLoadingStateChange : 1;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
 };

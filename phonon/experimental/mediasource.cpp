@@ -2,21 +2,19 @@
     Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
 
     This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of
-    the License or (at your option) version 3 or any later version
-    accepted by the membership of KDE e.V. (or its successor approved
-    by the membership of KDE e.V.), Nokia Corporation (or its successors, 
-    if any) and the KDE Free Qt Foundation, which shall act as a proxy 
-    defined in Section 14 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) version 3.
 
-    This program is distributed in the hope that it will be useful,
+    This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -62,7 +60,6 @@ MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
 MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
     : Phonon::MediaSource(*new MediaSourcePrivate(Link))
 {
-    S_D(MediaSource);
     d->linkedSources = mediaList;
     foreach (const Phonon::MediaSource &ms, mediaList) {
         Q_ASSERT(static_cast<MediaSource::Type>(ms.type()) != Link);
@@ -71,7 +68,6 @@ MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
 
 QList<Phonon::MediaSource> MediaSource::substreams() const
 {
-    S_D(MediaSource);
     return d->linkedSources;
 }
 

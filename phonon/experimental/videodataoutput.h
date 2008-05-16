@@ -2,21 +2,18 @@
     Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -42,8 +39,13 @@ namespace Experimental
     struct VideoFrame;
 
     /**
-     * \short This class gives you nothing. ;-)
-     * \deprecated
+     * \short This class gives you the video data.
+     *
+     * This class implements a special AbstractVideoOutput that gives your
+     * application the video data.
+     *
+     * You can also use the video data for further processing (e.g. encoding and
+     * saving to a file).
      *
      * \author Matthias Kretz <kretz@kde.org>
      */
@@ -76,7 +78,7 @@ namespace Experimental
         void stop();
 
     Q_SIGNALS:
-        /* FIXME: disabled this piece of documentation - add another * to enable
+        /**
          * Fixme: I don't think this makes sense, but I've been wrong before.
          *
          * Emitted whenever another dataSize number of samples are ready and
@@ -91,12 +93,11 @@ namespace Experimental
 
         /**
          * The signal is emitted whenever a frame should be displayed.
+         * nowStamp is the current time, outStamp tells the users
+         * what time the frame should be displayed with.
          *
          * The relevant frames should be fetched and displayed using frameForTime
          * method.
-         *
-         * \param nowStamp the current time
-         * \param outStamp the time the frame should be displayed with
          */
         void displayFrame(qint64 nowStamp, qint64 outStamp);
 

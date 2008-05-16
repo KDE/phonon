@@ -104,6 +104,5 @@ throughout this documentation simply called Backend:
 // DOXYGEN_SET_EXTRACT_ALL = NO
 // DOXYGEN_SET_HIDE_UNDOC_MEMBERS = YES
 // DOXYGEN_SET_SOURCE_BROWSER = NO
-// DOXYGEN_SET_INPUT = @topdir@/phonon/phonon
-// DOXYGEN_SET_FILE_PATTERNS = *interface.h */phonon/backend/Mainpage.dox */backend.dox
+// DOXYGEN_SET_INPUT += @topdir@/phonon/addoninterface.h @topdir@/phonon/audiooutputinterface.h @topdir@/phonon/backendinterface.h @topdir@/phonon/effectinterface.h @topdir@/phonon/frontendinterface_p.h @topdir@/phonon/mediaobjectinterface.h @topdir@/phonon/streaminterface.h @topdir@/phonon/videowidgetinterface.h @topdir@/phonon/volumefaderinterface.h
 // vim: tw=100 ts=4 sw=4 expandtab filetype=doxygen

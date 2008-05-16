@@ -4,11 +4,7 @@
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of
-    the License or (at your option) version 3 or any later version
-    accepted by the membership of KDE e.V. (or its successor approved
-    by the membership of KDE e.V.), Nokia Corporation (or its successors, 
-    if any) and the KDE Free Qt Foundation, which shall act as a proxy 
-    defined in Section 14 of version 3 of the license.
+    the License, or (at your option) version 3.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -35,9 +31,7 @@
 #include <phonon/mediaobject.h>
 
 #include <cstdlib>
-#ifndef Q_OS_WIN
 #include <unistd.h>
-#endif
 
 class MediaObjectTest : public QObject
 {
@@ -272,7 +266,7 @@ void MediaObjectTest::initTestCase()
 
     QSignalSpy totalTimeChangedSignalSpy(m_media, SIGNAL(totalTimeChanged(qint64)));
     QVERIFY(m_media->queue().isEmpty());
-    QCOMPARE(m_media->currentSource().type(), MediaSource::Empty);
+    QCOMPARE(m_media->currentSource().type(), MediaSource::Invalid);
     QCOMPARE(m_media->state(), Phonon::LoadingState);
     QCOMPARE(m_stateChangedSignalSpy->count(), 0);
     if (m_file) {
@@ -630,7 +624,7 @@ Q_DECLARE_METATYPE(MediaSource)
 void MediaObjectTest::testJustInTimeQueuing()
 {
     qRegisterMetaType<MediaSource>();
-    QSignalSpy currentSourceChanged(m_media, SIGNAL(currentSourceChanged(const Phonon::MediaSource &)));
+    QSignalSpy currentSourceChanged(m_media, SIGNAL(currentSourceChanged(const MediaSource &)));
     QSignalSpy finished(m_media, SIGNAL(finished()));
     connect(m_media, SIGNAL(aboutToFinish()), SLOT(enqueueMedia()));
 
@@ -645,7 +639,7 @@ void MediaObjectTest::testJustInTimeQueuing()
     }
     disconnect(m_media, SIGNAL(aboutToFinish()), this, SLOT(enqueueMedia()));
     if (currentSourceChanged.isEmpty()) {
-        QVERIFY(QTest::kWaitForSignal(m_media, SIGNAL(currentSourceChanged(const Phonon::MediaSource &)), 3000));
+        QVERIFY(QTest::kWaitForSignal(m_media, SIGNAL(currentSourceChanged(const MediaSource &)), 3000));
     }
     QCOMPARE(currentSourceChanged.size(), 1);
     QCOMPARE(finished.size(), 0);

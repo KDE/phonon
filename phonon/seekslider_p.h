@@ -2,21 +2,18 @@
     Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -24,8 +21,8 @@
 #define SEEKSLIDER_P_H
 
 #include "seekslider.h"
-#include "swiftslider_p.h"
 #include <QtGui/QBoxLayout>
+#include <QtGui/QSlider>
 #include <QtGui/QLabel>
 #include <QtGui/QPixmap>
 #include <QtGui/QIcon>
@@ -35,8 +32,6 @@
 #include "platform_p.h"
 
 QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_PHONON_SEEKSLIDER
 
 namespace Phonon
 {
@@ -49,10 +44,8 @@ class SeekSliderPrivate
             : layout(QBoxLayout::LeftToRight, parent),
             slider(Qt::Horizontal, parent),
             iconLabel(parent),
-            ticking(false)
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-            ,icon(Platform::icon(QLatin1String("player-time"), parent->style()))
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
+            ticking(false),
+            icon(Platform::icon(QLatin1String("player-time")))
         {
             const int e = parent->style()->pixelMetric(QStyle::PM_ButtonIconSize);
             iconSize = QSize(e, e);
@@ -84,7 +77,7 @@ class SeekSliderPrivate
         void _k_currentSourceChanged();
 
         QBoxLayout layout;
-        SwiftSlider slider;
+        QSlider slider;
         QLabel iconLabel;
         QPointer<MediaObject> media;
         bool ticking;
@@ -92,8 +85,6 @@ class SeekSliderPrivate
         QSize iconSize;
 };
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_SEEKSLIDER
 
 QT_END_NAMESPACE
 

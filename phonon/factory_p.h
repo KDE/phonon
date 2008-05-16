@@ -2,21 +2,18 @@
     Copyright (C) 2004-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -70,11 +67,6 @@ namespace Factory
              * \copydoc BackendCapabilities::Notifier::availableAudioOutputDevicesChanged
              */
             void availableAudioOutputDevicesChanged();
-
-            /**
-             * \copydoc BackendCapabilities::Notifier::availableAudioCaptureDevicesChanged
-             */
-            void availableAudioCaptureDevicesChanged();
     };
 
     /**
@@ -95,17 +87,13 @@ namespace Factory
      *
      * \return a pointer to the Effect the backend provides.
      */
-#ifndef QT_NO_PHONON_EFFECT
     QObject *createEffect(int effectId, QObject *parent = 0);
-#endif //QT_NO_PHONON_EFFECT
     /**
      * Create a new backend object for a VolumeFaderEffect.
      *
      * \return a pointer to the VolumeFaderEffect the backend provides.
      */
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
     QObject *createVolumeFaderEffect(QObject *parent = 0);
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
     /**
      * Create a new backend object for a AudioOutput.
      *
@@ -113,20 +101,29 @@ namespace Factory
      */
     QObject *createAudioOutput(QObject *parent = 0);
     /**
+     * Create a new backend object for a AudioDataOutput.
+     *
+     * \return a pointer to the AudioDataOutput the backend provides.
+     */
+    PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
+    /**
+     * Create a new backend object for a Visualization.
+     *
+     * \return a pointer to the Visualization the backend provides.
+     */
+    PHONON_EXPORT QObject *createVisualization(QObject *parent = 0);
+    /**
+     * Create a new backend object for a VideoDataOutput.
+     *
+     * \return a pointer to the VideoDataOutput the backend provides.
+     */
+    PHONON_EXPORT QObject *createVideoDataOutput(QObject *parent = 0);
+    /**
      * Create a new backend object for a VideoWidget.
      *
      * \return a pointer to the VideoWidget the backend provides.
      */
-#ifndef QT_NO_PHONON_VIDEO
     QObject *createVideoWidget(QObject *parent = 0);
-#endif //QT_NO_PHONON_VIDEO
-
-    /**
-    * Create a new backend object for a AudioDataOutput.
-    *
-    * \return a pointer to the AudioDataOutput the backend provides.
-    */
-    PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
 
     /**
      * \return a pointer to the backend interface.

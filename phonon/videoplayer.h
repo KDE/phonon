@@ -2,21 +2,18 @@
     Copyright (C) 2004-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) version 3, or any
-    later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
-    (or its successors, if any) and the KDE Free Qt Foundation, which shall
-    act as a proxy defined in Section 6 of version 3 of the license.
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    Library General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 
 */
 
@@ -30,8 +27,6 @@
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_PHONON_VIDEOPLAYER
 
 namespace Phonon
 {
@@ -52,7 +47,7 @@ class VideoWidget;
  *
  * A play and forget code example:
  * \code
- * VideoPlayer *player = new VideoPlayer(parentWidget);
+ * VideoPlayer *player = new VideoPlayer(Phonon::VideoCategory, parentWidget);
  * connect(player, SIGNAL(finished()), player, SLOT(deleteLater()));
  * player->play(url);
  * \endcode
@@ -72,14 +67,6 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          * \param parent The QObject parent.
          */
         explicit VideoPlayer(Phonon::Category category, QWidget *parent = 0);
-
-        /**
-         * Constructs a new video widget with a \p parent
-         * using Phonon::VideoCategory as its category.
-         *
-         * \param parent The QObject parent.
-         */
-        VideoPlayer(QWidget *parent = 0);
 
         /**
          * On destruction the playback is stopped, also the audio output is
@@ -114,21 +101,6 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          * \returns \c false if it is currently playing or stopped
          */
         bool isPaused() const;
-
-        /**
-         * getter for the MediaObject.
-         */
-        MediaObject *mediaObject() const;
-
-        /**
-         * getter for the AudioOutput.
-         */
-        AudioOutput *audioOutput() const;
-
-        /**
-         * getter for the VideoWidget.
-         */
-        VideoWidget *videoWidget() const;
 
     public Q_SLOTS:
         /**
@@ -186,6 +158,22 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          */
         void setVolume(float volume);
 
+        /**
+         * getter for the MediaObject.
+         */
+        MediaObject *mediaObject() const;
+
+        /**
+         * getter for the AudioOutput.
+         */
+        AudioOutput *audioOutput() const;
+
+        /**
+         * getter for the VideoWidget.
+         */
+        VideoWidget *videoWidget() const;
+
+
     Q_SIGNALS:
         /**
          * This signal is emitted when the playback finished.
@@ -197,8 +185,6 @@ class PHONON_EXPORT VideoPlayer : public QWidget
 };
 
 } //namespace Phonon
-
-#endif //QT_NO_PHONON_VIDEOPLAYER
 
 QT_END_NAMESPACE
 QT_END_HEADER
