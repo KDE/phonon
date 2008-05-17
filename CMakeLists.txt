@@ -149,6 +149,10 @@ else (WIN32)
    set(LIBRARY_OUTPUT_PATH ${Phonon_BINARY_DIR}/lib)
 endif (WIN32)
 
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_C_COMPILER MATCHES "icc")
+   set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common")
+endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_C_COMPILER MATCHES "icc")
+
 add_subdirectory(cmake)
 add_subdirectory(phonon)
 add_subdirectory(includes)
