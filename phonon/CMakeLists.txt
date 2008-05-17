@@ -42,13 +42,14 @@ add_library(phonon SHARED ${phonon_LIB_SRCS})
 target_link_libraries(phonon ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 set_target_properties(phonon PROPERTIES VERSION ${PHONON_LIB_VERSION} SOVERSION ${PHONON_LIB_SOVERSION})
 install(TARGETS phonon ${INSTALL_TARGETS_DEFAULT_ARGS})
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
+#configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
 
 install(FILES
    phonon_export.h
    objectdescription.h
    objectdescriptionmodel.h
-   ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
+   #${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
+   phononnamespace.h
    mediasource.h
    abstractmediastream.h
    abstractmediastream2.h
