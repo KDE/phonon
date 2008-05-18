@@ -25,6 +25,7 @@
 #include <QtTest/QTest>
 #include <QtTest/QSignalSpy>
 #include <cstdlib>
+
 #ifdef USE_FAKE_BACKEND
 #include "fakebackend/backend.h"
 #endif
@@ -42,9 +43,9 @@ QUrl testUrl()
 #ifdef USE_FAKE_BACKEND
     return QUrl("file:///foo.ogg");
 #else
-    QUrl url(getenv("PHONON_TESTURL"));
+    QUrl url(std::getenv("PHONON_TESTURL"));
     if (!url.isValid()) {
-        url = QUrl::fromLocalFile(getenv("PHONON_TESTURL"));
+        url = QUrl::fromLocalFile(std::getenv("PHONON_TESTURL"));
         if (!url.isValid()) {
             QWARN("You need to set PHONON_TESTURL to a valid URL. Expect to see failures.");
         }
