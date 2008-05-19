@@ -1,5 +1,4 @@
-include_directories(${CMAKE_BINARY_DIR}/phonon ${CMAKE_BINARY_DIR}/phonon/phonon ${CMAKE_SOURCE_DIR}/phonon ${CMAKE_SOURCE_DIR}/phonon/phonon)
-
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_subdirectory(tests)
 add_subdirectory(examples)
 add_subdirectory(experimental)
