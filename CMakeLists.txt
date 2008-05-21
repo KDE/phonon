@@ -36,11 +36,16 @@ include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_S
 option(PHONON_BUILD_TESTS "Build the tests")
 
 macro(_SET_FANCY _var _value _comment)
-   if (NOT DEFINED ${_var})
+   if (KDESupport_SOURCE_DIR)
+      # when building inside kdesupport other subprojects write crap into our variables
       set(${_var} "${_value}")
-   else (NOT DEFINED ${_var})
-      set(${_var} "${${_var}}" CACHE PATH "${_comment}")
-   endif (NOT DEFINED ${_var})
+   else (KDESupport_SOURCE_DIR)
+      if (NOT DEFINED ${_var})
+         set(${_var} "${_value}")
+      else (NOT DEFINED ${_var})
+         set(${_var} "${${_var}}" CACHE PATH "${_comment}")
+      endif (NOT DEFINED ${_var})
+   endif (KDESupport_SOURCE_DIR)
 endmacro(_SET_FANCY)
 
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
