@@ -24,7 +24,7 @@
 #include <QtCore/QtGlobal>
 
 #ifndef PHONONEXPERIMENTAL_EXPORT
-# if defined(MAKE_PHONONEXPERIMENTAL_LIB)
+# if defined(phononexperimental_EXPORTS)
    /* We are building this library */ 
 #  define PHONONEXPERIMENTAL_EXPORT Q_DECL_EXPORT
 # else
