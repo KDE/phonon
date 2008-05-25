@@ -15,4 +15,5 @@ set(phonon_fake_PART_SRCS
 
 automoc4(phonon_fake phonon_fake_PART_SRCS)
 add_library(phonon_fake SHARED ${phonon_fake_PART_SRCS})
+set_target_properties(phonon_fake PROPERTIES DEFINE_SYMBOL MAKE_PHONON_FAKE_LIB)
 target_link_libraries(phonon_fake ${PHONON_LIBS} phononexperimental)
