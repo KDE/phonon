@@ -29,7 +29,7 @@
 
 class KUrl;
 
-#ifdef phonon_fake_EXPORTS /* We are building this library */
+#ifdef MAKE_PHONON_FAKE_LIB /* We are building this library */
 # define PHONON_FAKE_EXPORT Q_DECL_EXPORT
 #else /* We are using this library */
 # define PHONON_FAKE_EXPORT Q_DECL_IMPORT

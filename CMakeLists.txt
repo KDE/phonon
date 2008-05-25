@@ -29,6 +29,9 @@ set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
+if(msvc)
+  add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
+endif(msvc)
 
 # for including config.h and for includes like <kparts/foo.h>
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/includes)
@@ -78,7 +81,8 @@ if (Q_WS_MAC)
    set(_global_add_executable_param MACOSX_BUNDLE)
 endif (Q_WS_MAC)
 if (WIN32)
-   set(_global_add_executable_param WIN32)
+   # no WIN32 here - all executables are command line executables
+   set(_global_add_executable_param)
 endif (WIN32)
 
 macro(phonon_add_executable _target)

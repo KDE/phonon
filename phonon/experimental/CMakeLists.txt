@@ -15,7 +15,11 @@ set(phononexperimental_LIB_SRCS
 automoc4(phononexperimental phononexperimental_LIB_SRCS)
 add_library(phononexperimental SHARED ${phononexperimental_LIB_SRCS})
 target_link_libraries(phononexperimental ${PHONON_LIBS})
-set_target_properties(phononexperimental PROPERTIES VERSION ${PHONON_LIB_VERSION} SOVERSION ${PHONON_LIB_SOVERSION})
+set_target_properties(phononexperimental PROPERTIES
+                                         VERSION ${PHONON_LIB_VERSION}
+                                         SOVERSION ${PHONON_LIB_SOVERSION}
+                                         DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
+                                         )
 install(TARGETS phononexperimental ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install headers ###############

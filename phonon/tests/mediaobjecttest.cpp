@@ -31,7 +31,9 @@
 #include <phonon/mediaobject.h>
 
 #include <cstdlib>
+#ifndef Q_OS_WIN
 #include <unistd.h>
+#endif
 
 class MediaObjectTest : public QObject
 {

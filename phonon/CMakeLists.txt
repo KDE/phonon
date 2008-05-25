@@ -41,7 +41,11 @@ set(phonon_LIB_SRCS
 automoc4(phonon phonon_LIB_SRCS)
 add_library(phonon SHARED ${phonon_LIB_SRCS})
 target_link_libraries(phonon ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-set_target_properties(phonon PROPERTIES VERSION ${PHONON_LIB_VERSION} SOVERSION ${PHONON_LIB_SOVERSION})
+set_target_properties(phonon PROPERTIES
+                             VERSION ${PHONON_LIB_VERSION}
+                             SOVERSION ${PHONON_LIB_SOVERSION}
+                             DEFINE_SYMBOL MAKE_PHONON_LIB
+                             )
 install(TARGETS phonon ${INSTALL_TARGETS_DEFAULT_ARGS})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
 
