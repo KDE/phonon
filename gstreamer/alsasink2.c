@@ -19,8 +19,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public 
- *  License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
 
 /**
@@ -44,8 +46,6 @@
  * Last reviewed on 2006-03-01 (0.10.4)
  */
 
-#define _XOPEN_SOURCE 600
-
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -60,12 +60,6 @@
 #include <gst/audio/multichannel.h>
 
 #define _(text) (text)
-
-#define GST_CHECK_ALSA_VERSION(major,minor,micro) \
-    (SND_LIB_MAJOR > (major) || \
-     (SND_LIB_MAJOR == (major) && SND_LIB_MINOR > (minor)) || \
-     (SND_LIB_MAJOR == (major) && SND_LIB_MINOR == (minor) && \
-      SND_LIB_SUBMINOR >= (micro)))
 
 static const GList *
 gst_alsa_device_property_probe_get_properties (GstPropertyProbe * probe)
@@ -102,8 +96,8 @@ gst_alsa_get_device_list (snd_pcm_stream_t stream)
   if (stream == ~0u)
     stream = 0;
 
-  snd_ctl_card_info_malloc (&info);
-  snd_pcm_info_malloc (&pcminfo);
+  snd_ctl_card_info_alloca (&info);
+  snd_pcm_info_alloca (&pcminfo);
   card = -1;
 
   if (snd_card_next (&card) < 0 || card < 0) {
@@ -153,9 +147,6 @@ gst_alsa_get_device_list (snd_pcm_stream_t stream)
       break;
     }
   }
-
-  snd_ctl_card_info_free (info);
-  snd_pcm_info_free (pcminfo);
 
   return list;
 }
@@ -237,7 +228,7 @@ gst_alsa_property_probe_interface_init (GstPropertyProbeInterface * iface)
   iface->get_values = gst_alsa_device_property_probe_get_values;
 }
 
-static void
+void
 gst_alsa_type_add_device_property_probe_interface (GType type)
 {
   static const GInterfaceInfo probe_iface_info = {
@@ -316,21 +307,14 @@ max_rate_err:
 
 static const struct
 {
-  const int width;
-  const int depth;
   const int sformat;
   const int uformat;
-} pcmformats[] = {
+} pcmformats[4] = {
   {
-  8, 8, SND_PCM_FORMAT_S8, SND_PCM_FORMAT_U8}, {
-  16, 16, SND_PCM_FORMAT_S16, SND_PCM_FORMAT_U16}, {
-  32, 24, SND_PCM_FORMAT_S24, SND_PCM_FORMAT_U24}, {
-#if (G_BYTE_ORDER == G_LITTLE_ENDIAN)   /* no endian-unspecific enum available */
-  24, 24, SND_PCM_FORMAT_S24_3LE, SND_PCM_FORMAT_U24_3LE}, {
-#else
-  24, 24, SND_PCM_FORMAT_S24_3BE, SND_PCM_FORMAT_U24_3BE}, {
-#endif
-  32, 32, SND_PCM_FORMAT_S32, SND_PCM_FORMAT_U32}
+  SND_PCM_FORMAT_S8, SND_PCM_FORMAT_U8}, {
+  SND_PCM_FORMAT_S16, SND_PCM_FORMAT_U16}, {
+  SND_PCM_FORMAT_UNKNOWN, SND_PCM_FORMAT_UNKNOWN}, {
+  SND_PCM_FORMAT_S32, SND_PCM_FORMAT_U32}
 };
 
 static GstCaps *
@@ -342,32 +326,23 @@ gst_alsa_detect_formats (GstObject * obj, snd_pcm_hw_params_t * hw_params,
   GstCaps *caps;
   guint i;
 
-  snd_pcm_format_mask_malloc (&mask);
+  snd_pcm_format_mask_alloca (&mask);
   snd_pcm_hw_params_get_format_mask (hw_params, mask);
 
   caps = gst_caps_new_empty ();
 
   for (i = 0; i < gst_caps_get_size (in_caps); ++i) {
     GstStructure *scopy;
-    guint w;
-    gint width = 0, depth = 0;
+    gint w, width = 0;
 
     s = gst_caps_get_structure (in_caps, i);
     if (!gst_structure_has_name (s, "audio/x-raw-int")) {
       GST_WARNING_OBJECT (obj, "skipping non-int format");
       continue;
     }
-    if (!gst_structure_get_int (s, "width", &width) ||
-        !gst_structure_get_int (s, "depth", &depth))
-      continue;
-    if (width == 0 || (width % 8) != 0)
-      continue;                 /* Only full byte widths are valid */
-    for (w = 0; w < G_N_ELEMENTS (pcmformats); w++)
-      if (pcmformats[w].width == width && pcmformats[w].depth == depth)
-        break;
-    if (w == G_N_ELEMENTS (pcmformats))
-      continue;                 /* Unknown format */
-
+    gst_structure_get_int (s, "width", &width);
+    g_assert (width != 0 && (width % 8) == 0);
+    w = (width / 8) - 1;
     if (snd_pcm_format_mask_test (mask, pcmformats[w].sformat) &&
         snd_pcm_format_mask_test (mask, pcmformats[w].uformat)) {
       /* template contains { true, false } or just one, leave it as it is */
@@ -390,7 +365,6 @@ gst_alsa_detect_formats (GstObject * obj, snd_pcm_hw_params_t * hw_params,
     }
   }
 
-  snd_pcm_format_mask_free (mask);
   gst_caps_unref (in_caps);
   return caps;
 }
@@ -594,54 +568,6 @@ max_chan_error:
   }
 }
 
-#ifndef GST_CHECK_VERSION
-#define GST_CHECK_VERSION(major,minor,micro) \
-    (GST_VERSION_MAJOR > (major) || \
-     (GST_VERSION_MAJOR == (major) && GST_VERSION_MINOR > (minor)) || \
-     (GST_VERSION_MAJOR == (major) && GST_VERSION_MINOR == (minor) && GST_VERSION_MICRO >= (micro)))
-#endif
-
-#if GST_CHECK_VERSION(0, 10, 18)
-snd_pcm_t *
-gst_alsa_open_iec958_pcm (GstObject * obj)
-{
-  char *iec958_pcm_name = NULL;
-  snd_pcm_t *pcm = NULL;
-  int res;
-  char devstr[256];             /* Storage for local 'default' device string */
-
-  /*
-   * Try and open our default iec958 device. Fall back to searching on card x
-   * if this fails, which should only happen on older alsa setups
-   */
-
-  /* The string will be one of these:
-   * SPDIF_CON: Non-audio flag not set:
-   *    spdif:{AES0 0x0 AES1 0x82 AES2 0x0 AES3 0x2}
-   * SPDIF_CON: Non-audio flag set:
-   *    spdif:{AES0 0x2 AES1 0x82 AES2 0x0 AES3 0x2}
-   */
-  sprintf (devstr,
-      "iec958:{AES0 0x%02x AES1 0x%02x AES2 0x%02x AES3 0x%02x}",
-      IEC958_AES0_CON_EMPHASIS_NONE | IEC958_AES0_NONAUDIO,
-      IEC958_AES1_CON_ORIGINAL | IEC958_AES1_CON_PCM_CODER,
-      0, IEC958_AES3_CON_FS_48000);
-
-  GST_DEBUG_OBJECT (obj, "Generated device string \"%s\"", devstr);
-  iec958_pcm_name = devstr;
-
-  res = snd_pcm_open (&pcm, iec958_pcm_name, SND_PCM_STREAM_PLAYBACK, 0);
-  if (G_UNLIKELY (res < 0)) {
-    GST_DEBUG_OBJECT (obj, "failed opening IEC958 device: %s",
-        snd_strerror (res));
-    pcm = NULL;
-  }
-
-  return pcm;
-}
-#endif
-
-
 /*
  * gst_alsa_probe_supported_formats:
  *
@@ -655,15 +581,12 @@ gst_alsa_probe_supported_formats (GstObject * obj, snd_pcm_t * handle,
     const GstCaps * template_caps)
 {
   snd_pcm_hw_params_t *hw_params;
-  snd_pcm_stream_t stream_type;
   GstCaps *caps;
   gint err;
 
-  snd_pcm_hw_params_malloc (&hw_params);
+  snd_pcm_hw_params_alloca (&hw_params);
   if ((err = snd_pcm_hw_params_any (handle, hw_params)) < 0)
     goto error;
-
-  stream_type = snd_pcm_stream (handle);
 
   caps = gst_caps_copy (template_caps);
 
@@ -676,33 +599,17 @@ gst_alsa_probe_supported_formats (GstObject * obj, snd_pcm_t * handle,
   if (!(caps = gst_alsa_detect_channels (obj, hw_params, caps)))
     goto subroutine_error;
 
-#if GST_CHECK_VERSION(0, 10, 18)
-  /* Try opening IEC958 device to see if we can support that format (playback
-   * only for now but we could add SPDIF capture later) */
-  if (stream_type == SND_PCM_STREAM_PLAYBACK) {
-    snd_pcm_t *pcm = gst_alsa_open_iec958_pcm (obj);
-
-    if (G_LIKELY (pcm)) {
-      gst_caps_append (caps, gst_caps_new_simple ("audio/x-iec958", NULL));
-      snd_pcm_close (pcm);
-    }
-  }
-#endif
-
-  snd_pcm_hw_params_free (hw_params);
   return caps;
 
   /* ERRORS */
 error:
   {
     GST_ERROR_OBJECT (obj, "failed to query formats: %s", snd_strerror (err));
-    snd_pcm_hw_params_free (hw_params);
     return NULL;
   }
 subroutine_error:
   {
     GST_ERROR_OBJECT (obj, "failed to query formats");
-    snd_pcm_hw_params_free (hw_params);
     return NULL;
   }
 }
@@ -809,8 +716,6 @@ GST_ELEMENT_DETAILS ("Audio sink (ALSA)",
 
 #define DEFAULT_DEVICE		"default"
 #define DEFAULT_DEVICE_NAME	""
-#define SPDIF_PERIOD_SIZE 1536
-#define SPDIF_BUFFER_SIZE 15360
 
 enum
 {
@@ -821,7 +726,7 @@ enum
 
 static void gst_alsasink2_init_interfaces (GType type);
 
-GST_BOILERPLATE_FULL (_k_GstAlsaSink, gst_alsasink2, GstAudioSink,
+GST_BOILERPLATE_FULL (GstAlsaSink2, gst_alsasink2, GstAudioSink,
     GST_TYPE_AUDIO_SINK, gst_alsasink2_init_interfaces);
 
 static void gst_alsasink2_finalise (GObject * object);
@@ -866,18 +771,6 @@ static GstStaticPadTemplate alsasink2_sink_factory =
         "audio/x-raw-int, "
         "endianness = (int) { " ALSA_SINK2_FACTORY_ENDIANNESS " }, "
         "signed = (boolean) { TRUE, FALSE }, "
-        "width = (int) 24, "
-        "depth = (int) 24, "
-        "rate = (int) [ 1, MAX ], " "channels = (int) [ 1, MAX ]; "
-        "audio/x-raw-int, "
-        "endianness = (int) { " ALSA_SINK2_FACTORY_ENDIANNESS " }, "
-        "signed = (boolean) { TRUE, FALSE }, "
-        "width = (int) 32, "
-        "depth = (int) 24, "
-        "rate = (int) [ 1, MAX ], " "channels = (int) [ 1, MAX ]; "
-        "audio/x-raw-int, "
-        "endianness = (int) { " ALSA_SINK2_FACTORY_ENDIANNESS " }, "
-        "signed = (boolean) { TRUE, FALSE }, "
         "width = (int) 16, "
         "depth = (int) 16, "
         "rate = (int) [ 1, MAX ], " "channels = (int) [ 1, MAX ]; "
@@ -885,14 +778,13 @@ static GstStaticPadTemplate alsasink2_sink_factory =
         "signed = (boolean) { TRUE, FALSE }, "
         "width = (int) 8, "
         "depth = (int) 8, "
-        "rate = (int) [ 1, MAX ], " "channels = (int) [ 1, MAX ];"
-        "audio/x-iec958")
+        "rate = (int) [ 1, MAX ], " "channels = (int) [ 1, MAX ]")
     );
 
 static void
 gst_alsasink2_finalise (GObject * object)
 {
-  _k_GstAlsaSink *sink = GST_ALSA_SINK2 (object);
+  GstAlsaSink2 *sink = GST_ALSA_SINK2 (object);
 
   g_free (sink->device);
   g_mutex_free (sink->alsa_lock);
@@ -925,7 +817,7 @@ gst_alsasink2_base_init (gpointer g_class)
       gst_static_pad_template_get (&alsasink2_sink_factory));
 }
 static void
-gst_alsasink2_class_init (_k_GstAlsaSinkClass * klass)
+gst_alsasink2_class_init (GstAlsaSink2Class * klass)
 {
   GObjectClass *gobject_class;
   GstElementClass *gstelement_class;
@@ -970,7 +862,7 @@ static void
 gst_alsasink2_set_property (GObject * object, guint prop_id,
     const GValue * value, GParamSpec * pspec)
 {
-  _k_GstAlsaSink *sink;
+  GstAlsaSink2 *sink;
 
   sink = GST_ALSA_SINK2 (object);
 
@@ -993,7 +885,7 @@ static void
 gst_alsasink2_get_property (GObject * object, guint prop_id,
     GValue * value, GParamSpec * pspec)
 {
-  _k_GstAlsaSink *sink;
+  GstAlsaSink2 *sink;
 
   sink = GST_ALSA_SINK2 (object);
 
@@ -1013,7 +905,7 @@ gst_alsasink2_get_property (GObject * object, guint prop_id,
 }
 
 static void
-gst_alsasink2_init (_k_GstAlsaSink * alsasink2, _k_GstAlsaSinkClass * g_class)
+gst_alsasink2_init (GstAlsaSink2 * alsasink2, GstAlsaSink2Class * g_class)
 {
   GST_DEBUG_OBJECT (alsasink2, "initializing alsasink2");
 
@@ -1041,7 +933,7 @@ gst_alsasink2_getcaps (GstBaseSink * bsink)
 {
   GstElementClass *element_class;
   GstPadTemplate *pad_template;
-  _k_GstAlsaSink *sink = GST_ALSA_SINK2 (bsink);
+  GstAlsaSink2 *sink = GST_ALSA_SINK2 (bsink);
   GstCaps *caps;
 
   if (sink->handle == NULL) {
@@ -1071,18 +963,17 @@ gst_alsasink2_getcaps (GstBaseSink * bsink)
 }
 
 static int
-set_hwparams (_k_GstAlsaSink * alsa)
+set_hwparams (GstAlsaSink2 * alsa)
 {
   guint rrate;
   gint err, dir;
   snd_pcm_hw_params_t *params;
   guint period_time, buffer_time;
 
-  snd_pcm_hw_params_malloc (&params);
+  snd_pcm_hw_params_alloca (&params);
 
-  GST_DEBUG_OBJECT (alsa, "Negotiating to %d channels @ %d Hz (format = %s) "
-      "SPDIF (%d)", alsa->channels, alsa->rate,
-      snd_pcm_format_name (alsa->format), alsa->iec958);
+  GST_DEBUG_OBJECT (alsa, "Negotiating to %d channels @ %d Hz (format = %s)",
+      alsa->channels, alsa->rate, snd_pcm_format_name (alsa->format));
 
   /* start with requested values, if we cannot configure alsa for those values,
    * we set these values to -1, which will leave the default alsa values */
@@ -1096,18 +987,6 @@ retry:
   CHECK (snd_pcm_hw_params_set_access (alsa->handle, params, alsa->access),
       wrong_access);
   /* set the sample format */
-#if GST_CHECK_VERSION(0, 10, 18)
-  if (alsa->iec958) {
-    /* Try to use big endian first else fallback to le and swap bytes */
-    if (snd_pcm_hw_params_set_format (alsa->handle, params, alsa->format) < 0) {
-      alsa->format = SND_PCM_FORMAT_S16_LE;
-      alsa->need_swap = TRUE;
-      GST_DEBUG_OBJECT (alsa, "falling back to little endian with swapping");
-    } else {
-      alsa->need_swap = FALSE;
-    }
-  }
-#endif
   CHECK (snd_pcm_hw_params_set_format (alsa->handle, params, alsa->format),
       no_sample_format);
   /* set the count of channels */
@@ -1115,7 +994,7 @@ retry:
       no_channels);
   /* set the stream rate */
   rrate = alsa->rate;
-  CHECK (snd_pcm_hw_params_set_rate_near (alsa->handle, params, &rrate, NULL),
+  CHECK (snd_pcm_hw_params_set_rate_near (alsa->handle, params, &rrate, 0),
       no_rate);
   if (rrate != alsa->rate)
     goto rate_match;
@@ -1144,7 +1023,7 @@ retry:
 
   /* now try to configure the buffer time and period time, if one
    * of those fail, we fall back to the defaults and emit a warning. */
-  if (buffer_time != ~0u && !alsa->iec958) {
+  if (buffer_time != ~0u) {
     /* set the buffer time */
     if ((err = snd_pcm_hw_params_set_buffer_time_near (alsa->handle, params,
                 &buffer_time, &dir)) < 0) {
@@ -1155,9 +1034,8 @@ retry:
       buffer_time = -1;
       goto retry;
     }
-    GST_DEBUG_OBJECT (alsa, "buffer time %u", buffer_time);
   }
-  if (period_time != ~0u && !alsa->iec958) {
+  if (period_time != ~0u) {
     /* set the period time */
     if ((err = snd_pcm_hw_params_set_period_time_near (alsa->handle, params,
                 &period_time, &dir)) < 0) {
@@ -1168,18 +1046,6 @@ retry:
       period_time = -1;
       goto retry;
     }
-    GST_DEBUG_OBJECT (alsa, "period time %u", period_time);
-  }
-
-  /* Set buffer size and period size manually for SPDIF */
-  if (G_UNLIKELY (alsa->iec958)) {
-    snd_pcm_uframes_t buffer_size = SPDIF_BUFFER_SIZE;
-    snd_pcm_uframes_t period_size = SPDIF_PERIOD_SIZE;
-
-    CHECK (snd_pcm_hw_params_set_buffer_size_near (alsa->handle, params,
-            &buffer_size), buffer_size);
-    CHECK (snd_pcm_hw_params_set_period_size_near (alsa->handle, params,
-            &period_size, NULL), period_size);
   }
 
   /* write the parameters to device */
@@ -1194,7 +1060,6 @@ retry:
   GST_DEBUG_OBJECT (alsa, "buffer size %lu, period size %lu", alsa->buffer_size,
       alsa->period_size);
 
-  snd_pcm_hw_params_free (params);
   return 0;
 
   /* ERRORS */
@@ -1203,21 +1068,18 @@ no_config:
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Broken configuration for playback: no configurations available: %s",
             snd_strerror (err)));
-    snd_pcm_hw_params_free (params);
     return err;
   }
 wrong_access:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Access type not available for playback: %s", snd_strerror (err)));
-    snd_pcm_hw_params_free (params);
     return err;
   }
 no_sample_format:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Sample format not available for playback: %s", snd_strerror (err)));
-    snd_pcm_hw_params_free (params);
     return err;
   }
 no_channels:
@@ -1235,7 +1097,6 @@ no_channels:
           alsa->channels);
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (msg), (snd_strerror (err)));
     g_free (msg);
-    snd_pcm_hw_params_free (params);
     return err;
   }
 no_rate:
@@ -1249,39 +1110,35 @@ rate_match:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Rate doesn't match (requested %iHz, get %iHz)", alsa->rate, err));
-    snd_pcm_hw_params_free (params);
     return -EINVAL;
   }
 buffer_size:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Unable to get buffer size for playback: %s", snd_strerror (err)));
-    snd_pcm_hw_params_free (params);
     return err;
   }
 period_size:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Unable to get period size for playback: %s", snd_strerror (err)));
-    snd_pcm_hw_params_free (params);
     return err;
   }
 set_hw_params:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Unable to set hw params for playback: %s", snd_strerror (err)));
-    snd_pcm_hw_params_free (params);
     return err;
   }
 }
 
 static int
-set_swparams (_k_GstAlsaSink * alsa)
+set_swparams (GstAlsaSink2 * alsa)
 {
   int err;
   snd_pcm_sw_params_t *params;
 
-  snd_pcm_sw_params_malloc (&params);
+  snd_pcm_sw_params_alloca (&params);
 
   /* get the current swparams */
   CHECK (snd_pcm_sw_params_current (alsa->handle, params), no_config);
@@ -1294,18 +1151,12 @@ set_swparams (_k_GstAlsaSink * alsa)
   /* allow the transfer when at least period_size samples can be processed */
   CHECK (snd_pcm_sw_params_set_avail_min (alsa->handle, params,
           alsa->period_size), set_avail);
-
-#if GST_CHECK_ALSA_VERSION(1,0,16)
-  /* snd_pcm_sw_params_set_xfer_align() is deprecated, alignment is always 1 */
-#else
   /* align all transfers to 1 sample */
   CHECK (snd_pcm_sw_params_set_xfer_align (alsa->handle, params, 1), set_align);
-#endif
 
   /* write the parameters to the playback device */
   CHECK (snd_pcm_sw_params (alsa->handle, params), set_sw_params);
 
-  snd_pcm_sw_params_free (params);
   return 0;
 
   /* ERRORS */
@@ -1314,7 +1165,6 @@ no_config:
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Unable to determine current swparams for playback: %s",
             snd_strerror (err)));
-    snd_pcm_sw_params_free (params);
     return err;
   }
 start_threshold:
@@ -1322,40 +1172,31 @@ start_threshold:
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Unable to set start threshold mode for playback: %s",
             snd_strerror (err)));
-    snd_pcm_sw_params_free (params);
     return err;
   }
 set_avail:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Unable to set avail min for playback: %s", snd_strerror (err)));
-    snd_pcm_sw_params_free (params);
     return err;
   }
-#if !GST_CHECK_ALSA_VERSION(1,0,16)
 set_align:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Unable to set transfer align for playback: %s", snd_strerror (err)));
-    snd_pcm_sw_params_free (params);
     return err;
   }
-#endif
 set_sw_params:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Unable to set sw params for playback: %s", snd_strerror (err)));
-    snd_pcm_sw_params_free (params);
     return err;
   }
 }
 
 static gboolean
-alsasink2_parse_spec (_k_GstAlsaSink * alsa, GstRingBufferSpec * spec)
+alsasink2_parse_spec (GstAlsaSink2 * alsa, GstRingBufferSpec * spec)
 {
-  /* Initialize our boolean */
-  alsa->iec958 = FALSE;
-
   switch (spec->type) {
     case GST_BUFTYPE_LINEAR:
       GST_DEBUG_OBJECT (alsa,
@@ -1389,12 +1230,6 @@ alsasink2_parse_spec (_k_GstAlsaSink * alsa, GstRingBufferSpec * spec)
     case GST_BUFTYPE_MU_LAW:
       alsa->format = SND_PCM_FORMAT_MU_LAW;
       break;
-#if GST_CHECK_VERSION(0, 10, 18)
-    case GST_BUFTYPE_IEC958:
-      alsa->format = SND_PCM_FORMAT_S16_BE;
-      alsa->iec958 = TRUE;
-      break;
-#endif
     default:
       goto error;
 
@@ -1417,11 +1252,12 @@ error:
 static gboolean
 gst_alsasink2_open (GstAudioSink * asink)
 {
-  _k_GstAlsaSink *alsa;
+  GstAlsaSink2 *alsa;
   gint err;
 
   alsa = GST_ALSA_SINK2 (asink);
 
+  fprintf(stderr, "alsasink2: snd_pcm_open(%s)\n", alsa->device);
   CHECK (snd_pcm_open (&alsa->handle, alsa->device, SND_PCM_STREAM_PLAYBACK,
           SND_PCM_NONBLOCK), open_error);
   GST_LOG_OBJECT (alsa, "Opened device %s", alsa->device);
@@ -1432,14 +1268,11 @@ gst_alsasink2_open (GstAudioSink * asink)
 open_error:
   {
     if (err == -EBUSY) {
-      GST_ELEMENT_ERROR (alsa, RESOURCE, BUSY,
-          (_("Could not open audio device for playback. "
-                  "Device is being used by another application.")),
-          ("Device '%s' is busy", alsa->device));
+      GST_ELEMENT_ERROR (alsa, RESOURCE, BUSY, (NULL), ("Device '%s' is busy",
+              alsa->device));
     } else {
       GST_ELEMENT_ERROR (alsa, RESOURCE, OPEN_WRITE,
-          (_("Could not open audio device for playback.")),
-          ("Playback open error on device '%s': %s", alsa->device,
+          (NULL), ("Playback open error on device '%s': %s", alsa->device,
               snd_strerror (err)));
     }
     return FALSE;
@@ -1449,23 +1282,15 @@ open_error:
 static gboolean
 gst_alsasink2_prepare (GstAudioSink * asink, GstRingBufferSpec * spec)
 {
-  _k_GstAlsaSink *alsa;
+  GstAlsaSink2 *alsa;
   gint err;
 
   alsa = GST_ALSA_SINK2 (asink);
 
-#if GST_CHECK_VERSION(0, 10, 18)
-  if (spec->format == GST_IEC958) {
-    snd_pcm_close (alsa->handle);
-    alsa->handle = gst_alsa_open_iec958_pcm (GST_OBJECT (alsa));
-    if (G_UNLIKELY (!alsa->handle)) {
-      goto no_iec958;
-    }
-  }
-#endif
-
   if (!alsasink2_parse_spec (alsa, spec))
     goto spec_parse;
+
+  CHECK (snd_pcm_nonblock (alsa->handle, 0), non_block);
 
   CHECK (set_hwparams (alsa), hw_params_failed);
   CHECK (set_swparams (alsa), sw_params_failed);
@@ -1474,37 +1299,19 @@ gst_alsasink2_prepare (GstAudioSink * asink, GstRingBufferSpec * spec)
   spec->segsize = alsa->period_size * spec->bytes_per_sample;
   spec->segtotal = alsa->buffer_size / alsa->period_size;
 
-  {
-    snd_output_t *out_buf = NULL;
-    char *msg = NULL;
-
-    snd_output_buffer_open (&out_buf);
-    snd_pcm_dump_hw_setup (alsa->handle, out_buf);
-    snd_output_buffer_string (out_buf, &msg);
-    GST_DEBUG_OBJECT (alsa, "Hardware setup: \n%s", msg);
-    snd_output_close (out_buf);
-    snd_output_buffer_open (&out_buf);
-    snd_pcm_dump_sw_setup (alsa->handle, out_buf);
-    snd_output_buffer_string (out_buf, &msg);
-    GST_DEBUG_OBJECT (alsa, "Software setup: \n%s", msg);
-    snd_output_close (out_buf);
-  }
-
   return TRUE;
 
   /* ERRORS */
-#if GST_CHECK_VERSION(0, 10, 18)
-no_iec958:
-  {
-    GST_ELEMENT_ERROR (alsa, RESOURCE, OPEN_WRITE, (NULL),
-        ("Could not open IEC958 (SPDIF) device for playback"));
-    return FALSE;
-  }
-#endif
 spec_parse:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Error parsing spec"));
+    return FALSE;
+  }
+non_block:
+  {
+    GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
+        ("Could not set device to blocking: %s", snd_strerror (err)));
     return FALSE;
   }
 hw_params_failed:
@@ -1524,7 +1331,7 @@ sw_params_failed:
 static gboolean
 gst_alsasink2_unprepare (GstAudioSink * asink)
 {
-  _k_GstAlsaSink *alsa;
+  GstAlsaSink2 *alsa;
   gint err;
 
   alsa = GST_ALSA_SINK2 (asink);
@@ -1532,6 +1339,8 @@ gst_alsasink2_unprepare (GstAudioSink * asink)
   CHECK (snd_pcm_drop (alsa->handle), drop);
 
   CHECK (snd_pcm_hw_free (alsa->handle), hw_free);
+
+  CHECK (snd_pcm_nonblock (alsa->handle, 1), non_block);
 
   return TRUE;
 
@@ -1548,18 +1357,22 @@ hw_free:
         ("Could not free hw params: %s", snd_strerror (err)));
     return FALSE;
   }
+non_block:
+  {
+    GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
+        ("Could not set device to nonblocking: %s", snd_strerror (err)));
+    return FALSE;
+  }
 }
 
 static gboolean
 gst_alsasink2_close (GstAudioSink * asink)
 {
-  _k_GstAlsaSink *alsa = GST_ALSA_SINK2 (asink);
+  GstAlsaSink2 *alsa = GST_ALSA_SINK2 (asink);
   gint err;
 
-  if (alsa->handle) {
-    CHECK (snd_pcm_close (alsa->handle), close_error);
-    alsa->handle = NULL;
-  }
+  CHECK (snd_pcm_close (alsa->handle), close_error);
+  alsa->handle = NULL;
   gst_caps_replace (&alsa->cached_caps, NULL);
 
   return TRUE;
@@ -1578,7 +1391,7 @@ close_error:
  *   Underrun and suspend recovery
  */
 static gint
-xrun_recovery (_k_GstAlsaSink * alsa, snd_pcm_t * handle, gint err)
+xrun_recovery (GstAlsaSink2 * alsa, snd_pcm_t * handle, gint err)
 {
   GST_DEBUG_OBJECT (alsa, "xrun recovery %d", err);
 
@@ -1610,38 +1423,34 @@ xrun_recovery (_k_GstAlsaSink * alsa, snd_pcm_t * handle, gint err)
 static guint
 gst_alsasink2_write (GstAudioSink * asink, gpointer data, guint length)
 {
-  _k_GstAlsaSink *alsa;
+  GstAlsaSink2 *alsa;
   gint err;
   gint cptr;
-  gint16 *ptr = data;
+  gint16 *ptr;
 
   alsa = GST_ALSA_SINK2 (asink);
 
-  if (alsa->iec958 && alsa->need_swap) {
-    guint i;
-
-    GST_DEBUG_OBJECT (asink, "swapping bytes");
-    for (i = 0; i < length / 2; i++) {
-      ptr[i] = GUINT16_SWAP_LE_BE (ptr[i]);
-    }
-  }
-
-  GST_LOG_OBJECT (asink, "received audio samples buffer of %u bytes", length);
-
   cptr = length / alsa->bytes_per_sample;
+  ptr = data;
 
   GST_ALSA_SINK2_LOCK (asink);
+  snd_pcm_nonblock (alsa->handle, 1);
   while (cptr > 0) {
-    /* start by doing a blocking wait for free space. Set the timeout
-     * to 4 times the period time */
-    err = snd_pcm_wait (alsa->handle, (4 * alsa->period_time / 1000));
-    if (err < 0) {
-      GST_DEBUG_OBJECT (asink, "wait timeout, %d", err);
-    } else {
+    while (cptr > 0) {
       err = snd_pcm_writei (alsa->handle, ptr, cptr);
+      if (err < 0) {
+        break;
+      }
+      ptr += err * alsa->channels;
+      cptr -= err;
+      err = snd_pcm_wait(alsa->handle, 100);
+      if (err < 0) {
+        break;
+      }
+      err = 0;
     }
 
-    GST_DEBUG_OBJECT (asink, "written %d frames out of %d", err, cptr);
+    GST_DEBUG_OBJECT (asink, "written %d result %d", cptr, err);
     if (err < 0) {
       GST_DEBUG_OBJECT (asink, "Write error: %s", snd_strerror (err));
       if (err == -EAGAIN) {
@@ -1652,15 +1461,17 @@ gst_alsasink2_write (GstAudioSink * asink, gpointer data, guint length)
       continue;
     }
 
-    ptr += snd_pcm_frames_to_bytes (alsa->handle, err);
+    ptr += err * alsa->channels;
     cptr -= err;
   }
+  snd_pcm_nonblock (alsa->handle, 0);
   GST_ALSA_SINK2_UNLOCK (asink);
 
-  return length - (cptr * alsa->bytes_per_sample);
+  return length - cptr;
 
 write_error:
   {
+    snd_pcm_nonblock (alsa->handle, 0);
     GST_ALSA_SINK2_UNLOCK (asink);
     return length;              /* skip one period */
   }
@@ -1669,23 +1480,12 @@ write_error:
 static guint
 gst_alsasink2_delay (GstAudioSink * asink)
 {
-  _k_GstAlsaSink *alsa;
+  GstAlsaSink2 *alsa;
   snd_pcm_sframes_t delay;
-  int res;
 
   alsa = GST_ALSA_SINK2 (asink);
 
-  res = snd_pcm_delay (alsa->handle, &delay);
-  if (G_UNLIKELY (res < 0)) {
-    /* on errors, report 0 delay */
-    GST_DEBUG_OBJECT (alsa, "snd_pcm_delay returned %d", res);
-    delay = 0;
-  }
-  if (G_UNLIKELY (delay < 0)) {
-    /* make sure we never return a negative delay */
-    GST_WARNING_OBJECT (alsa, "snd_pcm_delay returned negative delay");
-    delay = 0;
-  }
+  snd_pcm_delay (alsa->handle, &delay);
 
   return delay;
 }
@@ -1693,7 +1493,7 @@ gst_alsasink2_delay (GstAudioSink * asink)
 static void
 gst_alsasink2_reset (GstAudioSink * asink)
 {
-  _k_GstAlsaSink *alsa;
+  GstAlsaSink2 *alsa;
   gint err;
 
   alsa = GST_ALSA_SINK2 (asink);
@@ -1725,10 +1525,29 @@ prepare_error:
   }
 }
 
+#if 0
+GST_DEBUG_CATEGORY (alsa2_debug);
+
+/* ALSA debugging wrapper */
 static void
 gst_alsa_error_wrapper (const char *file, int line, const char *function,
     int err, const char *fmt, ...)
 {
+#ifndef GST_DISABLE_GST_DEBUG
+  va_list args;
+  gchar *str;
+
+  va_start (args, fmt);
+  str = g_strdup_vprintf (fmt, args);
+  va_end (args);
+  /* FIXME: use GST_LEVEL_ERROR here? Currently warning is used because we're 
+   * able to catch enough of the errors that would be printed otherwise
+   */
+  gst_debug_log (alsa2_debug, GST_LEVEL_WARNING, file, function, line, NULL,
+      "alsalib error: %s%s%s", str, err ? ": " : "",
+      err ? snd_strerror (err) : "");
+  g_free (str);
+#endif
 }
 
 static gboolean
@@ -1736,21 +1555,16 @@ plugin_init (GstPlugin * plugin)
 {
   int err;
 
-  if (!gst_element_register (plugin, "_k_alsasink", GST_RANK_PRIMARY,
+  if (!gst_element_register (plugin, "alsasink2", GST_RANK_PRIMARY,
           GST_TYPE_ALSA_SINK2))
     return FALSE;
 
+  GST_DEBUG_CATEGORY_INIT (alsa2_debug, "alsa2", 0, "alsa2 plugins");
+
   err = snd_lib_error_set_handler (gst_alsa_error_wrapper);
   if (err != 0)
-    GST_WARNING ("failed to set alsa error handler");
+    GST_WARNING ("failed to set alsa2 error handler");
 
   return TRUE;
 }
-
-#define PACKAGE ""
-GST_PLUGIN_DEFINE_STATIC (GST_VERSION_MAJOR,
-    GST_VERSION_MINOR,
-    "_k_alsa",
-    "ALSA plugin library (hotfixed)",
-    plugin_init, "0.1", "LGPL", "Phonon-GStreamer", "")
-#undef PACKAGE
+#endif

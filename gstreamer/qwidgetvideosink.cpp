@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -55,7 +55,9 @@ const char* QWidgetVideoSinkClass<VideoFormat_RGB>::get_name()
 template <VideoFormat FMT>
 gboolean QWidgetVideoSink<FMT>::set_caps(GstBaseSink* sink, GstCaps* caps)
 {
+    gboolean            rc = TRUE;
     GstStructure*       data;
+    GValue const*       framerate;
     QWidgetVideoSink<FMT> *self = G_TYPE_CHECK_INSTANCE_CAST(sink, QWidgetVideoSinkClass<FMT>::get_type(), QWidgetVideoSink<FMT>);
 
     data = gst_caps_get_structure(caps, 0);
@@ -64,7 +66,8 @@ gboolean QWidgetVideoSink<FMT>::set_caps(GstBaseSink* sink, GstCaps* caps)
     gst_structure_get_int(data, "height", &self->height);
     gst_structure_get_int(data, "bpp", &self->bpp);
     gst_structure_get_int(data, "depth", &self->depth);
-    return TRUE;
+    framerate = gst_structure_get_value(data, "framerate");
+    return rc;
 }
 
 template <VideoFormat FMT>

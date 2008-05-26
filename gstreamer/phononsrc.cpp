@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2008 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ GST_DEBUG_CATEGORY_STATIC (phonon_src_debug);
 enum
 {
     ARG_0,
-    ARG_PHONONSRC
+    ARG_PHONONSRC,
 };
 
 static void phonon_src_finalize (GObject * object);
@@ -63,19 +63,15 @@ static void _do_init (GType filesrc_type)
     GST_DEBUG_CATEGORY_INIT (phonon_src_debug, "phononsrc", 0, "QIODevice element");
 }
 
-GST_BOILERPLATE_FULL (PhononSrc, phonon_src, GstBaseSrc, GST_TYPE_BASE_SRC, _do_init)
+GST_BOILERPLATE_FULL (PhononSrc, phonon_src, GstBaseSrc, GST_TYPE_BASE_SRC, _do_init);
 
 // Register element details
 static void phonon_src_base_init (gpointer g_class) {
     GstElementClass *gstelement_class = GST_ELEMENT_CLASS (g_class);
-    static gchar longname[] = "Phonon Stream Source",
-                    klass[] = "Source/File",
-              description[] = "Read from a Phonon StreamInterface",
-                   author[] = "Nokia Corporation and/or its subsidiary(-ies) <qt-info@nokia.com>";
-    GstElementDetails details = GST_ELEMENT_DETAILS (longname,
-                                          klass,
-                                          description,
-                                          author);
+    GstElementDetails details = GST_ELEMENT_DETAILS ("Phonon Stream Source",
+                                          "Source/File",
+                                          "Read from a Phonon StreamInterface",
+                                          "Trolltech ASA <info@trolltech.com>");
     gst_element_class_set_details (gstelement_class, &details);
     gst_element_class_add_pad_template (gstelement_class, gst_static_pad_template_get (&srctemplate));
 }
@@ -170,6 +166,7 @@ static void phonon_src_get_property (GObject * object, guint prop_id, GValue * v
                                         GParamSpec * pspec)
 {
     PhononSrc *src;
+    Q_ASSERT(src->device);
     g_return_if_fail (GST_IS_PHONON_SRC (object));
     src = GST_PHONON_SRC (object);
 
@@ -202,7 +199,7 @@ static GstFlowReturn phonon_src_create_read (PhononSrc * src, guint64 offset, gu
         return GST_FLOW_OK;
     }
 
-    gst_mini_object_unref(GST_MINI_OBJECT(buf));
+    g_object_unref(buf);
     return GST_FLOW_ERROR;
 }
 

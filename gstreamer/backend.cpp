@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,6 @@
 #include "common.h"
 #include "backend.h"
 #include "audiooutput.h"
-#include "audiodataoutput.h"
 #include "audioeffect.h"
 #include "mediaobject.h"
 #include "videowidget.h"
@@ -27,7 +26,6 @@
 #include "message.h"
 #include "volumefadereffect.h"
 #include <gst/interfaces/propertyprobe.h>
-#include <phonon/pulsesupport.h>
 
 #include <QtCore/QSet>
 #include <QtCore/QVariant>
@@ -35,7 +33,7 @@
 
 QT_BEGIN_NAMESPACE
 
-Q_EXPORT_PLUGIN2(phonon_gstreamer, Phonon::Gstreamer::Backend)
+Q_EXPORT_PLUGIN2(phonon_gstreamer, Phonon::Gstreamer::Backend);
 
 namespace Phonon
 {
@@ -51,16 +49,6 @@ Backend::Backend(QObject *parent, const QVariantList &)
         , m_debugLevel(Warning)
         , m_isValid(false)
 {
-    // Initialise PulseAudio support
-    PulseSupport *pulse = PulseSupport::getInstance();
-    connect(pulse, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)), SIGNAL(objectDescriptionChanged(ObjectDescriptionType)));
-
-    // In order to support reloading, we only set the app name once...
-    static bool first = true;
-    if (first) {
-        first = false;
-        g_set_application_name(qApp->applicationName().toUtf8());
-    }
     GError *err = 0;
     bool wasInit = gst_init_check(0, 0, &err);  //init gstreamer: must be called before any gst-related functions
     if (err)
@@ -71,8 +59,8 @@ Backend::Backend(QObject *parent, const QVariantList &)
     setProperty("identifier",     QLatin1String("phonon_gstreamer"));
     setProperty("backendName",    QLatin1String("Gstreamer"));
     setProperty("backendComment", QLatin1String("Gstreamer plugin for Phonon"));
-    setProperty("backendVersion", QLatin1String("0.2"));
-    setProperty("backendWebsite", QLatin1String("http://qtsoftware.com/"));
+    setProperty("backendVersion", QLatin1String("0.1"));
+    setProperty("backendWebsite", QLatin1String("http://www.trolltech.com/"));
 
     //check if we should enable debug output
     QString debugLevelString = qgetenv("PHONON_GST_DEBUG");
@@ -96,9 +84,7 @@ Backend::Backend(QObject *parent, const QVariantList &)
 
 Backend::~Backend() 
 {
-    delete m_effectManager;
-    delete m_deviceManager;
-    PulseSupport::shutdown();
+    gst_deinit();
 }
 
 gboolean Backend::busCall(GstBus *bus, GstMessage *msg, gpointer data)
@@ -126,14 +112,17 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
     case MediaObjectClass:
         return new MediaObject(this, parent);
 
-    case AudioOutputClass:
-        return new AudioOutput(this, parent);
-
+    case AudioOutputClass: {
+            AudioOutput *ao = new AudioOutput(this, parent);
+            m_audioOutputs.append(ao);
+            return ao;
+        }
     case EffectClass:
         return new AudioEffect(this, args[0].toInt(), parent);
 
     case AudioDataOutputClass:
-        return new AudioDataOutput(this, parent);
+        logMessage("createObject() : AudioDataOutput not implemented");
+        break;
 
     case VideoDataOutputClass:
         logMessage("createObject() : VideoDataOutput not implemented");
@@ -214,15 +203,8 @@ QStringList Backend::availableMimeTypes() const
         GstPluginFeature *feature = GST_PLUGIN_FEATURE(iter->data);
         QString klass = gst_element_factory_get_klass(GST_ELEMENT_FACTORY(feature));
 
-        if (klass == QLatin1String("Codec/Decoder") || 
-            klass == QLatin1String("Codec/Decoder/Audio") || 
-            klass == QLatin1String("Codec/Decoder/Video") || 
-            klass == QLatin1String("Codec/Demuxer") || 
-            klass == QLatin1String("Codec/Demuxer/Audio") || 
-            klass == QLatin1String("Codec/Demuxer/Video") || 
-            klass == QLatin1String("Codec/Parser") || 
-            klass == QLatin1String("Codec/Parser/Audio") || 
-            klass == QLatin1String("Codec/Parser/Video")) {
+        if (klass == QLatin1String("Codec/Decoder/Audio") || 
+            klass == QLatin1String("Codec/Decoder/Video")) {
 
             const GList *static_templates;
             GstElementFactory *factory = GST_ELEMENT_FACTORY(feature);
@@ -244,15 +226,6 @@ QStringList Backend::availableMimeTypes() const
         }
     }
     g_list_free(factoryList);
-    if (availableMimeTypes.contains("audio/x-vorbis")
-        && availableMimeTypes.contains("application/x-ogm-audio")) {
-        if (!availableMimeTypes.contains("audio/x-vorbis+ogg"))
-            availableMimeTypes.append("audio/x-vorbis+ogg");
-        if (!availableMimeTypes.contains("application/ogg"))  /* *.ogg */
-            availableMimeTypes.append("application/ogg");
-        if (!availableMimeTypes.contains("audio/ogg")) /* *.oga */
-            availableMimeTypes.append("audio/ogg");
-    }
     availableMimeTypes.sort();
     return availableMimeTypes;
 }
@@ -266,10 +239,6 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
 
     if (!isValid())
         return list;
-
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive() && (Phonon::AudioOutputDeviceType == type || Phonon::AudioCaptureDeviceType == type))
-        return pulse->objectDescriptionIndexes(type);
 
     switch (type) {
     case Phonon::AudioOutputDeviceType: {
@@ -287,8 +256,6 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
             break;
         }
         break;
-    default:
-        break;
     }
     return list;
 }
@@ -304,17 +271,13 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
     if (!isValid())
         return ret;
 
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive() && (Phonon::AudioOutputDeviceType == type || Phonon::AudioCaptureDeviceType == type))
-        return pulse->objectDescriptionProperties(type, index);
-
     switch (type) {
     case Phonon::AudioOutputDeviceType: {
-            AudioDevice* ad;
-            if ((ad = deviceManager()->audioDevice(index))) {
-                ret.insert("name", ad->gstId);
-                ret.insert("description", ad->description);
-                ret.insert("icon", ad->icon);
+            QList<AudioDevice> audioDevices = deviceManager()->audioOutputDevices();
+            if (index >= 0 && index < audioDevices.size()) {
+                ret.insert("name", audioDevices[index].gstId);
+                ret.insert("description", audioDevices[index].description);
+                ret.insert("icon", QLatin1String("audio-card"));
             }
         }
         break;
@@ -329,8 +292,6 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
             } else
                 Q_ASSERT(1); // Since we use list position as ID, this should not happen
         }
-    default:
-        break;
     }
     return ret;
 }
@@ -443,7 +404,7 @@ EffectManager* Backend::effectManager() const
 
 /**
  * Returns a debuglevel that is determined by the
- * PHONON_GST_DEBUG environment variable.
+ * PHONON_GSTREAMER_DEBUG environment variable.
  *
  *  Warning - important warnings
  *  Info    - general info

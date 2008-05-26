@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -63,7 +63,7 @@ GstElement* VolumeFaderEffect::createEffectBin()
     gst_object_unref (srcPad);
 
     // Link sink pad
-    gst_element_link_many(queue, mconv, m_effectElement, (const char*)NULL);
+    gst_element_link_many(queue, mconv, m_effectElement, NULL);
     GstPad *sinkpad = gst_element_get_pad (queue, "sink");
     gst_element_add_pad (audioBin, gst_ghost_pad_new ("sink", sinkpad));
     gst_object_unref (sinkpad);
@@ -72,15 +72,15 @@ GstElement* VolumeFaderEffect::createEffectBin()
 
 float VolumeFaderEffect::volume() const
 {
-    gdouble val = 0.0;
+    gdouble val;
     if (m_effectElement)
-        g_object_get(G_OBJECT(m_effectElement), "volume", &val, (const char*)NULL);
+        g_object_get(G_OBJECT(m_effectElement), "volume", &val, NULL);
     return (float)val;
 }
 
 void VolumeFaderEffect::setVolume(float volume)
 {
-    g_object_set(G_OBJECT(m_effectElement), "volume", volume, (const char*)NULL);
+    g_object_set(G_OBJECT(m_effectElement), "volume", volume, NULL);
 }
 
 Phonon::VolumeFaderEffect::FadeCurve VolumeFaderEffect::fadeCurve() const

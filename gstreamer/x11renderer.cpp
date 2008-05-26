@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -90,13 +90,13 @@ GstElement* X11Renderer::createVideoSink()
             gst_object_unref(GST_OBJECT(videoSink));
             videoSink = 0;
         } else {
-            // Note that this should not really be necessary as these are
+            // Note that this should not really be neccessary as these are 
             // default values, though under certain conditions values are retained
             // even between application instances. (reproducible on 0.10.16/Gutsy)
-            g_object_set(G_OBJECT(videoSink), "brightness", 0, (const char*)NULL);
-            g_object_set(G_OBJECT(videoSink), "contrast", 0, (const char*)NULL);
-            g_object_set(G_OBJECT(videoSink), "hue", 0, (const char*)NULL);
-            g_object_set(G_OBJECT(videoSink), "saturation", 0, (const char*)NULL);
+            g_object_set(G_OBJECT(videoSink), "brightness", 0, NULL);
+            g_object_set(G_OBJECT(videoSink), "contrast", 0, NULL);
+            g_object_set(G_OBJECT(videoSink), "hue", 0, NULL);
+            g_object_set(G_OBJECT(videoSink), "saturation", 0, NULL);
         }
     }
 
@@ -130,15 +130,6 @@ void X11Renderer::aspectRatioChanged(Phonon::VideoWidget::AspectRatio)
 
 void X11Renderer::scaleModeChanged(Phonon::VideoWidget::ScaleMode)
 {
-    if (m_renderWidget) {
-        m_renderWidget->setGeometry(m_videoWidget->calculateDrawFrameRect());
-    }
-}
-
-void X11Renderer::movieSizeChanged(const QSize &movieSize)
-{
-    Q_UNUSED(movieSize);
-
     if (m_renderWidget) {
         m_renderWidget->setGeometry(m_videoWidget->calculateDrawFrameRect());
     }

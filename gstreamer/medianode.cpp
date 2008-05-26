@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -50,7 +50,7 @@ MediaNode::MediaNode(Backend *backend, NodeDescription description) :
 
         // Fake audio sink to swallow unconnected audio pads
         m_fakeAudioSink = gst_element_factory_make("fakesink", NULL);
-        g_object_set (G_OBJECT (m_fakeAudioSink), "sync", TRUE, (const char*)NULL);
+        g_object_set (G_OBJECT (m_fakeAudioSink), "sync", TRUE, NULL);
         gst_object_ref (GST_OBJECT (m_fakeAudioSink));
         gst_object_sink (GST_OBJECT (m_fakeAudioSink));
     }
@@ -62,7 +62,7 @@ MediaNode::MediaNode(Backend *backend, NodeDescription description) :
 
         // Fake video sink to swallow unconnected video pads
         m_fakeVideoSink = gst_element_factory_make("fakesink", NULL);
-        g_object_set (G_OBJECT (m_fakeVideoSink), "sync", TRUE, (const char*)NULL);
+        g_object_set (G_OBJECT (m_fakeVideoSink), "sync", TRUE, NULL);
         gst_object_ref (GST_OBJECT (m_fakeVideoSink));
         gst_object_sink (GST_OBJECT (m_fakeVideoSink));
     }
@@ -198,9 +198,9 @@ bool MediaNode::disconnectNode(QObject *obj)
         // Disconnecting elements while playing or paused seems to cause
         // potential deadlock. Hence we force the pipeline into ready state
         // before any nodes are disconnected.
-        gst_element_set_state(root()->pipeline(), GST_STATE_READY);
+        gst_element_set_state(root()->pipeline(), GST_STATE_READY);    
 
-        Q_ASSERT(sink->root()); //sink has to have a root since it is connected
+        Q_ASSERT(sink->root()); //sink has to have a root since it is onnected
 
         if (sink->description() & (AudioSink)) {
             GstPad *sinkPad = gst_element_get_pad(sink->audioElement(), "sink");

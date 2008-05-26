@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 #include "backend.h"
 #include "common.h"
 #include "medianode.h"
+
 #include <phonon/mediaobjectinterface.h>
 #include <phonon/addoninterface.h>
 
@@ -31,6 +32,7 @@
 #include <QtCore/QDate>
 #include <QtCore/QEvent>
 #include <QtCore/QUrl>
+
 #include <gst/gst.h>
 
 QT_BEGIN_NAMESPACE
@@ -48,21 +50,11 @@ class AudioPath;
 class VideoPath;
 class AudioOutput;
 
-class MediaObject : public QObject, public MediaObjectInterface
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-        , public AddonInterface
-#endif
-        , public MediaNode
+class MediaObject : public QObject, public MediaObjectInterface, public AddonInterface, public MediaNode
 {
     friend class Stream;
-    friend class AudioDataOutput;
     Q_OBJECT
-    Q_INTERFACES(Phonon::MediaObjectInterface
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-                 Phonon::AddonInterface
-#endif
-                 Phonon::Gstreamer::MediaNode
-    )
+    Q_INTERFACES(Phonon::MediaObjectInterface Phonon::AddonInterface Phonon::Gstreamer::MediaNode)
 
 public:
 
@@ -101,10 +93,16 @@ public:
     MediaSource source() const;
 
     // No additional interfaces currently supported
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-    bool hasInterface(Interface) const;
-    QVariant interfaceCall(Interface, int, const QList<QVariant> &);
-#endif
+    bool hasInterface(Interface) const
+    {
+        return false;
+    }
+
+    QVariant interfaceCall(Interface, int, const QList<QVariant> &)
+    {
+        return QVariant();
+    }
+
     bool isLoading()
     {
         return m_loading;
@@ -145,10 +143,13 @@ public:
     void handleBusMessage(const Message &msg);
     void handleEndOfStream();
     void addMissingCodecName(const QString &codec) { m_missingCodecs.append(codec); }
-    void invalidateGraph();
-
+    void invalidateGraph() {
+        m_resetNeeded = true;
+        if (m_state == Phonon::PlayingState || m_state == Phonon::PausedState) {
+            changeState(Phonon::StoppedState);
+        }
+    }
     static void cb_newpad (GstElement *decodebin, GstPad *pad, gboolean last, gpointer data);
-    static void cb_pad_added (GstElement *decodebin, GstPad *pad, gpointer data);
     static void cb_unknown_type (GstElement *decodebin, GstPad *pad, GstCaps *caps, gpointer data);
     static void cb_no_more_pads (GstElement * decodebin, gpointer data);
     void saveState();
@@ -174,29 +175,13 @@ Q_SIGNALS:
     QMultiMap<QString, QString> metaData();
     void setMetaData(QMultiMap<QString, QString> newData);
 
-    // AddonInterface:
-    void titleChanged(int);
-    void availableTitlesChanged(int);
-
-    // Not implemented
-    void chapterChanged(int);
-    void availableChaptersChanged(int);
-    void angleChanged(int);
-    void availableAnglesChanged(int);
-
-    void availableSubtitlesChanged();
-    void availableAudioChannelsChanged();
-
 protected:
     void beginLoad();
     void loadingComplete();
     void newPadAvailable (GstPad *pad);
     void changeState(State);
     void setError(const QString &errorString, Phonon::ErrorType error = NormalError);
-    /*
-     * @param encodedUrl percent-encoded QString for source compat reasons.  Should change to QUrl
-     */
-    bool createPipefromURL(const QUrl &url);
+    bool createPipefromURL(const QString &url);
     bool createPipefromStream(const MediaSource &);
 
 private Q_SLOTS:
@@ -230,11 +215,6 @@ private:
     void updateSeekable();
     qint64 getPipelinePos() const;
 
-    int _iface_availableTitles() const;
-    int _iface_currentTitle() const;
-    void _iface_setCurrentTitle(int title);
-    void setTrack(int title);
-
     bool m_resumeState;
     State m_oldState;
     quint64 m_oldPos;
@@ -248,9 +228,6 @@ private:
     MediaSource m_nextSource;
     qint32 m_prefinishMark;
     qint32 m_transitionTime;
-	bool m_isStream;
-
-    qint64 m_posAtSeek;
 
     bool m_prefinishMarkReachedNotEmitted;
     bool m_aboutToFinishEmitted;
@@ -281,10 +258,6 @@ private:
     bool m_resetNeeded;
     QStringList m_missingCodecs;
     QMultiMap<QString, QString> m_metaData;
-    bool m_autoplayTitles;
-    int m_availableTitles;
-    int m_currentTitle;
-    int m_pendingTitle;
 };
 }
 } //namespace Phonon::Gstreamer

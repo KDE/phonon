@@ -1,4 +1,4 @@
-# Copyright (C) 2009 Nokia Corporation. All rights reserved.
+# Copyright (C) 2007 Trolltech ASA. All rights reserved.
 # Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
 #
 # This library is free software: you can redistribute it and/or modify
@@ -17,23 +17,12 @@ project(phonon-gstreamer)
 include(ConfigureChecks.cmake)
 
 if (BUILD_PHONON_GSTREAMER)
-   include_directories(
-	  ${CMAKE_CURRENT_BINARY_DIR}
-	  ${GSTREAMER_INCLUDE_DIR}
-	  ${GLIB2_INCLUDE_DIR}
-      ${LIBXML2_INCLUDE_DIR}
-	  ${X11_X11_INCLUDE_PATH})
-   add_definitions(-DPHONON_BACKEND_VERSION_4_2)
-
-   # configure plugin api
-   if(USE_INSTALL_PLUGIN)
-      set(PLUGIN_INSTALL_API TRUE)
-   endif(USE_INSTALL_PLUGIN)
-
-   configure_file(phonon-config-gstreamer.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon-config-gstreamer.h )
+   include_directories(${GSTREAMER_INCLUDE_DIR} ${GLIB2_INCLUDE_DIR}
+      ${LIBXML2_INCLUDE_DIR})
 
    set(phonon_gstreamer_SRCS
       audiooutput.cpp
+      artssink.cpp
       backend.cpp
       devicemanager.cpp
       effectmanager.cpp
@@ -49,43 +38,32 @@ if (BUILD_PHONON_GSTREAMER)
       message.cpp
       audioeffect.cpp
       abstractrenderer.cpp
+      x11renderer.cpp
       widgetrenderer.cpp
       glrenderer.cpp
       volumefadereffect.cpp
-      audiodataoutput.cpp
       )
 
-   if(NOT WIN32)
-      set(phonon_gstreamer_SRCS
-          ${phonon_gstreamer_SRCS}
-          artssink.cpp
-          x11renderer.cpp)
-      macro_optional_find_package(Alsa)
-      macro_ensure_version("0.10.22" ${GSTREAMER_VERSION} GSTREAMER_HAS_NONBLOCKING_ALSASINK)
-   endif(NOT WIN32)
-   if(ALSA_FOUND AND NOT GSTREAMER_HAS_NONBLOCKING_ALSASINK)
+   find_package(Alsa)
+   if(ALSA_FOUND)
       add_definitions(-DUSE_ALSASINK2)
       include_directories(${ALSA_INCLUDES})
       set(phonon_gstreamer_SRCS
          ${phonon_gstreamer_SRCS}
          alsasink2.c
          )
-   endif(ALSA_FOUND AND NOT GSTREAMER_HAS_NONBLOCKING_ALSASINK)
+   endif(ALSA_FOUND)
 
-   automoc4_add_library(phonon_gstreamer MODULE ${phonon_gstreamer_SRCS})
-   set_target_properties(phonon_gstreamer PROPERTIES PREFIX "")
+   kde4_add_plugin(phonon_gstreamer ${phonon_gstreamer_SRCS})
    target_link_libraries(phonon_gstreamer
-      ${QT_QTOPENGL_LIBRARY}
-      ${PHONON_LIBS} ${OPENGL_gl_LIBRARY}
+      ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
+      ${KDE4_PHONON_LIBS} ${OPENGL_gl_LIBRARY}
       ${GSTREAMER_LIBRARIES} ${GSTREAMER_BASE_LIBRARY} ${GSTREAMER_INTERFACE_LIBRARY}
       ${GSTREAMER_PLUGIN_VIDEO_LIBRARIES} ${GSTREAMER_PLUGIN_AUDIO_LIBRARIES}
-      ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES})
+      ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES} ${ASOUND_LIBRARY})
    if(ALSA_FOUND)
       target_link_libraries(phonon_gstreamer ${ASOUND_LIBRARY})
    endif(ALSA_FOUND)
-   if(USE_INSTALL_PLUGIN)
-       target_link_libraries(phonon_gstreamer ${GSTREAMER_PLUGIN_PBUTILS_LIBRARIES})
-   endif(USE_INSTALL_PLUGIN)
 
    install(TARGETS phonon_gstreamer DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/phonon_backend)
    install(FILES gstreamer.desktop DESTINATION ${SERVICES_INSTALL_DIR}/phononbackends)

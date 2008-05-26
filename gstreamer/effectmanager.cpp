@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -54,7 +54,7 @@ EffectManager::EffectManager(Backend *backend)
             // "volume" not needed
             // "equalizer-nbands" not really useful at the moment
 
-            // These plugins simply don't work or have major stability issues:
+            // These plugins simply dont work or have major stability issues:
             // "iir" Does not seem to do much at the moment
             // "audioinvert" Only works for some streams, should be invesigated
             // "lpwsinc" Crashes for large values of filter kernel

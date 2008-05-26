@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -14,9 +14,9 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include <cmath>
 #include <gst/interfaces/propertyprobe.h>
-#include <gst/pbutils/install-plugins.h>
 #include "common.h"
 #include "mediaobject.h"
 #include "videowidget.h"
@@ -24,7 +24,7 @@
 #include "backend.h"
 #include "streamreader.h"
 #include "phononsrc.h"
-#include "phonon-config-gstreamer.h"
+
 #include <QtCore>
 #include <QtCore/QTimer>
 #include <QtCore/QVector>
@@ -55,8 +55,6 @@ MediaObject::MediaObject(Backend *backend, QObject *parent)
         , m_tickTimer(new QTimer(this))
         , m_prefinishMark(0)
         , m_transitionTime(0)
-        , m_isStream(false)
-        , m_posAtSeek(-1)
         , m_prefinishMarkReachedNotEmitted(true)
         , m_aboutToFinishEmitted(false)
         , m_loading(false)
@@ -79,10 +77,6 @@ MediaObject::MediaObject(Backend *backend, QObject *parent)
         , m_videoGraph(0)
         , m_previousTickTime(-1)
         , m_resetNeeded(false)
-        , m_autoplayTitles(true)
-        , m_availableTitles(0)
-        , m_currentTitle(1)
-        , m_pendingTitle(1)
 {
     qRegisterMetaType<GstCaps*>("GstCaps*");
     qRegisterMetaType<State>("State");
@@ -99,7 +93,7 @@ MediaObject::MediaObject(Backend *backend, QObject *parent)
         m_backend->addBusWatcher(this);
         connect(m_tickTimer, SIGNAL(timeout()), SLOT(emitTick()));
     }
-    connect(this, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+    connect(this, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 
             this, SLOT(notifyStateChange(Phonon::State, Phonon::State)));
 
 }
@@ -140,23 +134,15 @@ QString stateString(const Phonon::State &state)
     return QString();
 }
 
-void
-pluginInstallationDone( GstInstallPluginsReturn res, gpointer userData )
-{
-    // Nothing inside yet
-    Q_UNUSED(res);
-    Q_UNUSED(userData);
-}
-
 void MediaObject::saveState()
 {
     //Only first resumeState is respected
     if (m_resumeState)
         return;
 
-    if (m_pendingState == Phonon::PlayingState || m_pendingState == Phonon::PausedState) {
+    if (m_state == Phonon::PlayingState || m_state == Phonon::PausedState) {
         m_resumeState = true;
-        m_oldState = m_pendingState;
+        m_oldState = m_state;
         m_oldPos = getPipelinePos();
     }
 }
@@ -207,35 +193,13 @@ void MediaObject::noMorePadsAvailable ()
     if (m_missingCodecs.size() > 0) {
         bool canPlay = (m_hasAudio || m_videoStreamFound);
         Phonon::ErrorType error = canPlay ? Phonon::NormalError : Phonon::FatalError;
-#ifdef PLUGIN_INSTALL_API
-        GstInstallPluginsContext *ctx = gst_install_plugins_context_new ();
-        gchar *details[2];
-        details[0] = m_missingCodecs[0].toLocal8Bit().data();
-        details[1] = NULL;
-        GstInstallPluginsReturn status;
-
-        status = gst_install_plugins_async( details, ctx, pluginInstallationDone, NULL );
-        gst_install_plugins_context_free ( ctx );
-
-        if ( status != GST_INSTALL_PLUGINS_STARTED_OK )
-        {
-            if( status == GST_INSTALL_PLUGINS_HELPER_MISSING )
-                setError(QString(tr("Missing codec helper script assistant.")), Phonon::FatalError );
-            else
-                setError(QString(tr("Plugin codec installation failed for codec: %0"))
-                        .arg(m_missingCodecs[0].split("|")[3]), error);
-        }
-        m_missingCodecs.clear();
-#else
-        QString codecs = m_missingCodecs.join(", ");
-
         if (error == Phonon::NormalError && m_hasVideo && !m_videoStreamFound) {
             m_hasVideo = false;
             emit hasVideoChanged(false);
         }
-        setError(QString(tr("A required codec is missing. You need to install the following codec(s) to play this content: %0")).arg(codecs), error);
-        m_missingCodecs.clear();
-#endif
+        QString codecs = m_missingCodecs.join(", ");
+        setError(QString(tr("A required codec is missing. You need to install the following codec(s) to play this content: %0", 
+                            "", m_missingCodecs.size())).arg(codecs), error);
     }
 }
 
@@ -278,16 +242,7 @@ void MediaObject::cb_unknown_type (GstElement *decodebin, GstPad *pad, GstCaps *
         GstStructure *str = gst_caps_get_structure (caps, 0);
         value = QString::fromUtf8(gst_structure_get_name (str));
     }
-
-#ifdef PLUGIN_INSTALL_API
-    QString plugins = QString("gstreamer|0.10|%0|%1|decoder-%2")
-        .arg( qApp->applicationName() )
-        .arg( value )
-        .arg( QString::fromUtf8(gst_caps_to_string (caps) ) );
-    media->addMissingCodecName( plugins );
-#else
-    media->addMissingCodecName( value );
-#endif
+    media->addMissingCodecName(value);
 }
 
 static void notifyVideoCaps(GObject *obj, GParamSpec *, gpointer data)
@@ -312,12 +267,6 @@ void MediaObject::setVideoCaps(GstCaps *caps)
 
     if ((str = gst_caps_get_structure (caps, 0))) {
         if (gst_structure_get_int (str, "width", &width) && gst_structure_get_int (str, "height", &height)) {
-            gint aspectNum = 0;
-            gint aspectDenum = 0;
-            if (gst_structure_get_fraction(str, "pixel-aspect-ratio", &aspectNum, &aspectDenum)) {
-                if (aspectDenum > 0)
-                    width = width*aspectNum/aspectDenum;
-            }
             // Let child nodes know about our new video size
             QSize size(width, height);
             MediaNodeEvent event(MediaNodeEvent::VideoSizeChanged, &size);
@@ -348,11 +297,6 @@ void MediaObject::connectVideo(GstPad *pad)
             m_backend->logMessage("Video track connected", Backend::Info, this);
             // Note that the notify::caps _must_ be installed after linking to work with Dapper
             m_capsHandler = g_signal_connect(pad, "notify::caps", G_CALLBACK(notifyVideoCaps), this);
-
-            if (!m_loading && !m_hasVideo) {
-                m_hasVideo = m_videoStreamFound;
-                emit hasVideoChanged(m_hasVideo);
-            }
         }
         gst_object_unref (videopad);
     } else {
@@ -376,22 +320,12 @@ void MediaObject::connectAudio(GstPad *pad)
     }
 }
 
-void MediaObject::cb_pad_added(GstElement *decodebin,
-                               GstPad     *pad,
-                               gpointer    data)
-{
-    Q_UNUSED(decodebin);
-    GstPad *decodepad = static_cast<GstPad*>(data);
-    gst_pad_link (pad, decodepad);
-    //gst_object_unref (decodepad);
-}
-
 /**
  * Create a media source from a given URL.
  *
  * returns true if successful
  */
-bool MediaObject::createPipefromURL(const QUrl &url)
+bool MediaObject::createPipefromURL(const QString &url)
 {
     // Remove any existing data source
     if (m_datasource) {
@@ -401,53 +335,22 @@ bool MediaObject::createPipefromURL(const QUrl &url)
     }
 
     // Verify that the uri can be parsed
-    if (!url.isValid()) {
-        m_backend->logMessage(QString("%1 is not a valid URI").arg(url.toString()));
+    if (!gst_uri_is_valid(qPrintable(url))) {
+        m_backend->logMessage(QString("%0 is not a valid URI").arg(url));
         return false;
     }
 
     // Create a new datasource based on the input URL
-    // add the 'file' scheme if it's missing; the double '/' is needed!
-    QByteArray encoded_cstr_url = (url.scheme() == QLatin1String("") ?
-                    "file://" + url.toEncoded() :
-                    url.toEncoded());
-    m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), (const char*)NULL);
+    m_datasource = gst_element_make_from_uri(GST_URI_SRC, qPrintable(url), NULL);
     if (!m_datasource)
         return false;
-
-    // Set the device for MediaSource::Disc
-    if (m_source.type() == MediaSource::Disc) {
-
-        if (g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "device")) {
-            QByteArray mediaDevice = QFile::encodeName(m_source.deviceName());
-            if (!mediaDevice.isEmpty())
-                g_object_set (G_OBJECT (m_datasource), "device", mediaDevice.constData(), (const char*)NULL);
-        }
-
-        // Also Set optical disc speed to 2X for Audio CD
-        if (m_source.discType() == Phonon::Cd
-            && (g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "read-speed"))) {
-            g_object_set (G_OBJECT (m_datasource), "read-speed", 2, (const char*)NULL);
-            m_backend->logMessage(QString("new device speed : 2X"), Backend::Info, this);
-        }
-  }
-
-    /* make HTTP sources send extra headers so we get icecast
-     * metadata in case the stream is an icecast stream */
-    if (encoded_cstr_url.startsWith("http://")
-        && g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "iradio-mode")) {
-        g_object_set (m_datasource, "iradio-mode", TRUE, NULL);
-        m_isStream = true;
-    }
 
     // Link data source into pipeline
     gst_bin_add(GST_BIN(m_pipeline), m_datasource);
     if (!gst_element_link(m_datasource, m_decodebin)) {
-        // For sources with dynamic pads (such as RtspSrc) we need to connect dynamically
-        GstPad *decodepad = gst_element_get_pad (m_decodebin, "sink");
-        g_signal_connect (m_datasource, "pad-added", G_CALLBACK (&cb_pad_added), decodepad);
+        gst_bin_remove(GST_BIN(m_pipeline), m_datasource);
+        return false;
     }
-
     return true;
 }
 
@@ -470,7 +373,7 @@ bool MediaObject::createPipefromStream(const MediaSource &source)
         return false;
 
     StreamReader *streamReader = new StreamReader(source);
-    g_object_set (G_OBJECT (m_datasource), "iodevice", streamReader, (const char*)NULL);
+    g_object_set (G_OBJECT (m_datasource), "iodevice", streamReader, NULL);
 
     // Link data source into pipeline
     gst_bin_add(GST_BIN(m_pipeline), m_datasource);
@@ -506,7 +409,7 @@ void MediaObject::createPipeline()
     // pull-mode access. Also note that the max-size-time are increased to
     // reduce buffer overruns as these are not gracefully handled at the moment.
     m_audioPipe = gst_element_factory_make("queue", NULL);
-    g_object_set(G_OBJECT(m_audioPipe), "max-size-time",  MAX_QUEUE_TIME, (const char*)NULL);
+    g_object_set(G_OBJECT(m_audioPipe), "max-size-time",  MAX_QUEUE_TIME, NULL);
     gst_bin_add(GST_BIN(m_audioGraph), m_audioPipe);
     GstPad *audiopad = gst_element_get_pad (m_audioPipe, "sink");
     gst_element_add_pad (m_audioGraph, gst_ghost_pad_new ("sink", audiopad));
@@ -518,7 +421,7 @@ void MediaObject::createPipeline()
     gst_object_sink (GST_OBJECT (m_videoGraph));
 
     m_videoPipe = gst_element_factory_make("queue", NULL);
-    g_object_set(G_OBJECT(m_videoPipe), "max-size-time", MAX_QUEUE_TIME, (const char*)NULL);
+    g_object_set(G_OBJECT(m_videoPipe), "max-size-time", MAX_QUEUE_TIME, NULL);
     gst_bin_add(GST_BIN(m_videoGraph), m_videoPipe);
     GstPad *videopad = gst_element_get_pad (m_videoPipe, "sink");
     gst_element_add_pad (m_videoGraph, gst_ghost_pad_new ("sink", videopad));
@@ -691,7 +594,7 @@ void MediaObject::setState(State newstate)
             m_backend->logMessage("EOS already reached", Backend::Info, this);
         } else if (currentState == GST_STATE_PLAYING) {
             changeState(Phonon::PlayingState);
-        } else if (gst_element_set_state(m_pipeline, GST_STATE_PLAYING) != GST_STATE_CHANGE_FAILURE) {
+        } else if (!m_atEndOfStream && gst_element_set_state(m_pipeline, GST_STATE_PLAYING) != GST_STATE_CHANGE_FAILURE) {
             m_pendingState = Phonon::PlayingState;
         } else {
             m_backend->logMessage("phonon state request failed", Backend::Info, this);
@@ -721,7 +624,7 @@ void MediaObject::changeState(State newstate)
         return;
 
     Phonon::State oldState = m_state;
-    m_state = newstate; // m_state must be set before emitting, since
+    m_state = newstate; // m_state must be set before emitting, since 
                         // Error state requires that state() will return the new value
     m_pendingState = newstate;
     emit stateChanged(newstate, oldState);
@@ -741,8 +644,6 @@ void MediaObject::changeState(State newstate)
 
     case Phonon::StoppedState:
         m_backend->logMessage("phonon state changed: Stopped", Backend::Info, this);
-        // We must reset the pipeline when playing again
-        m_resetNeeded = true;
         m_tickTimer->stop();
         break;
 
@@ -809,8 +710,7 @@ MediaSource MediaObject::source() const
 
 void MediaObject::setNextSource(const MediaSource &source)
 {
-    if (source.type() == MediaSource::Invalid &&
-        source.type() == MediaSource::Empty)
+    if (source.type() == MediaSource::Invalid)
         return;
     m_nextSource = source;
 }
@@ -872,8 +772,6 @@ qint64 MediaObject::getPipelinePos() const
         return totalTime();
     if (m_atStartOfStream)
         return 0;
-    if (m_posAtSeek >= 0)
-        return m_posAtSeek;
 
     gint64 pos = 0;
     GstFormat format = GST_FORMAT_TIME;
@@ -908,7 +806,7 @@ void MediaObject::setSource(const MediaSource &source)
     // such as failing duration queries etc
     GstState state;
     gst_element_set_state(m_pipeline, GST_STATE_NULL);
-    gst_element_get_state(m_pipeline, &state, NULL, 2000);
+    gst_element_get_state (m_pipeline, &state, NULL, 2000);
 
     m_source = source;
     emit currentSourceChanged(m_source);
@@ -918,9 +816,7 @@ void MediaObject::setSource(const MediaSource &source)
     // Go into to loading state
     changeState(Phonon::LoadingState);
     m_loading = true;
-    // IMPORTANT: Honor the m_resetNeeded flag as it currently stands.
-    // See https://qa.mandriva.com/show_bug.cgi?id=56807
-    //m_resetNeeded = false;
+    m_resetNeeded = false;
     m_resumeState = false;
     m_pendingState = Phonon::StoppedState;
 
@@ -933,8 +829,8 @@ void MediaObject::setSource(const MediaSource &source)
     // Clear any existing errors
     m_aboutToFinishEmitted = false;
     m_error = NoError;
-    m_errorString.clear();
-
+    m_errorString = QString();
+    
     m_bufferPercent = 0;
     m_prefinishMarkReachedNotEmitted = true;
     m_aboutToFinishEmitted = false;
@@ -943,24 +839,25 @@ void MediaObject::setSource(const MediaSource &source)
     setTotalTime(-1);
     m_atEndOfStream = false;
 
-    m_availableTitles = 0;
-    m_pendingTitle = 1;
-    m_currentTitle = 1;
-
-    // Clear existing meta tags
+    // Clear exising meta tags
     m_metaData.clear();
-    m_isStream = false;
 
     switch (source.type()) {
     case MediaSource::Url: {
-            if (!createPipefromURL(source.url()))
+            QString urlString = source.url().toString();
+            if (!createPipefromURL(urlString)) {
                 setError(tr("Could not open media source."));
+                return;
+            }
         }
         break;
 
     case MediaSource::LocalFile: {
-            if (!createPipefromURL(QUrl::fromLocalFile(source.fileName())))
+            QString urlString = QUrl::fromLocalFile(source.fileName()).toString();
+            if (!createPipefromURL(urlString)) {
                 setError(tr("Could not open media source."));
+                return;
+            }
         }
         break;
 
@@ -968,51 +865,32 @@ void MediaObject::setSource(const MediaSource &source)
         setError(tr("Invalid source type."), Phonon::NormalError);
         break;
 
-    case MediaSource::Empty:
-        break;
-
     case MediaSource::Stream:
-        if (!createPipefromStream(source))
+        if (!createPipefromStream(source)) {
             setError(tr("Could not open media source."));
+            return;
+        }
         break;
 
-    case MediaSource::Disc:
-        {
-       QString mediaUrl;
-       switch (source.discType()) {
-       case Phonon::NoDisc:
-                qWarning() << "I should never get to see a MediaSource that is a disc but doesn't specify which one";
-                return;
-            case Phonon::Cd:  // CD tracks can be specified by setting the url in the following way uri=cdda:4
-                mediaUrl = QLatin1String("cdda://");
-                break;
-            case Phonon::Dvd:
-                mediaUrl = QLatin1String("dvd://");
-                break;
-            case Phonon::Vcd:
-                mediaUrl = QLatin1String("vcd://");
-                break;
-            default:
-                qWarning() <<  "media " << source.discType() << " not implemented";
-                return;
-            }
-            if (mediaUrl.isEmpty() || !createPipefromURL(QUrl(mediaUrl)))
-                setError(tr("Could not open media source."));
-        }
+    case MediaSource::Disc: // CD tracks can be specified by setting the url in the following way uri=cdda:4
+        m_backend->logMessage("Source type Disc not currently supported", Backend::Warning, this);
+        setError(tr("Could not open media source."), Phonon::NormalError);
         break;
 
     default:
         m_backend->logMessage("Source type not currently supported", Backend::Warning, this);
         setError(tr("Could not open media source."), Phonon::NormalError);
-        break;
+        return;
     }
 
+    // Setting to state paused will trigger fetching meta data and duration
     MediaNodeEvent event(MediaNodeEvent::SourceChanged);
     notify(&event);
 
     // We need to link this node to ensure that fake sinks are connected
     // before loading, otherwise the stream will be blocked
     link();
+
     beginLoad();
 }
 
@@ -1048,20 +926,6 @@ void MediaObject::getStreamInfo()
         m_hasVideo = m_videoStreamFound;
         emit hasVideoChanged(m_hasVideo);
     }
-
-    if (m_source.discType() == Phonon::Cd) {
-        gint64 titleCount;
-        GstFormat format = gst_format_get_by_nick("track");
-        if (gst_element_query_duration (m_pipeline, &format, &titleCount)) {
-            int oldAvailableTitles = m_availableTitles;
-            m_availableTitles = (int)titleCount;
-            if (m_availableTitles != oldAvailableTitles) {
-                emit availableTitlesChanged(m_availableTitles);
-                m_backend->logMessage(QString("Available titles changed: %0").arg(m_availableTitles), Backend::Info, this);
-            }
-        }
-    }
-
 }
 
 void MediaObject::setPrefinishMark(qint32 newPrefinishMark)
@@ -1093,6 +957,8 @@ void MediaObject::seek(qint64 time)
     if (!isValid())
         return;
 
+    Phonon::State oldState = state();
+
     if (isSeekable()) {
         switch (state()) {
         case Phonon::PlayingState:
@@ -1106,12 +972,11 @@ void MediaObject::seek(qint64 time)
             else
                 m_atStartOfStream = false;
 
-            m_posAtSeek = getPipelinePos();
-            m_tickTimer->stop();
-
+            // Go to buffering state, we resume paused state when ready
             if (gst_element_seek(m_pipeline, 1.0, GST_FORMAT_TIME,
                                  GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET,
                                  time * GST_MSECOND, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
+            setState(oldState);
             break;
         case Phonon::LoadingState:
         case Phonon::ErrorState:
@@ -1119,7 +984,7 @@ void MediaObject::seek(qint64 time)
         }
 
         quint64 current = currentTime();
-        quint64 total = totalTime();
+        quint64 total = totalTime(); 
 
         if (current < total - m_prefinishMark)
             m_prefinishMarkReachedNotEmitted = true;
@@ -1140,7 +1005,7 @@ void MediaObject::emitTick()
 
     if (m_tickInterval > 0 && currentTime != m_previousTickTime) {
         emit tick(currentTime);
-        m_previousTickTime = currentTime;
+        m_previousTickTime = currentTime;        
     }
     if (m_state == Phonon::PlayingState) {
         if (currentTime >= totalTime - m_prefinishMark) {
@@ -1151,12 +1016,7 @@ void MediaObject::emitTick()
         }
         // Prepare load of next source
         if (currentTime >= totalTime - ABOUT_TO_FINNISH_TIME) {
-            if (m_source.type() == MediaSource::Disc &&
-                m_autoplayTitles &&
-                m_availableTitles > 1 &&
-                m_currentTitle < m_availableTitles) {
-                m_aboutToFinishEmitted = false;
-            } else if (!m_aboutToFinishEmitted) {
+            if (!m_aboutToFinishEmitted) {
                 m_aboutToFinishEmitted = true; // track is about to finish
                 emit aboutToFinish();
             }
@@ -1253,15 +1113,14 @@ void MediaObject::handleBusMessage(const Message &message)
     if (m_backend->debugLevel() >= Backend::Debug) {
         int type = GST_MESSAGE_TYPE(gstMessage);
         gchar* name = gst_element_get_name(gstMessage->src);
-        QString msgString = QString("Bus: %0 (%1)").arg(gst_message_type_get_name ((GstMessageType)type)).arg(name);
+        QString message = QString("Bus: %0 (%1)").arg(gst_message_type_get_name ((GstMessageType)type)).arg(name);
         g_free(name);
-        m_backend->logMessage(msgString, Backend::Debug, this);
+        m_backend->logMessage(message, Backend::Debug, this);
     }
 
     switch (GST_MESSAGE_TYPE (gstMessage)) {
 
-    case GST_MESSAGE_EOS:
-        m_backend->logMessage("EOS received", Backend::Info, this);
+    case GST_MESSAGE_EOS: 
         handleEndOfStream();
         break;
 
@@ -1269,98 +1128,14 @@ void MediaObject::handleBusMessage(const Message &message)
             GstTagList* tag_list = 0;
             gst_message_parse_tag(gstMessage, &tag_list);
             if (tag_list) {
-                TagMap newTags;
-                gst_tag_list_foreach (tag_list, &foreach_tag_function, &newTags);
-                gst_tag_list_free(tag_list);
-
-                // Determine if we should no fake the album/artist tags.
-                // This is a little confusing as we want to fake it on initial
-                // connection where title, album and artist are all missing.
-                // There are however times when we get just other information,
-                // e.g. codec, and so we want to only do clever stuff if we
-                // have a commonly available tag (ORGANIZATION) or we have a
-                // change in title
-                bool fake_it =
-                   (m_isStream
-                    && ((!newTags.contains("TITLE")
-                         && newTags.contains("ORGANIZATION"))
-                        || (newTags.contains("TITLE")
-                            && m_metaData.value("TITLE") != newTags.value("TITLE")))
-                    && !newTags.contains("ALBUM")
-                    && !newTags.contains("ARTIST"));
-
                 TagMap oldMap = m_metaData; // Keep a copy of the old one for reference
-
-                // Now we've checked the new data, append any new meta tags to the existing tag list
-                // We cannot use TagMap::iterator as this is a multimap and when streaming data
-                // could in theory be lost.
-                QList<QString> keys = newTags.keys();
-                for (QList<QString>::iterator i = keys.begin(); i != keys.end(); ++i) {
-                    QString key = *i;
-                    if (m_isStream) {
-                        // If we're streaming, we need to remove data in m_metaData
-                        // in order to stop it filling up indefinitely (as it's a multimap)
-                        m_metaData.remove(key);
-                    }
-                    QList<QString> values = newTags.values(key);
-                    for (QList<QString>::iterator j = values.begin(); j != values.end(); ++j) {
-                        QString value = *j;
-                        QString currVal = m_metaData.value(key);
-                        if (!m_metaData.contains(key) || currVal != value) {
-                            m_metaData.insert(key, value);
-                        }
-                    }
-                }
-
+                // Append any new meta tags to the existing tag list
+                gst_tag_list_foreach (tag_list, &foreach_tag_function, &m_metaData);
                 m_backend->logMessage("Meta tags found", Backend::Info, this);
-                if (oldMap != m_metaData) {
-                    // This is a bit of a hack to ensure that stream metadata is
-                    // returned. We get as much as we can from the Shoutcast server's
-                    // StreamTitle= header. If further info is decoded from the stream
-                    // itself later, then it will overwrite this info.
-                    if (m_isStream && fake_it) {
-                        m_metaData.remove("ALBUM");
-                        m_metaData.remove("ARTIST");
-
-                        // Detect whether we want to "fill in the blanks"
-                        QString str;
-                        if (m_metaData.contains("TITLE"))
-                        {
-                            str = m_metaData.value("TITLE");
-                            int splitpoint;
-                            // Check to see if our title matches "%s - %s"
-                            // Where neither %s are empty...
-                            if ((splitpoint = str.indexOf(" - ")) > 0
-                                && str.size() > (splitpoint+3)) {
-                                m_metaData.insert("ARTIST", str.left(splitpoint));
-                                m_metaData.replace("TITLE", str.mid(splitpoint+3));
-                            }
-                        } else {
-                            str = m_metaData.value("GENRE");
-                            if (!str.isEmpty())
-                                m_metaData.insert("TITLE", str);
-                            else
-                                m_metaData.insert("TITLE", "Streaming Data");
-                        }
-                        if (!m_metaData.contains("ARTIST")) {
-                            str = m_metaData.value("LOCATION");
-                            if (!str.isEmpty())
-                                m_metaData.insert("ARTIST", str);
-                            else
-                                m_metaData.insert("ARTIST", "Streaming Data");
-                        }
-                        str = m_metaData.value("ORGANIZATION");
-                        if (!str.isEmpty())
-                            m_metaData.insert("ALBUM", str);
-                        else
-                            m_metaData.insert("ALBUM", "Streaming Data");
-                    }
-                    // As we manipulate the title, we need to recompare
-                    // oldMap and m_metaData here...
-                    if (oldMap != m_metaData && !m_loading)
-                        emit metaDataChanged(m_metaData);
-                }
-			}
+                if (oldMap != m_metaData && !m_loading)
+                    emit metaDataChanged(m_metaData);
+                gst_tag_list_free(tag_list);
+            }
         }
         break;
 
@@ -1371,13 +1146,7 @@ void MediaObject::handleBusMessage(const Message &message)
 
             GstState oldState;
             GstState newState;
-            GstState pendingState;
-            gst_message_parse_state_changed (gstMessage, &oldState, &newState, &pendingState);
-
-            if (newState == pendingState)
-                return;
-
-            m_posAtSeek = -1;
+            gst_message_parse_state_changed (gstMessage, &oldState, &newState, 0);
 
             switch (newState) {
 
@@ -1386,9 +1155,6 @@ void MediaObject::handleBusMessage(const Message &message)
                 m_backend->logMessage("gstreamer: pipeline state set to playing", Backend::Info, this);
                 m_tickTimer->start();
                 changeState(Phonon::PlayingState);
-                if ((m_source.type() == MediaSource::Disc) && (m_currentTitle != m_pendingTitle)) {
-                    setTrack(m_pendingTitle);
-                }
                 if (m_resumeState && m_oldState == Phonon::PlayingState) {
                     seek(m_oldPos);
                     m_resumeState = false;
@@ -1404,8 +1170,6 @@ void MediaObject::handleBusMessage(const Message &message)
                 m_backend->logMessage("gstreamer: pipeline state set to paused", Backend::Info, this);
                 m_tickTimer->start();
                 if (state() == Phonon::LoadingState) {
-                    // No_more_pads is not emitted from the decodebin in older versions (0.10.4)
-                    noMorePadsAvailable();
                     loadingComplete();
                 } else if (m_resumeState && m_oldState == Phonon::PausedState) {
                     changeState(Phonon::PausedState);
@@ -1424,9 +1188,6 @@ void MediaObject::handleBusMessage(const Message &message)
                     changeState(Phonon::StoppedState);
                 m_backend->logMessage("gstreamer: pipeline state set to ready", Backend::Debug, this);
                 m_tickTimer->stop();
-                if ((m_source.type() == MediaSource::Disc) && (m_currentTitle != m_pendingTitle)) {
-                    setTrack(m_pendingTitle);
-                }
                 break;
 
             case GST_STATE_VOID_PENDING :
@@ -1443,6 +1204,7 @@ void MediaObject::handleBusMessage(const Message &message)
             QString logMessage;
             gst_message_parse_error (gstMessage, &err, &debug);
             gchar *errorMessage = gst_error_get_message (err->domain, err->code);
+            QString message = QString::fromUtf8(errorMessage);
             logMessage.sprintf("Error: %s Message:%s (%s) Code:%d", debug, err->message, errorMessage, err->code);
             m_backend->logMessage(logMessage, Backend::Warning);
             g_free(errorMessage);
@@ -1465,7 +1227,7 @@ void MediaObject::handleBusMessage(const Message &message)
                             setError(err->message, Phonon::FatalError);
                         gst_caps_unref (caps);
                         gst_object_unref (sinkPad);
-                   }
+                   } 
                } else {
                     setError(QString(err->message), Phonon::FatalError);
                }
@@ -1490,9 +1252,9 @@ void MediaObject::handleBusMessage(const Message &message)
             gchar *debug;
             GError *err;
             gst_message_parse_warning(gstMessage, &err, &debug);
-            QString msgString;
-            msgString.sprintf("Warning: %s\nMessage:%s", debug, err->message);
-            m_backend->logMessage(msgString, Backend::Warning);
+            QString message;
+            message.sprintf("Warning: %s\nMessage:%s", debug, err->message);
+            m_backend->logMessage(message, Backend::Warning);
             g_free (debug);
             g_error_free (err);
             break;
@@ -1537,56 +1299,27 @@ void MediaObject::handleBusMessage(const Message &message)
         //case GST_MESSAGE_STEP_DONE:
         //case GST_MESSAGE_LATENCY: only from 0.10.12
         //case GST_MESSAGE_ASYNC_DONE: only from 0.10.13
-    default:
-        break;
+    default: 
+        break; 
     }
 }
 
 void MediaObject::handleEndOfStream()
 {
-    // If the stream is not seekable ignore
-    // otherwise chained radio broadcasts would stop
-
-
     if (m_atEndOfStream)
         return;
 
-    if (!m_seekable)
-        m_atEndOfStream = true;
+    m_atEndOfStream = true;
 
-    if (m_source.type() == MediaSource::Disc &&
-        m_autoplayTitles &&
-        m_availableTitles > 1 &&
-        m_currentTitle < m_availableTitles) {
-        _iface_setCurrentTitle(m_currentTitle + 1);
-        return;
-    }
-
-    if (m_nextSource.type() != MediaSource::Invalid
-        && m_nextSource.type() != MediaSource::Empty) {  // We only emit finish when the queue is actually empty
+    if (m_nextSource.type() != MediaSource::Invalid) {  // We only emit finish when the queue is actually empty
         QTimer::singleShot (qMax(0, transitionTime()), this, SLOT(beginPlay()));
     } else {
         m_pendingState = Phonon::PausedState;
         emit finished();
-        if (!m_seekable) {
-            setState(Phonon::StoppedState);
-            // Note the behavior for live streams is not properly defined
-            // But since we cant seek to 0, we don't have much choice other than stopping
-            // the stream
-        } else {
-            // Only emit paused if the finished signal
-            // did not result in a new state
-            if (m_pendingState == Phonon::PausedState)
-                setState(m_pendingState);
-        }
-    }
-}
-
-void MediaObject::invalidateGraph()
-{
-    m_resetNeeded = true;
-    if (m_state == Phonon::PlayingState || m_state == Phonon::PausedState) {
-        changeState(Phonon::StoppedState);
+        // Only emit paused if the finished signal
+        // did not result in a new state
+        if (m_pendingState == Phonon::PausedState)
+            setState(m_pendingState);
     }
 }
 
@@ -1596,87 +1329,6 @@ void MediaObject::notifyStateChange(Phonon::State newstate, Phonon::State oldsta
     Q_UNUSED(oldstate);
     MediaNodeEvent event(MediaNodeEvent::StateChanged, &newstate);
     notify(&event);
-}
-
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-//interface management
-bool MediaObject::hasInterface(Interface iface) const
-{
-    return iface == AddonInterface::TitleInterface;
-}
-
-QVariant MediaObject::interfaceCall(Interface iface, int command, const QList<QVariant> &params)
-{
-    if (hasInterface(iface)) {
-
-        switch (iface)
-        {
-        case TitleInterface:
-            switch (command)
-            {
-            case availableTitles:
-                return _iface_availableTitles();
-            case title:
-                return _iface_currentTitle();
-            case setTitle:
-                _iface_setCurrentTitle(params.first().toInt());
-                break;
-            case autoplayTitles:
-                return m_autoplayTitles;
-            case setAutoplayTitles:
-                m_autoplayTitles = params.first().toBool();
-                break;
-            }
-            break;
-                default:
-            break;
-        }
-    }
-    return QVariant();
-}
-#endif
-
-int MediaObject::_iface_availableTitles() const
-{
-    return m_availableTitles;
-}
-
-int MediaObject::_iface_currentTitle() const
-{
-    return m_currentTitle;
-}
-
-void MediaObject::_iface_setCurrentTitle(int title)
-{
-    m_backend->logMessage(QString("setCurrentTitle %0").arg(title), Backend::Info, this);
-    if ((title == m_currentTitle) || (title == m_pendingTitle))
-        return;
-
-    m_pendingTitle = title;
-
-    if (m_state == Phonon::PlayingState || m_state == Phonon::StoppedState) {
-        setTrack(m_pendingTitle);
-    } else {
-        setState(Phonon::StoppedState);
-    }
-}
-
-void MediaObject::setTrack(int title)
-{
-    if (((m_state != Phonon::PlayingState) && (m_state != Phonon::StoppedState)) || (title < 1) || (title > m_availableTitles))
-        return;
-
-
-    //let's seek to the beginning of the song
-    GstFormat trackFormat = gst_format_get_by_nick("track");
-    m_backend->logMessage(QString("setTrack %0").arg(title), Backend::Info, this);
-    if (gst_element_seek_simple(m_pipeline, trackFormat, GST_SEEK_FLAG_FLUSH, title - 1)) {
-        m_currentTitle = title;
-        updateTotalTime();
-        m_atEndOfStream = false;
-        emit titleChanged(title);
-        emit totalTimeChanged(totalTime());
-    }
 }
 
 } // ns Gstreamer

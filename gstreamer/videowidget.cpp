@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -50,7 +50,6 @@ VideoWidget::VideoWidget(Backend *backend, QWidget *parent) :
     m_hue(0.0),
     m_contrast(0.0),
     m_saturation(0.0),
-    m_scaleMode(Phonon::VideoWidget::FitInView),
     m_videoBalance(0),
     m_colorspace(0),
     m_videoplug(0)
@@ -95,7 +94,7 @@ void VideoWidget::setupVideoBin()
 
     if (queue && m_videoBin && videoScale && m_colorspace && videoSink && m_videoplug) {
         //Ensure that the bare essentials are prepared
-        gst_bin_add_many (GST_BIN (m_videoBin), queue, m_colorspace, m_videoplug, videoScale, videoSink, (const char*)NULL);
+        gst_bin_add_many (GST_BIN (m_videoBin), queue, m_colorspace, m_videoplug, videoScale, videoSink, NULL);
         bool success = false;
         //Video balance controls color/sat/hue in the YUV colorspace
         m_videoBalance = gst_element_factory_make ("videobalance", NULL);
@@ -104,11 +103,11 @@ void VideoWidget::setupVideoBin()
             // then hand it off to the videobalance filter before finally converting it back to RGB.
             // Hence we nede a videoFilter to convert the colorspace before and after videobalance
             GstElement *m_colorspace2 = gst_element_factory_make ("ffmpegcolorspace", NULL);
-            gst_bin_add_many(GST_BIN(m_videoBin), m_videoBalance, m_colorspace2, (const char*)NULL);
-            success = gst_element_link_many(queue, m_colorspace, m_videoBalance, m_colorspace2, videoScale, m_videoplug, videoSink, (const char*)NULL);
+            gst_bin_add_many(GST_BIN(m_videoBin), m_videoBalance, m_colorspace2, NULL);
+            success = gst_element_link_many(queue, m_colorspace, m_videoBalance, m_colorspace2, videoScale, m_videoplug, videoSink, NULL);
         } else {
             //If video balance is not available, just connect to sink directly
-            success = gst_element_link_many(queue, m_colorspace, videoScale, m_videoplug, videoSink, (const char*)NULL);
+            success = gst_element_link_many(queue, m_colorspace, videoScale, m_videoplug, videoSink, NULL);
         }
 
         if (success) {
@@ -203,6 +202,8 @@ QRect VideoWidget::scaleToAspect(QRect srcRect, int w, int h) const
 
 /***
  * Calculates the actual rectangle the movie will be presented with
+ *
+ * ### This function does currently asume a 1:1 pixel aspect
  **/
 QRect VideoWidget::calculateDrawFrameRect() const
 {
@@ -290,7 +291,7 @@ void VideoWidget::setBrightness(qreal newValue)
     m_brightness = newValue;
 
     if (m_videoBalance)
-        g_object_set(G_OBJECT(m_videoBalance), "brightness", newValue, (const char*)NULL); //gstreamer range is [-1, 1]
+        g_object_set(G_OBJECT(m_videoBalance), "brightness", newValue, NULL); //gstreamer range is [-1, 1]
 
 }
 
@@ -309,7 +310,7 @@ void VideoWidget::setContrast(qreal newValue)
     m_contrast = newValue;
 
     if (m_videoBalance)
-        g_object_set(G_OBJECT(m_videoBalance), "contrast", (newValue + 1.0), (const char*)NULL); //gstreamer range is [0-2]
+        g_object_set(G_OBJECT(m_videoBalance), "contrast", (newValue + 1.0), NULL); //gstreamer range is [0-2]
 }
 
 qreal VideoWidget::hue() const
@@ -327,7 +328,7 @@ void VideoWidget::setHue(qreal newValue)
     m_hue = newValue;
 
     if (m_videoBalance)
-        g_object_set(G_OBJECT(m_videoBalance), "hue", newValue, (const char*)NULL); //gstreamer range is [-1, 1]
+        g_object_set(G_OBJECT(m_videoBalance), "hue", newValue, NULL); //gstreamer range is [-1, 1]
 }
 
 qreal VideoWidget::saturation() const
@@ -345,7 +346,7 @@ void VideoWidget::setSaturation(qreal newValue)
     m_saturation = newValue;
 
     if (m_videoBalance)
-        g_object_set(G_OBJECT(m_videoBalance), "saturation", newValue + 1.0, (const char*)NULL); //gstreamer range is [0, 2]
+        g_object_set(G_OBJECT(m_videoBalance), "saturation", newValue + 1.0, NULL); //gstreamer range is [0, 2]
 }
 
 
@@ -357,9 +358,6 @@ void VideoWidget::setMovieSize(const QSize &size)
     m_movieSize = size;
     widget()->updateGeometry();
     widget()->update();
-
-    if (m_renderer)
-        m_renderer->movieSizeChanged(m_movieSize);
 }
 
 void VideoWidget::mediaNodeEvent(const MediaNodeEvent *event)

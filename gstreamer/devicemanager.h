@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -42,7 +42,6 @@ public :
     int id;
     QByteArray gstId;
     QByteArray description;
-    QString icon;
 };
 
 class DeviceManager : public QObject {
@@ -52,10 +51,8 @@ public:
     virtual ~DeviceManager();
     const QList<AudioDevice> audioOutputDevices() const;
     GstPad *requestPad(int device) const;
-    int allocateDeviceId();
     int deviceId(const QByteArray &gstId) const;
-    const QByteArray gstId(int id);
-    AudioDevice* audioDevice(int id);
+    QByteArray deviceDescription(int id) const;
     GstElement *createGNOMEAudioSink(Category category);
     GstElement *createAudioSink(Category category = NoCategory);
     AbstractRenderer *createVideoRenderer(VideoWidget *parent);
@@ -71,7 +68,6 @@ private:
     bool canOpenDevice(GstElement *element) const;
     Backend *m_backend;
     QList <AudioDevice> m_audioDeviceList;
-    int m_audioDeviceCounter;
     QTimer m_devicePollTimer;
     QByteArray m_audioSink;
     QByteArray m_videoSinkWidget;

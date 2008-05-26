@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,6 @@
 #include "widgetrenderer.h"
 #include "x11renderer.h"
 #include "artssink.h"
-#include "pulsesupport.h"
 
 #ifdef USE_ALSASINK2
 #include "alsasink2.h"
@@ -45,12 +44,9 @@ namespace Gstreamer
 AudioDevice::AudioDevice(DeviceManager *manager, const QByteArray &gstId)
         : gstId(gstId)
 {
-    // This should never be called when PulseAudio is active.
-    Q_ASSERT(!PulseSupport::getInstance()->isActive());
-
-    id = manager->allocateDeviceId();
-    icon = "audio-card";
-
+    //get an id
+    static int counter = 0;
+    id = counter++;
     //get name from device
     if (gstId == "default") {
         description = "Default audio device";
@@ -61,8 +57,8 @@ AudioDevice::AudioDevice(DeviceManager *manager, const QByteArray &gstId)
             gchar *deviceDescription = NULL;
 
             if (GST_IS_PROPERTY_PROBE(aSink) && gst_property_probe_get_property( GST_PROPERTY_PROBE(aSink), "device" ) ) {
-                g_object_set (G_OBJECT(aSink), "device", gstId.constData(), (const char*)NULL);
-                g_object_get (G_OBJECT(aSink), "device-name", &deviceDescription, (const char*)NULL);
+                g_object_set (G_OBJECT(aSink), "device", gstId.constData(), NULL);
+                g_object_get (G_OBJECT(aSink), "device-name", &deviceDescription, NULL);
                 description = QByteArray(deviceDescription);
                 g_free (deviceDescription);
                 gst_element_set_state(aSink, GST_STATE_NULL);
@@ -75,20 +71,14 @@ AudioDevice::AudioDevice(DeviceManager *manager, const QByteArray &gstId)
 DeviceManager::DeviceManager(Backend *backend)
         : QObject(backend)
         , m_backend(backend)
-        , m_audioDeviceCounter(0)
 {
     QSettings settings(QLatin1String("Trolltech"));
     settings.beginGroup(QLatin1String("Qt"));
 
-    PulseSupport *pulse = PulseSupport::getInstance();
     m_audioSink = qgetenv("PHONON_GST_AUDIOSINK");
     if (m_audioSink.isEmpty()) {
         m_audioSink = settings.value(QLatin1String("audiosink"), "Auto").toByteArray().toLower();
-        if (m_audioSink == "auto" && pulse->isActive())
-            m_audioSink = "pulsesink";
     }
-    if ("pulsesink" != m_audioSink)
-        pulse->disable();
 
     m_videoSinkWidget = qgetenv("PHONON_GST_VIDEOMODE");
     if (m_videoSinkWidget.isEmpty()) {
@@ -118,13 +108,13 @@ GstElement *DeviceManager::createGNOMEAudioSink(Category category)
         if (g_object_class_find_property (G_OBJECT_GET_CLASS (sink), "profile")) {
             switch (category) {
             case NotificationCategory:
-                g_object_set (G_OBJECT (sink), "profile", 0, (const char*)NULL); // 0 = 'sounds'
+                g_object_set (G_OBJECT (sink), "profile", 0, NULL); // 0 = 'sounds'
                 break;
             case CommunicationCategory:
-                g_object_set (G_OBJECT (sink), "profile", 2, (const char*)NULL); // 2 = 'chat'
+                g_object_set (G_OBJECT (sink), "profile", 2, NULL); // 2 = 'chat'
                 break;
             default:
-                g_object_set (G_OBJECT (sink), "profile", 1, (const char*)NULL); // 1 = 'music and movies'
+                g_object_set (G_OBJECT (sink), "profile", 1, NULL); // 1 = 'music and movies'
                 break;
             }
         }
@@ -187,7 +177,7 @@ GstElement *DeviceManager::createAudioSink(Category category)
 
 #ifdef USE_ALSASINK2
             if (!sink) {
-                sink = gst_element_factory_make ("_k_alsasink", NULL);
+                sink = GST_ELEMENT(g_object_new(gst_alsasink2_get_type(), NULL));
                 if (canOpenDevice(sink))
                     m_backend->logMessage("AudioOutput using alsa2 audio sink");
                 else if (sink) {
@@ -246,7 +236,7 @@ GstElement *DeviceManager::createAudioSink(Category category)
         if (sink) {
             m_backend->logMessage("AudioOutput Using fake audio sink");
             //without sync the sink will pull the pipeline as fast as the CPU allows
-            g_object_set (G_OBJECT (sink), "sync", TRUE, (const char*)NULL);
+            g_object_set (G_OBJECT (sink), "sync", TRUE, NULL);
         }
     }
     Q_ASSERT(sink);
@@ -276,17 +266,9 @@ AbstractRenderer *DeviceManager::createVideoRenderer(VideoWidget *parent)
     return new WidgetRenderer(parent);
 }
 
-/**
- * Allocate a device id for a new audio device
- */
-int DeviceManager::allocateDeviceId()
-{
-    return m_audioDeviceCounter++;
-}
-
-
-/**
- * Returns a positive device id or -1 if device does not exist
+/*
+ * Returns a positive device id or -1 if device
+ * does not exist
  *
  * The gstId is typically in the format hw:1,0
  */
@@ -301,30 +283,16 @@ int DeviceManager::deviceId(const QByteArray &gstId) const
 }
 
 /**
- * Returns a gstId or "default" if device does not exist
- *
- * The gstId is typically in the format hw:1,0
+ * Get a human-readable description from a device id
  */
-const QByteArray DeviceManager::gstId(int deviceId)
-{
-    if (!PulseSupport::getInstance()->isActive()) {
-        AudioDevice *ad = audioDevice(deviceId);
-        if (ad)
-            return QByteArray(ad->gstId);
-    }
-    return QByteArray("default");
-}
-
-/**
-* Get the AudioDevice for a given device id
-*/
-AudioDevice* DeviceManager::audioDevice(int id)
+QByteArray DeviceManager::deviceDescription(int id) const
 {
     for (int i = 0 ; i < m_audioDeviceList.size() ; ++i) {
-        if (m_audioDeviceList[i].id == id)
-            return &m_audioDeviceList[i];
+        if (m_audioDeviceList[i].id == id) {
+            return m_audioDeviceList[i].description;
+        }
     }
-    return NULL;
+    return QByteArray();
 }
 
 /**
@@ -338,11 +306,8 @@ void DeviceManager::updateDeviceList()
     QList<QByteArray> list;
 
     if (audioSink) {
-        if (!PulseSupport::getInstance()->isActive()) {
-            // If we're using pulse, the PulseSupport class takes care of things for us.
-            list = GstHelper::extractProperties(audioSink, "device");
-            list.prepend("default");
-        }
+        list = GstHelper::extractProperties(audioSink, "device");
+        list.prepend("default");
 
         for (int i = 0 ; i < list.size() ; ++i) {
             QByteArray gstId = list.at(i);

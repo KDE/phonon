@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2008 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -18,10 +18,10 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 /*****************************************
  *
  *  This is an aRts plugin for GStreamer
- *
+ * 
  ****************************************/
 
-#include <gst/gst.h>
+#include <gst/gst.h> 
 #include <gst/audio/audio.h>
 #include <gst/audio/gstaudiosink.h>
 #include "artssink.h"
@@ -33,16 +33,16 @@ namespace Phonon
 namespace Gstreamer
 {
 
-static GstStaticPadTemplate sinktemplate =
+static GstStaticPadTemplate sinktemplate = 
 GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS (
-                     "audio/x-raw-int, "
-                     "width = (int) { 8, 16 }, "
-                     "depth = (int) { 8, 16 }, "
-                     "endianness = (int) BYTE_ORDER, "
-                     "channels = (int) { 1, 2 }, "
+    GST_STATIC_CAPS ( 
+                     "audio/x-raw-int, " 
+                     "width = (int) { 8, 16 }, " 
+                     "depth = (int) { 8, 16 }, " 
+                     "endianness = (int) BYTE_ORDER, " 
+                     "channels = (int) { 1, 2 }, " 
                      "rate = (int) [ 8000, 96000 ]"
                     )
 );
@@ -80,13 +80,13 @@ static gboolean connected = false;
 static gboolean init = false;
 static int sinkCount;
 
-GST_BOILERPLATE (ArtsSink, arts_sink, GstAudioSink, GST_TYPE_AUDIO_SINK)
+GST_BOILERPLATE (ArtsSink, arts_sink, GstAudioSink, GST_TYPE_AUDIO_SINK);
 
 // ArtsSink args
 enum
 {
     ARG_0,
-    ARG_ARTSSINK
+    ARG_ARTSSINK,
 };
 
 /* open the device with given specs */
@@ -104,7 +104,7 @@ gboolean arts_sink_open(GstAudioSink *sink)
     }
 
     // Check if all symbols were resolved
-    if (!(p_arts_init && p_arts_play_stream && p_arts_close_stream
+    if (!(p_arts_init && p_arts_play_stream && p_arts_close_stream 
          && p_arts_stream_get && p_arts_stream_set && p_arts_write && p_arts_free))
         return FALSE;
 
@@ -113,7 +113,7 @@ gboolean arts_sink_open(GstAudioSink *sink)
         return false;
 
     return true;
-}
+};
 
 /* prepare resources and state to operate with the given specs */
 static gboolean arts_sink_prepare(GstAudioSink *sink, GstRingBufferSpec *spec)
@@ -129,14 +129,14 @@ static gboolean arts_sink_prepare(GstAudioSink *sink, GstRingBufferSpec *spec)
     asink->bytes_per_sample = spec->bytes_per_sample;
 
     static int id = 0;
-    asink->stream = p_arts_play_stream(spec->rate, spec->depth, spec->channels,
+    asink->stream = p_arts_play_stream(spec->rate, spec->depth, spec->channels, 
                                         QString("gstreamer-%0").arg(id++).toLatin1().constData());
     if (asink->stream)
         connected = true;
 
     return connected;
-}
-
+};
+  
 /* undo anything that was done in prepare() */
 static gboolean arts_sink_unprepare(GstAudioSink *sink)
 {
@@ -147,14 +147,14 @@ static gboolean arts_sink_unprepare(GstAudioSink *sink)
         connected = false;
     }
     return true;
-}
+};
 
 /* close the device */
 static gboolean arts_sink_close(GstAudioSink *sink)
 {
     Q_UNUSED(sink);
     return true;
-}
+};
 
 /* write samples to the device */
 static guint arts_sink_write(GstAudioSink *sink, gpointer data, guint length)
@@ -170,7 +170,7 @@ static guint arts_sink_write(GstAudioSink *sink, gpointer data, guint length)
         GST_ELEMENT_ERROR (sink, RESOURCE, WRITE, (NULL), ("Could not write to device.", NULL));
 
     return errorcode > 0 ? errorcode : 0;
-}
+};
 
 /* get number of samples queued in the device */
 static guint arts_sink_delay(GstAudioSink *sink)
@@ -182,7 +182,7 @@ static guint arts_sink_delay(GstAudioSink *sink)
     // We get results in millisecons so we have to caculate the approximate size in samples
     guint delay = p_arts_stream_get(asink->stream, ARTS_P_SERVER_LATENCY) * (asink->samplerate / 1000);
     return delay;
-}
+};
 
 /* reset the audio device, unblock from a write */
 static void arts_sink_reset(GstAudioSink *sink)
@@ -190,19 +190,15 @@ static void arts_sink_reset(GstAudioSink *sink)
     // ### We are currently unable to gracefully recover
     // after artsd has been restarted or killed.
     Q_UNUSED(sink);
-}
+};
 
 // Register element details
 static void arts_sink_base_init (gpointer g_class) {
     GstElementClass *gstelement_class = GST_ELEMENT_CLASS (g_class);
-    static gchar longname[] = "Experimental aRts sink",
-                    klass[] = "Sink/Audio",
-              description[] = "aRts Audio Output Device",
-                   author[] = "Nokia Corporation and/or its subsidiary(-ies) <qt-info@nokia.com>";
-    GstElementDetails details = GST_ELEMENT_DETAILS (longname,
-                                          klass,
-                                          description,
-                                          author);
+    GstElementDetails details = GST_ELEMENT_DETAILS ("Experimental aRts sink",
+                                          "Sink/Audio",
+                                          "aRts Audio Output Device",
+                                          "Trolltech ASA <info@trolltech.com>");
     gst_element_class_add_pad_template (gstelement_class, gst_static_pad_template_get (&sinktemplate));
     gst_element_class_set_details (gstelement_class, &details);
 }

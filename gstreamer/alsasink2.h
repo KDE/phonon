@@ -31,25 +31,25 @@
 G_BEGIN_DECLS
 
 #define GST_TYPE_ALSA_SINK2            (gst_alsasink2_get_type())
-#define GST_ALSA_SINK2(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj),GST_TYPE_ALSA_SINK2,_k_GstAlsaSink))
-#define GST_ALSA_SINK2_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),GST_TYPE_ALSA_SINK2,_k_GstAlsaSinkClass))
+#define GST_ALSA_SINK2(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj),GST_TYPE_ALSA_SINK2,GstAlsaSink2))
+#define GST_ALSA_SINK2_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),GST_TYPE_ALSA_SINK2,GstAlsaSink2Class))
 #define GST_IS_ALSA_SINK2(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj),GST_TYPE_ALSA_SINK2))
 #define GST_IS_ALSA_SINK2_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),GST_TYPE_ALSA_SINK2))
-#define GST_ALSA_SINK2_CAST(obj)       ((_k_GstAlsaSink *) (obj))
+#define GST_ALSA_SINK2_CAST(obj)       ((GstAlsaSink2 *) (obj))
 
-typedef struct _k_GstAlsaSink _k_GstAlsaSink;
-typedef struct _k_GstAlsaSinkClass _k_GstAlsaSinkClass;
+typedef struct _GstAlsaSink2 GstAlsaSink2;
+typedef struct _GstAlsaSink2Class GstAlsaSink2Class;
 
 #define GST_ALSA_SINK2_GET_LOCK(obj)	(GST_ALSA_SINK2_CAST (obj)->alsa_lock)
 #define GST_ALSA_SINK2_LOCK(obj)	        (g_mutex_lock (GST_ALSA_SINK2_GET_LOCK (obj)))
 #define GST_ALSA_SINK2_UNLOCK(obj)	(g_mutex_unlock (GST_ALSA_SINK2_GET_LOCK (obj)))
 
 /**
- * _k_GstAlsaSink:
+ * GstAlsaSink2:
  *
  * Opaque data structure
  */
-struct _k_GstAlsaSink {
+struct _GstAlsaSink2 {
   GstAudioSink    sink;
 
   gchar                 *device;
@@ -63,8 +63,6 @@ struct _k_GstAlsaSink {
   guint rate;
   guint channels;
   gint bytes_per_sample;
-  gboolean iec958;
-  gboolean need_swap;
 
   guint buffer_time;
   guint period_time;
@@ -76,7 +74,7 @@ struct _k_GstAlsaSink {
   GMutex *alsa_lock;
 };
 
-struct _k_GstAlsaSinkClass {
+struct _GstAlsaSink2Class {
   GstAudioSinkClass parent_class;
 };
 
