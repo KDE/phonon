@@ -6,7 +6,6 @@
 #  GOBJECT_LIBRARIES - the libraries needed to use GObject
 #  GOBJECT_DEFINITIONS - Compiler switches required for using GObject
 
-# Copyright (c) 2008 Helio Chissini de Castro, <helio@kde.org>
 #  (c)2006, Tim Beaulen <tbscope@gmail.com>
 
 
@@ -18,42 +17,43 @@ ELSE (GOBJECT_INCLUDE_DIR AND GOBJECT_LIBRARIES)
 ENDIF (GOBJECT_INCLUDE_DIR AND GOBJECT_LIBRARIES)
 
 IF (NOT WIN32)
-   FIND_PACKAGE(PkgConfig REQUIRED)
    # use pkg-config to get the directories and then use these values
    # in the FIND_PATH() and FIND_LIBRARY() calls
-   PKG_CHECK_MODULES(PKG_GOBJECT2 REQUIRED gobject-2.0)
-   SET(GOBJECT_DEFINITIONS ${PKG_GOBJECT2_CFLAGS})
+   INCLUDE(UsePkgConfig)
+   PKGCONFIG(gobject-2.0 _GObjectIncDir _GObjectLinkDir _GObjectLinkFlags _GObjectCflags)
+   #MESSAGE(STATUS "DEBUG: GObject include directory = ${_GObjectIncDir}")
+   #MESSAGE(STATUS "DEBUG: GObject link directory = ${_GObjectLinkDir}")
+   #MESSAGE(STATUS "DEBUG: GObject link flags = ${_GObjectLinkFlags}")
+   #MESSAGE(STATUS "DEBUG: GObject CFlags = ${_GObjectCflags}")
+   SET(GOBJECT_DEFINITIONS ${_GObjectCflags})
 ENDIF (NOT WIN32)
 
-FIND_PATH(GOBJECT_INCLUDE_DIR gobject/gobject.h
+FIND_PATH(GOBJECT_INCLUDE_DIR gobject.h
    PATHS
-   ${PKG_GOBJECT2_INCLUDE_DIRS}
-   /usr/include/glib-2.0/
-   PATH_SUFFIXES glib-2.0
+   ${_GObjectIncDir}
+   ${_GObjectIncDir}/glib-2.0/gobject/
+   /usr/include/glib-2.0/gobject/
+   #PATH_SUFFIXES gst
    )
 
 FIND_LIBRARY(_GObjectLibs NAMES gobject-2.0
    PATHS
-   ${PKG_GOBJECT2_LIBRARY_DIRS}
+   ${_GObjectLinkDir}
    )
 FIND_LIBRARY(_GModuleLibs NAMES gmodule-2.0
    PATHS
-   ${PKG_GOBJECT2_LIBRARY_DIRS}
+   ${_GObjectLinkDir}
    )
 FIND_LIBRARY(_GThreadLibs NAMES gthread-2.0
    PATHS
-   ${PKG_GOBJECT2_LIBRARY_DIRS}
+   ${_GObjectLinkDir}
    )
 FIND_LIBRARY(_GLibs NAMES glib-2.0
    PATHS
-   ${PKG_GOBJECT2_LIBRARY_DIRS}
+   ${_GObjectLinkDir}
    )
 
-IF (WIN32)
-SET (GOBJECT_LIBRARIES ${_GObjectLibs} ${_GModuleLibs} ${_GThreadLibs} ${_GLibs})
-ELSE (WIN32)
-SET (GOBJECT_LIBRARIES ${PKG_GOBJECT2_LIBRARIES})
-ENDIF (WIN32)
+SET( GOBJECT_LIBRARIES ${_GObjectLibs} ${_GModuleLibs} ${_GThreadLibs} ${_GLibs} )
 
 IF (GOBJECT_INCLUDE_DIR AND GOBJECT_LIBRARIES)
    SET(GOBJECT_FOUND TRUE)
