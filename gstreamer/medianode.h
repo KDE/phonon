@@ -116,7 +116,7 @@ private:
     NodeDescription m_description;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(MediaNode::NodeDescription);
+Q_DECLARE_OPERATORS_FOR_FLAGS(MediaNode::NodeDescription)
 
 } // ns Gstreamer
 } // ns Phonon

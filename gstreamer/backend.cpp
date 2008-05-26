@@ -33,7 +33,7 @@
 
 QT_BEGIN_NAMESPACE
 
-Q_EXPORT_PLUGIN2(phonon_gstreamer, Phonon::Gstreamer::Backend);
+Q_EXPORT_PLUGIN2(phonon_gstreamer, Phonon::Gstreamer::Backend)
 
 namespace Phonon
 {

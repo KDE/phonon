@@ -39,7 +39,7 @@ GST_DEBUG_CATEGORY_STATIC (phonon_src_debug);
 enum
 {
     ARG_0,
-    ARG_PHONONSRC,
+    ARG_PHONONSRC
 };
 
 static void phonon_src_finalize (GObject * object);
@@ -63,7 +63,7 @@ static void _do_init (GType filesrc_type)
     GST_DEBUG_CATEGORY_INIT (phonon_src_debug, "phononsrc", 0, "QIODevice element");
 }
 
-GST_BOILERPLATE_FULL (PhononSrc, phonon_src, GstBaseSrc, GST_TYPE_BASE_SRC, _do_init);
+GST_BOILERPLATE_FULL (PhononSrc, phonon_src, GstBaseSrc, GST_TYPE_BASE_SRC, _do_init)
 
 // Register element details
 static void phonon_src_base_init (gpointer g_class) {

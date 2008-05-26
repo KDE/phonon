@@ -53,6 +53,6 @@ private:
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(Phonon::Gstreamer::Message);
+Q_DECLARE_METATYPE(Phonon::Gstreamer::Message)
 
 #endif // Phonon_GSTREAMER_MESSAGE_H
