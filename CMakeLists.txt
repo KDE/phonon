@@ -35,7 +35,7 @@ if(msvc)
 endif(msvc)
 
 # for including config.h and for includes like <kparts/foo.h>
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/phonon)
+include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR}/phonon ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/phonon)
 
 option(PHONON_BUILD_TESTS "Build the tests")
 
@@ -191,10 +191,10 @@ add_subdirectory(cmake)
 add_subdirectory(phonon)
 add_subdirectory(includes)
 if (Q_WS_MAC)
-  add_subdirectory(qt7)
+   #add_subdirectory(qt7)
 endif (Q_WS_MAC)
 if (Q_WS_WIN)
-   add_subdirectory(ds9)
+   #add_subdirectory(ds9)
 endif (Q_WS_WIN)
 if (Q_WS_X11)
    add_subdirectory(gstreamer)
