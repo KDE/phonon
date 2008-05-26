@@ -120,7 +120,7 @@ namespace Phonon
         void removeInputPath(const Path &);
 
         const QObject *qObject() const { return const_cast<MediaNodePrivate *>(this)->qObject(); }
-        virtual QObject *qObject() = 0;
+        virtual QObject *qObject() { return 0; }
 
     protected:
         MediaNode *q_ptr;
