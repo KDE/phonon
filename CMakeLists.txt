@@ -60,6 +60,7 @@ _set_fancy(LIB_INSTALL_DIR             "${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX}"
 _set_fancy(INCLUDE_INSTALL_DIR         "${CMAKE_INSTALL_PREFIX}/include"           "The subdirectory to the header prefix")
 _set_fancy(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/kde4"                   "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
 _set_fancy(SHARE_INSTALL_PREFIX        "${CMAKE_INSTALL_PREFIX}/share"             "Base directory for files which go to share/")
+_set_fancy(DATA_INSTALL_DIR            "${SHARE_INSTALL_PREFIX}/apps"              "The parent directory where applications can install their data")
 _set_fancy(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde4/services"     "The install dir for service (desktop, protocol, ...) files")
 _set_fancy(DBUS_INTERFACES_INSTALL_DIR "${SHARE_INSTALL_PREFIX}/dbus-1/interfaces" "The dbus interfaces install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/interfaces)")
 _set_fancy(DBUS_SERVICES_INSTALL_DIR   "${SHARE_INSTALL_PREFIX}/dbus-1/services"   "The dbus services install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/services)")
