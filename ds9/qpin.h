@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "phononds9_namespace.h"
 
 #include <QtCore/QString>
+#include <QtCore/QMutex>
 #include <QtCore/QVector>
 #include <QtCore/QReadWriteLock>
 
@@ -86,12 +87,15 @@ namespace Phonon
         protected:
             //this can be used by sub-classes
             mutable QReadWriteLock m_lock;
+
             QBaseFilter *m_parent;
             bool m_flushing;
 
         private:
+
             HRESULT checkOutputMediaTypesConnection(IPin *pin);
             HRESULT checkOwnMediaTypesConnection(IPin *pin);
+            void *findUpStreamInterface(const IID &iid) const;
 
             LONG m_refCount;
             IPin *m_connected;
@@ -100,6 +104,8 @@ namespace Phonon
             AM_MEDIA_TYPE m_connectedType;
             QString m_name;
             IMemAllocator *m_memAlloc;
+
+            mutable QMutex m_mutex;
         };
 
         //utility function

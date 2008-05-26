@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #define PHONON_MEDIAGRAPH_H
 
 #include "backendnode.h"
+#include <QtCore/QSet>
 #include <QtCore/QMultiMap>
 
 #include <phonon/mediasource.h>
@@ -26,6 +27,8 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 //#define GRAPH_DEBUG
 
 QT_BEGIN_NAMESPACE
+
+uint qHash (const Phonon::DS9::Filter &f);
 
 namespace Phonon
 {
@@ -37,6 +40,7 @@ namespace Phonon
         //could be nice to then remove all the "*this" in the code of this class
         class MediaGraph : public QObject
         {
+            Q_OBJECT
         public:
             MediaGraph(MediaObject *mo, short index);
             ~MediaGraph();
@@ -47,17 +51,16 @@ namespace Phonon
             void stop();
             void pause();
             void absoluteSeek(qint64);
-
+            HRESULT saveToFile(const QString &filepath) const;
             QMultiMap<QString, QString> metadata() const;
 
-            static QList<Filter> getAllFilters(Graph graph);
-            QList<Filter> getAllFilters() const;
+            static QSet<Filter> getAllFilters(Graph graph);
+            QSet<Filter> getAllFilters() const;
 
             HRESULT loadSource(const Phonon::MediaSource &);
 
             bool hasVideo() const { return m_hasVideo; }
             void grabNode(BackendNode *node);
-            void grabFilter(Filter filter);
 
             //connections of the nodes
             bool connectNodes(BackendNode *source, BackendNode *sink);
@@ -72,13 +75,10 @@ namespace Phonon
             short index() const;
 
             Filter realSource() const;
-
-
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
             QList<qint64> titles() const;
+
             void setStopPosition(qint64 time);
             qint64 stopPosition() const;
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
             void switchFilters(Filter oldFilter, Filter newFilter);
             OAFilterState syncGetRealState() const;
@@ -89,15 +89,21 @@ namespace Phonon
 
             Graph graph() const;
 
+        Q_SIGNALS:
+            void loadingFinished(MediaGraph*);
+            void seekingFinished(MediaGraph*);
+
+        private Q_SLOTS:
             void finishLoading(quint16 workId, HRESULT hr, Graph);
             void finishSeeking(quint16 workId, qint64 time);
 
-        private:
+
             bool isSourceFilter(const Filter &filter) const;
             bool isDemuxerFilter(const Filter &filter) const;
             bool isDecoderFilter(const Filter &filter);
-            static QList<Filter> getFilterChain(const Filter &source, const Filter &sink);
+            static QSet<Filter> getFilterChain(const Filter &source, const Filter &sink);
 
+        private:
             HRESULT reallyFinishLoading(HRESULT, const Graph &graph);
 
 
@@ -117,14 +123,14 @@ namespace Phonon
             ComPointer<IMediaSeeking> m_mediaSeeking;
             Filter m_fakeSource, m_realSource;
             Filter m_demux;
-            QList<OutputPin> m_decoderPins;
-            QList<Filter> m_decoders;
+            QSet<OutputPin> m_decoderPins;
+            QSet<Filter> m_decoders;
 
             bool m_hasVideo;
             bool m_hasAudio;
             bool m_connectionsDirty;
             bool m_isStopping;
-            mutable bool m_isSeekable;
+            bool m_isSeekable;
             HRESULT m_result;
             quint16 m_index;
             quint16 m_renderId;
@@ -136,7 +142,7 @@ namespace Phonon
 
             MediaObject *m_mediaObject;
             Phonon::MediaSource m_mediaSource;
-            QList<BackendNode*> m_sinkConnections; //connections to the source
+            QSet<BackendNode*> m_sinkConnections; //connections to the source
 
             Q_DISABLE_COPY(MediaGraph);
         };

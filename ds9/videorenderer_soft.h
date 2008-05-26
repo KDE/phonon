@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -14,15 +14,12 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-
 #ifndef PHONON_VIDEORENDERER_SOFT_H
 #define PHONON_VIDEORENDERER_SOFT_H
 
 #include "abstractvideorenderer.h"
 
 QT_BEGIN_NAMESPACE
-#ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon
 {
@@ -39,13 +36,12 @@ namespace Phonon
 
             //Implementation from AbstractVideoRenderer
             void repaintCurrentFrame(QWidget *target, const QRect &rect);
-            void notifyResize(const QSize&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode);
+            void notifyResize(const QRect&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode);
             QSize videoSize() const;
             void applyMixerSettings(qreal brightness, qreal contrast, qreal hue, qreal saturation);
+            void setActive(bool);
             bool isNative() const;
-
-            QImage snapshot() const;
-            void setSnapshot(const QImage &); 
+            virtual void notifyVideoLoaded();
 
         protected:
             bool event(QEvent *);
@@ -59,10 +55,6 @@ namespace Phonon
     }
 }
 
-#endif //QT_NO_PHONON_VIDEO
-
 QT_END_NAMESPACE
 
 #endif
-
-

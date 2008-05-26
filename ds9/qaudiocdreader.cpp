@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -16,7 +16,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "qaudiocdreader.h"
-#include <dshow.h>
 #include <initguid.h>
 
 #include <winioctl.h> // needed for FILE_DEVICE_CD_ROM etc
@@ -25,8 +24,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #define IOCTL_CDROM_RAW_READ    CTL_CODE(FILE_DEVICE_CD_ROM, 0x000F, METHOD_OUT_DIRECT,  FILE_READ_ACCESS)
 
 QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
 
 namespace Phonon
 {
@@ -324,9 +321,10 @@ namespace Phonon
                 return QBaseFilter::QueryInterface(iid, out);
             }
         }
+
+
+
     }
 }
-
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 QT_END_NAMESPACE

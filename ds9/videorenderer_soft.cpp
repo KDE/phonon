@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -15,10 +15,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "videorenderer_soft.h"
-
-#ifndef QT_NO_PHONON_VIDEO
 
 #include "qmeminputpin.h"
 #include "qbasefilter.h"
@@ -28,24 +25,15 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtGui/QApplication>
 #include <QtCore/QTime>
 
-#define _USE_MATH_DEFINES //for pi
-#include <QtCore/qmath.h> //for sin and cos
-/* M_PI is a #define that may or may not be handled in <cmath> */
-#ifndef M_PI
-#define M_PI 3.14159265358979323846264338327950288419717
-#endif
+#include <cmath> //for sin and cos
 
 #include <dvdmedia.h> //for VIDEOINFOHEADER2
 
 //this will make a display every second of how many frames were pocessed and actually displayed
 //#define FPS_COUNTER
 
-#ifdef Q_OS_WINCE
-#define QT_NO_OPENGL
-#endif
-
 #ifndef QT_NO_OPENGL
-#include <gl/gl.h>
+#include <QtOpenGL/QGLWidget>
 #ifndef GL_FRAGMENT_PROGRAM_ARB
 #define GL_FRAGMENT_PROGRAM_ARB           0x8804
 #define GL_PROGRAM_FORMAT_ASCII_ARB       0x8875
@@ -135,18 +123,18 @@ static const char yuy2ToRgb[] =
 
 #endif //QT_NO_OPENGL
 
-#define CLIP_SHIFT_RIGHT_8(c) ((c) < 0 ? 0 : (c) > 0xffff ? 0xff : (c) >> 8)
-#define CLIP_SHIFT_LEFT_8(c) ((c) < 0 ? 0 : (c) > 0xffff ? 0xff0000 : ( ((c) << 8) & 0xff0000) )
-#define CLIP_NO_SHIFT(c) ((c) < 0 ? 0 : (c) > 0xffff ? 0xff00 : ((c) & 0xff00) )
-#define CLIPPED_PIXEL(base, r, g, b) (0xff000000u | CLIP_SHIFT_LEFT_8(base+r) | CLIP_NO_SHIFT(base+g) | CLIP_SHIFT_RIGHT_8(base+b))
-#define CLIPPED_PIXEL2(r, g, b) (0xff000000u | CLIP_SHIFT_LEFT_8(r) | CLIP_NO_SHIFT(g) | CLIP_SHIFT_RIGHT_8(b))
-
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
     namespace DS9
     {
+
+        static inline uchar clip(int c) 
+        {
+            return c <= 0 ? 0 : c >= 255 ? 255 : c;
+        }
+
         static const QVector<AM_MEDIA_TYPE> videoMediaTypes()
         {
             AM_MEDIA_TYPE mt;
@@ -178,8 +166,6 @@ namespace Phonon
 
             ~VideoRendererSoftFilter();
 
-            QSize videoSize() const;
-
 #ifndef QT_NO_OPENGL
             void freeGLResources()
             {
@@ -199,7 +185,8 @@ namespace Phonon
             void freeResources()
             {
                 QMutexLocker locker(&m_mutex);
-                m_sampleBuffer = ComPointer<IMediaSample>();
+                m_frontBuffer.clear();
+                m_backBuffer.clear();
 #ifndef QT_NO_OPENGL
                 freeGLResources();
 #endif // QT_NO_OPENGL
@@ -214,20 +201,15 @@ namespace Phonon
                 //we send the message to the graph
                 ComPointer<IMediaEventSink> sink(graph(), IID_IMediaEventSink);
                 if (sink) {
-                    sink->Notify(EC_COMPLETE, S_OK,
+                    sink->Notify(EC_COMPLETE, S_OK, 
                         reinterpret_cast<LONG_PTR>(static_cast<IBaseFilter*>(this)));
                 }
             }
 
-            void freeMediaSample()
-            {
-                QMutexLocker locker(&m_mutex);
-                m_sampleBuffer = ComPointer<IMediaSample>();
-            }
-
             void beginFlush()
             {
-                freeMediaSample();
+                m_backBuffer.sample = ComPointer<IMediaSample>();
+                m_frontBuffer.sample = ComPointer<IMediaSample>();
                 ::SetEvent(m_receiveCanWait); //unblocks the flow
             }
 
@@ -285,43 +267,41 @@ namespace Phonon
                 //let's normalize the values
                 m_brightness = brightness * 128;
                 m_contrast = contrast + 1.;
-                m_hue = hue * M_PI;
+                m_hue = hue * 180.;
                 m_saturation = saturation + 1.;
-            }
-            
-            QImage currentImage() const
-            {
-                return m_currentImage;
-            }
-
-            void setCurrentImage(const QImage &image)
-            {
-                QMutexLocker locker(&m_mutex);
-                m_currentImage = image;
             }
 
             //the following function is called from the GUI thread
             void repaintCurrentFrame(QPainter &painter, const QRect &r);
 
-
         protected:
-            static void convertYV12toRGB(const uchar *data, const QSize &s, QImage &dest,
+            static void convertYV12toRGB(const uchar *data, int w, int h, QImage &dest,
                                          qreal brightness, qreal contrast, qreal hue, qreal saturation);
-            static void convertYUY2toRGB(const uchar *data, const QSize &s, QImage &dest,
+            static void convertYUY2toRGB(const uchar *data, int w, int h, QImage &dest,
                                          qreal brightness, qreal contrast, qreal hue, qreal saturation);
-            static void normalizeRGB(const uchar *data, const QSize &s, QImage &destImage);
+            static void normalizeRGB(const uchar *data, int w, int h, QImage &destImage);
 
         private:
             QPin *const m_inputPin;
-            ComPointer<IMediaSample> m_sampleBuffer;
-            QImage m_currentImage;
+            struct VideoFrameBuffer
+            {
+                void clear()
+                {
+                    image = QImage();
+                    sample = ComPointer<IMediaSample>();
+                }
+
+                QImage image; //in case we render to an image
+                ComPointer<IMediaSample> sample;
+
+            } m_frontBuffer, m_backBuffer;
 
 
             VideoRendererSoft *m_renderer;
             mutable QMutex m_mutex;
             REFERENCE_TIME m_start;
             HANDLE m_renderEvent, m_receiveCanWait;         // Signals sample to render
-            QSize m_size;
+            int m_width, m_height;
             bool m_textureUploaded;
 
             //mixer settings
@@ -345,7 +325,7 @@ namespace Phonon
             };
 
             void updateTexture();
-            bool checkGLPrograms();
+            void checkGLPrograms();
 
             // ARB_fragment_program
             typedef void (APIENTRY *_glProgramStringARB) (GLenum, GLenum, GLsizei, const GLvoid *);
@@ -372,7 +352,7 @@ namespace Phonon
         class VideoRendererSoftPin : public QMemInputPin
         {
         public:
-            VideoRendererSoftPin(VideoRendererSoftFilter *parent) :
+            VideoRendererSoftPin(VideoRendererSoftFilter *parent) : 
               QMemInputPin(parent, videoMediaTypes(), false /*no transformation of the samples*/),
                   m_renderer(parent)
               {
@@ -402,47 +382,14 @@ namespace Phonon
                   return QMemInputPin::EndFlush();
               }
 
-
-              STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *prop)
-              {
-                  if (!prop) {
-                      return E_POINTER;
-                  }
-
-                  //we need 2 buffers
-                  prop->cBuffers = 2;
-                  return S_OK;
-              }
-
-
-              STDMETHODIMP NotifyAllocator(IMemAllocator *alloc, BOOL readonly)
-              {
-                  if (!alloc) {
-                      return E_POINTER;
-                  }
-                  ALLOCATOR_PROPERTIES prop;
-                  HRESULT hr = alloc->GetProperties(&prop);
-                  if (SUCCEEDED(hr) && prop.cBuffers == 1) {
-                      //we ask to get 2 buffers so that we don't block the flow 
-                      //when we addref the mediasample
-                      prop.cBuffers = 2;
-                      ALLOCATOR_PROPERTIES dummy;
-                      alloc->SetProperties(&prop, &dummy);
-                  }
-
-                  return QMemInputPin::NotifyAllocator(alloc, readonly);
-              }
-
-
-
         private:
             VideoRendererSoftFilter * const m_renderer;
 
         };
 
-        VideoRendererSoftFilter::VideoRendererSoftFilter(VideoRendererSoft *renderer) :
-        QBaseFilter(CLSID_NULL), m_inputPin(new VideoRendererSoftPin(this)),
-            m_renderer(renderer), m_start(0)
+        VideoRendererSoftFilter::VideoRendererSoftFilter(VideoRendererSoft *renderer) : 
+        QBaseFilter(CLSID_NULL), m_inputPin(new VideoRendererSoftPin(this)), m_renderer(renderer), m_start(0), 
+            m_width(0), m_height(0)
 #ifndef QT_NO_OPENGL
             ,m_usingOpenGL(false), m_checkedPrograms(false), m_textureUploaded(false)
 #endif
@@ -451,8 +398,6 @@ namespace Phonon
             m_receiveCanWait = ::CreateEvent(0, 0, 0, 0);
             //simply initialize the array with default values
             applyMixerSettings(0., 0., 0., 0.);
-#ifndef QT_NO_OPENGL
-#endif
         }
 
         VideoRendererSoftFilter::~VideoRendererSoftFilter()
@@ -462,27 +407,6 @@ namespace Phonon
             //this frees up resources
             freeResources();
         }
-
-        QSize VideoRendererSoftFilter::videoSize() const
-        {
-            QSize ret;
-            const AM_MEDIA_TYPE &mt = m_inputPin->connectedType();
-            if (mt.pbFormat && mt.pbFormat) {
-                if (mt.formattype == FORMAT_VideoInfo) {
-                    const VIDEOINFOHEADER *header = reinterpret_cast<VIDEOINFOHEADER*>(mt.pbFormat);
-                    const int h = qAbs(header->bmiHeader.biHeight),
-                        w = qAbs(header->bmiHeader.biWidth);
-                    ret = QSize(w, h);
-                } else if (mt.formattype == FORMAT_VideoInfo2) {
-                    const VIDEOINFOHEADER2 *header = reinterpret_cast<VIDEOINFOHEADER2*>(mt.pbFormat);
-                    const int h = qAbs(header->bmiHeader.biHeight),
-                        w = qAbs(header->bmiHeader.biWidth);
-                    ret = QSize(w, h);
-                }
-            }
-            return ret;
-        }
-
 
         HRESULT VideoRendererSoftFilter::processSample(IMediaSample *sample)
         {
@@ -509,9 +433,35 @@ namespace Phonon
                 return VFW_E_INVALIDMEDIATYPE;
             }
 
-            m_size = videoSize();
-            if (!m_size.isValid()) {
+            if (mt.formattype == FORMAT_VideoInfo) {
+                const VIDEOINFOHEADER *header = reinterpret_cast<VIDEOINFOHEADER*>(mt.pbFormat);
+                m_height = header->bmiHeader.biHeight;
+                m_width = header->bmiHeader.biWidth;
+            } else  if (mt.formattype == FORMAT_VideoInfo2) {
+                const VIDEOINFOHEADER2 *header = reinterpret_cast<VIDEOINFOHEADER2*>(mt.pbFormat);
+                m_height = header->bmiHeader.biHeight;
+                m_width = header->bmiHeader.biWidth;
+            } else {
                 return VFW_E_INVALIDMEDIATYPE;
+            }
+
+            uchar *data = 0;
+            sample->GetPointer(&data);
+#ifndef QT_NO_OPENGL
+            if (m_usingOpenGL) {
+                sample->AddRef();
+                m_backBuffer.sample = ComPointer<IMediaSample>(sample);
+            } else
+#endif
+            if (mt.subtype == MEDIASUBTYPE_YV12) {
+                convertYV12toRGB(data, m_width, m_height, m_backBuffer.image, 
+                                 m_brightness, m_contrast, m_hue, m_saturation);
+
+            } else if (mt.subtype == MEDIASUBTYPE_YUY2) {
+                convertYUY2toRGB(data, m_width, m_height, m_backBuffer.image,
+                                    m_brightness, m_contrast, m_hue, m_saturation);
+            } else if (mt.subtype == MEDIASUBTYPE_RGB32) {
+                normalizeRGB(data, m_width, m_height, m_backBuffer.image);
             }
 
 #ifdef FPS_COUNTER
@@ -523,10 +473,7 @@ namespace Phonon
 
             ComPointer<IReferenceClock> clock;
             GetSyncSource(clock.pparam());
-
-            const bool playing = SUCCEEDED(hr) && state() == State_Running && clock;
-
-            if (playing) {
+            if (SUCCEEDED(hr) && state() == State_Running && clock) {
                 REFERENCE_TIME current;
                 clock->GetTime(&current);
 
@@ -535,54 +482,47 @@ namespace Phonon
                 //let's synchronize here
                 clock->AdviseTime(m_start, start,
                     reinterpret_cast<HEVENT>(m_renderEvent), &advise);
+            }
 
-                HANDLE handles[] = {m_receiveCanWait, m_renderEvent};
-                if (::WaitForMultipleObjects(2, handles, false, INFINITE) == WAIT_OBJECT_0) {
-                    if (state() != State_Stopped && !m_inputPin->isFlushing()) {
-                        ::ResetEvent(m_receiveCanWait);
-                    }
+            HANDLE handles[] = {m_receiveCanWait, m_renderEvent};
+            if (::WaitForMultipleObjects(2, handles, false, INFINITE) == WAIT_OBJECT_0) {
+                if (state() != State_Stopped && !m_inputPin->isFlushing()) {
+                    ::ResetEvent(m_receiveCanWait);
                 }
             }
 
-
-            //the let's lock the sample to be used in the GUI thread
+            //the rendering is finished
             {
                 QMutexLocker locker(&m_mutex);
-                sample->AddRef();
-                m_sampleBuffer = ComPointer<IMediaSample>(sample);
+                //we simply swap them to avoid memory allocation and deallocation
+                qSwap(m_frontBuffer, m_backBuffer);
+                //be sure to free the sample
+                m_backBuffer.sample = ComPointer<IMediaSample>();
+
             }
 
             //image is updated: we should update the widget
             //we should never call directly members of target due to thread-safety
             QApplication::postEvent(m_renderer, new QEvent(QEvent::UpdateRequest));
 
-            if (!playing) {
-                //useless to test the return value of WaitForSingleObject: timeout can't happen
-                ::WaitForSingleObject(m_receiveCanWait, INFINITE); 
-                if (state() != State_Stopped && !m_inputPin->isFlushing()) {
-                    ::ResetEvent(m_receiveCanWait);
-                }
-            }
-
             //everything should be ok
             return S_OK;
         }
 
 #ifndef QT_NO_OPENGL
-        bool VideoRendererSoftFilter::checkGLPrograms()
+        void VideoRendererSoftFilter::checkGLPrograms()
         {
             if (!m_checkedPrograms) {
                 m_checkedPrograms = true;
-
-                glProgramStringARB = (_glProgramStringARB) wglGetProcAddress("glProgramStringARB");
-                glBindProgramARB = (_glBindProgramARB) wglGetProcAddress("glBindProgramARB");
-                glDeleteProgramsARB = (_glDeleteProgramsARB) wglGetProcAddress("glDeleteProgramsARB");
-                glGenProgramsARB = (_glGenProgramsARB) wglGetProcAddress("glGenProgramsARB");
-                glProgramLocalParameter4fARB = (_glProgramLocalParameter4fARB) wglGetProcAddress("glProgramLocalParameter4fARB");
-                glActiveTexture = (_glActiveTexture) wglGetProcAddress("glActiveTexture");
-
                 //we check only once if the widget is drawn using opengl
-                if (glProgramStringARB && glBindProgramARB && glDeleteProgramsARB &&
+                glProgramStringARB = (_glProgramStringARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glProgramStringARB"));
+                glBindProgramARB = (_glBindProgramARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glBindProgramARB"));
+                glDeleteProgramsARB = (_glDeleteProgramsARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glDeleteProgramsARB"));
+                glGenProgramsARB = (_glGenProgramsARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glGenProgramsARB"));
+                glProgramLocalParameter4fARB = (_glProgramLocalParameter4fARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glProgramLocalParameter4fARB"));
+                glActiveTexture = (_glActiveTexture) QGLContext::currentContext()->getProcAddress(QLatin1String("glActiveTexture"));
+
+                if (glProgramStringARB && glBindProgramARB && glDeleteProgramsARB && 
                     glGenProgramsARB && glActiveTexture && glProgramLocalParameter4fARB) {
                     glGenProgramsARB(2, m_program);
 
@@ -614,22 +554,21 @@ namespace Phonon
                     }
                 }
             }
-            return m_usingOpenGL;
         }
 
         void VideoRendererSoftFilter::updateTexture()
         {
-            if (!m_sampleBuffer) {
+            if (!m_frontBuffer.sample) {
                 return; //the texture is already up2date or their is no data yet
             }
 
             uchar *data = 0;
-            m_sampleBuffer->GetPointer(&data);
+            m_frontBuffer.sample->GetPointer(&data);
 
             if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YV12) {
-                int w[3] = { m_size.width(), m_size.width()/2, m_size.width()/2 };
-                int h[3] = { m_size.height(), m_size.height()/2, m_size.height()/2 };
-                int offs[3] = { 0, m_size.width()*m_size.height(), m_size.width()*m_size.height()*5/4 };
+                int w[3] = { m_width, m_width/2, m_width/2 };
+                int h[3] = { m_height, m_height/2, m_height/2 };
+                int offs[3] = { 0, m_width*m_height, m_width*m_height*5/4 };
 
                 for (int i = 0; i < 3; ++i) {
                     glBindTexture(GL_TEXTURE_2D, m_texture[i]);
@@ -644,7 +583,7 @@ namespace Phonon
             } else { //m_inputPin->connectedType().subtype == MEDIASUBTYPE_YUY2
                 //we upload 1 texture
                 glBindTexture(GL_TEXTURE_2D, m_texture[0]);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_size.width() / 2, m_size.height(), 0,
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width / 2, m_height, 0,
                     GL_RGBA, GL_UNSIGNED_BYTE, data);
 
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -654,7 +593,7 @@ namespace Phonon
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
             }
-            m_sampleBuffer = ComPointer<IMediaSample>();
+            m_frontBuffer.sample = ComPointer<IMediaSample>();
             m_textureUploaded = true;
         }
 #endif
@@ -669,111 +608,111 @@ namespace Phonon
 
 
 #ifndef QT_NO_OPENGL
-            if (painter.paintEngine() && painter.paintEngine()->type() == QPaintEngine::OpenGL && checkGLPrograms()) {
+            if (painter.paintEngine()->type() == QPaintEngine::OpenGL) {
                 //for now we only support YUV (both YV12 and YUY2)
-                updateTexture();
+                checkGLPrograms();
 
-                if (!m_textureUploaded) {
-                    //we simply fill the whole video with content
-                    //the callee has already set the brush
-                    painter.drawRect(r);
+                if (m_usingOpenGL) {
+                    updateTexture();
+
+                    if (!m_textureUploaded) {
+                        //we simply fill the whole video with content
+                        //the callee has alrtead set the brush
+                        QRect videorect(0,0,0,0);
+                        videorect.setSize(m_renderer->videoSize());
+                        painter.drawRect(videorect);
+                        return;
+                    }
+
+                    //let's draw the texture
+
+                    //Let's pass the other arguments
+                    const Program prog = (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YV12) ? YV12toRGB : YUY2toRGB;
+                    glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, m_program[prog]);
+                    //loading the parameters
+                    glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, m_brightness / 256., m_contrast, cos(m_hue), sin(m_hue));
+                    glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, m_saturation, painter.opacity() /*alpha */, 0. /*dummy*/, 0. /*dummy*/);
+
+                    glEnable(GL_FRAGMENT_PROGRAM_ARB);
+
+
+                    const float v_array[] = { r.left(), r.top(), r.right()+1, r.top(), r.right()+1, r.bottom()+1, r.left(), r.bottom()+1 };
+
+                    float tx_array[12] = {0., 0., 0., 1.,
+                                          0., 0., 1., 1.,
+                                          0., 0., 1., 0.};
+
+                    if (prog == YUY2toRGB) {
+                        const float w = m_width / 2,
+                            iw = 1. / w;
+
+                        tx_array[3] = w;
+                        tx_array[6] = w;
+
+                        for (int i = 0; i < 4; ++i) {
+                            tx_array[3*i + 2] = iw;
+                        }
+                    }
+
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, m_texture[0]);
+
+                    if (prog == YV12toRGB) {
+                        glActiveTexture(GL_TEXTURE1);
+                        glBindTexture(GL_TEXTURE_2D, m_texture[2]);
+                        glActiveTexture(GL_TEXTURE2);
+                        glBindTexture(GL_TEXTURE_2D, m_texture[1]);
+                        glActiveTexture(GL_TEXTURE0);
+                    }
+
+
+                    glVertexPointer(2, GL_FLOAT, 0, v_array);
+                    glTexCoordPointer(3, GL_FLOAT, 0, tx_array);
+                    glEnableClientState(GL_VERTEX_ARRAY);
+                    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                    glDrawArrays(GL_QUADS, 0, 4);
+                    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+                    glDisableClientState(GL_VERTEX_ARRAY);
+
+                    glDisable(GL_FRAGMENT_PROGRAM_ARB);
                     return;
                 }
 
-                //let's draw the texture
+            } else if (m_usingOpenGL) {
+                //we just switched to software again
+                m_usingOpenGL = false;
+                if (m_frontBuffer.sample) {
+                    uchar *data = 0;
+                    m_frontBuffer.sample->GetPointer(&data);
 
-                //Let's pass the other arguments
-                const Program prog = (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YV12) ? YV12toRGB : YUY2toRGB;
-                glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, m_program[prog]);
-                //loading the parameters
-                glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, m_brightness / 256., m_contrast, qCos(m_hue), qSin(m_hue));
-                glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, m_saturation, painter.opacity() /*alpha */, 0. /*dummy*/, 0. /*dummy*/);
+                    //let's update the front buffer
+                    if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YUY2) {
+                        convertYUY2toRGB(data, m_width, m_height, m_frontBuffer.image,
+                            m_brightness, m_contrast, m_hue, m_saturation);
+                    }else { //it is YV12
+                        convertYV12toRGB(data, m_width, m_height, m_frontBuffer.image,
+                            m_brightness, m_contrast, m_hue, m_saturation);
 
-                glEnable(GL_FRAGMENT_PROGRAM_ARB);
-
-                const float v_array[] = { r.left(), r.top(), r.right()+1, r.top(), r.right()+1, r.bottom()+1, r.left(), r.bottom()+1 };
-
-                float tx_array[12] = {0., 0., 0., 1.,
-                    0., 0., 1., 1.,
-                    0., 0., 1., 0.};
-
-                if (prog == YUY2toRGB) {
-                    const float w = m_size.width() / 2,
-                        iw = 1. / w;
-
-                    tx_array[3] = w;
-                    tx_array[6] = w;
-
-                    for (int i = 0; i < 4; ++i) {
-                        tx_array[3*i + 2] = iw;
                     }
                 }
+                freeGLResources();
 
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, m_texture[0]);
-
-                if (prog == YV12toRGB) {
-                    glActiveTexture(GL_TEXTURE1);
-                    glBindTexture(GL_TEXTURE_2D, m_texture[2]);
-                    glActiveTexture(GL_TEXTURE2);
-                    glBindTexture(GL_TEXTURE_2D, m_texture[1]);
-                    glActiveTexture(GL_TEXTURE0);
-                }
-
-
-                glVertexPointer(2, GL_FLOAT, 0, v_array);
-                glTexCoordPointer(3, GL_FLOAT, 0, tx_array);
-                glEnableClientState(GL_VERTEX_ARRAY);
-                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-                glDrawArrays(GL_QUADS, 0, 4);
-                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-                glDisableClientState(GL_VERTEX_ARRAY);
-
-                glDisable(GL_FRAGMENT_PROGRAM_ARB);
-                return;
-            } else
+            }
 #endif
-              if (m_sampleBuffer) {
-                //we need to get the sample data
-                uchar *data = 0;
-                m_sampleBuffer->GetPointer(&data);
-
-
-                //let's update the current image
-                if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YV12) {
-                    convertYV12toRGB(data, m_size, m_currentImage,
-                        m_brightness, m_contrast, m_hue, m_saturation);
-                } else if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YUY2) {
-                    convertYUY2toRGB(data, m_size, m_currentImage,
-                        m_brightness, m_contrast, m_hue, m_saturation);
-                } else if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_RGB32) {
-                    normalizeRGB(data, m_size, m_currentImage);
-                }
-                m_sampleBuffer = ComPointer<IMediaSample>();
-            }
-
-            if (m_currentImage.isNull()) {
-                //we simply fill the whole video with content
-                //the callee has alrtead set the brush
-                painter.drawRect(r);
-            } else {
-                painter.drawImage(0, 0, m_currentImage);
-            }
+            painter.drawImage(0, 0, m_frontBuffer.image);
         }
 
 
-        void VideoRendererSoftFilter::normalizeRGB(const uchar *data, const QSize &s, QImage &destImage)
+        void VideoRendererSoftFilter::normalizeRGB(const uchar *data, int w, int h, QImage &destImage)
         {
-            const int w = s.width(),
-                      h = s.height();
-            if (destImage.size() != s) {
-                destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
+            if (destImage.size() != QSize(w, h)) {
+                destImage = QImage(w, h, QImage::Format_RGB32);
             }
-            if (destImage.isNull()) {
-                return; //the system can't allocate the memory for the image drawing
-            }
+			if (destImage.isNull()) {
+				return; //the system can't allocate the memory for the image drawing
+			}
 
-            const QRgb *rgb = reinterpret_cast<const QRgb*>(data);
+			const QRgb *rgb = reinterpret_cast<const QRgb*>(data);
 
             //this sets the alpha channel to 0xff and flip the image vertically
             for (int y = h - 1; y >= 0; --y) {
@@ -786,15 +725,12 @@ namespace Phonon
 
 
         //we render data interpreted as YV12 into m_renderbuffer
-        void VideoRendererSoftFilter::convertYV12toRGB(const uchar *data, const QSize &s, QImage &destImage,
+        void VideoRendererSoftFilter::convertYV12toRGB(const uchar *data, int w, int h, QImage &destImage,
             qreal brightness, qreal contrast, qreal hue, qreal saturation)
         {
-            const int w = s.width(),
-                      h = s.height();
-
             //let's cache some computation
-            const int cosHx256 = qRound(qCos(hue) * contrast * saturation * 256),
-                      sinHx256 = qRound(qSin(hue) * contrast * saturation * 256);
+            const int cosHx256 = qRound(cos(hue) * contrast * saturation * 256),
+                      sinHx256 = qRound(sin(hue) * contrast * saturation * 256);
 
             int Yvalue[256];
             for(int i = 0;i<256;++i) {
@@ -802,20 +738,20 @@ namespace Phonon
             }
 
 
-            if (destImage.size() != s) {
-                destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
+            if (destImage.size() != QSize(w, h)) {
+                destImage = QImage(w, h, QImage::Format_ARGB32);
             }
 
-            if (destImage.isNull()) {
-                return; //the system can't allocate the memory for the image drawing
-            }
+    		if (destImage.isNull()) {
+				return; //the system can't allocate the memory for the image drawing
+			}
 
             QRgb *dest = reinterpret_cast<QRgb*>(destImage.bits());
             const uchar *dataY = data,
                 *dataV = data + (w*h),
                 *dataU = dataV + (w*h)/4;
 
-            uint *line1 = dest,
+            QRgb *line1 = dest,
                 *line2 = dest + w;
 
             for(int l = (h >> 1); l > 0; --l) {
@@ -838,17 +774,24 @@ namespace Phonon
                               y12 = Yvalue[ *dataY++ ];
 
                     //1st line 1st pixel
-                    *line1++ = CLIPPED_PIXEL(y11, compRed, compGreen, compBlue);
+                    *line1++ = qRgb(clip(( y11 + compRed) >> 8), 
+                        clip(( y11 + compGreen) >> 8), 
+                        clip(( y11 + compBlue) >> 8));
 
                     //1st line, 2nd pixel
-                    *line1++ = CLIPPED_PIXEL(y12, compRed, compGreen, compBlue);
+                    *line1++ = qRgb( clip(( y12 + compRed) >> 8),
+                        clip(( y12 + compGreen) >> 8),
+                        clip(( y12 + compBlue) >> 8));
 
                     //2nd line 1st pixel
-                    *line2++ = CLIPPED_PIXEL(y21, compRed, compGreen, compBlue);
+                    *line2++ = qRgb(clip(( y21 + compRed) >> 8),
+                        clip(( y21 + compGreen) >> 8),
+                        clip(( y21 + compBlue) >> 8));
 
                     //2nd line 2nd pixel
-                    *line2++ = CLIPPED_PIXEL(y22, compRed, compGreen, compBlue);
-
+                    *line2++ = qRgb(clip(( y22 + compRed) >> 8),
+                        clip(( y22 + compGreen) >> 8),
+                        clip(( y22 + compBlue) >> 8));
                 } //for
 
                 //end of the line
@@ -857,39 +800,36 @@ namespace Phonon
                 line2 += w;
 
             } //for
-
+            
         }
 
         //we render data interpreted as YUY2 into m_renderbuffer
-        void VideoRendererSoftFilter::convertYUY2toRGB(const uchar *data, const QSize &s, QImage &destImage,
+        void VideoRendererSoftFilter::convertYUY2toRGB(const uchar *data, int w, int h, QImage &destImage,
                                          qreal brightness, qreal contrast, qreal hue, qreal saturation)
         {
-            const int w = s.width(),
-                      h = s.height();
-
             //let's cache some computation
             int Yvalue[256];
             for(int i = 0;i<256;++i) {
                 Yvalue[i] = qRound(((i - 16) * contrast + brightness) * 298 + 128);
             }
 
-            const int cosHx256 = qRound(qCos(hue) * contrast * saturation * 256),
-                      sinHx256 = qRound(qSin(hue) * contrast * saturation * 256);
+            const int cosHx256 = qRound(cos(hue) * contrast * saturation * 256),
+                      sinHx256 = qRound(sin(hue) * contrast * saturation * 256);
 
-            if (destImage.size() != s) {
+            if (destImage.size() != QSize(w, h)) {
                 //this will only allocate memory when needed
-                destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
+                destImage = QImage(w, h, QImage::Format_ARGB32);
             }
-            if (destImage.isNull()) {
-                return; //the system can't allocate the memory for the image drawing
-            }
+			if (destImage.isNull()) {
+			    return; //the system can't allocate the memory for the image drawing
+			}
 
-            QRgb *dest = reinterpret_cast<QRgb*>(destImage.bits());
+			QRgb *dest = reinterpret_cast<QRgb*>(destImage.bits());
 
             //the number of iterations is width * height / 2 because we treat 2 pixels at each iterations
             for (int c = w * h / 2; c > 0 ; --c) {
 
-                //the idea of that algorithm comes from
+                //the idea of that algorithm comes from 
                 //http://msdn2.microsoft.com/en-us/library/ms867704.aspx#yuvformats_identifying_yuv_formats_in_directshow
 
                 //we treat 2 pixels by 2 pixels (we start reading 2 pixels info ie. "YUYV"
@@ -906,15 +846,19 @@ namespace Phonon
                     compBlue = 516 * d;
 
                 //first pixel
-                *dest++ = CLIPPED_PIXEL(y1, compRed, compGreen, compBlue);
+                *dest++ = qRgb(clip(( y1 + compRed) >> 8),
+                    clip(( y1 + compGreen) >> 8),
+                    clip(( y1 + compBlue) >> 8));
 
                 //second pixel
-                *dest++ = CLIPPED_PIXEL(y2, compRed, compGreen, compBlue);
+                *dest++ = qRgb(clip(( y2 + compRed) >> 8),
+                    clip(( y2 + compGreen) >> 8),
+                    clip(( y2 + compBlue) >> 8));
             }
         }
 
 
-        VideoRendererSoft::VideoRendererSoft(QWidget *target) :
+        VideoRendererSoft::VideoRendererSoft(QWidget *target) : 
         m_renderer(new VideoRendererSoftFilter(this)), m_target(target)
         {
             m_filter = Filter(m_renderer);
@@ -940,27 +884,26 @@ namespace Phonon
             painter.setPen(Qt::NoPen);
             if (!m_videoRect.contains(rect)) {
                 //we repaint the borders only when needed
-                const QVector<QRect> reg = (QRegion(rect) - m_videoRect).rects();
-                for (int i = 0; i < reg.count(); ++i) {
-                    painter.drawRect(reg.at(i));
+                QRegion reg = QRegion(rect) - m_videoRect;
+                foreach(QRect r, reg.rects()) {
+                    painter.drawRect(r);
                 }
             }
 
             painter.setRenderHint(QPainter::SmoothPixmapTransform);
             painter.setTransform(m_transform, true);
-            QSize vsize = videoSize();
-            m_renderer->repaintCurrentFrame(painter, QRect(0,0, vsize.width(), vsize.height()));
+            m_renderer->repaintCurrentFrame(painter, m_videoRect);
         }
 
-        void VideoRendererSoft::notifyResize(const QSize &size,
+        void VideoRendererSoft::notifyResize(const QRect &rect,
             Phonon::VideoWidget::AspectRatio aspectRatio, Phonon::VideoWidget::ScaleMode scaleMode)
         {
             const QSize vsize = videoSize();
-            internalNotifyResize(size, vsize, aspectRatio, scaleMode);
+            internalNotifyResize(rect.size(), vsize, aspectRatio, scaleMode);
 
             m_transform.reset();
 
-            if (vsize.isValid() && size.isValid()) {
+            if (vsize.isValid() && rect.isValid()) {
                 m_transform.translate(m_dstX, m_dstY);
                 const qreal sx = qreal(m_dstWidth) / qreal(vsize.width()),
                     sy = qreal(m_dstHeight) / qreal(vsize.height());
@@ -969,13 +912,33 @@ namespace Phonon
             }
         }
 
+        void VideoRendererSoft::notifyVideoLoaded()
+        {
+            m_renderer->freeResources();
+        }
+
+
         QSize VideoRendererSoft::videoSize() const
         {
+            QSize ret(0, 0);
             if (m_renderer->pins().first()->connected()) {
-                return m_renderer->videoSize();
-            } else {
-                return m_renderer->currentImage().size();
+                const AM_MEDIA_TYPE &mt = m_renderer->pins().first()->connectedType();
+                if (mt.pbFormat && mt.pbFormat) {
+                    if (mt.formattype == FORMAT_VideoInfo) {
+                        const VIDEOINFOHEADER *header = reinterpret_cast<VIDEOINFOHEADER*>(mt.pbFormat);
+                        const int h = header->bmiHeader.biHeight,
+                            w = header->bmiHeader.biWidth;
+                        ret = QSize(w, h);
+                    } else {
+                        const VIDEOINFOHEADER2 *header = reinterpret_cast<VIDEOINFOHEADER2*>(mt.pbFormat);
+                        const int h = header->bmiHeader.biHeight,
+                            w = header->bmiHeader.biWidth;
+                        ret = QSize(w, h);
+                    }
+                }
             }
+
+            return ret;
         }
 
         void VideoRendererSoft::applyMixerSettings(qreal brightness, qreal contrast, qreal hue, qreal saturation)
@@ -983,14 +946,9 @@ namespace Phonon
             m_renderer->applyMixerSettings(brightness, contrast, hue, saturation);
         }
 
-        QImage VideoRendererSoft::snapshot() const
+        void VideoRendererSoft::setActive(bool)
         {
-            return m_renderer->currentImage(); //not accurate (especially when using opengl...)
-        }
-
-        void VideoRendererSoft::setSnapshot(const QImage &image)
-        {
-            m_renderer->setCurrentImage(image);
+            //nothing to do here (it won't ask to repaint
         }
 
         bool VideoRendererSoft::event(QEvent *e)
@@ -1007,5 +965,3 @@ namespace Phonon
 }
 
 QT_END_NAMESPACE
-
-#endif //QT_NO_PHONON_VIDEO

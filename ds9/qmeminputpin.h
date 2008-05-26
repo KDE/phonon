@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -19,8 +19,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #define PHONON_QMEMINPUTPIN_H
 
 
-#include <QtCore/QList>
-#include <QtCore/QMutex>
+#include <QtCore/QSet>
 #include "qpin.h"
 
 #include <dshow.h>
@@ -63,7 +62,7 @@ namespace Phonon
             //addition
             void addOutput(QPin *output);
             void removeOutput(QPin *output);
-            QList<QPin*> outputs() const;
+            QSet<QPin*> outputs() const;
 
         private:
             IMediaSample *duplicateSampleForOutput(IMediaSample *, IMemAllocator *);
@@ -71,7 +70,7 @@ namespace Phonon
 
             bool m_shouldDuplicateSamples;
             const bool m_transform; //defines if the pin is transforming the samples
-            QList<QPin*> m_outputs;
+            QSet<QPin*> m_outputs;
             QMutex m_mutexReceive;
         };
     }

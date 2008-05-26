@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,9 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "audiooutput.h"
 #include "mediaobject.h"
 
-#include <QtCore/qmath.h>
+#include <QtCore/QVector>
+
+#include <cmath>
 
 QT_BEGIN_NAMESPACE
 
@@ -27,8 +29,8 @@ namespace Phonon
     namespace DS9
     {
         AudioOutput::AudioOutput(Backend *back, QObject *parent)
-            : BackendNode(parent), m_currentIndex(0), m_crossfadeProgress(1.),
-              m_device(-1), m_backend(back), m_volume(0.)
+            : BackendNode(parent), m_device(-1), m_backend(back), m_volume(0.),
+            m_currentIndex(0), m_crossfadeProgress(1.)
         {
         }
 
@@ -45,12 +47,12 @@ namespace Phonon
 
         void AudioOutput::setVolume(qreal newVolume)
         {
-            for(int i = 0; i < FILTER_COUNT; ++i) {
+            for(int i = 0; i < m_filters.count(); ++i) {
                 ComPointer<IBasicAudio> audio(m_filters[i], IID_IBasicAudio);
                 if (audio) {
                     const qreal currentVolume = newVolume * (m_currentIndex == i ? m_crossfadeProgress : 1-m_crossfadeProgress);
                     const qreal newDbVolume = (qMax(0., 1.-::log(::pow(currentVolume, -log10over20)))-1.) * 10000;
-                    audio->put_Volume(qRound(newDbVolume));
+                    audio->put_Volume(newDbVolume);
                 }
             }
 
@@ -67,12 +69,6 @@ namespace Phonon
             setVolume(m_volume);
         }
 
-        bool AudioOutput::setOutputDevice(const AudioOutputDevice & newDevice)
-        {
-            //stub implementation
-            return setOutputDevice(newDevice.index());
-        }
-
         qreal AudioOutput::volume() const
         {
             return m_volume;
@@ -85,8 +81,8 @@ namespace Phonon
             }
 
             //free the previous one if it was already set
-            for(int i = 0; i < FILTER_COUNT; ++i) {
-                const Filter &oldFilter = m_filters[i];
+            for(int i = 0; i < m_filters.count(); ++i) {
+                Filter oldFilter = m_filters.at(i);
 
                 Filter newFilter = m_backend->getAudioOutputFilter(newDevice);
 

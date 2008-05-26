@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -18,8 +18,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "qbasefilter.h"
 #include "qpin.h"
 #include "compointer.h"
-
-#include <QtCore/QMutex>
 
 QT_BEGIN_NAMESPACE
 
@@ -217,6 +215,7 @@ namespace Phonon
         //this is called on the input pins
         STDMETHODIMP QPin::ReceiveConnection(IPin *pin, const AM_MEDIA_TYPE *type)
         {
+            QMutexLocker locker(&m_mutex);
             if (!pin ||!type) {
                 return E_POINTER;
             }
@@ -242,6 +241,7 @@ namespace Phonon
         //this is called on the output pins
         STDMETHODIMP QPin::Connect(IPin *pin, const AM_MEDIA_TYPE *type)
         {
+            QMutexLocker locker(&m_mutex);
             if (!pin) {
                 return E_POINTER;
             }
@@ -306,6 +306,7 @@ namespace Phonon
 
         STDMETHODIMP QPin::Disconnect()
         {
+            QMutexLocker locker(&m_mutex);
             if (!connected()) {
                 return S_FALSE;
             }
@@ -397,16 +398,16 @@ namespace Phonon
                 return E_POINTER;
             }
 
-            for (int i = 0; i < m_mediaTypes.count(); ++i) {
-                const AM_MEDIA_TYPE &current = m_mediaTypes.at(i);
+            foreach(const AM_MEDIA_TYPE current, m_mediaTypes) {
+
                 if ( (type->majortype == current.majortype) &&
                     (current.subtype == MEDIASUBTYPE_NULL || type->subtype == current.subtype) &&
-                    (type->majortype == MEDIATYPE_Stream || type->formattype != GUID_NULL || current.formattype != GUID_NULL) &&
                     (current.formattype == GUID_NULL || type->formattype == current.formattype)
                     ) {
                         return S_OK;
                 }
             }
+
             return S_FALSE;
         }
 
@@ -482,8 +483,7 @@ namespace Phonon
 
         HRESULT QPin::checkOwnMediaTypesConnection(IPin *pin)
         {   
-            for(int i = 0; i < m_mediaTypes.count(); ++i) {
-                const AM_MEDIA_TYPE &current = m_mediaTypes.at(i);
+            foreach(const AM_MEDIA_TYPE current, mediaTypes()) {
                 setConnectedType(current);
                 HRESULT hr = pin->ReceiveConnection(this, &current);
                 if (hr == S_OK) {

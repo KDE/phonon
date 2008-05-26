@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +25,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore/QObject>
 #include <QtCore/QQueue>
 #include <QtCore/QBasicTimer>
+#include <QtCore/QWaitCondition>
 #include <QtCore/QMutex>
 #include <QtCore/QThread>
 
@@ -86,18 +87,17 @@ namespace Phonon
             Q_OBJECT
         public:
             WorkerThread();
-            ~WorkerThread();
 
             virtual void run();
 
             //wants to know as soon as the state is set
-            void addStateChangeRequest(Graph graph, OAFilterState, QList<Filter> = QList<Filter>());
+            void addStateChangeRequest(Graph graph, OAFilterState, QSet<Filter> = QSet<Filter>());
 
             quint16 addSeekRequest(Graph graph, qint64 time);
             quint16 addUrlToRender(const QString &url);
             quint16 addFilterToRender(const Filter &filter);
 
-            void replaceGraphForEventManagement(Graph newGraph, Graph oldGraph);
+            void addGraphForEventManagement(Graph graph);
 
     		void abortCurrentRender(qint16 renderId);
 
@@ -107,8 +107,8 @@ namespace Phonon
         Q_SIGNALS:
             void asyncRenderFinished(quint16, HRESULT, Graph);
             void asyncSeekingFinished(quint16, qint64);
-            void stateReady(Graph, Phonon::State);
-            void eventReady(Graph, long eventCode, long param1);
+            void stateReady(IGraphBuilder*, Phonon::State);
+            void eventReady(IGraphBuilder*, long eventCode, long param1);
 
         private:
 
@@ -117,7 +117,7 @@ namespace Phonon
                 Render,
                 Seek,
                 ChangeState,
-                ReplaceGraph //just updates recalls WaitForMultipleObject
+                AddGraph //just updates recalls WaitForMultipleObject
             };
 
             struct Work
@@ -125,7 +125,6 @@ namespace Phonon
                 Task task;
                 quint16 id;
                 Graph graph;
-                Graph oldGraph;
                 Filter filter;
                 QString url;
                 union
@@ -133,7 +132,7 @@ namespace Phonon
                     qint64 time;
                     OAFilterState state;
                 };
-                QList<Filter> decoders; //for the state change requests
+                QSet<Filter> decoders; //for the state change requests
             };
             Work dequeueWork();
             void handleTask();
@@ -145,28 +144,18 @@ namespace Phonon
             quint16 m_currentWorkId;
             QWinWaitCondition m_waitCondition;
             QMutex m_mutex;
+            QVector<Graph> m_graphs;
 
             //this is for WaitForMultipleObjects
-            struct
-            {
-                Graph graph;
-                HANDLE handle;
-            } m_graphHandle[FILTER_COUNT];
+            QVector<HANDLE> m_handles;
         };
 
 
-        class MediaObject : public BackendNode, public Phonon::MediaObjectInterface
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            , public Phonon::AddonInterface
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        class MediaObject : public BackendNode, public Phonon::MediaObjectInterface, public Phonon::AddonInterface
         {
             friend class Stream;
             Q_OBJECT
-                Q_INTERFACES(Phonon::MediaObjectInterface 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-                    Phonon::AddonInterface
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-                    )
+                Q_INTERFACES(Phonon::MediaObjectInterface Phonon::AddonInterface)
         public:
             MediaObject(QObject *parent);
             ~MediaObject();
@@ -186,10 +175,8 @@ namespace Phonon
             QString errorString() const;
             Phonon::ErrorType errorType() const;
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             bool hasInterface(Interface) const;
             QVariant interfaceCall(Interface iface, int command, const QList<QVariant> &params);
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
             qint64 totalTime() const;
             qint32 prefinishMark() const;
@@ -215,19 +202,13 @@ namespace Phonon
             void switchFilters(int index, Filter oldFilter, Filter newFilter);
 
             WorkerThread *workerThread();
-            void loadingFinished(MediaGraph *mg);
-            void seekingFinished(MediaGraph *mg);
-            MediaGraph *currentGraph() const;
-
-            //this is used by the backend only
-            Phonon::State transactionState;
 
          private Q_SLOTS:
             void switchToNextSource();
-            void slotStateReady(Graph, Phonon::State);
-            void handleEvents(Graph, long eventCode, long param1);
-            void finishLoading(quint16 workId, HRESULT hr, Graph);
-            void finishSeeking(quint16 workId, qint64 time);
+            void loadingFinished(MediaGraph *mg);
+            void seekingFinished(MediaGraph *mg);
+            void slotStateReady(IGraphBuilder*, Phonon::State);
+            void handleEvents(IGraphBuilder *graph, long eventCode, long param1);
 
          Q_SIGNALS:
             void stateChanged(Phonon::State newstate, Phonon::State oldstate);
@@ -256,10 +237,9 @@ namespace Phonon
             void timerEvent(QTimerEvent *e);
 
         private:
-#ifndef QT_NO_PHONON_VIDEO
             void updateVideoGeometry();
-#endif // QT_NO_PHONON_VIDEO
             void handleComplete(IGraphBuilder *graph);
+            MediaGraph *currentGraph() const;
             MediaGraph *nextGraph() const;
 
             void updateTargetTick();
@@ -278,20 +258,18 @@ namespace Phonon
             qint32 m_tickInterval;
 
             //the graph(s)
-            MediaGraph* m_graphs[FILTER_COUNT];
+            QList<MediaGraph*> m_graphs;
 
             //...the videowidgets in the graph
-            QList<VideoWidget*> m_videoWidgets;
-            QList<AudioOutput*> m_audioOutputs;
+            QSet<VideoWidget*> m_videoWidgets;
+            QSet<AudioOutput*> m_audioOutputs;
 
             bool m_buffering:1;
             bool m_oldHasVideo:1;
             bool m_prefinishMarkSent:1;
             bool m_aboutToFinishSent:1;
-            bool m_nextSourceReadyToStart:1;
 
             //for TitleInterface (and commands)
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
             bool m_autoplayTitles:1;
             QList<qint64> m_titles;
             int m_currentTitle;
@@ -300,7 +278,7 @@ namespace Phonon
             void _iface_setCurrentTitle(int title, bool bseek = true);
             void setTitles(const QList<qint64> &titles);
             qint64 titleAbsolutePosition(int title) const;
-#endif //QT_NO_PHONON_MEDIACONTROLLER
+
             qint64 m_targetTick;
 
             WorkerThread m_thread;

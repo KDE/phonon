@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -21,11 +21,9 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <phonon/videowidget.h>
 
+#include <QtGui/QImage>
+
 QT_BEGIN_NAMESPACE
-
-class QImage;
-
-#ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon
 {
@@ -38,14 +36,11 @@ namespace Phonon
             virtual ~AbstractVideoRenderer();
 
             virtual void repaintCurrentFrame(QWidget *target, const QRect &rect) = 0;
-            virtual void notifyResize(const QSize&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode) = 0;
+            virtual void notifyResize(const QRect&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode) = 0;
             virtual void applyMixerSettings(qreal brightness, qreal contrast, qreal m_hue, qreal saturation) = 0;
-            
-            void setActive(bool);
-            bool isActive() const;
-            
+            virtual void setActive(bool) = 0;
             virtual bool isNative() const = 0;
-            virtual QImage snapshot() const = 0;
+            virtual void notifyVideoLoaded() {}
 
             Filter getFilter() const;
             QSize sizeHint() const;
@@ -60,13 +55,10 @@ namespace Phonon
 
             Filter m_filter;
             int m_dstX, m_dstY, m_dstWidth, m_dstHeight;
-            bool m_active;
+
         };
     }
 }
-
-#endif //QT_NO_PHONON_VIDEO
-
 
 QT_END_NAMESPACE
 

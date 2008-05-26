@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -24,12 +24,21 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include <QtCore/QUrl>
-#include <QtCore/QDebug>
 
 #include <qnetwork.h>
 
 
 QT_BEGIN_NAMESPACE
+
+uint qHash (const Phonon::DS9::Filter &f)
+{
+    return uint(static_cast<IBaseFilter*>(f));
+}
+
+uint qHash (const Phonon::DS9::OutputPin &p)
+{
+    return uint(static_cast<IPin*>(p));
+}
 
 namespace Phonon
 {
@@ -44,84 +53,53 @@ namespace Phonon
             int inputOffset;
         };
 
-        static QList<GraphConnection> getConnections(Filter source)
+        QList<GraphConnection> getOrderedConnections(Filter source, const QSet<Filter> &validFilters)
         {
             QList<GraphConnection> ret;
             int outOffset = 0;
-            const QList<OutputPin> outputs = BackendNode::pins(source, PINDIR_OUTPUT);
-            for (int i = 0; i < outputs.count(); ++i) {
+            foreach(OutputPin output, BackendNode::pins(source, PINDIR_OUTPUT)) {
                 InputPin input;
-                if (outputs.at(i)->ConnectedTo(input.pparam()) == S_OK) {
+                if (output->ConnectedTo(input.pparam()) == S_OK) {
                     PIN_INFO info;
                     input->QueryPinInfo(&info);
                     Filter current(info.pFilter);
-                    if (current) {
+                    if (current && validFilters.contains(current)) {
                         //this is a valid connection
                         const int inOffset = BackendNode::pins(current, PINDIR_INPUT).indexOf(input);
                         const GraphConnection connection = {source, outOffset, current, inOffset};
                         ret += connection;
-                        ret += getConnections(current); //get subsequent connections
+                        ret += getOrderedConnections(current, validFilters); //get subsequent connections
                     }
                 }
                 outOffset++;
             }
             return ret;
         }
-                
-        static HRESULT saveToFile(Graph graph, const QString &filepath)
-        {
-            const WCHAR wszStreamName[] = L"ActiveMovieGraph";
-            HRESULT hr;
-            ComPointer<IStorage> storage;
 
-            // First, create a document file that will hold the GRF file
-            hr = StgCreateDocfile((OLECHAR*)filepath.utf16(),
-                STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE |
-                STGM_SHARE_EXCLUSIVE,
-                0, storage.pparam());
-
-            if (FAILED(hr)) {
-                return hr;
-            }
-
-            // Next, create a stream to store.
-            ComPointer<IStream> stream;
-            hr = storage->CreateStream(wszStreamName,
-                STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
-                0, 0, stream.pparam());
-
-            if (FAILED(hr)) {
-                return hr;
-            }
-
-            // The IpersistStream::Save method converts a stream into a persistent object.
-            ComPointer<IPersistStream> persist(graph, IID_IPersistStream);
-            hr = persist->Save(stream, TRUE);
-            if (SUCCEEDED(hr)) {
-                hr = storage->Commit(STGC_DEFAULT);
-            }
-
-            return hr;
-        }
-
-
-        MediaGraph::MediaGraph(MediaObject *mo, short index) :
-            m_graph(CLSID_FilterGraph, IID_IGraphBuilder),
-            m_fakeSource(new FakeSource()),
+        MediaGraph::MediaGraph(MediaObject *mo, short index) : m_fakeSource(new FakeSource()),
             m_hasVideo(false), m_hasAudio(false), m_connectionsDirty(false), 
             m_isStopping(false), m_isSeekable(false), m_result(S_OK),
-            m_index(index), m_renderId(0), m_seekId(0),
-            m_currentTime(0), m_totalTime(0), m_mediaObject(mo)
+            m_index(index), m_mediaObject(mo), 
+            m_graph(CLSID_FilterGraph, IID_IGraphBuilder),
+            m_renderId(0), m_seekId(0), m_currentTime(0)
         {
             m_mediaControl = ComPointer<IMediaControl>(m_graph, IID_IMediaControl);
             Q_ASSERT(m_mediaControl);
             m_mediaSeeking = ComPointer<IMediaSeeking>(m_graph, IID_IMediaSeeking);
             Q_ASSERT(m_mediaSeeking);
 
-            HRESULT hr = m_graph->AddFilter(m_fakeSource, 0);
+            m_mediaObject->workerThread()->addGraphForEventManagement(m_graph);
+
+            HRESULT hr = m_graph->AddFilter(m_fakeSource, L"Fake Source");
             if (m_mediaObject->catchComError(hr)) {
                 return;
             }
+
+            connect(mo->workerThread(), SIGNAL(asyncRenderFinished(quint16, HRESULT, Graph)),
+                SLOT(finishLoading(quint16, HRESULT, Graph)));
+
+            connect(mo->workerThread(), SIGNAL(asyncSeekingFinished(quint16, qint64)),
+                SLOT(finishSeeking(quint16, qint64)));
         }
 
         MediaGraph::~MediaGraph()
@@ -135,21 +113,14 @@ namespace Phonon
 
         void MediaGraph::grabNode(BackendNode *node)
         {
-            grabFilter(node->filter(m_index));
-        }
-
-        void MediaGraph::grabFilter(Filter filter)
-        {
+            FILTER_INFO info;
+            const Filter filter = node->filter(m_index);
             if (filter) {
-                FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                if (info.pGraph != m_graph) {
-                    if (info.pGraph) {
-                        m_mediaObject->catchComError(info.pGraph->RemoveFilter(filter));
-                    }
-                    m_mediaObject->catchComError(m_graph->AddFilter(filter, 0));
-                }
-                if (info.pGraph) {
+                if (info.pGraph == 0) {
+                    HRESULT hr = m_graph->AddFilter(filter, 0);
+                    m_mediaObject->catchComError(hr);
+                } else {
                     info.pGraph->Release();
                 }
             }
@@ -203,18 +174,15 @@ namespace Phonon
 
         void MediaGraph::ensureSourceDisconnected()
         {
-            for (int i = 0; i < m_sinkConnections.count(); ++i) {
-                const Filter currentFilter = m_sinkConnections.at(i)->filter(m_index);
-                const QList<InputPin> inputs = BackendNode::pins(currentFilter, PINDIR_INPUT);
-                const QList<InputPin> outputs = BackendNode::pins(m_fakeSource, PINDIR_OUTPUT);
-
-                for (int i = 0; i < inputs.count(); ++i) {
-                    for (int o = 0; o < outputs.count(); o++) {
-                        tryDisconnect(outputs.at(o), inputs.at(i));
+            foreach(BackendNode *node, m_sinkConnections) {
+                const Filter currentFilter = node->filter(m_index);
+                foreach(const InputPin inpin, BackendNode::pins(currentFilter, PINDIR_INPUT)) {
+                    foreach(const OutputPin outpin, BackendNode::pins(m_fakeSource, PINDIR_OUTPUT)) {
+                        tryDisconnect(outpin, inpin);
                     }
 
-                    for (int d = 0; d < m_decoderPins.count(); ++d) {
-                        tryDisconnect(m_decoderPins.at(d), inputs.at(i));
+                    foreach(const OutputPin outpin, m_decoderPins) {
+                        tryDisconnect(outpin, inpin);
                     }
                 }
             }
@@ -230,16 +198,21 @@ namespace Phonon
             ensureSourceDisconnected();
 
             //reconnect the pins
-            for (int i = 0; i < m_sinkConnections.count(); ++i) {
-                const Filter currentFilter = m_sinkConnections.at(i)->filter(m_index);
-                const QList<InputPin> inputs = BackendNode::pins(currentFilter, PINDIR_INPUT);
-                for(int i = 0; i < inputs.count(); ++i) {
+            foreach(BackendNode *node, m_sinkConnections) {
+                const Filter currentFilter = node->filter(m_index);
+                foreach(const InputPin &inpin, BackendNode::pins(currentFilter, PINDIR_INPUT)) {
                     //we ensure the filter belongs to the graph
-                    grabFilter(currentFilter);
+                    FILTER_INFO info;
+                    currentFilter->QueryFilterInfo(&info);
+                    if (info.pGraph == 0) {
+                        m_graph->AddFilter(currentFilter, 0);
+                    } else {
+                        info.pGraph->Release();
+                    }
 
-                    for (int d = 0; d < m_decoderPins.count(); ++d) {
+                    foreach(const OutputPin outpin, m_decoderPins) {
                         //a decoder has only one output
-                        if (tryConnect(m_decoderPins.at(d), inputs.at(i))) {
+                        if (tryConnect(outpin, inpin)) {
                             break;
                         }
                     }
@@ -247,9 +220,9 @@ namespace Phonon
             }
         }
 
-        QList<Filter> MediaGraph::getAllFilters(Graph graph)
+        QSet<Filter> MediaGraph::getAllFilters(Graph graph)
         {
-            QList<Filter> ret;
+            QSet<Filter> ret;
             ComPointer<IEnumFilters> enumFilters;
             graph->EnumFilters(enumFilters.pparam());
             Filter current;
@@ -259,7 +232,7 @@ namespace Phonon
             return ret;
         }
 
-        QList<Filter> MediaGraph::getAllFilters() const
+        QSet<Filter> MediaGraph::getAllFilters() const
         {
             return getAllFilters(m_graph);
         }
@@ -348,14 +321,11 @@ namespace Phonon
         void MediaGraph::ensureStopped()
         {
             m_isStopping = true;
-            //special case here because we want stopped to be synchronous
             m_graph->Abort();
-            m_mediaControl->Stop(); 
-            OAFilterState dummy;
-            //this will wait until the change is effective
-            m_mediaControl->GetState(INFINITE, &dummy);
+            m_mediaControl->Stop(); //special case here because we want stopped to be synchronous
             m_isStopping = false;
         }
+
 
         bool MediaGraph::isLoading() const
         {
@@ -377,7 +347,7 @@ namespace Phonon
             FILTER_INFO info;
             filter->QueryFilterInfo(&info);
 #ifdef GRAPH_DEBUG
-            qDebug() << "removeFilter" << QString::fromUtf16(info.achName);
+            qDebug() << "removeFilter" << QString::fromWCharArray(info.achName);
 #endif
             if (info.pGraph) {
                 info.pGraph->Release();
@@ -394,21 +364,23 @@ namespace Phonon
 
             ensureSourceDisconnected();
 
-            QList<Filter> list = m_decoders;
+            QSet<Filter> list = m_decoders;
             if (m_demux) {
                 list << m_demux;
             }
             if (m_realSource) {
                 list << m_realSource;
             }
-            list << m_decoders;
 
-            for (int i = 0; i < m_decoders.count(); ++i) {
-                list += getFilterChain(m_demux, m_decoders.at(i));
+            foreach(const Filter &decoder, m_decoders) {
+                list += getFilterChain(m_demux, decoder);
             }
 
-            for (int i = 0; i < list.count(); ++i) {
-                removeFilter(list.at(i));
+            foreach(const Filter &filter, list) {
+                HRESULT hr = removeFilter(filter);
+                if(FAILED(hr)) {
+                    return hr;
+                }
             }
 
             //Let's reinitialize the internal lists
@@ -429,22 +401,22 @@ namespace Phonon
             const Filter sinkFilter = sink->filter(m_index);
             const QList<InputPin> inputs = BackendNode::pins(sinkFilter, PINDIR_INPUT);
 
-            QList<OutputPin> outputs;
+            QSet<OutputPin> outputs;
             if (source == m_mediaObject) {
-                outputs = BackendNode::pins(m_fakeSource, PINDIR_OUTPUT);
+                outputs = BackendNode::pins(m_fakeSource, PINDIR_OUTPUT).toSet();
                 outputs += m_decoderPins;
             } else {
-                outputs = BackendNode::pins(source->filter(m_index), PINDIR_OUTPUT);
+                outputs = BackendNode::pins(source->filter(m_index), PINDIR_OUTPUT).toSet();
             }
 
 
-            for (int i = 0; i < inputs.count(); ++i) {
-                for (int o = 0; o < outputs.count(); ++o) {
-                    tryDisconnect(outputs.at(o), inputs.at(i));
+            foreach(InputPin inPin, inputs) {
+                foreach(OutputPin outPin, outputs) {
+                    tryDisconnect(outPin, inPin);
                 }
             }
 
-            if (m_sinkConnections.removeOne(sink)) {
+            if (m_sinkConnections.remove(sink)) {
                 m_connectionsDirty = true;
             }
             return true;
@@ -473,7 +445,9 @@ namespace Phonon
                             PIN_INFO info;
                             in->QueryPinInfo(&info);
                             Filter sink(info.pFilter);
-                            QList<Filter> list = getFilterChain(tee, sink);
+                            QSet<Filter> list = getFilterChain(tee, sink);
+                            list -= sink;
+                            list -= tee;
                             out->QueryPinInfo(&info);
                             Filter source(info.pFilter);
 
@@ -484,18 +458,17 @@ namespace Phonon
                                 }
                             } else {
                                 ret = true;
-                                for (int i = 0; i < list.count(); ++i) {
-                                    ret = ret && SUCCEEDED(removeFilter(list.at(i)));
+                                foreach(Filter f, list) {
+                                    ret = ret && SUCCEEDED(removeFilter(f));
                                 }
                             }
 
                             //Let's try to see if the Tee filter is still useful
                             if (ret) {
                                 int connections = 0;
-                                const QList<OutputPin> outputs = BackendNode::pins(tee, PINDIR_OUTPUT);
-                                for(int i = 0; i < outputs.count(); ++i) {
+                                foreach (OutputPin out, BackendNode::pins(tee, PINDIR_OUTPUT)) {
                                     InputPin p;
-                                    if ( SUCCEEDED(outputs.at(i)->ConnectedTo(p.pparam()))) {
+                                    if ( SUCCEEDED(out->ConnectedTo(p.pparam()))) {
                                         connections++;
                                     }
                                 }
@@ -534,14 +507,13 @@ namespace Phonon
                 filter->GetClassID(&clsid);
                 if (clsid == CLSID_InfTee) {
                     //there is already a Tee (namely 'filter') in use
-                    const QList<OutputPin> outputs = BackendNode::pins(filter, PINDIR_OUTPUT);
-                    for(int i = 0; i < outputs.count(); ++i) {
-                        const OutputPin &pin = outputs.at(i);
+                    foreach(OutputPin pin, BackendNode::pins(filter, PINDIR_OUTPUT)) {
                         if (VFW_E_NOT_CONNECTED == pin->ConnectedTo(inPin.pparam())) {
                             return SUCCEEDED(pin->Connect(newIn, 0));
                         }
                     }
-                    //we should never go here
+
+                    //we shoud never go here
                     return false;
                 } else {
                     QAMMediaType type;
@@ -614,21 +586,17 @@ namespace Phonon
         {
             bool ret = false;
             const QList<InputPin> inputs = BackendNode::pins(sink->filter(m_index), PINDIR_INPUT);
-            QList<OutputPin> outputs = BackendNode::pins(source == m_mediaObject ? m_fakeSource : source->filter(m_index), PINDIR_OUTPUT);
-            
-            if (source == m_mediaObject) {
-                grabFilter(m_fakeSource);
-            }
+            const QList<OutputPin> outputs = BackendNode::pins(source == m_mediaObject ? m_fakeSource : source->filter(m_index), PINDIR_OUTPUT);
 
 #ifdef GRAPH_DEBUG
             qDebug() << Q_FUNC_INFO << source << sink << this;
 #endif
 
-            for (int o = 0; o < outputs.count(); o++) {
+            foreach(OutputPin outPin, outputs) {
+
                 InputPin p;
-                for (int i = 0; i < inputs.count(); i++) {
-                    const InputPin &inPin = inputs.at(i);
-                    if (tryConnect(outputs.at(o), inPin)) {
+                foreach(InputPin inPin, inputs) {
+                    if (tryConnect(outPin, inPin)) {
                         //tell the sink node that it just got a new input
                         sink->connected(source, inPin);
                         ret = true;
@@ -676,12 +644,10 @@ namespace Phonon
                     m_result = m_graph->AddFilter(m_realSource, L"DVD Navigator");*/
 
 
- #ifndef QT_NO_PHONON_MEDIACONTROLLER
-               } else if (source.discType() == Phonon::Cd) {
+                } else if (source.discType() == Phonon::Cd) {
                     m_realSource = Filter(new QAudioCDPlayer);
-                    m_result = m_graph->AddFilter(m_realSource, 0);
+                    m_result = m_graph->AddFilter(m_realSource, L"Audio CD Reader");
 
-#endif //QT_NO_PHONON_MEDIACONTROLLER
                 } else {
                     m_result = E_NOTIMPL;
                 }
@@ -704,16 +670,18 @@ namespace Phonon
                     m_renderId = m_mediaObject->workerThread()->addUrlToRender(url);
                 }
                 break;
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             case Phonon::MediaSource::Stream:
                 {
                     m_realSource = Filter(new IODeviceReader(source, this));
+                    m_result = m_graph->AddFilter(m_realSource, L"Phonon Stream Reader");
+
+                    if (FAILED(m_result)) {
+                        return m_result;
+                    }
+
                     m_renderId = m_mediaObject->workerThread()->addFilterToRender(m_realSource);
                 }
                 break;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            default:
-                m_result = E_FAIL;
             }
 
             return m_result;
@@ -723,7 +691,7 @@ namespace Phonon
         {
             if (m_seekId == workId) {
                 m_currentTime = time;
-                m_mediaObject->seekingFinished(this);
+                emit seekingFinished(this);
                 m_seekId = 0;
             } else {
                 //it's a queue seek command
@@ -744,7 +712,7 @@ namespace Phonon
 				}
 
                 m_result = reallyFinishLoading(hr, graph);
-                m_mediaObject->loadingFinished(this);
+                emit loadingFinished(this);
             }
         }
 
@@ -755,59 +723,58 @@ namespace Phonon
                 return hr;
             }
 
-            const Graph oldGraph = m_graph;
-            m_graph = graph;
-
             //we keep the source and all the way down to the decoders
-            QList<Filter> removedFilters;
+            QSet<Filter> keptFilters;
 
-			const QList<Filter> allFilters = getAllFilters(graph);
-            for (int i = 0; i < allFilters.count(); ++i) {
-                const Filter &filter = allFilters.at(i);
+			const QSet<Filter> allFilters = getAllFilters(graph);
+
+            foreach(const Filter &filter, allFilters) {
                 if (isSourceFilter(filter)) {
                     m_realSource = filter; //save the source filter
                     if (!m_demux ) {
                         m_demux = filter; //in the WMV case, the demuxer is the source filter itself
                     }
+                    keptFilters << filter;
                 } else if (isDemuxerFilter(filter)) {
                     m_demux = filter;
+                    keptFilters << filter;
                 } else if (isDecoderFilter(filter)) {
                     m_decoders += filter;
                     m_decoderPins += BackendNode::pins(filter, PINDIR_OUTPUT).first();
-                }  else {
-                    removedFilters += filter;
+                    keptFilters << filter;
+                } 
+            }
+
+            foreach(const Filter &decoder, m_decoders) {
+                keptFilters += getFilterChain(m_demux, decoder);
+            }
+
+            //now know what filters to keep
+			//we add them to the graph and store their connections
+  			const QList<GraphConnection> connections = getOrderedConnections(m_realSource, keptFilters);
+
+    		//let's transfer the filter
+            foreach(const Filter filter, keptFilters) {
+
+				graph->RemoveFilter(filter);
+			
+                //...and add it to our current graph
+                hr = m_graph->AddFilter(filter, 0);
+                if (FAILED(hr)) {
+                    return hr;
                 }
             }
 
-            for (int i = 0; i < m_decoders.count(); ++i) {
-                QList<Filter> chain = getFilterChain(m_demux, m_decoders.at(i));
-                for (int i = 0; i < chain.count(); ++i) {
-                    //we keep those filters
-                    removedFilters.removeOne(chain.at(i));
-                }
-            }
-
-            for (int i = 0; i < removedFilters.count(); ++i) {
-                graph->RemoveFilter(removedFilters.at(i));
-            }
-
-            m_mediaObject->workerThread()->replaceGraphForEventManagement(graph, oldGraph);
-
-            //let's transfer the nodes from the current graph to the new one
-            QList<GraphConnection> connections; //we store the connections that need to be restored
-
-            // First get all the sink nodes (nodes with no input connected)
-            for (int i = 0; i < m_sinkConnections.count(); ++i) {
-                Filter currentFilter = m_sinkConnections.at(i)->filter(m_index);
-                connections += getConnections(currentFilter);
-                grabFilter(currentFilter);
-            }
+			//Let's now restore the connections in the new graph
+			foreach(GraphConnection connection, connections) {
+                const OutputPin output = BackendNode::pins(connection.output, PINDIR_OUTPUT).at(connection.outputOffset);
+                const InputPin input   = BackendNode::pins(connection.input, PINDIR_INPUT).at(connection.inputOffset);
+                m_graph->Connect( output, input);
+			}
 
             //we need to do something smart to detect if the streams are unencoded
             if (m_demux) {
-                const QList<OutputPin> outputs = BackendNode::pins(m_demux, PINDIR_OUTPUT);
-                for (int i = 0; i < outputs.count(); ++i) {
-                    const OutputPin &out = outputs.at(i);
+                foreach(const OutputPin out, BackendNode::pins(m_demux, PINDIR_OUTPUT)) {
                     InputPin pin;
                     if (out->ConnectedTo(pin.pparam()) == VFW_E_NOT_CONNECTED) {
                         m_decoderPins += out; //unconnected outputs can be decoded outputs
@@ -816,37 +783,16 @@ namespace Phonon
             }
 
             ensureSourceConnectedTo(true);
-
-            //let's reestablish the connections
-            for (int i = 0; i < connections.count(); ++i) {
-                const GraphConnection &connection = connections.at(i);
-                //check if we should transfer the sink node
-
-                grabFilter(connection.input);
-                grabFilter(connection.output);
-
-                const OutputPin output = BackendNode::pins(connection.output, PINDIR_OUTPUT).at(connection.outputOffset);
-                const InputPin input   = BackendNode::pins(connection.input, PINDIR_INPUT).at(connection.inputOffset);
-                HRESULT hr = output->Connect(input, 0);
-                Q_UNUSED(hr);
-                Q_ASSERT( SUCCEEDED(hr));
-            }
-
-            //Finally, let's update the interfaces
-            m_mediaControl = ComPointer<IMediaControl>(graph, IID_IMediaControl);
-            m_mediaSeeking = ComPointer<IMediaSeeking>(graph, IID_IMediaSeeking);
             return hr;
         }
 
         //utility functions
-        //retrieves the filters between source and sink
-        QList<Filter> MediaGraph::getFilterChain(const Filter &source, const Filter &sink)
+        QSet<Filter> MediaGraph::getFilterChain(const Filter &source, const Filter &sink)
         {
-            QList<Filter> ret;
+            QSet<Filter> ret;
             Filter current = sink;
             while (current && BackendNode::pins(current, PINDIR_INPUT).count() == 1 && current != source) {
-                if (current != source)
-                    ret += current;
+                ret += current;
                 InputPin pin = BackendNode::pins(current, PINDIR_INPUT).first();
                 current = Filter();
                 OutputPin output;
@@ -873,7 +819,7 @@ namespace Phonon
             {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                qDebug() << Q_FUNC_INFO << QString::fromUtf16(info.achName);
+                qDebug() << Q_FUNC_INFO << QString::fromWCharArray(info.achName);
                 if (info.pGraph) {
                     info.pGraph->Release();
                 }
@@ -919,7 +865,7 @@ namespace Phonon
             {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                qDebug() << "found a decoder filter" << QString::fromUtf16(info.achName);
+                qDebug() << "found a decoder filter" << QString::fromWCharArray(info.achName);
                 if (info.pGraph) {
                     info.pGraph->Release();
                 }
@@ -931,16 +877,6 @@ namespace Phonon
 
         bool MediaGraph::isSourceFilter(const Filter &filter) const
         {
-#ifdef GRAPH_DEBUG
-            {
-                FILTER_INFO info;
-                filter->QueryFilterInfo(&info);
-                qDebug() << Q_FUNC_INFO << QString::fromUtf16(info.achName);
-                if (info.pGraph) {
-                    info.pGraph->Release();
-                }
-            }
-#endif
             //a source filter is one that has no input
             return BackendNode::pins(filter, PINDIR_INPUT).isEmpty();
         }
@@ -954,7 +890,7 @@ namespace Phonon
             {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                qDebug() << Q_FUNC_INFO << QString::fromUtf16(info.achName);
+                qDebug() << Q_FUNC_INFO << QString::fromWCharArray(info.achName);
                 if (info.pGraph) {
                     info.pGraph->Release();
                 }
@@ -975,10 +911,10 @@ namespace Phonon
                 return false;
             }
 
-            for (int i = 0; i < outputs.count(); ++i) {
+            foreach(const OutputPin &outpin, outputs) {
                 QAMMediaType type;
                 //for now we support only video and audio
-                hr = outputs.at(i)->ConnectionMediaType(&type);
+                hr = outpin->ConnectionMediaType(&type);
                 if (SUCCEEDED(hr) && 
                     type.majortype != MEDIATYPE_Video && type.majortype != MEDIATYPE_Audio) {
                         return false;
@@ -988,7 +924,7 @@ namespace Phonon
             {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                qDebug() << "found a demuxer filter" << QString::fromUtf16(info.achName);
+                qDebug() << "found a demuxer filter" << QString::fromWCharArray(info.achName);
                 if (info.pGraph) {
                     info.pGraph->Release();
                 }
@@ -1006,27 +942,27 @@ namespace Phonon
                 BSTR str;
                 HRESULT hr = mediaContent->get_AuthorName(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("ARTIST"), QString::fromUtf16((const unsigned short*)str));
+                    ret.insert(QLatin1String("ARTIST"), QString::fromWCharArray(str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Title(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("TITLE"), QString::fromUtf16((const unsigned short*)str));
+                    ret.insert(QLatin1String("TITLE"), QString::fromWCharArray(str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Description(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("DESCRIPTION"), QString::fromUtf16((const unsigned short*)str));
+                    ret.insert(QLatin1String("DESCRIPTION"), QString::fromWCharArray(str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Copyright(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("COPYRIGHT"), QString::fromUtf16((const unsigned short*)str));
+                    ret.insert(QLatin1String("COPYRIGHT"), QString::fromWCharArray(str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_MoreInfoText(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("MOREINFO"), QString::fromUtf16((const unsigned short*)str));
+                    ret.insert(QLatin1String("MOREINFO"), QString::fromWCharArray(str));
                     SysFreeString(str);
                 }
             }
@@ -1038,7 +974,6 @@ namespace Phonon
             return m_realSource;
         }
 
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
         void MediaGraph::setStopPosition(qint64 time)
         {
             qint64 current = 0,
@@ -1089,11 +1024,48 @@ namespace Phonon
                 return QList<qint64>() << 0;
             }
         }
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 
+
+        HRESULT MediaGraph::saveToFile(const QString &filepath) const
+        {
+            const WCHAR wszStreamName[] = L"ActiveMovieGraph";
+            HRESULT hr;
+            ComPointer<IStorage> storage;
+
+            // First, create a document file that will hold the GRF file
+            hr = StgCreateDocfile(reinterpret_cast<const wchar_t *>(filepath.utf16()),
+                STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE |
+                STGM_SHARE_EXCLUSIVE,
+                0, storage.pparam());
+
+            if (FAILED(hr)) {
+                return hr;
+            }
+
+            // Next, create a stream to store.
+            ComPointer<IStream> stream;
+            hr = storage->CreateStream(wszStreamName,
+                STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
+                0, 0, stream.pparam());
+
+            if (FAILED(hr)) {
+                return hr;
+            }
+
+            // The IpersistStream::Save method converts a stream into a persistent object.
+            ComPointer<IPersistStream> persist(m_graph, IID_IPersistStream);
+            hr = persist->Save(stream, TRUE);
+            if (SUCCEEDED(hr)) {
+                hr = storage->Commit(STGC_DEFAULT);
+            }
+
+            return hr;
+        }
 
     }
 }
 
 QT_END_NAMESPACE
+
+#include "moc_mediagraph.cpp"

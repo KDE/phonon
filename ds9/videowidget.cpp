@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "videowidget.h"
 
-#include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 #include <QtCore/QTimer>
 #include <QtCore/QSettings>
@@ -28,8 +27,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "videorenderer_soft.h"
 
 QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon
 {
@@ -50,9 +47,13 @@ namespace Phonon
                 setAutoFillBackground(false);
             }
 
-            QPaintEngine* paintEngine() const
+            void setVisible(bool visible)
             {
-                return 0;
+                if (isEmbedded() && m_currentRenderer->isNative()) {
+                    //then we should switch the current renderer
+                    m_currentRenderer = m_node->ensureSoftwareRendering(m_currentRenderer);
+                }
+                QWidget::setVisible(visible);
             }
 
             bool isEmbedded() const
@@ -64,26 +65,30 @@ namespace Phonon
 #endif
             }
 
-            bool needsSoftRendering() const
-            {
-                QPaintDevice *dev = QPainter::redirected(this, 0);
-                return (dev && dev != this);
-            }
-
             void resizeEvent(QResizeEvent *e)
             {
-                m_node->updateVideoSize();
+                updateVideoSize();
                 QWidget::resizeEvent(e);
             }
 
-            AbstractVideoRenderer *currentRenderer() const
+            void notifyVideoLoaded()
             {
-                return m_currentRenderer;
+                m_currentRenderer->notifyVideoLoaded();
+                updateGeometry();
+                updateVideoSize();
+                update();
+            }
+
+            void updateVideoSize()
+            {
+                m_currentRenderer->notifyResize(rect(), m_node->aspectRatio(), m_node->scaleMode());
+                update();
             }
 
             void setCurrentRenderer(AbstractVideoRenderer *renderer)
             {
                 m_currentRenderer = renderer;
+                updateVideoSize();
                 update();
             }
 
@@ -92,21 +97,8 @@ namespace Phonon
                 return m_currentRenderer->sizeHint().expandedTo(QWidget::sizeHint());
             }
 
-            void changeEvent(QEvent *e)
-            {
-                checkCurrentRenderingMode();
-                QWidget::changeEvent(e);
-            }
-
-            void setVisible(bool visible)
-            {
-                checkCurrentRenderingMode();
-                QWidget::setVisible(visible);
-            }
-
             void paintEvent(QPaintEvent *e)
             {
-                checkCurrentRenderingMode();
                 m_currentRenderer->repaintCurrentFrame(this, e->rect());
             }
 
@@ -138,46 +130,25 @@ namespace Phonon
                 }
             }
 
-            void checkCurrentRenderingMode()
-            {
-                if (!m_currentRenderer)
-                    return;
-
-                if (m_currentRenderer->isNative()) {
-                    if (isEmbedded()) {
-                        //we need to switch to software renderer
-                        m_currentRenderer = m_node->switchRendering(m_currentRenderer);
-                        setAttribute(Qt::WA_PaintOnScreen, false);
-                    } else if (needsSoftRendering()) {
-                        m_node->performSoftRendering(m_currentRenderer->snapshot());
-                    }
-                } else if (!isEmbedded()) {
-                    m_currentRenderer = m_node->switchRendering(m_currentRenderer);
-                    setAttribute(Qt::WA_PaintOnScreen, true);
-                }
-            }
-
             VideoWidget *m_node;
             AbstractVideoRenderer *m_currentRenderer;
             QVariant m_restoreScreenSaverActive;
+
+
         };
 
         VideoWidget::VideoWidget(QWidget *parent)
-            : BackendNode(parent), m_aspectRatio(Phonon::VideoWidget::AspectRatioAuto),
-              m_scaleMode(Phonon::VideoWidget::FitInView),
-              m_brightness(0.), m_contrast(0.), m_hue(0.), m_saturation(0.), m_noNativeRendererSupported(false)
-              
+            : BackendNode(parent), m_brightness(0.), m_contrast(0.), m_hue(0.), m_saturation(0.),
+            m_aspectRatio(Phonon::VideoWidget::AspectRatioAuto), m_scaleMode(Phonon::VideoWidget::FitInView)
         {
             //initialisation of the widget
             m_widget = new VideoWindow(parent, this);
 
-            //initialization of the renderers
-            qMemSet(m_renderers, 0, sizeof(m_renderers));
-
-            for(int i = 0; i< FILTER_COUNT ;++i) {
-                //This might return a non native (ie Qt) renderer in case native is not supported
-                AbstractVideoRenderer *renderer = getRenderer(i, Native, true);
-                m_filters[i] = renderer->getFilter();
+            //initialization of the widgets
+            for(QVector<Filter>::iterator it = m_filters.begin(); it != m_filters.end(); ++it) {
+                AbstractVideoRenderer *renderer = getDefaultRenderer();                
+                m_renderers.append(renderer);
+                *it = renderer->getFilter();
             }
 
             //by default, we take the first VideoWindow object
@@ -186,30 +157,43 @@ namespace Phonon
 
         VideoWidget::~VideoWidget()
         {
-            for (int i = 0; i < 4; ++i) {
-                delete m_renderers[i];
+            qDeleteAll(m_renderers);
+        }
+
+        AbstractVideoRenderer *VideoWidget::getDefaultRenderer() const
+        {
+            //First we try the native renderer
+            AbstractVideoRenderer *ret = new VideoRendererVMR9(m_widget);
+            if (ret->getFilter() == 0) {
+                delete ret;
+                //if it fails, we create the software renderer
+                ret = new VideoRendererSoft(m_widget); 
             }
+            return ret;
         }
 
         void VideoWidget::notifyVideoLoaded()
         {
-            updateVideoSize();
-            m_widget->updateGeometry();
+            m_widget->notifyVideoLoaded();
         }
 
-        AbstractVideoRenderer *VideoWidget::switchRendering(AbstractVideoRenderer *current)
+
+        AbstractVideoRenderer *VideoWidget::ensureSoftwareRendering(AbstractVideoRenderer *renderer)
         {
-            const bool toNative = !current->isNative();
-            if (toNative && m_noNativeRendererSupported)
-                return current; //no switch here
+            const int index = m_renderers.indexOf(renderer);
+
+            //we can safely delete the renderer classes
+            qDeleteAll(m_renderers);
+            m_renderers.clear();
 
             //firt we delete the renderer
             //initialization of the widgets
-            for(int i = 0; i < FILTER_COUNT; ++i) {
-                Filter oldFilter = m_filters[i];
+            for(int i = 0; i < m_filters.count(); ++i) {
+                Filter oldFilter = m_filters.at(i);
 
                 //Let's create a software renderer
-                AbstractVideoRenderer *renderer = getRenderer(i, toNative ? Native : NonNative, true);
+                AbstractVideoRenderer *renderer = new VideoRendererSoft(m_widget);
+                m_renderers.append(renderer);
 
                 if (m_mediaObject) {
                     m_mediaObject->switchFilters(i, oldFilter, renderer->getFilter());
@@ -218,37 +202,18 @@ namespace Phonon
                 m_filters[i] = renderer->getFilter();
             }
 
-            return getRenderer(mediaObject()->currentGraph()->index(), toNative ? Native: NonNative);
+            //we return the new renderer
+            return m_renderers.at(index);
         }
 
-        void VideoWidget::performSoftRendering(const QImage &currentImage)
-        {
-            const int graphIndex = mediaObject()->currentGraph()->index();
-            VideoRendererSoft *r = static_cast<VideoRendererSoft*>(getRenderer(graphIndex, NonNative, true /*autocreation*/));
-            r->setSnapshot(currentImage);
-            r->notifyResize(m_widget->size(), m_aspectRatio, m_scaleMode);
-            r->repaintCurrentFrame(m_widget, m_widget->rect());
 
-        }
 
         void VideoWidget::setCurrentGraph(int index)
         {
-            for(int i = 0; i < 2; ++i) {
-                if (AbstractVideoRenderer *renderer = getRenderer(i, Native))
-                    renderer->setActive(index == i);
+            for(int i = 0; i < m_renderers.count(); ++i) {
+                m_renderers.at(i)->setActive(index == i);
             }
-
-            //be sure to update all the things that needs an update
-            applyMixerSettings();
-            updateVideoSize();
-
-            AbstractVideoRenderer *r = m_widget->currentRenderer();
-
-            //we determine dynamically if it is native or non native
-            r = getRenderer(index, !r || r->isNative() ? Native : NonNative);
-			if (!r)
-				r = getRenderer(index, NonNative);
-            m_widget->setCurrentRenderer(r);
+            m_widget->setCurrentRenderer(m_renderers.at(index));
         }
 
 
@@ -260,7 +225,7 @@ namespace Phonon
         void VideoWidget::setAspectRatio(Phonon::VideoWidget::AspectRatio aspectRatio)
         {
             m_aspectRatio = aspectRatio;
-            updateVideoSize();
+            m_widget->updateVideoSize();
         }
 
         Phonon::VideoWidget::ScaleMode VideoWidget::scaleMode() const
@@ -278,7 +243,7 @@ namespace Phonon
         void VideoWidget::setScaleMode(Phonon::VideoWidget::ScaleMode scaleMode)
         {
             m_scaleMode = scaleMode;
-            updateVideoSize();
+            m_widget->updateVideoSize();
         }
 
         void VideoWidget::setBrightness(qreal b)
@@ -327,46 +292,11 @@ namespace Phonon
         }
 
 
-        AbstractVideoRenderer *VideoWidget::getRenderer(int graphIndex, RendererType type, bool autoCreate)
-        {
-            int index = graphIndex * 2 + type;
-            if (m_renderers[index] == 0 && autoCreate) {
-                AbstractVideoRenderer *renderer = 0;
-				if (type == Native) {
-                    renderer = new VideoRendererVMR9(m_widget);
-                    if (renderer->getFilter() == 0) {
-                        //instanciating the renderer might fail with error VFW_E_DDRAW_CAPS_NOT_SUITABLE (0x80040273)
-                        m_noNativeRendererSupported = true;
-                        delete renderer;
-                        renderer = 0;
-                    }
-                }
-
-                if (renderer == 0) {
-                    type = NonNative;
-                    index = graphIndex * 2 + type;
-                    if (m_renderers[index] == 0)
-                        renderer = new VideoRendererSoft(m_widget); //this always succeeds
-                    else
-                        renderer = m_renderers[index];
-                }
-
-                m_renderers[index] = renderer;
-
-                //be sure to update all the things that needs an update
-                applyMixerSettings();
-                updateVideoSize();
-
-            }
-            return m_renderers[index];
-        }
-
         //this must be called whe nthe node is actually connected
         void  VideoWidget::applyMixerSettings() const
         {
-            for (int i = 0; i < 4; ++i) {
-                if (AbstractVideoRenderer *renderer = m_renderers[i])
-                    renderer->applyMixerSettings(m_brightness, m_contrast, m_hue, m_saturation);
+            foreach(AbstractVideoRenderer *renderer, m_renderers) {
+                renderer->applyMixerSettings(m_brightness, m_contrast, m_hue, m_saturation);
             }
         }
 
@@ -374,23 +304,11 @@ namespace Phonon
         {
             //in case of a connection, we simply reapply the mixer settings
             applyMixerSettings();
-            updateVideoSize();
+            m_widget->updateVideoSize();
         }
-
-        void VideoWidget::updateVideoSize() const
-        {
-            for (int i = 0; i < 4; ++i) {
-                if (AbstractVideoRenderer *renderer = m_renderers[i])
-                    renderer->notifyResize(m_widget->size(), m_aspectRatio, m_scaleMode);
-            }
-        }
-
-
 
     }
 }
-
-#endif //QT_NO_PHONON_VIDEO
 
 QT_END_NAMESPACE
 

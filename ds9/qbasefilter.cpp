@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "qbasefilter.h"
 #include "qpin.h"
 
-#include <QtCore/QMutex>
+#include <qdebug.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,7 +36,7 @@ namespace Phonon
                 m_filter->AddRef();
             }
 
-            virtual ~QEnumPins()
+            ~QEnumPins()
             {
                 m_filter->Release();
             }
@@ -269,7 +269,7 @@ namespace Phonon
             return S_OK;
         }
 
-        STDMETHODIMP QBaseFilter::Run(REFERENCE_TIME)
+        STDMETHODIMP QBaseFilter::Run(REFERENCE_TIME t)
         {
             QWriteLocker locker(&m_lock);
             m_state = State_Running;
@@ -321,8 +321,7 @@ namespace Phonon
                 return E_POINTER;
             }
 
-            for (int i = 0; i < m_pins.count(); ++i) {
-                IPin * current = m_pins.at(i);
+            foreach(IPin *current, pins()) {
                 PIN_INFO info;
                 current->QueryPinInfo(&info);
                 if (info.pFilter) {
@@ -357,7 +356,7 @@ namespace Phonon
         {
             QWriteLocker locker(&m_lock);
             m_graph = graph;
-            m_name = QString::fromUtf16((const unsigned short*)name);
+            m_name = QString::fromWCharArray(name);
             return S_OK;
         }
 
@@ -780,8 +779,7 @@ namespace Phonon
         QList<QPin*> QBaseFilter::inputPins() const
         {
             QList<QPin*> ret;
-            for(int i = 0; i < m_pins.count(); ++i) {
-                QPin * pin = m_pins.at(i);
+            foreach(QPin *pin, pins()) {
                 if (pin->direction() == PINDIR_INPUT) {
                     ret += pin;
                 }
@@ -792,8 +790,7 @@ namespace Phonon
         QList<QPin*> QBaseFilter::outputPins() const
         {
             QList<QPin*> ret;
-            for(int i = 0; i < m_pins.count(); ++i) {
-                QPin * pin = m_pins.at(i);
+            foreach(QPin *pin, pins()) {
                 if (pin->direction() == PINDIR_OUTPUT) {
                     ret += pin;
                 }
@@ -803,9 +800,8 @@ namespace Phonon
 
         void *QBaseFilter::getUpStreamInterface(const IID &iid) const
         {
-            const QList<QPin*> inputs = inputPins();
-            for (int i = 0; i < inputs.count(); ++i) {
-                IPin *out = inputs.at(i)->connected();
+            foreach(QPin *pin, inputPins()) {
+                IPin *out = pin->connected();
                 if (out) {
                     void *ms = 0;
                     out->QueryInterface(iid, &ms);
@@ -820,7 +816,7 @@ namespace Phonon
 
 
         //addition
-        HRESULT QBaseFilter::processSample(IMediaSample *)
+        HRESULT QBaseFilter::processSample(IMediaSample *sample)
         {
             return S_OK;
         }

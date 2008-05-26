@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +51,7 @@ namespace Phonon
         }*/
 
         //for now we have 2 graphs that do the same
-        BackendNode::BackendNode(QObject *parent) : QObject(parent), m_mediaObject(0)
+        BackendNode::BackendNode(QObject *parent) : QObject(parent), m_mediaObject(0), m_filters(2)
         {
         }
 
@@ -61,9 +61,7 @@ namespace Phonon
 
         void BackendNode::setMediaObject(MediaObject *mo)
         {
-            if (m_mediaObject) {
-                disconnect(m_mediaObject, SIGNAL(destroyed()), this, SLOT(mediaObjectDestroyed()));
-            }
+            Q_ASSERT(m_mediaObject == 0);
             m_mediaObject = mo;
             connect(mo, SIGNAL(destroyed()), SLOT(mediaObjectDestroyed()));
         }
@@ -72,10 +70,7 @@ namespace Phonon
         {
             //remove the filter from its graph
             FILTER_INFO info;
-            for(int i = 0; i < FILTER_COUNT; ++i) {
-                const Filter &filter = m_filters[i];
-                if (!filter)
-                    continue; 
+            foreach(const Filter filter, m_filters) {
                 filter->QueryFilterInfo(&info);
                 if (info.pGraph) {
                     HRESULT hr = info.pGraph->RemoveFilter(filter);

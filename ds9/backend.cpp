@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -35,7 +35,14 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 QT_BEGIN_NAMESPACE
 
+// export as Qt/KDE factory as required
+#ifdef PHONON_MAKE_QT_ONLY_BACKEND
 Q_EXPORT_PLUGIN2(phonon_ds9, Phonon::DS9::Backend);
+#else
+#include <kpluginfactory.h>
+K_PLUGIN_FACTORY(DS9BackendFactory, registerPlugin<Phonon::DS9::Backend>();)
+K_EXPORT_PLUGIN(DS9BackendFactory("ds9backend"))
+#endif
 
 namespace Phonon
 {
@@ -54,13 +61,12 @@ namespace Phonon
 
             //registering meta types
             qRegisterMetaType<HRESULT>("HRESULT");
+            qRegisterMetaType<QSet<Filter> >("QSet<Filter>");
             qRegisterMetaType<Graph>("Graph");
         }
 
         Backend::~Backend()
         {
-            m_audioOutputs.clear();
-            m_audioEffects.clear();
 			::CoUninitialize();
         }
 
@@ -72,18 +78,12 @@ namespace Phonon
                 return new MediaObject(parent);
             case AudioOutputClass:
                 return new AudioOutput(this, parent);
-#ifndef QT_NO_PHONON_EFFECT
             case EffectClass:
                 return new Effect(m_audioEffects[ args[0].toInt() ], parent);
-#endif //QT_NO_PHONON_EFFECT
-#ifndef QT_NO_PHONON_VIDEO
             case VideoWidgetClass:
                 return new VideoWidget(qobject_cast<QWidget *>(parent));
-#endif //QT_NO_PHONON_VIDEO
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
             case VolumeFaderEffectClass:
                 return new VolumeEffect(parent);
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
             default:
                 return 0;
             }
@@ -91,29 +91,24 @@ namespace Phonon
 
         bool Backend::supportsVideo() const
         {
-#ifndef QT_NO_PHONON_VIDEO
             return true;
-#else
-            return false;
-#endif //QT_NO_PHONON_VIDEO
         }
 
         QStringList Backend::availableMimeTypes() const
         {
-            QStringList ret;
-            {
-                QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"), QSettings::NativeFormat);
-                ret += settings.childGroups();
-            }
-            {
-                QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\wmplayer\\mime types"), QSettings::NativeFormat);
-                ret += settings.childGroups();
+            QSet<QString> ret;
+
+            const QStringList locations = QStringList() << QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types")
+                << QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\wmplayer\\mime types");
+
+            foreach(QString s, locations) {
+                QSettings settings(s, QSettings::NativeFormat);
+                ret += settings.childGroups().toSet();
             }
 
-            ret.removeDuplicates();
-            ret.replaceInStrings("\\", "/");
-            qSort(ret);
-            return ret;
+            QStringList list = ret.toList();
+            qSort(list);
+            return list;
         }
 
 		Filter Backend::getAudioOutputFilter(int index) const
@@ -157,7 +152,7 @@ namespace Phonon
                     while (S_OK == enumMon->Next(1, mon.pparam(), 0)) {
                         LPOLESTR str = 0;
                         mon->GetDisplayName(0,0,&str);
-                        const QString name = QString::fromUtf16((unsigned short*)str);
+                        const QString name = QString::fromWCharArray(str);
 						ComPointer<IMalloc> alloc;
 						::CoGetMalloc(1, alloc.pparam());
                         alloc->Free(str);
@@ -179,12 +174,11 @@ namespace Phonon
 #endif
 					break;
                 }
-#ifndef QT_NO_PHONON_EFFECT
             case Phonon::EffectType:
                 {
                     m_audioEffects.clear();
                     ComPointer<IEnumDMO> enumDMO;
-                    HRESULT hr = ::DMOEnum(DMOCATEGORY_AUDIO_EFFECT, DMO_ENUMF_INCLUDE_KEYED, 0, 0, 0, 0, enumDMO.pparam());
+					HRESULT hr = ::DMOEnum(DMOCATEGORY_AUDIO_EFFECT, DMO_ENUMF_INCLUDE_KEYED, 0, 0, 0, 0, enumDMO.pparam());
                     if (SUCCEEDED(hr)) {
                         CLSID clsid;
                         while (S_OK == enumDMO->Next(1, &clsid, 0, 0)) {
@@ -195,7 +189,6 @@ namespace Phonon
                     break;
                 }
                 break;
-#endif //QT_NO_PHONON_EFFECT
             default:
                 break;
             }
@@ -216,7 +209,7 @@ namespace Phonon
                     LPOLESTR str = 0;
                     HRESULT hr = mon->GetDisplayName(0,0, &str);
                     if (SUCCEEDED(hr)) {
-                        QString name = QString::fromUtf16((unsigned short*)str); 
+                        QString name = QString::fromWCharArray(str); 
 						ComPointer<IMalloc> alloc;
 						::CoGetMalloc(1, alloc.pparam());
                         alloc->Free(str);
@@ -225,18 +218,14 @@ namespace Phonon
 #endif
                 }
                 break;
-#ifndef QT_NO_PHONON_EFFECT
             case Phonon::EffectType:
                 {
                     WCHAR name[80]; // 80 is clearly stated in the MSDN doc
-                    HRESULT hr = ::DMOGetName(m_audioEffects[index], name);
+					HRESULT hr = ::DMOGetName(m_audioEffects[index], name);
                     if (SUCCEEDED(hr)) {
-                        ret["name"] = QString::fromUtf16((unsigned short*)name);
+                        ret["name"] = QString::fromWCharArray(name);
                     }
                 }
-                break;
-#endif //QT_NO_PHONON_EFFECT
-            default:
                 break;
             }
 			return ret;
@@ -245,54 +234,58 @@ namespace Phonon
         bool Backend::endConnectionChange(QSet<QObject *> objects)
         {
             //end of a transaction
-            for(QSet<QObject *>::const_iterator it = objects.begin(); it != objects.end(); ++it) {
-                if (BackendNode *node = qobject_cast<BackendNode*>(*it)) {
-                    MediaObject *mo = node->mediaObject();
-                    if (mo) {
-                        switch(mo->transactionState)
-                        {
-                        case Phonon::ErrorState:
-                        case Phonon::StoppedState:
-                        case Phonon::LoadingState:
-                            //nothing to do
-                            break;
-                        case Phonon::PausedState:
-                            mo->transactionState = Phonon::StoppedState;
-                            mo->pause();
-                            break;
-                        default:
-                            mo->transactionState = Phonon::StoppedState;
-                            mo->play();
+            HRESULT hr = E_FAIL;
+            if (!objects.isEmpty()) {
+                foreach(QObject *o, objects) {
+                    if (BackendNode *node = qobject_cast<BackendNode*>(o)) {
+                        MediaObject *mo = node->mediaObject();
+                        if (mo && m_graphState.contains(mo)) {
+                            switch(m_graphState[mo])
+                            {
+                            case Phonon::ErrorState:
+                            case Phonon::StoppedState:
+                            case Phonon::LoadingState:
+                                //nothing to do
+                                break;
+                            case Phonon::PausedState:
+                                mo->pause();
+                                break;
+                            default:
+                                mo->play();
+                                break;
+                            }
+                            if (mo->state() != Phonon::ErrorState) {
+                                hr = S_OK;
+                            }
+                            m_graphState.remove(mo);
                             break;
                         }
-
-                        if (mo->state() == Phonon::ErrorState)
-                            return false;
                     }
                 }
             }
-
-            return true;
+            return SUCCEEDED(hr);
         }
 
 
         bool Backend::startConnectionChange(QSet<QObject *> objects)
         {
+            //start a transaction
+            HRESULT hr = E_FAIL;
+
             //let's save the state of the graph (before we stop it)
-            for(QSet<QObject *>::const_iterator it = objects.begin(); it != objects.end(); ++it) {
-                if (BackendNode *node = qobject_cast<BackendNode*>(*it)) {
+            foreach(QObject *o, objects) {
+                if (BackendNode *node = qobject_cast<BackendNode*>(o)) {
                     if (MediaObject *mo = node->mediaObject()) {
-                        if (mo->state() != Phonon::StoppedState) {
-                            mo->transactionState = mo->state();
-                            mo->ensureStopped(); //we have to stop the graph..
-                            if (mo->state() == Phonon::ErrorState)
-                                return false;
+                        m_graphState[mo] = mo->state();
+                        mo->ensureStopped(); //we have to stop the graph..
+                        if (mo->state() != Phonon::ErrorState) {
+                            hr = S_OK;
                         }
+                        break;
                     }
                 }
             }
-
-            return true;
+            return SUCCEEDED(hr);
         }
 
         bool Backend::connectNodes(QObject *_source, QObject *_sink)
@@ -307,8 +300,9 @@ namespace Phonon
             }
 
             //setting the graph if needed
-            if (source->mediaObject() == 0 && sink->mediaObject() == 0) {
-                    //error: no graph selected
+            if ((source->mediaObject() && sink->mediaObject() && source->mediaObject() != sink->mediaObject())
+                || (source->mediaObject() == 0 && sink->mediaObject() == 0)) {
+                    //error: not in the same graph or no graph at all
                     return false;
             } else if (source->mediaObject() && source->mediaObject() != sink->mediaObject()) {
                 //this' graph becomes the common one

@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -19,12 +19,15 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "qbasefilter.h"
 #include "qmeminputpin.h"
 
-#include <QtCore/qmath.h> //for sqrt
+#include <cmath> //for sqrt
+
+//#define DEBUG_VOLUMEEFFECT
+
+#ifdef DEBUG_VOLUMEEFFECT
+#include <QtGui/QSlider>
+#endif
 
 QT_BEGIN_NAMESPACE
-
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
-
 
 namespace Phonon
 {
@@ -176,13 +179,14 @@ namespace Phonon
                 case 2:
                     {
                         short *shortBuffer = reinterpret_cast<short*>(*buffer);
-                        *shortBuffer *= qRound(volume);
+                        *shortBuffer *= volume;
                     }
                     break;
                 case 1:
-                    **buffer *= qRound(volume);
+                    **buffer *= volume;
                     break;
                 default:
+                    qWarning("sample size of %d not handled", sampleSize);
                     break;
                 }
 
@@ -197,6 +201,7 @@ namespace Phonon
             if (buffer) {
                 const AM_MEDIA_TYPE &mt = m_output->connectedType();
                 if (mt.formattype != FORMAT_WaveFormatEx) {
+                    qWarning("VolumeEffectFilter::processSample: the mediatype format should be FORMAT_WaveFormatEx");
                     return VFW_E_INVALIDMEDIATYPE;
                 }
                 WAVEFORMATEX *format = reinterpret_cast<WAVEFORMATEX*>(mt.pbFormat);
@@ -214,15 +219,22 @@ namespace Phonon
         }
 
         VolumeEffect::VolumeEffect(QObject *parent) : Effect(parent), 
-            m_volume(1), m_fadeCurve(Phonon::VolumeFaderEffect::Fade3Decibel),
-            m_fading(false), m_initialVolume(0), m_targetVolume(0), m_fadeDuration(0),
+            m_volume(1.f), m_fadeCurve(Phonon::VolumeFaderEffect::Fade3Decibel),
+            m_fading(false), m_initialVolume(0.), m_targetVolume(0.), m_fadeDuration(0),
             m_fadeSamplePosition(0)
         {
             //creation of the effects
-            for(int i = 0; i < FILTER_COUNT; ++i) {
+            for(QVector<Filter>::iterator it = m_filters.begin(); it != m_filters.end(); ++it) {
                 VolumeEffectFilter *f = new VolumeEffectFilter(this);
-                m_filters[i] = Filter(f);
+                *it = Filter(f);
             }
+
+#ifdef DEBUG_VOLUMEEFFECT
+            static QSlider *g_slider = new QSlider;
+            g_slider->setRange(0, 100);
+            g_slider->show();
+            connect(g_slider, SIGNAL(sliderMoved(int)), SLOT(setVolumePercentage(int)));
+#endif
         }
 
         float VolumeEffect::volume() const
@@ -234,6 +246,12 @@ namespace Phonon
         {
             m_volume = newVolume;
         }
+
+        void VolumeEffect::setVolumePercentage(int p)
+        {
+            setVolume(p / 100.);
+        }
+
 
         Phonon::VolumeFaderEffect::FadeCurve VolumeEffect::fadeCurve() const
         {
@@ -288,8 +306,6 @@ namespace Phonon
         }
     }
 }
-
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 
 QT_END_NAMESPACE
 

@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -24,8 +24,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_EFFECT
-
 namespace Phonon
 {
     namespace DS9
@@ -34,8 +32,8 @@ namespace Phonon
             : BackendNode(parent)
         {
             //creation of the filter
-            for(int i = 0; i < FILTER_COUNT; ++i) {
-                Filter &filter = m_filters[i];
+            for(QVector<Filter>::iterator it = m_filters.begin(); it != m_filters.end(); ++it) {
+                Filter &filter = *it;
                 filter = Filter(CLSID_DMOWrapperFilter, IID_IBaseFilter);
                 Q_ASSERT(filter);
                 ComPointer<IDMOWrapperFilter> wrapper(filter, IID_IDMOWrapperFilter);
@@ -56,60 +54,61 @@ namespace Phonon
         QList<Phonon::EffectParameter> Effect::parameters() const
         {
             QList<Phonon::EffectParameter> ret;
-            ComPointer<IMediaParamInfo> paramInfo(m_filters[0], IID_IMediaParamInfo);
-            if (!paramInfo) {
-                return ret;
-            }
-            DWORD paramCount = 0;
-            paramInfo->GetParamCount( &paramCount);
+            if (!m_filters.isEmpty()) {
+                ComPointer<IMediaParamInfo> paramInfo(m_filters.first(), IID_IMediaParamInfo);
+				if (!paramInfo) {
+					return ret;
+				}
+                DWORD paramCount = 0;
+                paramInfo->GetParamCount( &paramCount);
 
-            for(quint32 i = 0; i < paramCount; i++) {
-                MP_PARAMINFO info;
-                HRESULT hr = paramInfo->GetParamInfo(i, &info);
-                Q_ASSERT(SUCCEEDED(hr));
-                WCHAR *name = 0;
-                hr = paramInfo->GetParamText(i, &name);
-                Q_ASSERT(SUCCEEDED(hr));
-                QVariant def, min, max;
+                for(quint32 i = 0; i < paramCount; i++) {
+                    MP_PARAMINFO info;
+                    HRESULT hr = paramInfo->GetParamInfo(i, &info);
+                    Q_ASSERT(SUCCEEDED(hr));
+                    WCHAR *name = 0;
+                    hr = paramInfo->GetParamText(i, &name);
+                    Q_ASSERT(SUCCEEDED(hr));
+                    QVariant def, min, max;
 
-                QVariantList values;
+                    QVariantList values;
 
-                switch(info.mpType)
-                {
-                case MPT_ENUM:
+                    switch(info.mpType)
                     {
-                        WCHAR *current = name;
-                        current += wcslen(current) + 1; //skip the name
-                        current += wcslen(current) + 1; //skip the unit
-                        for(; *current; current += wcslen(current) + 1) {
-                            values.append( QString::fromUtf16((unsigned short*)current) );
+                    case MPT_ENUM:
+                        {
+                            WCHAR *current = name;
+                            current += wcslen(current) + 1; //skip the name
+                            current += wcslen(current) + 1; //skip the unit
+                            for(; *current; current += wcslen(current) + 1) {
+                                values.append( QString::fromWCharArray(current) );
+                            }
                         }
+                        //FALLTHROUGH
+                    case MPT_INT:
+                        def = int(info.mpdNeutralValue);
+                        min = int(info.mpdMinValue);
+                        max = int(info.mpdMaxValue);
+                        break;
+                    case MPT_FLOAT:
+                        def = info.mpdNeutralValue;
+                        min = info.mpdMinValue;
+                        max = info.mpdMaxValue;
+                        break;
+                    case MPT_BOOL:
+                        def = bool(info.mpdNeutralValue);
+                        break;
+                    case MPT_MAX:
+                        //Reserved ms-help://MS.PSDKSVR2003R2.1033/directshow/htm/mp_typeenumeration.htm
+                        break;
                     }
-                    //FALLTHROUGH
-                case MPT_INT:
-                    def = int(info.mpdNeutralValue);
-                    min = int(info.mpdMinValue);
-                    max = int(info.mpdMaxValue);
-                    break;
-                case MPT_FLOAT:
-                    def = info.mpdNeutralValue;
-                    min = info.mpdMinValue;
-                    max = info.mpdMaxValue;
-                    break;
-                case MPT_BOOL:
-                    def = bool(info.mpdNeutralValue);
-                    break;
-                case MPT_MAX:
-                    //Reserved ms-help://MS.PSDKSVR2003R2.1033/directshow/htm/mp_typeenumeration.htm
-                    break;
+
+                    Phonon::EffectParameter::Hints hint = info.mopCaps == MP_CAPS_CURVE_INVSQUARE ?
+                        Phonon::EffectParameter::LogarithmicHint : Phonon::EffectParameter::Hints(0);
+
+                    ret.append(Phonon::EffectParameter(i, QString::fromWCharArray(name), hint, def, min, max, values));
+					::CoTaskMemFree(name); //let's free the memory
                 }
-
-                Phonon::EffectParameter::Hints hint = info.mopCaps == MP_CAPS_CURVE_INVSQUARE ?
-                    Phonon::EffectParameter::LogarithmicHint : Phonon::EffectParameter::Hints(0);
-
-                const QString n = QString::fromUtf16((unsigned short*)name);
-                ret.append(Phonon::EffectParameter(i, n, hint, def, min, max, values));
-                ::CoTaskMemFree(name); //let's free the memory
             }
             return ret;
         }
@@ -117,14 +116,16 @@ namespace Phonon
         QVariant Effect::parameterValue(const Phonon::EffectParameter &p) const
         {
             QVariant ret;
-            ComPointer<IMediaParams> params(m_filters[0], IID_IMediaParams);
-            Q_ASSERT(params);
-            MP_DATA data;
-            HRESULT hr = params->GetParam(p.id(), &data);
-            if(SUCCEEDED(hr))
-                return data;
-            else
-                return QVariant();
+            if (!m_filters.isEmpty()) {
+                ComPointer<IMediaParams> params(m_filters.first(), IID_IMediaParams);
+                Q_ASSERT(params);
+                MP_DATA data;
+                HRESULT hr = params->GetParam(p.id(), &data);
+                Q_ASSERT(SUCCEEDED(hr));
+                Q_UNUSED(hr);
+                ret = data;
+            }
+            return ret;
         }
 
         void Effect::setParameterValue(const Phonon::EffectParameter &p, const QVariant &v)
@@ -133,8 +134,8 @@ namespace Phonon
                 return;
             }
 
-            for(int i=0; i < FILTER_COUNT ; ++i) {
-                const Filter &filter = m_filters[i];
+            for(QVector<Filter>::iterator it = m_filters.begin(); it != m_filters.end(); ++it) {
+                Filter &filter = *it;
                 ComPointer<IMediaParams> params(filter, IID_IMediaParams);
                 Q_ASSERT(params);
 
@@ -145,8 +146,6 @@ namespace Phonon
 
     }
 }
-
-#endif //QT_NO_PHONON_EFFECT
 
 QT_END_NAMESPACE
 

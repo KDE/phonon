@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -22,16 +22,13 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_VIDEO
-
 namespace Phonon
 {
     namespace DS9
     {
 
         AbstractVideoRenderer::AbstractVideoRenderer() : 
-            m_dstX(0), m_dstY(0), m_dstWidth(0), m_dstHeight(0),
-                m_active(false)
+            m_dstX(0), m_dstY(0), m_dstWidth(0), m_dstHeight(0)
         {
         }
 
@@ -53,15 +50,6 @@ namespace Phonon
             return s;
         }
 
-        void AbstractVideoRenderer::setActive(bool b)
-        {
-            m_active = b;
-        }
-
-        bool AbstractVideoRenderer::isActive() const
-        {
-            return m_active;
-        }
 
         void AbstractVideoRenderer::internalNotifyResize(const QSize &size, const QSize &videoSize,
             Phonon::VideoWidget::AspectRatio aspectRatio, Phonon::VideoWidget::ScaleMode scaleMode)
@@ -112,7 +100,5 @@ namespace Phonon
         }
     }
 }
-
-#endif //QT_NO_PHONON_EFFECT
 
 QT_END_NAMESPACE

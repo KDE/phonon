@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #define PHONON_AUDIOOUTPUT_H
 
 #include "backendnode.h"
+#include <QtCore/QFile>
 #include <phonon/audiooutputinterface.h>
 
 #include "backend.h"
@@ -45,7 +46,6 @@ namespace Phonon
             int outputDevice() const;
             void setVolume(qreal newVolume);
             bool setOutputDevice(int newDevice);
-            bool setOutputDevice(const AudioOutputDevice & newDevice);
             void setCrossFadingProgress(short currentIndex, qreal progress);
 
         Q_SIGNALS:

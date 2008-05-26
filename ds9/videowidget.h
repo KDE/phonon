@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -24,8 +24,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_VIDEO
-
 namespace Phonon
 {
     namespace DS9
@@ -35,12 +33,6 @@ namespace Phonon
 
         class VideoWidget : public BackendNode, public Phonon::VideoWidgetInterface
         {
-            enum RendererType
-            {
-                Native = 0,
-                NonNative = 1
-            };
-
             Q_OBJECT
                 Q_INTERFACES(Phonon::VideoWidgetInterface)
         public:
@@ -64,27 +56,26 @@ namespace Phonon
 
             QWidget *widget();
 
-            void notifyVideoLoaded();
-            AbstractVideoRenderer *switchRendering(AbstractVideoRenderer *current);
-            void performSoftRendering(const QImage &currentImage);
+            AbstractVideoRenderer *ensureSoftwareRendering(AbstractVideoRenderer *renderer);
 
-            //apply contrast/brightness/hue/saturation
-            void applyMixerSettings() const;
-            void updateVideoSize() const;
+            void notifyVideoLoaded();
 
         protected:
             virtual void connected(BackendNode *, const InputPin& inpin);
 
         private:
-            AbstractVideoRenderer *getRenderer(int graphIndex, RendererType type, bool autoCreate = false);
+            AbstractVideoRenderer *getDefaultRenderer() const;
+    
+            //apply contrast/brightness/hue/saturation
+            void applyMixerSettings() const;
 
             Phonon::VideoWidget::AspectRatio m_aspectRatio;
             Phonon::VideoWidget::ScaleMode m_scaleMode;
 
             VideoWindow *m_widget;
             qreal m_brightness, m_contrast, m_hue, m_saturation;
-            AbstractVideoRenderer* m_renderers[4];
-            mutable bool m_noNativeRendererSupported;
+            QVector<AbstractVideoRenderer*> m_renderers;
+            bool m_hardwareRenderer;
         };
     }
 }
@@ -92,5 +83,3 @@ namespace Phonon
 QT_END_NAMESPACE
 
 #endif // PHONON_VIDEOWIDGET_H
-
-#endif //QT_NO_PHONON_VIDEO

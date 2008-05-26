@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -15,10 +15,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "videorenderer_vmr9.h"
-
-#ifndef QT_NO_PHONON_VIDEO
 
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
@@ -32,7 +29,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 QT_BEGIN_NAMESPACE
-
 
 namespace Phonon
 {
@@ -51,7 +47,6 @@ namespace Phonon
 #ifdef Q_OS_WINCE
         VideoRendererVMR9::VideoRendererVMR9(QWidget *target) : m_target(target)
         {
-            m_target->setAttribute(Qt::WA_PaintOnScreen, true);
             m_filter = Filter(CLSID_VideoRenderer, IID_IBaseFilter);
         }
 
@@ -71,17 +66,9 @@ namespace Phonon
             //nothing to do here: the renderer paints everything
         }
 
-        void VideoRendererVMR9::notifyResize(const QSize &size, Phonon::VideoWidget::AspectRatio aspectRatio,
+        void VideoRendererVMR9::notifyResize(const QRect &rect, Phonon::VideoWidget::AspectRatio aspectRatio,
             Phonon::VideoWidget::ScaleMode scaleMode)
         {
-            if (!isActive()) {
-                ComPointer<IBasicVideo> basic(m_filter, IID_IBasicVideo);
-                if (basic) {
-                    basic->SetDestinationPosition(0, 0, 0, 0);
-                }
-                return;
-            }
-
             ComPointer<IVideoWindow> video(m_filter, IID_IVideoWindow);
 
             OAHWND owner;
@@ -98,10 +85,10 @@ namespace Phonon
             }
 
             //make sure the widget takes the whole size of the parent
-            video->SetWindowPosition(0, 0, size.width(), size.height());
+            video->SetWindowPosition(0, 0, rect.width(), rect.height());
 
             const QSize vsize = videoSize();
-            internalNotifyResize(size, vsize, aspectRatio, scaleMode);
+            internalNotifyResize(rect.size(), vsize, aspectRatio, scaleMode);
 
             ComPointer<IBasicVideo> basic(m_filter, IID_IBasicVideo);
             if (basic) {
@@ -112,6 +99,17 @@ namespace Phonon
         void VideoRendererVMR9::applyMixerSettings(qreal /*brightness*/, qreal /*contrast*/, qreal /*m_hue*/, qreal /*saturation*/)
         {
             //this can't be supported for WinCE
+        }
+
+        void VideoRendererVMR9::setActive(bool b)
+        {
+            if (b) {
+            } else {
+                ComPointer<IBasicVideo> basic(m_filter, IID_IBasicVideo);
+                if (basic) {
+                    basic->SetDestinationPosition(0, 0, 0, 0);
+                }
+            }
         }
 
         QImage VideoRendererVMR9::snapshot() const
@@ -130,8 +128,8 @@ namespace Phonon
 
                     const BITMAPINFOHEADER  *bmi = reinterpret_cast<const BITMAPINFOHEADER*>(buffer.constData());
 
-                    const int w = qAbs(bmi->biWidth),
-                        h = qAbs(bmi->biHeight);
+                    const int w = bmi->biWidth,
+                        h = bmi->biHeight;
 
                     // Create image and copy data into image.
                     QImage ret(w, h, QImage::Format_RGB32);
@@ -180,8 +178,10 @@ namespace Phonon
                 if (SUCCEEDED(hr)) {
 
                     const BITMAPINFOHEADER  *bmi = reinterpret_cast<BITMAPINFOHEADER*>(buffer);
-                    const int w = qAbs(bmi->biWidth),
-                        h = qAbs(bmi->biHeight);
+
+
+                    const int w = bmi->biWidth,
+                        h = bmi->biHeight;
 
                     // Create image and copy data into image.
                     QImage ret(w, h, QImage::Format_RGB32);
@@ -214,14 +214,14 @@ namespace Phonon
             return QSize(w, h);
         }
        
-        void VideoRendererVMR9::repaintCurrentFrame(QWidget *target, const QRect &rect)
+        void VideoRendererVMR9::repaintCurrentFrame(QWidget *target, const QRect &)
         {
             HDC hDC = target->getDC();
             // repaint the video
             ComPointer<IVMRWindowlessControl9> windowlessControl(m_filter, IID_IVMRWindowlessControl9);
 
             HRESULT hr = windowlessControl ? windowlessControl->RepaintVideo(target->winId(), hDC) : E_POINTER;
-            if (FAILED(hr) || m_dstY > 0 || m_dstX > 0) {
+            if (FAILED(hr) || m_dstY > 0 || m_dstX > 0 || true) {
                 const QColor c = target->palette().color(target->backgroundRole());
                 COLORREF color = RGB(c.red(), c.green(), c.blue());
                 HPEN hPen = ::CreatePen(PS_SOLID, 1, color);
@@ -249,19 +249,11 @@ namespace Phonon
 
         }
 
-        void VideoRendererVMR9::notifyResize(const QSize &size, Phonon::VideoWidget::AspectRatio aspectRatio,
+        void VideoRendererVMR9::notifyResize(const QRect &rect, Phonon::VideoWidget::AspectRatio aspectRatio,
             Phonon::VideoWidget::ScaleMode scaleMode)
         {
-            if (!isActive()) {
-                RECT dummyRect = { 0, 0, 0, 0};
-                ComPointer<IVMRWindowlessControl9> windowlessControl(m_filter, IID_IVMRWindowlessControl9);
-                windowlessControl->SetVideoPosition(&dummyRect, &dummyRect);
-                return;
-            }
-
-
             const QSize vsize = videoSize();
-            internalNotifyResize(size, vsize, aspectRatio, scaleMode);
+            internalNotifyResize(rect.size(), vsize, aspectRatio, scaleMode);
 
             RECT dstRectWin = { m_dstX, m_dstY, m_dstWidth + m_dstX, m_dstHeight + m_dstY};
             RECT srcRectWin = { 0, 0, vsize.width(), vsize.height()};
@@ -271,6 +263,17 @@ namespace Phonon
                 windowlessControl->SetVideoPosition(&srcRectWin, &dstRectWin);
             }
         }
+
+        void VideoRendererVMR9::setActive(bool b)
+        {
+            if (b) {
+            } else {
+                RECT dummyRect = { 0, 0, 0, 0};
+                ComPointer<IVMRWindowlessControl9> windowlessControl(m_filter, IID_IVMRWindowlessControl9);
+                windowlessControl->SetVideoPosition(&dummyRect, &dummyRect);
+            }
+        }
+
 
         void VideoRendererVMR9::applyMixerSettings(qreal brightness, qreal contrast, qreal hue, qreal saturation)
         {
@@ -329,5 +332,3 @@ namespace Phonon
 }
 
 QT_END_NAMESPACE
-
-#endif //QT_NO_PHONON_VIDEO

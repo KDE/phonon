@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -22,17 +22,20 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <phonon/streaminterface.h>
 
-#include <dshow.h>
 #include <initguid.h>
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 namespace Phonon
 {
     namespace DS9
     {
+
+        // {A222A867-A6FF-4f90-B514-0719A44D9F66}
+        DEFINE_GUID(CLSID_IODeviceReader,
+            0xa222a867, 0xa6ff, 0x4f90, 0xb5, 0x14, 0x7, 0x19, 0xa4, 0x4d, 0x9f, 0x66);
+
         //these mediatypes define a stream, its type will be autodetected by DirectShow
         static QVector<AM_MEDIA_TYPE> getMediaTypes()
         {
@@ -203,7 +206,7 @@ namespace Phonon
         };
 
         IODeviceReader::IODeviceReader(const Phonon::MediaSource &source, const MediaGraph *mg) :
-        QBaseFilter(CLSID_NULL)
+        QBaseFilter(CLSID_IODeviceReader)
         {
             //create the output pin
             m_streamReader = new StreamReader(this, source, mg);
@@ -222,7 +225,5 @@ namespace Phonon
 
     }
 }
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE

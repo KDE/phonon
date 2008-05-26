@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -14,16 +14,6 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include <QtCore/QVector>
-#include <QtCore/QTimerEvent>
-#include <QtCore/QTimer>
-#include <QtCore/QTime>
-#include <QtCore/QLibrary>
-
-#ifndef Q_CC_MSVC
-#include <dshow.h>
-#endif //Q_CC_MSVC
 #include <objbase.h>
 #include <initguid.h>
 #include <qnetwork.h>
@@ -34,8 +24,13 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "videowidget.h"
 #include "audiooutput.h"
 
+#include <QtCore/QVector>
+#include <QtCore/QTimerEvent>
+#include <QtCore/QTimer>
+#include <QtCore/QTime>
+#include <QtCore/QLibrary>
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #define TIMER_INTERVAL 16 //... ms for the timer that polls the current state (we use the multimedia timer
 #define PRELOAD_TIME 2000 // 2 seconds to load a source
@@ -46,24 +41,17 @@ namespace Phonon
 {
     namespace DS9
     {
-        typedef BOOL (WINAPI* LPAMGETERRORTEXT)(HRESULT, WCHAR *, DWORD);
+        typedef BOOL (WINAPI* LPAMGETERRORTEXT)(HRESULT, wchar_t *, DWORD);
 
         //first the definition of the WorkerThread class
-        WorkerThread::WorkerThread()
-          : QThread(), m_currentRenderId(0), m_finished(false), m_currentWorkId(1)
+        WorkerThread::WorkerThread() : QThread(), m_finished(false), m_currentRenderId(0), m_currentWorkId(1)
         {
-        }
-
-        WorkerThread::~WorkerThread()
-        {
+            m_handles << m_waitCondition;
         }
 
         WorkerThread::Work WorkerThread::dequeueWork()
         {
             QMutexLocker locker(&m_mutex);
-            if (m_finished) {
-                return Work();
-            }
             Work ret = m_queue.dequeue();
 
             //we ensure to have the wait condition in the right state
@@ -79,15 +67,7 @@ namespace Phonon
         void WorkerThread::run()
         {
             while (m_finished == false) {
-                HANDLE handles[FILTER_COUNT +1];
-                handles[0] = m_waitCondition;
-                int count = 1;
-                for(int i = 0; i < FILTER_COUNT; ++i) {
-                    if (m_graphHandle[i].graph) {
-                        handles[count++] = m_graphHandle[i].handle;
-                    }
-                }
-                DWORD result = ::WaitForMultipleObjects(count, handles, FALSE, INFINITE);
+                DWORD result = ::WaitForMultipleObjects(m_handles.count(), m_handles.data(), FALSE, INFINITE);
                 if (result == WAIT_OBJECT_0) {
                     if (m_finished) {
                         //that's the end if the thread execution
@@ -97,7 +77,7 @@ namespace Phonon
                     handleTask();
                 } else {
                     //this is the event management
-                    const Graph &graph = m_graphHandle[result - WAIT_OBJECT_0 - 1].graph;
+                    Graph graph = m_graphs.at(result - WAIT_OBJECT_0 - 1);
                     long eventCode;
                     LONG_PTR param1, param2;
 
@@ -110,7 +90,7 @@ namespace Phonon
         }
 
         //wants to know as soon as the state is set
-        void WorkerThread::addStateChangeRequest(Graph graph, OAFilterState state, QList<Filter> decoders)
+        void WorkerThread::addStateChangeRequest(Graph graph, OAFilterState state, QSet<Filter> decoders)
         {
             QMutexLocker locker(&m_mutex);
             bool found = false;
@@ -187,13 +167,13 @@ namespace Phonon
             return w.id;
         }
 
-        void WorkerThread::replaceGraphForEventManagement(Graph newGraph, Graph oldGraph)
+        void WorkerThread::addGraphForEventManagement(Graph graph)
         {
             QMutexLocker locker(&m_mutex);
             Work w;
-            w.task = ReplaceGraph;
-            w.graph = newGraph;
-            w.oldGraph = oldGraph;
+            w.task = AddGraph;
+            //we create a new graph
+            w.graph = graph;
             m_queue.enqueue(w);
             m_waitCondition.set();
         }
@@ -202,46 +182,25 @@ namespace Phonon
         {
             const Work w = dequeueWork();
 
-            if (m_finished) {
-                return;
-            }
-
             HRESULT hr = S_OK;
 
             m_currentRender = w.graph;
 			m_currentRenderId = w.id;
-            if (w.task == ReplaceGraph) {
+            if (w.task == AddGraph) {
                 QMutexLocker locker(&m_mutex);
+                ComPointer<IMediaEvent> mediaEvent(w.graph, IID_IMediaEvent);
                 HANDLE h;
-
-                int index = -1;
-                for(int i = 0; i < FILTER_COUNT; ++i) {
-                    if (m_graphHandle[i].graph == w.oldGraph) {
-                        m_graphHandle[i].graph = Graph();
-                        index = i;
-                        break;
-                    } else if (index == -1 && m_graphHandle[i].graph == 0) {
-                        //this is the first available slot
-                        index = i;
-                    }
+                if (SUCCEEDED(mediaEvent->GetEventHandle(reinterpret_cast<OAEVENT*>(&h)))) {
+                    m_graphs += w.graph;
+                    m_handles += h;
                 }
-
-                Q_ASSERT(index != -1);
-
-                //add the new graph
-                if (SUCCEEDED(ComPointer<IMediaEvent>(w.graph, IID_IMediaEvent)
-                    ->GetEventHandle(reinterpret_cast<OAEVENT*>(&h)))) {
-                    m_graphHandle[index].graph = w.graph;
-                    m_graphHandle[index].handle = h;
-                }
-            } else if (w.task == Render) {
+            }else if (w.task == Render) {
                 if (w.filter) {
                     //let's render pins
                     w.graph->AddFilter(w.filter, 0);
-                    const QList<OutputPin> outputs = BackendNode::pins(w.filter, PINDIR_OUTPUT);
-                    for (int i = 0; i < outputs.count(); ++i) {
+                    foreach(OutputPin out, BackendNode::pins(w.filter, PINDIR_OUTPUT)) {
                         //blocking call
-                        hr = w.graph->Render(outputs.at(i));
+                        hr = w.graph->Render(out);
                         if (FAILED(hr)) {
                             break;
                         }
@@ -271,14 +230,13 @@ namespace Phonon
             } else if (w.task == ChangeState) {
 
                 //remove useless decoders
-                QList<Filter> unused;
-                for (int i = 0; i < w.decoders.count(); ++i) {
-                    const Filter &filter = w.decoders.at(i);
+                QSet<Filter> unused;
+                foreach(const Filter filter, w.decoders) {
                     bool used = false;
                     const QList<OutputPin> pins = BackendNode::pins(filter, PINDIR_OUTPUT);
-                    for( int i = 0; i < pins.count(); ++i) {
+                    foreach(OutputPin pin, pins) {
                         InputPin input;
-                        if (pins.at(i)->ConnectedTo(input.pparam()) == S_OK) {
+                        if (pin->ConnectedTo(input.pparam()) == S_OK) {
                             used = true;
                         }
                     }
@@ -288,9 +246,9 @@ namespace Phonon
                 }
 
                 //we can get the state
-                for (int i = 0; i < unused.count(); ++i) {
+                foreach(Filter f, unused) {
                     //we should remove this filter from the graph
-                    w.graph->RemoveFilter(unused.at(i));
+                    w.graph->RemoveFilter(f);
                 }
 
 
@@ -365,7 +323,6 @@ namespace Phonon
 
 
         MediaObject::MediaObject(QObject *parent) : BackendNode(parent),
-            transactionState(Phonon::StoppedState),
             m_errorType(Phonon::NoError),
             m_state(Phonon::LoadingState),
             m_nextState(Phonon::StoppedState),
@@ -375,47 +332,36 @@ namespace Phonon
             m_oldHasVideo(false),
             m_prefinishMarkSent(false),
             m_aboutToFinishSent(false),
-            m_nextSourceReadyToStart(false),
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
             m_autoplayTitles(true),
             m_currentTitle(0),
-#endif //QT_NO_PHONON_MEDIACONTROLLER
             m_targetTick(INFINITE)
         {
-
-            for(int i = 0; i < FILTER_COUNT; ++i) {
-                m_graphs[i] = new MediaGraph(this, i);                
+            for(int i = 0; i < 2; ++i) {
+                MediaGraph *graph = new MediaGraph(this, i);
+                connect(graph, SIGNAL(loadingFinished(MediaGraph*)), SLOT(loadingFinished(MediaGraph*)));
+                connect(graph, SIGNAL(seekingFinished(MediaGraph*)), SLOT(seekingFinished(MediaGraph*)));
+                m_graphs << graph;
             }
 
-            connect(&m_thread, SIGNAL(stateReady(Graph, Phonon::State)), 
-                               SLOT(slotStateReady(Graph, Phonon::State)));
+            connect(&m_thread, SIGNAL(stateReady(IGraphBuilder *, Phonon::State)), 
+                               SLOT(slotStateReady(IGraphBuilder *, Phonon::State)));
 
-            connect(&m_thread, SIGNAL(eventReady(Graph, long, long)), 
-                               SLOT(handleEvents(Graph, long, long)));
-
-            connect(&m_thread, SIGNAL(asyncRenderFinished(quint16, HRESULT, Graph)),
-                SLOT(finishLoading(quint16, HRESULT, Graph)));
-
-            connect(&m_thread, SIGNAL(asyncSeekingFinished(quint16, qint64)),
-                SLOT(finishSeeking(quint16, qint64)));
+            connect(&m_thread, SIGNAL(eventReady(IGraphBuilder *, long, long)), 
+                               SLOT(handleEvents(IGraphBuilder *, long, long)));
             //really special case
             m_mediaObject = this;
+
             m_thread.start();
         }
 
         MediaObject::~MediaObject()
         {
-            //be sure to finish the timer first
-            m_tickTimer.stop();
-
             //we finish the worker thread here
             m_thread.signalStop();
             m_thread.wait();
 
             //and then we delete the graphs
-            for (int i = 0; i < FILTER_COUNT; ++i) {
-                delete m_graphs[i];
-            }
+            qDeleteAll(m_graphs);
         }
 
         WorkerThread *MediaObject::workerThread()
@@ -425,12 +371,12 @@ namespace Phonon
 
         MediaGraph *MediaObject::currentGraph() const
         {
-            return m_graphs[0];
+            return m_graphs.first();
         }
 
         MediaGraph *MediaObject::nextGraph() const
         {
-            return m_graphs[FILTER_COUNT - 1];
+            return m_graphs.last();
         }
 
         //utility function to save the graph to a file
@@ -447,7 +393,6 @@ namespace Phonon
                 }
 
                 //check that the title hasn't changed
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
                 if (m_autoplayTitles && m_currentTitle < _iface_availableTitles() - 1) {
 
                     if (current >= total) {
@@ -457,20 +402,19 @@ namespace Phonon
                     }
                     return;
                 }
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
                 if (total) {
                     const qint64 remaining = total - current;
 
-                    if (m_transitionTime < 0 && m_nextSourceReadyToStart) {
+                    if (m_transitionTime < 0 && nextGraph()->mediaSource().type() != Phonon::MediaSource::Invalid) {
                         if (remaining < -m_transitionTime + TIMER_INTERVAL/2) {
                             //we need to switch graphs to run the next source in the queue (with cross-fading)
                             switchToNextSource();
                             return;
                         } else if (current < -m_transitionTime) {
                             //we are currently crossfading
-                            for (int i = 0; i < m_audioOutputs.count(); ++i) {
-                                m_audioOutputs.at(i)->setCrossFadingProgress( currentGraph()->index(), qMin( qreal(1.), qreal(current) / qreal(-m_transitionTime)));
+                            foreach(AudioOutput *audio, m_audioOutputs) {
+                                audio->setCrossFadingProgress( currentGraph()->index(), qMin( qreal(1.), qreal(current) / qreal(-m_transitionTime)));
                             }
                         }
                     }
@@ -514,18 +458,15 @@ namespace Phonon
         {
             m_prefinishMarkSent = false;
             m_aboutToFinishSent = false;
-            m_nextSourceReadyToStart = false;
 
             m_oldHasVideo = currentGraph()->hasVideo();
 
-            qSwap(m_graphs[0], m_graphs[1]); //swap the graphs
+            m_graphs.swap(0,1); //swap the graphs
 
             //we tell the video widgets to switch now to the new source
-#ifndef QT_NO_PHONON_VIDEO
-            for (int i = 0; i < m_videoWidgets.count(); ++i) {
-                m_videoWidgets.at(i)->setCurrentGraph(currentGraph()->index());
+            foreach(VideoWidget *video, m_videoWidgets) {
+                video->setCurrentGraph(currentGraph()->index());
             }
-#endif //QT_NO_PHONON_VIDEO
 
             emit currentSourceChanged(currentGraph()->mediaSource());
 
@@ -546,9 +487,7 @@ namespace Phonon
             emit tick(0);
             emit totalTimeChanged(totalTime());
 
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
             setTitles(currentGraph()->titles());
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
             //this manages only gapless transitions
             if (currentGraph()->mediaSource().type() != Phonon::MediaSource::Invalid) {
@@ -581,26 +520,18 @@ namespace Phonon
 
         qint64 MediaObject::totalTime() const
         {
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
             //1st, check if there is more titles after
             const qint64 ret = (m_currentTitle < _iface_availableTitles() - 1) ? 
                 titleAbsolutePosition(m_currentTitle+1) : currentGraph()->absoluteTotalTime();
 
             //this is the duration of the current title
             return ret - titleAbsolutePosition(m_currentTitle);
-#else
-            return currentGraph()->absoluteTotalTime();
-#endif //QT_NO_PHONON_MEDIACONTROLLER
         }
 
         qint64 MediaObject::currentTime() const
         {
             //this handles inaccuracy when stopping on a title
-            return currentGraph()->absoluteCurrentTime() 
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-                - titleAbsolutePosition(m_currentTitle)
-#endif //QT_NO_PHONON_MEDIACONTROLLER
-                ;
+            return currentGraph()->absoluteCurrentTime() - titleAbsolutePosition(m_currentTitle);
         }
 
         qint32 MediaObject::tickInterval() const
@@ -635,10 +566,6 @@ namespace Phonon
         void MediaObject::ensureStopped()
         {
             currentGraph()->ensureStopped();
-            if (m_state == Phonon::ErrorState) {
-                //we reset the state here
-                m_state = Phonon::StoppedState;
-            }
         }
 
         void MediaObject::play()
@@ -728,7 +655,6 @@ namespace Phonon
 
         void MediaObject::setNextSource(const Phonon::MediaSource &source)
         {
-            m_nextSourceReadyToStart = true;
             const bool shouldSwitch = (m_state == Phonon::StoppedState || m_state == Phonon::ErrorState);
             nextGraph()->loadSource(source); //let's preload the source
 
@@ -739,7 +665,6 @@ namespace Phonon
 
         void MediaObject::setSource(const Phonon::MediaSource &source)
         {
-            m_nextSourceReadyToStart = false;
             m_prefinishMarkSent = false;
             m_aboutToFinishSent = false;
 
@@ -749,9 +674,10 @@ namespace Phonon
             m_nextState = Phonon::StoppedState; 
             catchComError(currentGraph()->loadSource(source));
             emit currentSourceChanged(source);
+
         }
 
-        void MediaObject::slotStateReady(Graph graph, Phonon::State newState)
+        void MediaObject::slotStateReady(IGraphBuilder *graph, Phonon::State newState)
         {
             if (graph == currentGraph()->graph() && !currentGraph()->isLoading()) {
                 setState(newState);
@@ -761,11 +687,9 @@ namespace Phonon
         void MediaObject::loadingFinished(MediaGraph *mg)
         {
             if (mg == currentGraph()) { 
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
                 //Title interface
                 m_currentTitle = 0;
                 setTitles(currentGraph()->titles());
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
                 HRESULT hr = mg->renderResult();
 
@@ -777,11 +701,9 @@ namespace Phonon
                     emit hasVideoChanged(currentGraph()->hasVideo());
                 }
 
-#ifndef QT_NO_PHONON_VIDEO
                 if (currentGraph()->hasVideo()) {
                     updateVideoGeometry();
                 }
-#endif //QT_NO_PHONON_VIDEO
 
                 emit metaDataChanged(currentGraph()->metadata());
                 emit totalTimeChanged(totalTime());
@@ -808,11 +730,7 @@ namespace Phonon
         void MediaObject::seek(qint64 time)
         {
             //we seek into the current title
-            currentGraph()->absoluteSeek(time
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-                + titleAbsolutePosition(m_currentTitle)
-#endif //QT_NO_PHONON_MEDIACONTROLLER
-                );
+            currentGraph()->absoluteSeek(time + titleAbsolutePosition(m_currentTitle));
         }
 
         void MediaObject::seekingFinished(MediaGraph *mg)
@@ -848,11 +766,11 @@ namespace Phonon
 #endif
                 LPAMGETERRORTEXT getErrorText = (LPAMGETERRORTEXT)QLibrary::resolve(QLatin1String("quartz"), "AMGetErrorTextW");
 
-                ushort buffer[MAX_ERROR_TEXT_LEN];
-                if (getErrorText && getErrorText(hr, (WCHAR*)buffer, MAX_ERROR_TEXT_LEN)) {
-                    m_errorString = QString::fromUtf16(buffer);
+                wchar_t buffer[MAX_ERROR_TEXT_LEN];
+                if (getErrorText && getErrorText(hr, buffer, MAX_ERROR_TEXT_LEN)) {
+                    m_errorString = QString::fromWCharArray(buffer);
                 } else {
-                    m_errorString = QString::fromUtf16((ushort*)_com_error(hr).ErrorMessage());
+                    m_errorString = QString::fromWCharArray(_com_error(hr).ErrorMessage());
                 }
                 const QString comError = QString::number(uint(hr), 16);
                 if (!m_errorString.toLower().contains(comError.toLower())) {
@@ -876,8 +794,8 @@ namespace Phonon
 
         void MediaObject::grabNode(BackendNode *node)
         {
-            for (int i = 0; i < FILTER_COUNT; ++i) {
-                m_graphs[i]->grabNode(node);
+            foreach(MediaGraph *graph, m_graphs) {
+                graph->grabNode(node);
             }
             node->setMediaObject(this);
         }
@@ -885,16 +803,13 @@ namespace Phonon
         bool MediaObject::connectNodes(BackendNode *source, BackendNode *sink)
         {
             bool ret = true;
-            for (int i = 0; i < FILTER_COUNT; ++i) {
-                ret = ret && m_graphs[i]->connectNodes(source, sink);
+            foreach(MediaGraph *graph, m_graphs) {
+                ret = ret && graph->connectNodes(source, sink);
             }
             if (ret) {
-#ifndef QT_NO_PHONON_VIDEO
                 if (VideoWidget *video = qobject_cast<VideoWidget*>(sink)) {
                     m_videoWidgets += video;
-                } else 
-#endif //QT_NO_PHONON_VIDEO
-                    if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
+                } else if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
                     m_audioOutputs += audio;
                 }
             }
@@ -904,30 +819,26 @@ namespace Phonon
         bool MediaObject::disconnectNodes(BackendNode *source, BackendNode *sink)
         {
             bool ret = true;
-            for (int i = 0; i < FILTER_COUNT; ++i) {
-                ret = ret && m_graphs[i]->disconnectNodes(source, sink);
+            foreach(MediaGraph *graph, m_graphs) {
+                ret = ret && graph->disconnectNodes(source, sink);
             }
             if (ret) {
-#ifndef QT_NO_PHONON_VIDEO
                 if (VideoWidget *video = qobject_cast<VideoWidget*>(sink)) {
-                    m_videoWidgets.removeOne(video);
-                } else 
-#endif //QT_NO_PHONON_VIDEO
-                    if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
-                        m_audioOutputs.removeOne(audio);
+                    m_videoWidgets -= video;
+                } else if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
+                    m_audioOutputs -= audio;
                 }
             }
             return ret;
         }
 
-#ifndef QT_NO_PHONON_VIDEO
         void MediaObject::updateVideoGeometry()
         {
-            for (int i = 0; i < m_videoWidgets.count(); ++i) {
-                m_videoWidgets.at(i)->notifyVideoLoaded();
+            foreach(VideoWidget *vw, m_videoWidgets) {
+                vw->notifyVideoLoaded();
             }
         }
-#endif //QT_NO_PHONON_VIDEO
+
 
         void MediaObject::handleComplete(IGraphBuilder *graph)
         {
@@ -937,7 +848,7 @@ namespace Phonon
                     m_aboutToFinishSent = true;
                 }
 
-                if (!m_nextSourceReadyToStart) {
+                if (nextGraph()->mediaSource().type() == Phonon::MediaSource::Invalid) {
                     //this is the last source, we simply finish
                     const qint64 current = currentTime();
                     const OAFilterState currentState = currentGraph()->syncGetRealState();
@@ -962,27 +873,12 @@ namespace Phonon
                 //it is just the end of the previous source (in case of cross-fading)
                 nextGraph()->cleanup();
             }
-            for (int i = 0; i < m_audioOutputs.count(); ++i) {
-                m_audioOutputs.at(i)->setCrossFadingProgress( currentGraph()->index(), 1.); //cross-fading is in any case finished
+            foreach(AudioOutput *audio, m_audioOutputs) {
+                audio->setCrossFadingProgress( currentGraph()->index(), 1.); //cross-fading is in any case finished
             }
         }
 
-        void MediaObject::finishLoading(quint16 workId, HRESULT hr, Graph graph)
-        {
-            for(int i = 0; i < FILTER_COUNT; ++i) {
-                m_graphs[i]->finishLoading(workId, hr, graph);
-            }
-        }
-
-        void MediaObject::finishSeeking(quint16 workId, qint64 time)
-        {
-            for(int i = 0; i < FILTER_COUNT; ++i) {
-                m_graphs[i]->finishSeeking(workId, time);
-            }
-        }
-
-
-        void MediaObject::handleEvents(Graph graph, long eventCode, long param1)
+        void MediaObject::handleEvents(IGraphBuilder *graph, long eventCode, long param1)
         {
             QString eventDescription;
             switch (eventCode)
@@ -1003,13 +899,11 @@ namespace Phonon
                 handleComplete(graph);
                 break;
 
-#ifndef QT_NO_PHONON_VIDEO
             case EC_VIDEO_SIZE_CHANGED:
                 if (graph == currentGraph()->graph()) {
                     updateVideoGeometry();
                 }
                 break;
-#endif //QT_NO_PHONON_VIDEO
 
 #ifdef GRAPH_DEBUG
             case EC_ACTIVATE: qDebug() << "EC_ACTIVATE: A video window is being " << (param1 ? "ACTIVATED" : "DEACTIVATED"); break;
@@ -1084,7 +978,6 @@ namespace Phonon
         }
 
 
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
         //interface management
         bool MediaObject::hasInterface(Interface iface) const
         {
@@ -1157,6 +1050,17 @@ namespace Phonon
             return m_currentTitle;
         }
 
+        void MediaObject::switchFilters(int index, Filter oldFilter, Filter newFilter)
+        {
+            if (currentGraph()->index() == index) {
+                currentGraph()->switchFilters(oldFilter, newFilter);
+            } else {
+                nextGraph()->switchFilters(oldFilter, newFilter);
+            }
+
+        }
+
+
         void MediaObject::_iface_setCurrentTitle(int title, bool bseek)
         {
 #ifdef GRAPH_DEBUG
@@ -1187,17 +1091,6 @@ namespace Phonon
                 //stop position is set to the end
                 currentGraph()->setStopPosition(-1);
             }
-        }
-#endif //QT_NO_PHONON_QT_NO_PHONON_MEDIACONTROLLER
-
-        void MediaObject::switchFilters(int index, Filter oldFilter, Filter newFilter)
-        {
-            if (currentGraph()->index() == index) {
-                currentGraph()->switchFilters(oldFilter, newFilter);
-            } else {
-                nextGraph()->switchFilters(oldFilter, newFilter);
-            }
-
         }
 
 
