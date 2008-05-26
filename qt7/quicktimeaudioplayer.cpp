@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,9 +17,11 @@
 
 #include "quicktimeaudioplayer.h"
 #include "quicktimevideoplayer.h"
+#include "backendheader.h"
 #include "audiograph.h"
 #include "medianodeevent.h"
 #include "medianode.h"
+#include <private/qt_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -32,6 +34,7 @@ QuickTimeAudioPlayer::QuickTimeAudioPlayer() : AudioNode(0, 1)
 {
     m_state = NoMedia;
     m_videoPlayer = 0;
+    m_audioExtractionRef = 0;
     m_audioChannelLayout = 0;
     m_sliceList = 0;
     m_sliceCount = 30;
@@ -41,11 +44,8 @@ QuickTimeAudioPlayer::QuickTimeAudioPlayer() : AudioNode(0, 1)
     m_samplesRemaining = -1;
     m_startTime = 0;
     m_sampleTimeStamp = 0;
+    m_duration = 0;
     m_audioUnitIsReset = true;
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-    m_audioExtractionRef = 0;
-#endif
 }
 
 QuickTimeAudioPlayer::~QuickTimeAudioPlayer()
@@ -60,11 +60,10 @@ void QuickTimeAudioPlayer::unsetVideoPlayer()
         BACKEND_ASSERT2(err == noErr, "Could not reset audio player unit when unsetting movie", FATAL_ERROR)
     }
 
-#ifdef QUICKTIME_C_API_AVAILABLE
-    if (m_audioExtractionRef && m_videoPlayer && m_videoPlayer->hasMovie())
+    // FIX: When streaming media, and the app quits, the follwing command
+    // makes the app crash. Cannot see why at the moment.
+    if (m_audioExtractionRef && m_videoPlayer && m_videoPlayer->movieRef())
          MovieAudioExtractionEnd(m_audioExtractionRef);
-    m_audioExtractionRef = 0;
-#endif
 
     if (m_audioChannelLayout){
         free(m_audioChannelLayout);
@@ -79,6 +78,7 @@ void QuickTimeAudioPlayer::unsetVideoPlayer()
     }
     
     m_videoPlayer = 0;
+    m_audioExtractionRef = 0;
     m_audioExtractionComplete = false;
     m_samplesRemaining = -1;
     m_sampleTimeStamp = 0;
@@ -104,8 +104,9 @@ bool QuickTimeAudioPlayer::audioEnabled()
 void QuickTimeAudioPlayer::setVideoPlayer(QuickTimeVideoPlayer *videoPlayer)
 {
     unsetVideoPlayer();
-    if (videoPlayer && videoPlayer->hasMovie()){
+    if (videoPlayer && videoPlayer->movieRef()){
         m_videoPlayer = videoPlayer;
+        m_duration = getLongestSoundtrackDurationInMs();
         initSoundExtraction();
         allocateSoundSlices();
         m_state = Paused;
@@ -171,10 +172,8 @@ bool QuickTimeAudioPlayer::isPlaying()
 
 void QuickTimeAudioPlayer::seek(quint64 milliseconds)
 {
-    if (!m_videoPlayer || !m_videoPlayer->hasMovie())
-        return;    
-    if (milliseconds > m_videoPlayer->duration())
-        milliseconds = m_videoPlayer->duration();
+    if (milliseconds > m_duration)
+        milliseconds = m_duration;
     if (!m_audioUnitIsReset && milliseconds == currentTime())
         return;
         
@@ -186,8 +185,8 @@ void QuickTimeAudioPlayer::seek(quint64 milliseconds)
         return;
     if (!m_audioUnit)
         return;
-    if (!m_audioEnabled || !m_videoPlayer->isSeekable())
-        return;
+    if (!m_videoPlayer || !m_audioEnabled || !m_videoPlayer->isSeekable())
+        return;    
 
     // Reset (and stop playing):
     OSStatus err;
@@ -211,25 +210,21 @@ void QuickTimeAudioPlayer::seek(quint64 milliseconds)
 
     // Seek back to 'now' in the movie:
     TimeRecord timeRec;
-	timeRec.scale = m_videoPlayer->timeScale();
+	timeRec.scale = GetMovieTimeScale(m_videoPlayer->movieRef());
     timeRec.base = 0;
 	timeRec.value.hi = 0;
 	timeRec.value.lo = (milliseconds / 1000.0f) * timeRec.scale;
-
-#ifdef QUICKTIME_C_API_AVAILABLE
 	err = MovieAudioExtractionSetProperty(m_audioExtractionRef,
         kQTPropertyClass_MovieAudioExtraction_Movie,
         kQTMovieAudioExtractionMoviePropertyID_CurrentTime,
         sizeof(TimeRecord), &timeRec);
     BACKEND_ASSERT2(err == noErr, "Could not set current time on audio player unit", FATAL_ERROR)
-#endif
 
-    float durationLeftSec = float(m_videoPlayer->duration() - milliseconds) / 1000.0f;
+    float durationLeftSec = float(m_duration - milliseconds) / 1000.0f;
     m_samplesRemaining = (durationLeftSec > 0) ? (durationLeftSec * m_audioStreamDescription.mSampleRate) : -1;
     m_audioExtractionComplete = false;
     m_audioUnitIsReset = false;    
     scheduleAudioToGraph();
-
 }
 
 quint64 QuickTimeAudioPlayer::currentTime()
@@ -247,7 +242,7 @@ quint64 QuickTimeAudioPlayer::currentTime()
 
     quint64 cTime = quint64(m_startTime +
         float(currentUnitTime / float(m_audioStreamDescription.mSampleRate)) * 1000.0f);
-    return (m_videoPlayer && cTime > m_videoPlayer->duration()) ? m_videoPlayer->duration() : cTime;
+    return (cTime < m_duration) ? cTime : m_duration;
 }
 
 QString QuickTimeAudioPlayer::currentTimeString()
@@ -304,6 +299,26 @@ bool QuickTimeAudioPlayer::fillInStreamSpecification(AudioConnection *connection
     return true;
 }
 
+qint64 QuickTimeAudioPlayer::getLongestSoundtrackDurationInMs()
+{
+    if (!m_videoPlayer)
+        return 0;
+
+    TimeValue maxDuration = 0;
+    int ntracks = GetMovieTrackCount(m_videoPlayer->movieRef());
+    if (ntracks){
+        for (int i=1; i<ntracks + 1; ++i) {
+            Track track = GetMovieIndTrackType(m_videoPlayer->movieRef(), i, SoundMediaType, movieTrackMediaType);
+            if (track){
+                TimeValue duration = GetTrackDuration(track);
+                if (duration > maxDuration) maxDuration = duration;
+            }
+        }
+        return 1000 * (float(maxDuration) / float(GetMovieTimeScale(m_videoPlayer->movieRef())));
+    }
+    return 0;
+}
+
 long QuickTimeAudioPlayer::regularTaskFrequency(){
     if (!m_audioEnabled || !m_audioUnit || (m_audioGraph && m_audioGraph->graphCannotPlay()))
         return INT_MAX;
@@ -319,11 +334,9 @@ long QuickTimeAudioPlayer::regularTaskFrequency(){
 
 void QuickTimeAudioPlayer::initSoundExtraction()
 {
-#ifdef QUICKTIME_C_API_AVAILABLE
-
     // Initilize the extraction:
 	OSStatus err = noErr;
-	err = MovieAudioExtractionBegin([m_videoPlayer->qtMovie() quickTimeMovie], 0, &m_audioExtractionRef);
+	err = MovieAudioExtractionBegin(m_videoPlayer->movieRef(), 0, &m_audioExtractionRef);
     BACKEND_ASSERT2(err == noErr, "Could not start audio extraction on audio player unit", FATAL_ERROR)
 	m_discrete = false;
 #if 0
@@ -360,14 +373,10 @@ void QuickTimeAudioPlayer::initSoundExtraction()
         kQTMovieAudioExtractionAudioPropertyID_AudioStreamBasicDescription,
         sizeof(m_audioStreamDescription), &m_audioStreamDescription, 0);
     BACKEND_ASSERT2(err == noErr, "Could not get audio stream description from audio extraction", FATAL_ERROR)
-    
-#endif // QUICKTIME_C_API_AVAILABLE
 }
 
 void QuickTimeAudioPlayer::allocateSoundSlices()
 {
-#ifdef QUICKTIME_C_API_AVAILABLE
-
     // m_sliceList will contain a specified number of ScheduledAudioSlice-s that each can
     // carry audio from extraction, and be scheduled for playback at an audio unit.
     // Each ScheduledAudioSlice will contain several audio buffers, one for each sound channel.
@@ -410,15 +419,11 @@ void QuickTimeAudioPlayer::allocateSoundSlices()
 		m_sliceList[sliceIndex].mFlags = kScheduledAudioSliceFlag_Complete;
 		m_sliceList[sliceIndex].mReserved = 0;
 	}
-	
-#endif // QUICKTIME_C_API_AVAILABLE
 }
 
 void QuickTimeAudioPlayer::scheduleSoundSlices()
 {
-#ifdef QUICKTIME_C_API_AVAILABLE
-
-    PhononAutoReleasePool pool;
+    QMacCocoaAutoReleasePool pool;
 	// For each completed (or never used) slice, fill and schedule it.
 	for (int sliceIndex = 0; sliceIndex < m_sliceCount; ++sliceIndex){
 		if (m_sliceList[sliceIndex].mFlags & kScheduledAudioSliceFlag_Complete){
@@ -462,8 +467,6 @@ void QuickTimeAudioPlayer::scheduleSoundSlices()
 			}
 		}
 	}
-
-#endif // QUICKTIME_C_API_AVAILABLE
 }
 
 void QuickTimeAudioPlayer::mediaNodeEvent(const MediaNodeEvent *event)
@@ -488,4 +491,5 @@ void QuickTimeAudioPlayer::mediaNodeEvent(const MediaNodeEvent *event)
 }}
 
 QT_END_NAMESPACE
+
 

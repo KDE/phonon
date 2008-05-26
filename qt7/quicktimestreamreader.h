@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,17 +18,17 @@
 #ifndef Phonon_QT7_QUICKTIMESTREAMREADER_H
 #define Phonon_QT7_QUICKTIMESTREAMREADER_H
 
+#include <QuickTime/QuickTime.h>
+#undef check // avoid name clash;
+
 #include <phonon/mediasource.h>
 #include <phonon/streaminterface.h>
-#include <QtCore/QReadWriteLock>
-
-#ifndef QT_MAC_USE_COCOA
-#include <QuickTime/Movies.h>
-#endif
+#include <QtCore>
+#include <QReadWriteLock>
 
 QT_BEGIN_NAMESPACE
 
-namespace Phonon
+namespace Phonon 
 {
 namespace QT7
 {
@@ -36,14 +36,13 @@ namespace QT7
     {
         Q_OBJECT
         Q_INTERFACES(Phonon::StreamInterface)
-
+        
     public:
         QuickTimeStreamReader(const Phonon::MediaSource &source);
         ~QuickTimeStreamReader();
 
         int readData(long offset, long size, void *data);
-        bool readAllData();
-        QByteArray *pointerToData();
+        bool readAllDataIntoBuffer();
         void writeData(const QByteArray &data);
         void endOfData();
         void setStreamSize(qint64 newSize);
@@ -53,11 +52,10 @@ namespace QT7
         void setCurrentPos(qint64 pos);
         qint64 currentPos() const;
         int currentBufferSize() const;
-#ifndef QT_MAC_USE_COCOA
-        Movie movieRef();
-#endif
+        Movie QuickTimeStreamReader::movieRef();
 
         QByteArray m_buffer;
+        void *m_QTMovieRef;
         mutable QReadWriteLock m_lock;
         bool m_seekable;
         qint64 m_pos;

@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_AudioNode_H
 #define Phonon_QT7_AudioNode_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "backendheader.h"
 #include "audioconnection.h"
 #include <AudioToolbox/AudioToolbox.h>
@@ -72,7 +72,7 @@ namespace QT7
             AudioUnit m_audioUnit;
 
             // Only the following methods needs to
-            // be overridden by only_one-audio-unit nodes:
+            // be overidden by only_one-audio-unit nodes:
             virtual ComponentDescription getAudioNodeDescription() const;
             virtual void initializeAudioUnit();
 

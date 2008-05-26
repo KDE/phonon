@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_MEDIANODEVIDEOPART_H
 #define Phonon_QT7_MEDIANODEVIDEOPART_H
 
-#include <QtCore/qnamespace.h>
+#include <QtCore>
 #include "backendheader.h"
 
 QT_BEGIN_NAMESPACE
@@ -32,6 +32,7 @@ namespace QT7
     public:
         MediaNodeVideoPart();
         virtual ~MediaNodeVideoPart();
+
         virtual void updateVideo(void *ciImage) = 0;
     };
 

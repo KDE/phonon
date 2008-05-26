@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,13 +18,12 @@
 #ifndef Phonon_QT7_VIDEOFRAME_H
 #define Phonon_QT7_VIDEOFRAME_H
 
-#import <QuartzCore/CVOpenGLTexture.h>
-#import <AppKit/NSImage.h>
+#include <QuickTime/QuickTime.h>
 #undef check // avoid name clash;
 
-#include <QtCore/QRect>
-#include <QtGui/QPainter>
-#include <QtGui/QImage>
+#include <QtCore>
+#include <QImage>
+#include "displaylinkcallback.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -35,50 +34,45 @@ namespace Phonon
 namespace QT7
 {
     class QuickTimeVideoPlayer;
-	class QNSBitmapImage;
 
     class VideoFrame
     {
         public:
             VideoFrame();
-            VideoFrame(QuickTimeVideoPlayer *videoPlayer);
+            VideoFrame(QuickTimeVideoPlayer *videoPlayer, const LinkTimeProxy &timeStamp);
             VideoFrame(const VideoFrame& frame);
             void operator=(const VideoFrame& frame);
             ~VideoFrame();
 
-
-            CVOpenGLTextureRef cachedCVTexture() const;
-			void *cachedCIImage() const;
+            CVOpenGLTextureRef cvTextureRef() const;
             GLuint glTextureRef() const;
+            bool isEmpty();
 
-			void drawQImage(QPainter *p, const QRect &rect) const;
-			void drawCIImage(const CGRect &rect, float opacity = 1.0f) const;
-			void drawCIImage(const QRect &rect, float opacity = 1.0f) const;
-            void drawCVTexture(const QRect &rect, float opacity = 1.0f) const;
-            void drawGLTexture(const QRect &rect, float opacity = 1.0f) const;
-
+            QRect frameRect() const;
+            void drawFrame(const QRect &rect, float opacity = 1.0f, bool origoLowLeft = true) const;
             void applyCoreImageFilter(void *filter);
             void setColors(qreal brightness, qreal contrast, qreal hue, qreal saturation);
-			bool hasColorAdjustments();
             void setBaseOpacity(qreal opacity);
             void setBackgroundFrame(const VideoFrame &frame);
-
-            bool isEmpty();
-            QRect frameRect() const;
-            QuickTimeVideoPlayer *videoPlayer();
+            QImage toQImage();
 
             void retain() const;
             void release() const;
 
-			static CGRect QRectToCGRect(const QRect & qrect);
+#if 0 // will be awailable in a later version of phonon.
+        private:
+            void *m_ciFrameRef;
+            void *coreImageContext;
+
+            void *coreImageRef() const;
+            void *createCoreImage();
+            bool hasCoreImage();
+#endif
 
         private:
-            CVOpenGLTextureRef m_cachedCVTextureRef;
-            void *m_cachedCIImage;
-			QImage m_cachedQImage;
-            NSBitmapImageRep *m_cachedNSBitmap;
-
+            CVOpenGLTextureRef m_cvTextureRef;
             QuickTimeVideoPlayer *m_videoPlayer;
+            LinkTimeProxy m_timeStamp;
             VideoFrame *m_backgroundFrame;
 
             qreal m_brightness;
@@ -89,7 +83,8 @@ namespace QT7
 
             void initMembers();
             void copyMembers(const VideoFrame& frame);
-            void invalidateImage() const;
+            void drawGLTexture(const QRect &rect, float opacity, bool origoLowLeft) const;
+            void invalidateTexture() const;
     };
 
 }} //namespace Phonon::QT7

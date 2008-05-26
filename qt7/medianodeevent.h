@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_MEDIANODEEVENT_H
 #define Phonon_QT7_MEDIANODEEVENT_H
 
-#include <QtCore/qnamespace.h>
+#include <QtCore>
 
 QT_BEGIN_NAMESPACE
 
@@ -46,12 +46,10 @@ namespace QT7
                 VideoSourceRemoved,
                 AudioSourceAdded,
                 AudioSourceRemoved,
-				VideoOutputCountChanged,
                 VideoFrameSizeChanged,
                 SetMediaObject,
                 StartConnectionChange,
-                EndConnectionChange,
-				MediaPlaying
+                EndConnectionChange
             };
 
             MediaNodeEvent(Type type, void *data = 0);

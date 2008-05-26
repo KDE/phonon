@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,14 +18,8 @@
 #ifndef Phonon_QT7_BACKENDHEADER_H
 #define Phonon_QT7_BACKENDHEADER_H
 
-#include <QtCore/QString>
-#import <Foundation/NSAutoreleasePool.h>
-#include <CoreFoundation/CFBase.h>
-
-#ifndef Q_WS_MAC64
-#define QUICKTIME_C_API_AVAILABLE
-#endif
-
+#include <QString>
+ 
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -51,7 +45,7 @@ void gClearError();
     + QLatin1String(", Line: ") + QString::number(__LINE__)
 
 #define SET_ERROR(string, type){                                \
-        Phonon::QT7::gSetErrorString(string);    \
+        Phonon::QT7::gSetErrorString(QLatin1String(string));    \
         Phonon::QT7::gSetErrorType(type);                       \
         Phonon::QT7::gSetErrorLocation(ERROR_LOCATION); }
 
@@ -81,13 +75,13 @@ void gClearError();
 
 #define CASE_UNSUPPORTED(string, type) SET_ERROR(string, type)
 
-#ifdef SET_DEBUG_IMPLEMENTED
+#if SET_DEBUG_IMPLEMENTED
 #define IMPLEMENTED qDebug() << "QT7:" << __FUNCTION__ << "(" << __FILE__ << "):"
 #else
 #define IMPLEMENTED if (1); else qDebug()
 #endif
 
-#ifdef SET_DEBUG_HALF_IMPLEMENTED
+#if SET_DEBUG_HALF_IMPLEMENTED
 #define HALF_IMPLEMENTED qDebug() << "QT7: --- HALF IMPLEMENTED:" << __FUNCTION__ << "(" << __FILE__ << "," << __LINE__ << "):"
 #else
 #define HALF_IMPLEMENTED if (1); else qDebug()
@@ -117,62 +111,6 @@ void gClearError();
 #define DEBUG_AUDIO_STREAM(x) {}
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////////////
-
-class PhononAutoReleasePool
-{
-private:
-    void *pool;
-public:
-    PhononAutoReleasePool();
-    ~PhononAutoReleasePool();
-};
-
-/////////////////////////////////////////////////////////////////////////////////////////
-
-template <typename T>
-class PhononCFType
-{
-public:
-    inline PhononCFType(const T &t = 0) : type(t) {}
-    inline PhononCFType(const PhononCFType &helper) : type(helper.type) { if (type) CFRetain(type); }
-    inline ~PhononCFType() { if (type) CFRelease(type); }
-    inline operator T() { return type; }
-    inline PhononCFType operator =(const PhononCFType &helper)
-    {
-	if (helper.type)
-	    CFRetain(helper.type);
-	CFTypeRef type2 = type;
-	type = helper.type;
-	if (type2)
-	    CFRelease(type2);
-	return *this;
-    }
-    inline T *operator&() { return &type; }
-    static PhononCFType constructFromGet(const T &t)
-    {
-        CFRetain(t);
-        return PhononCFType<T>(t);
-    }
-protected:
-    T type;
-};
-
-/////////////////////////////////////////////////////////////////////////////////////////
-
-class PhononCFString : public PhononCFType<CFStringRef>
-{
-public:
-    inline PhononCFString(const QString &str) : PhononCFType<CFStringRef>(0), string(str) {}
-    inline PhononCFString(const CFStringRef cfstr = 0) : PhononCFType<CFStringRef>(cfstr) {}
-    inline PhononCFString(const PhononCFType<CFStringRef> &other) : PhononCFType<CFStringRef>(other) {}
-    operator QString() const;
-    operator CFStringRef() const;
-    static QString toQString(CFStringRef cfstr);
-    static CFStringRef toCFStringRef(const QString &str);
-private:
-    QString string;
-};
 }} //namespace Phonon::QT7
 
 QT_END_NAMESPACE

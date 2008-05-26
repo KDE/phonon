@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,9 +18,7 @@
 #ifndef Phonon_QT7_AUDIOMIXER_H
 #define Phonon_QT7_AUDIOMIXER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QTime>
-#include <QtCore/QEvent>
+#include <QtCore>
 #include <phonon/effectinterface.h>
 #include <phonon/effectparameter.h>
 #include <phonon/volumefaderinterface.h>
@@ -66,7 +64,7 @@ namespace QT7
             float m_fadeToVolume;
             float m_fadeFromVolume;
             QTime m_fadeStartTime;
-
+            
             // EffectInterface:
             QList<Phonon::EffectParameter> parameters() const;
             QVariant parameterValue(const Phonon::EffectParameter &parameter) const;

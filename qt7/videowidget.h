@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,15 @@
 #ifndef Phonon_QT7_VIDEOWIDGET_H
 #define Phonon_QT7_VIDEOWIDGET_H
 
-#include <QtGui/QPaintEngine>
+#include <QtGui>
+#include <QGLWidget>
+#include <QGLContext>
+#include <QtOpenGL/private/qgl_p.h>
+#include <QPointer>
+
+#include <QuickTime/QuickTime.h>
+#undef check // avoid name clash;
+
 #include <phonon/videowidgetinterface.h>
 #include "medianode.h"
 
@@ -52,7 +60,7 @@ namespace QT7
         void setHue(qreal);
         qreal saturation() const;
         void setSaturation(qreal);
-
+        
         QWidget *widget();
 
         void updateVideo(VideoFrame &frame);

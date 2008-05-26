@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,8 +18,11 @@
 #ifndef Phonon_QT7_MEDIAOBJECT_H
 #define Phonon_QT7_MEDIAOBJECT_H
 
-#include <QtCore/QStringList>
-#include <QtCore/QTime>
+#include <QuickTime/QuickTime.h>
+#undef check // avoid name clash;
+
+#include <QtCore>
+
 #include <phonon/mediaobjectinterface.h>
 #include <phonon/addoninterface.h>
 
@@ -89,9 +92,7 @@ namespace QT7
 
         void setVolumeOnMovie(float volume);
         bool setAudioDeviceOnMovie(int id);
-
-		int videoOutputCount();
-
+        
     signals:
         void stateChanged(Phonon::State,Phonon::State);
         void tick(qint64);
@@ -125,7 +126,7 @@ namespace QT7
         quint32 m_prefinishMark;
         quint32 m_currentTime;
         float m_percentageLoaded;
-
+        
         int m_tickTimer;
         int m_bufferTimer;
         int m_rapidTimer;
@@ -148,21 +149,19 @@ namespace QT7
         void updateAudioBuffers();
         void updateLipSynch(int allowedOffset);
         void updateVideoFrames();
+        long updateQuickTime();
         void updateBufferStatus();
         void setMute(bool mute);
-		void inspectAudioGraphRecursive(AudioConnection *connection, int &effectCount, int &outputCount);
-		void inspectVideoGraphRecursive(MediaNode *node, int &effectCount, int &outputCount);
+        void inspectGraphRecursive(AudioConnection *connection, bool &hasEffects, bool &hasOutputs);
         void inspectGraph();
         bool isCrossFading();
-
+        
         QString m_errorString;
         Phonon::ErrorType m_errorType;
         bool checkForError();
 
-	    int m_audioEffectCount;
-	    int m_audioOutputCount;
-	    int m_videoEffectCount;
-	    int m_videoOutputCount;
+        bool m_hasAudioEffects;
+        bool m_hasAudioOutputs;
     };
 
 }} //namespace Phonon::QT7

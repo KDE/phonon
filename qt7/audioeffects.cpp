@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -16,6 +16,8 @@
 */
 
 #include "audioeffects.h"
+#include <QtCore>
+#include <private/qcore_mac_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -213,7 +215,7 @@ Phonon::EffectParameter AudioEffect::createParameter(const AudioUnit &audioUnit,
     BACKEND_ASSERT3(res == noErr, "Could not get parameter info from audio effect.", NORMAL_ERROR, Phonon::EffectParameter())
     
     QString name = info.flags & kAudioUnitParameterFlag_HasCFNameString
-        ? PhononCFString::toQString(info.cfNameString) : QLatin1String("<unknown parameter>");
+        ? QCFString::toQString(info.cfNameString) : QLatin1String("<unknown parameter>");
         
     Phonon::EffectParameter::Hint hint;
     switch(info.unit){

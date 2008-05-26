@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,15 +18,12 @@
 #ifndef Phonon_QT7_QUICKTIMEMETADATA_H
 #define Phonon_QT7_QUICKTIMEMETADATA_H
 
-#include "backendheader.h"
+#include <QuickTime/QuickTime.h>
+#undef check // avoid name clash;
+
 #include <phonon/mediasource.h>
 #include <Carbon/Carbon.h>
-#include <QtCore/QString>
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-    #include <QuickTime/QuickTime.h>
-    #undef check // avoid name clash;
-#endif
+#include <QtCore>
 
 QT_BEGIN_NAMESPACE
 
@@ -34,30 +31,28 @@ namespace Phonon
 {
 namespace QT7
 {
-    class QuickTimeVideoPlayer;
     class QuickTimeMetaData
     {
         public:
             QuickTimeMetaData();
             virtual ~QuickTimeMetaData();
 
-            void setVideo(QuickTimeVideoPlayer *videoPlayer);
+            void setVideo(Movie movieRef);
             QMultiMap<QString, QString> metaData();
+            Movie movieRef();
 
         private:
+            Movie m_movieRef;
             QMultiMap<QString, QString> m_metaData;
             bool m_movieChanged;
-            QuickTimeVideoPlayer *m_videoPlayer;
-            void readMetaData();
 
-#ifdef QUICKTIME_C_API_AVAILABLE
             QString stripCopyRightSymbol(const QString &key);
             QString convertQuickTimeKeyToUserKey(const QString &key);
             OSStatus readMetaValue(QTMetaDataRef, QTMetaDataItem, QTPropertyClass, QTPropertyID, QTPropertyValuePtr *, ByteCount *);
             UInt32 getMetaType(QTMetaDataRef metaDataRef, QTMetaDataItem item);
             QString getMetaValue(QTMetaDataRef metaDataRef, QTMetaDataItem item, SInt32 id);
             void readFormattedData(QTMetaDataRef metaDataRef, OSType format, QMultiMap<QString, QString> &result);
-#endif // QUICKTIME_C_API_AVAILABLE
+            void readMetaData();
     };
 
 }} // namespace Phonon::QT7

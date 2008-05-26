@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,17 +18,14 @@
 #ifndef Phonon_QT7_QUICKTIMEAUDIOPLAYER_H
 #define Phonon_QT7_QUICKTIMEAUDIOPLAYER_H
 
-#include "backendheader.h"
-
-#ifdef QUICKTIME_C_API_AVAILABLE
-    #include <QuickTime/QuickTime.h>
-    #undef check // avoid name clash;
-#endif
+#include <QuickTime/QuickTime.h>
+#undef check // avoid name clash;
 
 #include <phonon/mediasource.h>
 #include <Carbon/Carbon.h>
-#include <QtCore/QString>
 #include "audionode.h"
+
+#include <QtCore>
 
 QT_BEGIN_NAMESPACE
 
@@ -39,7 +36,7 @@ namespace QT7
     class AudioGraph;
     class MediaNodeEvent;
     class QuickTimeVideoPlayer;
-
+    
     class QuickTimeAudioPlayer : public AudioNode
     {
         public:
@@ -64,6 +61,7 @@ namespace QT7
             long regularTaskFrequency();
             quint64 currentTime();
             QString currentTimeString();
+            qint64 getLongestSoundtrackDurationInMs();
             QuickTimeVideoPlayer *videoPlayer();
 
             ComponentDescription getAudioNodeDescription() const;
@@ -81,14 +79,11 @@ namespace QT7
 
             State m_state;
             QuickTimeVideoPlayer *m_videoPlayer;
-
-#ifdef QUICKTIME_C_API_AVAILABLE
             MovieAudioExtractionRef m_audioExtractionRef;
-#endif
-
             ScheduledAudioSlice *m_sliceList;
+
             AudioChannelLayout *m_audioChannelLayout;
-            UInt32 m_audioChannelLayoutSize;
+        	UInt32 m_audioChannelLayoutSize;
             AudioStreamBasicDescription m_audioStreamDescription;
 
             bool m_discrete;
@@ -103,10 +98,10 @@ namespace QT7
 
             Float64 m_sampleTimeStamp;
             quint64 m_startTime;
+            quint64 m_duration;
     };
 
 }} // namespace Phonon::QT7
 
 QT_END_NAMESPACE
-
 #endif // Phonon_QT7_QUICKTIMEAUDIOPLAYER_H

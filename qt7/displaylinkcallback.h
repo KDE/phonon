@@ -15,15 +15,13 @@
     along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef Phonon_QT7_BACKENDINFO_H
-#define Phonon_QT7_BACKENDINFO_H
+#ifndef Phonon_QT7_DISPLAYLINKCALLBACK_H
+#define Phonon_QT7_DISPLAYLINKCALLBACK_H
 
 #include <QuickTime/QuickTime.h>
 #undef check // avoid name clash;
 
-#include <phonon/mediasource.h>
-#include <Carbon/Carbon.h>
-#include <QtCore>
+#include <QObject>
 
 QT_BEGIN_NAMESPACE
 
@@ -31,26 +29,34 @@ namespace Phonon
 {
 namespace QT7
 {
-    class BackendInfo
+    // Hide the fact that CoreVideo is beeing
+    // used to support panther:
+    class LinkTimeProxy
     {
         public:
-            enum Scope {In, Out};
-
-            static QString quickTimeVersionString();
-            static bool isQuickTimeVersionAvailable(int minHexVersion);
+            CVTimeStamp getCVTimeStamp() const;
+            void setCVTimeStamp(const CVTimeStamp &timeStamp);
             
-            static QMap<QString, QString> quickTimeMimeTypes(Scope scope);
-            static QStringList quickTimeCompressionFormats();
-            static QStringList coreAudioCodecs(Scope scope);
-            static QStringList coreAudioFileTypes(Scope scope);
+        private:
+            CVTimeStamp m_timeStamp;
+    };
+
+    class DisplayLinkCallback
+    {
+        public:
+            static void retain();
+            static void release();
+            static LinkTimeProxy currentTime();
 
         private:
-            static QString getMimeTypeTag(QTAtomContainer mimeList, int index, OSType type);
-
+            static CVDisplayLinkRef m_displayLink;
+            static int m_refCount;
+            static CVTimeStamp m_timeStamp;
+            static bool m_initialized;
     };
 
 }} // namespace Phonon::QT7
 
 QT_END_NAMESPACE
 
-#endif // Phonon_QT7_BACKENDINFO_H
+#endif // Phonon_QT7_DISPLAYLINKCALLBACK_H

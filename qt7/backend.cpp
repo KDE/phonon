@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QSet>
 #include <QtCore/QVariant>
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 
 #include "backendheader.h"
 
@@ -59,7 +59,7 @@ Backend::Backend(QObject *parent, const QStringList &) : QObject(parent)
     setProperty("backendComment", QLatin1String("Developed by Trolltech"));
     setProperty("backendVersion", QLatin1String("0.1"));
     setProperty("backendIcon",    QLatin1String(""));
-    setProperty("backendWebsite", QLatin1String("http://qtsoftware.com/"));
+    setProperty("backendWebsite", QLatin1String("http://www.trolltech.com/"));
 }
 
 Backend::~Backend()
@@ -128,13 +128,12 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
 bool Backend::startConnectionChange(QSet<QObject *> objects)
 {
     IMPLEMENTED;
-    QList<AudioGraph *> notifiedGraphs;
     for (int i=0; i<objects.size(); i++){
         MediaNode *node = qobject_cast<MediaNode*>(objects.values()[i]);
-        if (node && node->m_audioGraph && !notifiedGraphs.contains(node->m_audioGraph)){
+        if (node && node->m_audioGraph){
             MediaNodeEvent event(MediaNodeEvent::StartConnectionChange);
             node->m_audioGraph->notify(&event);
-            notifiedGraphs << node->m_audioGraph;
+            break;        
         }
     }        
     return true;
@@ -143,15 +142,15 @@ bool Backend::startConnectionChange(QSet<QObject *> objects)
 bool Backend::endConnectionChange(QSet<QObject *> objects)
 {
     IMPLEMENTED;
-    QList<AudioGraph *> notifiedGraphs;
     for (int i=0; i<objects.size(); i++){
         MediaNode *node = qobject_cast<MediaNode*>(objects.values()[i]);
-        if (node && node->m_audioGraph && !notifiedGraphs.contains(node->m_audioGraph)){
+        if (node && node->m_audioGraph){
             MediaNodeEvent event(MediaNodeEvent::EndConnectionChange);
             node->m_audioGraph->notify(&event);
-            notifiedGraphs << node->m_audioGraph;
+            break;
         }
     }
+    
     return true;
 }
 
@@ -182,7 +181,7 @@ bool Backend::disconnectNodes(QObject *aSource, QObject *aSink)
 QStringList Backend::availableMimeTypes() const
 {
     IMPLEMENTED;
-    return BackendInfo::quickTimeMimeTypes(BackendInfo::In);
+    return BackendInfo::quickTimeMimeTypes(BackendInfo::In).keys();
 }
 
 /**
@@ -219,7 +218,7 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
         // Just count the number of filters awailable (c), and
         // add return a set with the numbers 1..c inserted:
         IMPLEMENTED_SILENT << "Creating index set for type: VideoEffectType";
-        QList<QtCore/QString> filters = objc_getCiFilterInfo()->filterDisplayNames;
+        QList<QString> filters = objc_getCiFilterInfo()->filterDisplayNames;
         for (int i=0; i<filters.size(); i++)
             ret << insert(i);
         break; }
@@ -251,7 +250,7 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
     case VideoEffectType:{
         // Get list of effects, pick out filter at index, and return its name:
         IMPLEMENTED_SILENT << "Creating description hash for type: VideoEffectType";
-        QList<QtCore/QString> filters = objc_getCiFilterInfo()->filterDisplayNames;
+        QList<QString> filters = objc_getCiFilterInfo()->filterDisplayNames;
         ret.insert("name", filters[index]);
     case AudioCaptureDeviceType:{
         IMPLEMENTED_SILENT << "Creating description hash for type: AudioCaptureDeviceType";

@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_AUDIOOUTPUT_H
 #define Phonon_QT7_AUDIOOUTPUT_H
 
-#include <QtCore/QObject>
+#include <QtCore>
 #include <phonon/audiooutputinterface.h>
 #include <phonon/abstractaudiooutput.h>
 
@@ -75,7 +75,7 @@ namespace QT7
 
         protected:
             void mediaNodeEvent(const MediaNodeEvent *event);
-
+            
         private:
             AudioOutputAudioPart *m_audioOutput;
             int m_device;

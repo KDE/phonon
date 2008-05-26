@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+    Copyright (C) 2007 Trolltech ASA. All rights reserved.
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -15,7 +15,7 @@
     along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "medianodevideopart.h"
+#include "medianodeevent.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -24,14 +24,14 @@ namespace Phonon
 namespace QT7
 {
 
-MediaNodeVideoPart::MediaNodeVideoPart()
+MediaNodeEvent::MediaNodeEvent(Type type, void *data) : eventType(type), eventData(data)
 {
 }
 
-MediaNodeVideoPart::~MediaNodeVideoPart()
+MediaNodeEvent::~MediaNodeEvent()
 {
 }
 
-}}
+}} // namespace Phonon::QT7
 
 QT_END_NAMESPACE
