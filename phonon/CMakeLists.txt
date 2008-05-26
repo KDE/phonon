@@ -8,7 +8,6 @@ set(phonon_LIB_SRCS
    phononnamespace.cpp
    mediasource.cpp
    abstractmediastream.cpp
-   abstractmediastream2.cpp
    streaminterface.cpp
    mediaobject.cpp
    medianode.cpp
@@ -33,8 +32,6 @@ set(phonon_LIB_SRCS
    volumeslider.cpp
    effectwidget.cpp
    iodevicestream.cpp
-   lockfreequeue.cpp
-   streameventqueue.cpp
    )
 
 automoc4(phonon phonon_LIB_SRCS)
@@ -55,7 +52,6 @@ install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    mediasource.h
    abstractmediastream.h
-   abstractmediastream2.h
    streaminterface.h
    mediaobject.h
    audiooutput.h

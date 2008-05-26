@@ -54,14 +54,10 @@ qint64 AbstractMediaStream::streamSize() const
 
 void AbstractMediaStream::setStreamSize(qint64 newSize)
 {
-    d_ptr->setStreamSize(newSize);
-}
-
-void AbstractMediaStreamPrivate::setStreamSize(qint64 newSize)
-{
-    streamSize = newSize;
-    if (streamInterface) {
-        streamInterface->setStreamSize(newSize);
+    Q_D(AbstractMediaStream);
+    d->streamSize = newSize;
+    if (d->streamInterface) {
+        d->streamInterface->setStreamSize(newSize);
     }
 }
 
@@ -72,40 +68,28 @@ bool AbstractMediaStream::streamSeekable() const
 
 void AbstractMediaStream::setStreamSeekable(bool s)
 {
-    d_ptr->setStreamSeekable(s);
-}
-
-void AbstractMediaStreamPrivate::setStreamSeekable(bool s)
-{
-    streamSeekable = s;
-    if (streamInterface) {
-        streamInterface->setStreamSeekable(s);
+    Q_D(AbstractMediaStream);
+    d->streamSeekable = s;
+    if (d->streamInterface) {
+        d->streamInterface->setStreamSeekable(s);
     }
 }
 
 void AbstractMediaStream::writeData(const QByteArray &data)
 {
-    d_ptr->writeData(data);
-}
-
-void AbstractMediaStreamPrivate::writeData(const QByteArray &data)
-{
-    if (ignoreWrites) {
+    Q_D(AbstractMediaStream);
+    if (d->ignoreWrites) {
         return;
     }
-    Q_ASSERT(streamInterface);
-    streamInterface->writeData(data);
+    Q_ASSERT(d->streamInterface);
+    d->streamInterface->writeData(data);
 }
 
 void AbstractMediaStream::endOfData()
 {
-    d_ptr->endOfData();
-}
-
-void AbstractMediaStreamPrivate::endOfData()
-{
-    if (streamInterface) {
-        streamInterface->endOfData();
+    Q_D(AbstractMediaStream);
+    if (d->streamInterface) {
+        d->streamInterface->endOfData();
     }
 }
 
@@ -115,7 +99,6 @@ void AbstractMediaStream::error(Phonon::ErrorType type, const QString &text)
     d->errorType = type;
     d->errorText = text;
     if (d->mediaObjectPrivate) {
-        // TODO: MediaObject might be in a different thread
         d->mediaObjectPrivate->streamError(type, text);
     }
 }
@@ -132,11 +115,9 @@ void AbstractMediaStream::seekStream(qint64)
 AbstractMediaStreamPrivate::~AbstractMediaStreamPrivate()
 {
     if (mediaObjectPrivate) {
-        // TODO: MediaObject might be in a different thread
         mediaObjectPrivate->removeDestructionHandler(this);
     }
     if (streamInterface) {
-        // TODO: StreamInterface might be in a different thread
         streamInterface->d->disconnectMediaStream();
     }
 }
@@ -165,7 +146,6 @@ void AbstractMediaStreamPrivate::setStreamInterface(StreamInterface *iface)
 
 void AbstractMediaStreamPrivate::setMediaObjectPrivate(MediaObjectPrivate *mop)
 {
-    // TODO: MediaObject might be in a different thread
     mediaObjectPrivate = mop;
     mediaObjectPrivate->addDestructionHandler(this);
     if (!errorText.isEmpty()) {
@@ -175,7 +155,6 @@ void AbstractMediaStreamPrivate::setMediaObjectPrivate(MediaObjectPrivate *mop)
 
 void AbstractMediaStreamPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 {
-    // TODO: MediaObject might be in a different thread
     Q_ASSERT(bp == mediaObjectPrivate);
     Q_UNUSED(bp);
     mediaObjectPrivate = 0;

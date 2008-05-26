@@ -29,7 +29,7 @@ namespace Fake
 {
 class MediaObject;
 
-class Stream : public StreamInterface2
+class Stream : public QObject, public StreamInterface
 {
     Q_OBJECT
     public:

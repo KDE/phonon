@@ -20,7 +20,7 @@
 #ifndef PHONON_IODEVICESTREAM_P_H
 #define PHONON_IODEVICESTREAM_P_H
 
-#include "abstractmediastream2.h"
+#include "abstractmediastream.h"
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
@@ -31,7 +31,7 @@ namespace Phonon
 {
 
 class IODeviceStreamPrivate;
-class IODeviceStream : public AbstractMediaStream2
+class IODeviceStream : public AbstractMediaStream
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(IODeviceStream)
@@ -40,7 +40,7 @@ class IODeviceStream : public AbstractMediaStream2
         ~IODeviceStream();
 
         void reset();
-        void needData(quint32);
+        void needData();
         void seekStream(qint64);
 };
 } // namespace Phonon

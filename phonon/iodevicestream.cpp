@@ -18,14 +18,14 @@
 */
 
 #include "iodevicestream_p.h"
-#include "abstractmediastream2_p.h"
+#include "abstractmediastream_p.h"
 
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
 
-class IODeviceStreamPrivate : public AbstractMediaStream2Private
+class IODeviceStreamPrivate : public AbstractMediaStreamPrivate
 {
     Q_DECLARE_PUBLIC(IODeviceStream)
     protected:
@@ -46,7 +46,7 @@ class IODeviceStreamPrivate : public AbstractMediaStream2Private
 };
 
 IODeviceStream::IODeviceStream(QIODevice *ioDevice, QObject *parent)
-    : AbstractMediaStream2(*new IODeviceStreamPrivate(ioDevice), parent)
+    : AbstractMediaStream(*new IODeviceStreamPrivate(ioDevice), parent)
 {
     Q_D(IODeviceStream);
     d->ioDevice->reset();
@@ -60,13 +60,12 @@ void IODeviceStream::reset()
 {
     Q_D(IODeviceStream);
     d->ioDevice->reset();
-    resetDone();
 }
 
-void IODeviceStream::needData(quint32 size)
+void IODeviceStream::needData()
 {
     Q_D(IODeviceStream);
-    const QByteArray data = d->ioDevice->read(size);
+    const QByteArray data = d->ioDevice->read(4096);
     if (data.isEmpty() && !d->ioDevice->atEnd()) {
         error(Phonon::NormalError, d->ioDevice->errorString());
     }
@@ -80,7 +79,6 @@ void IODeviceStream::seekStream(qint64 offset)
 {
     Q_D(IODeviceStream);
     d->ioDevice->seek(offset);
-    seekStreamDone();
 }
 
 } // namespace Phonon
@@ -88,5 +86,3 @@ void IODeviceStream::seekStream(qint64 offset)
 QT_END_NAMESPACE
 
 #include "moc_iodevicestream_p.cpp"
-
-// vim: sw=4 sts=4 et tw=100

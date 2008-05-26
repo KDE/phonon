@@ -52,10 +52,6 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHan
         }
         ~AbstractMediaStreamPrivate();
 
-        virtual void setStreamSize(qint64 newSize);
-        virtual void setStreamSeekable(bool s);
-        virtual void writeData(const QByteArray &data);
-        virtual void endOfData();
         void phononObjectDestroyed(MediaNodePrivate *);
 
         AbstractMediaStream *q_ptr;

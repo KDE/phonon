@@ -23,7 +23,6 @@
 #include "mediasource.h"
 #include "objectdescription.h"
 #include "abstractmediastream.h"
-#include "streameventqueue_p.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QString>
@@ -42,7 +41,6 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
     public:
         MediaSourcePrivate(MediaSource::Type t)
             : type(t), discType(NoDisc), stream(0),
-            streamEventQueue(0),
             ioDevice(0),
             autoDelete(false)
         {
@@ -56,15 +54,7 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         QUrl url;
         Phonon::DiscType discType;
         QString deviceName;
-
-        // The AbstractMediaStream(2) may be deleted at any time by the application. If that happens
-        // stream will be 0 automatically, but streamEventQueue will stay valid as we hold a
-        // reference to it. This is necessary to avoid a races when setting the MediaSource while
-        // another thread deletes the AbstractMediaStream2. StreamInterface(2) will then just get a
-        // StreamEventQueue where nobody answers.
         QPointer<AbstractMediaStream> stream;
-        StreamEventQueue *streamEventQueue;
-
 //        AudioCaptureDevice audioCaptureDevice;
 //        VideoCaptureDevice videoCaptureDevice;
         QIODevice *ioDevice;
