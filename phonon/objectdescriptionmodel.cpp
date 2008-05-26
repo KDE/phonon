@@ -362,7 +362,7 @@ QStringList ObjectDescriptionModelData::mimeTypes(ObjectDescriptionType type) co
     return QStringList(QLatin1String("application/x-phonon-objectdescription") + QString::number(static_cast<int>(type)));
 }
 
-#if !defined(Q_CC_MSVC) || _MSC_VER >= 1300 || defined(Q_CC_INTEL)
+#if !defined(Q_CC_MSVC) || _MSC_VER > 1300 || defined(Q_CC_INTEL)
 #define INSTANTIATE_META_FUNCTIONS(type) \
 template PHONON_EXPORT const QMetaObject *ObjectDescriptionModel<type>::metaObject() const; \
 template void *ObjectDescriptionModel<type>::qt_metacast(const char *)
