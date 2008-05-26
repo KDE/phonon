@@ -8,6 +8,7 @@ enable_testing()
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(MacroLogFeature)
+include(MacroOptionalFindPackage)
 
 set(QT_MIN_VERSION 4.4.0)
 find_package(Qt4 REQUIRED)
