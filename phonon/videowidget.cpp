@@ -107,8 +107,16 @@ void VideoWidget::setFullScreen(bool newFullScreen)
             flags |= Qt::Window;
             flags ^= Qt::SubWindow;
             setWindowFlags(flags);
+#ifdef Q_WS_X11
+            // This works around a bug with Compiz
+            // as the window must be visible before we can set the state
+            show();
+            raise();
+            setWindowState( windowState() | Qt::WindowFullScreen ); // set
+#else
             setWindowState( windowState() | Qt::WindowFullScreen ); // set
             show();
+#endif
         }
     } else if (isFullScreen()) {
         flags ^= (Qt::Window | Qt::SubWindow); //clear the flags...
