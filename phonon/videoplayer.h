@@ -102,6 +102,21 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          */
         bool isPaused() const;
 
+        /**
+         * getter for the MediaObject.
+         */
+        MediaObject *mediaObject() const;
+
+        /**
+         * getter for the AudioOutput.
+         */
+        AudioOutput *audioOutput() const;
+
+        /**
+         * getter for the VideoWidget.
+         */
+        VideoWidget *videoWidget() const;
+
     public Q_SLOTS:
         /**
          * Starts preloading the media data and fill audiobuffers in the
@@ -157,22 +172,6 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          * 1.0 means 100%, 0.5 means 50% voltage/25% power, 0.0 means 0%
          */
         void setVolume(float volume);
-
-        /**
-         * getter for the MediaObject.
-         */
-        MediaObject *mediaObject() const;
-
-        /**
-         * getter for the AudioOutput.
-         */
-        AudioOutput *audioOutput() const;
-
-        /**
-         * getter for the VideoWidget.
-         */
-        VideoWidget *videoWidget() const;
-
 
     Q_SIGNALS:
         /**
