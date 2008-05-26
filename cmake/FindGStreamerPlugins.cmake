@@ -6,13 +6,14 @@
 #  GSTREAMERPLUGINSBASE_LIBRARIES - the libraries needed to use GStreamer_Plugins
 #  GSTREAMERPLUGINSBASE_DEFINITIONS - Compiler switches required for using GStreamer_Plugins
 #
-#  (c)2009 Nokia Corporation
-
-FIND_PACKAGE(PkgConfig REQUIRED)
+#  (c)2007, Trolltech ASA
 
 IF (NOT WIN32)
-   # don't make this check required - otherwise you can't use macro_optional_find_package on this one
-   PKG_CHECK_MODULES( PKG_GSTREAMER gstreamer-plugins-base-0.10 )
+   # use pkg-config to get the directories and then use these values
+   # in the FIND_PATH() and FIND_LIBRARY() calls
+   INCLUDE(UsePkgConfig)
+   PKGCONFIG(gstreamer-plugins-base-0.10 _GStreamer_PluginsIncDir _GStreamer_PluginsLinkDir _GStreamer_PluginsLinkFlags _GStreamer_PluginsCflags)
+   SET(GSTREAMERPLUGINS_DEFINITIONS ${_GStreamer_PluginsCflags})
 ENDIF (NOT WIN32)
 
 #
@@ -33,43 +34,43 @@ ENDIF (NOT WIN32)
 
 FIND_LIBRARY(GSTREAMER_PLUGIN_AUDIO_LIBRARIES NAMES gstaudio-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_CDDA_LIBRARIES NAMES gstcdda-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_NETBUFFER_LIBRARIES NAMES gstnetbuffer-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_PBUTILS_LIBRARIES NAMES gstpbutils-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_RIFF_LIBRARIES NAMES gstriff-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_RTP_LIBRARIES NAMES gstrtp-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_RTSP_LIBRARIES NAMES gstrtsp-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_SDP_LIBRARIES NAMES gstsdp-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_TAG_LIBRARIES NAMES gsttag-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_VIDEO_LIBRARIES NAMES gstvideo-0.10
    PATHS
-   ${PKG_GSTREAMER_LIBRARY_DIRS}
+   ${_GStreamer_PluginsLinkDir}
    )
 
 IF (GSTREAMER_PLUGIN_AUDIO_LIBRARIES AND
