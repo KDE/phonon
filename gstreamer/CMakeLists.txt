@@ -54,7 +54,8 @@ if (BUILD_PHONON_GSTREAMER)
          )
    endif(ALSA_FOUND)
 
-   kde4_add_plugin(phonon_gstreamer ${phonon_gstreamer_SRCS})
+   automoc4(phonon_gstreamer phonon_gstreamer_SRCS)
+   add_library(phonon_gstreamer ${phonon_gstreamer_SRCS})
    target_link_libraries(phonon_gstreamer
       ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
       ${KDE4_PHONON_LIBS} ${OPENGL_gl_LIBRARY}
