@@ -56,6 +56,7 @@ if (BUILD_PHONON_GSTREAMER)
 
    automoc4(phonon_gstreamer phonon_gstreamer_SRCS)
    add_library(phonon_gstreamer ${phonon_gstreamer_SRCS})
+   set_target_properties(phonon_gstreamer PROPERTIES PREFIX "")
    target_link_libraries(phonon_gstreamer
       ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
       ${KDE4_PHONON_LIBS} ${OPENGL_gl_LIBRARY}
