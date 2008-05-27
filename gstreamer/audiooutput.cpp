@@ -163,7 +163,6 @@ bool AudioOutput::setOutputDevice(int newDevice)
     return success;
 }
 
-#if (PHONON_VERSION >= PHONON_VERSION_CHECK(4, 2, 0))
 bool AudioOutput::setOutputDevice(const AudioOutputDevice &newDevice)
 {
     qDebug() << Q_FUNC_INFO << newDevice;
@@ -235,7 +234,6 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newDevice)
 
     return false;
 }
-#endif
 
 }
 } //namespace Phonon::Gstreamer
