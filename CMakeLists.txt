@@ -30,9 +30,9 @@ set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
-if(msvc)
+if(MSVC)
   add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
-endif(msvc)
+endif(MSVC)
 
 # for including config.h and for includes like <kparts/foo.h>
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR}/phonon ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/phonon)
