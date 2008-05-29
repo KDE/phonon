@@ -46,7 +46,7 @@ class LockFreeQueueBase
         ~LockFreeQueueBase();
 
     public:
-        struct NodeBase;
+        class NodeBase;
         typedef volatile NodeBase * NodeBasePointer;
         class NodeBase
         {
