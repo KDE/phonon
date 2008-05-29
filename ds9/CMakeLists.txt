@@ -35,7 +35,7 @@ if (BUILD_PHONON_DS9)
             qbasefilter.cpp
             qpin.cpp
             qasyncreader.cpp
-			qaudiocdreader.cpp
+            qaudiocdreader.cpp
             qmeminputpin.cpp
 	)
 
@@ -46,14 +46,15 @@ if (BUILD_PHONON_DS9)
 	    # TODO: check if qmake is really compiled with this flag (default: yes)
 	    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:wchar_t-")
     endif (MSVC)
-    
-    add_definitions(-DPHONON_MAKE_QT_ONLY_BACKEND)
+
+    add_definitions(-DPHONON_MAKE_QT_ONLY_BACKEND -DUNICODE)
+    automoc4(phonon_ds9 phonon_ds9_SRCS)
     add_library(phonon_ds9 SHARED ${phonon_ds9_SRCS})
-    set_target_properties(phonon_ds9 PROPERTIES PREFIX ""
-                                                DEFINE_SYMBOL MAKE_PHONON_LIB)
+    set_target_properties(phonon_ds9 PROPERTIES PREFIX "")
     target_link_libraries(phonon_ds9
-            ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY} ${KDE4_PHONON_LIBS} ${KDE4_KDECORE_LIBS}
-	    dxguid strmiids dmoguids msdmo ole32 oleaut32 uuid gdi32)
+            ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
+            ${OPENGL_gl_LIBRARY} ${KDE4_PHONON_LIBS} ${KDE4_KDECORE_LIBS}
+	          dxguid strmiids dmoguids msdmo ole32 oleaut32 uuid gdi32 phonon)
     install(TARGETS phonon_ds9
 	    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
 	    LIBRARY DESTINATION ${LIB_INSTALL_DIR}
