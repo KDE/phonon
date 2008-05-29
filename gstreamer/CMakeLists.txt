@@ -55,11 +55,11 @@ if (BUILD_PHONON_GSTREAMER)
    endif(ALSA_FOUND)
 
    automoc4(phonon_gstreamer phonon_gstreamer_SRCS)
-   add_library(phonon_gstreamer ${phonon_gstreamer_SRCS})
+   add_library(phonon_gstreamer SHARED ${phonon_gstreamer_SRCS})
    set_target_properties(phonon_gstreamer PROPERTIES PREFIX "")
    target_link_libraries(phonon_gstreamer
-      ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
-      ${KDE4_PHONON_LIBS} ${OPENGL_gl_LIBRARY}
+      ${QT_QTOPENGL_LIBRARY}
+      ${PHONON_LIBS} ${OPENGL_gl_LIBRARY}
       ${GSTREAMER_LIBRARIES} ${GSTREAMER_BASE_LIBRARY} ${GSTREAMER_INTERFACE_LIBRARY}
       ${GSTREAMER_PLUGIN_VIDEO_LIBRARIES} ${GSTREAMER_PLUGIN_AUDIO_LIBRARIES}
       ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES})
