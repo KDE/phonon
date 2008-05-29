@@ -30,7 +30,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore/QTime>
 #include <QtCore/QLibrary>
 
-#include <QDebug>
+#include <QtCore/QDebug>
 
 #define TIMER_INTERVAL 16 //... ms for the timer that polls the current state (we use the multimedia timer
 #define PRELOAD_TIME 2000 // 2 seconds to load a source

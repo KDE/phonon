@@ -18,7 +18,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PHONON_DS9_NAMESPACE_H
 #define PHONON_DS9_NAMESPACE_H
 
-#include <qnamespace.h>
+#include <QtCore/qnamespace.h>
 
 #ifndef QT_BEGIN_NAMESPACE
 #define QT_BEGIN_NAMESPACE
