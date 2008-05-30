@@ -52,9 +52,8 @@ if (BUILD_PHONON_DS9)
     add_library(phonon_ds9 SHARED ${phonon_ds9_SRCS})
     set_target_properties(phonon_ds9 PROPERTIES PREFIX "")
     target_link_libraries(phonon_ds9
-            ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
-            ${OPENGL_gl_LIBRARY} ${KDE4_PHONON_LIBS} ${KDE4_KDECORE_LIBS}
-	          dxguid strmiids dmoguids msdmo ole32 oleaut32 uuid gdi32 phonon)
+                ${PHONON_LIBS}  ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY}
+                dxguid strmiids dmoguids msdmo ole32 oleaut32 uuid gdi32)
     install(TARGETS phonon_ds9
 	    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
 	    LIBRARY DESTINATION ${LIB_INSTALL_DIR}
