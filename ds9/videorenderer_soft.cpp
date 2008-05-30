@@ -25,6 +25,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtGui/QApplication>
 #include <QtCore/QTime>
 
+#define _USE_MATH_DEFINES //for pi
 #include <cmath> //for sin and cos
 
 #include <dvdmedia.h> //for VIDEOINFOHEADER2
@@ -267,7 +268,7 @@ namespace Phonon
                 //let's normalize the values
                 m_brightness = brightness * 128;
                 m_contrast = contrast + 1.;
-                m_hue = hue * 180.;
+                m_hue = hue * M_PI;
                 m_saturation = saturation + 1.;
             }
 

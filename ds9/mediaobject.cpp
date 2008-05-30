@@ -56,6 +56,9 @@ namespace Phonon
         WorkerThread::Work WorkerThread::dequeueWork()
         {
             QMutexLocker locker(&m_mutex);
+            if (m_finished) {
+                return Work();
+            }
             Work ret = m_queue.dequeue();
 
             //we ensure to have the wait condition in the right state
@@ -185,6 +188,10 @@ namespace Phonon
         void WorkerThread::handleTask()
         {
             const Work w = dequeueWork();
+
+            if (m_finished) {
+                return;
+            }
 
             HRESULT hr = S_OK;
 
