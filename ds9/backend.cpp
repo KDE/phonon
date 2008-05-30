@@ -35,14 +35,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 QT_BEGIN_NAMESPACE
 
-// export as Qt/KDE factory as required
-#ifdef PHONON_MAKE_QT_ONLY_BACKEND
 Q_EXPORT_PLUGIN2(phonon_ds9, Phonon::DS9::Backend);
-#else
-#include <kpluginfactory.h>
-K_PLUGIN_FACTORY(DS9BackendFactory, registerPlugin<Phonon::DS9::Backend>();)
-K_EXPORT_PLUGIN(DS9BackendFactory("ds9backend"))
-#endif
 
 namespace Phonon
 {

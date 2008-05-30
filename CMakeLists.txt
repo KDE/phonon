@@ -13,7 +13,7 @@ include(MacroOptionalFindPackage)
 set(QT_MIN_VERSION 4.4.0)
 find_package(Qt4 REQUIRED)
 if (NOT QT_QTDBUS_FOUND)
-   message(FATAL_ERROR  "Phonon requires Qt4 with QtDBus module in order to built.")
+   message(STATUS "Warning: Phonon won't be compiled with DBus support.")
 endif(NOT QT_QTDBUS_FOUND)
 
 find_package(Automoc4 REQUIRED)
@@ -30,9 +30,9 @@ set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
-if(msvc)
+if(MSVC)
   add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
-endif(msvc)
+endif(MSVC)
 
 # for including config.h and for includes like <kparts/foo.h>
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR}/phonon ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/phonon)
@@ -98,7 +98,10 @@ if (CMAKE_SYSTEM_NAME MATCHES Linux)
    endif (CMAKE_C_COMPILER MATCHES "icc")
 endif (CMAKE_SYSTEM_NAME MATCHES Linux)
 
-set(PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+set(PHONON_LIBS phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+if(QT_QTDBUS_FOUND)
+    list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
+endif(QT_QTDBUS_FOUND)
 
 set(_global_add_executable_param)
 if (Q_WS_MAC)

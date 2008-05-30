@@ -19,7 +19,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "qbasefilter.h"
 #include "compointer.h"
 
-#include <qdebug.h>
+#include <QtCore/QDebug>
 
 QT_BEGIN_NAMESPACE
 

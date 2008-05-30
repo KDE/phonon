@@ -18,7 +18,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "qbasefilter.h"
 #include "qpin.h"
 
-#include <qdebug.h>
+#include <QtCore/QDebug>
 
 QT_BEGIN_NAMESPACE
 
