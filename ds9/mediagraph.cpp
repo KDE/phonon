@@ -53,7 +53,7 @@ namespace Phonon
             int inputOffset;
         };
 
-        QList<GraphConnection> getOrderedConnections(Filter source, const QSet<Filter> &validFilters)
+        static QList<GraphConnection> getConnections(Filter source)
         {
             QList<GraphConnection> ret;
             int outOffset = 0;
@@ -63,12 +63,12 @@ namespace Phonon
                     PIN_INFO info;
                     input->QueryPinInfo(&info);
                     Filter current(info.pFilter);
-                    if (current && validFilters.contains(current)) {
+                    if (current) {
                         //this is a valid connection
                         const int inOffset = BackendNode::pins(current, PINDIR_INPUT).indexOf(input);
                         const GraphConnection connection = {source, outOffset, current, inOffset};
                         ret += connection;
-                        ret += getOrderedConnections(current, validFilters); //get subsequent connections
+                        ret += getConnections(current); //get subsequent connections
                     }
                 }
                 outOffset++;
@@ -87,8 +87,6 @@ namespace Phonon
             Q_ASSERT(m_mediaControl);
             m_mediaSeeking = ComPointer<IMediaSeeking>(m_graph, IID_IMediaSeeking);
             Q_ASSERT(m_mediaSeeking);
-
-            m_mediaObject->workerThread()->addGraphForEventManagement(m_graph);
 
             HRESULT hr = m_graph->AddFilter(m_fakeSource, L"Fake Source");
             if (m_mediaObject->catchComError(hr)) {
@@ -749,28 +747,59 @@ namespace Phonon
                 keptFilters += getFilterChain(m_demux, decoder);
             }
 
-            //now know what filters to keep
-			//we add them to the graph and store their connections
-  			const QList<GraphConnection> connections = getOrderedConnections(m_realSource, keptFilters);
+            const QSet<Filter> removedFilters = allFilters - keptFilters;
+            foreach(const Filter &filter, removedFilters) {
+                graph->RemoveFilter(filter);
+            }
 
-    		//let's transfer the filter
-            foreach(const Filter filter, keptFilters) {
 
-				graph->RemoveFilter(filter);
-			
-                //...and add it to our current graph
-                hr = m_graph->AddFilter(filter, 0);
-                if (FAILED(hr)) {
-                    return hr;
+            //let's transfer the nodes from the current graph to the new one
+            QList<GraphConnection> connections; //we store the connections that need to be restored
+
+
+            // First get all the sink nodes (nodes with no input connected)
+            foreach(const Filter &filter, getAllFilters()) {
+                bool isSink = true;
+                foreach(InputPin pin, BackendNode::pins(filter, PINDIR_INPUT)) {
+                    OutputPin out;
+                    if (pin->ConnectedTo(out.pparam()) != VFW_E_NOT_CONNECTED) {
+                        isSink = false;
+                    }
+                }
+
+                if (isSink) {
+                    connections += getConnections(filter);
+                    //we can now transfer the filter itself
+                    m_graph->RemoveFilter(filter);
+                    graph->AddFilter(filter, 0);
                 }
             }
 
-			//Let's now restore the connections in the new graph
-			foreach(GraphConnection connection, connections) {
+
+            //let's reestablish the connections
+            foreach(GraphConnection connection, connections) {
+                //check if we shoud transfer the sink node
+                FILTER_INFO info;
+                connection.input->QueryFilterInfo(&info);
+                if (info.pGraph != graph) {
+                    if (info.pGraph) {
+                        info.pGraph->RemoveFilter(connection.input);
+                        info.pGraph->Release();
+                    }
+                    graph->AddFilter(connection.input, 0);
+                }
+
                 const OutputPin output = BackendNode::pins(connection.output, PINDIR_OUTPUT).at(connection.outputOffset);
                 const InputPin input   = BackendNode::pins(connection.input, PINDIR_INPUT).at(connection.inputOffset);
-                m_graph->Connect( output, input);
-			}
+                HRESULT hr = output->Connect(input, 0);
+                Q_ASSERT( SUCCEEDED(hr));
+            }
+
+            m_mediaObject->workerThread()->replaceGraphForEventManagement(graph, m_graph);
+            m_graph = graph;
+            //let's update the interfaces
+            m_mediaControl = ComPointer<IMediaControl>(m_graph, IID_IMediaControl);
+            m_mediaSeeking = ComPointer<IMediaSeeking>(m_graph, IID_IMediaSeeking);
 
             //we need to do something smart to detect if the streams are unencoded
             if (m_demux) {

@@ -130,7 +130,7 @@ namespace Phonon
             bool m_hasAudio;
             bool m_connectionsDirty;
             bool m_isStopping;
-            bool m_isSeekable;
+            mutable bool m_isSeekable;
             HRESULT m_result;
             quint16 m_index;
             quint16 m_renderId;
