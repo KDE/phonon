@@ -21,6 +21,7 @@
 
 #include "backendinterface.h"
 #include "medianode_p.h"
+#include "mediaobject.h"
 #include "audiooutput.h"
 #include "audiooutput_p.h"
 #include "globalstatic_p.h"
@@ -162,6 +163,12 @@ FactoryPrivate::FactoryPrivate()
 
 FactoryPrivate::~FactoryPrivate()
 {
+    foreach (QObject *o, objects) {
+        MediaObject *m = qobject_cast<MediaObject *>(o);
+        if (m) {
+            m->stop();
+        }
+    }
     foreach (MediaNodePrivate *bp, mediaNodePrivateList) {
         bp->deleteBackendObject();
     }
