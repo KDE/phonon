@@ -27,3 +27,5 @@
 - Codec interface - at least for audio
 
 - Speed factor for playback (useful mostly for audio - but video still needs to stay in sync)
+
+- tell the platform plugin which backend was loaded (if it doesn't do it itself) so that it can load KDE translations for the backend
