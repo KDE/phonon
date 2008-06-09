@@ -24,12 +24,11 @@
 #include "../abstractvideooutput.h"
 #include "../phonondefs.h"
 #include <QtCore/QObject>
+#include "videoframe2.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-template<typename T> class QVector;
-template<typename Key, typename T> class QMap;
+template<typename T> class QSet;
 #endif
-class QSize;
 
 namespace Phonon
 {
@@ -37,7 +36,6 @@ namespace Experimental
 {
 
 class AbstractVideoDataOutputPrivate;
-struct VideoFrame2;
 
 /**
  * \short This class gives you the video data.
@@ -61,8 +59,19 @@ class PHONONEXPERIMENTAL_EXPORT AbstractVideoDataOutput : public AbstractVideoOu
          * Constructs an AbstractVideoDataOutput
          */
         AbstractVideoDataOutput();
+        ~AbstractVideoDataOutput();
 
     public:
+        /**
+         * Lists the formats this output is allowed to pass via frameReady.
+         */
+        QSet<VideoFrame2::Format> allowedFormats() const;
+
+        /**
+         * Defaults to VideoFrame2::Format_RGB888.
+         */
+        void setAllowedFormats(const QSet<VideoFrame2::Format> &);
+
         bool isRunning() const;
 
         /**
