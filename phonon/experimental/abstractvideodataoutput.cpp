@@ -32,11 +32,29 @@ AbstractVideoDataOutput::AbstractVideoDataOutput()
 {
     K_D(AbstractVideoDataOutput);
     d->isRunning = false;
+    d->allowedFormats << VideoFrame2::Format_RGB888;
 }
 
 AbstractVideoDataOutput::AbstractVideoDataOutput(AbstractVideoDataOutputPrivate &dd)
     : AbstractVideoOutput(dd)
 {
+}
+
+AbstractVideoDataOutput::~AbstractVideoDataOutput()
+{
+    setRunning(false);
+}
+
+QSet<VideoFrame2::Format> AbstractVideoDataOutput::allowedFormats() const
+{
+    K_D(const AbstractVideoDataOutput);
+    return d->allowedFormats;
+}
+
+void AbstractVideoDataOutput::setAllowedFormats(const QSet<VideoFrame2::Format> &allowedFormats)
+{
+    K_D(AbstractVideoDataOutput);
+    d->allowedFormats = allowedFormats;
 }
 
 bool AbstractVideoDataOutput::isRunning() const

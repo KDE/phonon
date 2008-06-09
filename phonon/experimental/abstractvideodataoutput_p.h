@@ -22,6 +22,7 @@
 
 #include "abstractvideodataoutput.h"
 #include "../abstractvideooutput_p.h"
+#include <QtCore/QSet>
 
 namespace Phonon
 {
@@ -38,6 +39,7 @@ class AbstractVideoDataOutputPrivate : public Phonon::AbstractVideoOutputPrivate
 
     private:
         bool isRunning;
+        QSet<VideoFrame2::Format> allowedFormats;
 };
 
 } // namespace Experimental
