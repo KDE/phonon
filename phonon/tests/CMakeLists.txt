@@ -3,7 +3,6 @@ if(msvc)
   add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
 endif(msvc)
 add_subdirectory(fakebackend)
-#add_subdirectory(guitest)
 
 MACRO(PHONON_UNIT_TESTS)
 	FOREACH(_testname ${ARGN})
