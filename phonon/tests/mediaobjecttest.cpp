@@ -630,7 +630,7 @@ Q_DECLARE_METATYPE(MediaSource)
 void MediaObjectTest::testJustInTimeQueuing()
 {
     qRegisterMetaType<MediaSource>();
-    QSignalSpy currentSourceChanged(m_media, SIGNAL(currentSourceChanged(const MediaSource &)));
+    QSignalSpy currentSourceChanged(m_media, SIGNAL(currentSourceChanged(const Phonon::MediaSource &)));
     QSignalSpy finished(m_media, SIGNAL(finished()));
     connect(m_media, SIGNAL(aboutToFinish()), SLOT(enqueueMedia()));
 
@@ -645,7 +645,7 @@ void MediaObjectTest::testJustInTimeQueuing()
     }
     disconnect(m_media, SIGNAL(aboutToFinish()), this, SLOT(enqueueMedia()));
     if (currentSourceChanged.isEmpty()) {
-        QVERIFY(QTest::kWaitForSignal(m_media, SIGNAL(currentSourceChanged(const MediaSource &)), 3000));
+        QVERIFY(QTest::kWaitForSignal(m_media, SIGNAL(currentSourceChanged(const Phonon::MediaSource &)), 3000));
     }
     QCOMPARE(currentSourceChanged.size(), 1);
     QCOMPARE(finished.size(), 0);
