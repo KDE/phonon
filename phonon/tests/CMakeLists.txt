@@ -68,7 +68,13 @@ target_link_libraries(audiodevicelisttest ${PHONON_KAUDIODEVICELIST_LIBS})
 target_link_libraries(mediaplayer ${PHONON_KIO_LIBS})
 target_link_libraries(backendcapabilitiestest_fake ${PHONON_KDECORE_LIBS})
 #methodtest does not link against libphonon
-phonon_add_executable(methodtest methodtest.cpp ../factory.cpp ../phononnamespace.cpp ../streameventqueue.cpp ../lockfreequeue.cpp)
+phonon_add_executable(methodtest methodtest.cpp ../factory.cpp
+                                                ../mediaobject.cpp
+                                                ../phononnamespace.cpp
+                                                ../platform.cpp
+                                                ../streameventqueue.cpp
+                                                ../lockfreequeue.cpp
+                                                )
 target_link_libraries(methodtest ${QT_QTTEST_LIBRARY} ${PHONON_LIBS})
 SET_TARGET_PROPERTIES(methodtest PROPERTIES COMPILE_FLAGS "-DPHONON_METHODTEST -DPHONON_EXPORT=")
 phonon_add_unit_test(methodtest_fake methodtest.cpp ../factory.cpp ../phononnamespace.cpp)
