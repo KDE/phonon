@@ -12,6 +12,9 @@ InitialPreference=10
 Name=GStreamer
 
 Comment=Phonon GStreamer backend
+Comment[bg]=Phonon GStreamer
+Comment[ca]=Dorsal GStreamer del Phonon
+Comment[da]=GStreamer-backend til Phonon
 Comment[es]=Motor GStreamer para Phonon
 Comment[et]=Phononi GStreameri taustaprogramm
 Comment[gl]=Infraestrutura de GStreamer para Phonon

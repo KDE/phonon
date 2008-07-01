@@ -11,6 +11,9 @@ InitialPreference=15
 Name=DirectShow9
 
 Comment=Phonon DirectShow9 backend
+Comment[bg]=Phonon DirectShow9
+Comment[ca]=Dorsal DirectShow9 del Phonon
+Comment[da]=DirectShow9-backend til Phonon
 Comment[es]=Motor DirectShow9 para Phonon
 Comment[et]=Phononi DirectShow9 taustaprogramm
 Comment[gl]=Infraestrutura de DirectShow9 para Phonon
