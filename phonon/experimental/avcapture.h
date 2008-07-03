@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006, 2008 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,13 +19,13 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef PHONON_AVCAPTURE_H
-#define PHONON_AVCAPTURE_H
+#ifndef PHONON_EXPERIMENTAL_AVCAPTURE_H
+#define PHONON_EXPERIMENTAL_AVCAPTURE_H
 
 #include "export.h"
-#include "../mediaobject.h"
+#include "../medianode.h"
 #include "../phonondefs.h"
-#include "../objectdescription.h"
+#include "objectdescription.h"
 
 class QString;
 class QStringList;
@@ -52,11 +52,11 @@ namespace Experimental
      * @see BackendCapabilities::availableAudioCaptureDevices
      * @see BackendCapabilities::availableVideoCaptureDevices
      */
-    class PHONONEXPERIMENTAL_EXPORT AvCapture : public MediaProducer
+    class PHONONEXPERIMENTAL_EXPORT AvCapture : public QObject, public Phonon::MediaNode
     {
         Q_OBJECT
         K_DECLARE_PRIVATE(AvCapture)
-        PHONON_HEIR(AvCapture)
+        PHONON_OBJECT(AvCapture)
         Q_PROPERTY(AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
         Q_PROPERTY(VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
         public:
@@ -131,5 +131,4 @@ namespace Experimental
 } // namespace Experimental
 } // namespace Phonon
 
-// vim: sw=4 ts=4 tw=80
-#endif // PHONON_AVCAPTURE_H
+#endif // PHONON_EXPERIMENTAL_AVCAPTURE_H

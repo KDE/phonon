@@ -19,44 +19,29 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef PHONON_EXPERIMENTAL_FACTORY_P_H
-#define PHONON_EXPERIMENTAL_FACTORY_P_H
 
-#include <QtCore/QObject>
-#include "export.h"
+#ifndef PHONON_EXPERIMENTAL_AVCAPTUREINTERFACE_H
+#define PHONON_EXPERIMENTAL_AVCAPTUREINTERFACE_H
 
 namespace Phonon
 {
 namespace Experimental
 {
-namespace Factory
+
+class AvCaptureInterface
 {
-    /**
-     * Emits signals for Phonon::Experimental::Factory.
-     */
-    class Sender : public QObject
-    {
-        Q_OBJECT
-        Q_SIGNALS:
-            /**
-             * \copydoc Phonon::Experimental::BackendCapabilities::Notifier::availableVideoCaptureDevicesChanged
-             */
-            void availableVideoCaptureDevicesChanged();
-    };
+    public:
+        virtual ~AvCaptureInterface() {}
 
-    PHONONEXPERIMENTAL_EXPORT Sender *sender();
+        virtual int audioCaptureDevice() const = 0;
+        virtual int videoCaptureDevice() const = 0;
+        virtual void setAudioCaptureDevice(int) = 0;
+        virtual void setVideoCaptureDevice(int) = 0;
+};
 
-    /**
-     * Create a new backend object for a VideoDataOutput.
-     *
-     * \return a pointer to the VideoDataOutput the backend provides.
-     */
-    PHONONEXPERIMENTAL_EXPORT QObject *createVideoDataOutput(QObject *parent = 0);
-
-    QObject *createAvCapture(QObject *parent = 0);
-
-} // namespace Factory
 } // namespace Experimental
 } // namespace Phonon
 
-#endif // PHONON_EXPERIMENTAL_FACTORY_P_H
+Q_DECLARE_INTERFACE(Phonon::Experimental::AvCaptureInterface, "0AvCaptureInterface.Phonon.kde.org")
+
+#endif // PHONON_EXPERIMENTAL_AVCAPTUREINTERFACE_H

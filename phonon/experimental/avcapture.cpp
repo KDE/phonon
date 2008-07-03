@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2005-2006, 2008 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,26 +19,28 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 #include "avcapture.h"
+#include "avcaptureinterface.h"
 #include "avcapture_p.h"
 #include "factory_p.h"
 #include "objectdescription.h"
 
 #define PHONON_CLASSNAME AvCapture
+#define PHONON_INTERFACENAME AvCaptureInterface
 
 namespace Phonon
 {
 namespace Experimental
 {
-
-PHONON_HEIR_IMPL(MediaProducer)
+PHONON_OBJECT_IMPL
 
 AudioCaptureDevice AvCapture::audioCaptureDevice() const
 {
     K_D(const AvCapture);
     int index;
     if (d->m_backendObject)
-        BACKEND_GET(int, index, "audioCaptureDevice");
+        index = INTERFACE_CALL(audioCaptureDevice());
     else
         index = d->audioCaptureDevice;
     return AudioCaptureDevice::fromIndex(index);
@@ -48,7 +50,7 @@ void AvCapture::setAudioCaptureDevice(const AudioCaptureDevice &audioCaptureDevi
 {
     K_D(AvCapture);
     if (d->m_backendObject)
-        BACKEND_CALL1("setAudioCaptureDevice", int, audioCaptureDevice.index());
+        INTERFACE_CALL(setAudioCaptureDevice(audioCaptureDevice.index()));
     else
         d->audioCaptureDevice = audioCaptureDevice.index();
 }
@@ -57,7 +59,7 @@ void AvCapture::setAudioCaptureDevice(int audioCaptureDeviceIndex)
 {
     K_D(AvCapture);
     if (d->m_backendObject)
-        BACKEND_CALL1("setAudioCaptureDevice", int, audioCaptureDeviceIndex);
+        INTERFACE_CALL(setAudioCaptureDevice(audioCaptureDeviceIndex));
     else
         d->audioCaptureDevice = audioCaptureDeviceIndex;
 }
@@ -67,7 +69,7 @@ VideoCaptureDevice AvCapture::videoCaptureDevice() const
     K_D(const AvCapture);
     int index;
     if (d->m_backendObject)
-        BACKEND_GET(int, index, "videoCaptureDevice");
+        index = INTERFACE_CALL(videoCaptureDevice());
     else
         index = d->videoCaptureDevice;
     return VideoCaptureDevice::fromIndex(index);
@@ -77,7 +79,7 @@ void AvCapture::setVideoCaptureDevice(const VideoCaptureDevice &videoCaptureDevi
 {
     K_D(AvCapture);
     if (d->m_backendObject)
-        BACKEND_CALL1("setVideoCaptureDevice", int, videoCaptureDevice.index());
+        INTERFACE_CALL(setVideoCaptureDevice(videoCaptureDevice.index()));
     else
         d->videoCaptureDevice = videoCaptureDevice.index();
 }
@@ -86,32 +88,31 @@ void AvCapture::setVideoCaptureDevice(int videoCaptureDeviceIndex)
 {
     K_D(AvCapture);
     if (d->m_backendObject)
-        BACKEND_CALL1("setVideoCaptureDevice", int, videoCaptureDeviceIndex);
+        INTERFACE_CALL(setVideoCaptureDevice(videoCaptureDeviceIndex));
     else
         d->videoCaptureDevice = videoCaptureDeviceIndex;
 }
 
 bool AvCapturePrivate::aboutToDeleteBackendObject()
 {
-    pBACKEND_GET(int, audioCaptureDevice, "audioCaptureDevice");
-    pBACKEND_GET(int, videoCaptureDevice, "videoCaptureDevice");
-    return MediaProducerPrivate::aboutToDeleteBackendObject();
+    audioCaptureDevice = pINTERFACE_CALL(audioCaptureDevice());
+    videoCaptureDevice = pINTERFACE_CALL(videoCaptureDevice());
+    return true;
 }
 
 void AvCapturePrivate::setupBackendObject()
 {
     Q_ASSERT(m_backendObject);
-    MediaProducerPrivate::setupBackendObject();
 
     // set up attributes
-    pBACKEND_CALL1("setAudioCaptureDevice", int, audioCaptureDevice);
-    pBACKEND_CALL1("setVideoCaptureDevice", int, videoCaptureDevice);
+    pINTERFACE_CALL(setAudioCaptureDevice(audioCaptureDevice));
+    pINTERFACE_CALL(setVideoCaptureDevice(videoCaptureDevice));
 }
 
 } // namespace Experimental
 } // namespace Phonon
 
-#include "avcapture.moc"
+#include "moc_avcapture.cpp"
 
 #undef PHONON_CLASSNAME
-// vim: sw=4 ts=4 tw=80
+#undef PHONON_INTERFACENAME
