@@ -24,14 +24,15 @@
 #define AVCAPTURE_P_H
 
 #include "avcapture.h"
-#include "../mediaobject_p.h"
+#include "../medianode_p.h"
+#include "../phonondefs_p.h"
 
 namespace Phonon
 {
 namespace Experimental
 {
 
-class AvCapturePrivate : public MediaProducerPrivate
+class AvCapturePrivate : public MediaNodePrivate
 {
     Q_DECLARE_PUBLIC(AvCapture)
     PHONON_PRIVATECLASS

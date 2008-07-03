@@ -4,12 +4,14 @@ add_subdirectory(tests)
 set(phononexperimental_LIB_SRCS
     abstractvideodataoutput.cpp
     audiodataoutput.cpp
+    avcapture.cpp
     backendcapabilities.cpp
     factory.cpp
     globalconfig.cpp
     mediasource.cpp
     videodataoutput.cpp
     videodataoutput2.cpp
+    videowidget.cpp
     visualization.cpp
     ../abstractaudiooutput_p.cpp
     ../abstractvideooutput_p.cpp
@@ -28,15 +30,18 @@ install(TARGETS phononexperimental ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES
     abstractvideodataoutput.h
     audiodataoutput.h
+    avcapture.h
     backendcapabilities.h
     backendinterface.h
     export.h
     mediasource.h
     objectdescription.h
+    snapshotinterface.h
     videodataoutput.h
     videodataoutput2.h
     videodataoutputinterface.h
     videoframe.h
     videoframe2.h
+    videowidget.h
     visualization.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/phonon/experimental COMPONENT Devel)
