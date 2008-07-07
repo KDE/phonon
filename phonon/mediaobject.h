@@ -80,7 +80,6 @@ namespace Phonon
      */
     class PHONON_EXPORT MediaObject : public QObject, public MediaNode
     {
-        friend class MediaQueue;
         friend class FrontendInterfacePrivate;
         Q_OBJECT
         K_DECLARE_PRIVATE(MediaObject)
