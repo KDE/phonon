@@ -54,6 +54,7 @@ if (BUILD_PHONON_GSTREAMER)
          )
    endif(ALSA_FOUND)
 
+   add_definitions(-DPHONON_BACKEND_VERSION_4_2)
    automoc4(phonon_gstreamer phonon_gstreamer_SRCS)
    add_library(phonon_gstreamer SHARED ${phonon_gstreamer_SRCS})
    set_target_properties(phonon_gstreamer PROPERTIES PREFIX "")
