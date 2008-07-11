@@ -33,6 +33,11 @@ namespace Experimental
 class VideoWidgetPrivate : public Phonon::VideoWidgetPrivate
 {
     Q_DECLARE_PUBLIC(VideoWidget)
+    protected:
+        VideoWidgetPrivate(VideoWidget *parent)
+            : Phonon::VideoWidgetPrivate(parent)
+        {
+        }
 };
 
 } // namespace Experimental
