@@ -47,7 +47,7 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
         virtual void createBackendObject();
         void setupBackendObject();
 
-        VideoWidgetPrivate(VideoWidget *parent = 0)
+        VideoWidgetPrivate(VideoWidget *parent)
             : layout(parent),
               aspectRatio(VideoWidget::AspectRatioAuto),
               scaleMode(VideoWidget::FitInView),
