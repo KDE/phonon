@@ -3,7 +3,11 @@ project(Phonon)
 cmake_minimum_required(VERSION 2.4.5 FATAL_ERROR)
 
 # enable unit tests
-enable_testing()
+option(PHONON_BUILD_TESTS "Build the tests")
+
+if (NOT PHONON_BUILD_TESTS)
+    enable_testing()
+endif (NOT PHONON_BUILD_TESTS)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -36,8 +40,6 @@ endif(MSVC)
 
 # for including config.h and for includes like <kparts/foo.h>
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR}/phonon ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/phonon)
-
-option(PHONON_BUILD_TESTS "Build the tests")
 
 macro(_SET_FANCY _var _value _comment)
    if (KDESupport_SOURCE_DIR)
