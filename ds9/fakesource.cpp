@@ -18,6 +18,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "fakesource.h"
 #include "qpin.h"
 
+#include <dshow.h>
 #include <initguid.h>
 #include <dvdmedia.h> // VIDEOINFOHEADER2
 

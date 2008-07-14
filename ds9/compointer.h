@@ -18,6 +18,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PHONON_COMPOINTER_H
 #define PHONON_COMPOINTER_H
 
+#include <windows.h>
 #include <dshow.h>
 
 QT_BEGIN_NAMESPACE
