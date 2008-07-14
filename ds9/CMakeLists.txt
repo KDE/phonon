@@ -17,7 +17,7 @@ include(ConfigureChecks.cmake)
 if (BUILD_PHONON_DS9)
     find_package(OPENGL REQUIRED)
 
-    include_directories($ENV{DXDSDK_DIR}/include)
+    include_directories($ENV{DXDSDK_DIR}/include $ENV{DXSDK_DIR})
     set(phonon_ds9_SRCS
             abstractvideorenderer.cpp
             audiooutput.cpp
