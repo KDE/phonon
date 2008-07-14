@@ -22,6 +22,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <phonon/streaminterface.h>
 
+#include <dshow.h>
 #include <initguid.h>
 
 QT_BEGIN_NAMESPACE

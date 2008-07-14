@@ -16,6 +16,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "qaudiocdreader.h"
+#include <dshow.h>
 #include <initguid.h>
 
 #include <winioctl.h> // needed for FILE_DEVICE_CD_ROM etc
