@@ -42,13 +42,8 @@ namespace Experimental
     struct VideoFrame;
 
     /**
-     * \short This class gives you the video data.
-     *
-     * This class implements a special AbstractVideoOutput that gives your
-     * application the video data.
-     *
-     * You can also use the video data for further processing (e.g. encoding and
-     * saving to a file).
+     * \short This class gives you nothing. ;-)
+     * \deprecated
      *
      * \author Matthias Kretz <kretz@kde.org>
      */
