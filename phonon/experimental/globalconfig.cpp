@@ -37,12 +37,7 @@ namespace Experimental
 {
 
 GlobalConfig::GlobalConfig(QObject *parent)
-    : QObject(parent)
-    , m_config(QLatin1String("kde.org"), QLatin1String("libphonon"))
-{
-}
-
-GlobalConfig::~GlobalConfig()
+    : Phonon::GlobalConfig(parent)
 {
 }
 

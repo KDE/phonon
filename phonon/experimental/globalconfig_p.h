@@ -27,6 +27,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QSettings>
 
 #include "../phononnamespace.h"
+#include "../globalconfig_p.h"
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
@@ -36,26 +37,17 @@ namespace Phonon
 namespace Experimental
 {
 
-class GlobalConfig : public QObject
+class GlobalConfig : public Phonon::GlobalConfig
 {
     Q_OBJECT
 public:
     GlobalConfig(QObject *parent = 0);
-    ~GlobalConfig();
 
-    enum HideAdvancedDevicesOverride {
-        ShowAdvancedDevices = 0,
-        HideAdvancedDevices = 1,
-        FromSettings = 2
-    };
     QList<int> videoCaptureDeviceListFor(Phonon::Category category, HideAdvancedDevicesOverride override = FromSettings) const;
     int videoCaptureDeviceFor(Phonon::Category category) const;
 
 Q_SIGNALS:
     void videoCaptureDeviceConfigChanged();
-
-private:
-    QSettings m_config;
 };
 
 } // namespace Experimental
