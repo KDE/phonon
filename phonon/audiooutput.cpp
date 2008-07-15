@@ -32,9 +32,9 @@
 #include <qmath.h>
 
 #define PHONON_CLASSNAME AudioOutput
-#define IFACES2 AudioOutputInterface
+#define IFACES2 AudioOutputInterface42
 #define IFACES1 IFACES2
-#define IFACES0 AudioOutputInterface0, IFACES1
+#define IFACES0 AudioOutputInterface40, IFACES1
 #define PHONON_INTERFACENAME IFACES0
 
 QT_BEGIN_NAMESPACE

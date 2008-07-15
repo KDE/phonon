@@ -29,6 +29,12 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifdef PHONON_BACKEND_VERSION_4_3
+# ifndef PHONON_BACKEND_VERSION_4_2
+#  define PHONON_BACKEND_VERSION_4_2
+# endif
+#endif
+
 // the following inlines are correct - exclude per line doesn't work for multiline-macros so exclude
 // the whole file for inline checks
 //krazy:excludeall=inline
