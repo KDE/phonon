@@ -33,10 +33,13 @@ class AvCaptureInterface
     public:
         virtual ~AvCaptureInterface() {}
 
-        virtual int audioCaptureDevice() const = 0;
-        virtual int videoCaptureDevice() const = 0;
-        virtual void setAudioCaptureDevice(int) = 0;
-        virtual void setVideoCaptureDevice(int) = 0;
+        virtual void start() = 0;
+        virtual void stop() = 0;
+
+        virtual AudioCaptureDevice audioCaptureDevice() const = 0;
+        virtual VideoCaptureDevice videoCaptureDevice() const = 0;
+        virtual void setAudioCaptureDevice(const AudioCaptureDevice &) = 0;
+        virtual void setVideoCaptureDevice(const VideoCaptureDevice &) = 0;
 };
 
 } // namespace Experimental

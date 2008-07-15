@@ -26,6 +26,7 @@
 #include "../medianode.h"
 #include "../phonondefs.h"
 #include "objectdescription.h"
+#include "../phononnamespace.h"
 
 class QString;
 class QStringList;
@@ -78,7 +79,6 @@ namespace Experimental
              */
             VideoCaptureDevice videoCaptureDevice() const;
 
-        public Q_SLOTS:
             /**
              * Sets the audio capture source to use.
              *
@@ -90,18 +90,7 @@ namespace Experimental
              * @see setAudioCaptureDevice(int)
              */
             void setAudioCaptureDevice(const AudioCaptureDevice &source);
-
-            /**
-             * Sets the capture source to use.
-             *
-             * @param sourceIndex An index corresponding an object of class
-             * AudioCaptureDevice. A list of available objects can be queried from
-             * BackendCapabilities::availableAudioCaptureDevices.
-             *
-             * @see audioCaptureDevice
-             * @see setAudioCaptureDevice(const AudioCaptureDevice &)
-             */
-            void setAudioCaptureDevice(int sourceIndex);
+            void setAudioCaptureDevice(Phonon::Category category);
 
             /**
              * Sets the video capture source to use.
@@ -114,18 +103,18 @@ namespace Experimental
              * @see setVideoCaptureDevice(int)
              */
             void setVideoCaptureDevice(const VideoCaptureDevice &source);
+            void setVideoCaptureDevice(Phonon::Category category);
+
+        public Q_SLOTS:
+            /**
+             * Start capture.
+             */
+            void start();
 
             /**
-             * Sets the capture source to use.
-             *
-             * @param sourceIndex An index corresponding an object of class
-             * VideoCaptureDevice. A list of available objects can be queried from
-             * BackendCapabilities::availableVideoCaptureDevices.
-             *
-             * @see videoCaptureDevice
-             * @see setVideoCaptureDevice(const VideoCaptureDevice &)
+             * Stop capture.
              */
-            void setVideoCaptureDevice(int sourceIndex);
+            void stop();
     };
 
 } // namespace Experimental
