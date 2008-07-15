@@ -55,7 +55,7 @@ namespace Phonon
         void audioOutputDeviceConfigChanged();
         void audioCaptureDeviceConfigChanged();
 
-    private:
+    protected:
         QSettings m_config;
     };
 } // namespace Phonon
