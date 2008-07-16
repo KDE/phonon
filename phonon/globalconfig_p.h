@@ -26,6 +26,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QObject>
 #include <QtCore/QSettings>
 
+#include "phonon_export.h"
 #include "phononnamespace.h"
 
 QT_BEGIN_HEADER
@@ -33,7 +34,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-    class GlobalConfig : public QObject
+    class PHONON_EXPORT GlobalConfig : public QObject
     {
         Q_OBJECT
     public:
