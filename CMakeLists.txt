@@ -21,6 +21,113 @@ if (NOT QT_QTDBUS_FOUND)
 endif(NOT QT_QTDBUS_FOUND)
 
 find_package(Automoc4 REQUIRED)
+include (CheckCXXCompilerFlag)
+include (MacroEnsureVersion)
+
+if (CMAKE_COMPILER_IS_GNUCXX)
+   set (KDE4_ENABLE_EXCEPTIONS -fexceptions)
+   # Select flags.
+   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+   set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_CXX_FLAGS_DEBUG          "-g -O2 -fno-reorder-blocks -fno-schedule-insns -fno-inline")
+   set(CMAKE_CXX_FLAGS_DEBUGFULL      "-g3 -fno-inline")
+   set(CMAKE_CXX_FLAGS_PROFILE        "-g3 -fno-inline -ftest-coverage -fprofile-arcs")
+   set(CMAKE_C_FLAGS_RELWITHDEBINFO   "-O2 -g")
+   set(CMAKE_C_FLAGS_RELEASE          "-O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_C_FLAGS_DEBUG            "-g -O2 -fno-reorder-blocks -fno-schedule-insns -fno-inline")
+   set(CMAKE_C_FLAGS_DEBUGFULL        "-g3 -fno-inline")
+   set(CMAKE_C_FLAGS_PROFILE          "-g3 -fno-inline -ftest-coverage -fprofile-arcs")
+
+   if (CMAKE_SYSTEM_NAME MATCHES Linux)
+     set ( CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
+     set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-exceptions -fno-check-new -fno-common")
+     add_definitions (-D_BSD_SOURCE)
+   endif (CMAKE_SYSTEM_NAME MATCHES Linux)
+
+   # gcc under Windows
+   if (MINGW)
+      set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols -Wl,--disable-auto-import")
+      set (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--export-all-symbols -Wl,--disable-auto-import")
+
+      # we always link against the release version of QT with mingw
+      # (even for debug builds). So we need to define QT_NO_DEBUG
+      # or else QPluginLoader rejects plugins because it thinks
+      # they're built against the wrong QT.
+      add_definitions(-DQT_NO_DEBUG)
+   endif (MINGW)
+
+   check_cxx_compiler_flag(-fPIE HAVE_FPIE_SUPPORT)
+   if(KDE4_ENABLE_FPIE)
+       if(HAVE_FPIE_SUPPORT)
+        set (KDE4_CXX_FPIE_FLAGS "-fPIE")
+        set (KDE4_PIE_LDFLAGS "-pie")
+       else(HAVE_FPIE_SUPPORT)
+        message(STATUS "Your compiler doesn't support PIE flag")
+       endif(HAVE_FPIE_SUPPORT)
+   endif(KDE4_ENABLE_FPIE)
+
+   check_cxx_compiler_flag(-Woverloaded-virtual __KDE_HAVE_W_OVERLOADED_VIRTUAL)
+   if(__KDE_HAVE_W_OVERLOADED_VIRTUAL)
+       set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual")
+   endif(__KDE_HAVE_W_OVERLOADED_VIRTUAL)
+
+   # visibility support
+   check_cxx_compiler_flag(-fvisibility=hidden __KDE_HAVE_GCC_VISIBILITY)
+   set( __KDE_HAVE_GCC_VISIBILITY ${__KDE_HAVE_GCC_VISIBILITY} CACHE BOOL "GCC support for hidden visibility")
+
+   # get the gcc version
+   exec_program(${CMAKE_C_COMPILER} ARGS --version OUTPUT_VARIABLE _gcc_version_info)
+
+   string (REGEX MATCH "[345]\\.[0-9]\\.[0-9]" _gcc_version "${_gcc_version_info}")
+   # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
+   if (NOT _gcc_version)
+      string (REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" _gcc_version "${_gcc_version_info}")
+   endif (NOT _gcc_version)
+
+   macro_ensure_version("4.1.0" "${_gcc_version}" GCC_IS_NEWER_THAN_4_1)
+   macro_ensure_version("4.2.0" "${_gcc_version}" GCC_IS_NEWER_THAN_4_2)
+   macro_ensure_version("4.3.0" "${_gcc_version}" GCC_IS_NEWER_THAN_4_3)
+
+   # save a little by making local statics not threadsafe
+   # ### do not enable it for older compilers, see
+   # ### http://gcc.gnu.org/bugzilla/show_bug.cgi?id=31806
+   if (GCC_IS_NEWER_THAN_4_3)
+       set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-threadsafe-statics")
+   endif (GCC_IS_NEWER_THAN_4_3)
+
+   set(_GCC_COMPILED_WITH_BAD_ALLOCATOR FALSE)
+   if (GCC_IS_NEWER_THAN_4_1)
+      exec_program(${CMAKE_C_COMPILER} ARGS -v OUTPUT_VARIABLE _gcc_alloc_info)
+      string(REGEX MATCH "(--enable-libstdcxx-allocator=mt)" _GCC_COMPILED_WITH_BAD_ALLOCATOR "${_gcc_alloc_info}")
+   endif (GCC_IS_NEWER_THAN_4_1)
+
+   if (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR)
+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+      set (KDE4_C_FLAGS "-fvisibility=hidden")
+      # check that Qt defines Q_DECL_EXPORT as __attribute__ ((visibility("default")))
+      # if it doesn't and KDE compiles with hidden default visibiltiy plugins will break
+      set(_source "#include <QtCore/QtGlobal>\n int main()\n {\n #ifdef QT_VISIBILITY_AVAILABLE \n return 0;\n #else \n return 1; \n #endif \n }\n")
+      set(_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/check_qt_visibility.cpp)
+      file(WRITE "${_source_file}" "${_source}")
+      set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${QT_INCLUDES}")
+
+      try_run(_run_result _compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${_include_dirs}")
+
+      if(NOT _compile_result)
+         message(FATAL_ERROR "Could not compile simple test program:\n ${_source}")
+      endif(NOT _compile_result)
+      if(_run_result)
+         message(FATAL_ERROR "Qt compiled without support for -fvisibility=hidden. This will break plugins and linking of some applications. Please fix your Qt installation.")
+      endif(_run_result)
+
+      if (GCC_IS_NEWER_THAN_4_2)
+          set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden")
+      endif (GCC_IS_NEWER_THAN_4_2)
+   else (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR)
+      set (__KDE_HAVE_GCC_VISIBILITY 0)
+   endif (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR)
+
+endif (CMAKE_COMPILER_IS_GNUCXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
