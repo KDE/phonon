@@ -138,12 +138,14 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, Hid
         // the platform plugin lists the audio devices for the platform
         // this list already is in default order (as defined by the platform plugin)
         defaultList = platformPlugin->objectDescriptionIndexes(Phonon::AudioOutputDeviceType);
-        QMutableListIterator<int> it(defaultList);
-        while (it.hasNext()) {
-            AudioOutputDevice objDesc = AudioOutputDevice::fromIndex(it.next());
-            const QVariant var = objDesc.property("isAdvanced");
-            if (var.isValid() && var.toBool()) {
-                it.remove();
+        if (hideAdvancedDevices) {
+            QMutableListIterator<int> it(defaultList);
+            while (it.hasNext()) {
+                AudioOutputDevice objDesc = AudioOutputDevice::fromIndex(it.next());
+                const QVariant var = objDesc.property("isAdvanced");
+                if (var.isValid() && var.toBool()) {
+                    it.remove();
+                }
             }
         }
     }
@@ -190,12 +192,14 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, Hi
         // the platform plugin lists the audio devices for the platform
         // this list already is in default order (as defined by the platform plugin)
         defaultList = platformPlugin->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
-        QMutableListIterator<int> it(defaultList);
-        while (it.hasNext()) {
-            AudioCaptureDevice objDesc = AudioCaptureDevice::fromIndex(it.next());
-            const QVariant var = objDesc.property("isAdvanced");
-            if (var.isValid() && var.toBool()) {
-                it.remove();
+        if (hideAdvancedDevices) {
+            QMutableListIterator<int> it(defaultList);
+            while (it.hasNext()) {
+                AudioCaptureDevice objDesc = AudioCaptureDevice::fromIndex(it.next());
+                const QVariant var = objDesc.property("isAdvanced");
+                if (var.isValid() && var.toBool()) {
+                    it.remove();
+                }
             }
         }
     }
