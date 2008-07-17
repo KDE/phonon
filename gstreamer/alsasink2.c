@@ -594,6 +594,14 @@ max_chan_error:
   }
 }
 
+#ifndef GST_CHECK_VERSION
+#define GST_CHECK_VERSION(major,minor,micro) \
+    (GST_VERSION_MAJOR > (major) || \
+     (GST_VERSION_MAJOR == (major) && GST_VERSION_MINOR > (minor)) || \
+     (GST_VERSION_MAJOR == (major) && GST_VERSION_MINOR == (minor) && GST_VERSION_MICRO >= (micro)))
+#endif
+
+#if GST_CHECK_VERSION(0, 10, 18)
 snd_pcm_t *
 gst_alsa_open_iec958_pcm (GstObject * obj)
 {
@@ -631,6 +639,7 @@ gst_alsa_open_iec958_pcm (GstObject * obj)
 
   return pcm;
 }
+#endif
 
 
 /*
@@ -667,6 +676,7 @@ gst_alsa_probe_supported_formats (GstObject * obj, snd_pcm_t * handle,
   if (!(caps = gst_alsa_detect_channels (obj, hw_params, caps)))
     goto subroutine_error;
 
+#if GST_CHECK_VERSION(0, 10, 18)
   /* Try opening IEC958 device to see if we can support that format (playback
    * only for now but we could add SPDIF capture later) */
   if (stream_type == SND_PCM_STREAM_PLAYBACK) {
@@ -677,6 +687,7 @@ gst_alsa_probe_supported_formats (GstObject * obj, snd_pcm_t * handle,
       snd_pcm_close (pcm);
     }
   }
+#endif
 
   snd_pcm_hw_params_free (hw_params);
   return caps;
@@ -1085,6 +1096,7 @@ retry:
   CHECK (snd_pcm_hw_params_set_access (alsa->handle, params, alsa->access),
       wrong_access);
   /* set the sample format */
+#if GST_CHECK_VERSION(0, 10, 18)
   if (alsa->iec958) {
     /* Try to use big endian first else fallback to le and swap bytes */
     if (snd_pcm_hw_params_set_format (alsa->handle, params, alsa->format) < 0) {
@@ -1095,6 +1107,7 @@ retry:
       alsa->need_swap = FALSE;
     }
   }
+#endif
   CHECK (snd_pcm_hw_params_set_format (alsa->handle, params, alsa->format),
       no_sample_format);
   /* set the count of channels */
@@ -1376,10 +1389,12 @@ alsasink2_parse_spec (GstAlsaSink2 * alsa, GstRingBufferSpec * spec)
     case GST_BUFTYPE_MU_LAW:
       alsa->format = SND_PCM_FORMAT_MU_LAW;
       break;
+#if GST_CHECK_VERSION(0, 10, 18)
     case GST_BUFTYPE_IEC958:
       alsa->format = SND_PCM_FORMAT_S16_BE;
       alsa->iec958 = TRUE;
       break;
+#endif
     default:
       goto error;
 
@@ -1439,6 +1454,7 @@ gst_alsasink2_prepare (GstAudioSink * asink, GstRingBufferSpec * spec)
 
   alsa = GST_ALSA_SINK2 (asink);
 
+#if GST_CHECK_VERSION(0, 10, 18)
   if (spec->format == GST_IEC958) {
     snd_pcm_close (alsa->handle);
     alsa->handle = gst_alsa_open_iec958_pcm (GST_OBJECT (alsa));
@@ -1446,6 +1462,7 @@ gst_alsasink2_prepare (GstAudioSink * asink, GstRingBufferSpec * spec)
       goto no_iec958;
     }
   }
+#endif
 
   if (!alsasink2_parse_spec (alsa, spec))
     goto spec_parse;
@@ -1478,12 +1495,14 @@ gst_alsasink2_prepare (GstAudioSink * asink, GstRingBufferSpec * spec)
   return TRUE;
 
   /* ERRORS */
+#if GST_CHECK_VERSION(0, 10, 18)
 no_iec958:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, OPEN_WRITE, (NULL),
         ("Could not open IEC958 (SPDIF) device for playback"));
     return FALSE;
   }
+#endif
 spec_parse:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
