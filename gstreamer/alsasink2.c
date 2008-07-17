@@ -44,6 +44,8 @@
  * Last reviewed on 2006-03-01 (0.10.4)
  */
 
+#define _XOPEN_SOURCE 600
+
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <errno.h>
