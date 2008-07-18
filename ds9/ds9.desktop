@@ -12,6 +12,7 @@ Name=DirectShow9
 Name[pa]=ਡਾਇਰੈਕਸ਼ੋ9
 Name[sr]=Директшоу‑9
 Name[sr@latin]=DirectShow‑9
+Name[sv]=Directshow 9
 
 Comment=Phonon DirectShow9 backend
 Comment[bg]=Phonon DirectShow9
@@ -30,5 +31,6 @@ Comment[pa]=ਫੋਨੋਨ ਡਾਇਰੈਕਟਸ਼ੋ9 ਬੈਕਐਂਡ
 Comment[pt]=Infra-estrutura do DirectShow9 para o Phonon
 Comment[sr]=Директшоу‑9 као позадина Фонона
 Comment[sr@latin]=DirectShow‑9 kao pozadina Phonona
+Comment[sv]=Phonon Directshow 9-gränssnitt
 Comment[uk]=Сервер DirectShow9 для Phonon
 Comment[zh_CN]=Phonon DirectShow9 后端
