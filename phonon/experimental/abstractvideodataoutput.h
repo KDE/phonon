@@ -51,7 +51,7 @@ class AbstractVideoDataOutputPrivate;
  *
  * \author Matthias Kretz <kretz@kde.org>
  *
- * \see VideoDataOutput
+ * \see VideoDataOutput2
  */
 class PHONONEXPERIMENTAL_EXPORT AbstractVideoDataOutput : public AbstractVideoOutput
 {
@@ -64,11 +64,10 @@ class PHONONEXPERIMENTAL_EXPORT AbstractVideoDataOutput : public AbstractVideoOu
         AbstractVideoDataOutput();
         ~AbstractVideoDataOutput();
 
-    public:
         /**
          * Lists the formats this output is allowed to pass via frameReady.
          */
-        QSet<VideoFrame2::Format> allowedFormats() const;
+        virtual QSet<VideoFrame2::Format> allowedFormats() const;
 
         /**
          * Defaults to VideoFrame2::Format_RGB888.
