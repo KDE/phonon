@@ -68,6 +68,7 @@ bool AbstractVideoDataOutput::isRunning() const
 void AbstractVideoDataOutput::setRunning(bool running)
 {
     K_D(AbstractVideoDataOutput);
+    d->isRunning = running;
     Iface<VideoDataOutputInterface> iface(d);
     if (iface) {
         if (running) {
