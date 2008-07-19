@@ -23,7 +23,7 @@
 #include <QtCore/QtGlobal>
 
 #ifndef PHONON_EXPORT
-# if defined _WIN32 || defined _WIN64
+# if defined Q_WS_WIN
 #  ifdef MAKE_PHONON_LIB /* We are building this library */
 #   define PHONON_EXPORT Q_DECL_EXPORT
 #  else /* We are using this library */
