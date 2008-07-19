@@ -55,7 +55,7 @@ if (BUILD_PHONON_DS9)
                 ${PHONON_LIBS}  ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY}
                 dxguid strmiids dmoguids msdmo ole32 oleaut32 uuid gdi32)
     install(TARGETS phonon_ds9
-	    RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+	    RUNTIME DESTINATION ${BIN_INSTALL_DIR}/phonon_backend
 	    LIBRARY DESTINATION ${LIB_INSTALL_DIR}
 	    ARCHIVE DESTINATION ${LIB_INSTALL_DIR})
     install(FILES ds9.desktop DESTINATION ${SERVICES_INSTALL_DIR}/phononbackends)
