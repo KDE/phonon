@@ -50,6 +50,10 @@ if (QT_QTDBUS_FOUND)
 else (QT_QTDBUS_FOUND)
   target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 endif (QT_QTDBUS_FOUND)
+if (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
+  # We need to explicitly link libm to phonon in Solaris
+  target_link_libraries(phonon m)
+endif (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
 
 set_target_properties(phonon PROPERTIES
                              VERSION ${PHONON_LIB_VERSION}
