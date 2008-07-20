@@ -141,6 +141,15 @@ namespace Experimental
          * pixels with the Cr value.
          */
         QByteArray data2;
+
+        inline QImage qImage() const
+        {
+            if (format == Format_RGB888) {
+                return QImage(reinterpret_cast<const uchar *>(data0.constData()),
+                        width, height, QImage::Format_RGB888);
+            }
+            return QImage();
+        }
     };
 } // namespace Experimental
 } // namespace Phonon
