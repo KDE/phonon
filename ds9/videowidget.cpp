@@ -138,8 +138,10 @@ namespace Phonon
         };
 
         VideoWidget::VideoWidget(QWidget *parent)
-            : BackendNode(parent), m_brightness(0.), m_contrast(0.), m_hue(0.), m_saturation(0.),
-            m_aspectRatio(Phonon::VideoWidget::AspectRatioAuto), m_scaleMode(Phonon::VideoWidget::FitInView)
+            : BackendNode(parent), m_aspectRatio(Phonon::VideoWidget::AspectRatioAuto),
+              m_scaleMode(Phonon::VideoWidget::FitInView),
+              m_brightness(0.), m_contrast(0.), m_hue(0.), m_saturation(0.)
+              
         {
             //initialisation of the widget
             m_widget = new VideoWindow(parent, this);

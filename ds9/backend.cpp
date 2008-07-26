@@ -50,7 +50,7 @@ namespace Phonon
         Backend::Backend(QObject *parent, const QVariantList &)
             : QObject(parent)
         {
-			::CoInitialize(0);
+            ::CoInitialize(0);
 
             //registering meta types
             qRegisterMetaType<HRESULT>("HRESULT");
@@ -60,7 +60,7 @@ namespace Phonon
 
         Backend::~Backend()
         {
-			::CoUninitialize();
+            ::CoUninitialize();
         }
 
         QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const QList<QVariant> &args)
@@ -126,12 +126,12 @@ namespace Phonon
             case Phonon::AudioOutputDeviceType:
                 {
 #ifdef Q_OS_WINCE
-					ret << 0; // only one audio device with index 0
+                    ret << 0; // only one audio device with index 0
 #else
-					ComPointer<ICreateDevEnum> devEnum(CLSID_SystemDeviceEnum, IID_ICreateDevEnum);
-					if (!devEnum) {
-						return ret; //it is impossible to enumerate the devices
-					}
+                    ComPointer<ICreateDevEnum> devEnum(CLSID_SystemDeviceEnum, IID_ICreateDevEnum);
+                    if (!devEnum) {
+                        return ret; //it is impossible to enumerate the devices
+                    }
                     ComPointer<IEnumMoniker> enumMon;
                     HRESULT hr = devEnum->CreateClassEnumerator(CLSID_AudioRendererCategory, enumMon.pparam(), 0);
                     if (FAILED(hr)) {
@@ -145,9 +145,9 @@ namespace Phonon
                     while (S_OK == enumMon->Next(1, mon.pparam(), 0)) {
                         LPOLESTR str = 0;
                         mon->GetDisplayName(0,0,&str);
-                        const QString name = QString::fromWCharArray(str);
-						ComPointer<IMalloc> alloc;
-						::CoGetMalloc(1, alloc.pparam());
+                        const QString name = QString::fromUtf16((const unsigned short*)str);
+                        ComPointer<IMalloc> alloc;
+                        ::CoGetMalloc(1, alloc.pparam());
                         alloc->Free(str);
 
                         int insert_pos = 0;
@@ -171,7 +171,7 @@ namespace Phonon
                 {
                     m_audioEffects.clear();
                     ComPointer<IEnumDMO> enumDMO;
-					HRESULT hr = ::DMOEnum(DMOCATEGORY_AUDIO_EFFECT, DMO_ENUMF_INCLUDE_KEYED, 0, 0, 0, 0, enumDMO.pparam());
+                    HRESULT hr = ::DMOEnum(DMOCATEGORY_AUDIO_EFFECT, DMO_ENUMF_INCLUDE_KEYED, 0, 0, 0, 0, enumDMO.pparam());
                     if (SUCCEEDED(hr)) {
                         CLSID clsid;
                         while (S_OK == enumDMO->Next(1, &clsid, 0, 0)) {
@@ -185,7 +185,7 @@ namespace Phonon
             default:
                 break;
             }
-			return ret;
+            return ret;
         }
 
         QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(Phonon::ObjectDescriptionType type, int index) const
@@ -196,27 +196,27 @@ namespace Phonon
             case Phonon::AudioOutputDeviceType:
                 {
 #ifdef Q_OS_WINCE
-					ret["name"] = QLatin1String("default audio device");
+                    ret["name"] = QLatin1String("default audio device");
 #else
                     const AudioMoniker &mon = m_audioOutputs[index];
                     LPOLESTR str = 0;
                     HRESULT hr = mon->GetDisplayName(0,0, &str);
                     if (SUCCEEDED(hr)) {
-                        QString name = QString::fromWCharArray(str); 
-						ComPointer<IMalloc> alloc;
-						::CoGetMalloc(1, alloc.pparam());
+                        QString name = QString::fromUtf16((const unsigned short*)str); 
+                        ComPointer<IMalloc> alloc;
+                        ::CoGetMalloc(1, alloc.pparam());
                         alloc->Free(str);
                         ret["name"] = name.mid(name.indexOf('\\') + 1);
-					}
+                    }
 #endif
                 }
                 break;
             case Phonon::EffectType:
                 {
                     WCHAR name[80]; // 80 is clearly stated in the MSDN doc
-					HRESULT hr = ::DMOGetName(m_audioEffects[index], name);
+                    HRESULT hr = ::DMOGetName(m_audioEffects[index], name);
                     if (SUCCEEDED(hr)) {
-                        ret["name"] = QString::fromWCharArray(name);
+                        ret["name"] = QString::fromUtf16((const unsigned short*)name);
                     }
                 }
                 break;

@@ -29,8 +29,8 @@ namespace Phonon
     namespace DS9
     {
         AudioOutput::AudioOutput(Backend *back, QObject *parent)
-            : BackendNode(parent), m_device(-1), m_backend(back), m_volume(0.),
-            m_currentIndex(0), m_crossfadeProgress(1.)
+            : BackendNode(parent), m_currentIndex(0), m_crossfadeProgress(1.),
+              m_device(-1), m_backend(back), m_volume(0.)
         {
         }
 
@@ -52,7 +52,7 @@ namespace Phonon
                 if (audio) {
                     const qreal currentVolume = newVolume * (m_currentIndex == i ? m_crossfadeProgress : 1-m_crossfadeProgress);
                     const qreal newDbVolume = (qMax(0., 1.-::log(::pow(currentVolume, -log10over20)))-1.) * 10000;
-                    audio->put_Volume(newDbVolume);
+                    audio->put_Volume(int(newDbVolume + 0.5));
                 }
             }
 

@@ -36,7 +36,7 @@ namespace Phonon
                 m_filter->AddRef();
             }
 
-            ~QEnumPins()
+            virtual ~QEnumPins()
             {
                 m_filter->Release();
             }
@@ -269,7 +269,7 @@ namespace Phonon
             return S_OK;
         }
 
-        STDMETHODIMP QBaseFilter::Run(REFERENCE_TIME t)
+        STDMETHODIMP QBaseFilter::Run(REFERENCE_TIME)
         {
             QWriteLocker locker(&m_lock);
             m_state = State_Running;
@@ -356,7 +356,7 @@ namespace Phonon
         {
             QWriteLocker locker(&m_lock);
             m_graph = graph;
-            m_name = QString::fromWCharArray(name);
+            m_name = QString::fromUtf16((const unsigned short*)name);
             return S_OK;
         }
 
@@ -816,7 +816,7 @@ namespace Phonon
 
 
         //addition
-        HRESULT QBaseFilter::processSample(IMediaSample *sample)
+        HRESULT QBaseFilter::processSample(IMediaSample *)
         {
             return S_OK;
         }

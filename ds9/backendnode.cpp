@@ -51,7 +51,8 @@ namespace Phonon
         }*/
 
         //for now we have 2 graphs that do the same
-        BackendNode::BackendNode(QObject *parent) : QObject(parent), m_mediaObject(0), m_filters(2)
+        BackendNode::BackendNode(QObject *parent)
+          : QObject(parent), m_filters(2), m_mediaObject(0)
         {
         }
 

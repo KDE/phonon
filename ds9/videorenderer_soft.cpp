@@ -397,7 +397,7 @@ namespace Phonon
         QBaseFilter(CLSID_NULL), m_inputPin(new VideoRendererSoftPin(this)), m_renderer(renderer), m_start(0), 
             m_width(0), m_height(0)
 #ifndef QT_NO_OPENGL
-            ,m_usingOpenGL(false), m_checkedPrograms(false), m_textureUploaded(false)
+            ,m_textureUploaded(false), m_checkedPrograms(false), m_usingOpenGL(false)
 #endif
         {
             m_renderEvent    = ::CreateEvent(0, 0, 0, 0);

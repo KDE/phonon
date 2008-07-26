@@ -76,12 +76,13 @@ namespace Phonon
             return ret;
         }
 
-        MediaGraph::MediaGraph(MediaObject *mo, short index) : m_fakeSource(new FakeSource()),
+        MediaGraph::MediaGraph(MediaObject *mo, short index) :
+            m_graph(CLSID_FilterGraph, IID_IGraphBuilder),
+            m_fakeSource(new FakeSource()),
             m_hasVideo(false), m_hasAudio(false), m_connectionsDirty(false), 
             m_isStopping(false), m_isSeekable(false), m_result(S_OK),
-            m_index(index), m_mediaObject(mo), 
-            m_graph(CLSID_FilterGraph, IID_IGraphBuilder),
-            m_renderId(0), m_seekId(0), m_currentTime(0)
+            m_index(index), m_renderId(0), m_seekId(0),
+            m_currentTime(0), m_totalTime(0), m_mediaObject(mo)
         {
             m_mediaControl = ComPointer<IMediaControl>(m_graph, IID_IMediaControl);
             Q_ASSERT(m_mediaControl);
@@ -345,7 +346,7 @@ namespace Phonon
             FILTER_INFO info;
             filter->QueryFilterInfo(&info);
 #ifdef GRAPH_DEBUG
-            qDebug() << "removeFilter" << QString::fromWCharArray(info.achName);
+            qDebug() << "removeFilter" << QString::fromUtf16(info.achName);
 #endif
             if (info.pGraph) {
                 info.pGraph->Release();
@@ -505,7 +506,7 @@ namespace Phonon
                 filter->GetClassID(&clsid);
                 if (clsid == CLSID_InfTee) {
                     //there is already a Tee (namely 'filter') in use
-                    foreach(OutputPin pin, BackendNode::pins(filter, PINDIR_OUTPUT)) {
+                    Q_FOREACH(const OutputPin &pin, BackendNode::pins(filter, PINDIR_OUTPUT)) {
                         if (VFW_E_NOT_CONNECTED == pin->ConnectedTo(inPin.pparam())) {
                             return SUCCEEDED(pin->Connect(newIn, 0));
                         }
@@ -848,7 +849,7 @@ namespace Phonon
             {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                qDebug() << Q_FUNC_INFO << QString::fromWCharArray(info.achName);
+                qDebug() << Q_FUNC_INFO << QString::fromUtf16(info.achName);
                 if (info.pGraph) {
                     info.pGraph->Release();
                 }
@@ -894,7 +895,7 @@ namespace Phonon
             {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                qDebug() << "found a decoder filter" << QString::fromWCharArray(info.achName);
+                qDebug() << "found a decoder filter" << QString::fromUtf16(info.achName);
                 if (info.pGraph) {
                     info.pGraph->Release();
                 }
@@ -919,7 +920,7 @@ namespace Phonon
             {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                qDebug() << Q_FUNC_INFO << QString::fromWCharArray(info.achName);
+                qDebug() << Q_FUNC_INFO << QString::fromUtf16(info.achName);
                 if (info.pGraph) {
                     info.pGraph->Release();
                 }
@@ -953,7 +954,7 @@ namespace Phonon
             {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                qDebug() << "found a demuxer filter" << QString::fromWCharArray(info.achName);
+                qDebug() << "found a demuxer filter" << QString::fromUtf16(info.achName);
                 if (info.pGraph) {
                     info.pGraph->Release();
                 }
@@ -971,27 +972,27 @@ namespace Phonon
                 BSTR str;
                 HRESULT hr = mediaContent->get_AuthorName(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("ARTIST"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("ARTIST"), QString::fromUtf16((const unsigned short*)str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Title(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("TITLE"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("TITLE"), QString::fromUtf16((const unsigned short*)str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Description(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("DESCRIPTION"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("DESCRIPTION"), QString::fromUtf16((const unsigned short*)str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Copyright(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("COPYRIGHT"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("COPYRIGHT"), QString::fromUtf16((const unsigned short*)str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_MoreInfoText(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("MOREINFO"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("MOREINFO"), QString::fromUtf16((const unsigned short*)str));
                     SysFreeString(str);
                 }
             }

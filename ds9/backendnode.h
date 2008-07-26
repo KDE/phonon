@@ -54,7 +54,7 @@ namespace Phonon
             void setMediaObject(MediaObject *mo);
 
             //called by the connections to tell the node that it's been connection to anothe one through its 'inpin' input port
-            virtual void connected(BackendNode *, const InputPin& inpin) {}
+            virtual void connected(BackendNode *, const InputPin&) {}
 
             private Q_SLOTS:
                 void mediaObjectDestroyed();
