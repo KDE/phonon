@@ -81,7 +81,7 @@ namespace Phonon
                             current += wcslen(current) + 1; //skip the name
                             current += wcslen(current) + 1; //skip the unit
                             for(; *current; current += wcslen(current) + 1) {
-                                values.append( QString::fromWCharArray(current) );
+                                values.append( QString::fromUtf16((const unsigned short*)current) );
                             }
                         }
                         //FALLTHROUGH
@@ -106,8 +106,9 @@ namespace Phonon
                     Phonon::EffectParameter::Hints hint = info.mopCaps == MP_CAPS_CURVE_INVSQUARE ?
                         Phonon::EffectParameter::LogarithmicHint : Phonon::EffectParameter::Hints(0);
 
-                    ret.append(Phonon::EffectParameter(i, QString::fromWCharArray(name), hint, def, min, max, values));
-					::CoTaskMemFree(name); //let's free the memory
+                    const QString n = QString::fromUtf16((const unsigned short*)name);
+                    ret.append(Phonon::EffectParameter(i, n, hint, def, min, max, values));
+                    ::CoTaskMemFree(name); //let's free the memory
                 }
             }
             return ret;
@@ -134,8 +135,9 @@ namespace Phonon
                 return;
             }
 
-            for(QVector<Filter>::iterator it = m_filters.begin(); it != m_filters.end(); ++it) {
-                Filter &filter = *it;
+            QVector<Filter>::ConstIterator it = m_filters.constBegin();
+            for( ; it != m_filters.constEnd(); ++it) {
+                const Filter &filter = *it;
                 ComPointer<IMediaParams> params(filter, IID_IMediaParams);
                 Q_ASSERT(params);
 

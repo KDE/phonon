@@ -179,11 +179,11 @@ namespace Phonon
                 case 2:
                     {
                         short *shortBuffer = reinterpret_cast<short*>(*buffer);
-                        *shortBuffer *= volume;
+                        *shortBuffer *= int(volume + 0.5);
                     }
                     break;
                 case 1:
-                    **buffer *= volume;
+                    **buffer *= int(volume + 0.5);
                     break;
                 default:
                     qWarning("sample size of %d not handled", sampleSize);

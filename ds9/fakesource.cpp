@@ -34,7 +34,7 @@ namespace Phonon
 
         static WAVEFORMATEX g_defaultWaveFormat = {WAVE_FORMAT_PCM, 2, 44100, 176400, 4, 16, 0};
         static BITMAPINFOHEADER g_defautBitmapHeader = { sizeof(BITMAPINFOHEADER), 1, 1, 1, 0, 0, 0, 0, 0, 0, 0};
-        static VIDEOINFOHEADER2 g_defaultVideoInfo = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        static VIDEOINFOHEADER2 g_defaultVideoInfo = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
         class FakePin : public QPin
         {

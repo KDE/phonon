@@ -45,7 +45,8 @@ namespace Phonon
         typedef BOOL (WINAPI* LPAMGETERRORTEXT)(HRESULT, wchar_t *, DWORD);
 
         //first the definition of the WorkerThread class
-        WorkerThread::WorkerThread() : QThread(), m_finished(false), m_currentRenderId(0), m_currentWorkId(1)
+        WorkerThread::WorkerThread()
+          : QThread(), m_currentRenderId(0), m_finished(false), m_currentWorkId(1)
         {
             m_handles << m_waitCondition;
         }
@@ -799,9 +800,9 @@ namespace Phonon
 
                 wchar_t buffer[MAX_ERROR_TEXT_LEN];
                 if (getErrorText && getErrorText(hr, buffer, MAX_ERROR_TEXT_LEN)) {
-                    m_errorString = QString::fromWCharArray(buffer);
+                    m_errorString = QString::fromUtf16((const unsigned short*)buffer);
                 } else {
-                    m_errorString = QString::fromWCharArray(_com_error(hr).ErrorMessage());
+                    m_errorString = QString::fromUtf16((const unsigned short*)_com_error(hr).ErrorMessage());
                 }
                 const QString comError = QString::number(uint(hr), 16);
                 if (!m_errorString.toLower().contains(comError.toLower())) {
