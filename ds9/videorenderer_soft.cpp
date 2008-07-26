@@ -890,8 +890,8 @@ namespace Phonon
             painter.setPen(Qt::NoPen);
             if (!m_videoRect.contains(rect)) {
                 //we repaint the borders only when needed
-                QRegion reg = QRegion(rect) - m_videoRect;
-                foreach(QRect r, reg.rects()) {
+                const QRegion reg = QRegion(rect) - m_videoRect;
+                Q_FOREACH(const QRect &r, reg.rects()) {
                     painter.drawRect(r);
                 }
             }

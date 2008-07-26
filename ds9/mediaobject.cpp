@@ -227,7 +227,7 @@ namespace Phonon
                 if (w.filter) {
                     //let's render pins
                     w.graph->AddFilter(w.filter, 0);
-                    foreach(OutputPin out, BackendNode::pins(w.filter, PINDIR_OUTPUT)) {
+                    Q_FOREACH(const OutputPin &out, BackendNode::pins(w.filter, PINDIR_OUTPUT)) {
                         //blocking call
                         hr = w.graph->Render(out);
                         if (FAILED(hr)) {
@@ -260,10 +260,10 @@ namespace Phonon
 
                 //remove useless decoders
                 QSet<Filter> unused;
-                foreach(const Filter filter, w.decoders) {
+                Q_FOREACH(const Filter &filter, w.decoders) {
                     bool used = false;
                     const QList<OutputPin> pins = BackendNode::pins(filter, PINDIR_OUTPUT);
-                    foreach(OutputPin pin, pins) {
+                    Q_FOREACH(const OutputPin &pin, pins) {
                         InputPin input;
                         if (pin->ConnectedTo(input.pparam()) == S_OK) {
                             used = true;
@@ -275,7 +275,7 @@ namespace Phonon
                 }
 
                 //we can get the state
-                foreach(Filter f, unused) {
+                Q_FOREACH(const Filter &f, unused) {
                     //we should remove this filter from the graph
                     w.graph->RemoveFilter(f);
                 }
@@ -445,7 +445,7 @@ namespace Phonon
                             return;
                         } else if (current < -m_transitionTime) {
                             //we are currently crossfading
-                            foreach(AudioOutput *audio, m_audioOutputs) {
+                            Q_FOREACH(AudioOutput *audio, m_audioOutputs) {
                                 audio->setCrossFadingProgress( currentGraph()->index(), qMin( qreal(1.), qreal(current) / qreal(-m_transitionTime)));
                             }
                         }
@@ -496,7 +496,7 @@ namespace Phonon
             m_graphs.swap(0,1); //swap the graphs
 
             //we tell the video widgets to switch now to the new source
-            foreach(VideoWidget *video, m_videoWidgets) {
+            Q_FOREACH(VideoWidget *video, m_videoWidgets) {
                 video->setCurrentGraph(currentGraph()->index());
             }
 
@@ -826,7 +826,7 @@ namespace Phonon
 
         void MediaObject::grabNode(BackendNode *node)
         {
-            foreach(MediaGraph *graph, m_graphs) {
+            Q_FOREACH(MediaGraph *graph, m_graphs) {
                 graph->grabNode(node);
             }
             node->setMediaObject(this);
@@ -835,7 +835,7 @@ namespace Phonon
         bool MediaObject::connectNodes(BackendNode *source, BackendNode *sink)
         {
             bool ret = true;
-            foreach(MediaGraph *graph, m_graphs) {
+            Q_FOREACH(MediaGraph *graph, m_graphs) {
                 ret = ret && graph->connectNodes(source, sink);
             }
             if (ret) {
@@ -851,7 +851,7 @@ namespace Phonon
         bool MediaObject::disconnectNodes(BackendNode *source, BackendNode *sink)
         {
             bool ret = true;
-            foreach(MediaGraph *graph, m_graphs) {
+            Q_FOREACH(MediaGraph *graph, m_graphs) {
                 ret = ret && graph->disconnectNodes(source, sink);
             }
             if (ret) {
@@ -866,7 +866,7 @@ namespace Phonon
 
         void MediaObject::updateVideoGeometry()
         {
-            foreach(VideoWidget *vw, m_videoWidgets) {
+            Q_FOREACH(VideoWidget *vw, m_videoWidgets) {
                 vw->notifyVideoLoaded();
             }
         }
@@ -905,7 +905,7 @@ namespace Phonon
                 //it is just the end of the previous source (in case of cross-fading)
                 nextGraph()->cleanup();
             }
-            foreach(AudioOutput *audio, m_audioOutputs) {
+            Q_FOREACH(AudioOutput *audio, m_audioOutputs) {
                 audio->setCrossFadingProgress( currentGraph()->index(), 1.); //cross-fading is in any case finished
             }
         }

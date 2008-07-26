@@ -66,7 +66,7 @@ namespace Phonon
         {
             //this allows to serialize with Receive calls
             QMutexLocker locker(&m_mutexReceive); 
-            foreach(QPin *current, m_outputs) {
+            Q_FOREACH(QPin *current, m_outputs) {
                 IPin *conn = current->connected();
                 if (conn) {
                     conn->EndOfStream();
@@ -78,7 +78,7 @@ namespace Phonon
         STDMETHODIMP QMemInputPin::BeginFlush()
         {
             //pass downstream
-            foreach(QPin *current, m_outputs) {
+            Q_FOREACH(QPin *current, m_outputs) {
                 IPin *conn = current->connected();
                 if (conn) {
                     conn->BeginFlush();
@@ -92,7 +92,7 @@ namespace Phonon
         STDMETHODIMP QMemInputPin::EndFlush()
         {
             //pass downstream
-            foreach(QPin *current, m_outputs) {
+            Q_FOREACH(QPin *current, m_outputs) {
                 IPin *conn = current->connected();
                 if (conn) {
                     conn->EndFlush();
@@ -105,7 +105,7 @@ namespace Phonon
 
         STDMETHODIMP QMemInputPin::NewSegment(REFERENCE_TIME start, REFERENCE_TIME stop, double rate)
         {
-            foreach(IPin *current, m_outputs) {
+            Q_FOREACH(IPin *current, m_outputs) {
                 current->NewSegment(start, stop, rate);
             }
             return S_OK;
@@ -121,7 +121,7 @@ namespace Phonon
                 mt->subtype != MEDIASUBTYPE_NULL &&
                 mt->formattype != GUID_NULL) {
                     //we tell the output pins that they should connect with this type
-                    foreach(QPin *current, outputs()) {
+                    Q_FOREACH(QPin *current, outputs()) {
                         hr = current->setAcceptedMediaType(connectedType());
                         if (FAILED(hr)) {
                             break;
@@ -157,7 +157,7 @@ namespace Phonon
 
             setMemoryAllocator(alloc);
 
-            foreach(QPin *current, outputs()) {
+            Q_FOREACH(QPin *current, outputs()) {
                 IPin *pin = current->connected();
                 if (pin) {
                     ComPointer<IMemInputPin> input(pin, IID_IMemInputPin);
@@ -201,7 +201,7 @@ namespace Phonon
                 }
             }
 
-            foreach(QPin *current, outputs()) {
+            Q_FOREACH(QPin *current, outputs()) {
                 IMediaSample *outSample = m_shouldDuplicateSamples ? 
                     duplicateSampleForOutput(sample, current->memoryAllocator())
                     : sample;
@@ -248,7 +248,7 @@ namespace Phonon
         STDMETHODIMP QMemInputPin::ReceiveCanBlock()
         {
             //we test the output to see if they can block
-            foreach(QPin *current, m_outputs) {
+            Q_FOREACH(QPin *current, m_outputs) {
                 IPin *input = current->connected();
                 if (input) {
                     ComPointer<IMemInputPin> meminput(input, IID_IMemInputPin);

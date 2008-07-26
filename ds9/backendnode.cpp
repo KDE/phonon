@@ -71,7 +71,7 @@ namespace Phonon
         {
             //remove the filter from its graph
             FILTER_INFO info;
-            foreach(const Filter filter, m_filters) {
+            Q_FOREACH(const Filter &filter, m_filters) {
                 filter->QueryFilterInfo(&info);
                 if (info.pGraph) {
                     HRESULT hr = info.pGraph->RemoveFilter(filter);
