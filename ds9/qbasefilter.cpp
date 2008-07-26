@@ -321,7 +321,7 @@ namespace Phonon
                 return E_POINTER;
             }
 
-            foreach(IPin *current, pins()) {
+            Q_FOREACH(IPin *current, pins()) {
                 PIN_INFO info;
                 current->QueryPinInfo(&info);
                 if (info.pFilter) {
@@ -779,7 +779,7 @@ namespace Phonon
         QList<QPin*> QBaseFilter::inputPins() const
         {
             QList<QPin*> ret;
-            foreach(QPin *pin, pins()) {
+            Q_FOREACH(QPin *pin, pins()) {
                 if (pin->direction() == PINDIR_INPUT) {
                     ret += pin;
                 }
@@ -790,7 +790,7 @@ namespace Phonon
         QList<QPin*> QBaseFilter::outputPins() const
         {
             QList<QPin*> ret;
-            foreach(QPin *pin, pins()) {
+            Q_FOREACH(QPin *pin, pins()) {
                 if (pin->direction() == PINDIR_OUTPUT) {
                     ret += pin;
                 }
@@ -800,7 +800,7 @@ namespace Phonon
 
         void *QBaseFilter::getUpStreamInterface(const IID &iid) const
         {
-            foreach(QPin *pin, inputPins()) {
+            Q_FOREACH(QPin *pin, inputPins()) {
                 IPin *out = pin->connected();
                 if (out) {
                     void *ms = 0;

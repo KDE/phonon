@@ -94,7 +94,7 @@ namespace Phonon
             const QStringList locations = QStringList() << QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types")
                 << QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\wmplayer\\mime types");
 
-            foreach(QString s, locations) {
+            Q_FOREACH(const QString &s, locations) {
                 QSettings settings(s, QSettings::NativeFormat);
                 ret += settings.childGroups().toSet();
             }
@@ -229,7 +229,7 @@ namespace Phonon
             //end of a transaction
             HRESULT hr = E_FAIL;
             if (!objects.isEmpty()) {
-                foreach(QObject *o, objects) {
+                Q_FOREACH(QObject *o, objects) {
                     if (BackendNode *node = qobject_cast<BackendNode*>(o)) {
                         MediaObject *mo = node->mediaObject();
                         if (mo && m_graphState.contains(mo)) {
@@ -266,7 +266,7 @@ namespace Phonon
             HRESULT hr = E_FAIL;
 
             //let's save the state of the graph (before we stop it)
-            foreach(QObject *o, objects) {
+            Q_FOREACH(QObject *o, objects) {
                 if (BackendNode *node = qobject_cast<BackendNode*>(o)) {
                     if (MediaObject *mo = node->mediaObject()) {
                         m_graphState[mo] = mo->state();

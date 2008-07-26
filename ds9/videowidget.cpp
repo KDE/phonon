@@ -297,7 +297,7 @@ namespace Phonon
         //this must be called whe nthe node is actually connected
         void  VideoWidget::applyMixerSettings() const
         {
-            foreach(AbstractVideoRenderer *renderer, m_renderers) {
+            Q_FOREACH(AbstractVideoRenderer *renderer, m_renderers) {
                 renderer->applyMixerSettings(m_brightness, m_contrast, m_hue, m_saturation);
             }
         }

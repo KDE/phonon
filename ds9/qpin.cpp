@@ -398,7 +398,7 @@ namespace Phonon
                 return E_POINTER;
             }
 
-            foreach(const AM_MEDIA_TYPE current, m_mediaTypes) {
+            Q_FOREACH(const AM_MEDIA_TYPE &current, m_mediaTypes) {
 
                 if ( (type->majortype == current.majortype) &&
                     (current.subtype == MEDIASUBTYPE_NULL || type->subtype == current.subtype) &&
@@ -484,7 +484,7 @@ namespace Phonon
 
         HRESULT QPin::checkOwnMediaTypesConnection(IPin *pin)
         {   
-            foreach(const AM_MEDIA_TYPE current, mediaTypes()) {
+            Q_FOREACH(const AM_MEDIA_TYPE &current, mediaTypes()) {
                 setConnectedType(current);
                 HRESULT hr = pin->ReceiveConnection(this, &current);
                 if (hr == S_OK) {
