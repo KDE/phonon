@@ -1,13 +1,10 @@
 [Desktop Entry]
 Categories=Qt;KDE;Graphics;
-Comment[pt_BR]=
 Comment=
 Exec=videocapturetestapp
-GenericName[pt_BR]=Video Capture Test Application
 GenericName=Video Capture Test Application
 Icon=videocapturetestapp
 MimeType=
-Name[pt_BR]=videocapturetestapp
 Name=videocapturetestapp
 Path=
 StartupNotify=true
