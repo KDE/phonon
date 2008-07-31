@@ -21,7 +21,7 @@
 
 */
 
-#include <Phonon/AudioPlayer>
+#include <Phonon/MediaObject>
 #include <QtGui/QApplication>
 #include <QtGui/QMainWindow>
 #include <QtGui/QDirModel>
@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     public:
         MainWindow();
+        ~MainWindow();
 
     private slots:
         void play(const QModelIndex &index);
@@ -40,12 +41,12 @@ class MainWindow : public QMainWindow
         QColumnView m_fileView;
         QDirModel m_model;
 
-        Phonon::AudioPlayer *m_audioPlayer;
+        Phonon::MediaObject *m_media;
 };
 
 MainWindow::MainWindow()
     : m_fileView(this),
-    m_audioPlayer(0)
+    m_media(0)
 {
     setCentralWidget(&m_fileView);
     m_fileView.setModel(&m_model);
@@ -54,12 +55,18 @@ MainWindow::MainWindow()
     connect(&m_fileView, SIGNAL(updatePreviewWidget(const QModelIndex &)), SLOT(play(const QModelIndex &)));
 }
 
+MainWindow::~MainWindow()
+{
+    delete m_media;
+}
+
 void MainWindow::play(const QModelIndex &index)
 {
-    if (!m_audioPlayer) {
-        m_audioPlayer = new Phonon::AudioPlayer(Phonon::MusicCategory, this);
+    if (!m_media) {
+        m_media = Phonon::createPlayer(Phonon::MusicCategory);
     }
-    m_audioPlayer->play(m_model.filePath(index));
+    m_media->setCurrentSource(m_model.filePath(index));
+    m_media->play();
 }
 
 int main(int argc, char **argv)
