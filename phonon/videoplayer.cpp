@@ -101,8 +101,7 @@ void VideoPlayer::play(const MediaSource &source)
     if (ErrorState == d->player->state())
         return;
 
-    if (StoppedState == d->player->state())
-        d->player->play();
+    d->player->play();
 }
 
 void VideoPlayer::play()

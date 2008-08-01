@@ -179,23 +179,28 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
     }
 
     if (d->executeTransaction(disconnections, connections)) {
-        //everything went well: let's update the path and the source node
-        sink->k_ptr->addInputPath(*this);
-        if (d->sinkNode) {
-            d->sinkNode->k_ptr->removeInputPath(*this);
-            d->sinkNode->k_ptr->removeDestructionHandler(d.data());
-        }
-        d->sinkNode = sink;
-        d->sinkNode->k_ptr->addDestructionHandler(d.data());
 
         //everything went well: let's update the path and the sink node
-        source->k_ptr->addOutputPath(*this);
-        if (d->sourceNode) {
-            d->sourceNode->k_ptr->removeOutputPath(*this);
-            d->sourceNode->k_ptr->removeDestructionHandler(d.data());
+        if (d->sinkNode != sink) {
+            if (d->sinkNode) {
+                d->sinkNode->k_ptr->removeInputPath(*this);
+                d->sinkNode->k_ptr->removeDestructionHandler(d.data());
+            }
+            sink->k_ptr->addInputPath(*this);
+            d->sinkNode = sink;
+            d->sinkNode->k_ptr->addDestructionHandler(d.data());
         }
-        d->sourceNode = source;
-        d->sourceNode->k_ptr->addDestructionHandler(d.data());
+
+        //everything went well: let's update the path and the source node
+        if (d->sourceNode != source) {
+            source->k_ptr->addOutputPath(*this);
+            if (d->sourceNode) {
+                d->sourceNode->k_ptr->removeOutputPath(*this);
+                d->sourceNode->k_ptr->removeDestructionHandler(d.data());
+            }
+            d->sourceNode = source;
+            d->sourceNode->k_ptr->addDestructionHandler(d.data());
+        }
         return true;
     } else {
         return false;
