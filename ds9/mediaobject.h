@@ -140,7 +140,7 @@ namespace Phonon
             void handleTask();
 
             Graph m_currentRender;
-            qint16 m_currentRenderId;
+			qint16 m_currentRenderId;
             QQueue<Work> m_queue;
             bool m_finished;
             quint16 m_currentWorkId;

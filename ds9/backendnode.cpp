@@ -51,8 +51,7 @@ namespace Phonon
         }*/
 
         //for now we have 2 graphs that do the same
-        BackendNode::BackendNode(QObject *parent)
-          : QObject(parent), m_filters(2), m_mediaObject(0)
+        BackendNode::BackendNode(QObject *parent) : QObject(parent), m_mediaObject(0), m_filters(2)
         {
         }
 
@@ -62,7 +61,9 @@ namespace Phonon
 
         void BackendNode::setMediaObject(MediaObject *mo)
         {
-            Q_ASSERT(m_mediaObject == 0);
+            if (m_mediaObject) {
+                disconnect(m_mediaObject, SIGNAL(destroyed()), this, SLOT(mediaObjectDestroyed()));
+            }
             m_mediaObject = mo;
             connect(mo, SIGNAL(destroyed()), SLOT(mediaObjectDestroyed()));
         }
@@ -71,7 +72,7 @@ namespace Phonon
         {
             //remove the filter from its graph
             FILTER_INFO info;
-            Q_FOREACH(const Filter &filter, m_filters) {
+            Q_FOREACH(const Filter filter, m_filters) {
                 filter->QueryFilterInfo(&info);
                 if (info.pGraph) {
                     HRESULT hr = info.pGraph->RemoveFilter(filter);

@@ -112,14 +112,17 @@ namespace Phonon
 
         void MediaGraph::grabNode(BackendNode *node)
         {
-            FILTER_INFO info;
             const Filter filter = node->filter(m_index);
             if (filter) {
+                FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
-                if (info.pGraph == 0) {
-                    HRESULT hr = m_graph->AddFilter(filter, 0);
-                    m_mediaObject->catchComError(hr);
-                } else {
+                if (info.pGraph != m_graph) {
+                    if (info.pGraph) {
+                        m_mediaObject->catchComError(info.pGraph->RemoveFilter(filter));
+                    }
+                    m_mediaObject->catchComError(m_graph->AddFilter(filter, 0));
+                }
+                if (info.pGraph) {
                     info.pGraph->Release();
                 }
             }
@@ -320,11 +323,14 @@ namespace Phonon
         void MediaGraph::ensureStopped()
         {
             m_isStopping = true;
+            //special case here because we want stopped to be synchronous
             m_graph->Abort();
-            m_mediaControl->Stop(); //special case here because we want stopped to be synchronous
+            m_mediaControl->Stop(); 
+            OAFilterState dummy;
+            //this will wait until the change is effective
+            m_mediaControl->GetState(INFINITE, &dummy);
             m_isStopping = false;
         }
-
 
         bool MediaGraph::isLoading() const
         {
@@ -793,6 +799,7 @@ namespace Phonon
                 const OutputPin output = BackendNode::pins(connection.output, PINDIR_OUTPUT).at(connection.outputOffset);
                 const InputPin input   = BackendNode::pins(connection.input, PINDIR_INPUT).at(connection.inputOffset);
                 HRESULT hr = output->Connect(input, 0);
+                Q_UNUSED(hr);
                 Q_ASSERT( SUCCEEDED(hr));
             }
 
