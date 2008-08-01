@@ -26,12 +26,11 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore/QTime>
 
 #define _USE_MATH_DEFINES //for pi
-#include <cmath> //for sin and cos
+#include <qmath.h> //for sin and cos
 /* M_PI is a #define that may or may not be handled in <cmath> */
 #ifndef M_PI 
 #define M_PI 3.14159265358979323846264338327950288419717
 #endif
-
 
 #include <dvdmedia.h> //for VIDEOINFOHEADER2
 
@@ -39,7 +38,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 //#define FPS_COUNTER
 
 #ifndef QT_NO_OPENGL
-#include <QtOpenGL/QGLWidget>
+#include <gl/gl.h>
 #ifndef GL_FRAGMENT_PROGRAM_ARB
 #define GL_FRAGMENT_PROGRAM_ARB           0x8804
 #define GL_PROGRAM_FORMAT_ASCII_ARB       0x8875
@@ -136,9 +135,9 @@ namespace Phonon
     namespace DS9
     {
 
-        static inline uchar clip(int c) 
+        static __forceinline uchar clip(int c) 
         {
-            return c <= 0 ? 0 : c >= 255 ? 255 : c;
+            return c < 0 ? 0 : c > 255 ? 255 : c;
         }
 
         static const QVector<AM_MEDIA_TYPE> videoMediaTypes()
@@ -397,13 +396,21 @@ namespace Phonon
         QBaseFilter(CLSID_NULL), m_inputPin(new VideoRendererSoftPin(this)), m_renderer(renderer), m_start(0), 
             m_width(0), m_height(0)
 #ifndef QT_NO_OPENGL
-            ,m_textureUploaded(false), m_checkedPrograms(false), m_usingOpenGL(false)
+            , glProgramStringARB((_glProgramStringARB) wglGetProcAddress("glProgramStringARB"))
+            , glBindProgramARB((_glBindProgramARB) wglGetProcAddress("glBindProgramARB"))
+            , glDeleteProgramsARB((_glDeleteProgramsARB) wglGetProcAddress("glDeleteProgramsARB"))
+            , glGenProgramsARB((_glGenProgramsARB) wglGetProcAddress("glGenProgramsARB"))
+            , glProgramLocalParameter4fARB((_glProgramLocalParameter4fARB) wglGetProcAddress("glProgramLocalParameter4fARB"))
+            , glActiveTexture((_glActiveTexture) wglGetProcAddress("glActiveTexture"))
+            ,m_usingOpenGL(false), m_checkedPrograms(false), m_textureUploaded(false)
 #endif
         {
             m_renderEvent    = ::CreateEvent(0, 0, 0, 0);
             m_receiveCanWait = ::CreateEvent(0, 0, 0, 0);
             //simply initialize the array with default values
             applyMixerSettings(0., 0., 0., 0.);
+#ifndef QT_NO_OPENGL
+#endif
         }
 
         VideoRendererSoftFilter::~VideoRendererSoftFilter()
@@ -521,13 +528,6 @@ namespace Phonon
             if (!m_checkedPrograms) {
                 m_checkedPrograms = true;
                 //we check only once if the widget is drawn using opengl
-                glProgramStringARB = (_glProgramStringARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glProgramStringARB"));
-                glBindProgramARB = (_glBindProgramARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glBindProgramARB"));
-                glDeleteProgramsARB = (_glDeleteProgramsARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glDeleteProgramsARB"));
-                glGenProgramsARB = (_glGenProgramsARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glGenProgramsARB"));
-                glProgramLocalParameter4fARB = (_glProgramLocalParameter4fARB) QGLContext::currentContext()->getProcAddress(QLatin1String("glProgramLocalParameter4fARB"));
-                glActiveTexture = (_glActiveTexture) QGLContext::currentContext()->getProcAddress(QLatin1String("glActiveTexture"));
-
                 if (glProgramStringARB && glBindProgramARB && glDeleteProgramsARB && 
                     glGenProgramsARB && glActiveTexture && glProgramLocalParameter4fARB) {
                     glGenProgramsARB(2, m_program);
@@ -636,7 +636,7 @@ namespace Phonon
                     const Program prog = (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YV12) ? YV12toRGB : YUY2toRGB;
                     glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, m_program[prog]);
                     //loading the parameters
-                    glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, m_brightness / 256., m_contrast, cos(m_hue), sin(m_hue));
+                    glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 0, m_brightness / 256., m_contrast, qCos(m_hue), qSin(m_hue));
                     glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, m_saturation, painter.opacity() /*alpha */, 0. /*dummy*/, 0. /*dummy*/);
 
                     glEnable(GL_FRAGMENT_PROGRAM_ARB);
@@ -712,7 +712,7 @@ namespace Phonon
         void VideoRendererSoftFilter::normalizeRGB(const uchar *data, int w, int h, QImage &destImage)
         {
             if (destImage.size() != QSize(w, h)) {
-                destImage = QImage(w, h, QImage::Format_RGB32);
+                destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             }
 			if (destImage.isNull()) {
 				return; //the system can't allocate the memory for the image drawing
@@ -735,8 +735,8 @@ namespace Phonon
             qreal brightness, qreal contrast, qreal hue, qreal saturation)
         {
             //let's cache some computation
-            const int cosHx256 = qRound(cos(hue) * contrast * saturation * 256),
-                      sinHx256 = qRound(sin(hue) * contrast * saturation * 256);
+            const int cosHx256 = qRound(qCos(hue) * contrast * saturation * 256),
+                      sinHx256 = qRound(qSin(hue) * contrast * saturation * 256);
 
             int Yvalue[256];
             for(int i = 0;i<256;++i) {
@@ -745,7 +745,7 @@ namespace Phonon
 
 
             if (destImage.size() != QSize(w, h)) {
-                destImage = QImage(w, h, QImage::Format_ARGB32);
+                destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             }
 
     		if (destImage.isNull()) {
@@ -819,12 +819,12 @@ namespace Phonon
                 Yvalue[i] = qRound(((i - 16) * contrast + brightness) * 298 + 128);
             }
 
-            const int cosHx256 = qRound(cos(hue) * contrast * saturation * 256),
-                      sinHx256 = qRound(sin(hue) * contrast * saturation * 256);
+            const int cosHx256 = qRound(qCos(hue) * contrast * saturation * 256),
+                      sinHx256 = qRound(qSin(hue) * contrast * saturation * 256);
 
             if (destImage.size() != QSize(w, h)) {
                 //this will only allocate memory when needed
-                destImage = QImage(w, h, QImage::Format_ARGB32);
+                destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             }
 			if (destImage.isNull()) {
 			    return; //the system can't allocate the memory for the image drawing
@@ -890,8 +890,8 @@ namespace Phonon
             painter.setPen(Qt::NoPen);
             if (!m_videoRect.contains(rect)) {
                 //we repaint the borders only when needed
-                const QRegion reg = QRegion(rect) - m_videoRect;
-                Q_FOREACH(const QRect &r, reg.rects()) {
+                QRegion reg = QRegion(rect) - m_videoRect;
+                Q_FOREACH(QRect r, reg.rects()) {
                     painter.drawRect(r);
                 }
             }

@@ -75,6 +75,7 @@ namespace Phonon
             VideoWindow *m_widget;
             qreal m_brightness, m_contrast, m_hue, m_saturation;
             QVector<AbstractVideoRenderer*> m_renderers;
+            bool m_hardwareRenderer;
         };
     }
 }

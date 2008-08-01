@@ -15,7 +15,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <objbase.h>
-#include <dshow.h>
 #include <initguid.h>
 #include <qnetwork.h>
 #include <comdef.h>
@@ -598,6 +597,10 @@ namespace Phonon
         void MediaObject::ensureStopped()
         {
             currentGraph()->ensureStopped();
+            if (m_state == Phonon::ErrorState) {
+                //we reset the state here
+                m_state = Phonon::StoppedState;
+            }
         }
 
         void MediaObject::play()
@@ -800,9 +803,9 @@ namespace Phonon
 
                 wchar_t buffer[MAX_ERROR_TEXT_LEN];
                 if (getErrorText && getErrorText(hr, buffer, MAX_ERROR_TEXT_LEN)) {
-                    m_errorString = QString::fromUtf16((const unsigned short*)buffer);
+                    m_errorString = QString::fromUtf16(static_cast<unsigned short*>(buffer));
                 } else {
-                    m_errorString = QString::fromUtf16((const unsigned short*)_com_error(hr).ErrorMessage());
+                    m_errorString = QString::fromUtf16(static_cast<const unsigned short*>(_com_error(hr).ErrorMessage()));
                 }
                 const QString comError = QString::number(uint(hr), 16);
                 if (!m_errorString.toLower().contains(comError.toLower())) {
