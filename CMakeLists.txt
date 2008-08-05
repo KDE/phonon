@@ -1,6 +1,6 @@
 project(Phonon)
 
-cmake_minimum_required(VERSION 2.4.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
 
 # enable unit tests
 option(PHONON_BUILD_TESTS "Build the tests")
