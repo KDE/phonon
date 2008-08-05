@@ -295,9 +295,6 @@ FACTORY_IMPL_1ARG(Effect)
 FACTORY_IMPL(VolumeFaderEffect)
 #endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(AudioOutput)
-//FACTORY_IMPL(AudioDataOutput)
-//FACTORY_IMPL(Visualization)
-//FACTORY_IMPL(VideoDataOutput)
 #ifndef QT_NO_PHONON_VIDEO
 FACTORY_IMPL(VideoWidget)
 #endif //QT_NO_PHONON_VIDEO

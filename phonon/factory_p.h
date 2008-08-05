@@ -105,24 +105,6 @@ namespace Factory
      */
     QObject *createAudioOutput(QObject *parent = 0);
     /**
-     * Create a new backend object for a AudioDataOutput.
-     *
-     * \return a pointer to the AudioDataOutput the backend provides.
-     */
-    //PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
-    /**
-     * Create a new backend object for a Visualization.
-     *
-     * \return a pointer to the Visualization the backend provides.
-     */
-    //PHONON_EXPORT QObject *createVisualization(QObject *parent = 0);
-    /**
-     * Create a new backend object for a VideoDataOutput.
-     *
-     * \return a pointer to the VideoDataOutput the backend provides.
-     */
-    //PHONON_EXPORT QObject *createVideoDataOutput(QObject *parent = 0);
-    /**
      * Create a new backend object for a VideoWidget.
      *
      * \return a pointer to the VideoWidget the backend provides.
