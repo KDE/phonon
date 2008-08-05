@@ -22,7 +22,6 @@
 #include "backendinterface.h"
 #include "medianode_p.h"
 #include "audiooutput.h"
-#include "audiooutput_p.h"
 #include "globalstatic_p.h"
 #include "objectdescription.h"
 #include "platformplugin.h"
@@ -30,12 +29,9 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QLibrary>
 #include <QtCore/QList>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QPointer>
-#include <QtGui/QIcon>
 #ifndef QT_NO_DBUS
 #include <QtDBus/QtDBus>
 #endif
@@ -67,7 +63,9 @@ class FactoryPrivate : public Phonon::Factory::Sender
         /**
          * This is called via DBUS when the user changes the Phonon Backend.
          */
+#ifndef QT_NO_DBUS
         void phononBackendChanged();
+#endif //QT_NO_DBUS
 
         /**
          * unregisters the backend object
@@ -218,6 +216,7 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
     }
 }
 
+#ifndef QT_NO_DBUS
 void FactoryPrivate::phononBackendChanged()
 {
     if (m_backendObject) {
@@ -245,6 +244,7 @@ void FactoryPrivate::phononBackendChanged()
     }
     emit backendChanged();
 }
+#endif //QT_NO_DBUS
 
 //X void Factory::freeSoundcardDevices()
 //X {
@@ -277,13 +277,19 @@ QObject *Factory::create ## classname(int arg1, QObject *parent) \
 }
 
 FACTORY_IMPL(MediaObject)
+#ifndef QT_NO_PHONON_EFFECT
 FACTORY_IMPL_1ARG(Effect)
+#endif //QT_NO_PHONON_EFFECT
+#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(VolumeFaderEffect)
+#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(AudioOutput)
-FACTORY_IMPL(AudioDataOutput)
-FACTORY_IMPL(Visualization)
-FACTORY_IMPL(VideoDataOutput)
+//FACTORY_IMPL(AudioDataOutput)
+//FACTORY_IMPL(Visualization)
+//FACTORY_IMPL(VideoDataOutput)
+#ifndef QT_NO_PHONON_VIDEO
 FACTORY_IMPL(VideoWidget)
+#endif //QT_NO_PHONON_VIDEO
 
 #undef FACTORY_IMPL
 
