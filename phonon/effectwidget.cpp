@@ -34,6 +34,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_EFFECTWIDGET
+
 namespace Phonon
 {
 
@@ -187,6 +189,9 @@ void EffectWidgetPrivate::_k_setStringParameter(const QString &value)
 }
 
 } // namespace Phonon
+
+
+#endif //QT_NO_PHONON_EFFECTWIDGET
 
 QT_END_NAMESPACE
 

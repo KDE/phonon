@@ -270,7 +270,9 @@ typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;
 /**
  * \ingroup BackendInformation
  */
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
 typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
+#endif //QT_NO_PHONON_AUDIOCAPTURE
 /**
  * \ingroup BackendInformation
  */
@@ -282,7 +284,10 @@ typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
 /**
  * \ingroup BackendInformation
  */
+#ifndef QT_NO_PHONON_EFFECT
 typedef ObjectDescription<EffectType> EffectDescription;
+#endif //QT_NO_PHONON_EFFECT
+
 /**
  * \ingroup BackendInformation
  */
@@ -299,21 +304,33 @@ typedef ObjectDescription<EffectType> EffectDescription;
  * \ingroup BackendInformation
  */
 //typedef ObjectDescription<VisualizationType> VisualizationDescription;
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
 typedef ObjectDescription<AudioChannelType> AudioChannelDescription;
 typedef ObjectDescription<SubtitleType> SubtitleDescription;
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 } //namespace Phonon
 
+Q_DECLARE_METATYPE(Phonon::AudioOutputDevice)
+Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)
+
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
+Q_DECLARE_METATYPE(Phonon::AudioCaptureDevice)
+Q_DECLARE_METATYPE(QList<Phonon::AudioCaptureDevice>)
+#endif //QT_NO_PHONON_AUDIOCAPTURE
+
+#ifndef QT_NO_PHONON_EFFECT
+Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
+Q_DECLARE_METATYPE(Phonon::EffectDescription)
+#endif //QT_NO_PHONON_EFFECT
+
+
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
 Q_DECLARE_METATYPE(Phonon::AudioChannelDescription)
 Q_DECLARE_METATYPE(Phonon::SubtitleDescription)
-Q_DECLARE_METATYPE(Phonon::AudioOutputDevice)
-Q_DECLARE_METATYPE(Phonon::AudioCaptureDevice)
-Q_DECLARE_METATYPE(Phonon::EffectDescription)
 Q_DECLARE_METATYPE(QList<Phonon::AudioChannelDescription>)
 Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
-Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)
-Q_DECLARE_METATYPE(QList<Phonon::AudioCaptureDevice>)
-Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 QT_END_NAMESPACE
 QT_END_HEADER

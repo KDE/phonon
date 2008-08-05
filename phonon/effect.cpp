@@ -26,6 +26,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_EFFECT
+
 namespace Phonon
 {
 Effect::~Effect()
@@ -121,6 +123,8 @@ void EffectPrivate::setupBackendObject()
 }
 
 } //namespace Phonon
+
+#endif //QT_NO_PHONON_EFFECT
 
 QT_END_NAMESPACE
 

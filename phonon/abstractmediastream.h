@@ -29,6 +29,8 @@ QT_BEGIN_NAMESPACE
 
 class QByteArray;
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+
 namespace Phonon
 {
 class MediaObject;
@@ -213,6 +215,8 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
 };
 
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE
 QT_END_HEADER

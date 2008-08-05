@@ -22,31 +22,17 @@
 
 #include <QtCore/QDebug>
 #include "phonon_export.h"
-
-QT_BEGIN_NAMESPACE
-
-namespace Phonon
-{
-    struct GlobalData
-    {
-        GlobalData();
-
-        bool showDebugOutput;
-
-        static GlobalData *instance();
-    };
-}
-
-QT_END_NAMESPACE
+#include "factory_p.h"
 
 #if defined(QT_NO_DEBUG)
 #define pDebug if (false) qDebug
+#define pWarning if (false) qDebug
+#define pError if (false) qDebug
 #else
-#define pDebug if (!Phonon::GlobalData::instance()->showDebugOutput) {} else qDebug
-#endif
+#define pDebug if (qgetenv("PHONON_DEBUG").isEmpty()) {} else qDebug
 #define pWarning() qDebug() << "WARNING:"
 #define pError() qDebug() << "ERROR:"
-#define pFatal(message) qDebug() << "FATAL ERROR:" << message; ::abort()
+#endif
 
 // vim: sw=4 ts=4 tw=80
 #endif // PHONONNAMESPACE_P_H

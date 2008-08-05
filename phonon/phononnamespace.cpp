@@ -22,7 +22,6 @@
 #include "phonondefs_p.h"
 
 #include "factory_p.h"
-#include "globalstatic_p.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QList>
@@ -84,18 +83,6 @@ Q_CONSTRUCTOR_FUNCTION(registerPhononMetaTypes)
 #else
 static const int _Phonon_registerMetaTypes = registerPhononMetaTypes();
 #endif
-
-Phonon::GlobalData::GlobalData()
-{
-    showDebugOutput = !qgetenv("PHONON_DEBUG").isEmpty();
-}
-
-PHONON_GLOBAL_STATIC(Phonon::GlobalData, globalInstance)
-
-Phonon::GlobalData *Phonon::GlobalData::instance()
-{
-    return globalInstance;
-}
 
 QT_END_NAMESPACE
 

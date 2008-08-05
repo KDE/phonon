@@ -40,25 +40,32 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
 {
     public:
         MediaSourcePrivate(MediaSource::Type t)
-            : type(t), discType(NoDisc), stream(0),
-            ioDevice(0),
+            : type(t), discType(NoDisc), 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            stream(0), ioDevice(0),
+#endif
             autoDelete(false)
         {
         }
 
         virtual ~MediaSourcePrivate();
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         void setStream(AbstractMediaStream *s);
+#endif
 
         MediaSource::Type type;
         QUrl url;
         Phonon::DiscType discType;
         QString deviceName;
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         QPointer<AbstractMediaStream> stream;
-//        AudioCaptureDevice audioCaptureDevice;
-//        VideoCaptureDevice videoCaptureDevice;
         QIODevice *ioDevice;
-        QList<MediaSource> linkedSources;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+
+        //        AudioCaptureDevice audioCaptureDevice;
+//        VideoCaptureDevice videoCaptureDevice;
+        //QList<MediaSource> linkedSources;
         bool autoDelete;
 };
 
@@ -68,4 +75,5 @@ QT_END_NAMESPACE
 
 #endif // MEDIASOURCE_P_H
 // vim: sw=4 sts=4 et tw=100
+
 

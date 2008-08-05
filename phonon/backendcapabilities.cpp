@@ -35,16 +35,6 @@ QT_BEGIN_NAMESPACE
 
 PHONON_GLOBAL_STATIC(Phonon::BackendCapabilitiesPrivate, globalBCPrivate)
 
-template<class T>
-static inline bool sortByInitialPreference(const T &o1, const T &o2)
-{
-    // QVariant::toInt() returns 0 if the type() is not convertable to int
-    const int initialPreference1 = o1.property("initialPreference").toInt();
-    const int initialPreference2 = o2.property("initialPreference").toInt();
-    // the higher the number the higher it should appear in the list
-    return initialPreference1 > initialPreference2;
-}
-
 namespace Phonon
 {
 
@@ -52,21 +42,6 @@ BackendCapabilities::Notifier *BackendCapabilities::notifier()
 {
     return globalBCPrivate;
 }
-
-/*
-#define SUPPORTS(foo) \
-bool BackendCapabilities::supports ## foo() \
-{ \
-    if (BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend())) \
-        return backendIface->supports ## foo(); \
-    else \
-        return false; \
-}
-
-SUPPORTS(Video)
-SUPPORTS(OSD)
-SUPPORTS(Subtitles)
-*/
 
 QStringList BackendCapabilities::availableMimeTypes()
 {
@@ -94,34 +69,6 @@ bool BackendCapabilities::isMimeTypeAvailable(const QString &mimeType)
     return availableMimeTypes().contains(mimeType);
 }
 
-#define availableDevicesImpl(T) \
-QList<T> BackendCapabilities::available ## T ## s() \
-{ \
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend()); \
-    QList<T> ret; \
-    if (backendIface) { \
-        QList<int> deviceIndexes = backendIface->objectDescriptionIndexes(Phonon::T ## Type); \
-        foreach (int i, deviceIndexes) \
-            ret.append(T::fromIndex(i)); \
-    } \
-    qSort(ret.begin(), ret.end(), sortByInitialPreference<T>); \
-    return ret; \
-}
-
-#define availableDevicesImpl2(T) \
-QList<T ## Description> BackendCapabilities::available ## T ## s() \
-{ \
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend()); \
-    QList<T ## Description> ret; \
-    if (backendIface) { \
-        QList<int> deviceIndexes = backendIface->objectDescriptionIndexes(Phonon::T ## Type); \
-        foreach (int i, deviceIndexes) \
-            ret.append(T ## Description::fromIndex(i)); \
-    } \
-    qSort(ret.begin(), ret.end(), sortByInitialPreference<T ## Description>); \
-    return ret; \
-}
-
 QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()
 {
     QList<AudioOutputDevice> ret;
@@ -132,6 +79,8 @@ QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()
     return ret;
 }
 
+
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
 QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
 {
     QList<AudioCaptureDevice> ret;
@@ -141,15 +90,9 @@ QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
     }
     return ret;
 }
+#endif //QT_NO_PHONON_AUDIOCAPTURE
 
-/*
-availableDevicesImpl(VideoOutputDevice)
-availableDevicesImpl(VideoCaptureDevice)
-availableDevicesImpl2(Visualization)
-availableDevicesImpl2(AudioCodec)
-availableDevicesImpl2(VideoCodec)
-availableDevicesImpl2(ContainerFormat)*/
-
+#ifndef QT_NO_PHONON_EFFECT
 QList<EffectDescription> BackendCapabilities::availableAudioEffects()
 {
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
@@ -162,13 +105,14 @@ QList<EffectDescription> BackendCapabilities::availableAudioEffects()
     }
     return ret;
 }
+#endif //QT_NO_PHONON_EFFECT
 
 } // namespace Phonon
 
 QT_END_NAMESPACE
 
 #include "moc_backendcapabilities.cpp"
-#include "moc_backendcapabilities_p.cpp"
 
 // vim: sw=4 ts=4
+
 

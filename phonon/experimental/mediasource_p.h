@@ -39,6 +39,7 @@ class MediaSourcePrivate : public Phonon::MediaSourcePrivate
         }
 
         VideoCaptureDevice videoCaptureDevice;
+        QList<Phonon::MediaSource> linkedSources;
 };
 
 } // namespace Experimental

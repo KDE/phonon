@@ -338,26 +338,31 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     deviceBeforeFallback = outputDeviceIndex;
     outputDeviceIndex = device2.index();
     emit q->outputDeviceChanged(device2);
-    QString text;
     const AudioOutputDevice &device1 = AudioOutputDevice::fromIndex(deviceBeforeFallback);
     switch (type) {
     case FallbackChange:
         if (g_lastFallback.first != device1.index() || g_lastFallback.second != device2.index()) {
-            text = AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+            const QString text = AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
                     "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name());
             Platform::notification("AudioDeviceFallback", text);
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
             g_lastFallback.first = device1.index();
             g_lastFallback.second = device2.index();
         }
         break;
     case HigherPreferenceChange:
-        text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
+        {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+        const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
                 "which just became available and has higher preference.</html>").arg(device2.name());
         Platform::notification("AudioDeviceFallback", text,
                 QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
                 q, SLOT(_k_revertFallback()));
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
         g_lastFallback.first = 0;
         g_lastFallback.second = 0;
+        }
         break;
     }
 }

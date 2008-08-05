@@ -27,6 +27,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_EFFECTWIDGET
+
 namespace Phonon
 {
 class Effect;
@@ -59,6 +61,8 @@ class Effect;
             Q_PRIVATE_SLOT(k_func(), void _k_setStringParameter(const QString &))
     };
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_EFFECTWIDGET
 
 QT_END_NAMESPACE
 QT_END_HEADER

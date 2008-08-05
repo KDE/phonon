@@ -25,6 +25,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+
 class QIODevice;
 
 namespace Phonon
@@ -44,6 +46,8 @@ class IODeviceStream : public AbstractMediaStream
         void seekStream(qint64);
 };
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE
 QT_END_HEADER

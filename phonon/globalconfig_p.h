@@ -20,7 +20,6 @@ Boston, MA 02110-1301, USA.
 #ifndef PHONON_GLOBALCONFIG_P_H
 #define PHONON_GLOBALCONFIG_P_H
 
-#include <QtCore/QObject>
 #include <QtCore/QSettings>
 
 #include "phononnamespace.h"
@@ -30,11 +29,10 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-    class GlobalConfig : public QObject
+    class GlobalConfig
     {
-        Q_OBJECT
     public:
-        GlobalConfig(QObject *parent = 0);
+        GlobalConfig();
         ~GlobalConfig();
 
         enum HideAdvancedDevicesOverride {
@@ -45,12 +43,10 @@ namespace Phonon
         QList<int> audioOutputDeviceListFor(Phonon::Category category, HideAdvancedDevicesOverride override = FromSettings) const;
         int audioOutputDeviceFor(Phonon::Category category) const;
 
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
         QList<int> audioCaptureDeviceListFor(Phonon::Category category, HideAdvancedDevicesOverride override = FromSettings) const;
         int audioCaptureDeviceFor(Phonon::Category category) const;
-
-    Q_SIGNALS:
-        void audioOutputDeviceConfigChanged();
-        void audioCaptureDeviceConfigChanged();
+#endif //QT_NO_PHONON_AUDIOCAPTURE
 
     private:
         QSettings m_config;

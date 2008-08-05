@@ -27,6 +27,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_SEEKSLIDER
+
 namespace Phonon
 {
 
@@ -248,6 +250,8 @@ void SeekSlider::setIconSize(const QSize &iconSize)
 }
 
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_SEEKSLIDER
 
 QT_END_NAMESPACE
 

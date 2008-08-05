@@ -497,7 +497,9 @@ namespace Phonon
              *                          adding a VideoWidget will show an empty (black)
              *                          VideoWidget.
              */
+#ifndef QT_NO_PHONON_VIDEO
             void hasVideoChanged(bool hasVideo);
+#endif //QT_NO_PHONON_VIDEO
 
             /**
              * Tells about the status of the buffer.

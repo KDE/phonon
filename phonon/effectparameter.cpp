@@ -22,6 +22,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_EFFECT
+
 namespace Phonon
 {
 
@@ -129,6 +131,8 @@ int EffectParameter::id() const
 }
 
 }
+
+#endif //QT_NO_PHONON_EFFECT
 
 QT_END_NAMESPACE
 

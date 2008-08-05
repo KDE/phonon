@@ -34,6 +34,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VOLUMESLIDER
+
 namespace Phonon
 {
 class VolumeSliderPrivate
@@ -45,8 +47,10 @@ class VolumeSliderPrivate
             layout(QBoxLayout::LeftToRight, parent),
             slider(Qt::Horizontal, parent),
             muteButton(parent),
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
             volumeIcon(Platform::icon(QLatin1String("player-volume"))),
             mutedIcon(Platform::icon(QLatin1String("player-volume-muted"))),
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
             output(0),
             ignoreVolumeChange(false)
         {
@@ -87,6 +91,8 @@ class VolumeSliderPrivate
         bool ignoreVolumeChange;
 };
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_VOLUMESLIDER
 
 QT_END_NAMESPACE
 

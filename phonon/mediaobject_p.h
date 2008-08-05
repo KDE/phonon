@@ -65,7 +65,9 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             errorString(),
             prefinishMark(0),
             transitionTime(0), // gapless playback
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             kiofallback(0),
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             state(Phonon::LoadingState),
             errorType(Phonon::NormalError),
             errorOverride(false),
@@ -80,7 +82,9 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         QString errorString;
         qint32 prefinishMark;
         qint32 transitionTime;
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         AbstractMediaStream *kiofallback;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         State state : 8;
         ErrorType errorType : 4;
         bool errorOverride : 1;

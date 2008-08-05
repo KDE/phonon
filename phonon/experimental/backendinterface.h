@@ -27,7 +27,9 @@ namespace Experimental
 namespace BackendInterface
 {
 enum Class {
-    VideoDataOutputClass = 0x10000
+    VideoDataOutputClass = 0x10000,
+    AudioDataOutputClass,
+    VisualizationClass
 };
 } // namespace BackendInterface
 } // namespace Experimental

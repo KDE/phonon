@@ -29,6 +29,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
+
 namespace Phonon
 {
 PHONON_HEIR_IMPL(Effect)
@@ -91,6 +93,9 @@ void VolumeFaderEffectPrivate::setupBackendObject()
     pINTERFACE_CALL(setFadeCurve(fadeCurve));
 }
 }
+
+
+#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 
 QT_END_NAMESPACE
 

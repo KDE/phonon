@@ -28,6 +28,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_EFFECT
+
 namespace Phonon
 {
 
@@ -222,6 +224,8 @@ uint PHONON_EXPORT qHash(const Phonon::EffectParameter &param);
 inline uint qHash(const Phonon::EffectParameter &param) { return Phonon::qHash(param); } //krazy:exclude=inline
 #endif
 Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::EffectParameter::Hints)
+
+#endif //QT_NO_PHONON_EFFECT
 
 QT_END_NAMESPACE
 QT_END_HEADER

@@ -26,6 +26,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
+
 namespace Phonon
 {
     class VolumeFaderEffectPrivate;
@@ -163,6 +165,8 @@ namespace Phonon
             void fadeTo(float volume, int fadeTime);
     };
 } //namespace Phonon
+
+#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 
 QT_END_NAMESPACE
 QT_END_HEADER

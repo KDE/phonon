@@ -16,6 +16,8 @@
     Boston, MA 02110-1301, USA.
 
 */
+
+
 #ifndef PHONON_EFFECT_H
 #define PHONON_EFFECT_H
 
@@ -26,6 +28,8 @@
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
+
+#ifndef QT_NO_PHONON_EFFECT
 
 class QString;
 template<class T> class QList;
@@ -103,8 +107,11 @@ namespace Phonon
     };
 } //namespace Phonon
 
+#endif // QT_NO_EFFECT
+
 QT_END_NAMESPACE
 QT_END_HEADER
 
 // vim: sw=4 ts=4 tw=80
 #endif // PHONON_EFFECT_H
+

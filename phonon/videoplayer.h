@@ -28,6 +28,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VIDEOPLAYER
+
 namespace Phonon
 {
 class VideoPlayerPrivate;
@@ -184,6 +186,8 @@ class PHONON_EXPORT VideoPlayer : public QWidget
 };
 
 } //namespace Phonon
+
+#endif //QT_NO_PHONON_VIDEOPLAYER
 
 QT_END_NAMESPACE
 QT_END_HEADER
