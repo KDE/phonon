@@ -49,8 +49,8 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
     protected:
         AudioOutputPrivate(CastId castId = MediaNodePrivate::AudioOutputType)
             : AbstractAudioOutputPrivate(castId),
-            volume(Platform::loadVolume(name)),
             name(Platform::applicationName()),
+            volume(Platform::loadVolume(name)),
             outputDeviceIndex(-1),
             deviceBeforeFallback(-1),
             outputDeviceOverridden(false),
@@ -70,8 +70,8 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         void _k_deviceListChanged();
 
     private:
-        qreal volume;
         QString name;
+        qreal volume;
         Category category;
         int outputDeviceIndex;
         int deviceBeforeFallback;
