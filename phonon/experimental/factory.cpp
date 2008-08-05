@@ -81,6 +81,17 @@ Factory::Sender *Factory::sender()
     return globalFactory;
 }
 
+QObject *Factory::createAudioDataOutput(QObject *parent)
+{
+    Phonon::BackendInterface *b = qobject_cast<Phonon::BackendInterface *>(Phonon::Factory::backend());
+    if (b) {
+        return Phonon::Factory::registerQObject(b->createObject(
+                    static_cast<Phonon::BackendInterface::Class>(Phonon::Experimental::BackendInterface::AudioDataOutputClass),
+                    parent));
+    }
+    return 0;
+}
+
 QObject *Factory::createVideoDataOutput(QObject *parent)
 {
     Phonon::BackendInterface *b = qobject_cast<Phonon::BackendInterface *>(Phonon::Factory::backend());
@@ -98,6 +109,17 @@ QObject *Factory::createAvCapture(QObject *parent)
     if (b) {
         return Phonon::Factory::registerQObject(b->createObject(
                     static_cast<Phonon::BackendInterface::Class>(Phonon::Experimental::BackendInterface::AvCaptureClass),
+                    parent));
+    }
+    return 0;
+}
+
+QObject *Factory::createVisualization(QObject *parent)
+{
+    Phonon::BackendInterface *b = qobject_cast<Phonon::BackendInterface *>(Phonon::Factory::backend());
+    if (b) {
+        return Phonon::Factory::registerQObject(b->createObject(
+                    static_cast<Phonon::BackendInterface::Class>(Phonon::Experimental::BackendInterface::VisualizationClass),
                     parent));
     }
     return 0;

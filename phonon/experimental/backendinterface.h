@@ -30,6 +30,8 @@ namespace BackendInterface
 {
 enum Class {
     VideoDataOutputClass = 0x10000,
+    AudioDataOutputClass,
+    VisualizationClass,
     AvCaptureClass
 };
 } // namespace BackendInterface

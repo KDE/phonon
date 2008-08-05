@@ -30,6 +30,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
+
 namespace Phonon
 {
 
@@ -227,6 +229,8 @@ void MediaController::setCurrentSubtitle(const Phonon::SubtitleDescription &stre
 #undef IFACE
 
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 QT_END_NAMESPACE
 

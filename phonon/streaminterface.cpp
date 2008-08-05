@@ -28,6 +28,8 @@
 #include "phononnamespace_p.h"
 #include <QtCore/QEvent>
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -211,3 +213,5 @@ QT_END_NAMESPACE
 
 #include "moc_streaminterface.cpp"
 #include "moc_streaminterface_p.cpp"
+
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM

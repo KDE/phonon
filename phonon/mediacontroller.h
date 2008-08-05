@@ -32,6 +32,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
+
 namespace Phonon
 {
 class MediaControllerPrivate;
@@ -177,6 +179,8 @@ class PHONON_EXPORT MediaController : public QObject
 } // namespace Phonon
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::MediaController::Features)
+
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 QT_END_NAMESPACE
 QT_END_HEADER

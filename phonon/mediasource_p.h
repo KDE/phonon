@@ -44,22 +44,28 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
 {
     public:
         MediaSourcePrivate(MediaSource::Type t)
-            : type(t), discType(NoDisc), stream(0),
+            : type(t), discType(NoDisc),
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            stream(0),
             streamEventQueue(0),
             ioDevice(0),
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             autoDelete(false)
         {
         }
 
         virtual ~MediaSourcePrivate();
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         void setStream(AbstractMediaStream *s);
+#endif
 
         MediaSource::Type type;
         QUrl url;
         Phonon::DiscType discType;
         QString deviceName;
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         // The AbstractMediaStream(2) may be deleted at any time by the application. If that happens
         // stream will be 0 automatically, but streamEventQueue will stay valid as we hold a
         // reference to it. This is necessary to avoid a races when setting the MediaSource while
@@ -71,7 +77,8 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
 //        AudioCaptureDevice audioCaptureDevice;
 //        VideoCaptureDevice videoCaptureDevice;
         QIODevice *ioDevice;
-        QList<MediaSource> linkedSources;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        //QList<MediaSource> linkedSources;
         bool autoDelete;
 };
 
@@ -81,4 +88,5 @@ QT_END_NAMESPACE
 
 #endif // MEDIASOURCE_P_H
 // vim: sw=4 sts=4 et tw=100
+
 

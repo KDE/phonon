@@ -27,11 +27,11 @@
 #include "phononnamespace.h"
 #include "objectdescription.h"
 #include <QtCore/QSharedData>
+#include <QtCore/QString>
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
-class QString;
 class QUrl;
 class QIODevice;
 
@@ -131,6 +131,7 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(Phonon::DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
          * Creates a MediaSource object for a data stream.
          *
@@ -155,6 +156,7 @@ class PHONON_EXPORT MediaSource
          * \see setAutoDelete
          */
         MediaSource(QIODevice *ioDevice); //krazy:exclude=explicit
+#endif
 
         /**
          * Creates a MediaSource object for capture devices.
@@ -236,11 +238,13 @@ class PHONON_EXPORT MediaSource
          */
         QString deviceName() const;
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
          * Returns the media stream of the MediaSource if type() == Stream; otherwise returns 0.
          * QIODevices are handled as streams, too.
          */
         AbstractMediaStream *stream() const;
+#endif
 
         //AudioCaptureDevice audioCaptureDevice() const;
         //VideoCaptureDevice videoCaptureDevice() const;

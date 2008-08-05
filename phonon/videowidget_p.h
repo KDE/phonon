@@ -34,6 +34,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VIDEO
+
 namespace Phonon
 {
 
@@ -74,6 +76,8 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 };
 
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_VIDEO
 
 QT_END_NAMESPACE
 #endif // VIDEOWIDGET_P_H

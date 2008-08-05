@@ -33,6 +33,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
+
 /* MinGW 3.4.x gives an ICE when trying to instantiate one of the
    ObjectDescriptionModel<foo> classes because it can't handle
    half exported classes correct. gcc 4.3.x has a fix for this but
@@ -371,6 +373,8 @@ namespace Phonon
     typedef ObjectDescriptionModel<VisualizationType> VisualizationDescriptionModel;*/
 
 }
+
+#endif //QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 
 QT_END_NAMESPACE
 QT_END_HEADER

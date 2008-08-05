@@ -36,11 +36,6 @@ namespace Phonon
 namespace Experimental
 {
 
-GlobalConfig::GlobalConfig(QObject *parent)
-    : Phonon::GlobalConfig(parent)
-{
-}
-
 static void filterAdvanced(BackendInterface *backendIface, QList<int> *list)
 {
     QMutableListIterator<int> it(*list);
@@ -112,5 +107,3 @@ int GlobalConfig::videoCaptureDeviceFor(Phonon::Category category) const
 
 } // namespace Experimental
 } // namespace Phonon
-
-#include "moc_globalconfig_p.cpp"

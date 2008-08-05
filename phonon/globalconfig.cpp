@@ -38,9 +38,7 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
-GlobalConfig::GlobalConfig(QObject *parent)
-    : QObject(parent)
-    , m_config(QLatin1String("kde.org"), QLatin1String("libphonon"))
+GlobalConfig::GlobalConfig() : m_config(QLatin1String("kde.org"), QLatin1String("libphonon"))
 {
 }
 
@@ -130,11 +128,9 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, Hid
             ? generalGroup.value(QLatin1String("HideAdvancedDevices"), true)
             : static_cast<bool>(override));
 
-    PlatformPlugin *platformPlugin = Factory::platformPlugin();
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
-
     QList<int> defaultList;
-    if (platformPlugin) {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+    if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
         // the platform plugin lists the audio devices for the platform
         // this list already is in default order (as defined by the platform plugin)
         defaultList = platformPlugin->objectDescriptionIndexes(Phonon::AudioOutputDeviceType);
@@ -149,9 +145,10 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, Hid
             }
         }
     }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
     // lookup the available devices directly from the backend (mostly for virtual devices)
-    if (backendIface) {
+    if (BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend())) {
         // this list already is in default order (as defined by the backend)
         QList<int> list = backendIface->objectDescriptionIndexes(Phonon::AudioOutputDeviceType);
         if (hideAdvancedDevices || !defaultList.isEmpty()) {
@@ -175,6 +172,7 @@ int GlobalConfig::audioOutputDeviceFor(Phonon::Category category) const
     return ret.first();
 }
 
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
 QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, HideAdvancedDevicesOverride override) const
 {
     //The devices need to be stored independently for every backend
@@ -184,11 +182,9 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, Hi
             ? generalGroup.value(QLatin1String("HideAdvancedDevices"), true)
             : static_cast<bool>(override));
 
-    PlatformPlugin *platformPlugin = Factory::platformPlugin();
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
-
     QList<int> defaultList;
-    if (platformPlugin) {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+    if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
         // the platform plugin lists the audio devices for the platform
         // this list already is in default order (as defined by the platform plugin)
         defaultList = platformPlugin->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
@@ -203,9 +199,10 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, Hi
             }
         }
     }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
     // lookup the available devices directly from the backend (mostly for virtual devices)
-    if (backendIface) {
+    if (BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend())) {
         // this list already is in default order (as defined by the backend)
         QList<int> list = backendIface->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
         if (hideAdvancedDevices || !defaultList.isEmpty()) {
@@ -228,11 +225,9 @@ int GlobalConfig::audioCaptureDeviceFor(Phonon::Category category) const
         return -1;
     return ret.first();
 }
+#endif //QT_NO_PHONON_AUDIOCAPTURE
+
 
 } // namespace Phonon
 
 QT_END_NAMESPACE
-
-#include "moc_globalconfig_p.cpp"
-
-// vim: sw=4 ts=4

@@ -26,7 +26,6 @@
 #include "medianode_p.h"
 #include "mediaobject.h"
 #include "audiooutput.h"
-#include "audiooutput_p.h"
 #include "globalstatic_p.h"
 #include "objectdescription.h"
 #include "platformplugin.h"
@@ -34,12 +33,9 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QLibrary>
 #include <QtCore/QList>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QPointer>
-#include <QtGui/QIcon>
 #ifndef QT_NO_DBUS
 #include <QtDBus/QtDBus>
 #endif
@@ -58,11 +54,13 @@ class FactoryPrivate : public Phonon::Factory::Sender
         FactoryPrivate();
         ~FactoryPrivate();
         bool createBackend();
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
         PlatformPlugin *platformPlugin();
 
-        QPointer<QObject> m_backendObject;
         PlatformPlugin *m_platformPlugin;
         bool m_noPlatformPlugin;
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
+        QPointer<QObject> m_backendObject;
 
         QList<QObject *> objects;
         QList<MediaNodePrivate *> mediaNodePrivateList;
@@ -71,7 +69,9 @@ class FactoryPrivate : public Phonon::Factory::Sender
         /**
          * This is called via DBUS when the user changes the Phonon Backend.
          */
+#ifndef QT_NO_DBUS
         void phononBackendChanged();
+#endif //QT_NO_DBUS
 
         /**
          * unregisters the backend object
@@ -101,10 +101,12 @@ void Factory::setBackend(QObject *b)
 bool FactoryPrivate::createBackend()
 {
     Q_ASSERT(m_backendObject == 0);
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
     if (f) {
         m_backendObject = f->createBackend();
     }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     if (!m_backendObject) {
         // could not load a backend through the platform plugin. Falling back to the default
         // (finding the first loadable backend).
@@ -150,9 +152,10 @@ bool FactoryPrivate::createBackend()
 }
 
 FactoryPrivate::FactoryPrivate()
-    : m_backendObject(0),
-    m_platformPlugin(0),
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+    : m_platformPlugin(0),
     m_noPlatformPlugin(false)
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
@@ -180,7 +183,9 @@ FactoryPrivate::~FactoryPrivate()
         qDeleteAll(objects);
     }
     delete m_backendObject;
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     delete m_platformPlugin;
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 }
 
 void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
@@ -207,10 +212,14 @@ Factory::Sender *Factory::sender()
 
 bool Factory::isMimeTypeAvailable(const QString &mimeType)
 {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
     if (f) {
         return f->isMimeTypeAvailable(mimeType);
     }
+#else
+    Q_UNUSED(mimeType);
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     return true; // the MIME type might be supported, let BackendCapabilities find out
 }
 
@@ -228,6 +237,7 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
     }
 }
 
+#ifndef QT_NO_DBUS
 void FactoryPrivate::phononBackendChanged()
 {
     if (m_backendObject) {
@@ -255,6 +265,7 @@ void FactoryPrivate::phononBackendChanged()
     }
     emit backendChanged();
 }
+#endif //QT_NO_DBUS
 
 //X void Factory::freeSoundcardDevices()
 //X {
@@ -287,16 +298,20 @@ QObject *Factory::create ## classname(int arg1, QObject *parent) \
 }
 
 FACTORY_IMPL(MediaObject)
+#ifndef QT_NO_PHONON_EFFECT
 FACTORY_IMPL_1ARG(Effect)
+#endif //QT_NO_PHONON_EFFECT
+#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(VolumeFaderEffect)
+#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(AudioOutput)
-FACTORY_IMPL(AudioDataOutput)
-FACTORY_IMPL(Visualization)
-FACTORY_IMPL(VideoDataOutput)
+#ifndef QT_NO_PHONON_VIDEO
 FACTORY_IMPL(VideoWidget)
+#endif //QT_NO_PHONON_VIDEO
 
 #undef FACTORY_IMPL
 
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
 PlatformPlugin *FactoryPrivate::platformPlugin()
 {
     if (m_platformPlugin) {
@@ -349,6 +364,7 @@ PlatformPlugin *Factory::platformPlugin()
 {
     return globalFactory->platformPlugin();
 }
+#endif // QT_NO_PHONON_PLATFORMPLUGIN
 
 QObject *Factory::backend(bool createWhenNull)
 {

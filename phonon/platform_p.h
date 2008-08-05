@@ -33,6 +33,7 @@ QT_BEGIN_NAMESPACE
 class QIcon;
 class QObject;
 class QUrl;
+class QStyle;
 
 namespace Phonon
 {
@@ -44,7 +45,7 @@ namespace Platform
 void saveVolume(const QString &outputName, qreal volume);
 qreal loadVolume(const QString &outputName);
 AbstractMediaStream *createMediaStream(const QUrl &url, QObject *parent);
-QIcon icon(const QString &name);
+QIcon icon(const QString &name, QStyle *style = 0);
 void notification(const char *notificationName, const QString &text,
         const QStringList &actions = QStringList(), QObject *receiver = 0,
         const char *actionSlot = 0);

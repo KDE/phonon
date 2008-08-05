@@ -53,13 +53,15 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         virtual void phononObjectDestroyed(MediaNodePrivate *);
         PHONON_EXPORT void setupBackendObject();
 
-        void streamError(Phonon::ErrorType, const QString &);
         void _k_resumePlay();
         void _k_resumePause();
         void _k_metaDataChanged(const QMultiMap<QString, QString> &);
         void _k_aboutToFinish();
         void _k_currentSourceChanged(const MediaSource &);
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        void streamError(Phonon::ErrorType, const QString &);
         PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
         MediaObjectPrivate()
             : currentTime(0),
@@ -68,12 +70,16 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             errorString(),
             prefinishMark(0),
             transitionTime(0), // gapless playback
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             kiofallback(0),
-            state(Phonon::LoadingState),
-            errorType(Phonon::NormalError),
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            state(Phonon::LoadingState)
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            , errorType(Phonon::NormalError),
             errorOverride(false),
             ignoreLoadingToBufferingStateChange(false),
             ignoreErrorToLoadingStateChange(false)
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
         }
 
@@ -83,12 +89,19 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         QString errorString;
         qint32 prefinishMark;
         qint32 transitionTime;
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         AbstractMediaStream *kiofallback;
-        State state : 8;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        State state
+#ifdef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            ;
+#else
+            : 8;
         ErrorType errorType : 4;
         bool errorOverride : 1;
         bool ignoreLoadingToBufferingStateChange : 1;
         bool ignoreErrorToLoadingStateChange : 1;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
 };
