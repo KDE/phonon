@@ -29,6 +29,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VIDEOPLAYER
+
 namespace Phonon
 {
 
@@ -104,8 +106,7 @@ void VideoPlayer::play(const MediaSource &source)
     if (ErrorState == d->player->state())
         return;
 
-    if (StoppedState == d->player->state())
-        d->player->play();
+    d->player->play();
 }
 
 void VideoPlayer::play()
@@ -159,6 +160,8 @@ bool VideoPlayer::isPaused() const
 }
 
 } // namespaces
+
+#endif //QT_NO_PHONON_VIDEOPLAYER
 
 QT_END_NAMESPACE
 

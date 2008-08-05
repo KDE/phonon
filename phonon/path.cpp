@@ -23,6 +23,7 @@
 #include "path.h"
 #include "path_p.h"
 
+#include "phononnamespace_p.h"
 #include "backendinterface.h"
 #include "factory_p.h"
 #include "medianode.h"
@@ -56,10 +57,12 @@ class ConnectionTransaction
 
 PathPrivate::~PathPrivate()
 {
+#ifndef QT_NO_PHONON_EFFECT
     foreach (Effect *e, effects) {
         e->k_ptr->removeDestructionHandler(this);
     }
     delete effectsParent;
+#endif
 }
 
 Path::~Path()
@@ -81,6 +84,7 @@ bool Path::isValid() const
     return d->sourceNode != 0 && d->sinkNode != 0;
 }
 
+#ifndef QT_NO_PHONON_EFFECT
 Effect *Path::insertEffect(const EffectDescription &desc, Effect *insertBefore)
 {
     if (!d->effectsParent) {
@@ -147,6 +151,7 @@ QList<Effect *> Path::effects() const
 {
     return d->effects;
 }
+#endif //QT_NO_PHONON_EFFECT
 
 bool Path::reconnect(MediaNode *source, MediaNode *sink)
 {
@@ -164,7 +169,11 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
 
     if (bnewSource != bcurrentSource) {
         //we need to change the source
+#ifndef QT_NO_PHONON_EFFECT
         MediaNode *next = d->effects.isEmpty() ? sink : d->effects.first();
+#else
+        MediaNode *next = sink;
+#endif //QT_NO_PHONON_EFFECT
         QObject *bnext = next->k_ptr->backendObject();
         if (bcurrentSource)
             disconnections << QObjectPair(bcurrentSource, bnext);
@@ -172,7 +181,11 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
     }
 
     if (bnewSink != bcurrentSink) {
+#ifndef QT_NO_PHONON_EFFECT
         MediaNode *previous = d->effects.isEmpty() ? source : d->effects.last();
+#else
+        MediaNode *previous = source;
+#endif //QT_NO_PHONON_EFFECT
         QObject *bprevious = previous->k_ptr->backendObject();
         if (bcurrentSink)
             disconnections << QObjectPair(bprevious, bcurrentSink);
@@ -182,23 +195,28 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
     }
 
     if (d->executeTransaction(disconnections, connections)) {
-        //everything went well: let's update the path and the source node
-        sink->k_ptr->addInputPath(*this);
-        if (d->sinkNode) {
-            d->sinkNode->k_ptr->removeInputPath(*this);
-            d->sinkNode->k_ptr->removeDestructionHandler(d.data());
-        }
-        d->sinkNode = sink;
-        d->sinkNode->k_ptr->addDestructionHandler(d.data());
 
         //everything went well: let's update the path and the sink node
-        source->k_ptr->addOutputPath(*this);
-        if (d->sourceNode) {
-            d->sourceNode->k_ptr->removeOutputPath(*this);
-            d->sourceNode->k_ptr->removeDestructionHandler(d.data());
+        if (d->sinkNode != sink) {
+            if (d->sinkNode) {
+                d->sinkNode->k_ptr->removeInputPath(*this);
+                d->sinkNode->k_ptr->removeDestructionHandler(d.data());
+            }
+            sink->k_ptr->addInputPath(*this);
+            d->sinkNode = sink;
+            d->sinkNode->k_ptr->addDestructionHandler(d.data());
         }
-        d->sourceNode = source;
-        d->sourceNode->k_ptr->addDestructionHandler(d.data());
+
+        //everything went well: let's update the path and the source node
+        if (d->sourceNode != source) {
+            source->k_ptr->addOutputPath(*this);
+            if (d->sourceNode) {
+                d->sourceNode->k_ptr->removeOutputPath(*this);
+                d->sourceNode->k_ptr->removeDestructionHandler(d.data());
+            }
+            d->sourceNode = source;
+            d->sourceNode->k_ptr->addDestructionHandler(d.data());
+        }
         return true;
     } else {
         return false;
@@ -214,11 +232,14 @@ bool Path::disconnect()
     QObjectList list;
     if (d->sourceNode)
         list << d->sourceNode->k_ptr->backendObject();
+#ifndef QT_NO_PHONON_EFFECT
     foreach(Effect *e, d->effects) {
         list << e->k_ptr->backendObject();
     }
-    if (d->sinkNode)
+#endif
+    if (d->sinkNode) {
         list << d->sinkNode->k_ptr->backendObject();
+    }
 
     //lets build the disconnection list
     QList<QObjectPair> disco;
@@ -238,10 +259,12 @@ bool Path::disconnect()
         }
         d->sourceNode = 0;
 
+#ifndef QT_NO_PHONON_EFFECT
         foreach(Effect *e, d->effects) {
             e->k_ptr->removeDestructionHandler(d.data());
         }
         d->effects.clear();
+#endif 
 
         if (d->sinkNode) {
             d->sinkNode->k_ptr->removeInputPath(*this);
@@ -316,6 +339,7 @@ bool PathPrivate::executeTransaction( const QList<QObjectPair> &disconnections, 
     return true;
 }
 
+#ifndef QT_NO_PHONON_EFFECT
 bool PathPrivate::removeEffect(Effect *effect)
 {
     if (!effects.contains(effect))
@@ -347,6 +371,8 @@ bool PathPrivate::removeEffect(Effect *effect)
     }
     return false;
 }
+#endif //QT_NO_PHONON_EFFECT
+
 
 void PathPrivate::phononObjectDestroyed(MediaNodePrivate *mediaNodePrivate)
 {
@@ -356,9 +382,14 @@ void PathPrivate::phononObjectDestroyed(MediaNodePrivate *mediaNodePrivate)
         QObject *bsink = sinkNode->k_ptr->backendObject();
         QObject *bsource = sourceNode->k_ptr->backendObject();
         QList<QObjectPair> disconnections;
+#ifndef QT_NO_PHONON_EFFECT
         disconnections << QObjectPair(bsource, effects.isEmpty() ? bsink : effects.first()->k_ptr->backendObject());
         if (!effects.isEmpty())
             disconnections << QObjectPair(effects.last()->k_ptr->backendObject(), bsink);
+#else
+        disconnections << QObjectPair(bsource, bsink);
+#endif //QT_NO_PHONON_EFFECT
+
         executeTransaction(disconnections, QList<QObjectPair>());
 
         Path p; //temporary path
@@ -373,11 +404,13 @@ void PathPrivate::phononObjectDestroyed(MediaNodePrivate *mediaNodePrivate)
         sourceNode = 0;
         sinkNode = 0;
     } else {
+#ifndef QT_NO_PHONON_EFFECT
         foreach (Effect *e, effects) {
             if (e->k_ptr == mediaNodePrivate) {
                 removeEffect(e);
             }
         }
+#endif //QT_NO_PHONON_EFFECT
     }
 }
 
@@ -387,11 +420,12 @@ Path createPath(MediaNode *source, MediaNode *sink)
     if (!p.reconnect(source, sink)) {
         const QObject *const src = source ? source->k_ptr->qObject() : 0;
         const QObject *const snk = sink ? sink->k_ptr->qObject() : 0;
-        qWarning("Phonon::createPath: Cannot connect %s(%s) to %s(%s).",
-                src ? src->metaObject()->className() : "",
-                src ? (src->objectName().isEmpty() ? "no objectName" : qPrintable(src->objectName())) : "null",
-                snk ? snk->metaObject()->className() : "",
-                snk ? (snk->objectName().isEmpty() ? "no objectName" : qPrintable(snk->objectName())) : "null");
+        pWarning() << "Phonon::createPath: Cannot connect "
+            << (src ? src->metaObject()->className() : "")
+            << '(' << (src ? (src->objectName().isEmpty() ? "no objectName" : qPrintable(src->objectName())) : "null") << ") to "
+            << (snk ? snk->metaObject()->className() : "")
+            << '(' << (snk ? (snk->objectName().isEmpty() ? "no objectName" : qPrintable(snk->objectName())) : "null")
+            << ").";
     }
     return p;
 }

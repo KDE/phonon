@@ -29,6 +29,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VIDEO
+
 namespace Phonon
 {
 class AbstractVideoOutputPrivate : public MediaNodePrivate
@@ -37,6 +39,8 @@ class AbstractVideoOutputPrivate : public MediaNodePrivate
     PHONON_PRIVATEABSTRACTCLASS
 };
 } //namespace Phonon
+
+#endif //QT_NO_PHONON_VIDEO
 
 QT_END_NAMESPACE
 

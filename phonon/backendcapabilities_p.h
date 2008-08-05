@@ -33,7 +33,6 @@ namespace Phonon
 {
 class BackendCapabilitiesPrivate : public BackendCapabilities::Notifier
 {
-    Q_OBJECT
     public:
         BackendCapabilitiesPrivate()
         {

@@ -28,6 +28,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+
 namespace Phonon
 {
 
@@ -186,8 +188,11 @@ void AbstractMediaStreamPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 
 } // namespace Phonon
 
+
 QT_END_NAMESPACE
 
 #include "moc_abstractmediastream.cpp"
+
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 // vim: sw=4 sts=4 et tw=100

@@ -21,7 +21,7 @@
 */
 #include "audiodataoutput.h"
 #include "audiodataoutput_p.h"
-#include "../factory_p.h"
+#include "factory_p.h"
 
 #define PHONON_CLASSNAME AudioDataOutput
 

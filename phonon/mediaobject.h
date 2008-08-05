@@ -500,7 +500,9 @@ namespace Phonon
              *                          adding a VideoWidget will show an empty (black)
              *                          VideoWidget.
              */
+#ifndef QT_NO_PHONON_VIDEO
             void hasVideoChanged(bool hasVideo);
+#endif //QT_NO_PHONON_VIDEO
 
             /**
              * Tells about the status of the buffer.
@@ -593,7 +595,9 @@ namespace Phonon
             Q_PRIVATE_SLOT(k_func(), void _k_resumePlay())
             Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
             Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<QString, QString> &))
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             Q_PRIVATE_SLOT(k_func(), void _k_aboutToFinish())
             Q_PRIVATE_SLOT(k_func(), void _k_currentSourceChanged(const MediaSource &))
     };

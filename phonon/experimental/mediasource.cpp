@@ -62,6 +62,7 @@ MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
 MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
     : Phonon::MediaSource(*new MediaSourcePrivate(Link))
 {
+    S_D(MediaSource);
     d->linkedSources = mediaList;
     foreach (const Phonon::MediaSource &ms, mediaList) {
         Q_ASSERT(static_cast<MediaSource::Type>(ms.type()) != Link);
@@ -70,6 +71,7 @@ MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
 
 QList<Phonon::MediaSource> MediaSource::substreams() const
 {
+    S_D(MediaSource);
     return d->linkedSources;
 }
 

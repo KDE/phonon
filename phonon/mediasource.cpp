@@ -53,10 +53,14 @@ MediaSource::MediaSource(const QString &filename)
         if (localFs) {
             d->url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
         } else {
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             // it's a Qt resource -> use QFile
             d->type = Stream;
             d->ioDevice = new QFile(filename);
             d->setStream(new IODeviceStream(d->ioDevice, d->ioDevice));
+#else
+            d->type = Invalid;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         }
     } else {
         d->url = filename;
@@ -89,6 +93,7 @@ MediaSource::MediaSource(Phonon::DiscType dt, const QString &deviceName)
     d->deviceName = deviceName;
 }
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 MediaSource::MediaSource(AbstractMediaStream *stream)
     : d(new MediaSourcePrivate(Stream))
 {
@@ -109,6 +114,7 @@ MediaSource::MediaSource(QIODevice *ioDevice)
         d->type = Invalid;
     }
 }
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 /* post 4.0
 MediaSource::MediaSource(const QList<MediaSource> &mediaList)
@@ -132,6 +138,7 @@ MediaSource::~MediaSource()
 
 MediaSourcePrivate::~MediaSourcePrivate()
 {
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (autoDelete) {
         delete stream;
         delete ioDevice;
@@ -139,6 +146,7 @@ MediaSourcePrivate::~MediaSourcePrivate()
     if (streamEventQueue) {
         streamEventQueue->deref();
     }
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 }
 
 MediaSource::MediaSource(const MediaSource &rhs)
@@ -169,9 +177,11 @@ bool MediaSource::autoDelete() const
 
 MediaSource::Type MediaSource::type() const
 {
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (d->type == Stream && d->stream == 0) {
         return Invalid;
     }
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
     return d->type;
 }
 
@@ -195,6 +205,7 @@ QString MediaSource::deviceName() const
     return d->deviceName;
 }
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 AbstractMediaStream *MediaSource::stream() const
 {
     return d->stream;
@@ -210,6 +221,8 @@ void MediaSourcePrivate::setStream(AbstractMediaStream *s)
         streamEventQueue->ref();
     }
 }
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+
 
 //X AudioCaptureDevice MediaSource::audioCaptureDevice() const
 //X {

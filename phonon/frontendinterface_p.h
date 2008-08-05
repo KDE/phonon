@@ -30,6 +30,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
+
 namespace Phonon
 {
 class FrontendInterfacePrivate
@@ -55,10 +57,11 @@ class FrontendInterfacePrivate
             }
         }
         AddonInterface *iface() { return qobject_cast<AddonInterface *>(media->k_ptr->backendObject()); }
-
         QPointer<MediaObject> media;
 };
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 QT_END_NAMESPACE
 

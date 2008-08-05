@@ -49,14 +49,13 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
     protected:
         AudioOutputPrivate(CastId castId = MediaNodePrivate::AudioOutputType)
             : AbstractAudioOutputPrivate(castId),
-            volume(1.0),
+            volume(Platform::loadVolume(name)),
+            name(Platform::applicationName()),
             outputDeviceIndex(-1),
             deviceBeforeFallback(-1),
             outputDeviceOverridden(false),
             muted(false)
         {
-            name = Platform::applicationName();
-            volume = Platform::loadVolume(name);
         }
 
         enum DeviceChangeType {
@@ -72,8 +71,8 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
 
     private:
         qreal volume;
-        Category category;
         QString name;
+        Category category;
         int outputDeviceIndex;
         int deviceBeforeFallback;
         bool outputDeviceOverridden;

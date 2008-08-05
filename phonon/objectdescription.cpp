@@ -109,6 +109,7 @@ bool ObjectDescriptionData::isValid() const
 ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType type, int index)
 {
     // prefer to get the ObjectDescriptionData from the platform plugin for audio devices
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     if (type == AudioOutputDeviceType || type == AudioCaptureDeviceType) {
         PlatformPlugin *platformPlugin = Factory::platformPlugin();
         if (platformPlugin) {
@@ -119,6 +120,8 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
             }
         }
     }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
+
     QObject *b = Factory::backend();
     BackendInterface *iface = qobject_cast<BackendInterface *>(b);
     if (iface) {

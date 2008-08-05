@@ -30,6 +30,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VOLUMESLIDER
+
 namespace Phonon
 {
 class AudioOutput;
@@ -143,6 +145,8 @@ class PHONON_EXPORT VolumeSlider : public QWidget
 };
 
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_VOLUMESLIDER
 
 QT_END_NAMESPACE
 QT_END_HEADER
