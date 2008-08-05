@@ -23,6 +23,8 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QUrl>
 #include <QtGui/QIcon>
+#include <QtGui/QStyle>
+#include <QtGui/QApplication>
 
 QT_BEGIN_NAMESPACE
 
@@ -69,17 +71,26 @@ AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *paren
     return 0;
 }
 
-QIcon Platform::icon(const QString &name)
+QIcon Platform::icon(const QString &name, QStyle *style)
 {
+    QIcon ret;
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    const PlatformPlugin *f = Factory::platformPlugin();
-    if (f) {
-        return f->icon(name);
+    if (const PlatformPlugin *f = Factory::platformPlugin()) {
+        ret = f->icon(name);
     }
-#else
-    Q_UNUSED(name);
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
-    return QIcon();
+    if (ret.isNull()) {
+        if (!style) {
+            style = QApplication::style();
+        }
+        if (name == QLatin1String("player-volume")) {
+            ret = style->standardPixmap(QStyle::SP_MediaVolume);
+        } else if (name == QLatin1String("player-volume-muted")) {
+            ret = style->standardPixmap(QStyle::SP_MediaVolumeMuted);
+        }
+    }
+
+    return ret;
 }
 
 void Platform::notification(const char *notificationName, const QString &text,

@@ -48,7 +48,7 @@ class SeekSliderPrivate
             iconLabel(parent),
             ticking(false)
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-            ,icon(Platform::icon(QLatin1String("player-time")))
+            ,icon(Platform::icon(QLatin1String("player-time"), parent->style()))
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
         {
             const int e = parent->style()->pixelMetric(QStyle::PM_ButtonIconSize);
