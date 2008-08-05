@@ -50,11 +50,13 @@ class FactoryPrivate : public Phonon::Factory::Sender
         FactoryPrivate();
         ~FactoryPrivate();
         bool createBackend();
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
         PlatformPlugin *platformPlugin();
 
-        QPointer<QObject> m_backendObject;
         PlatformPlugin *m_platformPlugin;
         bool m_noPlatformPlugin;
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
+        QPointer<QObject> m_backendObject;
 
         QList<QObject *> objects;
         QList<MediaNodePrivate *> mediaNodePrivateList;
@@ -95,10 +97,12 @@ void Factory::setBackend(QObject *b)
 bool FactoryPrivate::createBackend()
 {
     Q_ASSERT(m_backendObject == 0);
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
     if (f) {
         m_backendObject = f->createBackend();
     }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     if (!m_backendObject) {
         // could not load a backend through the platform plugin. Falling back to the default
         // (finding the first loadable backend).
@@ -144,9 +148,10 @@ bool FactoryPrivate::createBackend()
 }
 
 FactoryPrivate::FactoryPrivate()
-    : m_backendObject(0),
-    m_platformPlugin(0),
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+    : m_platformPlugin(0),
     m_noPlatformPlugin(false)
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
@@ -168,7 +173,9 @@ FactoryPrivate::~FactoryPrivate()
         qDeleteAll(objects);
     }
     delete m_backendObject;
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     delete m_platformPlugin;
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 }
 
 void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
@@ -195,10 +202,14 @@ Factory::Sender *Factory::sender()
 
 bool Factory::isMimeTypeAvailable(const QString &mimeType)
 {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
     if (f) {
         return f->isMimeTypeAvailable(mimeType);
     }
+#else
+    Q_UNUSED(mimeType);
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     return true; // the MIME type might be supported, let BackendCapabilities find out
 }
 
@@ -293,6 +304,7 @@ FACTORY_IMPL(VideoWidget)
 
 #undef FACTORY_IMPL
 
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
 PlatformPlugin *FactoryPrivate::platformPlugin()
 {
     if (m_platformPlugin) {
@@ -345,6 +357,7 @@ PlatformPlugin *Factory::platformPlugin()
 {
     return globalFactory->platformPlugin();
 }
+#endif QT_NO_PHONON_PLATFORMPLUGIN
 
 QObject *Factory::backend(bool createWhenNull)
 {
