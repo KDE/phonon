@@ -51,7 +51,7 @@ namespace Phonon
             void stop();
             void pause();
             void absoluteSeek(qint64);
-            HRESULT saveToFile(const QString &filepath) const;
+
             QMultiMap<QString, QString> metadata() const;
 
             static QSet<Filter> getAllFilters(Graph graph);
@@ -61,6 +61,7 @@ namespace Phonon
 
             bool hasVideo() const { return m_hasVideo; }
             void grabNode(BackendNode *node);
+            void grabFilter(Filter filter);
 
             //connections of the nodes
             bool connectNodes(BackendNode *source, BackendNode *sink);
@@ -75,10 +76,13 @@ namespace Phonon
             short index() const;
 
             Filter realSource() const;
-            QList<qint64> titles() const;
 
+
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
+            QList<qint64> titles() const;
             void setStopPosition(qint64 time);
             qint64 stopPosition() const;
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
             void switchFilters(Filter oldFilter, Filter newFilter);
             OAFilterState syncGetRealState() const;

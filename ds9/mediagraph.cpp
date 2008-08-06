@@ -24,6 +24,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include <QtCore/QUrl>
+#include <QtCore/QDebug>
 
 #include <qnetwork.h>
 
@@ -75,6 +76,43 @@ namespace Phonon
             }
             return ret;
         }
+                
+        static HRESULT saveToFile(Graph graph, const QString &filepath)
+        {
+            const WCHAR wszStreamName[] = L"ActiveMovieGraph";
+            HRESULT hr;
+            ComPointer<IStorage> storage;
+
+            // First, create a document file that will hold the GRF file
+            hr = StgCreateDocfile(reinterpret_cast<const wchar_t *>(filepath.utf16()),
+                STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE |
+                STGM_SHARE_EXCLUSIVE,
+                0, storage.pparam());
+
+            if (FAILED(hr)) {
+                return hr;
+            }
+
+            // Next, create a stream to store.
+            ComPointer<IStream> stream;
+            hr = storage->CreateStream(wszStreamName,
+                STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
+                0, 0, stream.pparam());
+
+            if (FAILED(hr)) {
+                return hr;
+            }
+
+            // The IpersistStream::Save method converts a stream into a persistent object.
+            ComPointer<IPersistStream> persist(graph, IID_IPersistStream);
+            hr = persist->Save(stream, TRUE);
+            if (SUCCEEDED(hr)) {
+                hr = storage->Commit(STGC_DEFAULT);
+            }
+
+            return hr;
+        }
+
 
         MediaGraph::MediaGraph(MediaObject *mo, short index) :
             m_graph(CLSID_FilterGraph, IID_IGraphBuilder),
@@ -112,7 +150,11 @@ namespace Phonon
 
         void MediaGraph::grabNode(BackendNode *node)
         {
-            const Filter filter = node->filter(m_index);
+            grabFilter(node->filter(m_index));
+        }
+
+        void MediaGraph::grabFilter(Filter filter)
+        {
             if (filter) {
                 FILTER_INFO info;
                 filter->QueryFilterInfo(&info);
@@ -120,7 +162,7 @@ namespace Phonon
                     if (info.pGraph) {
                         m_mediaObject->catchComError(info.pGraph->RemoveFilter(filter));
                     }
-                    m_mediaObject->catchComError(m_graph->AddFilter(filter, 0));
+                    m_mediaObject->catchComError(m_graph->AddFilter(filter, info.achName));
                 }
                 if (info.pGraph) {
                     info.pGraph->Release();
@@ -204,13 +246,7 @@ namespace Phonon
                 const Filter currentFilter = node->filter(m_index);
                 Q_FOREACH(const InputPin &inpin, BackendNode::pins(currentFilter, PINDIR_INPUT)) {
                     //we ensure the filter belongs to the graph
-                    FILTER_INFO info;
-                    currentFilter->QueryFilterInfo(&info);
-                    if (info.pGraph == 0) {
-                        m_graph->AddFilter(currentFilter, 0);
-                    } else {
-                        info.pGraph->Release();
-                    }
+                    grabFilter(currentFilter);
 
                     Q_FOREACH(const OutputPin &outpin, m_decoderPins) {
                         //a decoder has only one output
@@ -591,7 +627,11 @@ namespace Phonon
         {
             bool ret = false;
             const QList<InputPin> inputs = BackendNode::pins(sink->filter(m_index), PINDIR_INPUT);
-            const QList<OutputPin> outputs = BackendNode::pins(source == m_mediaObject ? m_fakeSource : source->filter(m_index), PINDIR_OUTPUT);
+            QList<OutputPin> outputs = BackendNode::pins(source == m_mediaObject ? m_fakeSource : source->filter(m_index), PINDIR_OUTPUT);
+            
+            if (source == m_mediaObject) {
+                grabFilter(m_fakeSource);
+            }
 
 #ifdef GRAPH_DEBUG
             qDebug() << Q_FUNC_INFO << source << sink << this;
@@ -649,10 +689,12 @@ namespace Phonon
                     m_result = m_graph->AddFilter(m_realSource, L"DVD Navigator");*/
 
 
-                } else if (source.discType() == Phonon::Cd) {
+ #ifndef QT_NO_PHONON_MEDIACONTROLLER
+               } else if (source.discType() == Phonon::Cd) {
                     m_realSource = Filter(new QAudioCDPlayer);
                     m_result = m_graph->AddFilter(m_realSource, L"Audio CD Reader");
 
+#endif //QT_NO_PHONON_MEDIACONTROLLER
                 } else {
                     m_result = E_NOTIMPL;
                 }
@@ -675,6 +717,7 @@ namespace Phonon
                     m_renderId = m_mediaObject->workerThread()->addUrlToRender(url);
                 }
                 break;
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             case Phonon::MediaSource::Stream:
                 {
                     m_realSource = Filter(new IODeviceReader(source, this));
@@ -687,6 +730,9 @@ namespace Phonon
                     m_renderId = m_mediaObject->workerThread()->addFilterToRender(m_realSource);
                 }
                 break;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            default:
+                m_result = E_FAIL;
             }
 
             return m_result;
@@ -728,6 +774,12 @@ namespace Phonon
                 return hr;
             }
 
+            const Graph oldGraph = m_graph;
+            m_graph = graph;
+            //let's update the interfaces
+            m_mediaControl = ComPointer<IMediaControl>(graph, IID_IMediaControl);
+            m_mediaSeeking = ComPointer<IMediaSeeking>(graph, IID_IMediaSeeking);
+
             //we keep the source and all the way down to the decoders
             QSet<Filter> keptFilters;
 
@@ -759,42 +811,27 @@ namespace Phonon
                 graph->RemoveFilter(filter);
             }
 
+            m_mediaObject->workerThread()->replaceGraphForEventManagement(graph, oldGraph);
 
             //let's transfer the nodes from the current graph to the new one
             QList<GraphConnection> connections; //we store the connections that need to be restored
 
 
             // First get all the sink nodes (nodes with no input connected)
-            Q_FOREACH(const Filter &filter, getAllFilters()) {
-                bool isSink = true;
-                Q_FOREACH(const InputPin &pin, BackendNode::pins(filter, PINDIR_INPUT)) {
-                    OutputPin out;
-                    if (pin->ConnectedTo(out.pparam()) != VFW_E_NOT_CONNECTED) {
-                        isSink = false;
-                    }
-                }
-
-                if (isSink) {
-                    connections += getConnections(filter);
-                    //we can now transfer the filter itself
-                    m_graph->RemoveFilter(filter);
-                    graph->AddFilter(filter, 0);
-                }
+            Q_FOREACH(BackendNode *node, m_sinkConnections) {
+                Filter currentFilter = node->filter(m_index);
+                connections += getConnections(currentFilter);
+                grabFilter(currentFilter);
             }
 
+            ensureSourceConnectedTo(true);
 
             //let's reestablish the connections
             Q_FOREACH(const GraphConnection &connection, connections) {
                 //check if we shoud transfer the sink node
-                FILTER_INFO info;
-                connection.input->QueryFilterInfo(&info);
-                if (info.pGraph != graph) {
-                    if (info.pGraph) {
-                        info.pGraph->RemoveFilter(connection.input);
-                        info.pGraph->Release();
-                    }
-                    graph->AddFilter(connection.input, 0);
-                }
+
+                grabFilter(connection.input);
+                grabFilter(connection.output);
 
                 const OutputPin output = BackendNode::pins(connection.output, PINDIR_OUTPUT).at(connection.outputOffset);
                 const InputPin input   = BackendNode::pins(connection.input, PINDIR_INPUT).at(connection.inputOffset);
@@ -802,12 +839,6 @@ namespace Phonon
                 Q_UNUSED(hr);
                 Q_ASSERT( SUCCEEDED(hr));
             }
-
-            m_mediaObject->workerThread()->replaceGraphForEventManagement(graph, m_graph);
-            m_graph = graph;
-            //let's update the interfaces
-            m_mediaControl = ComPointer<IMediaControl>(m_graph, IID_IMediaControl);
-            m_mediaSeeking = ComPointer<IMediaSeeking>(m_graph, IID_IMediaSeeking);
 
             //we need to do something smart to detect if the streams are unencoded
             if (m_demux) {
@@ -819,7 +850,6 @@ namespace Phonon
                 }
             }
 
-            ensureSourceConnectedTo(true);
             return hr;
         }
 
@@ -1011,6 +1041,7 @@ namespace Phonon
             return m_realSource;
         }
 
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
         void MediaGraph::setStopPosition(qint64 time)
         {
             qint64 current = 0,
@@ -1061,44 +1092,9 @@ namespace Phonon
                 return QList<qint64>() << 0;
             }
         }
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 
-
-        HRESULT MediaGraph::saveToFile(const QString &filepath) const
-        {
-            const WCHAR wszStreamName[] = L"ActiveMovieGraph";
-            HRESULT hr;
-            ComPointer<IStorage> storage;
-
-            // First, create a document file that will hold the GRF file
-            hr = StgCreateDocfile(reinterpret_cast<const wchar_t *>(filepath.utf16()),
-                STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE |
-                STGM_SHARE_EXCLUSIVE,
-                0, storage.pparam());
-
-            if (FAILED(hr)) {
-                return hr;
-            }
-
-            // Next, create a stream to store.
-            ComPointer<IStream> stream;
-            hr = storage->CreateStream(wszStreamName,
-                STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
-                0, 0, stream.pparam());
-
-            if (FAILED(hr)) {
-                return hr;
-            }
-
-            // The IpersistStream::Save method converts a stream into a persistent object.
-            ComPointer<IPersistStream> persist(m_graph, IID_IPersistStream);
-            hr = persist->Save(stream, TRUE);
-            if (SUCCEEDED(hr)) {
-                hr = storage->Commit(STGC_DEFAULT);
-            }
-
-            return hr;
-        }
 
     }
 }

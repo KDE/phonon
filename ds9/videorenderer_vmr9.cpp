@@ -15,7 +15,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #include "videorenderer_vmr9.h"
+
+#ifndef QT_NO_PHONON_VIDEO
 
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
@@ -29,6 +32,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 QT_BEGIN_NAMESPACE
+
 
 namespace Phonon
 {
@@ -332,3 +336,5 @@ namespace Phonon
 }
 
 QT_END_NAMESPACE
+
+#endif //QT_NO_PHONON_VIDEO

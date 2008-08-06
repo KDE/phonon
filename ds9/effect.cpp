@@ -24,6 +24,8 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_EFFECT
+
 namespace Phonon
 {
     namespace DS9
@@ -148,6 +150,8 @@ namespace Phonon
 
     }
 }
+
+#endif //QT_NO_PHONON_EFFECT
 
 QT_END_NAMESPACE
 
