@@ -8,7 +8,7 @@ set(phonon_LIB_SRCS
    phononnamespace.cpp
    mediasource.cpp
    abstractmediastream.cpp
-   abstractmediastream2.cpp
+   #abstractmediastream2.cpp
    streaminterface.cpp
    mediaobject.cpp
    medianode.cpp
@@ -43,12 +43,10 @@ if (QT_QTDBUS_FOUND)
 endif (QT_QTDBUS_FOUND)
 
 
-automoc4(phonon phonon_LIB_SRCS)
-add_library(phonon SHARED ${phonon_LIB_SRCS})
+automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
+target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 if (QT_QTDBUS_FOUND)
-  target_link_libraries(phonon ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-else (QT_QTDBUS_FOUND)
-  target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+  target_link_libraries(phonon ${QT_QTDBUS_LIBRARY})
 endif (QT_QTDBUS_FOUND)
 if (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
   # We need to explicitly link libm to phonon in Solaris
@@ -70,7 +68,7 @@ install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    mediasource.h
    abstractmediastream.h
-   abstractmediastream2.h
+   #abstractmediastream2.h
    streaminterface.h
    mediaobject.h
    audiooutput.h

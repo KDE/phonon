@@ -36,8 +36,7 @@ namespace Fake
  */
 
 Stream::Stream(const MediaSource &mediaSource, MediaObject *parent)
-    : StreamInterface2(parent),
-    m_eof(false),
+    : m_eof(false),
     m_streamSeekable(false),
     m_streamSize(0),
     m_bufferSize(0),

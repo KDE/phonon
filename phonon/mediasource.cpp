@@ -49,7 +49,7 @@ MediaSource::MediaSource(const QString &filename)
 {
     const QFileInfo fileInfo(filename);
     if (fileInfo.exists()) {
-        bool localFs = QFSFileEngine(filename).fileFlags(QAbstractFileEngine::LocalDiskFlag);
+        bool localFs = QAbstractFileEngine::LocalDiskFlag & QFSFileEngine(filename).fileFlags(QAbstractFileEngine::LocalDiskFlag);
         if (localFs) {
             d->url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
         } else {
@@ -214,12 +214,14 @@ AbstractMediaStream *MediaSource::stream() const
 void MediaSourcePrivate::setStream(AbstractMediaStream *s)
 {
     stream = s;
+#if 0
     AbstractMediaStream2 *s2 = qobject_cast<AbstractMediaStream2 *>(s);
     if (s2) {
         streamEventQueue = s2->d_func()->streamEventQueue;
         Q_ASSERT(streamEventQueue);
         streamEventQueue->ref();
     }
+#endif
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 

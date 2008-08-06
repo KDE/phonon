@@ -116,6 +116,7 @@ class PHONON_EXPORT StreamInterface
  * \warning Even though AbstractMediaStream2 may be used from any thread, StreamInterface2 still has
  * to run in the main thread for compatibility with AbstractMediaStream.
  */
+#if 0
 class PHONON_EXPORT StreamInterface2 : public QObject, public StreamInterface
 {
     friend class StreamInterfacePrivate;
@@ -140,6 +141,7 @@ class PHONON_EXPORT StreamInterface2 : public QObject, public StreamInterface
     private:
         Q_PRIVATE_SLOT(d, void _k_handleStreamEvent())
 };
+#endif
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::StreamInterface, "StreamInterface1.phonon.kde.org")
