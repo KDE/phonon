@@ -70,6 +70,7 @@ void StreamInterface::connectToSource(const MediaSource &mediaSource)
     d->mediaSource = mediaSource;
     Q_ASSERT(d->mediaSource.type() == MediaSource::Stream);
     Q_ASSERT(d->mediaSource.stream());
+#if 0
     AbstractMediaStream2 *stream2 = qobject_cast<AbstractMediaStream2 *>(d->mediaSource.stream());
     if (stream2) {
         if (!d->qobject) {
@@ -84,6 +85,7 @@ void StreamInterface::connectToSource(const MediaSource &mediaSource)
         d->streamEventQueue->setBackendCommandHandler(d);
         d->streamEventQueue->sendToFrontend(StreamEventQueue::Connect);
     } else {
+#endif
         if (d->awakeSignalConnected) {
             d->awakeSignalConnected = false;
             QObject::disconnect(d->eventDispatcher, SIGNAL(awake()), d->qobject, SLOT(_k_handleStreamEvent()));
@@ -92,7 +94,9 @@ void StreamInterface::connectToSource(const MediaSource &mediaSource)
         AbstractMediaStreamPrivate *dd = d->mediaSource.stream()->d_func();
         dd->setStreamInterface(this);
         d->mediaSource.stream()->reset();
+#if 0
     }
+#endif
 }
 
 void StreamInterfacePrivate::disconnectMediaStream()
@@ -187,6 +191,7 @@ void StreamInterfacePrivate::_k_handleStreamEvent()
     }
 }
 
+#if 0
 void StreamInterface2::needData(quint32 size)
 {
     if (d->streamEventQueue) {
@@ -206,6 +211,7 @@ StreamInterface2::~StreamInterface2()
 {
     d->qobject = 0;
 }
+#endif
 
 } // namespace Phonon
 

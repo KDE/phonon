@@ -30,7 +30,7 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
-class IODeviceStreamPrivate : public AbstractMediaStream2Private
+class IODeviceStreamPrivate : public AbstractMediaStreamPrivate
 {
     Q_DECLARE_PUBLIC(IODeviceStream)
     protected:
@@ -51,7 +51,7 @@ class IODeviceStreamPrivate : public AbstractMediaStream2Private
 };
 
 IODeviceStream::IODeviceStream(QIODevice *ioDevice, QObject *parent)
-    : AbstractMediaStream2(*new IODeviceStreamPrivate(ioDevice), parent)
+    : AbstractMediaStream(*new IODeviceStreamPrivate(ioDevice), parent)
 {
     Q_D(IODeviceStream);
     d->ioDevice->reset();
@@ -65,11 +65,12 @@ void IODeviceStream::reset()
 {
     Q_D(IODeviceStream);
     d->ioDevice->reset();
-    resetDone();
+    //resetDone();
 }
 
-void IODeviceStream::needData(quint32 size)
+void IODeviceStream::needData()
 {
+    quint32 size = 4096;
     Q_D(IODeviceStream);
     const QByteArray data = d->ioDevice->read(size);
     if (data.isEmpty() && !d->ioDevice->atEnd()) {
@@ -85,7 +86,7 @@ void IODeviceStream::seekStream(qint64 offset)
 {
     Q_D(IODeviceStream);
     d->ioDevice->seek(offset);
-    seekStreamDone();
+    //seekStreamDone();
 }
 
 } // namespace Phonon

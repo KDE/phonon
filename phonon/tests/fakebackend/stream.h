@@ -32,9 +32,9 @@ namespace Fake
 {
 class MediaObject;
 
-class Stream : public StreamInterface2
+class Stream : public StreamInterface
 {
-    Q_OBJECT
+    //Q_OBJECT
     public:
         Stream(const MediaSource &mediaSource, MediaObject *parent);
         void writeData(const QByteArray &data);
