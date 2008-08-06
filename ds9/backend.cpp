@@ -71,12 +71,18 @@ namespace Phonon
                 return new MediaObject(parent);
             case AudioOutputClass:
                 return new AudioOutput(this, parent);
+#ifndef QT_NO_PHONON_EFFECT
             case EffectClass:
                 return new Effect(m_audioEffects[ args[0].toInt() ], parent);
+#endif //QT_NO_PHONON_EFFECT
+#ifndef QT_NO_PHONON_VIDEO
             case VideoWidgetClass:
                 return new VideoWidget(qobject_cast<QWidget *>(parent));
+#endif //QT_NO_PHONON_VIDEO
+#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
             case VolumeFaderEffectClass:
                 return new VolumeEffect(parent);
+#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
             default:
                 return 0;
             }
@@ -84,7 +90,11 @@ namespace Phonon
 
         bool Backend::supportsVideo() const
         {
+#ifndef QT_NO_PHONON_VIDEO
             return true;
+#else
+            return false;
+#endif //QT_NO_PHONON_VIDEO
         }
 
         QStringList Backend::availableMimeTypes() const
@@ -167,6 +177,7 @@ namespace Phonon
 #endif
 					break;
                 }
+#ifndef QT_NO_PHONON_EFFECT
             case Phonon::EffectType:
                 {
                     m_audioEffects.clear();
@@ -182,6 +193,7 @@ namespace Phonon
                     break;
                 }
                 break;
+#endif //QT_NO_PHONON_EFFECT
             default:
                 break;
             }
@@ -211,6 +223,7 @@ namespace Phonon
 #endif
                 }
                 break;
+#ifndef QT_NO_PHONON_EFFECT
             case Phonon::EffectType:
                 {
                     WCHAR name[80]; // 80 is clearly stated in the MSDN doc
@@ -219,6 +232,9 @@ namespace Phonon
                         ret["name"] = QString::fromUtf16(static_cast<unsigned short*>(name));
                     }
                 }
+                break;
+#endif //QT_NO_PHONON_EFFECT
+            default:
                 break;
             }
 			return ret;

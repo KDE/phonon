@@ -360,8 +360,10 @@ namespace Phonon
             m_oldHasVideo(false),
             m_prefinishMarkSent(false),
             m_aboutToFinishSent(false),
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
             m_autoplayTitles(true),
             m_currentTitle(0),
+#endif //QT_NO_PHONON_MEDIACONTROLLER
             m_targetTick(INFINITE)
         {
             for(int i = 0; i < 2; ++i) {
@@ -424,6 +426,7 @@ namespace Phonon
                 }
 
                 //check that the title hasn't changed
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
                 if (m_autoplayTitles && m_currentTitle < _iface_availableTitles() - 1) {
 
                     if (current >= total) {
@@ -433,6 +436,7 @@ namespace Phonon
                     }
                     return;
                 }
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
                 if (total) {
                     const qint64 remaining = total - current;
@@ -495,9 +499,11 @@ namespace Phonon
             m_graphs.swap(0,1); //swap the graphs
 
             //we tell the video widgets to switch now to the new source
+#ifndef QT_NO_PHONON_VIDEO
             Q_FOREACH(VideoWidget *video, m_videoWidgets) {
                 video->setCurrentGraph(currentGraph()->index());
             }
+#endif //QT_NO_PHONON_VIDEO
 
             emit currentSourceChanged(currentGraph()->mediaSource());
 
@@ -518,7 +524,9 @@ namespace Phonon
             emit tick(0);
             emit totalTimeChanged(totalTime());
 
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
             setTitles(currentGraph()->titles());
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
             //this manages only gapless transitions
             if (currentGraph()->mediaSource().type() != Phonon::MediaSource::Invalid) {
@@ -551,18 +559,26 @@ namespace Phonon
 
         qint64 MediaObject::totalTime() const
         {
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
             //1st, check if there is more titles after
             const qint64 ret = (m_currentTitle < _iface_availableTitles() - 1) ? 
                 titleAbsolutePosition(m_currentTitle+1) : currentGraph()->absoluteTotalTime();
 
             //this is the duration of the current title
             return ret - titleAbsolutePosition(m_currentTitle);
+#else
+            return currentGraph()->absoluteTotalTime();
+#endif //QT_NO_PHONON_MEDIACONTROLLER
         }
 
         qint64 MediaObject::currentTime() const
         {
             //this handles inaccuracy when stopping on a title
-            return currentGraph()->absoluteCurrentTime() - titleAbsolutePosition(m_currentTitle);
+            return currentGraph()->absoluteCurrentTime() 
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
+                - titleAbsolutePosition(m_currentTitle)
+#endif //QT_NO_PHONON_MEDIACONTROLLER
+                ;
         }
 
         qint32 MediaObject::tickInterval() const
@@ -722,9 +738,11 @@ namespace Phonon
         void MediaObject::loadingFinished(MediaGraph *mg)
         {
             if (mg == currentGraph()) { 
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
                 //Title interface
                 m_currentTitle = 0;
                 setTitles(currentGraph()->titles());
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
                 HRESULT hr = mg->renderResult();
 
@@ -736,9 +754,11 @@ namespace Phonon
                     emit hasVideoChanged(currentGraph()->hasVideo());
                 }
 
+#ifndef QT_NO_PHONON_VIDEO
                 if (currentGraph()->hasVideo()) {
                     updateVideoGeometry();
                 }
+#endif //QT_NO_PHONON_VIDEO
 
                 emit metaDataChanged(currentGraph()->metadata());
                 emit totalTimeChanged(totalTime());
@@ -765,7 +785,11 @@ namespace Phonon
         void MediaObject::seek(qint64 time)
         {
             //we seek into the current title
-            currentGraph()->absoluteSeek(time + titleAbsolutePosition(m_currentTitle));
+            currentGraph()->absoluteSeek(time
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
+                + titleAbsolutePosition(m_currentTitle)
+#endif //QT_NO_PHONON_MEDIACONTROLLER
+                );
         }
 
         void MediaObject::seekingFinished(MediaGraph *mg)
@@ -842,9 +866,12 @@ namespace Phonon
                 ret = ret && graph->connectNodes(source, sink);
             }
             if (ret) {
+#ifndef QT_NO_PHONON_VIDEO
                 if (VideoWidget *video = qobject_cast<VideoWidget*>(sink)) {
                     m_videoWidgets += video;
-                } else if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
+                } else 
+#endif //QT_NO_PHONON_VIDEO
+                    if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
                     m_audioOutputs += audio;
                 }
             }
@@ -858,22 +885,26 @@ namespace Phonon
                 ret = ret && graph->disconnectNodes(source, sink);
             }
             if (ret) {
+#ifndef QT_NO_PHONON_VIDEO
                 if (VideoWidget *video = qobject_cast<VideoWidget*>(sink)) {
                     m_videoWidgets -= video;
-                } else if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
+                } else 
+#endif //QT_NO_PHONON_VIDEO
+                    if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
                     m_audioOutputs -= audio;
                 }
             }
             return ret;
         }
 
+#ifndef QT_NO_PHONON_VIDEO
         void MediaObject::updateVideoGeometry()
         {
             Q_FOREACH(VideoWidget *vw, m_videoWidgets) {
                 vw->notifyVideoLoaded();
             }
         }
-
+#endif //QT_NO_PHONON_VIDEO
 
         void MediaObject::handleComplete(IGraphBuilder *graph)
         {
@@ -934,11 +965,13 @@ namespace Phonon
                 handleComplete(graph);
                 break;
 
+#ifndef QT_NO_PHONON_VIDEO
             case EC_VIDEO_SIZE_CHANGED:
                 if (graph == currentGraph()->graph()) {
                     updateVideoGeometry();
                 }
                 break;
+#endif //QT_NO_PHONON_VIDEO
 
 #ifdef GRAPH_DEBUG
             case EC_ACTIVATE: qDebug() << "EC_ACTIVATE: A video window is being " << (param1 ? "ACTIVATED" : "DEACTIVATED"); break;
@@ -1013,6 +1046,7 @@ namespace Phonon
         }
 
 
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
         //interface management
         bool MediaObject::hasInterface(Interface iface) const
         {
@@ -1085,17 +1119,6 @@ namespace Phonon
             return m_currentTitle;
         }
 
-        void MediaObject::switchFilters(int index, Filter oldFilter, Filter newFilter)
-        {
-            if (currentGraph()->index() == index) {
-                currentGraph()->switchFilters(oldFilter, newFilter);
-            } else {
-                nextGraph()->switchFilters(oldFilter, newFilter);
-            }
-
-        }
-
-
         void MediaObject::_iface_setCurrentTitle(int title, bool bseek)
         {
 #ifdef GRAPH_DEBUG
@@ -1126,6 +1149,17 @@ namespace Phonon
                 //stop position is set to the end
                 currentGraph()->setStopPosition(-1);
             }
+        }
+#endif //QT_NO_PHONON_QT_NO_PHONON_MEDIACONTROLLER
+
+        void MediaObject::switchFilters(int index, Filter oldFilter, Filter newFilter)
+        {
+            if (currentGraph()->index() == index) {
+                currentGraph()->switchFilters(oldFilter, newFilter);
+            } else {
+                nextGraph()->switchFilters(oldFilter, newFilter);
+            }
+
         }
 
 

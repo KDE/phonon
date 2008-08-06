@@ -15,7 +15,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #include "videorenderer_soft.h"
+
+#ifndef QT_NO_PHONON_VIDEO
 
 #include "qmeminputpin.h"
 #include "qbasefilter.h"
@@ -36,6 +39,10 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 //this will make a display every second of how many frames were pocessed and actually displayed
 //#define FPS_COUNTER
+
+#ifdef Q_OS_WINCE
+#define QT_NO_OPENGL
+#endif
 
 #ifndef QT_NO_OPENGL
 #include <gl/gl.h>
@@ -971,3 +978,5 @@ namespace Phonon
 }
 
 QT_END_NAMESPACE
+
+#endif //QT_NO_PHONON_VIDEO

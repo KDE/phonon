@@ -153,11 +153,18 @@ namespace Phonon
         };
 
 
-        class MediaObject : public BackendNode, public Phonon::MediaObjectInterface, public Phonon::AddonInterface
+        class MediaObject : public BackendNode, public Phonon::MediaObjectInterface
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            , public Phonon::AddonInterface
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
             friend class Stream;
             Q_OBJECT
-                Q_INTERFACES(Phonon::MediaObjectInterface Phonon::AddonInterface)
+                Q_INTERFACES(Phonon::MediaObjectInterface 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+                    Phonon::AddonInterface
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+                    )
         public:
             MediaObject(QObject *parent);
             ~MediaObject();
@@ -177,8 +184,10 @@ namespace Phonon
             QString errorString() const;
             Phonon::ErrorType errorType() const;
 
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             bool hasInterface(Interface) const;
             QVariant interfaceCall(Interface iface, int command, const QList<QVariant> &params);
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
             qint64 totalTime() const;
             qint32 prefinishMark() const;
@@ -239,7 +248,9 @@ namespace Phonon
             void timerEvent(QTimerEvent *e);
 
         private:
+#ifndef QT_NO_PHONON_VIDEO
             void updateVideoGeometry();
+#endif QT_NO_PHONON_VIDEO
             void handleComplete(IGraphBuilder *graph);
             MediaGraph *currentGraph() const;
             MediaGraph *nextGraph() const;
@@ -272,6 +283,7 @@ namespace Phonon
             bool m_aboutToFinishSent:1;
 
             //for TitleInterface (and commands)
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
             bool m_autoplayTitles:1;
             QList<qint64> m_titles;
             int m_currentTitle;
@@ -280,7 +292,7 @@ namespace Phonon
             void _iface_setCurrentTitle(int title, bool bseek = true);
             void setTitles(const QList<qint64> &titles);
             qint64 titleAbsolutePosition(int title) const;
-
+#endif //QT_NO_PHONON_MEDIACONTROLLER
             qint64 m_targetTick;
 
             WorkerThread m_thread;

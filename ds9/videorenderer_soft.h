@@ -14,12 +14,15 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+
 #ifndef PHONON_VIDEORENDERER_SOFT_H
 #define PHONON_VIDEORENDERER_SOFT_H
 
 #include "abstractvideorenderer.h"
 
 QT_BEGIN_NAMESPACE
+#ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon
 {
@@ -55,6 +58,10 @@ namespace Phonon
     }
 }
 
+#endif //QT_NO_PHONON_VIDEO
+
 QT_END_NAMESPACE
 
 #endif
+
+
