@@ -9,6 +9,7 @@ GenericName[gl]=Programa de probas para a captura de vídeo
 GenericName[pt]=Aplicação de Testes de Captura de Vídeo
 GenericName[sv]=Testprogram för videoinspelning
 GenericName[uk]=Тестова програма для захоплення відео
+GenericName[zh_TW]=影像擷取測試應用程式
 Icon=videocapturetestapp
 MimeType=
 Name=videocapturetestapp
