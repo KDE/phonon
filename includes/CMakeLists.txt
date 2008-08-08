@@ -40,6 +40,7 @@ DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon)
 install(FILES
   Phonon/Experimental/AbstractVideoDataOutput
   Phonon/Experimental/AudioDataOutput
+  Phonon/Experimental/SnapshotInterface
   Phonon/Experimental/VideoDataOutput
   Phonon/Experimental/VideoDataOutputInterface
   Phonon/Experimental/VideoFrame
