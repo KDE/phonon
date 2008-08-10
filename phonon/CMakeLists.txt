@@ -1,5 +1,11 @@
-add_subdirectory(tests)
-add_subdirectory(examples)
+if (PHONON_BUILD_TESTS)
+    add_subdirectory(tests)
+endif (PHONON_BUILD_TESTS)
+
+if (PHONON_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif (PHONON_BUILD_EXAMPLES)
+
 add_subdirectory(experimental)
 
 set(phonon_LIB_SRCS
