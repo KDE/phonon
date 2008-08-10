@@ -7,10 +7,11 @@ cmake_policy(SET CMP0002 OLD)
 
 # enable unit tests
 option(PHONON_BUILD_TESTS "Build the tests")
+option(PHONON_BUILD_EXAMPLES "Build the examples")
 
-if (NOT PHONON_BUILD_TESTS)
+if (PHONON_BUILD_TESTS)
     enable_testing()
-endif (NOT PHONON_BUILD_TESTS)
+endif (PHONON_BUILD_TESTS)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
