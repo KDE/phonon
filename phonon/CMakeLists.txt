@@ -41,7 +41,12 @@ set(phonon_LIB_SRCS
    lockfreequeue.cpp
    streameventqueue.cpp
    )
-
+if (WIN32)
+    list(APPEND phonon_LIB_SRCS 
+        abstractmediastream2.cpp
+    )
+endif(WIN32)
+   
 if (QT_QTDBUS_FOUND)
    list(APPEND phonon_LIB_SRCS
       audiooutputadaptor.cpp
