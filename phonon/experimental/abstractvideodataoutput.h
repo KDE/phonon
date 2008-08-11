@@ -80,7 +80,10 @@ class PHONONEXPERIMENTAL_EXPORT AbstractVideoDataOutput : public AbstractVideoOu
          * This function is called whenever a frame should be displayed.
          *
          * \warning frameReady can get called from any thread (other than the
-         * main thread or the thread affinity of this QObject).
+         * main thread or the thread affinity of this QObject). A common error to create a deadlock
+         * situation is to block the thread this function is called from, until the main thread
+         * has found time to handle the frame. If it is blocking while the main thread decides to
+         * stop/delete the MediaObject you might get a deadlock.
          */
         virtual void frameReady(const VideoFrame2 &) = 0;
 
