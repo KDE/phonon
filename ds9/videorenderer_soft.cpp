@@ -142,7 +142,11 @@ namespace Phonon
     namespace DS9
     {
 
+#ifdef Q_CC_MSVC
         static __forceinline uchar clip(int c) 
+#else
+        static inline uchar clip(int c) 
+#endif
         {
             return c < 0 ? 0 : c > 255 ? 255 : c;
         }
