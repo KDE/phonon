@@ -356,7 +356,7 @@ namespace Phonon
         {
             QWriteLocker locker(&m_lock);
             m_graph = graph;
-            m_name = QString::fromUtf16(static_cast<const unsigned short*>(name));
+            m_name = QString::fromUtf16((const unsigned short*)(name));
             return S_OK;
         }
 
