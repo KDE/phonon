@@ -69,6 +69,12 @@ namespace Phonon
             setVolume(m_volume);
         }
 
+        bool AudioOutput::setOutputDevice(const AudioOutputDevice & newDevice)
+        {
+            //stub implementation
+            return setOutputDevice(newDevice.index());
+        }
+
         qreal AudioOutput::volume() const
         {
             return m_volume;

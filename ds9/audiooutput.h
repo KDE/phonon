@@ -46,6 +46,7 @@ namespace Phonon
             int outputDevice() const;
             void setVolume(qreal newVolume);
             bool setOutputDevice(int newDevice);
+            bool setOutputDevice(const AudioOutputDevice & newDevice);
             void setCrossFadingProgress(short currentIndex, qreal progress);
 
         Q_SIGNALS:
