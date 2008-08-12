@@ -825,11 +825,11 @@ namespace Phonon
 #endif
                 LPAMGETERRORTEXT getErrorText = (LPAMGETERRORTEXT)QLibrary::resolve(QLatin1String("quartz"), "AMGetErrorTextW");
 
-                wchar_t buffer[MAX_ERROR_TEXT_LEN];
+                WCHAR buffer[MAX_ERROR_TEXT_LEN];
                 if (getErrorText && getErrorText(hr, buffer, MAX_ERROR_TEXT_LEN)) {
-                    m_errorString = QString::fromUtf16(static_cast<unsigned short*>(buffer));
+                    m_errorString = QString::fromUtf16((const unsigned short*)(buffer));
                 } else {
-                    m_errorString = QString::fromUtf16(static_cast<const unsigned short*>(_com_error(hr).ErrorMessage()));
+                    m_errorString = QString::fromUtf16((const unsigned short*)(_com_error(hr).ErrorMessage()));
                 }
                 const QString comError = QString::number(uint(hr), 16);
                 if (!m_errorString.toLower().contains(comError.toLower())) {

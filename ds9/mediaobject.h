@@ -250,7 +250,7 @@ namespace Phonon
         private:
 #ifndef QT_NO_PHONON_VIDEO
             void updateVideoGeometry();
-#endif QT_NO_PHONON_VIDEO
+#endif // QT_NO_PHONON_VIDEO
             void handleComplete(IGraphBuilder *graph);
             MediaGraph *currentGraph() const;
             MediaGraph *nextGraph() const;

@@ -155,9 +155,9 @@ namespace Phonon
                     while (S_OK == enumMon->Next(1, mon.pparam(), 0)) {
                         LPOLESTR str = 0;
                         mon->GetDisplayName(0,0,&str);
-                        const QString name = QString::fromUtf16(static_cast<unsigned short*>(str));
-						ComPointer<IMalloc> alloc;
-						::CoGetMalloc(1, alloc.pparam());
+                        const QString name = QString::fromUtf16((unsigned short*)(str));
+                        ComPointer<IMalloc> alloc;
+                        ::CoGetMalloc(1, alloc.pparam());
                         alloc->Free(str);
 
                         int insert_pos = 0;
@@ -182,7 +182,7 @@ namespace Phonon
                 {
                     m_audioEffects.clear();
                     ComPointer<IEnumDMO> enumDMO;
-					HRESULT hr = ::DMOEnum(DMOCATEGORY_AUDIO_EFFECT, DMO_ENUMF_INCLUDE_KEYED, 0, 0, 0, 0, enumDMO.pparam());
+                    HRESULT hr = ::DMOEnum(DMOCATEGORY_AUDIO_EFFECT, DMO_ENUMF_INCLUDE_KEYED, 0, 0, 0, 0, enumDMO.pparam());
                     if (SUCCEEDED(hr)) {
                         CLSID clsid;
                         while (S_OK == enumDMO->Next(1, &clsid, 0, 0)) {
@@ -214,9 +214,9 @@ namespace Phonon
                     LPOLESTR str = 0;
                     HRESULT hr = mon->GetDisplayName(0,0, &str);
                     if (SUCCEEDED(hr)) {
-                        QString name = QString::fromUtf16(static_cast<unsigned short*>(str)); 
-						ComPointer<IMalloc> alloc;
-						::CoGetMalloc(1, alloc.pparam());
+                        QString name = QString::fromUtf16((unsigned short*)(str)); 
+                        ComPointer<IMalloc> alloc;
+                        ::CoGetMalloc(1, alloc.pparam());
                         alloc->Free(str);
                         ret["name"] = name.mid(name.indexOf('\\') + 1);
 					}
@@ -227,9 +227,9 @@ namespace Phonon
             case Phonon::EffectType:
                 {
                     WCHAR name[80]; // 80 is clearly stated in the MSDN doc
-					HRESULT hr = ::DMOGetName(m_audioEffects[index], name);
+                    HRESULT hr = ::DMOGetName(m_audioEffects[index], name);
                     if (SUCCEEDED(hr)) {
-                        ret["name"] = QString::fromUtf16(static_cast<unsigned short*>(name));
+                        ret["name"] = QString::fromUtf16((unsigned short*)(name));
                     }
                 }
                 break;
