@@ -40,8 +40,7 @@ if (BUILD_PHONON_DS9)
 	)
 
     add_definitions(-DPHONON_MAKE_QT_ONLY_BACKEND -DUNICODE)
-    automoc4(phonon_ds9 phonon_ds9_SRCS)
-    add_library(phonon_ds9 SHARED ${phonon_ds9_SRCS})
+    automoc4_add_library(phonon_ds9 SHARED ${phonon_ds9_SRCS})
     set_target_properties(phonon_ds9 PROPERTIES PREFIX "")
     target_link_libraries(phonon_ds9
                 ${PHONON_LIBS}  ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY}

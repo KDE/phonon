@@ -16,8 +16,7 @@ set(phononexperimental_LIB_SRCS
     ../abstractaudiooutput_p.cpp
     ../abstractvideooutput_p.cpp
    )
-automoc4(phononexperimental phononexperimental_LIB_SRCS)
-add_library(phononexperimental SHARED ${phononexperimental_LIB_SRCS})
+automoc4_add_library(phononexperimental SHARED ${phononexperimental_LIB_SRCS})
 target_link_libraries(phononexperimental ${PHONON_LIBS})
 set_target_properties(phononexperimental PROPERTIES
                                          VERSION ${PHONON_LIB_VERSION}
