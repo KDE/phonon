@@ -402,13 +402,12 @@ namespace Phonon
 
                 if ( (type->majortype == current.majortype) &&
                     (current.subtype == MEDIASUBTYPE_NULL || type->subtype == current.subtype) &&
-                    (type->formattype != GUID_NULL || current.formattype != GUID_NULL) &&
+                    (type->majortype == MEDIATYPE_Stream || type->formattype != GUID_NULL || current.formattype != GUID_NULL) &&
                     (current.formattype == GUID_NULL || type->formattype == current.formattype)
                     ) {
                         return S_OK;
                 }
             }
-
             return S_FALSE;
         }
 

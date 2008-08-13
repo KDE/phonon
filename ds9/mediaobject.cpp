@@ -42,7 +42,7 @@ namespace Phonon
 {
     namespace DS9
     {
-        typedef BOOL (WINAPI* LPAMGETERRORTEXT)(HRESULT, wchar_t *, DWORD);
+        typedef BOOL (WINAPI* LPAMGETERRORTEXT)(HRESULT, WCHAR *, DWORD);
 
         //first the definition of the WorkerThread class
         WorkerThread::WorkerThread()
@@ -369,8 +369,6 @@ namespace Phonon
         {
             for(int i = 0; i < 2; ++i) {
                 MediaGraph *graph = new MediaGraph(this, i);
-                connect(graph, SIGNAL(loadingFinished(MediaGraph*)), SLOT(loadingFinished(MediaGraph*)));
-                connect(graph, SIGNAL(seekingFinished(MediaGraph*)), SLOT(seekingFinished(MediaGraph*)));
                 m_graphs << graph;
             }
 
@@ -826,11 +824,11 @@ namespace Phonon
 #endif
                 LPAMGETERRORTEXT getErrorText = (LPAMGETERRORTEXT)QLibrary::resolve(QLatin1String("quartz"), "AMGetErrorTextW");
 
-                WCHAR buffer[MAX_ERROR_TEXT_LEN];
-                if (getErrorText && getErrorText(hr, buffer, MAX_ERROR_TEXT_LEN)) {
-                    m_errorString = QString::fromUtf16((const unsigned short*)(buffer));
+                ushort buffer[MAX_ERROR_TEXT_LEN];
+                if (getErrorText && getErrorText(hr, (WCHAR*)buffer, MAX_ERROR_TEXT_LEN)) {
+                    m_errorString = QString::fromUtf16(buffer);
                 } else {
-                    m_errorString = QString::fromUtf16((const unsigned short*)(_com_error(hr).ErrorMessage()));
+                    m_errorString = QString::fromUtf16(_com_error(hr).ErrorMessage());
                 }
                 const QString comError = QString::number(uint(hr), 16);
                 if (!m_errorString.toLower().contains(comError.toLower())) {
