@@ -93,10 +93,6 @@ namespace Phonon
 
             Graph graph() const;
 
-        Q_SIGNALS:
-            void loadingFinished(MediaGraph*);
-            void seekingFinished(MediaGraph*);
-
         private Q_SLOTS:
             void finishLoading(quint16 workId, HRESULT hr, Graph);
             void finishSeeking(quint16 workId, qint64 time);

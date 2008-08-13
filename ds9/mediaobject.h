@@ -213,11 +213,11 @@ namespace Phonon
             void switchFilters(int index, Filter oldFilter, Filter newFilter);
 
             WorkerThread *workerThread();
+            void loadingFinished(MediaGraph *mg);
+            void seekingFinished(MediaGraph *mg);
 
          private Q_SLOTS:
             void switchToNextSource();
-            void loadingFinished(MediaGraph *mg);
-            void seekingFinished(MediaGraph *mg);
             void slotStateReady(IGraphBuilder*, Phonon::State);
             void handleEvents(IGraphBuilder *graph, long eventCode, long param1);
 

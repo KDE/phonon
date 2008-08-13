@@ -84,7 +84,7 @@ namespace Phonon
             ComPointer<IStorage> storage;
 
             // First, create a document file that will hold the GRF file
-            hr = StgCreateDocfile(reinterpret_cast<const wchar_t *>(filepath.utf16()),
+            hr = StgCreateDocfile((OLECHAR*)filepath.utf16(),
                 STGM_CREATE | STGM_TRANSACTED | STGM_READWRITE |
                 STGM_SHARE_EXCLUSIVE,
                 0, storage.pparam());
@@ -162,7 +162,7 @@ namespace Phonon
                     if (info.pGraph) {
                         m_mediaObject->catchComError(info.pGraph->RemoveFilter(filter));
                     }
-                    m_mediaObject->catchComError(m_graph->AddFilter(filter, info.achName));
+                    m_mediaObject->catchComError(m_graph->AddFilter(filter, 0));
                 }
                 if (info.pGraph) {
                     info.pGraph->Release();
@@ -721,12 +721,6 @@ namespace Phonon
             case Phonon::MediaSource::Stream:
                 {
                     m_realSource = Filter(new IODeviceReader(source, this));
-                    m_result = m_graph->AddFilter(m_realSource, L"Phonon Stream Reader");
-
-                    if (FAILED(m_result)) {
-                        return m_result;
-                    }
-
                     m_renderId = m_mediaObject->workerThread()->addFilterToRender(m_realSource);
                 }
                 break;
@@ -742,7 +736,7 @@ namespace Phonon
         {
             if (m_seekId == workId) {
                 m_currentTime = time;
-                emit seekingFinished(this);
+                m_mediaObject->seekingFinished(this);
                 m_seekId = 0;
             } else {
                 //it's a queue seek command
@@ -763,7 +757,7 @@ namespace Phonon
 				}
 
                 m_result = reallyFinishLoading(hr, graph);
-                emit loadingFinished(this);
+                m_mediaObject->loadingFinished(this);
             }
         }
 
@@ -776,9 +770,6 @@ namespace Phonon
 
             const Graph oldGraph = m_graph;
             m_graph = graph;
-            //let's update the interfaces
-            m_mediaControl = ComPointer<IMediaControl>(graph, IID_IMediaControl);
-            m_mediaSeeking = ComPointer<IMediaSeeking>(graph, IID_IMediaSeeking);
 
             //we keep the source and all the way down to the decoders
             QSet<Filter> keptFilters;
@@ -850,6 +841,10 @@ namespace Phonon
                 }
             }
 
+
+            //Finally, let's update the interfaces
+            m_mediaControl = ComPointer<IMediaControl>(graph, IID_IMediaControl);
+            m_mediaSeeking = ComPointer<IMediaSeeking>(graph, IID_IMediaSeeking);
             return hr;
         }
 
@@ -944,6 +939,16 @@ namespace Phonon
 
         bool MediaGraph::isSourceFilter(const Filter &filter) const
         {
+#ifdef GRAPH_DEBUG
+            {
+                FILTER_INFO info;
+                filter->QueryFilterInfo(&info);
+                qDebug() << Q_FUNC_INFO << QString::fromUtf16(info.achName);
+                if (info.pGraph) {
+                    info.pGraph->Release();
+                }
+            }
+#endif
             //a source filter is one that has no input
             return BackendNode::pins(filter, PINDIR_INPUT).isEmpty();
         }
