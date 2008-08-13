@@ -828,7 +828,7 @@ namespace Phonon
                 if (getErrorText && getErrorText(hr, (WCHAR*)buffer, MAX_ERROR_TEXT_LEN)) {
                     m_errorString = QString::fromUtf16(buffer);
                 } else {
-                    m_errorString = QString::fromUtf16(_com_error(hr).ErrorMessage());
+                    m_errorString = QString::fromUtf16((ushort*)_com_error(hr).ErrorMessage());
                 }
                 const QString comError = QString::number(uint(hr), 16);
                 if (!m_errorString.toLower().contains(comError.toLower())) {
