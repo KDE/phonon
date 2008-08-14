@@ -69,6 +69,7 @@ class PHONONEXPERIMENTAL_EXPORT AbstractVideoDataOutput : public AbstractVideoOu
          */
         virtual QSet<VideoFrame2::Format> allowedFormats() const;
 
+        // TODO: consider to remove the following function and make the above pure virtual
         /**
          * Defaults to VideoFrame2::Format_RGB888.
          */
