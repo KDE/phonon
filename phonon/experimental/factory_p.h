@@ -58,7 +58,7 @@ namespace Factory
      *
      * \return a pointer to the VideoDataOutput the backend provides.
      */
-    PHONONEXPERIMENTAL_EXPORT QObject *createVideoDataOutput(QObject *parent = 0);
+    QObject *createVideoDataOutput(QObject *parent = 0);
 
     QObject *createAvCapture(QObject *parent = 0);
 
