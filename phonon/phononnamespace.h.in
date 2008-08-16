@@ -94,12 +94,37 @@ namespace Phonon
      * the Ogg Vorbis specification.
      */
     enum MetaData {
+        /**
+         * The artist generally considered responsible for the work. In popular
+         * music this is usually the performing band or singer. For classical
+         * music it would be the composer. For an audio book it would be the
+         * author of the original text.
+         */
         ArtistMetaData,
+        /**
+         * The collection name to which this track belongs.
+         */
         AlbumMetaData,
+        /**
+         * Track/Work name
+         */
         TitleMetaData,
+        /**
+         * Date the track was recorded
+         */
         DateMetaData,
+        /**
+         * A short text indication of music genre
+         */
         GenreMetaData,
+        /**
+         * The track number of this piece if part of a specific larger
+         * collection or album
+         */
         TracknumberMetaData,
+        /**
+         * A short text description of the contents
+         */
         DescriptionMetaData,
         MusicBrainzDiscIdMetaData
     };
