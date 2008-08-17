@@ -87,12 +87,12 @@ inline uint qHash(const AudioFormat &p)
 
 } // namespace Experimental
 } // namespace Phonon
-
+#ifndef Q_WS_WIN
 inline uint qHash(const Phonon::Experimental::AudioFormat &p)
 {
     return Phonon::Experimental::qHash(p);
 }
-
+#endif
 QT_END_NAMESPACE
 QT_END_HEADER
 
