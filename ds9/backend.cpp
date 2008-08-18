@@ -106,7 +106,7 @@ namespace Phonon
 
             Q_FOREACH(QString s, locations) {
                 QSettings settings(s, QSettings::NativeFormat);
-                ret += settings.childGroups().toSet();
+                ret += settings.childGroups().replaceInStrings("\\", "/").toSet();
             }
 
             QStringList list = ret.toList();
