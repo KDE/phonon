@@ -111,7 +111,7 @@ public:
         HeresYourXineStream,
         Cleanup,
         RequestSnapshot,
-        UnloadCommand
+        SnapshotReady
     };
 
     int ref;
@@ -128,6 +128,7 @@ inline T *copyEvent(T *)
     return 0;
 }
 
+EVENT_CLASS1(SnapshotReady, QImage i, image(i), const QImage, image)
 EVENT_CLASS1(HeresYourXineStream, QExplicitlySharedDataPointer<XineStream> s, stream(s), QExplicitlySharedDataPointer<XineStream>, stream)
 EVENT_CLASS1(HasVideo, bool v, hasVideo(v), const bool, hasVideo)
 EVENT_CLASS1(UpdateVolume, int v, volume(v), const int, volume)
@@ -136,7 +137,6 @@ EVENT_CLASS1(GaplessSwitch, const QByteArray &_mrl, mrl(_mrl), const QByteArray,
 EVENT_CLASS1(SetTickInterval, qint32 i, interval(i), const qint32, interval)
 EVENT_CLASS1(SetPrefinishMark, qint32 i, time(i), const qint32, time)
 
-EVENT_CLASS2(RequestSnapshot, QImage& i, QWaitCondition *w, image(i), waitCondition(w), QImage&, image, QWaitCondition *, waitCondition)
 EVENT_CLASS2(Rewire, QList<WireCall> _wireCalls, QList<WireCall> _unwireCalls, wireCalls(_wireCalls), unwireCalls(_unwireCalls), const QList<WireCall>, wireCalls, const QList<WireCall>, unwireCalls)
 EVENT_CLASS2(Reference, bool alt, const QByteArray &m, alternative(alt), mrl(m), const bool, alternative, const QByteArray, mrl)
 EVENT_CLASS2(Progress, const QString &d, int p, description(d), percent(p), const QString, description, const int, percent)

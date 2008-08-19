@@ -21,14 +21,12 @@
 #ifndef SOURCENODE_H
 #define SOURCENODE_H
 
+#include <Phonon/Global>
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QSet>
 #include <xine.h>
 #include "backend.h"
 #include "shareddata.h"
-
-// the gcc 4.0 STL includes assert.h
-#undef assert
 
 namespace Phonon
 {
@@ -53,7 +51,6 @@ class SourceNodeXT : virtual public SharedData
         bool deleted;
 
         friend class XineThread;
-        friend class AudioDataOutputXT;
 
         // hold a ref to the sink that we're connected to to make 100% sure it's always valid
         QExplicitlySharedDataPointer<SinkNodeXT> m_xtSink;

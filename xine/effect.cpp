@@ -20,6 +20,8 @@
 */
 
 #include "effect.h"
+#include <kdebug.h>
+#include <klocale.h>
 #include <QVariant>
 #include "xineengine.h"
 #include <QMutexLocker>
@@ -81,10 +83,10 @@ xine_audio_port_t *EffectXT::fakeAudioPort()
 
 void EffectXT::createInstance()
 {
-    debug() << Q_FUNC_INFO << "m_pluginName =" << m_pluginName;
+    kDebug(610) << "m_pluginName =" << m_pluginName;
     Q_ASSERT(m_plugin == 0 && m_pluginApi == 0);
     if (!m_pluginName) {
-        qWarning( "tried to create invalid Effect");
+        kWarning(610) << "tried to create invalid Effect";
         return;
     }
 
@@ -133,7 +135,7 @@ void EffectXT::createInstance()
             case POST_PARAM_TYPE_CHAR:         /* char (or vector of chars = string) */
             case POST_PARAM_TYPE_STRING:       /* (char *), ASCIIZ                   */
             case POST_PARAM_TYPE_STRINGLIST:   /* (char **) list, NULL terminated    */
-                qWarning() << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
+                kWarning(610) << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
                 break;
             case POST_PARAM_TYPE_BOOL:         /* integer (0 or 1)                   */
                 m_parameterList << EffectParameter(i, QString::fromUtf8(p.description ? p.description : p.name), EffectParameter::ToggledHint,
@@ -236,28 +238,28 @@ QVariant Effect::parameterValue(const EffectParameter &p) const
     Q_ASSERT(xt->m_pluginParams);
     xt->m_pluginApi->get_parameters(xt->m_plugin, xt->m_pluginParams);
     int i = 0;
-    for (; i < parameterIndex && desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i) ;
+    for (; i < parameterIndex && desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i);
     if (i == parameterIndex) {
-        xine_post_api_parameter_t &post_p = desc->parameter[i];
-        switch (post_p.type) {
+        xine_post_api_parameter_t &p = desc->parameter[i];
+        switch (p.type) {
         case POST_PARAM_TYPE_INT:          /* integer (or vector of integers)    */
-            return *reinterpret_cast<int *>(xt->m_pluginParams + post_p.offset);
+            return *reinterpret_cast<int *>(xt->m_pluginParams + p.offset);
         case POST_PARAM_TYPE_DOUBLE:       /* double (or vector of doubles)      */
-            return *reinterpret_cast<double *>(xt->m_pluginParams + post_p.offset);
+            return *reinterpret_cast<double *>(xt->m_pluginParams + p.offset);
         case POST_PARAM_TYPE_CHAR:         /* char (or vector of chars = string) */
         case POST_PARAM_TYPE_STRING:       /* (char *), ASCIIZ                   */
         case POST_PARAM_TYPE_STRINGLIST:   /* (char **) list, NULL terminated    */
-            qWarning() <<  "char/string/stringlist parameter '" << (post_p.description ? post_p.description : post_p.name) << "' not supported.";
+            kWarning(610) << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
             return QVariant();
         case POST_PARAM_TYPE_BOOL:         /* integer (0 or 1)                   */
-            return static_cast<bool>(*reinterpret_cast<int *>(xt->m_pluginParams + post_p.offset));
+            return static_cast<bool>(*reinterpret_cast<int *>(xt->m_pluginParams + p.offset));
         case POST_PARAM_TYPE_LAST:         /* terminator of parameter list       */
             break;
         default:
             abort();
         }
     }
-    qWarning() << "invalid parameterIndex passed to Effect::value";
+    kError(610) << "invalid parameterIndex passed to Effect::value";
     return QVariant();
 }
 
@@ -273,52 +275,52 @@ void Effect::setParameterValue(const EffectParameter &p, const QVariant &newValu
     xine_post_api_descr_t *desc = xt->m_pluginApi->get_param_descr();
     Q_ASSERT(xt->m_pluginParams);
     int i = 0;
-    for (; i < parameterIndex && desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i) ;
+    for (; i < parameterIndex && desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i);
     if (i == parameterIndex) {
-        xine_post_api_parameter_t &post_p = desc->parameter[i];
-        switch (post_p.type) {
+        xine_post_api_parameter_t &p = desc->parameter[i];
+        switch (p.type) {
         case POST_PARAM_TYPE_INT:          /* integer (or vector of integers)    */
-            if (post_p.enum_values && newValue.type() == QVariant::String) {
+            if (p.enum_values && newValue.type() == QVariant::String) {
                 // need to convert to index
-                int *value = reinterpret_cast<int *>(xt->m_pluginParams + post_p.offset);
+                int *value = reinterpret_cast<int *>(xt->m_pluginParams + p.offset);
                 const QString string = newValue.toString();
-                for (int j = 0; post_p.enum_values[j]; ++j) {
-                    if (string == QString::fromUtf8(post_p.enum_values[j])) {
+                for (int j = 0; p.enum_values[j]; ++j) {
+                    if (string == QString::fromUtf8(p.enum_values[j])) {
                         *value = j;
                         break;
                     }
                 }
             } else {
-                int *value = reinterpret_cast<int *>(xt->m_pluginParams + post_p.offset);
+                int *value = reinterpret_cast<int *>(xt->m_pluginParams + p.offset);
                 *value = newValue.toInt();
             }
             break;
         case POST_PARAM_TYPE_DOUBLE:       /* double (or vector of doubles)      */
             {
-                double *value = reinterpret_cast<double *>(xt->m_pluginParams + post_p.offset);
+                double *value = reinterpret_cast<double *>(xt->m_pluginParams + p.offset);
                 *value = newValue.toDouble();
             }
             break;
         case POST_PARAM_TYPE_CHAR:         /* char (or vector of chars = string) */
         case POST_PARAM_TYPE_STRING:       /* (char *), ASCIIZ                   */
         case POST_PARAM_TYPE_STRINGLIST:   /* (char **) list, NULL terminated    */
-            qWarning() << "char/string/stringlist parameter '" << (post_p.description ? post_p.description : post_p.name) << "' not supported." ;
+            kWarning(610) << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
             return;
         case POST_PARAM_TYPE_BOOL:         /* integer (0 or 1)                   */
             {
-               int *value = reinterpret_cast<int *>(xt->m_pluginParams + post_p.offset);
+               int *value = reinterpret_cast<int *>(xt->m_pluginParams + p.offset);
                *value = newValue.toBool() ? 1 : 0;
             }
             break;
         case POST_PARAM_TYPE_LAST:         /* terminator of parameter list       */
-            qWarning() << "invalid parameterIndex passed to Effect::setValue";
+            kError(610) << "invalid parameterIndex passed to Effect::setValue";
             break;
         default:
             abort();
         }
         xt->m_pluginApi->set_parameters(xt->m_plugin, xt->m_pluginParams);
     } else {
-        qWarning() << "invalid parameterIndex passed to Effect::setValue";
+        kError(610) << "invalid parameterIndex passed to Effect::setValue";
     }
 }
 

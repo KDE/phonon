@@ -30,9 +30,8 @@
 #include <QtCore/QWaitCondition>
 #include <QtCore/QTimer>
 
+#include <Phonon/Global>
 #include <Phonon/ObjectDescription>
-#include <Phonon/VideoWidget>
-#include <Phonon/MediaObject>
 
 #include <xine.h>
 
@@ -40,6 +39,8 @@
 #include <time.h>
 #include "xineengine.h"
 #include "myshareddatapointer.h"
+
+class KUrl;
 
 namespace Phonon
 {
@@ -61,7 +62,6 @@ class ByteStream;
 class XineStream : public QObject, public SourceNodeXT
 {
     Q_OBJECT
-
     public:
         static void xineEventListener(void *, const xine_event_t *);
 
@@ -87,6 +87,7 @@ class XineStream : public QObject, public SourceNodeXT
         //void needRewire(AudioPostList *postList);
         void useGaplessPlayback(bool);
         void useGapOf(int gap);
+        void gaplessSwitchTo(const KUrl &url);
         void gaplessSwitchTo(const QByteArray &mrl);
         void closeBlocking();
         void aboutToDeleteVideoWidget();
@@ -121,8 +122,6 @@ class XineStream : public QObject, public SourceNodeXT
         int subtitlesSize() const;
         int audioChannelsSize() const;
 
-        int64_t currentVpts() { return xine_get_current_vpts(m_stream); }
-
         enum StateForNewMrl {
             // no use: Loading, Error, Buffering
             StoppedState = Phonon::StoppedState,
@@ -141,8 +140,8 @@ class XineStream : public QObject, public SourceNodeXT
         void setMediaObject(MediaObject *m) { m_mediaObject = m; }
         void handleDownstreamEvent(Event *e);
 
-        void unload();
     public slots:
+        void setUrl(const KUrl &url);
         void setMrl(const QByteArray &mrl, StateForNewMrl = StoppedState);
         void play();
         void pause();

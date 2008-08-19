@@ -22,7 +22,6 @@
 #include "sinknode.h"
 #include "events.h"
 #include "keepreference.h"
-#include "audiooutput.h"
 
 namespace Phonon
 {

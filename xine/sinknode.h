@@ -21,12 +21,10 @@
 #ifndef SINKNODE_H
 #define SINKNODE_H
 
+#include <Phonon/Global>
 #include <xine.h>
 #include "backend.h"
 #include "shareddata.h"
-
-// the gcc 4.0 STL includes assert.h
-#undef assert
 
 namespace Phonon
 {
@@ -57,9 +55,6 @@ class SinkNode
 {
     friend class WireCall;
     friend class XineStream;
-    friend class AudioDataOutput;
-    friend class AudioOutput;
-
     public:
         SinkNode(SinkNodeXT *_xt);
         virtual ~SinkNode();

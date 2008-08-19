@@ -22,13 +22,13 @@
 #define Phonon_XINE_BACKEND_H
 
 #include <QtCore/QList>
+#include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QPair>
 #include <QtCore/QPointer>
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QVariant>
-#include <QtCore/QtDebug>
 
 #include <xine.h>
 #include <xine/xineutils.h>
@@ -36,6 +36,7 @@
 #include "xineengine.h"
 #include <phonon/objectdescription.h>
 #include <phonon/backendinterface.h>
+#include <KDE/KSharedConfig>
 
 namespace Phonon
 {
@@ -65,15 +66,15 @@ class XineThread;
 typedef QHash< int, QHash<QByteArray, QVariant> > ChannelIndexHash;
 typedef QHash<ObjectDescriptionType, ChannelIndexHash> ObjectDescriptionHash;
 
-class Backend : public QObject, public BackendInterface
+class Backend : public QObject, public Phonon::BackendInterface
 {
     Q_OBJECT
     Q_INTERFACES(Phonon::BackendInterface)
     Q_CLASSINFO("D-Bus Interface", "org.kde.phonon.XineBackendInternal")
     public:
         static Backend *instance();
-        Backend(QObject *parent = 0, const QVariantList & =  QVariantList());
-        virtual ~Backend();
+        Backend(QObject *parent, const QVariantList &args);
+        ~Backend();
 
         QObject *createObject(BackendInterface::Class, QObject *parent, const QList<QVariant> &args);
 
@@ -111,22 +112,17 @@ class Backend : public QObject, public BackendInterface
         static void returnXineEngine(const XineEngine &);
         static XineEngine xineEngineForStream();
 
-#ifndef NDEBUG
-        inline QDebug _debug() { if (m_debugMessages) { return qDebug(); } return QDebug(&m_noDebugStream); }
-#endif
-
     signals:
         void objectDescriptionChanged(ObjectDescriptionType);
 
     private slots:
-        void emitAudioOutputDeviceChange();
-        void emitObjectDescriptionChanged(ObjectDescriptionType);
+        void emitAudioDeviceChange();
 
     private:
         void checkAudioOutputs();
         void addAudioOutput(int idx, int initialPreference, const QString &n,
                 const QString &desc, const QString &ic, const QByteArray &dr,
-                bool isAdvanced = false, bool isHardware = false);
+                bool isAdvanced = false);
 
         mutable QStringList m_supportedMimeTypes;
 
@@ -137,7 +133,7 @@ class Backend : public QObject, public BackendInterface
             AudioOutputInfo(int idx, int ip, const QString &n, const QString &desc, const QString &ic,
                     const QByteArray &dr)
                 : name(n), description(desc), icon(ic), driver(dr),
-                index(idx), initialPreference(ip), available(false), isAdvanced(false), isHardware(false) {}
+                index(idx), initialPreference(ip), available(false), isAdvanced(false) {}
 
             QString name;
             QString description;
@@ -147,18 +143,17 @@ class Backend : public QObject, public BackendInterface
             int initialPreference;
             bool available : 1;
             bool isAdvanced : 1;
-            bool isHardware : 1;
             inline bool operator==(const AudioOutputInfo &rhs) const { return name == rhs.name && driver == rhs.driver; }
             inline bool operator<(const AudioOutputInfo &rhs) const { return initialPreference > rhs.initialPreference; }
         };
         QList<AudioOutputInfo> m_audioOutputInfos;
         QList<QObject *> m_cleanupObjects;
+        KSharedConfigPtr m_config;
         int m_deinterlaceMethod : 8;
         bool m_deinterlaceDVD : 1;
         bool m_deinterlaceVCD : 1;
         bool m_deinterlaceFile : 1;
         bool m_inShutdown : 1;
-        bool m_debugMessages : 1;
         XineThread *m_thread;
         XineEngine m_xine;
         QTimer signalTimer;
@@ -168,48 +163,8 @@ class Backend : public QObject, public BackendInterface
         QList<XineEngine> m_freeEngines;
 
         friend class XineThread;
-
-#ifndef NDEBUG
-        class NoDebugStream: public QIODevice
-        {
-            public:
-                NoDebugStream() { open(WriteOnly); }
-                bool isSequential() const { return true; }
-                qint64 readData(char *, qint64) { return 0; /* eof */ }
-                qint64 readLineData(char *, qint64) { return 0; /* eof */ }
-                qint64 writeData(const char *, qint64 len) { return len; }
-        } m_noDebugStream;
-#endif
 };
-
-#ifdef NDEBUG
-class NoDebug
-{
-public:
-    inline NoDebug(){}
-    inline NoDebug(const QDebug &){}
-    inline ~NoDebug(){}
-    inline NoDebug &operator<<(QTextStreamFunction) { return *this; }
-    inline NoDebug &operator<<(QTextStreamManipulator) { return *this; }
-    inline NoDebug &space() { return *this; }
-    inline NoDebug &nospace() { return *this; }
-    inline NoDebug &maybeSpace() { return *this; }
-
-    template<typename T>
-    inline NoDebug &operator<<(const T &) { return *this; }
-};
-inline NoDebug debug() { return NoDebug(); }
-
-#else
-inline QDebug debug()
-{
-    return Backend::instance()->_debug();
-}
-#endif
-
 }} // namespace Phonon::Xine
 
-QT_END_NAMESPACE
-
-#endif // Phonon_XINE_BACKEND_H
 // vim: sw=4 ts=4 tw=80
+#endif // Phonon_XINE_BACKEND_H

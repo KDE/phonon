@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2008      Ian Monroe <imonroe@kde.org>
 
     This program is free software; you can redistribute it and/or
@@ -22,12 +22,13 @@
 #include "xinestream.h"
 
 #include <QMutexLocker>
-#include <QtCore/QTextCodec>
 #include <QEvent>
 #include <QCoreApplication>
 #include <QTimer>
 #include <QVarLengthArray>
-#include <QUrl>
+
+#include <klocale.h>
+#include <kurl.h>
 
 #include "backend.h"
 #include "bytestream.h"
@@ -58,7 +59,7 @@ void XineStream::xineEventListener(void *p, const xine_event_t *xineEvent)
     if (!p || !xineEvent) {
         return;
     }
-    //debug() << Q_FUNC_INFO << "Xine event: " << xineEvent->type << QByteArray((char *)xineEvent->data, xineEvent->data_length);
+    //kDebug(610) << "Xine event: " << xineEvent->type << QByteArray((char *)xineEvent->data, xineEvent->data_length);
 
     XineStream *xs = static_cast<XineStream *>(p);
 
@@ -86,17 +87,17 @@ void XineStream::xineEventListener(void *p, const xine_event_t *xineEvent)
         }
         break;
     case XINE_EVENT_UI_CHANNELS_CHANGED:    /* inform ui that new channel info is available */
-        debug() << Q_FUNC_INFO << "XINE_EVENT_UI_CHANNELS_CHANGED";
+        kDebug(610) << "XINE_EVENT_UI_CHANNELS_CHANGED";
         {
             QCoreApplication::postEvent(xs, new QEVENT(UiChannelsChanged));
         }
         break;
     case XINE_EVENT_UI_MESSAGE:             /* message (dialog) for the ui to display */
         {
-            debug() << Q_FUNC_INFO << "XINE_EVENT_UI_MESSAGE";
+            kDebug(610) << "XINE_EVENT_UI_MESSAGE";
             const xine_ui_message_data_t *message = static_cast<xine_ui_message_data_t *>(xineEvent->data);
             if (message->type == XINE_MSG_AUDIO_OUT_UNAVAILABLE) {
-                debug() << Q_FUNC_INFO << "XINE_MSG_AUDIO_OUT_UNAVAILABLE";
+                kDebug(610) << "XINE_MSG_AUDIO_OUT_UNAVAILABLE";
                 // we don't know for sure which AudioOutput failed. but the one without any
                 // capabilities must be the guilty one
                 xs->handleDownstreamEvent(new QEVENT(AudioDeviceFailed));
@@ -104,28 +105,28 @@ void XineStream::xineEventListener(void *p, const xine_event_t *xineEvent)
         }
         break;
     case XINE_EVENT_FRAME_FORMAT_CHANGE:    /* e.g. aspect ratio change during dvd playback */
-        debug() << Q_FUNC_INFO << "XINE_EVENT_FRAME_FORMAT_CHANGE";
+        kDebug(610) << "XINE_EVENT_FRAME_FORMAT_CHANGE";
         {
             xine_format_change_data_t *data = static_cast<xine_format_change_data_t *>(xineEvent->data);
             xs->handleDownstreamEvent(new FrameFormatChangeEvent(data->width, data->height, data->aspect, data->pan_scan));
         }
         break;
     case XINE_EVENT_AUDIO_LEVEL:            /* report current audio level (l/r/mute) */
-        debug() << Q_FUNC_INFO << "XINE_EVENT_AUDIO_LEVEL";
+        kDebug(610) << "XINE_EVENT_AUDIO_LEVEL";
         break;
     case XINE_EVENT_QUIT:                   /* last event sent when stream is disposed */
-        debug() << Q_FUNC_INFO << "XINE_EVENT_QUIT";
+        kDebug(610) << "XINE_EVENT_QUIT";
         break;
     case XINE_EVENT_UI_NUM_BUTTONS:         /* number of buttons for interactive menus */
-        debug() << Q_FUNC_INFO << "XINE_EVENT_UI_NUM_BUTTONS";
+        kDebug(610) << "XINE_EVENT_UI_NUM_BUTTONS";
         break;
     case XINE_EVENT_DROPPED_FRAMES:         /* number of dropped frames is too high */
-        debug() << Q_FUNC_INFO << "XINE_EVENT_DROPPED_FRAMES";
+        kDebug(610) << "XINE_EVENT_DROPPED_FRAMES";
         break;
     case XINE_EVENT_MRL_REFERENCE_EXT:      /* demuxer->frontend: MRL reference(s) for the real stream */
         {
             xine_mrl_reference_data_ext_t *reference = static_cast<xine_mrl_reference_data_ext_t *>(xineEvent->data);
-            debug() << Q_FUNC_INFO << "XINE_EVENT_MRL_REFERENCE_EXT: " << reference->alternative
+            kDebug(610) << "XINE_EVENT_MRL_REFERENCE_EXT: " << reference->alternative
                 << ", " << reference->start_time
                 << ", " << reference->duration
                 << ", " << reference->mrl
@@ -251,28 +252,28 @@ bool XineStream::xineOpen(Phonon::State newstate)
 
 #ifdef DISABLE_FILE_MRLS
     if (m_mrl.startsWith("file:/")) {
-        debug() << Q_FUNC_INFO << "faked xine_open failed for m_mrl =" << m_mrl.constData();
-        error(Phonon::NormalError, tr("Cannot open media data at '<i>%1</i>'").arg(m_mrl.constData()));
+        kDebug(610) << "faked xine_open failed for m_mrl =" << m_mrl.constData();
+        error(Phonon::NormalError, i18n("Cannot open media data at '<i>%1</i>'", m_mrl.constData()));
         return false;
     }
 #endif
 
     // xine_open can call functions from ByteStream which will block waiting for data.
-    //debug() << Q_FUNC_INFO << "xine_open(" << m_mrl.constData() << ")";
+    //kDebug(610) << "xine_open(" << m_mrl.constData() << ")";
     if (xine_open(m_stream, m_mrl.constData()) == 0) {
-        debug() << Q_FUNC_INFO << "xine_open failed for m_mrl =" << m_mrl.constData();
+        kDebug(610) << "xine_open failed for m_mrl =" << m_mrl.constData();
         switch (xine_get_error(m_stream)) {
         case XINE_ERROR_NONE:
             // hmm?
             abort();
         case XINE_ERROR_NO_INPUT_PLUGIN:
-            error(Phonon::NormalError, tr("Cannot find input plugin for MRL [%1]").arg(m_mrl.constData()));
+            error(Phonon::NormalError, i18n("Cannot find input plugin for MRL [%1]", m_mrl.constData()));
             break;
         case XINE_ERROR_NO_DEMUX_PLUGIN:
             if (m_mrl.startsWith("kbytestream:/")) {
-                error(Phonon::FatalError, tr("Cannot find demultiplexer plugin for the given media data"));
+                error(Phonon::FatalError, i18n("Cannot find demultiplexer plugin for the given media data"));
             } else {
-                error(Phonon::FatalError, tr("Cannot find demultiplexer plugin for MRL [%1]").arg(m_mrl.constData()));
+                error(Phonon::FatalError, i18n("Cannot find demultiplexer plugin for MRL [%1]", m_mrl.constData()));
             }
             break;
         default:
@@ -287,7 +288,7 @@ bool XineStream::xineOpen(Phonon::State newstate)
         }
         return false;
     }
-    debug() << Q_FUNC_INFO << "xine_open succeeded for m_mrl =" << m_mrl.constData();
+    kDebug(610) << "xine_open succeeded for m_mrl =" << m_mrl.constData();
     const bool needDeinterlacer =
         (m_mrl.startsWith("dvd:/") && Backend::deinterlaceDVD()) ||
         (m_mrl.startsWith("vcd:/") && Backend::deinterlaceVCD()) ||
@@ -309,7 +310,7 @@ bool XineStream::xineOpen(Phonon::State newstate)
             }
         }
         if (!videoPort) {
-            debug() << Q_FUNC_INFO << "creating xine_stream with null video port";
+            kDebug(610) << "creating xine_stream with null video port";
             videoPort = nullVideoPort();
         }
         m_deinterlacer = xine_post_init(m_xine, "tvtime", 1, 0, &videoPort);
@@ -404,7 +405,7 @@ bool XineStream::hasVideo() const
         // FIXME: this is non-deterministic: a program might fail sometimes and sometimes work
         // because of this
         if (!m_waitingForStreamInfo.wait(&m_streamInfoMutex, 80)) {
-            debug() << Q_FUNC_INFO << "waitcondition timed out";
+            kDebug(610) << "waitcondition timed out";
         }
     }
     return m_hasVideo;
@@ -421,7 +422,7 @@ bool XineStream::isSeekable() const
         // FIXME: this is non-deterministic: a program might fail sometimes and sometimes work
         // because of this
         /*if (!m_waitingForStreamInfo.wait(&m_streamInfoMutex, 80)) {
-            debug() << Q_FUNC_INFO << "waitcondition timed out";
+            kDebug(610) << "waitcondition timed out";
             return false;
         } */
     }
@@ -435,7 +436,7 @@ void XineStream::getStreamInfo()
 
     if (m_stream && !m_mrl.isEmpty()) {
         if (xine_get_status(m_stream) == XINE_STATUS_IDLE) {
-            debug() << Q_FUNC_INFO << "calling xineOpen from ";
+            kDebug(610) << "calling xineOpen from ";
             if (!xineOpen(Phonon::StoppedState)) {
                 return;
             }
@@ -458,27 +459,27 @@ void XineStream::getStreamInfo()
             emit seekableChanged(m_isSeekable);
         }
         if (m_availableTitles != availableTitles) {
-            debug() << Q_FUNC_INFO << "available titles changed: " << availableTitles;
+            kDebug(610) << "available titles changed: " << availableTitles;
             m_availableTitles = availableTitles;
             emit availableTitlesChanged(m_availableTitles);
         }
         if (m_availableChapters != availableChapters) {
-            debug() << Q_FUNC_INFO << "available chapters changed: " << availableChapters;
+            kDebug(610) << "available chapters changed: " << availableChapters;
             m_availableChapters = availableChapters;
             emit availableChaptersChanged(m_availableChapters);
         }
         if (m_availableAngles != availableAngles) {
-            debug() << Q_FUNC_INFO << "available angles changed: " << availableAngles;
+            kDebug(610) << "available angles changed: " << availableAngles;
             m_availableAngles = availableAngles;
             emit availableAnglesChanged(m_availableAngles);
         }
         if (m_availableSubtitles != availableSubtitles) {
-            debug() << Q_FUNC_INFO << "available angles changed: " << availableSubtitles;
+            kDebug(610) << "available angles changed: " << availableSubtitles;
             m_availableSubtitles = availableSubtitles;
             emit availableSubtitlesChanged();
         }
         if (m_availableAudioChannels != availableAudioChannels) {
-            debug() << Q_FUNC_INFO << "available angles changed: " << availableAudioChannels;
+            kDebug(610) << "available angles changed: " << availableAudioChannels;
             m_availableAudioChannels = availableAudioChannels;
             emit availableAudioChannelsChanged();
         }
@@ -501,16 +502,12 @@ bool XineStream::createStream()
     }
 
     m_portMutex.lock();
-    //debug() << Q_FUNC_INFO << "AudioPort.xinePort() = " << m_audioPort.xinePort();
+    //kDebug(610) << "AudioPort.xinePort() = " << m_audioPort.xinePort();
     xine_audio_port_t *audioPort = 0;
     xine_video_port_t *videoPort = 0;
-    if (!m_mediaObject) {
-        qWarning("request to create a stream, but no valid audio/video outputs are given/available");
-        error(Phonon::FatalError, tr("Xine failed to create a stream."));
-        return false;
-    }
+    Q_ASSERT(m_mediaObject);
     QSet<SinkNode *> sinks = m_mediaObject->sinks();
-    debug() << Q_FUNC_INFO << "MediaObject is connected to " << sinks.size() << " nodes";
+    kDebug(610) << "MediaObject is connected to " << sinks.size() << " nodes";
     foreach (SinkNode *sink, sinks) {
         Q_ASSERT(sink->threadSafeObject());
         if (sink->threadSafeObject()->audioPort()) {
@@ -523,11 +520,11 @@ bool XineStream::createStream()
         }
     }
     if (!audioPort) {
-        debug() << Q_FUNC_INFO << "creating xine_stream with null audio port";
+        kDebug(610) << "creating xine_stream with null audio port";
         audioPort = nullAudioPort();
     }
     if (!videoPort) {
-        debug() << Q_FUNC_INFO << "creating xine_stream with null video port";
+        kDebug(610) << "creating xine_stream with null video port";
         videoPort = nullVideoPort();
     }
     m_stream = xine_stream_new(m_xine, audioPort, videoPort);
@@ -550,15 +547,15 @@ bool XineStream::createStream()
     xine_event_create_listener_thread(m_event_queue, &XineStream::xineEventListener, (void *)this);
 
     if (m_useGaplessPlayback) {
-        debug() << Q_FUNC_INFO << "XINE_PARAM_EARLY_FINISHED_EVENT: 1";
+        kDebug(610) << "XINE_PARAM_EARLY_FINISHED_EVENT: 1";
         xine_set_param(m_stream, XINE_PARAM_EARLY_FINISHED_EVENT, 1);
 #ifdef XINE_PARAM_DELAY_FINISHED_EVENT
     } else if (m_transitionGap > 0) {
-        debug() << Q_FUNC_INFO << "XINE_PARAM_DELAY_FINISHED_EVENT:" << m_transitionGap;
+        kDebug(610) << "XINE_PARAM_DELAY_FINISHED_EVENT:" << m_transitionGap;
         xine_set_param(m_stream, XINE_PARAM_DELAY_FINISHED_EVENT, m_transitionGap);
 #endif // XINE_PARAM_DELAY_FINISHED_EVENT
     } else {
-        debug() << Q_FUNC_INFO << "XINE_PARAM_EARLY_FINISHED_EVENT: 0";
+        kDebug(610) << "XINE_PARAM_EARLY_FINISHED_EVENT: 0";
         xine_set_param(m_stream, XINE_PARAM_EARLY_FINISHED_EVENT, 0);
     }
 
@@ -582,12 +579,12 @@ void XineStream::removeAudioPostList(const AudioPostList &postList)
 //called from main thread
 void XineStream::aboutToDeleteVideoWidget()
 {
-    debug() << Q_FUNC_INFO;
+    kDebug(610);
     m_portMutex.lock();
 
     // schedule m_stream rewiring
     QCoreApplication::postEvent(this, new QEVENT(RewireVideoToNull));
-    debug() << Q_FUNC_INFO << "waiting for rewire";
+    kDebug(610) << "waiting for rewire";
     m_waitingForRewire.wait(&m_portMutex);
     m_portMutex.unlock();
 }
@@ -623,6 +620,12 @@ void XineStream::useGapOf(int gap)
 }
 
 // called from main thread
+void XineStream::gaplessSwitchTo(const KUrl &url)
+{
+    gaplessSwitchTo(url.url().toUtf8());
+}
+
+// called from main thread
 void XineStream::gaplessSwitchTo(const QByteArray &mrl)
 {
     QCoreApplication::postEvent(this, new GaplessSwitchEvent(mrl));
@@ -640,21 +643,21 @@ void XineStream::changeState(Phonon::State newstate)
     if (newstate == Phonon::PlayingState) {
         if (m_ticking) {
             m_tickTimer.start();
-            //debug() << Q_FUNC_INFO << "tickTimer started.";
+            //kDebug(610) << "tickTimer started.";
         }
         if (m_prefinishMark > 0) {
             emitAboutToFinish();
         }
     } else if (oldstate == Phonon::PlayingState) {
         m_tickTimer.stop();
-        //debug() << Q_FUNC_INFO << "tickTimer stopped.";
+        //kDebug(610) << "tickTimer stopped.";
         m_prefinishMarkReachedNotEmitted = true;
         if (m_prefinishMarkTimer) {
             m_prefinishMarkTimer->stop();
         }
     }
     if (newstate == Phonon::ErrorState) {
-        debug() << Q_FUNC_INFO << "reached error state";// from: " << kBacktrace();
+        kDebug(610) << "reached error state";// from: " << kBacktrace();
         if (m_event_queue) {
             xine_event_dispose_queue(m_event_queue);
             m_event_queue = 0;
@@ -668,112 +671,31 @@ void XineStream::changeState(Phonon::State newstate)
     emit stateChanged(newstate, oldstate);
 }
 
-static bool checkIsUtf8(const char *buf)
-{
-    if (!buf || !*buf) {
-        // it's actually neither true nor false, but the logic below needs us to return false here
-        // for empty/null strings
-        return false;
-    }
-
-    bool isValidUtf8 = false;
-    unsigned char c;
-    for (int i = 0; (c = buf[i]); ++i) {
-        if ((c & 0x80) == 0) {
-            // 0xxxxxxx is ASCII
-            continue;
-        }
-        if ((c & 0x40) == 0) {
-            // 10xxxxxx is never UTF-8
-            return false;
-        } else {
-            // 11xxxxxx begins UTF-8
-            int following;
-
-            if ((c & 0x20) == 0) {
-                // 110xxxxx
-                if (c == 0xC0 || c == 0xC1) {
-                    return false;
-                }
-                following = 1;
-            } else if ((c & 0x10) == 0) {
-                // 1110xxxx
-                following = 2;
-            } else if ((c & 0x08) == 0) {
-                // 11110xxx
-                if (c == 0xF5) {
-                    return false;
-                }
-                following = 3;
-            } else if ((c & 0x04) == 0) {
-                // 111110xx
-                following = 4;
-            } else if ((c & 0x02) == 0) {
-                // 1111110x
-                following = 5;
-            } else {
-                return false;
-            }
-
-            for (int n = 0; n < following; ++n) {
-                ++i;
-                if (!(c = buf[i])) {
-                    // null termination, this should make it invalid UTF-8
-                    return false;
-                }
-
-                if ((c & 0xC0) != 0x80) {
-                    return false;
-                }
-            }
-            isValidUtf8 = true;
-        }
-    }
-    return isValidUtf8;
-}
-
 // xine thread
 void XineStream::updateMetaData()
 {
     Q_ASSERT(QThread::currentThread() == XineThread::instance());
-    const char *meta[8] = {
-        xine_get_meta_info(m_stream, XINE_META_INFO_TITLE),
-        xine_get_meta_info(m_stream, XINE_META_INFO_ARTIST),
-        xine_get_meta_info(m_stream, XINE_META_INFO_GENRE),
-        xine_get_meta_info(m_stream, XINE_META_INFO_ALBUM),
-        xine_get_meta_info(m_stream, XINE_META_INFO_YEAR),
-        xine_get_meta_info(m_stream, XINE_META_INFO_TRACK_NUMBER),
-        xine_get_meta_info(m_stream, XINE_META_INFO_COMMENT),
-        xine_get_meta_info(m_stream, XINE_META_INFO_CDINDEX_DISCID)
-    };
-    bool isUtf8 = false;
-    for (int i = 0; !isUtf8 && i < 8; ++i) {
-        isUtf8 &= checkIsUtf8(meta[i]);
-    }
-    QTextCodec *codec = QTextCodec::codecForMib(106); // utf-8
-    if (!isUtf8) {
-        QTextCodec *localCodec = QTextCodec::codecForLocale();
-        if (localCodec == codec) {
-            // if the local codec also is UTF-8 our best guess is Latin-1
-            codec = QTextCodec::codecForName("ISO 8859-1");
-        } else {
-            // hoping that the local codec is the same as the one used in the meta data
-            codec = localCodec;
-        }
-    }
     QMultiMap<QString, QString> metaDataMap;
-    metaDataMap.insert(QLatin1String("TITLE"), codec->toUnicode(meta[0]));
-    metaDataMap.insert(QLatin1String("ARTIST"), codec->toUnicode(meta[1]));
-    metaDataMap.insert(QLatin1String("GENRE"), codec->toUnicode(meta[2]));
-    metaDataMap.insert(QLatin1String("ALBUM"), codec->toUnicode(meta[3]));
-    metaDataMap.insert(QLatin1String("DATE"), codec->toUnicode(meta[4]));
-    metaDataMap.insert(QLatin1String("TRACKNUMBER"), codec->toUnicode(meta[5]));
-    metaDataMap.insert(QLatin1String("DESCRIPTION"), codec->toUnicode(meta[6]));
-    metaDataMap.insert(QLatin1String("MUSICBRAINZ_DISCID"), codec->toUnicode(meta[7]));
+    metaDataMap.insert(QLatin1String("TITLE"),
+            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_TITLE)));
+    metaDataMap.insert(QLatin1String("ARTIST"),
+            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_ARTIST)));
+    metaDataMap.insert(QLatin1String("GENRE"),
+            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_GENRE)));
+    metaDataMap.insert(QLatin1String("ALBUM"),
+            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_ALBUM)));
+    metaDataMap.insert(QLatin1String("DATE"),
+            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_YEAR)));
+    metaDataMap.insert(QLatin1String("TRACKNUMBER"),
+            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_TRACK_NUMBER)));
+    metaDataMap.insert(QLatin1String("DESCRIPTION"),
+            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_COMMENT)));
+    metaDataMap.insert(QLatin1String("MUSICBRAINZ_DISCID"),
+            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_CDINDEX_DISCID)));
     if(metaDataMap == m_metaDataMap)
         return;
     m_metaDataMap = metaDataMap;
-    //debug() << Q_FUNC_INFO << "emitting metaDataChanged(" << m_metaDataMap << ")";
+    //kDebug(610) << "emitting metaDataChanged(" << m_metaDataMap << ")";
     emit metaDataChanged(m_metaDataMap);
 }
 
@@ -787,12 +709,7 @@ void XineStream::playbackFinished()
             emit prefinishMarkReached(0);
         }
         changeState(Phonon::StoppedState);
-        // Some other thread may have "nicely" closed the stream before we got to it
-        // better to check for its existence first before we crash the program
-        // FIXME: This does happen in practice, but shouldn't. (B.K.O. 196320)
-        if (m_stream) {
-            xine_close(m_stream); // TODO: is it necessary? should xine_close be called as late as possible?
-        }
+        xine_close(m_stream); // TODO: is it necessary? should xine_close be called as late as possible?
         m_streamInfoReady = false;
         m_prefinishMarkReachedNotEmitted = true;
         emit finished();
@@ -804,7 +721,7 @@ void XineStream::playbackFinished()
 inline void XineStream::error(Phonon::ErrorType type, const QString &string)
 {
     Q_ASSERT(QThread::currentThread() == XineThread::instance());
-    debug() << Q_FUNC_INFO << type << string;
+    kDebug(610) << type << string;
     m_errorLock.lockForWrite();
     m_errorType = type;
     m_errorString = string;
@@ -845,8 +762,6 @@ const char *nameForEvent(int e)
         return "PauseCommand";
     case Event::StopCommand:
         return "StopCommand";
-    case Event::UnloadCommand:
-        return "UnloadCommand";
     case Event::SetTickInterval:
         return "SetTickInterval";
     case Event::SetPrefinishMark:
@@ -882,7 +797,7 @@ bool XineStream::event(QEvent *ev)
             break;
         default:
             if (eventName) {
-                debug() << Q_FUNC_INFO << "####################### ignoring Event: " << eventName;
+                kDebug(610) << "####################### ignoring Event: " << eventName;
             }
             return QObject::event(ev);
         }
@@ -890,9 +805,9 @@ bool XineStream::event(QEvent *ev)
     if (eventName) {
         if (static_cast<int>(ev->type()) == Event::Progress) {
             ProgressEvent *e = static_cast<ProgressEvent *>(ev);
-            debug() << Q_FUNC_INFO << "################################ Event: " << eventName << ": " << e->percent;
+            kDebug(610) << "################################ Event: " << eventName << ": " << e->percent;
         } else {
-            debug() << Q_FUNC_INFO << "################################ Event: " << eventName;
+            kDebug(610) << "################################ Event: " << eventName;
         }
     }
     switch (ev->type()) {
@@ -921,35 +836,35 @@ bool XineStream::event(QEvent *ev)
             int availableChapters = xine_get_stream_info(m_stream, XINE_STREAM_INFO_DVD_CHAPTER_COUNT);
             int availableAngles   = xine_get_stream_info(m_stream, XINE_STREAM_INFO_DVD_ANGLE_COUNT);
             if (m_availableTitles != availableTitles) {
-                debug() << Q_FUNC_INFO << "available titles changed: " << availableTitles;
+                kDebug(610) << "available titles changed: " << availableTitles;
                 m_availableTitles = availableTitles;
                 emit availableTitlesChanged(m_availableTitles);
             }
             if (m_availableChapters != availableChapters) {
-                debug() << Q_FUNC_INFO << "available chapters changed: " << availableChapters;
+                kDebug(610) << "available chapters changed: " << availableChapters;
                 m_availableChapters = availableChapters;
                 emit availableChaptersChanged(m_availableChapters);
             }
             if (m_availableAngles != availableAngles) {
-                debug() << Q_FUNC_INFO << "available angles changed: " << availableAngles;
+                kDebug(610) << "available angles changed: " << availableAngles;
                 m_availableAngles = availableAngles;
                 emit availableAnglesChanged(m_availableAngles);
             }
 
             {
-                const int availableSubtitles = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_SPU_CHANNEL);
+                int availableSubtitles = subtitlesSize();
                 if(availableSubtitles != m_availableSubtitles)
                 {
-                    debug() << Q_FUNC_INFO << "available subtitles changed: " << availableSubtitles;
+                    kDebug(610) << "available subtitles changed: " << availableSubtitles;
                     m_availableSubtitles = availableSubtitles;
                     emit availableSubtitlesChanged();
                 }
             }
             {
-                const int availableAudioChannels = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_AUDIO_CHANNEL);
+                int availableAudioChannels = audioChannelsSize();
                 if(availableAudioChannels != m_availableAudioChannels)
                 {
-                    debug() << Q_FUNC_INFO << "available audio channels changed: " << availableAudioChannels;
+                    kDebug(610) << "available audio channels changed: " << availableAudioChannels;
                     m_availableAudioChannels = availableAudioChannels;
                     emit availableAudioChannelsChanged();
                 }
@@ -959,17 +874,17 @@ bool XineStream::event(QEvent *ev)
             int currentChapter = xine_get_stream_info(m_stream, XINE_STREAM_INFO_DVD_CHAPTER_NUMBER);
             int currentAngle   = xine_get_stream_info(m_stream, XINE_STREAM_INFO_DVD_ANGLE_NUMBER);
             if (currentAngle != m_currentAngle) {
-                debug() << Q_FUNC_INFO << "current angle changed: " << currentAngle;
+                kDebug(610) << "current angle changed: " << currentAngle;
                 m_currentAngle = currentAngle;
                 emit angleChanged(m_currentAngle);
             }
             if (currentChapter != m_currentChapter) {
-                debug() << Q_FUNC_INFO << "current chapter changed: " << currentChapter;
+                kDebug(610) << "current chapter changed: " << currentChapter;
                 m_currentChapter = currentChapter;
                 emit chapterChanged(m_currentChapter);
             }
             if (currentTitle != m_currentTitle) {
-                debug() << Q_FUNC_INFO << "current title changed: " << currentTitle;
+                kDebug(610) << "current title changed: " << currentTitle;
                 m_currentTitle = currentTitle;
                 emit titleChanged(m_currentTitle);
             }
@@ -1023,7 +938,7 @@ bool XineStream::event(QEvent *ev)
         return true;
     case Event::MediaFinished:
         ev->accept();
-        debug() << Q_FUNC_INFO << "MediaFinishedEvent m_useGaplessPlayback = " << m_useGaplessPlayback;
+        kDebug(610) << "MediaFinishedEvent m_useGaplessPlayback = " << m_useGaplessPlayback;
         if (m_stream) {
             if (m_useGaplessPlayback) {
                 xine_set_param(m_stream, XINE_PARAM_GAPLESS_SWITCH, 1);
@@ -1041,10 +956,10 @@ bool XineStream::event(QEvent *ev)
             GaplessSwitchEvent *e = static_cast<GaplessSwitchEvent *>(ev);
             m_mutex.lock();
             if (e->mrl.isEmpty()) {
-                debug() << Q_FUNC_INFO << "no GaplessSwitch";
+                kDebug(610) << "no GaplessSwitch";
             } else {
                 setMrlInternal(e->mrl);
-                debug() << Q_FUNC_INFO << "GaplessSwitch new m_mrl =" << m_mrl.constData();
+                kDebug(610) << "GaplessSwitch new m_mrl =" << m_mrl.constData();
             }
             if (e->mrl.isEmpty() || m_closing) {
                 xine_set_param(m_stream, XINE_PARAM_GAPLESS_SWITCH, 0);
@@ -1053,7 +968,7 @@ bool XineStream::event(QEvent *ev)
                 return true;
             }
             if (!xine_open(m_stream, m_mrl.constData())) {
-                qWarning("xine_open for gapless playback failed!");
+                kWarning(610) << "xine_open for gapless playback failed!";
                 xine_set_param(m_stream, XINE_PARAM_GAPLESS_SWITCH, 0);
                 m_mutex.unlock();
                 playbackFinished();
@@ -1091,7 +1006,7 @@ bool XineStream::event(QEvent *ev)
                 }
                 //QTimer::singleShot(20, this, SLOT(getStartTime()));
             }
-            debug() << Q_FUNC_INFO << "emit bufferStatus(" << e->percent << ")";
+            kDebug(610) << "emit bufferStatus(" << e->percent << ")";
             emit bufferStatus(e->percent);
         }
         ev->accept();
@@ -1117,7 +1032,7 @@ bool XineStream::event(QEvent *ev)
         if (m_stream) {
             const int32_t w = xine_get_stream_info(m_stream, XINE_STREAM_INFO_VIDEO_WIDTH);
             const int32_t h = xine_get_stream_info(m_stream, XINE_STREAM_INFO_VIDEO_HEIGHT);
-            debug() << Q_FUNC_INFO << "taking snapshot of" << w << h;
+            kDebug(610) << "taking snapshot of" << w << h;
             if (w > 0 && h > 0) {
                 int width, height, ratio_code, format;
                 QVarLengthArray<uint8_t> img(w * h * 4);
@@ -1141,7 +1056,7 @@ bool XineStream::event(QEvent *ev)
                  */
                 switch (format) {
                 case XINE_IMGFMT_YUY2: // every four consecutive pixels Y0 Cb Y1 Cr
-                    debug() << Q_FUNC_INFO << "got a YUY2 snapshot";
+                    kDebug(610) << "got a YUY2 snapshot";
                     Q_ASSERT(width % 2 == 0);
                     for (int row = 0; row < height; ++row) {
                         QRgb *line = reinterpret_cast<QRgb *>(qimg.scanLine(row));
@@ -1166,7 +1081,7 @@ bool XineStream::event(QEvent *ev)
                     }
                     break;
                 case XINE_IMGFMT_YV12:
-                    debug() << Q_FUNC_INFO << "got a YV12 snapshot";
+                    kDebug(610) << "got a YV12 snapshot";
                     Q_ASSERT(width % 2 == 0);
                     Q_ASSERT(height % 2 == 0);
                     {
@@ -1214,10 +1129,7 @@ bool XineStream::event(QEvent *ev)
                 default:
                     return true;
                 }
-                   RequestSnapshotEvent *event=static_cast<RequestSnapshotEvent*>(ev);
-                   event->image=qimg;
-                   event->waitCondition->wakeAll();
-//                 handleDownstreamEvent(new SnapshotReadyEvent(qimg));
+                handleDownstreamEvent(new SnapshotReadyEvent(qimg));
             }
         }
         return true;
@@ -1234,15 +1146,15 @@ bool XineStream::event(QEvent *ev)
             State previousState = m_state;
             setMrlInternal(e->mrl);
             m_errorType = Phonon::NoError;
-            m_errorString.clear();
+            m_errorString = QString();
             if (!m_stream) {
                 changeState(Phonon::LoadingState);
                 m_mutex.lock();
                 createStream();
                 m_mutex.unlock();
                 if (!m_stream) {
-                    qWarning() << "MrlChangedEvent: createStream didn't create a stream. This should not happen.";
-                    error(Phonon::FatalError, tr("Xine failed to create a stream."));
+                    kError(610) << "MrlChangedEvent: createStream didn't create a stream. This should not happen.";
+                    error(Phonon::FatalError, i18n("Xine failed to create a stream."));
                     return true;
                 }
             } else if (xine_get_status(m_stream) != XINE_STATUS_IDLE) {
@@ -1254,10 +1166,10 @@ bool XineStream::event(QEvent *ev)
                 m_mutex.unlock();
             }
             if (m_closing || m_mrl.isEmpty()) {
-                debug() << Q_FUNC_INFO << "MrlChanged: don't call xineOpen. m_closing =" << m_closing << ", m_mrl =" << m_mrl.constData();
+                kDebug(610) << "MrlChanged: don't call xineOpen. m_closing =" << m_closing << ", m_mrl =" << m_mrl.constData();
                 m_waitingForClose.wakeAll();
             } else {
-                debug() << Q_FUNC_INFO << "calling xineOpen from MrlChanged";
+                kDebug(610) << "calling xineOpen from MrlChanged";
                 if (!xineOpen(Phonon::StoppedState)) {
                     return true;
                 }
@@ -1299,15 +1211,15 @@ bool XineStream::event(QEvent *ev)
     case Event::TransitionTypeChanged:
         if (m_stream) {
             if (m_useGaplessPlayback) {
-                debug() << Q_FUNC_INFO << "XINE_PARAM_EARLY_FINISHED_EVENT: 1";
+                kDebug(610) << "XINE_PARAM_EARLY_FINISHED_EVENT: 1";
                 xine_set_param(m_stream, XINE_PARAM_EARLY_FINISHED_EVENT, 1);
 #ifdef XINE_PARAM_DELAY_FINISHED_EVENT
             } else if (m_transitionGap > 0) {
-                debug() << Q_FUNC_INFO << "XINE_PARAM_DELAY_FINISHED_EVENT:" << m_transitionGap;
+                kDebug(610) << "XINE_PARAM_DELAY_FINISHED_EVENT:" << m_transitionGap;
                 xine_set_param(m_stream, XINE_PARAM_DELAY_FINISHED_EVENT, m_transitionGap);
 #endif // XINE_PARAM_DELAY_FINISHED_EVENT
             } else {
-                debug() << Q_FUNC_INFO << "XINE_PARAM_EARLY_FINISHED_EVENT: 0";
+                kDebug(610) << "XINE_PARAM_EARLY_FINISHED_EVENT: 0";
                 xine_set_param(m_stream, XINE_PARAM_EARLY_FINISHED_EVENT, 0);
             }
         }
@@ -1321,7 +1233,7 @@ bool XineStream::event(QEvent *ev)
                 return true;
             }
             QMutexLocker portLocker(&m_portMutex);
-            debug() << Q_FUNC_INFO << "rewiring ports";
+            kDebug(610) << "rewiring ports";
             xine_post_out_t *videoSource = xine_get_video_source(m_stream);
             xine_video_port_t *videoPort = nullVideoPort();
             xine_post_wire_video_port(videoSource, videoPort);
@@ -1331,8 +1243,8 @@ bool XineStream::event(QEvent *ev)
     case Event::PlayCommand:
         ev->accept();
         if (m_mediaObject->sinks().isEmpty()) {
-            qWarning("request to play a stream, but no valid audio/video outputs are given/available");
-            error(Phonon::FatalError, tr("Playback failed because no valid audio or video outputs are available"));
+            kWarning(610) << "request to play a stream, but no valid audio/video outputs are given/available";
+            error(Phonon::FatalError, i18n("Playback failed because no valid audio or video outputs are available"));
             return true;
         }
         if (m_state == Phonon::ErrorState || m_state == Phonon::PlayingState) {
@@ -1348,8 +1260,8 @@ bool XineStream::event(QEvent *ev)
             QMutexLocker locker(&m_mutex);
             createStream();
             if (!m_stream) {
-                qWarning() << "PlayCommand: createStream didn't create a stream. This should not happen.";
-                error(Phonon::FatalError, tr("Xine failed to create a stream."));
+                kError(610) << "PlayCommand: createStream didn't create a stream. This should not happen.";
+                error(Phonon::FatalError, i18n("Xine failed to create a stream."));
                 return true;
             }
         }
@@ -1365,7 +1277,7 @@ bool XineStream::event(QEvent *ev)
             //X                     m_startTime = -1;
             //X                 }
             if (xine_get_status(m_stream) == XINE_STATUS_IDLE) {
-                debug() << Q_FUNC_INFO << "calling xineOpen from PlayCommand";
+                kDebug(610) << "calling xineOpen from PlayCommand";
                 if (!xineOpen(Phonon::BufferingState)) {
                     return true;
                 }
@@ -1388,13 +1300,13 @@ bool XineStream::event(QEvent *ev)
             QMutexLocker locker(&m_mutex);
             createStream();
             if (!m_stream) {
-                qWarning() << "PauseCommand: createStream didn't create a stream. This should not happen.";
-                error(Phonon::FatalError, tr("Xine failed to create a stream."));
+                kError(610) << "PauseCommand: createStream didn't create a stream. This should not happen.";
+                error(Phonon::FatalError, i18n("Xine failed to create a stream."));
                 return true;
             }
         }
         if (xine_get_status(m_stream) == XINE_STATUS_IDLE) {
-            debug() << Q_FUNC_INFO << "calling xineOpen from PauseCommand";
+            kDebug(610) << "calling xineOpen from PauseCommand";
             if (!xineOpen(Phonon::StoppedState)) {
                 return true;
             }
@@ -1416,38 +1328,13 @@ bool XineStream::event(QEvent *ev)
             QMutexLocker locker(&m_mutex);
             createStream();
             if (!m_stream) {
-                qWarning() << "StopCommand: createStream didn't create a stream. This should not happen.";
-                error(Phonon::FatalError, tr("Xine failed to create a stream."));
+                kError(610) << "StopCommand: createStream didn't create a stream. This should not happen.";
+                error(Phonon::FatalError, i18n("Xine failed to create a stream."));
                 return true;
             }
         }
         xine_stop(m_stream);
         changeState(Phonon::StoppedState);
-        return true;
-    case Event::UnloadCommand:
-        ev->accept();
-        if (m_deinterlacer) {
-            xine_post_dispose(m_xine, m_deinterlacer);
-            m_deinterlacer = 0;
-        }
-        if(m_event_queue) {
-            xine_event_dispose_queue(m_event_queue);
-            m_event_queue = 0;
-        }
-        if(m_stream) {
-            xine_dispose(m_stream);
-            m_stream = 0;
-        }
-        delete m_prefinishMarkTimer;
-        m_prefinishMarkTimer = 0;
-        if (m_nullAudioPort) {
-            xine_close_audio_driver(m_xine, m_nullAudioPort);
-            m_nullAudioPort = 0;
-        }
-        if (m_nullVideoPort) {
-            xine_close_video_driver(m_xine, m_nullVideoPort);
-            m_nullVideoPort = 0;
-        }
         return true;
     case Event::SetTickInterval:
         ev->accept();
@@ -1457,12 +1344,12 @@ bool XineStream::event(QEvent *ev)
                 // disable ticks
                 m_ticking = false;
                 m_tickTimer.stop();
-                //debug() << Q_FUNC_INFO << "tickTimer stopped.";
+                //kDebug(610) << "tickTimer stopped.";
             } else {
                 m_tickTimer.setInterval(e->interval);
                 if (m_ticking == false && m_state == Phonon::PlayingState) {
                     m_tickTimer.start();
-                    //debug() << Q_FUNC_INFO << "tickTimer started.";
+                    //kDebug(610) << "tickTimer started.";
                 }
                 m_ticking = true;
             }
@@ -1497,14 +1384,14 @@ bool XineStream::event(QEvent *ev)
             case Phonon::PausedState:
             case Phonon::BufferingState:
             case Phonon::PlayingState:
-                debug() << Q_FUNC_INFO << "seeking xine stream to " << e->time << "ms";
+                kDebug(610) << "seeking xine stream to " << e->time << "ms";
                 // xine_trick_mode aborts :(
                 //if (0 == xine_trick_mode(m_stream, XINE_TRICK_MODE_SEEK_TO_TIME, e->time)) {
                 xine_play(m_stream, 0, e->time);
 
 #ifdef XINE_PARAM_DELAY_FINISHED_EVENT
                 if (!m_useGaplessPlayback && m_transitionGap > 0) {
-                    debug() << Q_FUNC_INFO << "XINE_PARAM_DELAY_FINISHED_EVENT:" << m_transitionGap;
+                    kDebug(610) << "XINE_PARAM_DELAY_FINISHED_EVENT:" << m_transitionGap;
                     xine_set_param(m_stream, XINE_PARAM_DELAY_FINISHED_EVENT, m_transitionGap);
                 }
 #endif // XINE_PARAM_DELAY_FINISHED_EVENT
@@ -1530,7 +1417,7 @@ bool XineStream::event(QEvent *ev)
                     emitAboutToFinishIn(timeToSignal);
                 } else if (m_prefinishMarkReachedNotEmitted) {
                     m_prefinishMarkReachedNotEmitted = false;
-                    debug() << Q_FUNC_INFO << "emitting prefinishMarkReached(" << timeToSignal + m_prefinishMark << ")";
+                    kDebug(610) << "emitting prefinishMarkReached(" << timeToSignal + m_prefinishMark << ")";
                     emit prefinishMarkReached(timeToSignal + m_prefinishMark);
                 }
             }
@@ -1587,12 +1474,12 @@ QList<SubtitleDescription> XineStream::availableSubtitles() const
 {
     uint hash = streamHash();
     QList<SubtitleDescription> subtitles;
-    if (m_stream && m_mutex.tryLock(500)) {
-        const int channels = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_SPU_CHANNEL);
-        for(int index = 0; index < channels; index++) {
-            subtitles << streamDescription<SubtitleDescription>(index, hash, SubtitleType, xine_get_spu_lang);
-        }
-        m_mutex.unlock();
+    if( !m_stream )
+        return subtitles;
+    const int channels = subtitlesSize();
+    for( int index = 0; index < channels; index++ )
+    {
+        subtitles << streamDescription<SubtitleDescription>( index, hash, SubtitleType, xine_get_spu_lang );
     }
     return subtitles;
 }
@@ -1601,94 +1488,64 @@ QList<AudioChannelDescription> XineStream::availableAudioChannels() const
 {
     const uint hash = streamHash();
     QList<AudioChannelDescription> audios;
-    if (m_stream && m_mutex.tryLock(500)) {
-        if (m_stream) {
-            const int channels = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_AUDIO_CHANNEL);
-            for(int index = 0; index < channels; index++) {
-                audios << streamDescription<AudioChannelDescription>(index, hash, AudioChannelType, xine_get_audio_lang);
-            }
-        }
-        m_mutex.unlock();
+    if( !m_stream )
+        return audios;
+    const int channels = audioChannelsSize();
+    for( int index = 0; index < channels; index++ )
+    {
+        audios << streamDescription<AudioChannelDescription>( index, hash, AudioChannelType, xine_get_audio_lang );
     }
     return audios;
 }
 
 int XineStream::subtitlesSize() const
 {
-    int r = 0;
-    if (m_stream && m_mutex.tryLock(500)) {
-        if (m_stream) {
-            r = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_SPU_CHANNEL);
-        }
-        m_mutex.unlock();
-    }
-    return r;
+    return xine_get_stream_info( m_stream, XINE_STREAM_INFO_MAX_SPU_CHANNEL );
 }
 
 int XineStream::audioChannelsSize() const
 {
-    int r = 0;
-    if (m_stream && m_mutex.tryLock(500)) {
-        if (m_stream) {
-            r = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_AUDIO_CHANNEL);
-        }
-        m_mutex.unlock();
-    }
-    return r;
+    return xine_get_stream_info( m_stream, XINE_STREAM_INFO_MAX_AUDIO_CHANNEL );
 }
 
 void XineStream::setCurrentAudioChannel(const AudioChannelDescription& streamDesc)
 {
-    xine_set_param(m_stream, XINE_PARAM_AUDIO_CHANNEL_LOGICAL, streamDesc.index() - streamHash());
+    xine_set_param( m_stream, XINE_PARAM_AUDIO_CHANNEL_LOGICAL, streamDesc.index() - streamHash() );
 }
 
 void XineStream::setCurrentSubtitle(const SubtitleDescription& streamDesc)
 {
-    debug() << Q_FUNC_INFO << "setting the subtitle to: " << streamDesc.index();
-    xine_set_param(m_stream, XINE_PARAM_SPU_CHANNEL, streamDesc.index() - streamHash());
+    kDebug() << "setting the subtitle to: " << streamDesc.index();
+    xine_set_param( m_stream, XINE_PARAM_SPU_CHANNEL, streamDesc.index() - streamHash() );
 }
 
 uint XineStream::streamHash() const
 {
-    return qHash(m_mrl);
+    return qHash( m_mrl );
 }
 
 template<class S>
 S XineStream::streamDescription(int index, uint hash, ObjectDescriptionType type, int(*get_xine_stream_text)(xine_stream_t *stream, int channel, char *lang)) const
 {
     QByteArray lang;
-    lang.resize(150);
-    get_xine_stream_text(m_stream, index, lang.data());
+    lang.resize( 150 );
+    get_xine_stream_text( m_stream, index, lang.data() );
     QHash<QByteArray, QVariant> properities;
-    properities.insert("name", QString(lang));
-    Backend::setObjectDescriptionProperities(type, index + hash, properities);
-    return S(index + hash, properities);
+    properities.insert( "name", QString( lang ) );
+    Backend::setObjectDescriptionProperities( type, index + hash, properities );
+    return S( index + hash, properities );
 }
 
 AudioChannelDescription XineStream::currentAudioChannel() const
 {
-    AudioChannelDescription r;
-    if (m_stream && m_mutex.tryLock(500)) {
-        if (m_stream) {
-            const int index = xine_get_param(m_stream, XINE_PARAM_AUDIO_CHANNEL_LOGICAL);
-            r = streamDescription<AudioChannelDescription>(index, streamHash(), AudioChannelType, xine_get_audio_lang);
-        }
-        m_mutex.unlock();
-    }
-    return r;
+    const int index = xine_get_param( m_stream, XINE_PARAM_AUDIO_CHANNEL_LOGICAL );
+    return streamDescription<AudioChannelDescription>( index, streamHash(), AudioChannelType, xine_get_audio_lang );
 }
 
 SubtitleDescription XineStream::currentSubtitle() const
 {
-    SubtitleDescription r;
-    if (m_stream && m_mutex.tryLock(500)) {
-        if (m_stream) {
-            const int index = xine_get_param(m_stream, XINE_PARAM_SPU_CHANNEL);
-            r = streamDescription<SubtitleDescription>(index, streamHash(), SubtitleType, xine_get_spu_lang);
-        }
-        m_mutex.unlock();
-    }
-    return r;
+    int index = xine_get_param( m_stream, XINE_PARAM_SPU_CHANNEL );
+    return streamDescription<SubtitleDescription>( index, streamHash(), SubtitleType, xine_get_spu_lang );
 }
 
 xine_post_out_t *XineStream::audioOutputPort() const
@@ -1713,9 +1570,15 @@ xine_post_out_t *XineStream::videoOutputPort() const
 }
 
 // called from main thread
+void XineStream::setUrl(const KUrl &url)
+{
+    setMrl(url.url().toUtf8());
+}
+
+// called from main thread
 void XineStream::setMrl(const QByteArray &mrl, StateForNewMrl sfnm)
 {
-    debug() << Q_FUNC_INFO << mrl << ", " << sfnm;
+    kDebug(610) << mrl << ", " << sfnm;
     QCoreApplication::postEvent(this, new MrlChangedEvent(mrl, sfnm));
 }
 
@@ -1737,11 +1600,6 @@ void XineStream::stop()
     QCoreApplication::postEvent(this, new QEVENT(StopCommand));
 }
 
-void XineStream::unload()
-{
-    QCoreApplication::postEvent(this, new QEVENT(UnloadCommand));
-}
-
 // called from main thread
 void XineStream::seek(qint64 time)
 {
@@ -1758,7 +1616,7 @@ bool XineStream::updateTime()
     }
 
     if (xine_get_status(m_stream) == XINE_STATUS_IDLE) {
-        debug() << Q_FUNC_INFO << "calling xineOpen from ";
+        kDebug(610) << "calling xineOpen from ";
         if (!xineOpen(Phonon::StoppedState)) {
             return false;
         }
@@ -1796,7 +1654,7 @@ bool XineStream::updateTime()
 void XineStream::emitAboutToFinishIn(int timeToAboutToFinishSignal)
 {
     Q_ASSERT(QThread::currentThread() == XineThread::instance());
-    //debug() << Q_FUNC_INFO << timeToAboutToFinishSignal;
+    //kDebug(610) << timeToAboutToFinishSignal;
     Q_ASSERT(m_prefinishMark > 0);
     if (!m_prefinishMarkTimer) {
         m_prefinishMarkTimer = new QTimer(this);
@@ -1810,7 +1668,7 @@ void XineStream::emitAboutToFinishIn(int timeToAboutToFinishSignal)
     if (timeToAboutToFinishSignal < 0) {
         timeToAboutToFinishSignal = 0;
     }
-    //debug() << Q_FUNC_INFO << timeToAboutToFinishSignal;
+    //kDebug(610) << timeToAboutToFinishSignal;
     m_prefinishMarkTimer->start(timeToAboutToFinishSignal);
 }
 
@@ -1818,15 +1676,15 @@ void XineStream::emitAboutToFinishIn(int timeToAboutToFinishSignal)
 void XineStream::emitAboutToFinish()
 {
     Q_ASSERT(QThread::currentThread() == XineThread::instance());
-    //debug() << Q_FUNC_INFO << m_prefinishMarkReachedNotEmitted << ", " << m_prefinishMark;
+    //kDebug(610) << m_prefinishMarkReachedNotEmitted << ", " << m_prefinishMark;
     if (m_prefinishMarkReachedNotEmitted && m_prefinishMark > 0) {
         updateTime();
         const int remainingTime = m_totalTime - m_currentTime;
 
-        //debug() << Q_FUNC_INFO << remainingTime;
+        //kDebug(610) << remainingTime;
         if (remainingTime <= m_prefinishMark + 150) {
             m_prefinishMarkReachedNotEmitted = false;
-            debug() << Q_FUNC_INFO << "emitting prefinishMarkReached(" << remainingTime << ")";
+            kDebug(610) << "emitting prefinishMarkReached(" << remainingTime << ")";
             emit prefinishMarkReached(remainingTime);
         } else {
             emitAboutToFinishIn(remainingTime - m_prefinishMark);
@@ -1855,7 +1713,7 @@ void XineStream::timerEvent(QTimerEvent *event)
                 killTimer(m_waitForPlayingTimerId);
                 m_waitForPlayingTimerId = -1;
             //} else {
-                //debug() << Q_FUNC_INFO << "waiting";
+                //kDebug(610) << "waiting";
             }
         }
     } else {
@@ -1868,11 +1726,11 @@ void XineStream::emitTick()
 {
     Q_ASSERT(QThread::currentThread() == XineThread::instance());
     if (!updateTime()) {
-        debug() << Q_FUNC_INFO << "no useful time information available. skipped.";
+        kDebug(610) << "no useful time information available. skipped.";
         return;
     }
     if (m_ticking) {
-        //debug() << Q_FUNC_INFO << m_currentTime;
+        //kDebug(610) << m_currentTime;
         emit tick(m_currentTime);
     }
     if (m_prefinishMarkReachedNotEmitted && m_prefinishMark > 0) {
@@ -1883,7 +1741,7 @@ void XineStream::emitTick()
                 emitAboutToFinishIn(timeToAboutToFinishSignal);
             } else {
                 m_prefinishMarkReachedNotEmitted = false;
-                debug() << Q_FUNC_INFO << "emitting prefinishMarkReached(" << remainingTime << ")";
+                kDebug(610) << "emitting prefinishMarkReached(" << remainingTime << ")";
                 emit prefinishMarkReached(remainingTime);
             }
         }
@@ -1928,7 +1786,7 @@ void XineStream::internalPlay()
 
 #ifdef XINE_PARAM_DELAY_FINISHED_EVENT
     if (!m_useGaplessPlayback && m_transitionGap > 0) {
-        debug() << Q_FUNC_INFO << "XINE_PARAM_DELAY_FINISHED_EVENT:" << m_transitionGap;
+        kDebug(610) << "XINE_PARAM_DELAY_FINISHED_EVENT:" << m_transitionGap;
         xine_set_param(m_stream, XINE_PARAM_DELAY_FINISHED_EVENT, m_transitionGap);
     }
 #endif // XINE_PARAM_DELAY_FINISHED_EVENT

@@ -26,9 +26,7 @@
 #include "xinestream.h"
 #include "events.h"
 #include "backend.h"
-
-// the gcc 4.0 STL includes assert.h
-#undef assert
+#include <kdebug.h>
 
 namespace Phonon
 {
@@ -85,7 +83,7 @@ XineStream *XineThread::newStream()
 void XineThread::quit()
 {
     foreach (QObject *child, children()) {
-        debug() << Q_FUNC_INFO << child;
+        kDebug(610) << child;
     }
     QThread::quit();
 }
@@ -113,17 +111,17 @@ bool XineThread::event(QEvent *e)
         return true;
     case Event::Rewire:
         e->accept();
-        debug() << Q_FUNC_INFO << "XineThread Rewire event:";
+        kDebug(610) << "XineThread Rewire event:";
         {
             RewireEvent *ev = static_cast<RewireEvent *>(e);
             foreach (WireCall unwire, ev->unwireCalls) {
-                debug() << Q_FUNC_INFO << "     " << unwire.source.data() << " XX " << unwire.sink.data();
+                kDebug(610) << "     " << unwire.source.data() << " XX " << unwire.sink.data();
                 unwire.sink->assert();
                 unwire.source->assert();
                 unwire.source->m_xtSink = 0;
             }
             foreach (WireCall wire, ev->wireCalls) {
-                debug() << Q_FUNC_INFO << "     " << wire.source.data() << " -> " << wire.sink.data();
+                kDebug(610) << "     " << wire.source.data() << " -> " << wire.sink.data();
                 wire.sink->assert();
                 wire.source->assert();
                 wire.source->m_xtSink = wire.sink;

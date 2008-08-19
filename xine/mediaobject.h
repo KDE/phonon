@@ -35,6 +35,8 @@
 #include <QMultiMap>
 #include <QPointer>
 
+#include <kurl.h>
+
 #include <xine.h>
 #include "sourcenode.h"
 
@@ -117,6 +119,9 @@ class MediaObject : public QObject, public MediaObjectInterface, public AddonInt
         void availableAnglesChanged(int);
         void angleChanged(int);
 
+    protected slots:
+        void startToFakeBuffering();
+
     private slots:
         void handleStateChange(Phonon::State newstate, Phonon::State oldstate);
         void needNextUrl();
@@ -146,7 +151,8 @@ class MediaObject : public QObject, public MediaObjectInterface, public AddonInt
         qint32 m_prefinishMark;
         qint32 m_transitionTime;
         bool m_autoplayTitles : 1;
-        bool m_waitingForNextSource : 1;
+        bool m_fakingBuffering : 1;
+        bool m_shouldFakeBufferingOnPlay : 1;
 };
 }} //namespace Phonon::Xine
 

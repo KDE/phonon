@@ -17,6 +17,7 @@
     Boston, MA 02110-1301, USA.
 
 */
+
 #include "videowidget.h"
 #include "events.h"
 #include <QPalette>
@@ -25,6 +26,7 @@
 #include <QtCore/QSharedData>
 #include <QImage>
 #include <QPainter>
+#include <kdebug.h>
 
 //#ifndef PHONON_XINE_NO_VIDEOWIDGET
 #include <QX11Info>
@@ -50,7 +52,7 @@ static XcbConnection *s_instance = 0;
 
 QExplicitlySharedDataPointer<XcbConnection> XcbConnection::instance()
 {
-    debug() << Q_FUNC_INFO;
+    kDebug();
     if (!s_instance) {
         new XcbConnection;
     }
@@ -60,7 +62,7 @@ QExplicitlySharedDataPointer<XcbConnection> XcbConnection::instance()
 
 XcbConnection::~XcbConnection()
 {
-    debug() << Q_FUNC_INFO;
+    kDebug();
     s_instance = 0;
 
 //#ifndef PHONON_XINE_NO_VIDEOWIDGET
@@ -72,7 +74,7 @@ XcbConnection::~XcbConnection()
 XcbConnection::XcbConnection()
     : m_screen(0)
 {
-    debug() << Q_FUNC_INFO;
+    kDebug();
     Q_ASSERT(!s_instance);
     s_instance = this;
     int preferredScreen = 0;
@@ -151,7 +153,6 @@ VideoWidgetXT::VideoWidgetXT(VideoWidget *w)
     m_xcbConnection(0), //XcbConnection::instance()),
     m_videoPort(0), m_videoWidget(w), m_isValid(false)
 {
-    memset(&m_visual, 0, sizeof(m_visual));
     Q_ASSERT(!m_xine);
     m_xine = Backend::xine();
 }
@@ -162,7 +163,7 @@ void VideoWidgetXT::createVideoPort()
     Q_ASSERT(!m_videoPort);
     int preferredScreen = 0;
     m_xcbConnection = xcb_connect(NULL, &preferredScreen);//DisplayString(x11Info().display()), NULL);
-    debug() << Q_FUNC_INFO << "xcb_connect" << m_xcbConnection;
+    kDebug() << "xcb_connect" << m_xcbConnection;
     if (m_xcbConnection && m_xine) {
         xcb_screen_iterator_t screenIt = xcb_setup_roots_iterator(xcb_get_setup(m_xcbConnection));
         while ((screenIt.rem > 1) && (preferredScreen > 0)) {
@@ -186,7 +187,7 @@ void VideoWidgetXT::createVideoPort()
         if (!m_videoPort) {
 //#endif // PHONON_XINE_NO_VIDEOWIDGET
             m_videoPort = xine_open_video_driver(m_xine, "auto", XINE_VISUAL_TYPE_NONE, 0);
-            qWarning() << "No xine video output plugin using libxcb for threadsafe access to the X server found. No video for you.";
+            kError(610) << "No xine video output plugin using libxcb for threadsafe access to the X server found. No video for you.";
 //#ifndef PHONON_XINE_NO_VIDEOWIDGET
         }
     }
@@ -226,7 +227,7 @@ VideoWidget::VideoWidget(QWidget *parent)
 
 VideoWidget::~VideoWidget()
 {
-    debug() << Q_FUNC_INFO;
+    kDebug(610);
     K_XT(VideoWidget);
     xt->m_videoWidget = 0;
     if (xt->m_videoPort) {
@@ -236,12 +237,12 @@ VideoWidget::~VideoWidget()
 
 VideoWidgetXT::~VideoWidgetXT()
 {
-    debug() << Q_FUNC_INFO;
+    kDebug(610);
     if (m_videoPort && m_xine) {
         xine_close_video_driver(m_xine, m_videoPort);
     }
     if (m_xcbConnection) {
-        debug() << Q_FUNC_INFO << "xcb_disconnect" << m_xcbConnection;
+        kDebug() << "xcb_disconnect" << m_xcbConnection;
         xcb_disconnect(m_xcbConnection);
         m_xcbConnection = 0;
     }
@@ -344,11 +345,12 @@ QImage VideoWidget::snapshot() const
 {
     QImage img;
     QMutexLocker lock(&m_snapshotLock);
-    const_cast<VideoWidget *>(this)->upstreamEvent(new RequestSnapshotEvent(img, &m_snapshotWait) );
+    const_cast<VideoWidget *>(this)->upstreamEvent(new Event(Event::RequestSnapshot));
     if (m_snapshotWait.wait(&m_snapshotLock, 1000)) {
-      return img;
+        img = m_snapshotImage;
+        m_snapshotImage = QImage();
     }
-    return QImage();
+    return img;
 }
 
 /*
@@ -402,7 +404,7 @@ void VideoWidget::updateZoom()
         QSize imageSize = m_sizeHint;
         // the image size is in square pixels
         // first transform it to the current aspect ratio
-        debug() << Q_FUNC_INFO << imageSize;
+        kDebug(610) << imageSize;
         switch (m_aspectRatio) {
         case Phonon::VideoWidget::AspectRatioAuto:
             // FIXME: how can we find out the ratio xine decided on? the event?
@@ -417,9 +419,9 @@ void VideoWidget::updateZoom()
             // correct ratio already
             break;
         }
-        debug() << Q_FUNC_INFO << imageSize;
+        kDebug(610) << imageSize;
         imageSize.scale(s, Qt::KeepAspectRatioByExpanding);
-        debug() << Q_FUNC_INFO << imageSize << s;
+        kDebug(610) << imageSize << s;
         int zoom;
         if (imageSize.width() > s.width()) {
             zoom = imageSize.width() * 100 / s.width();
@@ -444,12 +446,12 @@ bool VideoWidget::event(QEvent *ev)
 {
     switch (ev->type()) {
     case Event::NavButtonIn:
-        debug() << Q_FUNC_INFO << "NavButtonIn";
+        kDebug(610) << "NavButtonIn";
         setCursor(QCursor(Qt::PointingHandCursor));
         ev->accept();
         return true;
     case Event::NavButtonOut:
-        debug() << Q_FUNC_INFO << "NavButtonOut";
+        kDebug(610) << "NavButtonOut";
         unsetCursor();
         ev->accept();
         return true;
@@ -457,7 +459,7 @@ bool VideoWidget::event(QEvent *ev)
         ev->accept();
         {
             FrameFormatChangeEvent *e = static_cast<FrameFormatChangeEvent *>(ev);
-            debug() << Q_FUNC_INFO << "FrameFormatChangeEvent " << e->size;
+            kDebug(610) << "FrameFormatChangeEvent " << e->size;
             m_sizeHint = e->size;
             updateGeometry();
         }
@@ -470,6 +472,10 @@ bool VideoWidget::event(QEvent *ev)
 void VideoWidget::mouseMoveEvent(QMouseEvent *mev)
 {
     K_XT(VideoWidget);
+
+    if (cursor().shape() == Qt::BlankCursor) {
+        setCursor(QCursor(Qt::ArrowCursor));
+    }
 
     x11_rectangle_t   rect;
     xine_event_t      *event = new xine_event_t;
@@ -488,7 +494,7 @@ void VideoWidget::mouseMoveEvent(QMouseEvent *mev)
     input->button      = 0;
     input->x           = rect.x;
     input->y           = rect.y;
-    //debug() << Q_FUNC_INFO << "upstreamEvent(EventSendEvent(move " << rect.x << rect.y;
+    //kDebug(610) << "upstreamEvent(EventSendEvent(move " << rect.x << rect.y;
     upstreamEvent(new EventSendEvent(event));
 
     QWidget::mouseMoveEvent(mev);
@@ -528,7 +534,7 @@ void VideoWidget::mousePressEvent(QMouseEvent *mev)
             input->button      = button;
             input->x           = rect.x;
             input->y           = rect.y;
-            //debug() << Q_FUNC_INFO << "upstreamEvent(EventSendEvent(button " << rect.x << rect.y;
+            //kDebug(610) << "upstreamEvent(EventSendEvent(button " << rect.x << rect.y;
             upstreamEvent(new EventSendEvent(event));
         }
     }
@@ -559,13 +565,13 @@ void VideoWidget::paintEvent(QPaintEvent *event)
 {
     K_XT(VideoWidget);
 
-    //debug() << Q_FUNC_INFO << "m_empty = " << m_empty;
+    //kDebug(610) << "m_empty = " << m_empty;
     if (m_empty || !source()) {// || m_path->mediaObject()->state() == Phonon::LoadingState) {
         QPainter p(this);
         p.fillRect(rect(), Qt::black);
 //#ifndef PHONON_XINE_NO_VIDEOWIDGET
     } else if (xt->m_videoPort) {
-        //debug() << Q_FUNC_INFO;
+        //kDebug();
         const QRect &rect = event->rect();
 
         xcb_expose_event_t xcb_event;
@@ -605,11 +611,11 @@ void VideoWidget::changeEvent(QEvent *event)
 
     if (event->type() == QEvent::ParentAboutToChange)
     {
-        debug() << Q_FUNC_INFO << "ParentAboutToChange";
+        kDebug(610) << "ParentAboutToChange";
     }
     else if (event->type() == QEvent::ParentChange)
     {
-        debug() << Q_FUNC_INFO << "ParentChange" << winId();
+        kDebug(610) << "ParentChange" << winId();
 //#ifndef PHONON_XINE_NO_VIDEOWIDGET
         if (xt->m_visual.window != winId()) {
             xt->m_visual.window = winId();
@@ -618,7 +624,7 @@ void VideoWidget::changeEvent(QEvent *event)
                 // X-server yet
                 QApplication::syncX();
                 xine_port_send_gui_data(xt->m_videoPort, XINE_GUI_SEND_DRAWABLE_CHANGED, reinterpret_cast<void *>(xt->m_visual.window));
-                debug() << Q_FUNC_INFO << "XINE_GUI_SEND_DRAWABLE_CHANGED done.";
+                kDebug(610) << "XINE_GUI_SEND_DRAWABLE_CHANGED done.";
             }
         }
 //#endif // PHONON_XINE_NO_VIDEOWIDGET
@@ -638,6 +644,12 @@ void VideoWidget::downstreamEvent(Event *e)
             }
         }
         break;
+    case Event::SnapshotReady:
+        m_snapshotLock.lock();
+        m_snapshotImage = static_cast<const SnapshotReadyEvent *>(e)->image;
+        m_snapshotWait.wakeAll();
+        m_snapshotLock.unlock();
+        break;
     default:
         QCoreApplication::sendEvent(this, e);
         break;
@@ -647,7 +659,7 @@ void VideoWidget::downstreamEvent(Event *e)
 
 void VideoWidget::aboutToChangeXineEngine()
 {
-    debug() << Q_FUNC_INFO;
+    kDebug();
     K_XT(VideoWidget);
     if (xt->m_videoPort) {
         VideoWidgetXT *xt2 = new VideoWidgetXT(this);
@@ -664,7 +676,7 @@ void VideoWidget::aboutToChangeXineEngine()
 
 void VideoWidget::xineEngineChanged()
 {
-    debug() << Q_FUNC_INFO;
+    kDebug();
     K_XT(VideoWidget);
     if (xt->m_xine) {
         Q_ASSERT(!xt->m_videoPort);

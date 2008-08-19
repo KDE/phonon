@@ -28,6 +28,8 @@
 
 #include <QtCore/QCoreApplication>
 
+#include <KDE/KDebug>
+
 #include <Phonon/Experimental/AbstractVideoDataOutput>
 #include <Phonon/Experimental/VideoFrame2>
 
@@ -62,7 +64,7 @@ class VideoDataOutputXT : public SinkNodeXT
 void VideoDataOutputXT::raw_output_cb(void *user_data, int format, int width,
         int height, double aspect, void *data0, void *data1, void *data2)
 {
-    debug() << Q_FUNC_INFO;
+    kDebug(610);
     VideoDataOutputXT* vw = reinterpret_cast<VideoDataOutputXT *>(user_data);
     const Experimental::VideoFrame2 f = {
         width,
@@ -77,7 +79,7 @@ void VideoDataOutputXT::raw_output_cb(void *user_data, int format, int width,
         QByteArray::fromRawData(reinterpret_cast<const char *>(data2), (format == XINE_VORAW_YV12) ? (width >> 1) + (height >> 1) : 0)
     };
     if (vw->m_frontend) {
-        debug() << Q_FUNC_INFO << "calling frameReady on the frontend";
+        kDebug(610) << "calling frameReady on the frontend";
         vw->m_frontend->frameReady(f);
     }
 }
@@ -100,9 +102,6 @@ VideoDataOutputXT::VideoDataOutputXT()
 #endif
     m_videoPort(0)
 {
-#ifdef XINE_VISUAL_TYPE_RAW
-    memset(&m_visual, 0, sizeof(m_visual));
-#endif
     m_xine = Backend::xine();
 }
 
@@ -138,7 +137,7 @@ xine_video_port_t *VideoDataOutputXT::videoPort() const
         that->m_visual.supported_formats = m_supported_formats;
         that->m_visual.raw_output_cb = &Phonon::Xine::VideoDataOutputXT::raw_output_cb;
         that->m_visual.raw_overlay_cb = &Phonon::Xine::VideoDataOutputXT::raw_overlay_cb;
-        debug() << Q_FUNC_INFO << "create new raw video port with supported_formats =" << that->m_visual.supported_formats;
+        kDebug(610) << "create new raw video port with supported_formats =" << that->m_visual.supported_formats;
         xine_video_port_t *newVideoPort = xine_open_video_driver(m_xine, "auto", XINE_VISUAL_TYPE_RAW, static_cast<void *>(&that->m_visual));
         if (m_videoPort) {
             // TODO delayed destruction of m_videoPort
@@ -152,11 +151,11 @@ xine_video_port_t *VideoDataOutputXT::videoPort() const
 
 void VideoDataOutputXT::rewireTo(SourceNodeXT *source)
 {
-    debug() << Q_FUNC_INFO;
+    kDebug(610);
     if (!source->videoOutputPort()) {
         return;
     }
-    debug() << Q_FUNC_INFO << "do something";
+    kDebug(610) << "do something";
     xine_post_wire_video_port(source->videoOutputPort(), videoPort());
 }
 
@@ -207,6 +206,7 @@ void VideoDataOutput::setFrontendObject(Experimental::AbstractVideoDataOutput *x
 
 void VideoDataOutput::aboutToChangeXineEngine()
 {
+    kDebug();
     K_XT(VideoDataOutput);
     if (xt->m_videoPort) {
         VideoDataOutputXT *xt2 = new VideoDataOutputXT();

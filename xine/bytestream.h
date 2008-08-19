@@ -30,6 +30,7 @@
 #include <QByteArray>
 #include <QSharedData>
 #include <QQueue>
+#include <kdebug.h>
 #include <QCoreApplication>
 #include <QMutex>
 #include <QWaitCondition>

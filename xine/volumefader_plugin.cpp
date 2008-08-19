@@ -18,14 +18,11 @@
 
 */
 
-#ifndef I18N_NOOP
-#define I18N_NOOP(x) x
-#endif
-
-#include "backend.h"
-
-#include <QObject>
+#include <kdemacros.h>
 #include <phonon/volumefadereffect.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kglobal.h>
 #include <cmath>
 
 #define __STDC_FORMAT_MACROS
@@ -138,13 +135,12 @@ typedef struct
 /*
  * description of params struct
  */
-static const char *enum_fadeCurve[] = { "Fade3Decibel", "Fade6Decibel", "Fade9Decibel", "Fade12Decibel", NULL };
-
+static char *enum_fadeCurve[] = { "Fade3Decibel", "Fade6Decibel", "Fade9Decibel", "Fade12Decibel", NULL };
 START_PARAM_DESCR(kvolumefader_parameters_t)
-PARAM_ITEM(POST_PARAM_TYPE_INT, fadeCurve, const_cast<char**>(enum_fadeCurve), 0.0, 0.0, 0, const_cast<char*>( I18N_NOOP("fade curve") ))
-PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, currentVolume, NULL, 0.0, maxVolume, 0, const_cast<char*>( I18N_NOOP("current volume") ))
-PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, fadeTo, NULL, 0.0, maxVolume, 0, const_cast<char*>( I18N_NOOP("volume to fade to") ))
-PARAM_ITEM(POST_PARAM_TYPE_INT, fadeTime, NULL, 0.0, 10000.0, 0, const_cast<char*>( I18N_NOOP("fade time in milliseconds") ))
+PARAM_ITEM(POST_PARAM_TYPE_INT, fadeCurve, enum_fadeCurve, 0.0, 0.0, 0, I18N_NOOP("fade curve"))
+PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, currentVolume, NULL, 0.0, maxVolume, 0, I18N_NOOP("current volume"))
+PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, fadeTo, NULL, 0.0, maxVolume, 0, I18N_NOOP("volume to fade to"))
+PARAM_ITEM(POST_PARAM_TYPE_INT, fadeTime, NULL, 0.0, 10000.0, 0, I18N_NOOP("fade time in milliseconds"))
 END_PARAM_DESCR(param_descr)
 
 static int set_parameters (xine_post_t *this_gen, void *param_gen) 
@@ -159,17 +155,7 @@ static int set_parameters (xine_post_t *this_gen, void *param_gen)
     that->curvePosition = 0;
     that->fadeTime = param->fadeTime;
     that->curveLength = static_cast<int>((param->fadeTime * that->rate) / 1000);
-    if ( that->curveLength == 0 )
-    {
-        // we've been asked to fade instantly, so pre-calculate everything
-        that->oneOverCurveLength = 0.0f;
-        that->fadeStart += that->fadeDiff;
-        that->fadeDiff = 0.0f;
-    }
-    else
-    {
-        that->oneOverCurveLength = 1000.0f / (param->fadeTime * that->rate);
-    }
+    that->oneOverCurveLength = 1000.0f / (param->fadeTime * that->rate);
     const char *x = "unknown";
     switch (that->fadeCurve) {
     case Phonon::VolumeFaderEffect::Fade3Decibel:
@@ -201,7 +187,7 @@ static int set_parameters (xine_post_t *this_gen, void *param_gen)
         x = "12dB";
         break;
     }
-    Phonon::Xine::debug() << Q_FUNC_INFO
+    kDebug(610)
         << x
         << param->currentVolume
         << param->fadeTo
@@ -243,7 +229,7 @@ static xine_post_api_descr_t *get_param_descr()
 static char *get_help ()
 {
     static QByteArray helpText(
-           QObject::tr("Normalizes audio by maximizing the volume without distorting "
+            i18n("Normalizes audio by maximizing the volume without distorting "
                  "the sound.\n"
                  "\n"
                  "Parameters:\n"
@@ -294,17 +280,7 @@ static int kvolumefader_port_open(xine_audio_port_t *port_gen, xine_stream_t *st
         break;
     }
     that->curveLength = static_cast<int>((that->fadeTime * that->rate) / 1000);
-    if ( that->curveLength == 0 )
-    {
-        // we've been asked to fade instantly, so pre-calculate everything
-        that->oneOverCurveLength = 0.0f;
-        that->fadeStart += that->fadeDiff;
-        that->fadeDiff = 0.0f;
-    }
-    else
-    {
-        that->oneOverCurveLength = 1000.0f / (that->fadeTime * that->rate);
-    }
+    that->oneOverCurveLength = 1000.0f / (that->fadeTime * that->rate);
 
     return port->original_port->open(port->original_port, stream, bits, rate, mode);
 }
@@ -323,7 +299,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
     const int num_channels = _x_ao_mode2channels(buf->format.mode);
     const int bufferLength = buf->num_frames * num_channels;
     if (buf->format.bits == 16 || buf->format.bits == 0) {
-        //debug() << Q_FUNC_INFO 
+        //kDebug(610) 
             //<< " bufferLength = " << bufferLength
             //<< " start = " << fadeStart
             //<< " diff = " << fadeDiff
@@ -341,7 +317,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
             oneOverCurveLength = 0.0f;
             fadeStart += fadeDiff;
             fadeDiff = 0.0f; // else a new mediaobject using this effect will start a 0s fade with fadeDiff != 0
-            Phonon::Xine::debug() << Q_FUNC_INFO << "fade ended: stay at " << fadeStart;
+            kDebug(610) << "fade ended: stay at " << fadeStart;
         }
         if (fadeStart == 0.0f) {
             memset(data + i, 0, sizeof(int16_t) *(bufferLength-i));
@@ -365,7 +341,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
             data[i] = data[i] * fadeStart / maxVolume;
         } */
     } else {
-        Phonon::Xine::debug() << Q_FUNC_INFO << "broken bits " << buf->format.bits;
+        kDebug(610) << "broken bits " << buf->format.bits;
     }
 }
 
@@ -402,7 +378,7 @@ static post_plugin_t *kvolumefader_open_plugin(post_class_t *class_gen, int inpu
     Q_UNUSED(inputs);
     Q_UNUSED(video_target);
 
-    kvolumefader_plugin_t *that = static_cast<kvolumefader_plugin_t *>(calloc(1, sizeof(kvolumefader_plugin_t)));
+    kvolumefader_plugin_t *that = static_cast<kvolumefader_plugin_t *>(xine_xmalloc(sizeof(kvolumefader_plugin_t)));
     post_in_t             *input;
     post_out_t            *output;
     xine_post_in_t        *input_api;
@@ -450,7 +426,7 @@ static post_plugin_t *kvolumefader_open_plugin(post_class_t *class_gen, int inpu
     return &that->post;
 }
 
-#if XINE_MAJOR_VERSION < 1 || (XINE_MAJOR_VERSION == 1 && (XINE_MINOR_VERSION < 1 || (XINE_MINOR_VERSION == 1 && XINE_SUB_VERSION < 90)))
+#if XINE_MAJOR_VERSION < 1 || ( XINE_MAJOR_VERSION == 1 && ( XINE_MINOR_VERSION < 1 || ( XINE_MINOR_VERSION == 1 && XINE_SUB_VERSION < 90 ) ) )
 #define NEED_DESCRIPTION_FUNCTION 1
 #else
 #define NEED_DESCRIPTION_FUNCTION 0
@@ -463,13 +439,14 @@ static post_plugin_t *kvolumefader_open_plugin(post_class_t *class_gen, int inpu
 static char *kvolumefader_get_identifier(post_class_t *class_gen)
 {
     Q_UNUSED(class_gen);
-    return const_cast<char*>(PLUGIN_IDENTIFIER);
+    return PLUGIN_IDENTIFIER;
 }
 
 static char *kvolumefader_get_description(post_class_t *class_gen)
 {
     Q_UNUSED(class_gen);
-    static QByteArray description(QObject::tr(PLUGIN_DESCRIPTION).toUtf8());
+    static QByteArray description(
+            i18n(PLUGIN_DESCRIPTION).toUtf8());
     return description.data();
 }
 #endif
@@ -482,7 +459,7 @@ static void kvolumefader_class_dispose(post_class_t *class_gen)
 /* plugin class initialization function */
 void *init_kvolumefader_plugin (xine_t *xine, void *)
 {
-    kvolumefader_class_t *_class = static_cast<kvolumefader_class_t *>(calloc(1,sizeof(kvolumefader_class_t)));
+    kvolumefader_class_t *_class = static_cast<kvolumefader_class_t *>(malloc(sizeof(kvolumefader_class_t)));
 
     if (!_class) {
         return NULL;

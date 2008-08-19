@@ -92,10 +92,10 @@ class VideoWidgetXT : public SinkNodeXT
         bool m_isValid;
 };
 
-class VideoWidget : public QWidget, public Phonon::VideoWidgetInterfaceLatest, public Phonon::Xine::SinkNode, public Phonon::Experimental::SnapshotInterface
+class VideoWidget : public QWidget, public Phonon::VideoWidgetInterface, public Phonon::Xine::SinkNode, public Phonon::Experimental::SnapshotInterface
 {
     Q_OBJECT
-    Q_INTERFACES( Phonon::VideoWidgetInterface Phonon::Xine::SinkNode Phonon::Experimental::SnapshotInterface)
+    Q_INTERFACES(Phonon::VideoWidgetInterface Phonon::Xine::SinkNode Phonon::Experimental::SnapshotInterface)
     public:
         VideoWidget(QWidget *parent = 0);
         ~VideoWidget();
@@ -153,6 +153,7 @@ class VideoWidget : public QWidget, public Phonon::VideoWidgetInterfaceLatest, p
 
         mutable QMutex m_snapshotLock;
         mutable QWaitCondition m_snapshotWait;
+        mutable QImage m_snapshotImage;
 
         QSize m_sizeHint;
 
