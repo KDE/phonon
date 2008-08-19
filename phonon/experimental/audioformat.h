@@ -74,7 +74,7 @@ class AudioFormat
                 int m_channelCount;
                 Phonon::Experimental::BitRate m_bitRate;
                 QSysInfo::Endian m_byteOrder;
-            };
+            } s;
             // for future use:
             AudioFormatPrivate *d_ptr;
         };
