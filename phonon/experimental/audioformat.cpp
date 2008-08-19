@@ -35,11 +35,11 @@ class AudioFormatPrivate
 };
 
 AudioFormat::AudioFormat(int sampleRate, int channelCount, Phonon::Experimental::BitRate bitRate, QSysInfo::Endian byteOrder)
-    : m_sampleRate(sampleRate),
-    m_channelCount(channelCount),
-    m_bitRate(bitRate),
-    m_byteOrder(byteOrder)
 {
+    s.m_sampleRate = sampleRate;
+    s.m_channelCount = channelCount;
+    s.m_bitRate = bitRate;
+    s.m_byteOrder = byteOrder;
 }
 
 AudioFormat::~AudioFormat()
@@ -48,63 +48,63 @@ AudioFormat::~AudioFormat()
 
 int AudioFormat::sampleRate() const
 {
-    return m_sampleRate;
+    return s.m_sampleRate;
 }
 
 int AudioFormat::channelCount() const
 {
-    return m_channelCount;
+    return s.m_channelCount;
 }
 
 Phonon::Experimental::BitRate AudioFormat::bitRate() const
 {
-    return m_bitRate;
+    return s.m_bitRate;
 }
 
 QSysInfo::Endian AudioFormat::byteOrder() const
 {
-    return m_byteOrder;
+    return s.m_byteOrder;
 }
 
 AudioFormat::AudioFormat(const AudioFormat &f)
-    : m_sampleRate(f.m_sampleRate),
-    m_channelCount(f.m_channelCount),
-    m_bitRate(f.m_bitRate),
-    m_byteOrder(f.m_byteOrder)
 {
+    s.m_sampleRate = f.sampleRate();
+    s.m_channelCount = f.channelCount();
+    s.m_bitRate = f.bitRate();
+    s.m_byteOrder = f.byteOrder();
 }
 
 AudioFormat &AudioFormat::operator=(const AudioFormat &f)
 {
-    m_sampleRate = f.m_sampleRate;
-    m_channelCount = f.m_channelCount;
-    m_bitRate = f.m_bitRate;
-    m_byteOrder = f.m_byteOrder;
+    s.m_sampleRate = f.sampleRate();
+    s.m_channelCount = f.channelCount();
+    s.m_bitRate = f.bitRate();
+    s.m_byteOrder = f.byteOrder();
     return *this;
 }
 
 bool AudioFormat::operator==(const AudioFormat &f) const
 {
-    return m_sampleRate == f.m_sampleRate &&
-        m_channelCount == f.m_channelCount &&
-        m_bitRate == f.m_bitRate &&
-        m_byteOrder == f.m_byteOrder;
+    return s.m_sampleRate == f.sampleRate() &&
+        s.m_channelCount == f.channelCount() &&
+        s.m_bitRate == f.bitRate() &&
+        s.m_byteOrder == f.byteOrder();
 }
 
 bool AudioFormat::operator<(const AudioFormat &f) const
 {
-    return m_bitRate < f.m_bitRate ||
-        (m_bitRate == f.m_bitRate && (m_sampleRate < f.m_sampleRate ||
-                                      (m_sampleRate == f.m_sampleRate && (m_channelCount < f.m_channelCount ||
-                                                                          (m_channelCount == f.m_channelCount && m_byteOrder != QSysInfo::ByteOrder && f.m_byteOrder == QSysInfo::ByteOrder)))));
+    return s.m_bitRate < f.bitRate() ||
+        (s.m_bitRate == f.bitRate() && (s.m_sampleRate < f.sampleRate() ||
+                                      (s.m_sampleRate == f.sampleRate() && (s.m_channelCount < f.channelCount() ||
+                                                                          (s.m_channelCount == f.channelCount() && s.m_byteOrder != QSysInfo::ByteOrder && f.byteOrder() == QSysInfo::ByteOrder)))));
 }
 
 quint32 AudioFormat::key() const
 {
-    return (m_byteOrder == QSysInfo::ByteOrder ? 1 : 0) + // 1 bit  least significant
-        (m_channelCount << 1) + // give it 8 bits
-        (m_sampleRate) + // 192kHz ~ 18 bits (let the (unimportant) lower 9 bits overlap with channels + byteOrder)
-        (m_bitRate << 18); //                                       most significant
+    return (s.m_byteOrder == QSysInfo::ByteOrder ? 1 : 0) + // 1 bit  least significant
+        (s.m_channelCount << 1) + // give it 8 bits
+        (s.m_sampleRate) + // 192kHz ~ 18 bits (let the (unimportant) lower 9 bits overlap with channels + byteOrder)
+        (s.m_bitRate << 18); //                                       most significant
 }
 
 } // namespace Experimental
