@@ -20,7 +20,7 @@
 #ifndef PHONON_PACKET_H
 #define PHONON_PACKET_H
 
-#include "phonon_export.h"
+#include "export.h"
 
 namespace Phonon
 {
@@ -35,7 +35,7 @@ struct PacketPrivate;
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONON_EXPORT Packet
+class PHONONEXPERIMENTAL_EXPORT Packet
 {
     friend class PacketPoolPrivate;
     Q_DECLARE_PRIVATE(Packet)

@@ -20,7 +20,7 @@
 #ifndef PHONON_PACKETPOOL_H
 #define PHONON_PACKETPOOL_H
 
-#include "phonon_export.h"
+#include "export.h"
 
 namespace Phonon
 {
@@ -34,7 +34,7 @@ class PacketPoolPrivate;
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONON_EXPORT PacketPool
+class PHONONEXPERIMENTAL_EXPORT PacketPool
 {
     Q_DECLARE_PRIVATE(PacketPool)
     friend class Packet;
