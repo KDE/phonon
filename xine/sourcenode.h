@@ -21,7 +21,6 @@
 #ifndef SOURCENODE_H
 #define SOURCENODE_H
 
-#include <Phonon/Global>
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QSet>
 #include <xine.h>

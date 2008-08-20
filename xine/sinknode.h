@@ -21,7 +21,6 @@
 #ifndef SINKNODE_H
 #define SINKNODE_H
 
-#include <Phonon/Global>
 #include <xine.h>
 #include "backend.h"
 #include "shareddata.h"

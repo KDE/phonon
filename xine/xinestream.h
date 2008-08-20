@@ -30,8 +30,9 @@
 #include <QtCore/QWaitCondition>
 #include <QtCore/QTimer>
 
-#include <Phonon/Global>
 #include <Phonon/ObjectDescription>
+#include <Phonon/VideoWidget>
+#include <Phonon/MediaObject>
 
 #include <xine.h>
 
