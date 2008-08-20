@@ -359,8 +359,7 @@ if (NOT Q_WS_WIN) #no xine on windows to look for, and running the find breaks s
          set(XINE_FOUND FALSE)
       endif(XINE_MINOR_VERSION LESS 2 AND XINE_BUGFIX_VERSION LESS 90)
      if(XINE_FOUND)
-		 # Disabled for now
-		 # add_subdirectory(xine)
+		 add_subdirectory(xine)
      endif(XINE_FOUND)
    endif(XINE_FOUND)
 endif (NOT Q_WS_WIN)

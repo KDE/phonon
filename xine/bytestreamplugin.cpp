@@ -194,7 +194,7 @@ static void kbytestream_plugin_dispose (input_plugin_t *this_gen)
 
 static int kbytestream_plugin_open (input_plugin_t *this_gen)
 {
-    kDebug(610);
+    qDebug();
     KByteStreamInputPlugin *that = static_cast<KByteStreamInputPlugin *>(this_gen);
 
     if (kbytestream_plugin_get_length (this_gen) == 0) {
@@ -225,7 +225,7 @@ static void kbytestream_normal_cb(void *that_gen)
 static input_plugin_t *kbytestream_class_get_instance (input_class_t *cls_gen, xine_stream_t *stream,
         const char *mrl)
 {
-    kDebug(610);
+    qDebug();
     KByteStreamInputPlugin *that = new KByteStreamInputPlugin(stream, mrl);
 
     if (!that->bytestream()) {

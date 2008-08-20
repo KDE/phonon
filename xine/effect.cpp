@@ -20,7 +20,6 @@
 */
 
 #include "effect.h"
-#include <kdebug.h>
 #include <klocale.h>
 #include <QVariant>
 #include "xineengine.h"
@@ -83,10 +82,10 @@ xine_audio_port_t *EffectXT::fakeAudioPort()
 
 void EffectXT::createInstance()
 {
-    kDebug(610) << "m_pluginName =" << m_pluginName;
+    qDebug() << "m_pluginName =" << m_pluginName;
     Q_ASSERT(m_plugin == 0 && m_pluginApi == 0);
     if (!m_pluginName) {
-        kWarning(610) << "tried to create invalid Effect";
+        qWarning(  "tried to create invalid Effect" );
         return;
     }
 
@@ -135,7 +134,7 @@ void EffectXT::createInstance()
             case POST_PARAM_TYPE_CHAR:         /* char (or vector of chars = string) */
             case POST_PARAM_TYPE_STRING:       /* (char *), ASCIIZ                   */
             case POST_PARAM_TYPE_STRINGLIST:   /* (char **) list, NULL terminated    */
-                kWarning(610) << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
+                qWarning() << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
                 break;
             case POST_PARAM_TYPE_BOOL:         /* integer (0 or 1)                   */
                 m_parameterList << EffectParameter(i, QString::fromUtf8(p.description ? p.description : p.name), EffectParameter::ToggledHint,
@@ -249,7 +248,7 @@ QVariant Effect::parameterValue(const EffectParameter &p) const
         case POST_PARAM_TYPE_CHAR:         /* char (or vector of chars = string) */
         case POST_PARAM_TYPE_STRING:       /* (char *), ASCIIZ                   */
         case POST_PARAM_TYPE_STRINGLIST:   /* (char **) list, NULL terminated    */
-            kWarning(610) << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
+            qWarning( ) <<  "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
             return QVariant();
         case POST_PARAM_TYPE_BOOL:         /* integer (0 or 1)                   */
             return static_cast<bool>(*reinterpret_cast<int *>(xt->m_pluginParams + p.offset));
@@ -259,7 +258,7 @@ QVariant Effect::parameterValue(const EffectParameter &p) const
             abort();
         }
     }
-    kError(610) << "invalid parameterIndex passed to Effect::value";
+    qFatal(  "invalid parameterIndex passed to Effect::value" );
     return QVariant();
 }
 
@@ -304,7 +303,7 @@ void Effect::setParameterValue(const EffectParameter &p, const QVariant &newValu
         case POST_PARAM_TYPE_CHAR:         /* char (or vector of chars = string) */
         case POST_PARAM_TYPE_STRING:       /* (char *), ASCIIZ                   */
         case POST_PARAM_TYPE_STRINGLIST:   /* (char **) list, NULL terminated    */
-            kWarning(610) << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
+            qWarning( ) << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported." ;
             return;
         case POST_PARAM_TYPE_BOOL:         /* integer (0 or 1)                   */
             {
@@ -313,14 +312,14 @@ void Effect::setParameterValue(const EffectParameter &p, const QVariant &newValu
             }
             break;
         case POST_PARAM_TYPE_LAST:         /* terminator of parameter list       */
-            kError(610) << "invalid parameterIndex passed to Effect::setValue";
+            qFatal(  "invalid parameterIndex passed to Effect::setValue" );
             break;
         default:
             abort();
         }
         xt->m_pluginApi->set_parameters(xt->m_plugin, xt->m_pluginParams);
     } else {
-        kError(610) << "invalid parameterIndex passed to Effect::setValue";
+        qFatal(  "invalid parameterIndex passed to Effect::setValue" );
     }
 }
 

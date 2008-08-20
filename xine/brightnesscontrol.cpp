@@ -20,7 +20,6 @@
 
 #include "brightnesscontrol.h"
 #include "mediaobject.h"
-#include <kdebug.h>
 
 namespace Phonon
 {
@@ -54,7 +53,7 @@ void BrightnessControl::setBrightness(int newBrightness)
         m_brightness = newBrightness;
         XineStream *s = stream();
         if (s) {
-            kDebug(610) << m_brightness;
+            qDebug() << m_brightness;
             s->setParam(XINE_PARAM_VO_BRIGHTNESS, m_brightness);
         }
     }

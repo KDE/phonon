@@ -40,8 +40,6 @@
 #include "xineengine.h"
 #include "myshareddatapointer.h"
 
-class KUrl;
-
 namespace Phonon
 {
 namespace Xine
@@ -87,7 +85,7 @@ class XineStream : public QObject, public SourceNodeXT
         //void needRewire(AudioPostList *postList);
         void useGaplessPlayback(bool);
         void useGapOf(int gap);
-        void gaplessSwitchTo(const KUrl &url);
+        void gaplessSwitchTo(const QUrl &url);
         void gaplessSwitchTo(const QByteArray &mrl);
         void closeBlocking();
         void aboutToDeleteVideoWidget();
@@ -141,7 +139,7 @@ class XineStream : public QObject, public SourceNodeXT
         void handleDownstreamEvent(Event *e);
 
     public slots:
-        void setUrl(const KUrl &url);
+        void setUrl(const QUrl &url);
         void setMrl(const QByteArray &mrl, StateForNewMrl = StoppedState);
         void play();
         void pause();

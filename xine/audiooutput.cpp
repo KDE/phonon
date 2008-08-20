@@ -22,7 +22,6 @@
 #include "audiooutput.h"
 #include <QVector>
 #include <QtCore/QCoreApplication>
-#include <kdebug.h>
 
 #include <sys/ioctl.h>
 #include <iostream>
@@ -51,7 +50,7 @@ AudioOutput::AudioOutput(QObject *parent)
 
 AudioOutput::~AudioOutput()
 {
-    //kDebug(610) ;
+    //qDebug() ;
 }
 
 AudioOutputXT::~AudioOutputXT()
@@ -59,7 +58,7 @@ AudioOutputXT::~AudioOutputXT()
     if (m_audioPort) {
         xine_close_audio_driver(m_xine, m_audioPort);
         m_audioPort = 0;
-        kDebug(610) << "----------------------------------------------- audio_port destroyed";
+        qDebug() << "----------------------------------------------- audio_port destroyed";
     }
 }
 
@@ -101,7 +100,7 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
     QVariant v = deviceDesc.property("driver");
     if (!v.isValid()) {
         const QByteArray &outputPlugin = Backend::audioDriverFor(deviceDesc.index());
-        kDebug(610) << "use output plugin:" << outputPlugin;
+        qDebug() << "use output plugin:" << outputPlugin;
         port = xine_open_audio_driver(xt->m_xine, outputPlugin.constData(), 0);
     } else {
         const QByteArray &outputPlugin = v.toByteArray();
@@ -110,7 +109,7 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
         if (deviceIds.isEmpty()) {
             return 0;
         }
-        //kDebug(610) << outputPlugin << alsaDevices;
+        //qDebug() << outputPlugin << alsaDevices;
 
         if (outputPlugin == "alsa") {
             foreach (const QString &device, deviceIds) {
@@ -130,7 +129,7 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
                     // now the config key should be registered
                     if(!xine_config_lookup_entry(xt->m_xine, "audio.device.alsa_default_device",
                                 &alsaDeviceConfig)) {
-                        kError(610) << "cannot set the ALSA device on Xine's ALSA output plugin";
+                        qFatal( "cannot set the ALSA device on Xine's ALSA output plugin" );
                         return 0;
                     }
                 }
@@ -146,16 +145,16 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
 
                 port = xine_open_audio_driver(xt->m_xine, "alsa", 0);
                 if (port) {
-                    kDebug(610) << "use ALSA device: " << device;
+                    qDebug() << "use ALSA device: " << device;
                     break;
                 }
             }
         } else if (outputPlugin == "oss") {
-            kDebug(610) << "use OSS output";
+            qDebug() << "use OSS output";
             port = xine_open_audio_driver(xt->m_xine, "oss", 0);
         }
     }
-    kDebug(610) << "----------------------------------------------- audio_port created";
+    qDebug() << "----------------------------------------------- audio_port created";
     return port;
 }
 
@@ -175,7 +174,7 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newDevice)
 
     xine_audio_port_t *port = createPort(newDevice);
     if (!port) {
-        kDebug(610) << "new audio port is invalid";
+        qDebug() << "new audio port is invalid";
         return false;
     }
 
@@ -207,7 +206,7 @@ void AudioOutput::xineEngineChanged()
     if (xt->m_xine) {
         xine_audio_port_t *port = createPort(m_device);
         if (!port) {
-            kDebug(610) << "stored audio port is invalid";
+            qDebug() << "stored audio port is invalid";
             QMetaObject::invokeMethod(this, "audioDeviceFailed", Qt::QueuedConnection);
             return;
         }
@@ -272,7 +271,7 @@ bool AudioOutput::event(QEvent *ev)
 
 void AudioOutput::graphChanged()
 {
-    kDebug(610);
+    qDebug();
     // we got connected to a new XineStream, it needs to know our m_volume
     int xinevolume = static_cast<int>(m_volume * 100);
     if (xinevolume > 200) {
