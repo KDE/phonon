@@ -18,8 +18,6 @@
 
 */
 
-#include <kglobal.h>
-
 #include "nullsink.h"
 #include "xineengine.h"
 #include "sourcenode.h"

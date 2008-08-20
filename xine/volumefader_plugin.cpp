@@ -18,7 +18,6 @@
 
 */
 
-#include <kdemacros.h>
 #include <phonon/volumefadereffect.h>
 #include <cmath>
 
