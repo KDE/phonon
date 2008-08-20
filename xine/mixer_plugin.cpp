@@ -20,8 +20,6 @@
 
 #include <kdemacros.h>
 #include <phonon/volumefadereffect.h>
-#include <klocale.h>
-#include <kdebug.h>
 #include <cmath>
 #include <QVarLengthArray>
 #include <QList>
@@ -171,7 +169,7 @@ static int portNumber(const post_audio_port_t *port)
 //X             x = "12dB";
 //X             break;
 //X     }
-//X     kDebug(610) << "set parameters to "
+//X     qDebug() << "set parameters to "
 //X         << x << ", "
 //X         << that->fadeStart << ", "
 //X         << that->fadeDiff << ", "
@@ -245,7 +243,7 @@ static int kmixer_port_open(xine_audio_port_t *port_gen, xine_stream_t *stream,
     _x_post_rewire(&that->post);
     _x_post_inc_usage(port);
     if (port->usage_count != 1) {
-        kDebug(610) << "bad usage count: " << port->usage_count;
+        qDebug() << "bad usage count: " << port->usage_count;
     }
 
     if (that->rate) {

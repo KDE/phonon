@@ -20,7 +20,6 @@
 
 #include "deinterlacefilter.h"
 #include "mediaobject.h"
-#include <kdebug.h>
 
 namespace Phonon
 {

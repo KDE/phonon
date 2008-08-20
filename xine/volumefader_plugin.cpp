@@ -20,9 +20,6 @@
 
 #include <kdemacros.h>
 #include <phonon/volumefadereffect.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kglobal.h>
 #include <cmath>
 
 #define __STDC_FORMAT_MACROS
@@ -137,10 +134,10 @@ typedef struct
  */
 static char *enum_fadeCurve[] = { "Fade3Decibel", "Fade6Decibel", "Fade9Decibel", "Fade12Decibel", NULL };
 START_PARAM_DESCR(kvolumefader_parameters_t)
-PARAM_ITEM(POST_PARAM_TYPE_INT, fadeCurve, enum_fadeCurve, 0.0, 0.0, 0, I18N_NOOP("fade curve"))
-PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, currentVolume, NULL, 0.0, maxVolume, 0, I18N_NOOP("current volume"))
-PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, fadeTo, NULL, 0.0, maxVolume, 0, I18N_NOOP("volume to fade to"))
-PARAM_ITEM(POST_PARAM_TYPE_INT, fadeTime, NULL, 0.0, 10000.0, 0, I18N_NOOP("fade time in milliseconds"))
+PARAM_ITEM(POST_PARAM_TYPE_INT, fadeCurve, enum_fadeCurve, 0.0, 0.0, 0, "fade curve")
+PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, currentVolume, NULL, 0.0, maxVolume, 0, "current volume")
+PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, fadeTo, NULL, 0.0, maxVolume, 0, "volume to fade to")
+PARAM_ITEM(POST_PARAM_TYPE_INT, fadeTime, NULL, 0.0, 10000.0, 0, "fade time in milliseconds")
 END_PARAM_DESCR(param_descr)
 
 static int set_parameters (xine_post_t *this_gen, void *param_gen) 
@@ -187,7 +184,7 @@ static int set_parameters (xine_post_t *this_gen, void *param_gen)
         x = "12dB";
         break;
     }
-    kDebug(610)
+    qDebug()
         << x
         << param->currentVolume
         << param->fadeTo
@@ -229,14 +226,14 @@ static xine_post_api_descr_t *get_param_descr()
 static char *get_help ()
 {
     static QByteArray helpText(
-            i18n("Normalizes audio by maximizing the volume without distorting "
+           "Normalizes audio by maximizing the volume without distorting "
                  "the sound.\n"
                  "\n"
                  "Parameters:\n"
                  "  method: 1: use a single sample to smooth the variations via "
                  "the standard weighted mean over past samples (default); 2: use "
                  "several samples to smooth the variations via the standard "
-                 "weighted mean over past samples.\n").toUtf8());
+                 "weighted mean over past samples.\n" );
     return helpText.data();
 }
 
@@ -299,7 +296,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
     const int num_channels = _x_ao_mode2channels(buf->format.mode);
     const int bufferLength = buf->num_frames * num_channels;
     if (buf->format.bits == 16 || buf->format.bits == 0) {
-        //kDebug(610) 
+        //qDebug() 
             //<< " bufferLength = " << bufferLength
             //<< " start = " << fadeStart
             //<< " diff = " << fadeDiff
@@ -317,7 +314,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
             oneOverCurveLength = 0.0f;
             fadeStart += fadeDiff;
             fadeDiff = 0.0f; // else a new mediaobject using this effect will start a 0s fade with fadeDiff != 0
-            kDebug(610) << "fade ended: stay at " << fadeStart;
+            qDebug() << "fade ended: stay at " << fadeStart;
         }
         if (fadeStart == 0.0f) {
             memset(data + i, 0, sizeof(int16_t) *(bufferLength-i));
@@ -341,7 +338,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
             data[i] = data[i] * fadeStart / maxVolume;
         } */
     } else {
-        kDebug(610) << "broken bits " << buf->format.bits;
+        qDebug() << "broken bits " << buf->format.bits;
     }
 }
 
@@ -432,7 +429,7 @@ static post_plugin_t *kvolumefader_open_plugin(post_class_t *class_gen, int inpu
 #define NEED_DESCRIPTION_FUNCTION 0
 #endif
 
-#define PLUGIN_DESCRIPTION I18N_NOOP("Fade in or fade out with different fade curves")
+#define PLUGIN_DESCRIPTION "Fade in or fade out with different fade curves"
 #define PLUGIN_IDENTIFIER "KVolumeFader"
 
 #if NEED_DESCRIPTION_FUNCTION
@@ -445,8 +442,7 @@ static char *kvolumefader_get_identifier(post_class_t *class_gen)
 static char *kvolumefader_get_description(post_class_t *class_gen)
 {
     Q_UNUSED(class_gen);
-    static QByteArray description(
-            i18n(PLUGIN_DESCRIPTION).toUtf8());
+    static QByteArray description( PLUGIN_DESCRIPTION );
     return description.data();
 }
 #endif

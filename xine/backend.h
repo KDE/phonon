@@ -36,7 +36,8 @@
 #include "xineengine.h"
 #include <phonon/objectdescription.h>
 #include <phonon/backendinterface.h>
-#include <KDE/KSharedConfig>
+
+QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
@@ -73,8 +74,8 @@ class Backend : public QObject, public Phonon::BackendInterface
     Q_CLASSINFO("D-Bus Interface", "org.kde.phonon.XineBackendInternal")
     public:
         static Backend *instance();
-        Backend(QObject *parent, const QVariantList &args);
-        ~Backend();
+        Backend(QObject *parent = 0, const QVariantList & =  QVariantList());
+        virtual ~Backend();
 
         QObject *createObject(BackendInterface::Class, QObject *parent, const QList<QVariant> &args);
 
@@ -92,11 +93,6 @@ class Backend : public QObject, public Phonon::BackendInterface
         static void addCleanupObject(QObject *o) { instance()->m_cleanupObjects << o; }
         static void removeCleanupObject(QObject *o) { instance()->m_cleanupObjects.removeAll(o); }
         static const QList<QObject *> &cleanupObjects() { return instance()->m_cleanupObjects; }
-
-        static bool deinterlaceDVD();
-        static bool deinterlaceVCD();
-        static bool deinterlaceFile();
-        static int deinterlaceMethod();
 
         static bool inShutdown() { return instance()->m_inShutdown; }
 
@@ -148,11 +144,6 @@ class Backend : public QObject, public Phonon::BackendInterface
         };
         QList<AudioOutputInfo> m_audioOutputInfos;
         QList<QObject *> m_cleanupObjects;
-        KSharedConfigPtr m_config;
-        int m_deinterlaceMethod : 8;
-        bool m_deinterlaceDVD : 1;
-        bool m_deinterlaceVCD : 1;
-        bool m_deinterlaceFile : 1;
         bool m_inShutdown : 1;
         XineThread *m_thread;
         XineEngine m_xine;
@@ -166,5 +157,7 @@ class Backend : public QObject, public Phonon::BackendInterface
 };
 }} // namespace Phonon::Xine
 
-// vim: sw=4 ts=4 tw=80
+QT_END_NAMESPACE
+
 #endif // Phonon_XINE_BACKEND_H
+// vim: sw=4 ts=4 tw=80

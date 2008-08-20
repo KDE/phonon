@@ -19,7 +19,6 @@
 */
 
 #include "visualization.h"
-#include <kdebug.h>
 
 namespace Phonon
 {
@@ -52,12 +51,12 @@ void Visualization::setVisualization(int newVisualization)
 
 void VisualizationXT::rewireTo(SourceNodeXT *)
 {
-    kFatal() << "not implemented";
+    qFatal( "not implemented" );
 }
 
 xine_post_out_t *VisualizationXT::videoOutputPort() const
 {
-    kFatal() << "not implemented";
+    qFatal( "not implemented" );
     return 0;
 }
 

@@ -28,7 +28,7 @@ set(phonon_xine_SRCS
 macro_optional_find_package(XCB)
 SET(XCB_VIDEO TRUE)
 if(XCB_FOUND AND XINE_XCB_FOUND)
-  set(phonon_xine_SRCS ${phonon_xine_PART_SRCS} videowidget.cpp)
+  set(phonon_xine_SRCS ${phonon_xine_SRCS} videowidget.cpp)
   include_directories(${LIBXCB_INCLUDE_DIR})
   add_definitions(${LIBXCB_DEFINITIONS})
 else(XCB_FOUND AND XINE_XCB_FOUND)
