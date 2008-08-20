@@ -17,8 +17,6 @@
 
 */
 
-#include <kdemacros.h>
-
 #include <QExplicitlySharedDataPointer>
 
 #define __STDC_FORMAT_MACROS

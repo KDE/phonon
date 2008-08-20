@@ -34,8 +34,7 @@
 #include <QHash>
 #include <QMultiMap>
 #include <QPointer>
-
-#include <kurl.h>
+#include <QUrl>
 
 #include <xine.h>
 #include "sourcenode.h"

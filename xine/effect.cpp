@@ -20,7 +20,6 @@
 */
 
 #include "effect.h"
-#include <klocale.h>
 #include <QVariant>
 #include "xineengine.h"
 #include <QMutexLocker>
