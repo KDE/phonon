@@ -30,6 +30,9 @@
 #include <QtGui/QLabel>
 #include <QtGui/QPixmap>
 #include <QtTest/QtTest>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 
 class Output : public QObject, public Phonon::Experimental::AbstractVideoDataOutput
 {
@@ -90,7 +93,11 @@ void VideoDataOutputTest::testDelete()
     m_output->start();
     QVERIFY(m_output->isRunning());
     Phonon::createPath(m_media, m_output);
+#ifdef Q_OS_WIN
+    Sleep(1000);
+#else
     sleep(1);
+#endif
 }
 
 void VideoDataOutputTest::playMedia()
