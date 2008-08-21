@@ -288,9 +288,9 @@ bool XineStream::xineOpen(Phonon::State newstate)
     }
     qDebug() << "xine_open succeeded for m_mrl =" << m_mrl.constData();
     const bool needDeinterlacer =
-        (m_mrl.startsWith("dvd:/") ) ||
-        (m_mrl.startsWith("vcd:/") ) ||
-        (m_mrl.startsWith("file:/") )  ;
+        (m_mrl.startsWith("dvd:/") && Backend::deinterlaceDVD()) ||
+        (m_mrl.startsWith("vcd:/") && Backend::deinterlaceVCD()) ||
+        (m_mrl.startsWith("file:/") && Backend::deinterlaceFile());
     if (m_deinterlacer) {
         if (!needDeinterlacer) {
             xine_post_dispose(m_xine, m_deinterlacer);

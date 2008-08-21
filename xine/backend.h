@@ -92,6 +92,11 @@ class Backend : public QObject, public Phonon::BackendInterface
         static void removeCleanupObject(QObject *o) { instance()->m_cleanupObjects.removeAll(o); }
         static const QList<QObject *> &cleanupObjects() { return instance()->m_cleanupObjects; }
 
+        static bool deinterlaceDVD();
+        static bool deinterlaceVCD();
+        static bool deinterlaceFile();
+        static int deinterlaceMethod();
+
         static bool inShutdown() { return instance()->m_inShutdown; }
 
         static void setObjectDescriptionProperities(ObjectDescriptionType type, int index, const QHash<QByteArray, QVariant> &properities);
@@ -142,6 +147,10 @@ class Backend : public QObject, public Phonon::BackendInterface
         };
         QList<AudioOutputInfo> m_audioOutputInfos;
         QList<QObject *> m_cleanupObjects;
+        int m_deinterlaceMethod : 8;
+        bool m_deinterlaceDVD : 1;
+        bool m_deinterlaceVCD : 1;
+        bool m_deinterlaceFile : 1;
         bool m_inShutdown : 1;
         XineThread *m_thread;
         XineEngine m_xine;
