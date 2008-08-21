@@ -269,7 +269,7 @@ bool XineStream::xineOpen(Phonon::State newstate)
             break;
         case XINE_ERROR_NO_DEMUX_PLUGIN:
             if (m_mrl.startsWith("kbytestream:/")) {
-                error(Phonon::FatalError, "Cannot find demultiplexer plugin for the given media data");
+                error(Phonon::FatalError, tr( "Cannot find demultiplexer plugin for the given media data") );
             } else {
                 error(Phonon::FatalError, tr( "Cannot find demultiplexer plugin for MRL [%1]" ).arg( m_mrl.constData()));
             }

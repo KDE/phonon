@@ -585,24 +585,25 @@ void Backend::checkAudioOutputs()
                     || 0 == strcmp(outputPlugins[i], "oss")) {
                 // ignore these drivers (hardware devices are listed by the KDE platform plugin)
             } else if (0 == strcmp(outputPlugins[i], "jack")) {
-                addAudioOutput(nextIndex++, 9, "Jack Audio Connection Kit",
-                        "<html><p>JACK is a low-latency audio server. It can connect a number "
+                addAudioOutput(nextIndex++, 9, tr("Jack Audio Connection Kit"),
+                        tr( "<html><p>JACK is a low-latency audio server. It can connect a number "
                             "of different applications to an audio device, as well as allowing "
                             "them to share audio between themselves.</p>"
                             "<p>JACK was designed from the ground up for professional audio "
                             "work, and its design focuses on two key areas: synchronous "
-                            "execution of all clients, and low latency operation.</p></html>","audio-backend-jack", outputPlugins[i] );
+                            "execution of all clients, and low latency operation.</p></html>" ),
+                            /*icon name */"audio-backend-jack", outputPlugins[i] );
             } else if (0 == strcmp(outputPlugins[i], "arts")) {
-                addAudioOutput(nextIndex++, -100, "aRts",
-                        "<html><p>aRts is the old soundserver and media framework that was used "
-                            "in KDE2 and KDE3. Its use is discuraged.</p></html>",
+                addAudioOutput(nextIndex++, -100, tr( "aRts" ),
+                        tr( "<html><p>aRts is the old soundserver and media framework that was used "
+                            "in KDE2 and KDE3. Its use is discuraged.</p></html>" ),
                         /*icon name */"audio-backend-arts", outputPlugins[i]);
             } else if (0 == strcmp(outputPlugins[i], "pulseaudio")) {
-                addAudioOutput(nextIndex++, 10, "PulseAudio",
+                addAudioOutput(nextIndex++, 10, tr( "PulseAudio" ),
                         xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
                         /*icon name */"audio-backend-pulseaudio", outputPlugins[i]);
             } else if (0 == strcmp(outputPlugins[i], "esd")) {
-                addAudioOutput(nextIndex++, 8, "Esound (ESD)",
+                addAudioOutput(nextIndex++, 8, tr( "Esound (ESD)" ),
                         xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
                         /*icon name */"audio-backend-esd", outputPlugins[i]);
             } else {
