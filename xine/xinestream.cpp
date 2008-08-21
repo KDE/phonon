@@ -324,8 +324,8 @@ bool XineStream::xineOpen(Phonon::State newstate)
             for (int i = 0; desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i) {
                 xine_post_api_parameter_t &p = desc->parameter[i];
                 if (p.type == POST_PARAM_TYPE_INT && 0 == strcmp(p.name, "method")) {
-                    //int *value = reinterpret_cast<int *>(pluginParams + p.offset);
-                    //*value = Backend::deinterlaceMethod();*/
+                    int *value = reinterpret_cast<int *>(pluginParams + p.offset);
+                    *value = Backend::deinterlaceMethod();
                     break;
                 }
             }
@@ -1561,6 +1561,10 @@ xine_post_out_t *XineStream::videoOutputPort() const
     if (!m_stream) {
         return 0;
     }
+    if (m_deinterlacer) {
+            return xine_post_output(m_deinterlacer, "deinterlaced video");
+    }
+
     return xine_get_video_source(m_stream);
 }
 
