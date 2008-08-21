@@ -8,12 +8,10 @@
 #
 #  (c)2007, Trolltech ASA
 
+FIND_PACKAGE(PkgConfig REQUIRED)
+
 IF (NOT WIN32)
-   # use pkg-config to get the directories and then use these values
-   # in the FIND_PATH() and FIND_LIBRARY() calls
-   INCLUDE(UsePkgConfig)
-   PKGCONFIG(gstreamer-plugins-base-0.10 _GStreamer_PluginsIncDir _GStreamer_PluginsLinkDir _GStreamer_PluginsLinkFlags _GStreamer_PluginsCflags)
-   SET(GSTREAMERPLUGINS_DEFINITIONS ${_GStreamer_PluginsCflags})
+   PKG_CHECK_MODULES( PKG_GSTREAMER REQUIRED gstreamer-plugins-base-0.10 )
 ENDIF (NOT WIN32)
 
 #
@@ -34,43 +32,43 @@ ENDIF (NOT WIN32)
 
 FIND_LIBRARY(GSTREAMER_PLUGIN_AUDIO_LIBRARIES NAMES gstaudio-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_CDDA_LIBRARIES NAMES gstcdda-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_NETBUFFER_LIBRARIES NAMES gstnetbuffer-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_PBUTILS_LIBRARIES NAMES gstpbutils-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_RIFF_LIBRARIES NAMES gstriff-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_RTP_LIBRARIES NAMES gstrtp-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_RTSP_LIBRARIES NAMES gstrtsp-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_SDP_LIBRARIES NAMES gstsdp-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_TAG_LIBRARIES NAMES gsttag-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 FIND_LIBRARY(GSTREAMER_PLUGIN_VIDEO_LIBRARIES NAMES gstvideo-0.10
    PATHS
-   ${_GStreamer_PluginsLinkDir}
+   ${PKG_GSTREAMER_LIBRARY_DIRS}
    )
 
 IF (GSTREAMER_PLUGIN_AUDIO_LIBRARIES AND
