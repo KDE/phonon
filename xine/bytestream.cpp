@@ -121,8 +121,8 @@ void ByteStream::pullBuffer(char *buf, int len)
     while (len > 0) {
         if (m_buffers.isEmpty()) {
             // pullBuffer is only called when there's => len data available
-            qWarning() << "m_currentPosition = " << m_currentPosition
-                << ", m_preview.size() = " << m_preview.size() << ", len = " << len;
+            qFatal("m_currentPosition = %lld, m_preview.size() = %d, len = %d",
+                    m_currentPosition, m_preview.size() ,len);
         }
         if (m_buffers.head().size() - m_offset <= len) {
             // The whole data of the next buffer is needed
