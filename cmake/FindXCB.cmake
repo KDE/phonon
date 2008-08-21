@@ -21,7 +21,7 @@ IF (NOT WIN32)
 
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
-  PKG_CHECK_MODULES(PKG_XCB REQUIRED xcb)
+  PKG_CHECK_MODULES(PKG_XCB xcb)
 	  
   SET(LIBXCB_DEFINITIONS ${PKG_XCB_CFLAGS})
 
