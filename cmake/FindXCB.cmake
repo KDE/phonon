@@ -20,18 +20,17 @@ IF (NOT WIN32)
 
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
-  INCLUDE(UsePkgConfig)
-  PKGCONFIG(xcb _LibXCBIncDir _LibXCBLinkDir _LibXCBLinkFlags _LibXCBCflags)
+  PKG_CHECK_MODULES(PKG_XCB REQUIRED xcb)
 	  
-  SET(LIBXCB_DEFINITIONS ${_LibXCBCflags})
+  SET(LIBXCB_DEFINITIONS ${PKG_XCB_CFLAGS})
 
   FIND_PATH(LIBXCB_INCLUDE_DIR xcb/xcb.h
-    ${_LibXCBIncDir}
+    ${PKG_XCB_INCLUDE_DIRS}
     )
 
   FIND_LIBRARY(LIBXCB_LIBRARIES NAMES xcb libxcb
     PATHS
-    ${_LibXCBLinkDir}
+    ${PKG_XCB_LIBRARY_DIRS}
     )
 
   include(FindPackageHandleStandardArgs)

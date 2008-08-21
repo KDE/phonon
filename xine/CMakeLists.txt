@@ -58,5 +58,5 @@ if(XCB_FOUND AND XINE_XCB_FOUND)
   target_link_libraries(phonon_xine ${LIBXCB_LIBRARIES})
 endif(XCB_FOUND AND XINE_XCB_FOUND)
 
-install(TARGETS phonon_xine DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS phonon_xine DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/phonon_backend)
 install(FILES xine.desktop DESTINATION ${SERVICES_INSTALL_DIR}/phononbackends)
