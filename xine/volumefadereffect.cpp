@@ -79,6 +79,8 @@ QVariant VolumeFaderEffect::parameterValue(const EffectParameter &p) const
     case StartFadeParameter:
         return 0;
     }
+
+    qWarning() << "request for unknown parameter " << parameterId;
     return QVariant();
 }
 
