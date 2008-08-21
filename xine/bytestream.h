@@ -37,7 +37,7 @@
 #include <cstdlib>
 #include <QObject>
 
-//extern const char Error__off_t_needs_to_have_64_bits[sizeof(off_t) == 8 ? 1 : -1];
+extern const char Error__off_t_needs_to_have_64_bits[sizeof(off_t) == 8 ? 1 : -1];
 
 namespace Phonon
 {

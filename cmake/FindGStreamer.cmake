@@ -6,6 +6,7 @@
 #  GSTREAMER_LIBRARIES - the libraries needed to use GStreamer
 #  GSTREAMER_DEFINITIONS - Compiler switches required for using GStreamer
 
+# Copyright (c) 2008 Helio Chissini de Castro, <helio@kde.org>
 #  (c)2006, Tim Beaulen <tbscope@gmail.com>
 
 # TODO: Other versions --> GSTREAMER_X_Y_FOUND (Example: GSTREAMER_0_8_FOUND and GSTREAMER_0_10_FOUND etc)

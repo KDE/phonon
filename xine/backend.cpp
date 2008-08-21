@@ -49,8 +49,6 @@
 #include <QtCore/QVariant>
 #include <QtCore/QtPlugin>
 
-QT_BEGIN_NAMESPACE
-
 Q_EXPORT_PLUGIN2(phonon_xine, Phonon::Xine::Backend)
 
 static Phonon::Xine::Backend *s_instance = 0;

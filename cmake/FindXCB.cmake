@@ -6,6 +6,7 @@
 #  LIBXCB_INCLUDE_DIR - the libxcb include dir
 #  LIBXCB_DEFINITIONS - compiler switches required for using libxcb
 
+# Copyright (c) 2008 Helio Chissini de Castro, <helio@kde.org>
 # Copyright (c) 2007, Matthias Kretz, <kretz@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
