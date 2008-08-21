@@ -185,7 +185,7 @@ void VideoWidgetXT::createVideoPort()
         if (!m_videoPort) {
 //#endif // PHONON_XINE_NO_VIDEOWIDGET
             m_videoPort = xine_open_video_driver(m_xine, "auto", XINE_VISUAL_TYPE_NONE, 0);
-            qFatal( "No xine video output plugin using libxcb for threadsafe access to the X server found. No video for you." );
+            qWarning() << "No xine video output plugin using libxcb for threadsafe access to the X server found. No video for you.";
 //#ifndef PHONON_XINE_NO_VIDEOWIDGET
         }
     }

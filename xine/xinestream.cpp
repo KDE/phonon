@@ -1151,7 +1151,7 @@ bool XineStream::event(QEvent *ev)
                 createStream();
                 m_mutex.unlock();
                 if (!m_stream) {
-                    qFatal( "MrlChangedEvent: createStream didn't create a stream. This should not happen." );
+                    qWarning() << "MrlChangedEvent: createStream didn't create a stream. This should not happen.";
                     error(Phonon::FatalError, tr( "Xine failed to create a stream." ));
                     return true;
                 }
@@ -1258,7 +1258,7 @@ bool XineStream::event(QEvent *ev)
             QMutexLocker locker(&m_mutex);
             createStream();
             if (!m_stream) {
-                qFatal( "PlayCommand: createStream didn't create a stream. This should not happen." );
+                qWarning() << "PlayCommand: createStream didn't create a stream. This should not happen.";
                 error(Phonon::FatalError, tr("Xine failed to create a stream."));
                 return true;
             }
@@ -1298,7 +1298,7 @@ bool XineStream::event(QEvent *ev)
             QMutexLocker locker(&m_mutex);
             createStream();
             if (!m_stream) {
-                qFatal(  "PauseCommand: createStream didn't create a stream. This should not happen." );
+                qWarning() << "PauseCommand: createStream didn't create a stream. This should not happen.";
                 error(Phonon::FatalError, tr("Xine failed to create a stream."));
                 return true;
             }
@@ -1326,7 +1326,7 @@ bool XineStream::event(QEvent *ev)
             QMutexLocker locker(&m_mutex);
             createStream();
             if (!m_stream) {
-                qFatal( "StopCommand: createStream didn't create a stream. This should not happen." );
+                qWarning() << "StopCommand: createStream didn't create a stream. This should not happen.";
                 error(Phonon::FatalError, tr("Xine failed to create a stream."));
                 return true;
             }

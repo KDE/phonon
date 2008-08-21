@@ -316,7 +316,7 @@ void MediaObject::setTransitionTime(qint32 newTransitionTime)
 void MediaObject::setNextSource(const MediaSource &source)
 {
     if (m_transitionTime < 0) {
-        qFatal(  "crossfades are not supported with the xine backend" );
+        qWarning() <<  "crossfades are not supported with the xine backend";
     } else if (m_transitionTime > 0) {
         if (source.type() == MediaSource::Invalid) {
             QMetaObject::invokeMethod(m_stream, "playbackFinished", Qt::QueuedConnection);
@@ -354,7 +354,7 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
     case MediaSource::Url:
         if (source.url().scheme() == QLatin1String("kbytestream")) {
             m_mediaSource = MediaSource();
-            qFatal(  "do not ever use kbytestream:/ URLs with MediaObject!" );
+            qWarning() <<  "do not ever use kbytestream:/ URLs with MediaObject!";
             m_shouldFakeBufferingOnPlay = false;
             m_stream->setMrl(QByteArray());
             m_stream->setError(Phonon::NormalError, tr( "Cannot open media data at '<i>%1</i>'" ).arg( source.url().toString(  QUrl::RemovePassword ) ));
@@ -374,7 +374,7 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
         {
             m_mediaDevice = QFile::encodeName(source.deviceName());
             if (!m_mediaDevice.isEmpty() && !m_mediaDevice.startsWith('/')) {
-                //qFatal(  "mediaDevice '%i' has to be an absolute path - starts with a /", m_mediaDevice );
+                //qWarning() << "mediaDevice '%i' has to be an absolute path - starts with a /", m_mediaDevice );
                 m_mediaDevice.clear();
             }
             m_mediaDevice += '/';
@@ -382,7 +382,7 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
             QByteArray mrl;
             switch (source.discType()) {
             case Phonon::NoDisc:
-                qFatal( "I should never get to see a MediaSource that is a disc but doesn't specify which one" );
+                qWarning() << "I should never get to see a MediaSource that is a disc but doesn't specify which one";
                 return;
             case Phonon::Cd:
                 mrl = autoplayMrlsToTitles("CD", "cdda:/");
@@ -394,7 +394,7 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
                 mrl = autoplayMrlsToTitles("VCD", "vcd:/");
                 break;
             default:
-                qFatal(  "media %i not implemented", source.discType() );
+                qWarning() <<  "media " << source.discType() << " not implemented";
                 return;
             }
             switch (how) {

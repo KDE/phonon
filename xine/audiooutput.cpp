@@ -129,7 +129,7 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
                     // now the config key should be registered
                     if(!xine_config_lookup_entry(xt->m_xine, "audio.device.alsa_default_device",
                                 &alsaDeviceConfig)) {
-                        qFatal( "cannot set the ALSA device on Xine's ALSA output plugin" );
+                        qWarning() << "cannot set the ALSA device on Xine's ALSA output plugin";
                         return 0;
                     }
                 }
