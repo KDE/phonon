@@ -85,9 +85,9 @@ Backend::Backend(QObject *parent, const QVariantList &)
 
     QSettings cg( "Phonon", "Xine" );
     m_deinterlaceDVD = cg.value("Settings/deinterlaceDVD", true).toBool();
-    m_deinterlaceVCD = cg.value("deinterlaceVCD", false).toBool();
-    m_deinterlaceFile = cg.value("deinterlaceFile", false).toBool();
-    m_deinterlaceMethod = cg.value("deinterlaceMethod", 0).toInt();
+    m_deinterlaceVCD = cg.value("Settings/deinterlaceVCD", false).toBool();
+    m_deinterlaceFile = cg.value("Settings/deinterlaceFile", false).toBool();
+    m_deinterlaceMethod = cg.value("Settings/deinterlaceMethod", 0).toInt();
 
     signalTimer.setSingleShot(true);
     connect(&signalTimer, SIGNAL(timeout()), SLOT(emitAudioDeviceChange()));
