@@ -117,7 +117,7 @@ void VolumeFaderEffectXT::createInstance()
     xine_audio_port_t *audioPort = fakeAudioPort();
     Q_ASSERT(0 == m_plugin);
     qDebug() << audioPort << " fadeTime = " << m_parameters.fadeTime;
-    m_plugin = xine_post_init(m_xine, "VolumeFader", 1, &audioPort, 0);
+    m_plugin = xine_post_init(m_xine, "KVolumeFader", 1, &audioPort, 0);
     xine_post_in_t *paraInput = xine_post_input(m_plugin, "parameters");
     Q_ASSERT(paraInput);
     Q_ASSERT(paraInput->type == XINE_POST_DATA_PARAMETERS);
