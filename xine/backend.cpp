@@ -48,6 +48,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QVariant>
 #include <QtCore/QtPlugin>
+#include <QtCore/QSettings>
 
 Q_EXPORT_PLUGIN2(phonon_xine, Phonon::Xine::Backend)
 
@@ -81,6 +82,12 @@ Backend::Backend(QObject *parent, const QVariantList &)
     setProperty("backendVersion", QLatin1String("0.1"));
     setProperty("backendIcon",    QLatin1String("phonon-xine"));
     setProperty("backendWebsite", QLatin1String("http://multimedia.kde.org/"));
+
+    QSettings cg( "Phonon", "Xine" );
+    m_deinterlaceDVD = cg.value("Settings/deinterlaceDVD", true).toBool();
+    m_deinterlaceVCD = cg.value("deinterlaceVCD", false).toBool();
+    m_deinterlaceFile = cg.value("deinterlaceFile", false).toBool();
+    m_deinterlaceMethod = cg.value("deinterlaceMethod", 0).toInt();
 
     signalTimer.setSingleShot(true);
     connect(&signalTimer, SIGNAL(timeout()), SLOT(emitAudioDeviceChange()));
@@ -485,6 +492,26 @@ void Backend::emitAudioDeviceChange()
 {
     qDebug();
     emit objectDescriptionChanged(AudioOutputDeviceType);
+}
+
+bool Backend::deinterlaceDVD()
+{
+    return s_instance->m_deinterlaceDVD;
+}
+
+bool Backend::deinterlaceVCD()
+{
+    return s_instance->m_deinterlaceVCD;
+}
+
+bool Backend::deinterlaceFile()
+{
+    return s_instance->m_deinterlaceFile;
+}
+
+int Backend::deinterlaceMethod()
+{
+    return s_instance->m_deinterlaceMethod;
 }
 
 void Backend::setObjectDescriptionProperities( ObjectDescriptionType type, int index, const QHash<QByteArray, QVariant>& properities )
