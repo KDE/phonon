@@ -37,8 +37,6 @@
 #include <phonon/objectdescription.h>
 #include <phonon/backendinterface.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 namespace Xine

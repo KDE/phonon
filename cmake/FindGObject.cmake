@@ -6,6 +6,7 @@
 #  GOBJECT_LIBRARIES - the libraries needed to use GObject
 #  GOBJECT_DEFINITIONS - Compiler switches required for using GObject
 
+# Copyright (c) 2008 Helio Chissini de Castro, <helio@kde.org>
 #  (c)2006, Tim Beaulen <tbscope@gmail.com>
 
 

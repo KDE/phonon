@@ -8,6 +8,7 @@
 #  XINE_LIBRARY - The libraries needed to use XINE
 #  XINE_XCB_FOUND - libxine can use XCB for video output
 
+# Copyright (c) 2008 Helio Chissini de Castro, <helio@kde.org>
 # Copyright (c) 2006,2007 Laurent Montel, <montel@kde.org>
 # Copyright (c) 2006, Matthias Kretz, <kretz@kde.org>
 #

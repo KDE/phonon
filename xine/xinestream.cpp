@@ -251,7 +251,7 @@ bool XineStream::xineOpen(Phonon::State newstate)
 #ifdef DISABLE_FILE_MRLS
     if (m_mrl.startsWith("file:/")) {
         qDebug() << "faked xine_open failed for m_mrl =" << m_mrl.constData();
-        error(Phonon::NormalError, tr( QString( "Cannot open media data at '<i>%1</i>'" ).arg( m_mrl.constData())) );
+        error(Phonon::NormalError, tr( "Cannot open media data at '<i>%1</i>'" ).arg( m_mrl.constData()));
         return false;
     }
 #endif
@@ -265,13 +265,13 @@ bool XineStream::xineOpen(Phonon::State newstate)
             // hmm?
             abort();
         case XINE_ERROR_NO_INPUT_PLUGIN:
-            error(Phonon::NormalError, QString( tr( "Cannot find input plugin for MRL [%1]" ) ).arg( m_mrl.constData()) );
+            error(Phonon::NormalError, tr( "Cannot find input plugin for MRL [%1]" ).arg( m_mrl.constData()) );
             break;
         case XINE_ERROR_NO_DEMUX_PLUGIN:
             if (m_mrl.startsWith("kbytestream:/")) {
                 error(Phonon::FatalError, "Cannot find demultiplexer plugin for the given media data");
             } else {
-                error(Phonon::FatalError, QString( tr( "Cannot find demultiplexer plugin for MRL [%1]" ) ).arg( m_mrl.constData()));
+                error(Phonon::FatalError, tr( "Cannot find demultiplexer plugin for MRL [%1]" ).arg( m_mrl.constData()));
             }
             break;
         default:
@@ -620,7 +620,7 @@ void XineStream::useGapOf(int gap)
 // called from main thread
 void XineStream::gaplessSwitchTo(const QUrl &url)
 {
-    gaplessSwitchTo(url.toString().toUtf8());
+    gaplessSwitchTo(url.toEncoded());
 }
 
 // called from main thread
@@ -1567,7 +1567,7 @@ xine_post_out_t *XineStream::videoOutputPort() const
 // called from main thread
 void XineStream::setUrl(const QUrl &url)
 {
-    setMrl(url.toString().toUtf8());
+    setMrl(url.toEncoded());
 }
 
 // called from main thread

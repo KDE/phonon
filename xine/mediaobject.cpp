@@ -32,6 +32,7 @@
 #include <QMultiMap>
 #include <QtDebug>
 #include <QMetaType>
+#include <QUrl>
 
 #include <cmath>
 #include "xinethread.h"
@@ -356,8 +357,7 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
             qFatal(  "do not ever use kbytestream:/ URLs with MediaObject!" );
             m_shouldFakeBufferingOnPlay = false;
             m_stream->setMrl(QByteArray());
-            QString msg( tr( "Cannot open media data at '<i>%1</i>'" ).arg( source.url().toString(  QUrl::RemovePassword ) ) );
-            m_stream->setError(Phonon::NormalError, msg);
+            m_stream->setError(Phonon::NormalError, tr( "Cannot open media data at '<i>%1</i>'" ).arg( source.url().toString(  QUrl::RemovePassword ) ));
             return;
         }
         switch (how) {
