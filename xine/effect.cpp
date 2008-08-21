@@ -257,7 +257,7 @@ QVariant Effect::parameterValue(const EffectParameter &p) const
             abort();
         }
     }
-    qFatal(  "invalid parameterIndex passed to Effect::value" );
+    qWarning() << "invalid parameterIndex passed to Effect::value";
     return QVariant();
 }
 
@@ -311,14 +311,14 @@ void Effect::setParameterValue(const EffectParameter &p, const QVariant &newValu
             }
             break;
         case POST_PARAM_TYPE_LAST:         /* terminator of parameter list       */
-            qFatal(  "invalid parameterIndex passed to Effect::setValue" );
+            qWarning() << "invalid parameterIndex passed to Effect::setValue";
             break;
         default:
             abort();
         }
         xt->m_pluginApi->set_parameters(xt->m_plugin, xt->m_pluginParams);
     } else {
-        qFatal(  "invalid parameterIndex passed to Effect::setValue" );
+        qWarning() << "invalid parameterIndex passed to Effect::setValue";
     }
 }
 
