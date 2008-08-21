@@ -320,49 +320,11 @@ endif (Q_WS_MAC AND BUILD_PHONON_QT7)
 if (Q_WS_WIN)
    add_subdirectory(ds9)
 endif (Q_WS_WIN)
+
 if (Q_WS_X11)
    add_subdirectory(gstreamer)
+   add_subdirectory(xine)
 endif (Q_WS_X11)
-
-if (NOT Q_WS_WIN) #no xine on windows to look for, and running the find breaks stuff
-# known limitations:
-#  xinelib 1.1.1 adds audio
-#  xinelib 1.1.2 adds audio with gapless playback
-#  xinelib 1.1.5 + xcb adds video
-#  xinelib 1.1.7 does not abort() when unplugging a USB device
-#  xinelib 1.1.9 fixes playback of short sounds
-#  xinelib 1.2 untested => unsupported
-
-   macro_optional_find_package(Xine)
-   if (NOT Q_WS_MAC) # mac has the qt7 backend, so xine is optional
-       # if no xinelib at all is available say that we want 1.1.9
-       macro_log_feature(XINE_FOUND "Xine" "xine-lib 1.1.x is required for the multimedia backend" "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732" TRUE "1.1.9" "The xine development libraries (v1.1.9 or above) are required to provide audio and video support. Using the latest 1.1.x version is recommended." )
-   endif(NOT Q_WS_MAC)
-   if(XINE_FOUND)
-      string(REGEX REPLACE "^[0-9]*\\.([0-9]*)\\.[0-9]*$" "\\1" XINE_MINOR_VERSION ${XINE_VERSION})
-      string(REGEX REPLACE "^[0-9]*\\.[0-9]*\\." "" XINE_BUGFIX_VERSION ${XINE_VERSION})
-      # if an older xinelib is installed give a warning about problems but continue
-      if(XINE_MINOR_VERSION LESS 2 AND XINE_BUGFIX_VERSION LESS 90)
-         if(XINE_BUGFIX_VERSION LESS 7)
-            if(XINE_BUGFIX_VERSION LESS 5)
-               macro_log_feature(TRUE "Xine" "xine-lib v${XINE_VERSION} was found on your system. This version does not provide video support and has known security issues. Recommend upgrading to version 1.1.9 or above." "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732")
-            else(XINE_BUGFIX_VERSION LESS 5)
-                  macro_log_feature(TRUE "Xine" "xine-lib v${XINE_VERSION} was found on your system. This version is known to have problems when a device is unplugged. Consider upgrading to version 1.1.9 or above." "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732")
-            endif(XINE_BUGFIX_VERSION LESS 5)
-         else(XINE_BUGFIX_VERSION LESS 7)
-            if(XINE_BUGFIX_VERSION LESS 9)
-               macro_log_feature(TRUE "Xine" "xine-lib v${XINE_VERSION} was found on your system. This version is known to have problems when playing short sounds. Consider upgrading to version 1.1.9 or above." "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732")
-             endif(XINE_BUGFIX_VERSION LESS 9)
-         endif(XINE_BUGFIX_VERSION LESS 7)
-      else(XINE_MINOR_VERSION LESS 2 AND XINE_BUGFIX_VERSION LESS 90)
-         macro_log_feature(FALSE "Xine" "xine-lib v${XINE_VERSION} was found on your system. This version contains major changes compared to 1.1.x and has not been tested properly for use with this backend. Consider downgrading to version 1.1.9." "http://sourceforge.net/project/showfiles.php?group_id=9655&package_id=9732")
-         set(XINE_FOUND FALSE)
-      endif(XINE_MINOR_VERSION LESS 2 AND XINE_BUGFIX_VERSION LESS 90)
-     if(XINE_FOUND)
-		 add_subdirectory(xine)
-     endif(XINE_FOUND)
-   endif(XINE_FOUND)
-endif (NOT Q_WS_WIN)
 
 if(NOT WIN32) # pkgconfig file
    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)
