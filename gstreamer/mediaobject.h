@@ -181,7 +181,10 @@ protected:
     void newPadAvailable (GstPad *pad);
     void changeState(State);
     void setError(const QString &errorString, Phonon::ErrorType error = NormalError);
-    bool createPipefromURL(const QString &url);
+    /*
+     * @param encodedUrl percent-encoded QString for source compat reasons.  Should change to QUrl
+     */
+    bool createPipefromURL(const QString &encodedUrl);
     bool createPipefromStream(const MediaSource &);
 
 private Q_SLOTS:
