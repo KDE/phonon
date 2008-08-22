@@ -325,8 +325,11 @@ void MediaObject::connectAudio(GstPad *pad)
  *
  * returns true if successful
  */
-bool MediaObject::createPipefromURL(const QString &url)
+bool MediaObject::createPipefromURL(const QString &encodedUrl)
 {
+    // Convert back to URL
+    QUrl url(encodedUrl, QUrl::StrictMode);
+
     // Remove any existing data source
     if (m_datasource) {
         gst_bin_remove(GST_BIN(m_pipeline), m_datasource);
@@ -335,13 +338,14 @@ bool MediaObject::createPipefromURL(const QString &url)
     }
 
     // Verify that the uri can be parsed
-    if (!gst_uri_is_valid(qPrintable(url))) {
-        m_backend->logMessage(QString("%0 is not a valid URI").arg(url));
+    if (!url.isValid()) {
+        m_backend->logMessage(QString("%1 is not a valid URI").arg(encodedUrl));
         return false;
     }
 
     // Create a new datasource based on the input URL
-    m_datasource = gst_element_make_from_uri(GST_URI_SRC, qPrintable(url), NULL);
+    QByteArray encoded_cstr_url = url.toEncoded();
+    m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), NULL);
     if (!m_datasource)
         return false;
 
@@ -843,21 +847,11 @@ void MediaObject::setSource(const MediaSource &source)
     m_metaData.clear();
 
     switch (source.type()) {
-    case MediaSource::Url: {
-            QString urlString = source.url().toString();
-            if (!createPipefromURL(urlString)) {
-                setError(tr("Could not open media source."));
-                return;
-            }
-        }
-        break;
-
-    case MediaSource::LocalFile: {
-            QString urlString = QUrl::fromLocalFile(source.fileName()).toString();
-            if (!createPipefromURL(urlString)) {
-                setError(tr("Could not open media source."));
-                return;
-            }
+    case MediaSource::Url:
+    case MediaSource::LocalFile:
+        if (!createPipefromURL(source.url().toString())) {
+            setError(tr("Could not open media source."));
+            return;
         }
         break;
 
