@@ -9,7 +9,12 @@ X-KDE-Library=kcm_phononxine
 X-KDE-ParentComponents=phonon_xine
 
 Name=Phonon Xine
+Name[nds]=Phonon-Xine
 Comment=Xine Backend Configuration
+Comment[et]=Xine taustaprogrammi seadistamine
+Comment[ga]=Cumraíocht Inneall Xine
+Comment[ja]=Xine バックエンドの設定
+Comment[nds]=Instellen vun't Xine-Hülpprogramm
 X-KDE-Keywords=Xine
 X-KDE-Keywords[ne]=जाइन
 X-KDE-Keywords[sr]=Xine,Ксине
