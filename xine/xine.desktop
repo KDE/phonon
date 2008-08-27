@@ -12,3 +12,7 @@ InitialPreference=15
 Name=Xine
 
 Comment=Phonon Xine backend
+Comment[et]=Phononi Xine taustaprogramm
+Comment[ga]=Inneall Phonon Xine
+Comment[ja]=Phonon Xine バックエンド
+Comment[nds]=Phonon-Hülpprogrmm Xine
