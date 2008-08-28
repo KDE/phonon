@@ -11,6 +11,7 @@ X-KDE-ParentComponents=phonon_xine
 Name=Phonon Xine
 Name[nds]=Phonon-Xine
 Comment=Xine Backend Configuration
+Comment[cs]=Nastavení Xine backendu
 Comment[et]=Xine taustaprogrammi seadistamine
 Comment[ga]=Cumraíocht Inneall Xine
 Comment[ja]=Xine バックエンドの設定
