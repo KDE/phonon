@@ -23,7 +23,8 @@ IF (NOT WIN32)
    FIND_PACKAGE(PkgConfig REQUIRED)
    # use pkg-config to get the directories and then use these values
    # in the FIND_PATH() and FIND_LIBRARY() calls
-   PKG_CHECK_MODULES(PKG_GSTREAMER REQUIRED gstreamer-0.10)
+   # don't make this check required - otherwise you can't use macro_optional_find_package on this one
+   PKG_CHECK_MODULES(PKG_GSTREAMER gstreamer-0.10)
    SET(GSTREAMER_DEFINITIONS ${PKG_GSTREAMER_CFLAGS})
 ENDIF (NOT WIN32)
 
