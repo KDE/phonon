@@ -11,7 +11,8 @@
 FIND_PACKAGE(PkgConfig REQUIRED)
 
 IF (NOT WIN32)
-   PKG_CHECK_MODULES( PKG_GSTREAMER REQUIRED gstreamer-plugins-base-0.10 )
+   # don't make this check required - otherwise you can't use macro_optional_find_package on this one
+   PKG_CHECK_MODULES( PKG_GSTREAMER gstreamer-plugins-base-0.10 )
 ENDIF (NOT WIN32)
 
 #
