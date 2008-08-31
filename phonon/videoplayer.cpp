@@ -68,6 +68,7 @@ VideoPlayer::VideoPlayer(Phonon::Category category, QWidget *parent)
 
 VideoPlayer::~VideoPlayer()
 {
+    delete d;
 }
 
 MediaObject *VideoPlayer::mediaObject() const
