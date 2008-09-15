@@ -38,7 +38,9 @@ VolumeSlider::VolumeSlider(QWidget *parent)
 #ifndef QT_NO_TOOLTIP
     setToolTip(tr("Volume: %1%").arg(100));
 #endif
+#ifndef QT_NO_WHATSTHIS
     setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%, the rightmost is %1%").arg(100));
+#endif
 
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_sliderChanged(int)));
     connect(&d->muteButton, SIGNAL(clicked()), SLOT(_k_buttonClicked()));
@@ -54,7 +56,9 @@ VolumeSlider::VolumeSlider(AudioOutput *output, QWidget *parent)
 #ifndef QT_NO_TOOLTIP
     setToolTip(tr("Volume: %1%").arg(100));
 #endif
+#ifndef QT_NO_WHATSTHIS
     setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%, the rightmost is %1%").arg(100));
+#endif
 
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_sliderChanged(int)));
     connect(&d->muteButton, SIGNAL(clicked()), SLOT(_k_buttonClicked()));
@@ -106,8 +110,10 @@ void VolumeSlider::setMaximumVolume(qreal volume)
 {
     int max = static_cast<int>(volume * 100);
     k_ptr->slider.setMaximum(max);
+#ifndef QT_NO_WHATSTHIS
     setWhatsThis(tr("Use this slider to adjust the volume. The leftmost position is 0%, the rightmost is %1%")
             .arg(max));
+#endif
 }
 
 Qt::Orientation VolumeSlider::orientation() const
