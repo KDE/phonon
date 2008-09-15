@@ -14,8 +14,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <objbase.h>
+
+#ifndef _WIN32_WCE
 #include <dshow.h>
+#endif //Q_OS_WINCE
+#include <objbase.h>
 #include <initguid.h>
 #include <qnetwork.h>
 #include <comdef.h>
