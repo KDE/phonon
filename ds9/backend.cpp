@@ -60,6 +60,8 @@ namespace Phonon
 
         Backend::~Backend()
         {
+            m_audioOutputs.clear();
+            m_audioEffects.clear();
 			::CoUninitialize();
         }
 

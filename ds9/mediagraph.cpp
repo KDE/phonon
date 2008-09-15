@@ -807,12 +807,21 @@ namespace Phonon
             //let's transfer the nodes from the current graph to the new one
             QList<GraphConnection> connections; //we store the connections that need to be restored
 
-
             // First get all the sink nodes (nodes with no input connected)
             Q_FOREACH(BackendNode *node, m_sinkConnections) {
                 Filter currentFilter = node->filter(m_index);
                 connections += getConnections(currentFilter);
                 grabFilter(currentFilter);
+            }
+
+            //we need to do something smart to detect if the streams are unencoded
+            if (m_demux) {
+                Q_FOREACH(const OutputPin &out, BackendNode::pins(m_demux, PINDIR_OUTPUT)) {
+                    InputPin pin;
+                    if (out->ConnectedTo(pin.pparam()) == VFW_E_NOT_CONNECTED) {
+                        m_decoderPins += out; //unconnected outputs can be decoded outputs
+                    }
+                }
             }
 
             ensureSourceConnectedTo(true);
@@ -830,17 +839,6 @@ namespace Phonon
                 Q_UNUSED(hr);
                 Q_ASSERT( SUCCEEDED(hr));
             }
-
-            //we need to do something smart to detect if the streams are unencoded
-            if (m_demux) {
-                Q_FOREACH(const OutputPin &out, BackendNode::pins(m_demux, PINDIR_OUTPUT)) {
-                    InputPin pin;
-                    if (out->ConnectedTo(pin.pparam()) == VFW_E_NOT_CONNECTED) {
-                        m_decoderPins += out; //unconnected outputs can be decoded outputs
-                    }
-                }
-            }
-
 
             //Finally, let's update the interfaces
             m_mediaControl = ComPointer<IMediaControl>(graph, IID_IMediaControl);
