@@ -13,6 +13,7 @@ Name[nds]=Phonon-Xine
 Name[pt]=Phonon com Xine
 Comment=Xine Backend Configuration
 Comment[cs]=Nastavení Xine backendu
+Comment[el]=Ρύθμιση του συστήματος υποστήριξης Xine
 Comment[es]=Configuración del motor Xine
 Comment[et]=Xine taustaprogrammi seadistamine
 Comment[ga]=Cumraíocht Inneall Xine

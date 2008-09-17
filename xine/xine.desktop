@@ -12,6 +12,7 @@ InitialPreference=15
 Name=Xine
 
 Comment=Phonon Xine backend
+Comment[el]=Σύστημα υποστήριξης του Phonon Xine
 Comment[es]=Motor Xine para Phonon
 Comment[et]=Phononi Xine taustaprogramm
 Comment[ga]=Inneall Phonon Xine
