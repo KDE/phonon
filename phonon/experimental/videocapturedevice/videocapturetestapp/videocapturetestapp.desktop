@@ -4,6 +4,7 @@ Comment=
 Exec=videocapturetestapp
 GenericName=Video Capture Test Application
 GenericName[cs]=Testovací aplikace pro nahrávání videa
+GenericName[el]=Δοκιμαστική εφαρμογή σύλληψης βίντεο
 GenericName[es]=Aplicación para probar la de captura de vídeo
 GenericName[et]=Videohõive testrakendus
 GenericName[ga]=Feidhmchlár Tástála Físghabhála
