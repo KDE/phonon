@@ -10,6 +10,7 @@ Icon=phonon-xine
 InitialPreference=15
 
 Name=Xine
+Name[x-test]=xxXinexx
 
 Comment=Phonon Xine backend
 Comment[ca]=Dorsal del Xine pel Phonon
@@ -25,5 +26,6 @@ Comment[nn]=Xine-motor for Phonon
 Comment[pt]=Infra-estrutura de Xine para o Phonon
 Comment[sv]=Phonon Xine-gränssnitt
 Comment[uk]=Сервер Xine для Phonon
+Comment[x-test]=xxPhonon Xine backendxx
 Comment[zh_CN]=Phonon Xine 后端
 Comment[zh_TW]=Phonon Xine 後端介面
