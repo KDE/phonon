@@ -87,7 +87,7 @@ inline uint qHash(const AudioFormat &p)
 
 } // namespace Experimental
 } // namespace Phonon
-#if !defined(Q_WS_WIN) && !defined(__arm__)
+#if !defined(Q_WS_WIN) && !defined(__arm__) && !defined(Q_OS_MAC)
 inline uint qHash(const Phonon::Experimental::AudioFormat &p)
 {
     return Phonon::Experimental::qHash(p);
