@@ -188,6 +188,9 @@ void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
     case AudioOutputDeviceType:
         emit availableAudioOutputDevicesChanged();
         break;
+    case AudioCaptureDeviceType:
+        emit availableAudioCaptureDevicesChanged();
+        break;
     default:
         break;
     }

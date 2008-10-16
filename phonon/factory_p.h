@@ -67,6 +67,11 @@ namespace Factory
              * \copydoc BackendCapabilities::Notifier::availableAudioOutputDevicesChanged
              */
             void availableAudioOutputDevicesChanged();
+
+            /**
+             * \copydoc BackendCapabilities::Notifier::availableAudioCaptureDevicesChanged
+             */
+            void availableAudioCaptureDevicesChanged();
     };
 
     /**
