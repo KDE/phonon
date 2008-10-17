@@ -82,7 +82,7 @@ XineStream *XineThread::newStream()
 void XineThread::quit()
 {
     foreach (QObject *child, children()) {
-        qDebug() << child;
+        debug() << Q_FUNC_INFO << child;
     }
     QThread::quit();
 }
@@ -110,17 +110,17 @@ bool XineThread::event(QEvent *e)
         return true;
     case Event::Rewire:
         e->accept();
-        qDebug() << "XineThread Rewire event:";
+        debug() << Q_FUNC_INFO << "XineThread Rewire event:";
         {
             RewireEvent *ev = static_cast<RewireEvent *>(e);
             foreach (WireCall unwire, ev->unwireCalls) {
-                qDebug() << "     " << unwire.source.data() << " XX " << unwire.sink.data();
+                debug() << Q_FUNC_INFO << "     " << unwire.source.data() << " XX " << unwire.sink.data();
                 unwire.sink->assert();
                 unwire.source->assert();
                 unwire.source->m_xtSink = 0;
             }
             foreach (WireCall wire, ev->wireCalls) {
-                qDebug() << "     " << wire.source.data() << " -> " << wire.sink.data();
+                debug() << Q_FUNC_INFO << "     " << wire.source.data() << " -> " << wire.sink.data();
                 wire.sink->assert();
                 wire.source->assert();
                 wire.source->m_xtSink = wire.sink;

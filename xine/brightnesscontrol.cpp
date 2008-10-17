@@ -53,7 +53,7 @@ void BrightnessControl::setBrightness(int newBrightness)
         m_brightness = newBrightness;
         XineStream *s = stream();
         if (s) {
-            qDebug() << m_brightness;
+            debug() << Q_FUNC_INFO << m_brightness;
             s->setParam(XINE_PARAM_VO_BRIGHTNESS, m_brightness);
         }
     }

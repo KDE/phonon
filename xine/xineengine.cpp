@@ -20,6 +20,7 @@
 */
 
 #include "xineengine.h"
+#include "backend.h"
 
 #include <QtCore/QByteArray>
 #include <QtCore/QFile>
@@ -41,7 +42,7 @@ XineEngineData::XineEngineData()
     : m_xine(xine_new())
 {
     const QByteArray phonon_xine_verbosity(getenv("PHONON_XINE_VERBOSITY"));
-    qDebug() << "setting xine verbosity to" << phonon_xine_verbosity.toInt();
+    debug() << Q_FUNC_INFO << "setting xine verbosity to" << phonon_xine_verbosity.toInt();
     xine_engine_set_param(m_xine, XINE_ENGINE_PARAM_VERBOSITY, phonon_xine_verbosity.toInt());
 
     xine_init(m_xine);
