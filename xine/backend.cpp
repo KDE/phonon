@@ -79,12 +79,12 @@ Backend::Backend(QObject *parent, const QVariantList &)
 
     setProperty("identifier",     QLatin1String("phonon_xine"));
     setProperty("backendName",    QLatin1String("Xine"));
-    setProperty("backendComment", tr("Phonon Xine Backend") );
+    setProperty("backendComment", tr("Phonon Xine Backend"));
     setProperty("backendVersion", QLatin1String("0.1"));
     setProperty("backendIcon",    QLatin1String("phonon-xine"));
     setProperty("backendWebsite", QLatin1String("http://multimedia.kde.org/"));
 
-    QSettings cg( "Phonon", "Xine" );
+    QSettings cg("Phonon", "Xine");
     m_deinterlaceDVD = cg.value("Settings/deinterlaceDVD", true).toBool();
     m_deinterlaceVCD = cg.value("Settings/deinterlaceVCD", false).toBool();
     m_deinterlaceFile = cg.value("Settings/deinterlaceFile", false).toBool();
@@ -247,7 +247,7 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
         {
             ObjectDescriptionHash hash = Backend::objectDescriptions();
             ObjectDescriptionHash::iterator it = hash.find(type);
-            if( it != hash.end() )
+            if(it != hash.end())
                 list = it.value().keys();
         }
         break;
@@ -329,7 +329,7 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
             {
                 ChannelIndexHash indexHash = descIt.value();
                 ChannelIndexHash::iterator indexIt = indexHash.find(index);
-                if(indexIt != indexHash.end() )
+                if(indexIt != indexHash.end())
                 {
                     ret = indexIt.value();
                 }
@@ -515,7 +515,7 @@ int Backend::deinterlaceMethod()
     return s_instance->m_deinterlaceMethod;
 }
 
-void Backend::setObjectDescriptionProperities( ObjectDescriptionType type, int index, const QHash<QByteArray, QVariant>& properities )
+void Backend::setObjectDescriptionProperities(ObjectDescriptionType type, int index, const QHash<QByteArray, QVariant>& properities)
 {
     s_instance->m_objectDescriptions[type][index] = properities;
 }
@@ -548,7 +548,7 @@ QHash<QByteArray, QVariant> Backend::audioOutputProperties(int audioDevice)
 
             const QString iconName = that->m_audioOutputInfos[i].icon;
             if (!iconName.isEmpty()) {
-                ret.insert("icon", QLatin1String( "audio-card" ));
+                ret.insert("icon", QLatin1String("audio-card"));
             }
             ret.insert("available", that->m_audioOutputInfos[i].available);
 
@@ -614,24 +614,24 @@ void Backend::checkAudioOutputs()
                 // ignore these drivers (hardware devices are listed by the KDE platform plugin)
             } else if (0 == strcmp(outputPlugins[i], "jack")) {
                 addAudioOutput(nextIndex++, 9, tr("Jack Audio Connection Kit"),
-                        tr( "<html><p>JACK is a low-latency audio server. It can connect a number "
+                        tr("<html><p>JACK is a low-latency audio server. It can connect a number "
                             "of different applications to an audio device, as well as allowing "
                             "them to share audio between themselves.</p>"
                             "<p>JACK was designed from the ground up for professional audio "
                             "work, and its design focuses on two key areas: synchronous "
-                            "execution of all clients, and low latency operation.</p></html>" ),
-                            /*icon name */"audio-backend-jack", outputPlugins[i] );
+                            "execution of all clients, and low latency operation.</p></html>"),
+                            /*icon name */"audio-backend-jack", outputPlugins[i]);
             } else if (0 == strcmp(outputPlugins[i], "arts")) {
-                addAudioOutput(nextIndex++, -100, tr( "aRts" ),
-                        tr( "<html><p>aRts is the old soundserver and media framework that was used "
-                            "in KDE2 and KDE3. Its use is discuraged.</p></html>" ),
+                addAudioOutput(nextIndex++, -100, tr("aRts"),
+                        tr("<html><p>aRts is the old soundserver and media framework that was used "
+                            "in KDE2 and KDE3. Its use is discuraged.</p></html>"),
                         /*icon name */"audio-backend-arts", outputPlugins[i]);
             } else if (0 == strcmp(outputPlugins[i], "pulseaudio")) {
-                addAudioOutput(nextIndex++, 10, tr( "PulseAudio" ),
+                addAudioOutput(nextIndex++, 10, tr("PulseAudio"),
                         xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
                         /*icon name */"audio-backend-pulseaudio", outputPlugins[i]);
             } else if (0 == strcmp(outputPlugins[i], "esd")) {
-                addAudioOutput(nextIndex++, 8, tr( "Esound (ESD)" ),
+                addAudioOutput(nextIndex++, 8, tr("Esound (ESD)"),
                         xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
                         /*icon name */"audio-backend-esd", outputPlugins[i]);
             } else {

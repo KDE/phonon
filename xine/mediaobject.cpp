@@ -357,7 +357,7 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
             qWarning() <<  "do not ever use kbytestream:/ URLs with MediaObject!";
             m_shouldFakeBufferingOnPlay = false;
             m_stream->setMrl(QByteArray());
-            m_stream->setError(Phonon::NormalError, tr( "Cannot open media data at '<i>%1</i>'" ).arg( source.url().toString(  QUrl::RemovePassword ) ));
+            m_stream->setError(Phonon::NormalError, tr("Cannot open media data at '<i>%1</i>'").arg(source.url().toString(QUrl::RemovePassword)));
             return;
         }
         switch (how) {
@@ -374,7 +374,7 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
         {
             m_mediaDevice = QFile::encodeName(source.deviceName());
             if (!m_mediaDevice.isEmpty() && !m_mediaDevice.startsWith('/')) {
-                //qWarning() << "mediaDevice '%i' has to be an absolute path - starts with a /", m_mediaDevice );
+                //qWarning() << "mediaDevice '%i' has to be an absolute path - starts with a /", m_mediaDevice);
                 m_mediaDevice.clear();
             }
             m_mediaDevice += '/';
@@ -598,15 +598,15 @@ QVariant MediaObject::interfaceCall(Interface interface, int command, const QLis
         switch (static_cast<AddonInterface::SubtitleCommand>(command))
         {
             case AddonInterface::availableSubtitles:
-                return QVariant::fromValue( m_stream->availableSubtitles() );
+                return QVariant::fromValue(m_stream->availableSubtitles());
             case AddonInterface::currentSubtitle:
                 return QVariant::fromValue(m_stream->currentSubtitle());
             case AddonInterface::setCurrentSubtitle:
-                if (arguments.isEmpty() || !arguments.first().canConvert<SubtitleDescription>() ) {
+                if (arguments.isEmpty() || !arguments.first().canConvert<SubtitleDescription>()) {
                     debug() << Q_FUNC_INFO << "arguments invalid";
                     return false;
                 }
-                m_stream->setCurrentSubtitle( arguments.first().value<SubtitleDescription>() );
+                m_stream->setCurrentSubtitle(arguments.first().value<SubtitleDescription>());
                 return true;
         }
         break;
@@ -614,15 +614,15 @@ QVariant MediaObject::interfaceCall(Interface interface, int command, const QLis
         switch (static_cast<AddonInterface::AudioChannelCommand>(command))
         {
             case AddonInterface::availableAudioChannels:
-                return QVariant::fromValue( m_stream->availableAudioChannels() );
+                return QVariant::fromValue(m_stream->availableAudioChannels());
             case AddonInterface::currentAudioChannel:
-                return QVariant::fromValue( m_stream->currentAudioChannel() );
+                return QVariant::fromValue(m_stream->currentAudioChannel());
             case AddonInterface::setCurrentAudioChannel:
-                if (arguments.isEmpty() || !arguments.first().canConvert<AudioChannelDescription>() ) {
+                if (arguments.isEmpty() || !arguments.first().canConvert<AudioChannelDescription>()) {
                     debug() << Q_FUNC_INFO << "arguments invalid";
                     return false;
                 }
-                m_stream->setCurrentAudioChannel( arguments.first().value<AudioChannelDescription>() );
+                m_stream->setCurrentAudioChannel(arguments.first().value<AudioChannelDescription>());
                 return true;
          }
          break;

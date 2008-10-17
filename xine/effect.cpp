@@ -84,7 +84,7 @@ void EffectXT::createInstance()
     debug() << Q_FUNC_INFO << "m_pluginName =" << m_pluginName;
     Q_ASSERT(m_plugin == 0 && m_pluginApi == 0);
     if (!m_pluginName) {
-        qWarning(  "tried to create invalid Effect" );
+        qWarning( "tried to create invalid Effect");
         return;
     }
 
@@ -247,7 +247,7 @@ QVariant Effect::parameterValue(const EffectParameter &p) const
         case POST_PARAM_TYPE_CHAR:         /* char (or vector of chars = string) */
         case POST_PARAM_TYPE_STRING:       /* (char *), ASCIIZ                   */
         case POST_PARAM_TYPE_STRINGLIST:   /* (char **) list, NULL terminated    */
-            qWarning( ) <<  "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
+            qWarning() <<  "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported.";
             return QVariant();
         case POST_PARAM_TYPE_BOOL:         /* integer (0 or 1)                   */
             return static_cast<bool>(*reinterpret_cast<int *>(xt->m_pluginParams + p.offset));
@@ -302,7 +302,7 @@ void Effect::setParameterValue(const EffectParameter &p, const QVariant &newValu
         case POST_PARAM_TYPE_CHAR:         /* char (or vector of chars = string) */
         case POST_PARAM_TYPE_STRING:       /* (char *), ASCIIZ                   */
         case POST_PARAM_TYPE_STRINGLIST:   /* (char **) list, NULL terminated    */
-            qWarning( ) << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported." ;
+            qWarning() << "char/string/stringlist parameter '" << (p.description ? p.description : p.name) << "' not supported." ;
             return;
         case POST_PARAM_TYPE_BOOL:         /* integer (0 or 1)                   */
             {

@@ -47,13 +47,13 @@ VolumeFaderEffect::VolumeFaderEffect(QObject *parent)
     const QVariant one = 1.0;
     const QVariant dZero = 0.0;
     const QVariant iZero = 0;
-    addParameter(EffectParameter(VolumeParameter, tr( "Volume" ), 0, one, dZero, one));
-    addParameter(EffectParameter(FadeCurveParameter, tr( "Fade Curve" ),
+    addParameter(EffectParameter(VolumeParameter, tr("Volume"), 0, one, dZero, one));
+    addParameter(EffectParameter(FadeCurveParameter, tr("Fade Curve"),
                 EffectParameter::IntegerHint, iZero, iZero, 3));
-    addParameter(EffectParameter(FadeToParameter, tr( "Fade To Volume" ), 0, one, dZero, one));
-    addParameter(EffectParameter(FadeTimeParameter, tr( "Fade Time" ),
+    addParameter(EffectParameter(FadeToParameter, tr("Fade To Volume"), 0, one, dZero, one));
+    addParameter(EffectParameter(FadeTimeParameter, tr("Fade Time"),
                 EffectParameter::IntegerHint, iZero, iZero, 10000));
-    addParameter(EffectParameter(StartFadeParameter, tr( "Start Fade" ),
+    addParameter(EffectParameter(StartFadeParameter, tr("Start Fade"),
                 EffectParameter::ToggledHint, iZero, iZero, 1));
 }
 
