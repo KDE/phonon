@@ -19,7 +19,7 @@
 */
 
 #ifndef I18N_NOOP
-#define I18N_NOOP( x ) x
+#define I18N_NOOP(x) x
 #endif
 
 #include "backend.h"
@@ -140,10 +140,10 @@ typedef struct
  */
 static char *enum_fadeCurve[] = { "Fade3Decibel", "Fade6Decibel", "Fade9Decibel", "Fade12Decibel", NULL };
 START_PARAM_DESCR(kvolumefader_parameters_t)
-PARAM_ITEM(POST_PARAM_TYPE_INT, fadeCurve, enum_fadeCurve, 0.0, 0.0, 0, I18N_NOOP ( "fade curve") )
-PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, currentVolume, NULL, 0.0, maxVolume, 0, I18N_NOOP( "current volume") )
-PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, fadeTo, NULL, 0.0, maxVolume, 0, I18N_NOOP( "volume to fade to") )
-PARAM_ITEM(POST_PARAM_TYPE_INT, fadeTime, NULL, 0.0, 10000.0, 0, I18N_NOOP( "fade time in milliseconds") )
+PARAM_ITEM(POST_PARAM_TYPE_INT, fadeCurve, enum_fadeCurve, 0.0, 0.0, 0, I18N_NOOP ("fade curve"))
+PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, currentVolume, NULL, 0.0, maxVolume, 0, I18N_NOOP("current volume"))
+PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, fadeTo, NULL, 0.0, maxVolume, 0, I18N_NOOP("volume to fade to"))
+PARAM_ITEM(POST_PARAM_TYPE_INT, fadeTime, NULL, 0.0, 10000.0, 0, I18N_NOOP("fade time in milliseconds"))
 END_PARAM_DESCR(param_descr)
 
 static int set_parameters (xine_post_t *this_gen, void *param_gen) 
@@ -232,14 +232,14 @@ static xine_post_api_descr_t *get_param_descr()
 static char *get_help ()
 {
     static QByteArray helpText(
-           QObject::tr( "Normalizes audio by maximizing the volume without distorting "
+           QObject::tr("Normalizes audio by maximizing the volume without distorting "
                  "the sound.\n"
                  "\n"
                  "Parameters:\n"
                  "  method: 1: use a single sample to smooth the variations via "
                  "the standard weighted mean over past samples (default); 2: use "
                  "several samples to smooth the variations via the standard "
-                 "weighted mean over past samples.\n" ).toUtf8() );
+                 "weighted mean over past samples.\n").toUtf8());
     return helpText.data();
 }
 
@@ -429,13 +429,13 @@ static post_plugin_t *kvolumefader_open_plugin(post_class_t *class_gen, int inpu
     return &that->post;
 }
 
-#if XINE_MAJOR_VERSION < 1 || ( XINE_MAJOR_VERSION == 1 && ( XINE_MINOR_VERSION < 1 || ( XINE_MINOR_VERSION == 1 && XINE_SUB_VERSION < 90 ) ) )
+#if XINE_MAJOR_VERSION < 1 || (XINE_MAJOR_VERSION == 1 && (XINE_MINOR_VERSION < 1 || (XINE_MINOR_VERSION == 1 && XINE_SUB_VERSION < 90)))
 #define NEED_DESCRIPTION_FUNCTION 1
 #else
 #define NEED_DESCRIPTION_FUNCTION 0
 #endif
 
-#define PLUGIN_DESCRIPTION I18N_NOOP( "Fade in or fade out with different fade curves" )
+#define PLUGIN_DESCRIPTION I18N_NOOP("Fade in or fade out with different fade curves")
 #define PLUGIN_IDENTIFIER "KVolumeFader"
 
 #if NEED_DESCRIPTION_FUNCTION
@@ -448,7 +448,7 @@ static char *kvolumefader_get_identifier(post_class_t *class_gen)
 static char *kvolumefader_get_description(post_class_t *class_gen)
 {
     Q_UNUSED(class_gen);
-    static QByteArray description( QObject::tr( PLUGIN_DESCRIPTION ).toUtf8() );
+    static QByteArray description(QObject::tr(PLUGIN_DESCRIPTION).toUtf8());
     return description.data();
 }
 #endif
