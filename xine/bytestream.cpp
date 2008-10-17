@@ -55,8 +55,7 @@ ByteStream *ByteStream::fromMrl(const QByteArray &mrl)
         return 0;
     }
     ByteStream *ret = 0;
-    const unsigned int length = mrl.length();
-    Q_ASSERT(length >= 13 + sizeof(void *) && length <= 13 + 2 * sizeof(void *));
+    Q_ASSERT(mrl.length() >= 13 + sizeof(void *) && mrl.length() <= 13 + 2 * sizeof(void *));
     const unsigned char *encoded = reinterpret_cast<const unsigned char *>(mrl.constData() + 13);
     unsigned char *addrHack = reinterpret_cast<unsigned char *>(&ret);
     for (unsigned int i = 0; i < sizeof(void *); ++i, ++encoded) {
@@ -189,7 +188,7 @@ qint64 ByteStream::readFromBuffer(void *buf, size_t count)
     // never called from main thread
     //Q_ASSERT(m_mainThread != pthread_self());
 
-    qint64 currentPosition = m_currentPosition;
+    const qint64 currentPosition = m_currentPosition;
 
     PXINE_VDEBUG << count;
 
@@ -209,6 +208,7 @@ qint64 ByteStream::readFromBuffer(void *buf, size_t count)
             return 0;
         }
         Q_ASSERT(currentPosition == m_currentPosition);
+        Q_UNUSED(currentPosition);
         //PXINE_VDEBUG << "m_buffersize = " << m_buffersize;
     }
     if (m_buffersize >= count) {
