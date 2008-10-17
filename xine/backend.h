@@ -29,6 +29,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QVariant>
+#include <QtCore/QtDebug>
 
 #include <xine.h>
 #include <xine/xineutils.h>
@@ -111,6 +112,10 @@ class Backend : public QObject, public Phonon::BackendInterface
         static void returnXineEngine(const XineEngine &);
         static XineEngine xineEngineForStream();
 
+#ifndef NDEBUG
+        inline QDebug _debug() { if (m_debugMessages) { return qDebug(); } return QDebug(&m_noDebugStream); }
+#endif
+
     signals:
         void objectDescriptionChanged(ObjectDescriptionType);
 
@@ -152,6 +157,7 @@ class Backend : public QObject, public Phonon::BackendInterface
         bool m_deinterlaceVCD : 1;
         bool m_deinterlaceFile : 1;
         bool m_inShutdown : 1;
+        bool m_debugMessages : 1;
         XineThread *m_thread;
         XineEngine m_xine;
         QTimer signalTimer;
@@ -161,7 +167,45 @@ class Backend : public QObject, public Phonon::BackendInterface
         QList<XineEngine> m_freeEngines;
 
         friend class XineThread;
+
+#ifndef NDEBUG
+        class NoDebugStream: public QIODevice
+        {
+            public:
+                NoDebugStream() { open(WriteOnly); }
+                bool isSequential() const { return true; }
+                qint64 readData(char *, qint64) { return 0; /* eof */ }
+                qint64 readLineData(char *, qint64) { return 0; /* eof */ }
+                qint64 writeData(const char *, qint64 len) { return len; }
+        } m_noDebugStream;
+#endif
 };
+
+#ifdef NDEBUG
+class NoDebug
+{
+public:
+    inline NoDebug(){}
+    inline NoDebug(const QDebug &){}
+    inline ~NoDebug(){}
+    inline NoDebug &operator<<(QTextStreamFunction) { return *this; }
+    inline NoDebug &operator<<(QTextStreamManipulator) { return *this; }
+    inline NoDebug &space() { return *this; }
+    inline NoDebug &nospace() { return *this; }
+    inline NoDebug &maybeSpace() { return *this; }
+
+    template<typename T>
+    inline NoDebug &operator<<(const T &) { return *this; }
+};
+inline NoDebug debug() { return NoDebug(); }
+
+#else
+inline QDebug debug()
+{
+    return Backend::instance()->_debug();
+}
+#endif
+
 }} // namespace Phonon::Xine
 
 QT_END_NAMESPACE

@@ -81,7 +81,7 @@ xine_audio_port_t *EffectXT::fakeAudioPort()
 
 void EffectXT::createInstance()
 {
-    qDebug() << "m_pluginName =" << m_pluginName;
+    debug() << Q_FUNC_INFO << "m_pluginName =" << m_pluginName;
     Q_ASSERT(m_plugin == 0 && m_pluginApi == 0);
     if (!m_pluginName) {
         qWarning(  "tried to create invalid Effect" );

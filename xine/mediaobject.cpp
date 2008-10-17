@@ -132,7 +132,7 @@ bool MediaObject::isSeekable() const
 
 qint64 MediaObject::currentTime() const
 {
-    //qDebug() << kBacktrace();
+    //debug() << Q_FUNC_INFO << kBacktrace();
     switch(m_stream->state()) {
     case Phonon::PausedState:
     case Phonon::BufferingState:
@@ -150,7 +150,7 @@ qint64 MediaObject::currentTime() const
 qint64 MediaObject::totalTime() const
 {
     const qint64 ret = m_stream->totalTime();
-    //qDebug() << "returning " << ret;
+    //debug() << Q_FUNC_INFO << "returning " << ret;
     return ret;
 }
 
@@ -162,18 +162,18 @@ qint64 MediaObject::remainingTime() const
     case Phonon::PlayingState:
         {
             const qint64 ret = m_stream->remainingTime();
-            //qDebug() << "returning " << ret;
+            //debug() << Q_FUNC_INFO << "returning " << ret;
             return ret;
         }
         break;
     case Phonon::StoppedState:
     case Phonon::LoadingState:
-        //qDebug() << "returning 0";
+        //debug() << Q_FUNC_INFO << "returning 0";
         return 0;
     case Phonon::ErrorState:
         break;
     }
-    //qDebug() << "returning -1";
+    //debug() << Q_FUNC_INFO << "returning -1";
     return -1;
 }
 
@@ -190,7 +190,7 @@ void MediaObject::setTickInterval(qint32 newTickInterval)
 
 void MediaObject::play()
 {
-    qDebug() << green << "PLAY" << normal;
+    debug() << Q_FUNC_INFO << green << "PLAY" << normal;
     m_stream->play();
     if (m_shouldFakeBufferingOnPlay || m_state == Phonon::StoppedState || m_state == Phonon::LoadingState || m_state == Phonon::PausedState) {
         m_shouldFakeBufferingOnPlay = false;
@@ -212,7 +212,7 @@ void MediaObject::stop()
 
 void MediaObject::seek(qint64 time)
 {
-    //qDebug() << time;
+    //debug() << Q_FUNC_INFO << time;
     m_stream->seek(time);
 }
 
@@ -228,7 +228,7 @@ Phonon::ErrorType MediaObject::errorType() const
 
 void MediaObject::startToFakeBuffering()
 {
-    qDebug() << blue << "start faking" << normal;
+    debug() << Q_FUNC_INFO << blue << "start faking" << normal;
     m_fakingBuffering = true;
     if (m_state == Phonon::BufferingState) {
         return;
@@ -237,7 +237,7 @@ void MediaObject::startToFakeBuffering()
         return;
     }
 
-    qDebug() << "fake state change: reached BufferingState after " << m_state;
+    debug() << Q_FUNC_INFO << "fake state change: reached BufferingState after " << m_state;
 
     Phonon::State oldstate = m_state;
     m_state = Phonon::BufferingState;
@@ -249,7 +249,7 @@ void MediaObject::handleStateChange(Phonon::State newstate, Phonon::State oldsta
 {
     if (m_state == newstate && m_state == BufferingState) {
         m_fakingBuffering = false;
-        qDebug() << blue << "end faking" << normal;
+        debug() << Q_FUNC_INFO << blue << "end faking" << normal;
         // BufferingState -> BufferingState, nothing to do
         return;
     } else if (m_state != oldstate) {
@@ -260,7 +260,7 @@ void MediaObject::handleStateChange(Phonon::State newstate, Phonon::State oldsta
         Q_ASSERT(m_state == BufferingState);
         if (newstate == PlayingState || newstate == ErrorState) {
             m_fakingBuffering = false;
-            qDebug() << blue << "end faking" << normal;
+            debug() << Q_FUNC_INFO << blue << "end faking" << normal;
             oldstate = m_state;
         } else {
             // we're faking BufferingState and stay there until we either reach BufferingState,
@@ -272,24 +272,24 @@ void MediaObject::handleStateChange(Phonon::State newstate, Phonon::State oldsta
     }
     m_state = newstate;
 
-    qDebug() << "reached " << newstate << " after " << oldstate;
+    debug() << Q_FUNC_INFO << "reached " << newstate << " after " << oldstate;
     emit stateChanged(newstate, oldstate);
 }
 void MediaObject::handleFinished()
 {
-    qDebug() << "emit finished()";
+    debug() << Q_FUNC_INFO << "emit finished()";
     emit finished();
 }
 
 MediaSource MediaObject::source() const
 {
-    //qDebug();
+    //debug() << Q_FUNC_INFO;
     return m_mediaSource;
 }
 
 qint32 MediaObject::prefinishMark() const
 {
-    //qDebug();
+    //debug() << Q_FUNC_INFO;
     return m_prefinishMark;
 }
 
@@ -342,7 +342,7 @@ void MediaObject::setSource(const MediaSource &source)
 
 void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl how)
 {
-    //qDebug();
+    //debug() << Q_FUNC_INFO;
     m_titles.clear();
     m_mediaSource = source;
 
@@ -445,7 +445,7 @@ QByteArray MediaObject::autoplayMrlsToTitles(const char *plugin, const char *def
     char **mrls = xine_get_autoplay_mrls(m_stream->xine(), plugin, &num);
     for (int i = 0; i < num; ++i) {
         if (mrls[i]) {
-            qDebug() << mrls[i];
+            debug() << Q_FUNC_INFO << mrls[i];
             m_titles << QByteArray(mrls[i]);
         }
     }
@@ -493,7 +493,7 @@ bool MediaObject::hasInterface(Interface interface) const
 
 void MediaObject::handleAvailableTitlesChanged(int t)
 {
-    qDebug() << t;
+    debug() << Q_FUNC_INFO << t;
     if (m_mediaSource.discType() == Phonon::Dvd) {
         QByteArray mrl = "dvd:" + m_mediaDevice;
         const int lastSize = m_titles.size();
@@ -509,7 +509,7 @@ void MediaObject::handleAvailableTitlesChanged(int t)
 
 QVariant MediaObject::interfaceCall(Interface interface, int command, const QList<QVariant> &arguments)
 {
-    qDebug() << interface << ", " << command;
+    debug() << Q_FUNC_INFO << interface << ", " << command;
 
     switch (interface) {
     case AddonInterface::ChapterInterface:
@@ -521,7 +521,7 @@ QVariant MediaObject::interfaceCall(Interface interface, int command, const QLis
         case AddonInterface::setChapter:
             {
                 if (arguments.isEmpty() || !arguments.first().canConvert(QVariant::Int)) {
-                    qDebug() << "arguments invalid";
+                    debug() << Q_FUNC_INFO << "arguments invalid";
                     return false;
                 }
                 int c = arguments.first().toInt();
@@ -540,27 +540,27 @@ QVariant MediaObject::interfaceCall(Interface interface, int command, const QLis
     case AddonInterface::TitleInterface:
         switch (static_cast<AddonInterface::TitleCommand>(command)) {
         case AddonInterface::availableTitles:
-            qDebug() << m_titles.size();
+            debug() << Q_FUNC_INFO << m_titles.size();
             return m_titles.size();
         case AddonInterface::title:
-            qDebug() << m_currentTitle;
+            debug() << Q_FUNC_INFO << m_currentTitle;
             return m_currentTitle;
         case AddonInterface::setTitle:
             {
                 if (arguments.isEmpty() || !arguments.first().canConvert(QVariant::Int)) {
-                    qDebug() << "arguments invalid";
+                    debug() << Q_FUNC_INFO << "arguments invalid";
                     return false;
                 }
                 int t = arguments.first().toInt();
                 if (t > m_titles.size()) {
-                    qDebug() << "invalid title";
+                    debug() << Q_FUNC_INFO << "invalid title";
                     return false;
                 }
                 if (m_currentTitle == t) {
-                    qDebug() << "no title change";
+                    debug() << Q_FUNC_INFO << "no title change";
                     return true;
                 }
-                qDebug() << "change title from " << m_currentTitle << " to " << t;
+                debug() << Q_FUNC_INFO << "change title from " << m_currentTitle << " to " << t;
                 m_currentTitle = t;
                 m_stream->setMrl(m_titles[t - 1],
                         m_autoplayTitles ? XineStream::KeepState : XineStream::StoppedState);
@@ -574,20 +574,20 @@ QVariant MediaObject::interfaceCall(Interface interface, int command, const QLis
         case AddonInterface::setAutoplayTitles:
             {
                 if (arguments.isEmpty() || !arguments.first().canConvert(QVariant::Bool)) {
-                    qDebug() << "arguments invalid";
+                    debug() << Q_FUNC_INFO << "arguments invalid";
                     return false;
                 }
                 bool b = arguments.first().toBool();
                 if (b == m_autoplayTitles) {
-                    qDebug() << "setAutoplayTitles: no change";
+                    debug() << Q_FUNC_INFO << "setAutoplayTitles: no change";
                     return false;
                 }
                 m_autoplayTitles = b;
                 if (b) {
-                    qDebug() << "setAutoplayTitles: enable autoplay";
+                    debug() << Q_FUNC_INFO << "setAutoplayTitles: enable autoplay";
                     m_stream->useGaplessPlayback(true);
                 } else {
-                    qDebug() << "setAutoplayTitles: disable autoplay";
+                    debug() << Q_FUNC_INFO << "setAutoplayTitles: disable autoplay";
                     m_stream->useGaplessPlayback(false);
                 }
                 return true;
@@ -603,7 +603,7 @@ QVariant MediaObject::interfaceCall(Interface interface, int command, const QLis
                 return QVariant::fromValue(m_stream->currentSubtitle());
             case AddonInterface::setCurrentSubtitle:
                 if (arguments.isEmpty() || !arguments.first().canConvert<SubtitleDescription>() ) {
-                    qDebug() << "arguments invalid";
+                    debug() << Q_FUNC_INFO << "arguments invalid";
                     return false;
                 }
                 m_stream->setCurrentSubtitle( arguments.first().value<SubtitleDescription>() );
@@ -619,7 +619,7 @@ QVariant MediaObject::interfaceCall(Interface interface, int command, const QLis
                 return QVariant::fromValue( m_stream->currentAudioChannel() );
             case AddonInterface::setCurrentAudioChannel:
                 if (arguments.isEmpty() || !arguments.first().canConvert<AudioChannelDescription>() ) {
-                    qDebug() << "arguments invalid";
+                    debug() << Q_FUNC_INFO << "arguments invalid";
                     return false;
                 }
                 m_stream->setCurrentAudioChannel( arguments.first().value<AudioChannelDescription>() );
@@ -661,7 +661,7 @@ void MediaObject::upstreamEvent(Event *e)
         downstreamEvent(new HeresYourXineStreamEvent(stream()));
         break;
     case Event::UpdateVolume:
-        qDebug() << "UpdateVolumeEvent";
+        debug() << Q_FUNC_INFO << "UpdateVolumeEvent";
         // postEvent takes ownership of the event and will delete it when done
         QCoreApplication::postEvent(m_stream, copyEvent(static_cast<UpdateVolumeEvent *>(e)));
         break;
@@ -674,7 +674,7 @@ void MediaObject::upstreamEvent(Event *e)
         QCoreApplication::postEvent(m_stream, copyEvent(static_cast<SetParamEvent *>(e)));
         break;
     case Event::EventSend:
-        //qDebug() << "copying EventSendEvent and post it to XineStream" << m_stream;
+        //debug() << Q_FUNC_INFO << "copying EventSendEvent and post it to XineStream" << m_stream;
         // postEvent takes ownership of the event and will delete it when done
         QCoreApplication::postEvent(m_stream, copyEvent(static_cast<EventSendEvent *>(e)));
         break;

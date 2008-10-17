@@ -50,7 +50,7 @@ AudioOutput::AudioOutput(QObject *parent)
 
 AudioOutput::~AudioOutput()
 {
-    //qDebug() ;
+    //debug() << Q_FUNC_INFO ;
 }
 
 AudioOutputXT::~AudioOutputXT()
@@ -58,7 +58,7 @@ AudioOutputXT::~AudioOutputXT()
     if (m_audioPort) {
         xine_close_audio_driver(m_xine, m_audioPort);
         m_audioPort = 0;
-        qDebug() << "----------------------------------------------- audio_port destroyed";
+        debug() << Q_FUNC_INFO << "----------------------------------------------- audio_port destroyed";
     }
 }
 
@@ -100,7 +100,7 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
     QVariant v = deviceDesc.property("driver");
     if (!v.isValid()) {
         const QByteArray &outputPlugin = Backend::audioDriverFor(deviceDesc.index());
-        qDebug() << "use output plugin:" << outputPlugin;
+        debug() << Q_FUNC_INFO << "use output plugin:" << outputPlugin;
         port = xine_open_audio_driver(xt->m_xine, outputPlugin.constData(), 0);
     } else {
         const QByteArray &outputPlugin = v.toByteArray();
@@ -109,7 +109,7 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
         if (deviceIds.isEmpty()) {
             return 0;
         }
-        //qDebug() << outputPlugin << alsaDevices;
+        //debug() << Q_FUNC_INFO << outputPlugin << alsaDevices;
 
         if (outputPlugin == "alsa") {
             foreach (const QString &device, deviceIds) {
@@ -145,16 +145,16 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
 
                 port = xine_open_audio_driver(xt->m_xine, "alsa", 0);
                 if (port) {
-                    qDebug() << "use ALSA device: " << device;
+                    debug() << Q_FUNC_INFO << "use ALSA device: " << device;
                     break;
                 }
             }
         } else if (outputPlugin == "oss") {
-            qDebug() << "use OSS output";
+            debug() << Q_FUNC_INFO << "use OSS output";
             port = xine_open_audio_driver(xt->m_xine, "oss", 0);
         }
     }
-    qDebug() << "----------------------------------------------- audio_port created";
+    debug() << Q_FUNC_INFO << "----------------------------------------------- audio_port created";
     return port;
 }
 
@@ -174,7 +174,7 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newDevice)
 
     xine_audio_port_t *port = createPort(newDevice);
     if (!port) {
-        qDebug() << "new audio port is invalid";
+        debug() << Q_FUNC_INFO << "new audio port is invalid";
         return false;
     }
 
@@ -206,7 +206,7 @@ void AudioOutput::xineEngineChanged()
     if (xt->m_xine) {
         xine_audio_port_t *port = createPort(m_device);
         if (!port) {
-            qDebug() << "stored audio port is invalid";
+            debug() << Q_FUNC_INFO << "stored audio port is invalid";
             QMetaObject::invokeMethod(this, "audioDeviceFailed", Qt::QueuedConnection);
             return;
         }
@@ -271,7 +271,7 @@ bool AudioOutput::event(QEvent *ev)
 
 void AudioOutput::graphChanged()
 {
-    qDebug();
+    debug() << Q_FUNC_INFO;
     // we got connected to a new XineStream, it needs to know our m_volume
     int xinevolume = static_cast<int>(m_volume * 100);
     if (xinevolume > 200) {

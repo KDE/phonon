@@ -68,6 +68,7 @@ Backend *Backend::instance()
 Backend::Backend(QObject *parent, const QVariantList &)
     : QObject(parent),
     m_inShutdown(false),
+    m_debugMessages(!qgetenv("PHONON_XINE_DEBUG").isEmpty()),
     m_thread(0)
 {
     Q_ASSERT(s_instance == 0);
@@ -93,7 +94,7 @@ Backend::Backend(QObject *parent, const QVariantList &)
     connect(&signalTimer, SIGNAL(timeout()), SLOT(emitAudioDeviceChange()));
     QDBusConnection::sessionBus().registerObject("/internal/PhononXine", this, QDBusConnection::ExportScriptableSlots);
 
-    qDebug() << "Using Xine version " << xine_get_version_string();
+    debug() << Q_FUNC_INFO << "Using Xine version " << xine_get_version_string();
 }
 
 Backend::~Backend()
@@ -160,7 +161,7 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
     case EffectClass:
         {
             Q_ASSERT(args.size() == 1);
-            qDebug() << "creating Effect(" << args[0];
+            debug() << Q_FUNC_INFO << "creating Effect(" << args[0];
             Effect *e = new Effect(args[0].toInt(), parent);
             if (e->isValid()) {
                 return e;
@@ -256,7 +257,7 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
 
 QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescriptionType type, int index) const
 {
-    //qDebug() << type << index;
+    //debug() << Q_FUNC_INFO << type << index;
     QHash<QByteArray, QVariant> ret;
     switch (type) {
     case Phonon::AudioOutputDeviceType:
@@ -350,13 +351,13 @@ bool Backend::startConnectionChange(QSet<QObject *> nodes)
 
 bool Backend::connectNodes(QObject *_source, QObject *_sink)
 {
-    qDebug() << _source << "->" << _sink;
+    debug() << Q_FUNC_INFO << _source << "->" << _sink;
     SourceNode *source = qobject_cast<SourceNode *>(_source);
     SinkNode *sink = qobject_cast<SinkNode *>(_sink);
     if (!source || !sink) {
         return false;
     }
-    qDebug() << source->threadSafeObject().data() << "->" << sink->threadSafeObject().data();
+    debug() << Q_FUNC_INFO << source->threadSafeObject().data() << "->" << sink->threadSafeObject().data();
     // what streams to connect - i.e. all both nodes support
     const MediaStreamTypes types = source->outputMediaStreamTypes() & sink->inputMediaStreamTypes();
     if (sink->source() != 0 || source->sinks().contains(sink)) {
@@ -389,13 +390,13 @@ bool Backend::connectNodes(QObject *_source, QObject *_sink)
 
 bool Backend::disconnectNodes(QObject *_source, QObject *_sink)
 {
-    qDebug() << _source << "XX" << _sink;
+    debug() << Q_FUNC_INFO << _source << "XX" << _sink;
     SourceNode *source = qobject_cast<SourceNode *>(_source);
     SinkNode *sink = qobject_cast<SinkNode *>(_sink);
     if (!source || !sink) {
         return false;
     }
-    qDebug() << source->threadSafeObject().data() << "XX" << sink->threadSafeObject().data();
+    debug() << Q_FUNC_INFO << source->threadSafeObject().data() << "XX" << sink->threadSafeObject().data();
     const MediaStreamTypes types = source->outputMediaStreamTypes() & sink->inputMediaStreamTypes();
     if (!source->sinks().contains(sink) || sink->source() != source) {
         return false;
@@ -464,7 +465,7 @@ bool Backend::endConnectionChange(QSet<QObject *> nodes)
             }
             sink->findXineEngine();
         } else if (!source) {
-            qDebug() << q << "is neither a source nor a sink";
+            debug() << Q_FUNC_INFO << q << "is neither a source nor a sink";
         }
         ConnectNotificationInterface *connectNotify = qobject_cast<ConnectNotificationInterface *>(q);
         if (connectNotify) {
@@ -490,7 +491,7 @@ bool Backend::endConnectionChange(QSet<QObject *> nodes)
 
 void Backend::emitAudioDeviceChange()
 {
-    qDebug();
+    debug() << Q_FUNC_INFO;
     emit objectDescriptionChanged(AudioOutputDeviceType);
 }
 
@@ -523,7 +524,7 @@ QList<int> Backend::audioOutputIndexes()
 {
     instance()->checkAudioOutputs();
     const Backend *const that = instance();
-    qDebug() << that << that->m_audioOutputInfos.size();
+    debug() << Q_FUNC_INFO << that << that->m_audioOutputInfos.size();
     QList<int> list;
     for (int i = 0; i < that->m_audioOutputInfos.size(); ++i) {
         list << that->m_audioOutputInfos[i].index;
@@ -599,13 +600,13 @@ void Backend::addAudioOutput(int index, int initialPreference, const QString &na
 void Backend::checkAudioOutputs()
 {
     if (m_audioOutputInfos.isEmpty()) {
-        qDebug() << "isEmpty";
+        debug() << Q_FUNC_INFO << "isEmpty";
         int nextIndex = 10000;
 
         // This will list the audio drivers, not the actual devices.
         const char *const *outputPlugins = xine_list_audio_output_plugins(m_xine);
         for (int i = 0; outputPlugins[i]; ++i) {
-            qDebug() << "outputPlugin: " << outputPlugins[i];
+            debug() << Q_FUNC_INFO << "outputPlugin: " << outputPlugins[i];
             if (0 == strcmp(outputPlugins[i], "alsa")
                     || 0 == strcmp(outputPlugins[i], "none")
                     || 0 == strcmp(outputPlugins[i], "file")
@@ -644,7 +645,7 @@ void Backend::checkAudioOutputs()
 
         // now m_audioOutputInfos holds all devices this computer has ever seen
         foreach (const AudioOutputInfo &info, m_audioOutputInfos) {
-            qDebug() << info.index << info.name << info.driver;
+            debug() << Q_FUNC_INFO << info.index << info.name << info.driver;
         }
     }
 }

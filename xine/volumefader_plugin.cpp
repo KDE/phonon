@@ -22,6 +22,7 @@
 #define I18N_NOOP( x ) x
 #endif
 
+#include "backend.h"
 
 #include <QObject>
 #include <phonon/volumefadereffect.h>
@@ -189,7 +190,7 @@ static int set_parameters (xine_post_t *this_gen, void *param_gen)
         x = "12dB";
         break;
     }
-    qDebug()
+    Phonon::Xine::debug() << Q_FUNC_INFO
         << x
         << param->currentVolume
         << param->fadeTo
@@ -301,7 +302,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
     const int num_channels = _x_ao_mode2channels(buf->format.mode);
     const int bufferLength = buf->num_frames * num_channels;
     if (buf->format.bits == 16 || buf->format.bits == 0) {
-        //qDebug() 
+        //debug() << Q_FUNC_INFO 
             //<< " bufferLength = " << bufferLength
             //<< " start = " << fadeStart
             //<< " diff = " << fadeDiff
@@ -319,7 +320,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
             oneOverCurveLength = 0.0f;
             fadeStart += fadeDiff;
             fadeDiff = 0.0f; // else a new mediaobject using this effect will start a 0s fade with fadeDiff != 0
-            qDebug() << "fade ended: stay at " << fadeStart;
+            Phonon::Xine::debug() << Q_FUNC_INFO << "fade ended: stay at " << fadeStart;
         }
         if (fadeStart == 0.0f) {
             memset(data + i, 0, sizeof(int16_t) *(bufferLength-i));
@@ -343,7 +344,7 @@ void KVolumeFaderPlugin::fadeBuffer(audio_buffer_t *buf)
             data[i] = data[i] * fadeStart / maxVolume;
         } */
     } else {
-        qDebug() << "broken bits " << buf->format.bits;
+        Phonon::Xine::debug() << Q_FUNC_INFO << "broken bits " << buf->format.bits;
     }
 }
 
