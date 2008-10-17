@@ -38,6 +38,10 @@
 
 #undef assert
 
+typedef QPair<QByteArray, QString> PhononDeviceAccess;
+typedef QList<PhononDeviceAccess> PhononDeviceAccessList;
+Q_DECLARE_METATYPE(PhononDeviceAccessList)
+
 namespace Phonon
 {
 namespace Xine
@@ -92,11 +96,129 @@ xine_audio_port_t *AudioOutputXT::audioPort() const
     return m_audioPort;
 }
 
+static QByteArray audioDriverFor(const QByteArray &driver)
+{
+    if (driver == "alsa" || driver == "oss" || driver == "pulseaudio" || driver == "esd" ||
+            driver == "arts" || driver == "jack") {
+        return driver;
+    }
+    return QByteArray();
+}
+
+static bool lookupConfigEntry(xine_t *xine, const char *key, xine_cfg_entry_t *entry, const char *driver)
+{
+    if(!xine_config_lookup_entry(xine, key, entry)) {
+        // the config key is not registered yet - it is registered when the output
+        // plugin is opened. So we open the plugin and close it again, then we can set the
+        // setting. :(
+        xine_audio_port_t *port = xine_open_audio_driver(xine, driver, 0);
+        if (port) {
+            xine_close_audio_driver(xine, port);
+            // port == 0 does not have to be fatal, since it might be only the default device
+            // that cannot be opened
+        }
+        // now the config key should be registered
+        if(!xine_config_lookup_entry(xine, key, entry)) {
+            qWarning() << "cannot configure the device on Xine's" << driver << "output plugin";
+            return false;
+        }
+    }
+    return true;
+}
+
 xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
 {
     K_XT(AudioOutput);
     xine_audio_port_t *port = 0;
 
+    const QVariant &deviceAccessListVariant = deviceDesc.property("deviceAccessList");
+    if (deviceAccessListVariant.isValid()) {
+        const PhononDeviceAccessList &deviceAccessList =
+            qvariant_cast<PhononDeviceAccessList>(deviceAccessListVariant);
+        foreach (const PhononDeviceAccess &access, deviceAccessList) {
+            const QByteArray &outputPlugin = audioDriverFor(access.first);
+            if (outputPlugin.isEmpty()) {
+                continue;
+            }
+            const QString &handle = access.second;
+            if (outputPlugin == "alsa") {
+                xine_cfg_entry_t deviceConfig;
+                if (!lookupConfigEntry(xt->m_xine, "audio.device.alsa_default_device",
+                            &deviceConfig, "alsa")) {
+                    continue;
+                }
+                Q_ASSERT(deviceConfig.type == XINE_CONFIG_TYPE_STRING);
+                QByteArray deviceStr = handle.toUtf8();
+                deviceConfig.str_value = deviceStr.data();
+                xine_config_update_entry(xt->m_xine, &deviceConfig);
+
+                const int err = xine_config_lookup_entry(xt->m_xine, "audio.device.alsa_front_device",
+                        &deviceConfig);
+                Q_ASSERT(err); Q_UNUSED(err);
+                Q_ASSERT(deviceConfig.type == XINE_CONFIG_TYPE_STRING);
+                deviceConfig.str_value = deviceStr.data();
+                xine_config_update_entry(xt->m_xine, &deviceConfig);
+
+                port = xine_open_audio_driver(xt->m_xine, "alsa", 0);
+                if (port) {
+                    debug() << Q_FUNC_INFO << "use ALSA device: " << handle;
+                    debug() << Q_FUNC_INFO << "----------------------------------------------- audio_port created";
+                    return port;
+                }
+            } else if (outputPlugin == "pulseaudio") {
+                xine_cfg_entry_t deviceConfig;
+                if (!lookupConfigEntry(xt->m_xine, "audio.pulseaudio_device", &deviceConfig,
+                        "pulseaudio")) {
+                    continue;
+                }
+                Q_ASSERT(deviceConfig.type == XINE_CONFIG_TYPE_STRING);
+                QByteArray deviceStr = handle.toUtf8();
+                deviceConfig.str_value = deviceStr.data();
+                xine_config_update_entry(xt->m_xine, &deviceConfig);
+
+                port = xine_open_audio_driver(xt->m_xine, "pulseaudio", 0);
+                if (port) {
+                    debug() << Q_FUNC_INFO << "use PulseAudio: " << handle;
+                    debug() << Q_FUNC_INFO << "----------------------------------------------- audio_port created";
+                    return port;
+                }
+            } else if (outputPlugin == "oss") {
+                xine_cfg_entry_t deviceConfig;
+                if (!lookupConfigEntry(xt->m_xine, "audio.device.oss_device_name", &deviceConfig,
+                            "oss")) {
+                    continue;
+                }
+                Q_ASSERT(deviceConfig.type == XINE_CONFIG_TYPE_ENUM);
+                deviceConfig.num_value = 0;
+                xine_config_update_entry(xt->m_xine, &deviceConfig);
+                if(!xine_config_lookup_entry(xt->m_xine, "audio.device.oss_device_number",
+                            &deviceConfig)) {
+                    qWarning() << "cannot set the OSS device on Xine's OSS output plugin";
+                    return 0;
+                }
+                Q_ASSERT(deviceConfig.type == XINE_CONFIG_TYPE_NUM);
+                const QByteArray &deviceStr = handle.toUtf8();
+                char lastChar = deviceStr[deviceStr.length() - 1];
+                int deviceNumber = -1;
+                if (lastChar >= '0' || lastChar <= '9') {
+                    deviceNumber = lastChar - '0';
+                    char lastChar = deviceStr[deviceStr.length() - 2];
+                    if (lastChar >= '0' || lastChar <= '9') {
+                        deviceNumber += 10 * (lastChar - '0');
+                    }
+                }
+                deviceConfig.num_value = deviceNumber;
+                xine_config_update_entry(xt->m_xine, &deviceConfig);
+
+                port = xine_open_audio_driver(xt->m_xine, "oss", 0);
+                if (port) {
+                    debug() << Q_FUNC_INFO << "use OSS device: " << handle;
+                    debug() << Q_FUNC_INFO << "----------------------------------------------- audio_port created";
+                    return port;
+                }
+            }
+        }
+    }
     QVariant v = deviceDesc.property("driver");
     if (!v.isValid()) {
         const QByteArray &outputPlugin = Backend::audioDriverFor(deviceDesc.index());
@@ -113,35 +235,21 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
 
         if (outputPlugin == "alsa") {
             foreach (const QString &device, deviceIds) {
-                xine_cfg_entry_t alsaDeviceConfig;
-                QByteArray deviceStr = device.toUtf8();
-                if(!xine_config_lookup_entry(xt->m_xine, "audio.device.alsa_default_device",
-                            &alsaDeviceConfig)) {
-                    // the config key is not registered yet - it is registered when the alsa output
-                    // plugin is opened. So we open the plugin and close it again, then we can set the
-                    // setting. :(
-                    port = xine_open_audio_driver(xt->m_xine, "alsa", 0);
-                    if (port) {
-                        xine_close_audio_driver(xt->m_xine, port);
-                        // port == 0 does not have to be fatal, since it might be only the default device
-                        // that cannot be opened
-                    }
-                    // now the config key should be registered
-                    if(!xine_config_lookup_entry(xt->m_xine, "audio.device.alsa_default_device",
-                                &alsaDeviceConfig)) {
-                        qWarning() << "cannot set the ALSA device on Xine's ALSA output plugin";
-                        return 0;
-                    }
+                xine_cfg_entry_t deviceConfig;
+                if (!lookupConfigEntry(xt->m_xine, "audio.device.alsa_default_device",
+                        &deviceConfig, "alsa")) {
+                    return 0;
                 }
-                Q_ASSERT(alsaDeviceConfig.type == XINE_CONFIG_TYPE_STRING);
-                alsaDeviceConfig.str_value = deviceStr.data();
-                xine_config_update_entry(xt->m_xine, &alsaDeviceConfig);
+                Q_ASSERT(deviceConfig.type == XINE_CONFIG_TYPE_STRING);
+                QByteArray deviceStr = device.toUtf8();
+                deviceConfig.str_value = deviceStr.data();
+                xine_config_update_entry(xt->m_xine, &deviceConfig);
 
-                int err = xine_config_lookup_entry(xt->m_xine, "audio.device.alsa_front_device", &alsaDeviceConfig);
+                int err = xine_config_lookup_entry(xt->m_xine, "audio.device.alsa_front_device", &deviceConfig);
                 Q_ASSERT(err);
-                Q_ASSERT(alsaDeviceConfig.type == XINE_CONFIG_TYPE_STRING);
-                alsaDeviceConfig.str_value = deviceStr.data();
-                xine_config_update_entry(xt->m_xine, &alsaDeviceConfig);
+                Q_ASSERT(deviceConfig.type == XINE_CONFIG_TYPE_STRING);
+                deviceConfig.str_value = deviceStr.data();
+                xine_config_update_entry(xt->m_xine, &deviceConfig);
 
                 port = xine_open_audio_driver(xt->m_xine, "alsa", 0);
                 if (port) {
