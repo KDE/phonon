@@ -10,6 +10,7 @@ InitialPreference=15
 
 Name=DirectShow9
 Name[pa]=ਡਾਇਰੈਕਸ਼ੋ9
+Name[sl]=DirectShow 9
 Name[sr]=Директшоу‑9
 Name[sr@latin]=DirectShow‑9
 Name[sv]=Directshow 9
@@ -36,6 +37,7 @@ Comment[nn]=Phonon-motor for DirectShow9
 Comment[pa]=ਫੋਨੋਨ ਡਾਇਰੈਕਟਸ਼ੋ9 ਬੈਕਐਂਡ
 Comment[pl]=Obsługa DirectShow9 przez Phonon
 Comment[pt]=Infra-estrutura do DirectShow9 para o Phonon
+Comment[sl]=Phononova Hrbtenica DirectShow 9
 Comment[sr]=Директшоу‑9 као позадина Фонона
 Comment[sr@latin]=DirectShow‑9 kao pozadina Phonona
 Comment[sv]=Phonon Directshow 9-gränssnitt
