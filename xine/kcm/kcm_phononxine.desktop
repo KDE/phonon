@@ -10,7 +10,6 @@ X-KDE-ParentComponents=phonon_xine
 
 Name=Phonon Xine
 Name[nds]=Phonon-Xine
-Name[nl]=Xine (Phonon)
 Name[pt]=Phonon com Xine
 Name[x-test]=xxPhonon Xinexx
 Comment=Xine Backend Configuration
@@ -24,7 +23,6 @@ Comment[gl]=Configuración da infraestrutura Xine
 Comment[ja]=Xine バックエンドの設定
 Comment[ko]=Xine 백엔드 설정
 Comment[nds]=Instellen vun't Xine-Hülpprogramm
-Comment[nl]=Xine-backend-configuratie
 Comment[nn]=Oppsett av Xine-motor
 Comment[pt]=Configuração da Infra-Estrutura do Xine
 Comment[sv]=Inställning av Xine-gränssnitt
