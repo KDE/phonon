@@ -364,12 +364,13 @@ bool AudioOutput::event(QEvent *ev)
     case Event::AudioDeviceFailed:
         {
             ev->accept();
-            // we don't know for sure which AudioPort failed. but the one without any
-            // capabilities must be the guilty one
-            K_XT(AudioOutput);
-            if (!xt->m_audioPort || xt->m_audioPort->get_capabilities(xt->m_audioPort) == AO_CAP_NOCAP) {
-                QMetaObject::invokeMethod(this, "audioDeviceFailed", Qt::QueuedConnection);
+            // we don't know for sure which AudioPort failed. We also can't know from the
+            // information libxine makes available. So we have to just try the old device again
+            if (setOutputDevice(m_device)) {
+                return true;
             }
+            // we really need a different output device
+            QMetaObject::invokeMethod(this, "audioDeviceFailed", Qt::QueuedConnection);
         }
         return true;
     default:
