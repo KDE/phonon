@@ -46,14 +46,15 @@ if (BUILD_PHONON_GSTREAMER)
       )
 
    find_package(Alsa)
-   if(ALSA_FOUND)
+   macro_ensure_version("0.10.22" ${GSTREAMER_VERSION} GSTREAMER_HAS_NONBLOCKING_ALSASINK)
+   if(ALSA_FOUND AND NOT GSTREAMER_HAS_NONBLOCKING_ALSASINK)
       add_definitions(-DUSE_ALSASINK2)
       include_directories(${ALSA_INCLUDES})
       set(phonon_gstreamer_SRCS
          ${phonon_gstreamer_SRCS}
          alsasink2.c
          )
-   endif(ALSA_FOUND)
+   endif(ALSA_FOUND AND NOT GSTREAMER_HAS_NONBLOCKING_ALSASINK)
 
    automoc4(phonon_gstreamer phonon_gstreamer_SRCS)
    add_library(phonon_gstreamer SHARED ${phonon_gstreamer_SRCS})

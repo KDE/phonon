@@ -125,6 +125,7 @@ void AudioOutput::setVolume(qreal newVolume)
 
 bool AudioOutput::setOutputDevice(int newDevice)
 {
+    qDebug() << Q_FUNC_INFO << newDevice;
     if (newDevice == m_device)
         return true;
 
