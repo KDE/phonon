@@ -5,6 +5,7 @@
 #  GSTREAMER_INCLUDE_DIR - the GStreamer include directory
 #  GSTREAMER_LIBRARIES - the libraries needed to use GStreamer
 #  GSTREAMER_DEFINITIONS - Compiler switches required for using GStreamer
+#  GSTREAMER_VERSION - the version of GStreamer
 
 # Copyright (c) 2008 Helio Chissini de Castro, <helio@kde.org>
 #  (c)2006, Tim Beaulen <tbscope@gmail.com>
@@ -25,6 +26,7 @@ IF (NOT WIN32)
    # in the FIND_PATH() and FIND_LIBRARY() calls
    # don't make this check required - otherwise you can't use macro_optional_find_package on this one
    PKG_CHECK_MODULES(PKG_GSTREAMER gstreamer-0.10)
+   SET(GSTREAMER_VERSION ${PKG_GSTREAMER_VERSION})
    SET(GSTREAMER_DEFINITIONS ${PKG_GSTREAMER_CFLAGS})
 ENDIF (NOT WIN32)
 
