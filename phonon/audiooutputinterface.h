@@ -89,6 +89,8 @@ class AudioOutputInterface42 : public AudioOutputInterface40
         virtual bool setOutputDevice(const Phonon::AudioOutputDevice &) = 0;
 
         using AudioOutputInterface40::setOutputDevice;
+
+        PHONON_EXPORT QList<QPair<QByteArray, QString> > deviceAccessListFor(const Phonon::AudioOutputDevice &) const;
 };
 
 } // namespace Phonon

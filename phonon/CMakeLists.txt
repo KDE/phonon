@@ -25,6 +25,7 @@ set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
    abstractaudiooutput_p.cpp
    audiooutput.cpp
+   audiooutputinterface.cpp
    abstractvideooutput.cpp
    abstractvideooutput_p.cpp
    backendcapabilities.cpp
