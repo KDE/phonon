@@ -354,6 +354,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
                         SLOT(objectDescriptionChanged(ObjectDescriptionType)));
                 return m_platformPlugin;
             } else {
+                delete qobj;
                 pDebug() << Q_FUNC_INFO << dir.absolutePath() << "exists but the platform plugin was not loadable:" << pluginLoader.errorString();
                 pluginLoader.unload();
             }
