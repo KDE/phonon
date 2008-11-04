@@ -128,6 +128,17 @@ QString Platform::applicationName()
     return ret;
 }
 
+QList<QPair<QByteArray, QString> > Platform::deviceAccessListFor(const Phonon::AudioOutputDevice &deviceDesc)
+{
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+    const PlatformPlugin *f = Factory::platformPlugin();
+    if (f) {
+        return f->deviceAccessListFor(deviceDesc);
+    }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
+    return QList<QPair<QByteArray, QString> >();
+}
+
 } // namespace Phonon
 
 QT_END_NAMESPACE

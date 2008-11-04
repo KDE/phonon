@@ -27,6 +27,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QtGlobal>
 #include "phonon_export.h"
+#include "objectdescription.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -34,6 +35,7 @@ class QIcon;
 class QObject;
 class QUrl;
 class QStyle;
+template<class A, class B> class QPair;
 
 namespace Phonon
 {
@@ -50,6 +52,7 @@ void notification(const char *notificationName, const QString &text,
         const QStringList &actions = QStringList(), QObject *receiver = 0,
         const char *actionSlot = 0);
 QString applicationName();
+QList<QPair<QByteArray, QString> > deviceAccessListFor(const Phonon::AudioOutputDevice &deviceDesc);
 
 } // namespace Platform
 } // namespace Phonon

@@ -36,6 +36,7 @@ QT_BEGIN_NAMESPACE
 class QUrl;
 class QObject;
 class QIcon;
+template<class A, class B> class QPair;
 
 namespace Phonon
 {
@@ -99,11 +100,15 @@ class PlatformPlugin
 
         virtual QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const = 0;
         virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
-};
 
+        /**
+         * Returns a list of (driver, handle) pairs for the given AudioOutputDevice description.
+         */
+        virtual QList<QPair<QByteArray, QString> > deviceAccessListFor(const Phonon::AudioOutputDevice &) const { return QList<QPair<QByteArray, QString> >(); }
+};
 } // namespace Phonon
 
-Q_DECLARE_INTERFACE(Phonon::PlatformPlugin, "2PlatformPlugin.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::PlatformPlugin, "3PlatformPlugin.phonon.kde.org")
 
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
