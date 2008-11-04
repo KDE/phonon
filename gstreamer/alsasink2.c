@@ -1467,6 +1467,8 @@ gst_alsasink2_prepare (GstAudioSink * asink, GstRingBufferSpec * spec)
   if (!alsasink2_parse_spec (alsa, spec))
     goto spec_parse;
 
+  CHECK (snd_pcm_nonblock (alsa->handle, 0), non_block);
+
   CHECK (set_hwparams (alsa), hw_params_failed);
   CHECK (set_swparams (alsa), sw_params_failed);
 
@@ -1507,6 +1509,12 @@ spec_parse:
         ("Error parsing spec"));
     return FALSE;
   }
+non_block:
+  {
+    GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
+        ("Could not set device to blocking: %s", snd_strerror (err)));
+    return FALSE;
+  }
 hw_params_failed:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
@@ -1533,6 +1541,8 @@ gst_alsasink2_unprepare (GstAudioSink * asink)
 
   CHECK (snd_pcm_hw_free (alsa->handle), hw_free);
 
+  CHECK (snd_pcm_nonblock (alsa->handle, 1), non_block);
+
   return TRUE;
 
   /* ERRORS */
@@ -1546,6 +1556,12 @@ hw_free:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
         ("Could not free hw params: %s", snd_strerror (err)));
+    return FALSE;
+  }
+non_block:
+  {
+    GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
+        ("Could not set device to nonblocking: %s", snd_strerror (err)));
     return FALSE;
   }
 }
@@ -1631,17 +1647,23 @@ gst_alsasink2_write (GstAudioSink * asink, gpointer data, guint length)
   cptr = length / alsa->bytes_per_sample;
 
   GST_ALSA_SINK2_LOCK (asink);
+  snd_pcm_nonblock (alsa->handle, 1);
   while (cptr > 0) {
-    /* start by doing a blocking wait for free space. Set the timeout
-     * to 4 times the period time */
-    err = snd_pcm_wait (alsa->handle, (4 * alsa->period_time / 1000));
-    if (err < 0) {
-      GST_DEBUG_OBJECT (asink, "wait timeout, %d", err);
-    } else {
+    while (cptr > 0) {
       err = snd_pcm_writei (alsa->handle, ptr, cptr);
+      if (err < 0) {
+        break;
+      }
+      ptr += err * alsa->channels;
+      cptr -= err;
+      err = snd_pcm_wait(alsa->handle, 100);
+      if (err < 0) {
+        break;
+      }
+      err = 0;
     }
 
-    GST_DEBUG_OBJECT (asink, "written %d frames out of %d", err, cptr);
+    GST_DEBUG_OBJECT (asink, "written %d result %d", cptr, err);
     if (err < 0) {
       GST_DEBUG_OBJECT (asink, "Write error: %s", snd_strerror (err));
       if (err == -EAGAIN) {
@@ -1655,12 +1677,14 @@ gst_alsasink2_write (GstAudioSink * asink, gpointer data, guint length)
     ptr += snd_pcm_frames_to_bytes (alsa->handle, err);
     cptr -= err;
   }
+  snd_pcm_nonblock (alsa->handle, 0);
   GST_ALSA_SINK2_UNLOCK (asink);
 
   return length - (cptr * alsa->bytes_per_sample);
 
 write_error:
   {
+    snd_pcm_nonblock (alsa->handle, 0);
     GST_ALSA_SINK2_UNLOCK (asink);
     return length;              /* skip one period */
   }
