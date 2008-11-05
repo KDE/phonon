@@ -236,7 +236,7 @@ QVariant Effect::parameterValue(const EffectParameter &p) const
     Q_ASSERT(xt->m_pluginParams);
     xt->m_pluginApi->get_parameters(xt->m_plugin, xt->m_pluginParams);
     int i = 0;
-    for (; i < parameterIndex && desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i);
+    for (; i < parameterIndex && desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i) ;
     if (i == parameterIndex) {
         xine_post_api_parameter_t &p = desc->parameter[i];
         switch (p.type) {
@@ -273,7 +273,7 @@ void Effect::setParameterValue(const EffectParameter &p, const QVariant &newValu
     xine_post_api_descr_t *desc = xt->m_pluginApi->get_param_descr();
     Q_ASSERT(xt->m_pluginParams);
     int i = 0;
-    for (; i < parameterIndex && desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i);
+    for (; i < parameterIndex && desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i) ;
     if (i == parameterIndex) {
         xine_post_api_parameter_t &p = desc->parameter[i];
         switch (p.type) {
