@@ -167,6 +167,7 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
             }
             Q_ASSERT(deviceConfig.type == XINE_CONFIG_TYPE_STRING);
             QByteArray deviceStr = handle.toUtf8();
+            deviceStr.replace('\n', ':');
             deviceConfig.str_value = deviceStr.data();
             xine_config_update_entry(xt->m_xine, &deviceConfig);
 
