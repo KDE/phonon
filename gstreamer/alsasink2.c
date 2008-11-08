@@ -237,7 +237,7 @@ gst_alsa_property_probe_interface_init (GstPropertyProbeInterface * iface)
   iface->get_values = gst_alsa_device_property_probe_get_values;
 }
 
-void
+static void
 gst_alsa_type_add_device_property_probe_interface (GType type)
 {
   static const GInterfaceInfo probe_iface_info = {
@@ -821,7 +821,7 @@ enum
 
 static void gst_alsasink2_init_interfaces (GType type);
 
-GST_BOILERPLATE_FULL (GstAlsaSink2, gst_alsasink2, GstAudioSink,
+GST_BOILERPLATE_FULL (_k_GstAlsaSink, gst_alsasink2, GstAudioSink,
     GST_TYPE_AUDIO_SINK, gst_alsasink2_init_interfaces);
 
 static void gst_alsasink2_finalise (GObject * object);
@@ -892,7 +892,7 @@ static GstStaticPadTemplate alsasink2_sink_factory =
 static void
 gst_alsasink2_finalise (GObject * object)
 {
-  GstAlsaSink2 *sink = GST_ALSA_SINK2 (object);
+  _k_GstAlsaSink *sink = GST_ALSA_SINK2 (object);
 
   g_free (sink->device);
   g_mutex_free (sink->alsa_lock);
@@ -925,7 +925,7 @@ gst_alsasink2_base_init (gpointer g_class)
       gst_static_pad_template_get (&alsasink2_sink_factory));
 }
 static void
-gst_alsasink2_class_init (GstAlsaSink2Class * klass)
+gst_alsasink2_class_init (_k_GstAlsaSinkClass * klass)
 {
   GObjectClass *gobject_class;
   GstElementClass *gstelement_class;
@@ -970,7 +970,7 @@ static void
 gst_alsasink2_set_property (GObject * object, guint prop_id,
     const GValue * value, GParamSpec * pspec)
 {
-  GstAlsaSink2 *sink;
+  _k_GstAlsaSink *sink;
 
   sink = GST_ALSA_SINK2 (object);
 
@@ -993,7 +993,7 @@ static void
 gst_alsasink2_get_property (GObject * object, guint prop_id,
     GValue * value, GParamSpec * pspec)
 {
-  GstAlsaSink2 *sink;
+  _k_GstAlsaSink *sink;
 
   sink = GST_ALSA_SINK2 (object);
 
@@ -1013,7 +1013,7 @@ gst_alsasink2_get_property (GObject * object, guint prop_id,
 }
 
 static void
-gst_alsasink2_init (GstAlsaSink2 * alsasink2, GstAlsaSink2Class * g_class)
+gst_alsasink2_init (_k_GstAlsaSink * alsasink2, _k_GstAlsaSinkClass * g_class)
 {
   GST_DEBUG_OBJECT (alsasink2, "initializing alsasink2");
 
@@ -1041,7 +1041,7 @@ gst_alsasink2_getcaps (GstBaseSink * bsink)
 {
   GstElementClass *element_class;
   GstPadTemplate *pad_template;
-  GstAlsaSink2 *sink = GST_ALSA_SINK2 (bsink);
+  _k_GstAlsaSink *sink = GST_ALSA_SINK2 (bsink);
   GstCaps *caps;
 
   if (sink->handle == NULL) {
@@ -1071,7 +1071,7 @@ gst_alsasink2_getcaps (GstBaseSink * bsink)
 }
 
 static int
-set_hwparams (GstAlsaSink2 * alsa)
+set_hwparams (_k_GstAlsaSink * alsa)
 {
   guint rrate;
   gint err, dir;
@@ -1276,7 +1276,7 @@ set_hw_params:
 }
 
 static int
-set_swparams (GstAlsaSink2 * alsa)
+set_swparams (_k_GstAlsaSink * alsa)
 {
   int err;
   snd_pcm_sw_params_t *params;
@@ -1351,7 +1351,7 @@ set_sw_params:
 }
 
 static gboolean
-alsasink2_parse_spec (GstAlsaSink2 * alsa, GstRingBufferSpec * spec)
+alsasink2_parse_spec (_k_GstAlsaSink * alsa, GstRingBufferSpec * spec)
 {
   /* Initialize our boolean */
   alsa->iec958 = FALSE;
@@ -1417,7 +1417,7 @@ error:
 static gboolean
 gst_alsasink2_open (GstAudioSink * asink)
 {
-  GstAlsaSink2 *alsa;
+  _k_GstAlsaSink *alsa;
   gint err;
 
   alsa = GST_ALSA_SINK2 (asink);
@@ -1449,7 +1449,7 @@ open_error:
 static gboolean
 gst_alsasink2_prepare (GstAudioSink * asink, GstRingBufferSpec * spec)
 {
-  GstAlsaSink2 *alsa;
+  _k_GstAlsaSink *alsa;
   gint err;
 
   alsa = GST_ALSA_SINK2 (asink);
@@ -1466,8 +1466,6 @@ gst_alsasink2_prepare (GstAudioSink * asink, GstRingBufferSpec * spec)
 
   if (!alsasink2_parse_spec (alsa, spec))
     goto spec_parse;
-
-  CHECK (snd_pcm_nonblock (alsa->handle, 0), non_block);
 
   CHECK (set_hwparams (alsa), hw_params_failed);
   CHECK (set_swparams (alsa), sw_params_failed);
@@ -1509,12 +1507,6 @@ spec_parse:
         ("Error parsing spec"));
     return FALSE;
   }
-non_block:
-  {
-    GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
-        ("Could not set device to blocking: %s", snd_strerror (err)));
-    return FALSE;
-  }
 hw_params_failed:
   {
     GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
@@ -1532,7 +1524,7 @@ sw_params_failed:
 static gboolean
 gst_alsasink2_unprepare (GstAudioSink * asink)
 {
-  GstAlsaSink2 *alsa;
+  _k_GstAlsaSink *alsa;
   gint err;
 
   alsa = GST_ALSA_SINK2 (asink);
@@ -1540,8 +1532,6 @@ gst_alsasink2_unprepare (GstAudioSink * asink)
   CHECK (snd_pcm_drop (alsa->handle), drop);
 
   CHECK (snd_pcm_hw_free (alsa->handle), hw_free);
-
-  CHECK (snd_pcm_nonblock (alsa->handle, 1), non_block);
 
   return TRUE;
 
@@ -1558,18 +1548,12 @@ hw_free:
         ("Could not free hw params: %s", snd_strerror (err)));
     return FALSE;
   }
-non_block:
-  {
-    GST_ELEMENT_ERROR (alsa, RESOURCE, SETTINGS, (NULL),
-        ("Could not set device to nonblocking: %s", snd_strerror (err)));
-    return FALSE;
-  }
 }
 
 static gboolean
 gst_alsasink2_close (GstAudioSink * asink)
 {
-  GstAlsaSink2 *alsa = GST_ALSA_SINK2 (asink);
+  _k_GstAlsaSink *alsa = GST_ALSA_SINK2 (asink);
   gint err;
 
   if (alsa->handle) {
@@ -1594,7 +1578,7 @@ close_error:
  *   Underrun and suspend recovery
  */
 static gint
-xrun_recovery (GstAlsaSink2 * alsa, snd_pcm_t * handle, gint err)
+xrun_recovery (_k_GstAlsaSink * alsa, snd_pcm_t * handle, gint err)
 {
   GST_DEBUG_OBJECT (alsa, "xrun recovery %d", err);
 
@@ -1626,7 +1610,7 @@ xrun_recovery (GstAlsaSink2 * alsa, snd_pcm_t * handle, gint err)
 static guint
 gst_alsasink2_write (GstAudioSink * asink, gpointer data, guint length)
 {
-  GstAlsaSink2 *alsa;
+  _k_GstAlsaSink *alsa;
   gint err;
   gint cptr;
   gint16 *ptr = data;
@@ -1647,23 +1631,17 @@ gst_alsasink2_write (GstAudioSink * asink, gpointer data, guint length)
   cptr = length / alsa->bytes_per_sample;
 
   GST_ALSA_SINK2_LOCK (asink);
-  snd_pcm_nonblock (alsa->handle, 1);
   while (cptr > 0) {
-    while (cptr > 0) {
+    /* start by doing a blocking wait for free space. Set the timeout
+     * to 4 times the period time */
+    err = snd_pcm_wait (alsa->handle, (4 * alsa->period_time / 1000));
+    if (err < 0) {
+      GST_DEBUG_OBJECT (asink, "wait timeout, %d", err);
+    } else {
       err = snd_pcm_writei (alsa->handle, ptr, cptr);
-      if (err < 0) {
-        break;
-      }
-      ptr += err * alsa->channels;
-      cptr -= err;
-      err = snd_pcm_wait(alsa->handle, 100);
-      if (err < 0) {
-        break;
-      }
-      err = 0;
     }
 
-    GST_DEBUG_OBJECT (asink, "written %d result %d", cptr, err);
+    GST_DEBUG_OBJECT (asink, "written %d frames out of %d", err, cptr);
     if (err < 0) {
       GST_DEBUG_OBJECT (asink, "Write error: %s", snd_strerror (err));
       if (err == -EAGAIN) {
@@ -1677,14 +1655,12 @@ gst_alsasink2_write (GstAudioSink * asink, gpointer data, guint length)
     ptr += snd_pcm_frames_to_bytes (alsa->handle, err);
     cptr -= err;
   }
-  snd_pcm_nonblock (alsa->handle, 0);
   GST_ALSA_SINK2_UNLOCK (asink);
 
   return length - (cptr * alsa->bytes_per_sample);
 
 write_error:
   {
-    snd_pcm_nonblock (alsa->handle, 0);
     GST_ALSA_SINK2_UNLOCK (asink);
     return length;              /* skip one period */
   }
@@ -1693,7 +1669,7 @@ write_error:
 static guint
 gst_alsasink2_delay (GstAudioSink * asink)
 {
-  GstAlsaSink2 *alsa;
+  _k_GstAlsaSink *alsa;
   snd_pcm_sframes_t delay;
   int res;
 
@@ -1717,7 +1693,7 @@ gst_alsasink2_delay (GstAudioSink * asink)
 static void
 gst_alsasink2_reset (GstAudioSink * asink)
 {
-  GstAlsaSink2 *alsa;
+  _k_GstAlsaSink *alsa;
   gint err;
 
   alsa = GST_ALSA_SINK2 (asink);
@@ -1748,3 +1724,34 @@ prepare_error:
     return;
   }
 }
+
+static void
+gst_alsa_error_wrapper (const char *file, int line, const char *function,
+    int err, const char *fmt, ...)
+{
+}
+
+static gboolean
+plugin_init (GstPlugin * plugin)
+{
+  int err;
+
+  printf("registering alsasink2\n");
+  if (!gst_element_register (plugin, "_k_alsasink", GST_RANK_PRIMARY,
+          GST_TYPE_ALSA_SINK2))
+    return FALSE;
+
+  err = snd_lib_error_set_handler (gst_alsa_error_wrapper);
+  if (err != 0)
+    GST_WARNING ("failed to set alsa error handler");
+
+  return TRUE;
+}
+
+#define PACKAGE ""
+GST_PLUGIN_DEFINE_STATIC (GST_VERSION_MAJOR,
+    GST_VERSION_MINOR,
+    "_k_alsa",
+    "ALSA plugin library (hotfixed)",
+    plugin_init, "0.1", "LGPL", "Phonon-GStreamer", "")
+#undef PACKAGE
