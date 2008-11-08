@@ -50,6 +50,7 @@ VideoWidget::VideoWidget(Backend *backend, QWidget *parent) :
     m_hue(0.0),
     m_contrast(0.0),
     m_saturation(0.0),
+    m_scaleMode(Phonon::VideoWidget::FitInView),
     m_videoBalance(0),
     m_colorspace(0),
     m_videoplug(0)
