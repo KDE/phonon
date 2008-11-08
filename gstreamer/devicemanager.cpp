@@ -177,7 +177,7 @@ GstElement *DeviceManager::createAudioSink(Category category)
 
 #ifdef USE_ALSASINK2
             if (!sink) {
-                sink = GST_ELEMENT(g_object_new(gst_alsasink2_get_type(), NULL));
+                sink = gst_element_factory_make ("_k_alsasink", NULL);
                 if (canOpenDevice(sink))
                     m_backend->logMessage("AudioOutput using alsa2 audio sink");
                 else if (sink) {
