@@ -1736,7 +1736,6 @@ plugin_init (GstPlugin * plugin)
 {
   int err;
 
-  printf("registering alsasink2\n");
   if (!gst_element_register (plugin, "_k_alsasink", GST_RANK_PRIMARY,
           GST_TYPE_ALSA_SINK2))
     return FALSE;
