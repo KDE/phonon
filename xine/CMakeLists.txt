@@ -111,6 +111,7 @@ if(XINE_FOUND)
 
     install(TARGETS phonon_xine DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/phonon_backend)
     install(FILES xine.desktop DESTINATION ${SERVICES_INSTALL_DIR}/phononbackends)
+    phonon_install_icons(${ICON_INSTALL_DIR})
 else(XINE_FOUND)
     macro_log_feature(XINE_FOUND "Xine" "libxine is needed to compile phonon xine backend" "http://xinehq.de/")
 endif(XINE_FOUND)
