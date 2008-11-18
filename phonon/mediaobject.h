@@ -285,6 +285,8 @@ namespace Phonon
              *
              * \param source The MediaSource object to the media data. You can
              * just as well use a QUrl or QString (for a local file) here.
+             * Setting an empty (invalid) source, will stop and remove the
+             * current source.
              *
              * \code
              * QUrl url("http://www.example.com/music.ogg");
@@ -440,6 +442,13 @@ namespace Phonon
              * \see SeekSlider
              */
             void seek(qint64 time);
+
+            /**
+             * Stops and removes all playing and enqueued media sources.
+             *
+             * \see setCurrentSource
+             */
+            void clear();
 
         Q_SIGNALS:
             /**
