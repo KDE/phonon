@@ -247,13 +247,17 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
-    } else
+    } 
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    if (d->mediaSource.type() == MediaSource::Invalid) {
-        pWarning() << "requested invalid MediaSource for the current source of MediaObject";
-        return;
-    }
+
     INTERFACE_CALL(setSource(d->mediaSource));
+}
+
+void MediaObject::clear()
+{
+    K_D(MediaObject);
+    d->sourceQueue.clear();
+    setCurrentSource(MediaSource());
 }
 
 QList<MediaSource> MediaObject::queue() const
@@ -415,7 +419,6 @@ void MediaObjectPrivate::_k_aboutToFinish()
     if (sourceQueue.isEmpty()) {
         emit q->aboutToFinish();
         if (sourceQueue.isEmpty()) {
-            pINTERFACE_CALL(setNextSource(MediaSource()));
             return;
         }
     }
