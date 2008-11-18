@@ -126,7 +126,7 @@ class Backend : public QObject, public Phonon::BackendInterface
         void checkAudioOutputs();
         void addAudioOutput(int idx, int initialPreference, const QString &n,
                 const QString &desc, const QString &ic, const QByteArray &dr,
-                bool isAdvanced = false);
+                bool isAdvanced = false, bool isHardware = false);
 
         mutable QStringList m_supportedMimeTypes;
 
@@ -137,7 +137,7 @@ class Backend : public QObject, public Phonon::BackendInterface
             AudioOutputInfo(int idx, int ip, const QString &n, const QString &desc, const QString &ic,
                     const QByteArray &dr)
                 : name(n), description(desc), icon(ic), driver(dr),
-                index(idx), initialPreference(ip), available(false), isAdvanced(false) {}
+                index(idx), initialPreference(ip), available(false), isAdvanced(false), isHardware(false) {}
 
             QString name;
             QString description;
@@ -147,6 +147,7 @@ class Backend : public QObject, public Phonon::BackendInterface
             int initialPreference;
             bool available : 1;
             bool isAdvanced : 1;
+            bool isHardware : 1;
             inline bool operator==(const AudioOutputInfo &rhs) const { return name == rhs.name && driver == rhs.driver; }
             inline bool operator<(const AudioOutputInfo &rhs) const { return initialPreference > rhs.initialPreference; }
         };

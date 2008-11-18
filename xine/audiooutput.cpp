@@ -127,9 +127,32 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
     K_XT(AudioOutput);
     xine_audio_port_t *port = 0;
 
-    const QList<QPair<QByteArray, QString> > &deviceAccessList = deviceAccessListFor(deviceDesc);
     typedef QPair<QByteArray, QString> PhononDeviceAccess;
-    foreach (const PhononDeviceAccess &access, deviceAccessList) {
+    QList<PhononDeviceAccess> deviceAccessList = deviceAccessListFor(deviceDesc);
+    if (deviceAccessList.isEmpty()) {
+        const QByteArray &outputPlugin = Backend::audioDriverFor(deviceDesc.index());
+        if (outputPlugin == "alsa") {
+            deviceAccessList << PhononDeviceAccess("alsa", QLatin1String("default"));
+            deviceAccessList << PhononDeviceAccess("alsa", QLatin1String("default:CARD=0"));
+            deviceAccessList << PhononDeviceAccess("alsa", QLatin1String("default:CARD=1"));
+            deviceAccessList << PhononDeviceAccess("alsa", QLatin1String("default:CARD=2"));
+            deviceAccessList << PhononDeviceAccess("alsa", QLatin1String("default:CARD=3"));
+            deviceAccessList << PhononDeviceAccess("alsa", QLatin1String("default:CARD=4"));
+        } else if (outputPlugin == "oss") {
+            deviceAccessList << PhononDeviceAccess("oss", QLatin1String("/dev/dsp"));
+            deviceAccessList << PhononDeviceAccess("oss", QLatin1String("/dev/dsp1"));
+            deviceAccessList << PhononDeviceAccess("oss", QLatin1String("/dev/dsp2"));
+            deviceAccessList << PhononDeviceAccess("oss", QLatin1String("/dev/dsp3"));
+            deviceAccessList << PhononDeviceAccess("oss", QLatin1String("/dev/dsp4"));
+        } else {
+            debug() << Q_FUNC_INFO << "use output plugin:" << outputPlugin;
+            port = xine_open_audio_driver(xt->m_xine, outputPlugin.constData(), 0);
+            debug() << Q_FUNC_INFO << "----------------------------------------------- audio_port created";
+            return port;
+        }
+    }
+    const QList<PhononDeviceAccess> &_deviceAccessList = deviceAccessList;
+    foreach (const PhononDeviceAccess &access, _deviceAccessList) {
         const QByteArray &outputPlugin = audioDriverFor(access.first);
         if (outputPlugin.isEmpty()) {
             continue;
@@ -213,10 +236,6 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
             }
         }
     }
-    const QByteArray &outputPlugin = Backend::audioDriverFor(deviceDesc.index());
-    debug() << Q_FUNC_INFO << "use output plugin:" << outputPlugin;
-    port = xine_open_audio_driver(xt->m_xine, outputPlugin.constData(), 0);
-    debug() << Q_FUNC_INFO << "----------------------------------------------- audio_port created";
     return port;
 }
 

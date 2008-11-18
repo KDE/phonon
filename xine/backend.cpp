@@ -554,6 +554,9 @@ QHash<QByteArray, QVariant> Backend::audioOutputProperties(int audioDevice)
 
             ret.insert("initialPreference", that->m_audioOutputInfos[i].initialPreference);
             ret.insert("isAdvanced", that->m_audioOutputInfos[i].isAdvanced);
+            if (that->m_audioOutputInfos[i].isHardware) {
+                ret.insert("isHardwareDevice", true);
+            }
 
             return ret;
         }
@@ -579,10 +582,11 @@ QByteArray Backend::audioDriverFor(int audioDevice)
 }
 
 void Backend::addAudioOutput(int index, int initialPreference, const QString &name, const QString &description,
-        const QString &icon, const QByteArray &driver, bool isAdvanced)
+        const QString &icon, const QByteArray &driver, bool isAdvanced, bool isHardware)
 {
     AudioOutputInfo info(index, initialPreference, name, description, icon, driver);
     info.isAdvanced = isAdvanced;
+    info.isHardware = isHardware;
     const int listIndex = m_audioOutputInfos.indexOf(info);
     if (listIndex == -1) {
         info.available = true;
@@ -607,10 +611,20 @@ void Backend::checkAudioOutputs()
         const char *const *outputPlugins = xine_list_audio_output_plugins(m_xine);
         for (int i = 0; outputPlugins[i]; ++i) {
             debug() << Q_FUNC_INFO << "outputPlugin: " << outputPlugins[i];
-            if (0 == strcmp(outputPlugins[i], "alsa")
-                    || 0 == strcmp(outputPlugins[i], "none")
-                    || 0 == strcmp(outputPlugins[i], "file")
-                    || 0 == strcmp(outputPlugins[i], "oss")) {
+            if (0 == strcmp(outputPlugins[i], "alsa")) {
+                // we just list "default" for fallback when the platform plugin fails to list
+                // devices
+                addAudioOutput(nextIndex++, 12, tr("ALSA default output"),
+                        tr("<html><p>The Platform Plugin failed. This is a fallback to use the first ALSA device available.</p></html>"),
+                        /*icon name */"audio-card", outputPlugins[i], false, true);
+            } else if (0 == strcmp(outputPlugins[i], "oss")) {
+                // we just list /dev/dsp for fallback when the platform plugin fails to list
+                // devices
+                addAudioOutput(nextIndex++, 11, tr("OSS default output"),
+                        tr("<html><p>The Platform Plugin failed. This is a fallback to use the first OSS device available.</p></html>"),
+                        /*icon name */"audio-card", outputPlugins[i], false, true);
+            } else if (0 == strcmp(outputPlugins[i], "none")
+                    || 0 == strcmp(outputPlugins[i], "file")) {
                 // ignore these drivers (hardware devices are listed by the KDE platform plugin)
             } else if (0 == strcmp(outputPlugins[i], "jack")) {
                 addAudioOutput(nextIndex++, 9, tr("Jack Audio Connection Kit"),
