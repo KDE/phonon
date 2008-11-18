@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2007 Trolltech ASA. All rights reserved.
+Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -51,6 +51,7 @@ namespace Phonon
 #ifdef Q_OS_WINCE
         VideoRendererVMR9::VideoRendererVMR9(QWidget *target) : m_target(target)
         {
+            m_target->setAttribute(Qt::WA_PaintOnScreen, true);
             m_filter = Filter(CLSID_VideoRenderer, IID_IBaseFilter);
         }
 
@@ -157,6 +158,7 @@ namespace Phonon
 #else
         VideoRendererVMR9::VideoRendererVMR9(QWidget *target) : m_target(target)
         {
+            m_target->setAttribute(Qt::WA_PaintOnScreen, true);
             m_filter = Filter(CLSID_VideoMixingRenderer9, IID_IBaseFilter);
             if (!m_filter) {
                 qWarning("the video widget could not be initialized correctly");

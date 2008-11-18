@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2007 Trolltech ASA. All rights reserved.
+Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -15,9 +15,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _WIN32_WCE
+#include <QtCore/QVector>
+#include <QtCore/QTimerEvent>
+#include <QtCore/QTimer>
+#include <QtCore/QTime>
+#include <QtCore/QLibrary>
+
+#ifndef Q_CC_MSVC
 #include <dshow.h>
-#endif //Q_OS_WINCE
+#endif //Q_CC_MSVC
 #include <objbase.h>
 #include <initguid.h>
 #include <qnetwork.h>
@@ -28,11 +34,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "videowidget.h"
 #include "audiooutput.h"
 
-#include <QtCore/QVector>
-#include <QtCore/QTimerEvent>
-#include <QtCore/QTimer>
-#include <QtCore/QTime>
-#include <QtCore/QLibrary>
 
 #include <QtCore/QDebug>
 
@@ -364,6 +365,7 @@ namespace Phonon
             m_oldHasVideo(false),
             m_prefinishMarkSent(false),
             m_aboutToFinishSent(false),
+            m_nextSourceReadyToStart(false),
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
             m_autoplayTitles(true),
             m_currentTitle(0),
@@ -443,7 +445,7 @@ namespace Phonon
                 if (total) {
                     const qint64 remaining = total - current;
 
-                    if (m_transitionTime < 0 && nextGraph()->mediaSource().type() != Phonon::MediaSource::Invalid) {
+                    if (m_transitionTime < 0 && m_nextSourceReadyToStart) {
                         if (remaining < -m_transitionTime + TIMER_INTERVAL/2) {
                             //we need to switch graphs to run the next source in the queue (with cross-fading)
                             switchToNextSource();
@@ -495,6 +497,7 @@ namespace Phonon
         {
             m_prefinishMarkSent = false;
             m_aboutToFinishSent = false;
+            m_nextSourceReadyToStart = false;
 
             m_oldHasVideo = currentGraph()->hasVideo();
 
@@ -708,6 +711,7 @@ namespace Phonon
 
         void MediaObject::setNextSource(const Phonon::MediaSource &source)
         {
+            m_nextSourceReadyToStart = true;
             const bool shouldSwitch = (m_state == Phonon::StoppedState || m_state == Phonon::ErrorState);
             nextGraph()->loadSource(source); //let's preload the source
 
@@ -718,6 +722,7 @@ namespace Phonon
 
         void MediaObject::setSource(const Phonon::MediaSource &source)
         {
+            m_nextSourceReadyToStart = false;
             m_prefinishMarkSent = false;
             m_aboutToFinishSent = false;
 
@@ -727,7 +732,6 @@ namespace Phonon
             m_nextState = Phonon::StoppedState; 
             catchComError(currentGraph()->loadSource(source));
             emit currentSourceChanged(source);
-
         }
 
         void MediaObject::slotStateReady(IGraphBuilder *graph, Phonon::State newState)
@@ -916,7 +920,7 @@ namespace Phonon
                     m_aboutToFinishSent = true;
                 }
 
-                if (nextGraph()->mediaSource().type() == Phonon::MediaSource::Invalid) {
+                if (!m_nextSourceReadyToStart) {
                     //this is the last source, we simply finish
                     const qint64 current = currentTime();
                     const OAFilterState currentState = currentGraph()->syncGetRealState();
