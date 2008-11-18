@@ -83,6 +83,17 @@ class FactoryPrivate : public Phonon::Factory::Sender
 
 PHONON_GLOBAL_STATIC(Phonon::FactoryPrivate, globalFactory)
 
+static inline void ensureLibraryPathSet()
+{
+#ifdef PHONON_LIBRARY_PATH
+    static bool done = false;
+    if (!done) {
+        done = true;
+        QCoreApplication::addLibraryPath(QLatin1String(PHONON_LIBRARY_PATH));
+    }
+#endif // PHONON_LIBRARY_PATH
+}
+
 void Factory::setBackend(QObject *b)
 {
     Q_ASSERT(globalFactory->m_backendObject == 0);
@@ -108,6 +119,8 @@ bool FactoryPrivate::createBackend()
     }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
     if (!m_backendObject) {
+        ensureLibraryPathSet();
+
         // could not load a backend through the platform plugin. Falling back to the default
         // (finding the first loadable backend).
         const QLatin1String suffix("/phonon_backend/");
@@ -331,6 +344,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
 #endif
     const QString suffix(QLatin1String("/phonon_platform/"));
     Q_ASSERT(QCoreApplication::instance());
+    ensureLibraryPathSet();
     foreach (QString libPath, QCoreApplication::libraryPaths()) {
         libPath += suffix;
         const QDir dir(libPath);
