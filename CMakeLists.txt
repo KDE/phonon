@@ -1,6 +1,9 @@
 project(Phonon)
 
-cmake_minimum_required(VERSION 2.4.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
+
+# CMP0002: we have multiple targets with the same name for the unit tests
+cmake_policy(SET CMP0002 OLD)
 
 # enable unit tests
 enable_testing()
@@ -20,16 +23,13 @@ find_package(Automoc4 REQUIRED)
 include (CheckCXXCompilerFlag)
 include (MacroEnsureVersion)
 
-if (CMAKE_MAJOR_VERSION GREATER 4)
-   # cmake 2.6.0 and automoc4 0.9.83 didn't add the necessary definitions for backends to moc calls
-   if (NOT AUTOMOC4_VERSION)
-      set(AUTOMOC4_VERSION "0.9.83")
-   endif (NOT AUTOMOC4_VERSION)
-   macro_ensure_version("0.9.84" "${AUTOMOC4_VERSION}" _automoc4_version_ok)
-   if (NOT _automoc4_version_ok)
-      message(FATAL_ERROR "Your version of automoc4 is too old. You have ${AUTOMOC4_VERSION}, you need at least 0.9.84")
-   endif (NOT _automoc4_version_ok)
-endif (CMAKE_MAJOR_VERSION GREATER 4)
+if (NOT AUTOMOC4_VERSION)
+   set(AUTOMOC4_VERSION "0.9.83")
+endif (NOT AUTOMOC4_VERSION)
+macro_ensure_version("0.9.86" "${AUTOMOC4_VERSION}" _automoc4_version_ok)
+if (NOT _automoc4_version_ok)
+   message(FATAL_ERROR "Your version of automoc4 is too old. You have ${AUTOMOC4_VERSION}, you need at least 0.9.86")
+endif (NOT _automoc4_version_ok)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
    set (KDE4_ENABLE_EXCEPTIONS -fexceptions)
