@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2007 Trolltech ASA. All rights reserved.
+Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #define _USE_MATH_DEFINES //for pi
 #include <qmath.h> //for sin and cos
 /* M_PI is a #define that may or may not be handled in <cmath> */
-#ifndef M_PI 
+#ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288419717
 #endif
 
@@ -143,9 +143,9 @@ namespace Phonon
     {
 
 #ifdef Q_CC_MSVC
-        static __forceinline uchar clip(int c) 
+        static __forceinline uchar clip(int c)
 #else
-        static inline uchar clip(int c) 
+        static inline uchar clip(int c)
 #endif
         {
             return c < 0 ? 0 : c > 255 ? 255 : c;
@@ -201,8 +201,7 @@ namespace Phonon
             void freeResources()
             {
                 QMutexLocker locker(&m_mutex);
-                m_frontBuffer.clear();
-                m_backBuffer.clear();
+                m_sampleBuffer = ComPointer<IMediaSample>();
 #ifndef QT_NO_OPENGL
                 freeGLResources();
 #endif // QT_NO_OPENGL
@@ -217,15 +216,14 @@ namespace Phonon
                 //we send the message to the graph
                 ComPointer<IMediaEventSink> sink(graph(), IID_IMediaEventSink);
                 if (sink) {
-                    sink->Notify(EC_COMPLETE, S_OK, 
+                    sink->Notify(EC_COMPLETE, S_OK,
                         reinterpret_cast<LONG_PTR>(static_cast<IBaseFilter*>(this)));
                 }
             }
 
             void beginFlush()
             {
-                m_backBuffer.sample = ComPointer<IMediaSample>();
-                m_frontBuffer.sample = ComPointer<IMediaSample>();
+                m_sampleBuffer = ComPointer<IMediaSample>();
                 ::SetEvent(m_receiveCanWait); //unblocks the flow
             }
 
@@ -299,18 +297,8 @@ namespace Phonon
 
         private:
             QPin *const m_inputPin;
-            struct VideoFrameBuffer
-            {
-                void clear()
-                {
-                    image = QImage();
-                    sample = ComPointer<IMediaSample>();
-                }
-
-                QImage image; //in case we render to an image
-                ComPointer<IMediaSample> sample;
-
-            } m_frontBuffer, m_backBuffer;
+            ComPointer<IMediaSample> m_sampleBuffer;
+            QImage m_currentImage;
 
 
             VideoRendererSoft *m_renderer;
@@ -368,7 +356,7 @@ namespace Phonon
         class VideoRendererSoftPin : public QMemInputPin
         {
         public:
-            VideoRendererSoftPin(VideoRendererSoftFilter *parent) : 
+            VideoRendererSoftPin(VideoRendererSoftFilter *parent) :
               QMemInputPin(parent, videoMediaTypes(), false /*no transformation of the samples*/),
                   m_renderer(parent)
               {
@@ -403,16 +391,10 @@ namespace Phonon
 
         };
 
-        VideoRendererSoftFilter::VideoRendererSoftFilter(VideoRendererSoft *renderer) : 
-        QBaseFilter(CLSID_NULL), m_inputPin(new VideoRendererSoftPin(this)), m_renderer(renderer), m_start(0), 
+        VideoRendererSoftFilter::VideoRendererSoftFilter(VideoRendererSoft *renderer) :
+        QBaseFilter(CLSID_NULL), m_inputPin(new VideoRendererSoftPin(this)), m_renderer(renderer), m_start(0),
             m_width(0), m_height(0)
 #ifndef QT_NO_OPENGL
-            , glProgramStringARB((_glProgramStringARB) wglGetProcAddress("glProgramStringARB"))
-            , glBindProgramARB((_glBindProgramARB) wglGetProcAddress("glBindProgramARB"))
-            , glDeleteProgramsARB((_glDeleteProgramsARB) wglGetProcAddress("glDeleteProgramsARB"))
-            , glGenProgramsARB((_glGenProgramsARB) wglGetProcAddress("glGenProgramsARB"))
-            , glProgramLocalParameter4fARB((_glProgramLocalParameter4fARB) wglGetProcAddress("glProgramLocalParameter4fARB"))
-            , glActiveTexture((_glActiveTexture) wglGetProcAddress("glActiveTexture"))
             ,m_usingOpenGL(false), m_checkedPrograms(false), m_textureUploaded(false)
 #endif
         {
@@ -469,25 +451,6 @@ namespace Phonon
                 return VFW_E_INVALIDMEDIATYPE;
             }
 
-            uchar *data = 0;
-            sample->GetPointer(&data);
-#ifndef QT_NO_OPENGL
-            if (m_usingOpenGL) {
-                sample->AddRef();
-                m_backBuffer.sample = ComPointer<IMediaSample>(sample);
-            } else
-#endif
-            if (mt.subtype == MEDIASUBTYPE_YV12) {
-                convertYV12toRGB(data, m_width, m_height, m_backBuffer.image, 
-                                 m_brightness, m_contrast, m_hue, m_saturation);
-
-            } else if (mt.subtype == MEDIASUBTYPE_YUY2) {
-                convertYUY2toRGB(data, m_width, m_height, m_backBuffer.image,
-                                    m_brightness, m_contrast, m_hue, m_saturation);
-            } else if (mt.subtype == MEDIASUBTYPE_RGB32) {
-                normalizeRGB(data, m_width, m_height, m_backBuffer.image);
-            }
-
 #ifdef FPS_COUNTER
             nbFramesProcessed++;
 #endif
@@ -497,7 +460,10 @@ namespace Phonon
 
             ComPointer<IReferenceClock> clock;
             GetSyncSource(clock.pparam());
-            if (SUCCEEDED(hr) && state() == State_Running && clock) {
+
+            const bool playing = SUCCEEDED(hr) && state() == State_Running && clock;
+
+            if (playing) {
                 REFERENCE_TIME current;
                 clock->GetTime(&current);
 
@@ -506,28 +472,34 @@ namespace Phonon
                 //let's synchronize here
                 clock->AdviseTime(m_start, start,
                     reinterpret_cast<HEVENT>(m_renderEvent), &advise);
-            }
 
-            HANDLE handles[] = {m_receiveCanWait, m_renderEvent};
-            if (::WaitForMultipleObjects(2, handles, false, INFINITE) == WAIT_OBJECT_0) {
-                if (state() != State_Stopped && !m_inputPin->isFlushing()) {
-                    ::ResetEvent(m_receiveCanWait);
+                HANDLE handles[] = {m_receiveCanWait, m_renderEvent};
+                if (::WaitForMultipleObjects(2, handles, false, INFINITE) == WAIT_OBJECT_0) {
+                    if (state() != State_Stopped && !m_inputPin->isFlushing()) {
+                        ::ResetEvent(m_receiveCanWait);
+                    }
                 }
             }
 
-            //the rendering is finished
+
+            //the let's lock the sample to be used in the GUI thread
             {
                 QMutexLocker locker(&m_mutex);
-                //we simply swap them to avoid memory allocation and deallocation
-                qSwap(m_frontBuffer, m_backBuffer);
-                //be sure to free the sample
-                m_backBuffer.sample = ComPointer<IMediaSample>();
-
+                sample->AddRef();
+                m_sampleBuffer = ComPointer<IMediaSample>(sample);
             }
 
             //image is updated: we should update the widget
             //we should never call directly members of target due to thread-safety
             QApplication::postEvent(m_renderer, new QEvent(QEvent::UpdateRequest));
+
+            if (!playing) {
+                //useless to test the return value of WaitForSingleObject: timeout can't happen
+                ::WaitForSingleObject(m_receiveCanWait, INFINITE); 
+                if (state() != State_Stopped && !m_inputPin->isFlushing()) {
+                    ::ResetEvent(m_receiveCanWait);
+                }
+            }
 
             //everything should be ok
             return S_OK;
@@ -538,8 +510,16 @@ namespace Phonon
         {
             if (!m_checkedPrograms) {
                 m_checkedPrograms = true;
+
+                glProgramStringARB = (_glProgramStringARB) wglGetProcAddress("glProgramStringARB");
+                glBindProgramARB = (_glBindProgramARB) wglGetProcAddress("glBindProgramARB");
+                glDeleteProgramsARB = (_glDeleteProgramsARB) wglGetProcAddress("glDeleteProgramsARB");
+                glGenProgramsARB = (_glGenProgramsARB) wglGetProcAddress("glGenProgramsARB");
+                glProgramLocalParameter4fARB = (_glProgramLocalParameter4fARB) wglGetProcAddress("glProgramLocalParameter4fARB");
+                glActiveTexture = (_glActiveTexture) wglGetProcAddress("glActiveTexture");
+
                 //we check only once if the widget is drawn using opengl
-                if (glProgramStringARB && glBindProgramARB && glDeleteProgramsARB && 
+                if (glProgramStringARB && glBindProgramARB && glDeleteProgramsARB &&
                     glGenProgramsARB && glActiveTexture && glProgramLocalParameter4fARB) {
                     glGenProgramsARB(2, m_program);
 
@@ -575,12 +555,12 @@ namespace Phonon
 
         void VideoRendererSoftFilter::updateTexture()
         {
-            if (!m_frontBuffer.sample) {
+            if (!m_sampleBuffer) {
                 return; //the texture is already up2date or their is no data yet
             }
 
             uchar *data = 0;
-            m_frontBuffer.sample->GetPointer(&data);
+            m_sampleBuffer->GetPointer(&data);
 
             if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YV12) {
                 int w[3] = { m_width, m_width/2, m_width/2 };
@@ -610,7 +590,7 @@ namespace Phonon
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
             }
-            m_frontBuffer.sample = ComPointer<IMediaSample>();
+            m_sampleBuffer = ComPointer<IMediaSample>();
             m_textureUploaded = true;
         }
 #endif
@@ -625,7 +605,7 @@ namespace Phonon
 
 
 #ifndef QT_NO_OPENGL
-            if (painter.paintEngine()->type() == QPaintEngine::OpenGL) {
+            if (painter.paintEngine() && painter.paintEngine()->type() == QPaintEngine::OpenGL) {
                 //for now we only support YUV (both YV12 and YUY2)
                 checkGLPrograms();
 
@@ -635,9 +615,7 @@ namespace Phonon
                     if (!m_textureUploaded) {
                         //we simply fill the whole video with content
                         //the callee has alrtead set the brush
-                        QRect videorect(0,0,0,0);
-                        videorect.setSize(m_renderer->videoSize());
-                        painter.drawRect(videorect);
+                        painter.drawRect(r);
                         return;
                     }
 
@@ -651,7 +629,6 @@ namespace Phonon
                     glProgramLocalParameter4fARB(GL_FRAGMENT_PROGRAM_ARB, 1, m_saturation, painter.opacity() /*alpha */, 0. /*dummy*/, 0. /*dummy*/);
 
                     glEnable(GL_FRAGMENT_PROGRAM_ARB);
-
 
                     const float v_array[] = { r.left(), r.top(), r.right()+1, r.top(), r.right()+1, r.bottom()+1, r.left(), r.bottom()+1 };
 
@@ -695,28 +672,31 @@ namespace Phonon
                     return;
                 }
 
-            } else if (m_usingOpenGL) {
-                //we just switched to software again
-                m_usingOpenGL = false;
-                if (m_frontBuffer.sample) {
-                    uchar *data = 0;
-                    m_frontBuffer.sample->GetPointer(&data);
-
-                    //let's update the front buffer
-                    if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YUY2) {
-                        convertYUY2toRGB(data, m_width, m_height, m_frontBuffer.image,
-                            m_brightness, m_contrast, m_hue, m_saturation);
-                    }else { //it is YV12
-                        convertYV12toRGB(data, m_width, m_height, m_frontBuffer.image,
-                            m_brightness, m_contrast, m_hue, m_saturation);
-
-                    }
-                }
-                freeGLResources();
-
-            }
+            } else
 #endif
-            painter.drawImage(0, 0, m_frontBuffer.image);
+              if (m_sampleBuffer) {
+                //we need to get the sample data
+                uchar *data = 0;
+                m_sampleBuffer->GetPointer(&data);
+
+                //let's update the front buffer
+                if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YUY2) {
+                    convertYUY2toRGB(data, m_width, m_height, m_currentImage,
+                        m_brightness, m_contrast, m_hue, m_saturation);
+                } else { //it is YV12
+                    convertYV12toRGB(data, m_width, m_height, m_currentImage,
+                        m_brightness, m_contrast, m_hue, m_saturation);
+                }
+                m_sampleBuffer = ComPointer<IMediaSample>();
+            }
+
+            if (m_currentImage.isNull()) {
+                //we simply fill the whole video with content
+                //the callee has alrtead set the brush
+                painter.drawRect(r);
+            } else {
+                painter.drawImage(0, 0, m_currentImage);
+            }
         }
 
 
@@ -725,11 +705,11 @@ namespace Phonon
             if (destImage.size() != QSize(w, h)) {
                 destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             }
-			if (destImage.isNull()) {
-				return; //the system can't allocate the memory for the image drawing
-			}
+            if (destImage.isNull()) {
+                return; //the system can't allocate the memory for the image drawing
+            }
 
-			const QRgb *rgb = reinterpret_cast<const QRgb*>(data);
+            const QRgb *rgb = reinterpret_cast<const QRgb*>(data);
 
             //this sets the alpha channel to 0xff and flip the image vertically
             for (int y = h - 1; y >= 0; --y) {
@@ -759,9 +739,9 @@ namespace Phonon
                 destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             }
 
-    		if (destImage.isNull()) {
-				return; //the system can't allocate the memory for the image drawing
-			}
+            if (destImage.isNull()) {
+                return; //the system can't allocate the memory for the image drawing
+            }
 
             QRgb *dest = reinterpret_cast<QRgb*>(destImage.bits());
             const uchar *dataY = data,
@@ -791,8 +771,8 @@ namespace Phonon
                               y12 = Yvalue[ *dataY++ ];
 
                     //1st line 1st pixel
-                    *line1++ = qRgb(clip(( y11 + compRed) >> 8), 
-                        clip(( y11 + compGreen) >> 8), 
+                    *line1++ = qRgb(clip(( y11 + compRed) >> 8),
+                        clip(( y11 + compGreen) >> 8),
                         clip(( y11 + compBlue) >> 8));
 
                     //1st line, 2nd pixel
@@ -817,7 +797,7 @@ namespace Phonon
                 line2 += w;
 
             } //for
-            
+
         }
 
         //we render data interpreted as YUY2 into m_renderbuffer
@@ -837,16 +817,16 @@ namespace Phonon
                 //this will only allocate memory when needed
                 destImage = QImage(w, h, QImage::Format_ARGB32_Premultiplied);
             }
-			if (destImage.isNull()) {
-			    return; //the system can't allocate the memory for the image drawing
-			}
+                        if (destImage.isNull()) {
+                            return; //the system can't allocate the memory for the image drawing
+                        }
 
-			QRgb *dest = reinterpret_cast<QRgb*>(destImage.bits());
+                        QRgb *dest = reinterpret_cast<QRgb*>(destImage.bits());
 
             //the number of iterations is width * height / 2 because we treat 2 pixels at each iterations
             for (int c = w * h / 2; c > 0 ; --c) {
 
-                //the idea of that algorithm comes from 
+                //the idea of that algorithm comes from
                 //http://msdn2.microsoft.com/en-us/library/ms867704.aspx#yuvformats_identifying_yuv_formats_in_directshow
 
                 //we treat 2 pixels by 2 pixels (we start reading 2 pixels info ie. "YUYV"
@@ -875,9 +855,10 @@ namespace Phonon
         }
 
 
-        VideoRendererSoft::VideoRendererSoft(QWidget *target) : 
+        VideoRendererSoft::VideoRendererSoft(QWidget *target) :
         m_renderer(new VideoRendererSoftFilter(this)), m_target(target)
         {
+            m_target->setAttribute(Qt::WA_PaintOnScreen, false);
             m_filter = Filter(m_renderer);
         }
 
@@ -909,7 +890,8 @@ namespace Phonon
 
             painter.setRenderHint(QPainter::SmoothPixmapTransform);
             painter.setTransform(m_transform, true);
-            m_renderer->repaintCurrentFrame(painter, m_videoRect);
+            QSize vsize = videoSize();
+            m_renderer->repaintCurrentFrame(painter, QRect(0,0, vsize.width(), vsize.height()));
         }
 
         void VideoRendererSoft::notifyResize(const QRect &rect,
