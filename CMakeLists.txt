@@ -236,8 +236,7 @@ endif (WIN32)
 
 macro(phonon_add_executable _target)
    set(_srcs ${ARGN})
-   automoc4(${_target} _srcs)
-   add_executable(${_target} ${_global_add_executable_param} ${_srcs})
+   automoc4_add_executable(${_target} ${_global_add_executable_param} ${_srcs})
 endmacro(phonon_add_executable _target)
 
 macro (PHONON_ADD_UNIT_TEST _test_NAME)
@@ -254,8 +253,7 @@ macro (PHONON_ADD_UNIT_TEST _test_NAME)
       set(_add_executable_param ${_add_executable_param} EXCLUDE_FROM_ALL)
    endif (NOT PHONON_BUILD_TESTS)
 
-   automoc4(${_test_NAME} _srcList)
-   add_executable(${_test_NAME} ${_add_executable_param} ${_srcList})
+   automoc4_add_executable(${_test_NAME} ${_add_executable_param} ${_srcList})
 
    if(NOT PHONON_TEST_OUTPUT)
       set(PHONON_TEST_OUTPUT plaintext)
