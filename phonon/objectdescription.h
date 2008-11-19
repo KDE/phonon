@@ -314,6 +314,8 @@ typedef ObjectDescription<SubtitleType> SubtitleDescription;
 
 } //namespace Phonon
 
+QT_END_NAMESPACE
+
 Q_DECLARE_METATYPE(Phonon::AudioOutputDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)
 
@@ -335,7 +337,6 @@ Q_DECLARE_METATYPE(QList<Phonon::AudioChannelDescription>)
 Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
 #endif //QT_NO_PHONON_MEDIACONTROLLER
 
-QT_END_NAMESPACE
 QT_END_HEADER
 
 #endif // PHONON_OBJECTDESCRIPTION_H
