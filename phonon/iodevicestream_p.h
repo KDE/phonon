@@ -23,7 +23,7 @@
 #ifndef PHONON_IODEVICESTREAM_P_H
 #define PHONON_IODEVICESTREAM_P_H
 
-#include "abstractmediastream2.h"
+#include "abstractmediastream.h"
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
