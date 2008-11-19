@@ -22,5 +22,4 @@ phonon_declare_examples(
     #videoplayback
     )
 
-target_link_libraries(videoongraphicsview ${QT_QTOPENGL_LIBRARY})
 #target_link_libraries(videoplayer ${KDE4_KDEUI_LIBS})
