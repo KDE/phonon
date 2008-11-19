@@ -26,9 +26,9 @@
 #include "mediaobject_p.h"
 #include "streaminterface_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+
+QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
