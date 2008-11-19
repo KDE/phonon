@@ -23,7 +23,7 @@
 #include "mediasource.h"
 #include "mediasource_p.h"
 #include "iodevicestream_p.h"
-#include "abstractmediastream2_p.h"
+#include "abstractmediastream_p.h"
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
@@ -143,9 +143,6 @@ MediaSourcePrivate::~MediaSourcePrivate()
         delete stream;
         delete ioDevice;
     }
-    if (streamEventQueue) {
-        streamEventQueue->deref();
-    }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 }
 
@@ -214,14 +211,6 @@ AbstractMediaStream *MediaSource::stream() const
 void MediaSourcePrivate::setStream(AbstractMediaStream *s)
 {
     stream = s;
-#if 0
-    AbstractMediaStream2 *s2 = qobject_cast<AbstractMediaStream2 *>(s);
-    if (s2) {
-        streamEventQueue = s2->d_func()->streamEventQueue;
-        Q_ASSERT(streamEventQueue);
-        streamEventQueue->ref();
-    }
-#endif
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 

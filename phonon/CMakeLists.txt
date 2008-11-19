@@ -14,7 +14,6 @@ set(phonon_LIB_SRCS
    phononnamespace.cpp
    mediasource.cpp
    abstractmediastream.cpp
-   #abstractmediastream2.cpp
    streaminterface.cpp
    mediaobject.cpp
    medianode.cpp
@@ -39,15 +38,8 @@ set(phonon_LIB_SRCS
    volumeslider.cpp
    effectwidget.cpp
    iodevicestream.cpp
-   lockfreequeue.cpp
-   streameventqueue.cpp
    )
-if (WIN32)
-    list(APPEND phonon_LIB_SRCS 
-        abstractmediastream2.cpp
-    )
-endif(WIN32)
-   
+
 if (QT_QTDBUS_FOUND)
    list(APPEND phonon_LIB_SRCS
       audiooutputadaptor.cpp
@@ -81,7 +73,6 @@ install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    mediasource.h
    abstractmediastream.h
-   #abstractmediastream2.h
    streaminterface.h
    mediaobject.h
    audiooutput.h
