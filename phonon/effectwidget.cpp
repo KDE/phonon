@@ -34,6 +34,16 @@
 #include <QtGui/QSpinBox>
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
+#include <QtGui/QSlider>
+#include <limits>
+
+static const qreal DEFAULT_MIN = std::numeric_limits<qreal>::min();
+static const qreal DEFAULT_MAX = std::numeric_limits<qreal>::max();
+static const int DEFAULT_MIN_INT = std::numeric_limits<int>::min();
+static const int DEFAULT_MAX_INT = std::numeric_limits<int>::max();
+static const int SLIDER_RANGE = 8;
+static const int TICKINTERVAL = 4;
+
 
 QT_BEGIN_NAMESPACE
 
@@ -93,69 +103,95 @@ void EffectWidgetPrivate::autogenerateUi()
         label->setToolTip(para.description());
 #endif
 
-        QWidget *control;
-        if (para.type() == QVariant::String) {
-            QComboBox *cb = new QComboBox(q);
-            control = cb;
-            if (value.type() == QVariant::Int) {
-                foreach (const QVariant &item, para.possibleValues()) {
-                    cb->addItem(item.toString());
-                }
-                cb->setCurrentIndex(value.toInt());
-                QObject::connect(cb, SIGNAL(currentIndexChanged(int)), q, SLOT(_k_setIntParameter(int)));
-            } else {
-                foreach (const QVariant &item, para.possibleValues()) {
-                    cb->addItem(item.toString());
-                    if (item == value) {
-                        cb->setCurrentIndex(cb->count() - 1);
+        QWidget *control = 0;
+        switch (para.type()) {
+        case QVariant::String:
+            {
+                QComboBox *cb = new QComboBox(q);
+                control = cb;
+                if (value.type() == QVariant::Int) {
+                    //value just defines the item index
+                    foreach (const QVariant &item, para.possibleValues()) {
+                        cb->addItem(item.toString());
                     }
+                    cb->setCurrentIndex(value.toInt());
+                    QObject::connect(cb, SIGNAL(currentIndexChanged(int)), q, SLOT(_k_setIntParameter(int)));
+                } else {
+                    foreach (const QVariant &item, para.possibleValues()) {
+                        cb->addItem(item.toString());
+                        if (item == value) {
+                            cb->setCurrentIndex(cb->count() - 1);
+                        }
+                    }
+                    QObject::connect(cb, SIGNAL(currentIndexChanged(QString)), q, SLOT(_k_setStringParameter(QString)));
                 }
-                QObject::connect(cb, SIGNAL(currentIndexChanged(QString)), q, SLOT(_k_setStringParameter(QString)));
             }
-        } else if (para.type() == QVariant::Bool) {
-            QCheckBox *cb = new QCheckBox(q);
-            control = cb;
-            cb->setChecked(value.toBool());
-            QObject::connect(cb, SIGNAL(toggled(bool)), q, SLOT(_k_setToggleParameter(bool)));
-        }
-        else if (para.minimumValue().isValid() && para.maximumValue().isValid())
-        {
-            if (para.type() == QVariant::Int)
+            break;
+        case QVariant::Bool:
+            {
+                QCheckBox *cb = new QCheckBox(q);
+                control = cb;
+                cb->setChecked(value.toBool());
+                QObject::connect(cb, SIGNAL(toggled(bool)), q, SLOT(_k_setToggleParameter(bool)));
+            }
+            break;
+        case QVariant::Int:
             {
                 QSpinBox *sb = new QSpinBox(q);
                 control = sb;
-                sb->setRange(para.minimumValue().toInt(),
-                        para.maximumValue().toInt());
+                bool minValueOk = false;
+                bool maxValueOk = false;
+                const int minValue = para.minimumValue().toInt(&minValueOk);
+                const int maxValue = para.minimumValue().toInt(&maxValueOk);
+
+                sb->setRange(minValueOk ? minValue : DEFAULT_MIN_INT, maxValueOk ? maxValue : DEFAULT_MAX_INT);
                 sb->setValue(value.toInt());
                 QObject::connect(sb, SIGNAL(valueChanged(int)), q, SLOT(_k_setIntParameter(int)));
             }
-            else
+            break;
+        case QVariant::Double:
             {
-                QDoubleSpinBox *sb = new QDoubleSpinBox(q);
-                control = sb;
-                sb->setRange(para.minimumValue().toDouble(),
-                        para.maximumValue().toDouble());
-                sb->setValue(value.toDouble());
-                sb->setSingleStep((para.maximumValue().toDouble() - para.minimumValue().toDouble()) / 20);
-                QObject::connect(sb, SIGNAL(valueChanged(double)), q,
+                const double minValue = (para.minimumValue().type() == QVariant::Double ?
+                    para.minimumValue().toDouble() : DEFAULT_MIN);
+                const double maxValue = (para.maximumValue().type() == QVariant::Double ?
+                    para.maximumValue().toDouble() : DEFAULT_MAX);
+
+                if (minValue == -1. && maxValue == 1.) {
+                    //Special case values between -1 and 1.0 to use a slider for improved usability
+                    QSlider *slider = new QSlider(Qt::Horizontal, q);
+                    slider->setRange(-SLIDER_RANGE, +SLIDER_RANGE);
+                    slider->setValue(int(SLIDER_RANGE * value.toDouble()));
+                    slider->setTickPosition(QSlider::TicksBelow);
+                    slider->setTickInterval(TICKINTERVAL);
+                    QObject::connect(slider, SIGNAL(valueChanged(int)), q, SLOT(_k_setSliderParameter(int)));
+                } else {
+                    double step = 0.1;
+                    if (qAbs(maxValue - minValue) > 50)
+                        step = 1.0;
+                    QDoubleSpinBox *sb = new QDoubleSpinBox(q);
+                    control = sb;
+                    sb->setRange(minValue, maxValue);
+                    sb->setValue(value.toDouble());
+                    sb->setSingleStep(step);
+                    QObject::connect(sb, SIGNAL(valueChanged(double)), q,
                         SLOT(_k_setDoubleParameter(double)));
+                }
             }
+            break;
+        default:
+            break;
         }
-        else
-        {
-            QDoubleSpinBox *sb = new QDoubleSpinBox(q);
-            control = sb;
-            sb->setDecimals(7);
-            sb->setRange(-1e100, 1e100);
-            QObject::connect(sb, SIGNAL(valueChanged(double)), q,
-                    SLOT(_k_setDoubleParameter(double)));
-        }
+
 #ifndef QT_NO_TOOLTIP
         control->setToolTip(para.description());
 #endif
-        label->setBuddy(control);
-        pLayout->addWidget(control);
-        parameterForObject.insert(control, para);
+        if (control) {
+#ifndef QT_NO_SHORTCUT
+            label->setBuddy(control);
+#endif
+            pLayout->addWidget(control);
+            parameterForObject.insert(control, para);
+        }
     }
 }
 
@@ -191,10 +227,19 @@ void EffectWidgetPrivate::_k_setStringParameter(const QString &value)
     }
 }
 
+void EffectWidgetPrivate::_k_setSliderParameter(int value)
+{
+    Q_Q(EffectWidget);
+    if (parameterForObject.contains(q->sender())) {
+        effect->setParameterValue(parameterForObject[q->sender()], double(value) / double(SLIDER_RANGE));
+    }
+}
+
+
 } // namespace Phonon
 
 
-#endif //QT_NO_PHONON_EFFECTWIDGET
+#endif // QT_NO_PHONON_EFFECTWIDGET
 
 QT_END_NAMESPACE
 
