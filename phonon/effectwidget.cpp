@@ -237,7 +237,7 @@ void EffectWidgetPrivate::_k_setSliderParameter(int value)
 } // namespace Phonon
 
 
-#endif QT_NO_PHONON_EFFECTWIDGET
+#endif // QT_NO_PHONON_EFFECTWIDGET
 
 QT_END_NAMESPACE
 
