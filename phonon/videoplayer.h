@@ -52,7 +52,7 @@ class VideoWidget;
  *
  * A play and forget code example:
  * \code
- * VideoPlayer *player = new VideoPlayer(Phonon::VideoCategory, parentWidget);
+ * VideoPlayer *player = new VideoPlayer(parentWidget);
  * connect(player, SIGNAL(finished()), player, SLOT(deleteLater()));
  * player->play(url);
  * \endcode
@@ -72,6 +72,14 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          * \param parent The QObject parent.
          */
         explicit VideoPlayer(Phonon::Category category, QWidget *parent = 0);
+
+        /**
+         * Constructs a new video widget with a \p parent
+         * using Phonon::VideoCategory as its category.
+         *
+         * \param parent The QObject parent.
+         */
+        VideoPlayer(QWidget *parent = 0);
 
         /**
          * On destruction the playback is stopped, also the audio output is

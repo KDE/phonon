@@ -38,9 +38,9 @@ class VideoPlayerPrivate
 {
     public:
         VideoPlayerPrivate()
-            : player(0)
-        {
-        }
+            : player(0) {}
+
+        void init(VideoPlayer *q, Phonon::Category category);
 
         MediaObject *player;
         AudioOutput *aoutput;
@@ -49,24 +49,35 @@ class VideoPlayerPrivate
         MediaSource src;
 };
 
+void VideoPlayerPrivate::init(VideoPlayer *q, Phonon::Category category)
+{
+    QVBoxLayout *layout = new QVBoxLayout(q);
+    layout->setMargin(0);
+
+    aoutput = new AudioOutput(category, q);
+
+    voutput = new VideoWidget(q);
+    layout->addWidget(voutput);
+
+    player = new MediaObject(q);
+    Phonon::createPath(player, aoutput);
+    Phonon::createPath(player, voutput);
+
+    q->connect(player, SIGNAL(finished()), SIGNAL(finished()));
+}
+
 VideoPlayer::VideoPlayer(Phonon::Category category, QWidget *parent)
     : QWidget(parent)
     , d(new VideoPlayerPrivate)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setMargin(0);
+    d->init(this, category);
+}
 
-    d->aoutput = new AudioOutput(category, this);
-
-    d->voutput = new VideoWidget(this);
-    layout->addWidget(d->voutput);
-
-
-    d->player = new MediaObject(this);
-    Phonon::createPath(d->player, d->aoutput);
-    Phonon::createPath(d->player, d->voutput);
-
-    connect(d->player, SIGNAL(finished()), SIGNAL(finished()));
+VideoPlayer::VideoPlayer(QWidget *parent)
+    : QWidget(parent)
+    , d(new VideoPlayerPrivate)
+{
+    d->init(this, Phonon::VideoCategory);
 }
 
 VideoPlayer::~VideoPlayer()
