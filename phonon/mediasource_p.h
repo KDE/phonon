@@ -26,7 +26,6 @@
 #include "mediasource.h"
 #include "objectdescription.h"
 #include "abstractmediastream.h"
-#include "streameventqueue_p.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QString>
@@ -47,7 +46,6 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
             : type(t), discType(NoDisc),
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             stream(0),
-            streamEventQueue(0),
             ioDevice(0),
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             autoDelete(false)
@@ -72,7 +70,6 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         // another thread deletes the AbstractMediaStream2. StreamInterface(2) will then just get a
         // StreamEventQueue where nobody answers.
         QPointer<AbstractMediaStream> stream;
-        StreamEventQueue *streamEventQueue;
 
 //        AudioCaptureDevice audioCaptureDevice;
 //        VideoCaptureDevice videoCaptureDevice;

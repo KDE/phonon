@@ -111,37 +111,6 @@ class PHONON_EXPORT StreamInterface
 
         StreamInterfacePrivate *const d;
 };
-
-/**
- * \warning Even though AbstractMediaStream2 may be used from any thread, StreamInterface2 still has
- * to run in the main thread for compatibility with AbstractMediaStream.
- */
-#if 0
-class PHONON_EXPORT StreamInterface2 : public QObject, public StreamInterface
-{
-    friend class StreamInterfacePrivate;
-    Q_OBJECT
-    public:
-        ~StreamInterface2();
-
-        /**
-         * Call this function to tell the AbstractMediaStream that you need more data. The data will
-         * arrive through writeData. Don't rely on writeData getting called from needData, though
-         * some AbstractMediaStream implementations might do so.
-         *
-         * Depending on the buffering you need you either treat needData as a replacement for a
-         * read call like QIODevice::read, or you start calling needData whenever your buffer
-         * reaches a certain lower threshold.
-         */
-        void needData(quint32);
-
-    protected:
-        StreamInterface2(QObject *parent = 0);
-
-    private:
-        Q_PRIVATE_SLOT(d, void _k_handleStreamEvent())
-};
-#endif
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::StreamInterface, "StreamInterface1.phonon.kde.org")

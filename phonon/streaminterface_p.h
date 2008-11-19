@@ -24,10 +24,7 @@
 #define STREAMINTERFACE_P_H
 
 #include "streaminterface.h"
-#include "streameventqueue_p.h"
 #include "mediasource.h"
-#include <QtCore/QAbstractEventDispatcher>
-#include <QtCore/QObject>
 
 QT_BEGIN_NAMESPACE
 
@@ -35,55 +32,21 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-
-class StreamInterfacePrivateHelper;
-
-class StreamInterfacePrivate : public LockFreeQueueBase::DataReadyHandler
+class StreamInterfacePrivate
 {
     friend class StreamInterface;
-    friend class StreamInterface2;
-    friend class StreamInterfacePrivateHelper;
-
     public:
         void disconnectMediaStream();
 
     protected:
         inline StreamInterfacePrivate()
-            : qobject(0),
-            streamEventQueue(0),
-            eventDispatcher(QAbstractEventDispatcher::instance()),
-            connected(false),
-            awakeSignalConnected(false)
+            : connected(false)
         {
-            Q_ASSERT(eventDispatcher);
         }
 
-        inline ~StreamInterfacePrivate()
-        {
-            delete qobject;
-        }
-
-        virtual void dataReady();
-        void _k_handleStreamEvent();
-        void handleStreamEvent(QObject *sender);
-
-        MediaSource mediaSource;
-        QObject *qobject;
         StreamInterface *q;
-        StreamEventQueue *streamEventQueue;
-        QAbstractEventDispatcher *eventDispatcher;
-        quint8 connected : 1;
-        quint8 awakeSignalConnected : 1;
-};
-
-class StreamInterfacePrivateHelper : public QObject
-{
-    Q_OBJECT
-    public:
-        StreamInterfacePrivateHelper(StreamInterfacePrivate *qq) : q(qq) {}
-
-    private:
-        StreamInterfacePrivate *const q;
+        MediaSource mediaSource;
+        bool connected;
 };
 
 } // namespace Phonon
