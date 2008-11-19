@@ -43,12 +43,12 @@ PHONON_EXECUTABLE_TESTS(
 
 PHONON_UNIT_TESTS(
 	)
-phonon_add_unit_test(streameventqueuetest streameventqueuetest.cpp ../streameventqueue.cpp ../lockfreequeue.cpp)
-target_link_libraries(streameventqueuetest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
-phonon_add_unit_test(lockfreequeuetest lockfreequeuetest.cpp ../lockfreequeue.cpp)
-target_link_libraries(lockfreequeuetest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
-phonon_add_unit_test(lockfreequeuetest2 lockfreequeuetest2.cpp ../lockfreequeue.cpp)
-target_link_libraries(lockfreequeuetest2 ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+#phonon_add_unit_test(streameventqueuetest streameventqueuetest.cpp ../streameventqueue.cpp ../lockfreequeue.cpp)
+#target_link_libraries(streameventqueuetest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+#phonon_add_unit_test(lockfreequeuetest lockfreequeuetest.cpp ../lockfreequeue.cpp)
+#target_link_libraries(lockfreequeuetest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
+#phonon_add_unit_test(lockfreequeuetest2 lockfreequeuetest2.cpp ../lockfreequeue.cpp)
+#target_link_libraries(lockfreequeuetest2 ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 PHONON_UNIT_TESTS_FAKE(
 	mediaobjecttest
