@@ -4,7 +4,7 @@
  *
  * dbusidl2cpp is Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
  *
- * This is an auto-generated file.
+ * This is an auto-generated file. This file has been hand-edited.
  */
 
 #include "audiooutputadaptor_p.h"
@@ -17,6 +17,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include "phononnamespace_p.h"
+
+#ifndef QT_NO_DBUS
 
 /*
  * Implementation of adaptor class AudioOutputAdaptor
@@ -75,3 +77,4 @@ QString AudioOutputAdaptor::name()
 
 #include "moc_audiooutputadaptor_p.cpp"
 
+#endif
