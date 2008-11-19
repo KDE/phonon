@@ -24,6 +24,7 @@
 
 #include "backendinterface.h"
 #include "medianode_p.h"
+#include "mediaobject.h"
 #include "audiooutput.h"
 #include "globalstatic_p.h"
 #include "objectdescription.h"
@@ -181,6 +182,12 @@ FactoryPrivate::FactoryPrivate()
 
 FactoryPrivate::~FactoryPrivate()
 {
+    foreach (QObject *o, objects) {
+        MediaObject *m = qobject_cast<MediaObject *>(o);
+        if (m) {
+            m->stop();
+        }
+    }
     foreach (MediaNodePrivate *bp, mediaNodePrivateList) {
         bp->deleteBackendObject();
     }
@@ -360,6 +367,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
                         SLOT(objectDescriptionChanged(ObjectDescriptionType)));
                 return m_platformPlugin;
             } else {
+                delete qobj;
                 pDebug() << Q_FUNC_INFO << dir.absolutePath() << "exists but the platform plugin was not loadable:" << pluginLoader.errorString();
                 pluginLoader.unload();
             }
