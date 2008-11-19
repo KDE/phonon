@@ -35,6 +35,14 @@ namespace Phonon
 /** \class AudioOutputInterface audiooutputinterface.h Phonon/AudioOutputInterface
  * \short Interface for AudioOutput objects
  *
+ * The implementation can make use of the signals
+ * \code
+     void volumeChanged(qreal newVolume);
+     void audioDeviceFailed();
+ * \endcode
+ * to notify the frontend whenever the volume has changed or when an audioDeviceFailed (e.g. USB
+ * unplug or sound server failure).
+ *
  * \author Matthias Kretz <kretz@kde.org>
  */
 class AudioOutputInterface40
@@ -54,6 +62,9 @@ class AudioOutputInterface40
          *
          * A value of 0.0 means muted, 1.0 means unchanged, 2.0 means double voltage (i.e. all
          * samples are multiplied by 2).
+         *
+         * Everytime the volume in the backend changes it should emit volumeChanged(qreal), also
+         * inside this function.
          */
         virtual void setVolume(qreal) = 0;
 
