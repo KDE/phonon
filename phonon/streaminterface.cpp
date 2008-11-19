@@ -24,7 +24,7 @@
 #include "streaminterface_p.h"
 #include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
-#include "mediasource.h"
+#include "mediasource_p.h"
 
 QT_BEGIN_NAMESPACE
 

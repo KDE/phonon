@@ -73,7 +73,7 @@ class QSettingsGroup
             m_mutableSettings->remove(m_group + key);
         }
 
-        bool hasKey(const QString &key) const
+        inline bool hasKey(const QString &key) const
         {
             return m_settings->contains(m_group + key);
         }

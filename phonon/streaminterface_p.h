@@ -39,12 +39,12 @@ class StreamInterfacePrivate
         void disconnectMediaStream();
 
     protected:
-        StreamInterfacePrivate()
+        inline StreamInterfacePrivate()
             : connected(false)
         {
         }
 
-        StreamInterface* q;
+        StreamInterface *q;
         MediaSource mediaSource;
         bool connected;
 };
