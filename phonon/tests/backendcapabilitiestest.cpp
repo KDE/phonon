@@ -83,7 +83,7 @@ void BackendCapabilitiesTest::sensibleValues()
 {
     BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
     //if (BackendCapabilities::supportsVideo()) create VideoWidget and such - needs UI libs
-    VERIFY_TUPLE(AudioOutputDevice);
+    //VERIFY_TUPLE(AudioOutputDevice);
     /*
     VERIFY_TUPLE(AudioCaptureDevice);
     VERIFY_TUPLE(VideoOutputDevice);

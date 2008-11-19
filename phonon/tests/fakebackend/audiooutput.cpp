@@ -64,9 +64,11 @@ void AudioOutput::setVolume(qreal newVolume)
 
 bool AudioOutput::setOutputDevice(int newDevice)
 {
-    Q_ASSERT(newDevice >= 10000);
-    Q_ASSERT(newDevice <= 10009);
-    m_device = newDevice;
+    if (newDevice > 0) {
+        Q_ASSERT(newDevice >= 10000);
+        Q_ASSERT(newDevice <= 10009);
+        m_device = newDevice;
+    }
     return true;
 }
 
