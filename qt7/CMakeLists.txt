@@ -39,8 +39,7 @@ if (BUILD_PHONON_QT7)
         mediaobjectaudionode.cpp
        )
 
-   automoc4(phonon_qt7 phonon_qt7_SRCS)
-   add_library(phonon_qt7 MODULE ${phonon_qt7_SRCS})
+   automoc4_add_library(phonon_qt7 MODULE ${phonon_qt7_SRCS})
    target_link_libraries(phonon_qt7
        ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
        "-framework phonon"
