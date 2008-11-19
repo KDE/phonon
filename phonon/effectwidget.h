@@ -62,6 +62,7 @@ class Effect;
             Q_PRIVATE_SLOT(k_func(), void _k_setIntParameter(int value))
             Q_PRIVATE_SLOT(k_func(), void _k_setDoubleParameter(double value))
             Q_PRIVATE_SLOT(k_func(), void _k_setStringParameter(const QString &))
+            Q_PRIVATE_SLOT(k_func(), void _k_setSliderParameter(int))
     };
 } // namespace Phonon
 
