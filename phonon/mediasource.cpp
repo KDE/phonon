@@ -46,7 +46,7 @@ MediaSource::MediaSource(const QString &filename)
 {
     const QFileInfo fileInfo(filename);
     if (fileInfo.exists()) {
-        bool localFs = QFSFileEngine(filename).fileFlags(QAbstractFileEngine::LocalDiskFlag);
+        bool localFs = QAbstractFileEngine::LocalDiskFlag & QFSFileEngine(filename).fileFlags(QAbstractFileEngine::LocalDiskFlag);
         if (localFs) {
             d->url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
         } else {
