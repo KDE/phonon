@@ -25,6 +25,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
+#include <QtCore/QPair>
 #include "phonon_export.h"
 #include "objectdescription.h"
 
@@ -36,7 +37,6 @@ QT_BEGIN_NAMESPACE
 class QUrl;
 class QObject;
 class QIcon;
-template<class A, class B> class QPair;
 
 namespace Phonon
 {

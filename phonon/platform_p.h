@@ -26,6 +26,7 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QtGlobal>
+#include <QtCore/QPair>
 #include "phonon_export.h"
 #include "objectdescription.h"
 
@@ -35,7 +36,6 @@ class QIcon;
 class QObject;
 class QUrl;
 class QStyle;
-template<class A, class B> class QPair;
 
 namespace Phonon
 {
