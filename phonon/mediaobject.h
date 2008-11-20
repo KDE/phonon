@@ -446,13 +446,6 @@ namespace Phonon
              */
             void seek(qint64 time);
 
-            /**
-             * Stops and removes all playing and enqueued media sources.
-             *
-             * \see setCurrentSource
-             */
-            void clear();
-
         Q_SIGNALS:
             /**
              * Emitted when the state of the MediaObject has changed.
