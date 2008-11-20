@@ -296,7 +296,7 @@ namespace Phonon
                 mo->ensureStopped(); //we have to stop the graph..
             }
 
-            return !mediaObjects.isEmpty();
+            return objects.isEmpty() || !mediaObjects.isEmpty();
         }
 
         bool Backend::connectNodes(QObject *_source, QObject *_sink)
