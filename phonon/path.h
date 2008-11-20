@@ -206,6 +206,17 @@ class PHONON_EXPORT Path
          */
         bool operator!=(const Path &p) const;
 
+        /**
+         * Returns the source MediaNode used by the path.
+         */
+        MediaNode *source() const;
+
+        /**
+         * Returns the sink MediaNode used by the path.
+         */
+        MediaNode *sink() const;
+
+
     protected:
         friend class PathPrivate;
         QExplicitlySharedDataPointer<PathPrivate> d;
