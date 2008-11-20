@@ -41,8 +41,7 @@ endif (QT_QTDBUS_FOUND)
 
 
 add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
-automoc4(phonon phonon_LIB_SRCS)
-add_library(phonon SHARED ${phonon_LIB_SRCS})
+automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
 if (QT_QTDBUS_FOUND)
   target_link_libraries(phonon ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 else (QT_QTDBUS_FOUND)

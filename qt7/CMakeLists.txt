@@ -40,8 +40,7 @@ if (BUILD_PHONON_QT7)
        )
 
    add_definitions(-DPHONON_BACKEND_VERSION_4_2)
-   automoc4(phonon_qt7 phonon_qt7_SRCS)
-   add_library(phonon_qt7 SHARED ${phonon_qt7_SRCS})
+   automoc4_add_library(phonon_qt7 SHARED ${phonon_qt7_SRCS})
    set_target_properties(phonon_gstreamer PROPERTIES PREFIX "")
    target_link_libraries(phonon_qt7
        ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
