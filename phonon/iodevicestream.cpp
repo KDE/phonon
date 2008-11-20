@@ -21,7 +21,7 @@
 */
 
 #include "iodevicestream_p.h"
-#include "abstractmediastream2_p.h"
+#include "abstractmediastream_p.h"
 
 QT_BEGIN_NAMESPACE
 
