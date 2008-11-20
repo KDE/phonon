@@ -43,12 +43,6 @@ PHONON_EXECUTABLE_TESTS(
 
 PHONON_UNIT_TESTS(
 	)
-#phonon_add_unit_test(streameventqueuetest streameventqueuetest.cpp ../streameventqueue.cpp ../lockfreequeue.cpp)
-#target_link_libraries(streameventqueuetest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
-#phonon_add_unit_test(lockfreequeuetest lockfreequeuetest.cpp ../lockfreequeue.cpp)
-#target_link_libraries(lockfreequeuetest ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
-#phonon_add_unit_test(lockfreequeuetest2 lockfreequeuetest2.cpp ../lockfreequeue.cpp)
-#target_link_libraries(lockfreequeuetest2 ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY})
 
 PHONON_UNIT_TESTS_FAKE(
 	mediaobjecttest
@@ -72,16 +66,14 @@ phonon_add_executable(methodtest methodtest.cpp ../factory.cpp
                                                 ../mediaobject.cpp
                                                 ../phononnamespace.cpp
                                                 ../platform.cpp
-                                                ../streameventqueue.cpp
-                                                ../lockfreequeue.cpp)
+                                                )
 target_link_libraries(methodtest ${QT_QTTEST_LIBRARY} ${PHONON_LIBS})
 SET_TARGET_PROPERTIES(methodtest PROPERTIES COMPILE_FLAGS "-DPHONON_METHODTEST -DPHONON_EXPORT=")
-phonon_add_unit_test(methodtest_fake methodtest.cpp ../factory.cpp 
-                                                    ../phononnamespace.cpp 
+phonon_add_unit_test(methodtest_fake methodtest.cpp ../factory.cpp
+                                                    ../phononnamespace.cpp
                                                     ../mediaobject.cpp
                                                     ../platform.cpp
-                                                    ../streameventqueue.cpp
-                                                    ../lockfreequeue.cpp)
+                                                    )
 target_link_libraries(methodtest_fake ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} phonon_fake)
 SET_TARGET_PROPERTIES(methodtest_fake PROPERTIES COMPILE_FLAGS "-DUSE_FAKE_BACKEND -DPHONON_METHODTEST -DPHONON_EXPORT=")
 
