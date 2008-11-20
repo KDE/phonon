@@ -277,6 +277,18 @@ bool Path::disconnect()
     }
 }
 
+MediaNode *Path::source() const
+{
+    return d->sourceNode;
+}
+
+MediaNode *Path::sink() const
+{
+    return d->sinkNode;
+}
+
+
+
 bool PathPrivate::executeTransaction( const QList<QObjectPair> &disconnections, const QList<QObjectPair> &connections)
 {
     QSet<QObject*> nodesForTransaction;
