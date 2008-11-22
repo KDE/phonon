@@ -422,6 +422,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
     if (sourceQueue.isEmpty()) {
         emit q->aboutToFinish();
         if (sourceQueue.isEmpty()) {
+            pINTERFACE_CALL(setNextSource(MediaSource()));
             return;
         }
     }
