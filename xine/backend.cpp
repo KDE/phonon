@@ -615,13 +615,21 @@ void Backend::checkAudioOutputs()
                 // we just list "default" for fallback when the platform plugin fails to list
                 // devices
                 addAudioOutput(nextIndex++, 12, tr("ALSA default output"),
-                        tr("<html><p>The Platform Plugin failed. This is a fallback to use the first ALSA device available.</p></html>"),
+                        tr("<html><p>The Platform Plugin failed. This is a fallback to use the "
+                            "first ALSA device available.</p></html>", "This string is only shown "
+                            "when the KDE runtime is broken. The technical term 'Platform Plugin' "
+                            "might help users to find a solution, so it might make sense to leave "
+                            "that term untranslated."),
                         /*icon name */"audio-card", outputPlugins[i], false, true);
             } else if (0 == strcmp(outputPlugins[i], "oss")) {
                 // we just list /dev/dsp for fallback when the platform plugin fails to list
                 // devices
                 addAudioOutput(nextIndex++, 11, tr("OSS default output"),
-                        tr("<html><p>The Platform Plugin failed. This is a fallback to use the first OSS device available.</p></html>"),
+                        tr("<html><p>The Platform Plugin failed. This is a fallback to use the "
+                            "first OSS device available.</p></html>", "This string is only shown "
+                            "when the KDE runtime is broken. The technical term 'Platform Plugin' "
+                            "might help users to find a solution, so it might make sense to leave "
+                            "that term untranslated."),
                         /*icon name */"audio-card", outputPlugins[i], false, true);
             } else if (0 == strcmp(outputPlugins[i], "none")
                     || 0 == strcmp(outputPlugins[i], "file")) {
