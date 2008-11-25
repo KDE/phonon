@@ -139,6 +139,7 @@ class XineStream : public QObject, public SourceNodeXT
         void setMediaObject(MediaObject *m) { m_mediaObject = m; }
         void handleDownstreamEvent(Event *e);
 
+        void unload();
     public slots:
         void setUrl(const QUrl &url);
         void setMrl(const QByteArray &mrl, StateForNewMrl = StoppedState);

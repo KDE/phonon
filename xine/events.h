@@ -111,7 +111,8 @@ public:
         HeresYourXineStream,
         Cleanup,
         RequestSnapshot,
-        SnapshotReady
+        SnapshotReady,
+        UnloadCommand
     };
 
     int ref;

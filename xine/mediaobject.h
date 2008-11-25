@@ -146,6 +146,7 @@ class MediaObject : public QObject, public MediaObjectInterface, public AddonInt
         qint32 m_prefinishMark;
         qint32 m_transitionTime;
         bool m_autoplayTitles : 1;
+        bool m_waitingForNextSource : 1;
 };
 }} //namespace Phonon::Xine
 
