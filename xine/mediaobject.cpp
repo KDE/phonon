@@ -57,7 +57,8 @@ MediaObject::MediaObject(QObject *parent)
     m_stream(static_cast<XineStream *>(SourceNode::threadSafeObject().data())),
     m_currentTitle(1),
     m_transitionTime(0),
-    m_autoplayTitles(true)
+    m_autoplayTitles(true),
+    m_waitingForNextSource(false)
 {
     m_stream->setMediaObject(this);
     m_stream->useGaplessPlayback(true);
@@ -285,22 +286,23 @@ void MediaObject::setTransitionTime(qint32 newTransitionTime)
 
 void MediaObject::setNextSource(const MediaSource &source)
 {
+    m_waitingForNextSource = false;
     if (m_transitionTime < 0) {
         qWarning() <<  "crossfades are not supported with the xine backend";
     } else if (m_transitionTime > 0) {
         if (source.type() == MediaSource::Invalid) {
+            // tells gapless playback logic to stop waiting and emit finished()
             QMetaObject::invokeMethod(m_stream, "playbackFinished", Qt::QueuedConnection);
-        } else {
-            setSourceInternal(source, HardSwitch);
+        }
+        setSourceInternal(source, HardSwitch);
+        if (source.type() != MediaSource::Invalid) {
             play();
         }
         return;
     }
     if (source.type() == MediaSource::Invalid) {
-        // the frontend is telling us that the play-queue is empty, so stop waiting for a new MRL
-        // for gapless playback
+        // tells gapless playback logic to stop waiting and emit finished()
         m_stream->gaplessSwitchTo(QByteArray());
-        return;
     }
     setSourceInternal(source, GaplessSwitch);
 }
@@ -318,7 +320,8 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
 
     switch (source.type()) {
     case MediaSource::Invalid:
-        stop();
+        m_stream->stop();
+        m_stream->unload();
         break;
     case MediaSource::LocalFile:
     case MediaSource::Url:
@@ -612,7 +615,15 @@ void MediaObject::needNextUrl()
         emit titleChanged(m_currentTitle);
         return;
     }
+    m_waitingForNextSource = true;
     emit aboutToFinish();
+    if (m_waitingForNextSource) {
+        if (m_transitionTime > 0) {
+            QMetaObject::invokeMethod(m_stream, "playbackFinished", Qt::QueuedConnection);
+        } else {
+            m_stream->gaplessSwitchTo(QByteArray());
+        }
+    }
 }
 
 void MediaObject::setPrefinishMark(qint32 newPrefinishMark)

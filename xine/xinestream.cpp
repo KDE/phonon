@@ -760,6 +760,8 @@ const char *nameForEvent(int e)
         return "PauseCommand";
     case Event::StopCommand:
         return "StopCommand";
+    case Event::UnloadCommand:
+        return "UnloadCommand";
     case Event::SetTickInterval:
         return "SetTickInterval";
     case Event::SetPrefinishMark:
@@ -1334,6 +1336,31 @@ bool XineStream::event(QEvent *ev)
         xine_stop(m_stream);
         changeState(Phonon::StoppedState);
         return true;
+    case Event::UnloadCommand:
+        ev->accept();
+        if (m_deinterlacer) {
+            xine_post_dispose(m_xine, m_deinterlacer);
+            m_deinterlacer = 0;
+        }
+        if(m_event_queue) {
+            xine_event_dispose_queue(m_event_queue);
+            m_event_queue = 0;
+        }
+        if(m_stream) {
+            xine_dispose(m_stream);
+            m_stream = 0;
+        }
+        delete m_prefinishMarkTimer;
+        m_prefinishMarkTimer = 0;
+        if (m_nullAudioPort) {
+            xine_close_audio_driver(m_xine, m_nullAudioPort);
+            m_nullAudioPort = 0;
+        }
+        if (m_nullVideoPort) {
+            xine_close_video_driver(m_xine, m_nullVideoPort);
+            m_nullVideoPort = 0;
+        }
+        return true;
     case Event::SetTickInterval:
         ev->accept();
         {
@@ -1596,6 +1623,11 @@ void XineStream::pause()
 void XineStream::stop()
 {
     QCoreApplication::postEvent(this, new QEVENT(StopCommand));
+}
+
+void XineStream::unload()
+{
+    QCoreApplication::postEvent(this, new QEVENT(UnloadCommand));
 }
 
 // called from main thread
