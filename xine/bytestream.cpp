@@ -55,7 +55,7 @@ ByteStream *ByteStream::fromMrl(const QByteArray &mrl)
         return 0;
     }
     ByteStream *ret = 0;
-    Q_ASSERT(mrl.length() >= 13 + sizeof(void *) && mrl.length() <= 13 + 2 * sizeof(void *));
+    Q_ASSERT(mrl.length() >= 13 + (int)sizeof(void *) && mrl.length() <= 13 + 2 * (int)sizeof(void *));
     const unsigned char *encoded = reinterpret_cast<const unsigned char *>(mrl.constData() + 13);
     unsigned char *addrHack = reinterpret_cast<unsigned char *>(&ret);
     for (unsigned int i = 0; i < sizeof(void *); ++i, ++encoded) {

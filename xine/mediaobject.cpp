@@ -433,6 +433,10 @@ QByteArray MediaObject::autoplayMrlsToTitles(const char *plugin, const char *def
 bool MediaObject::hasInterface(Interface interface) const
 {
     switch (interface) {
+    case AddonInterface::NavigationInterface:
+        break;
+    case AddonInterface::AngleInterface:
+        break;
     case AddonInterface::TitleInterface:
         if (m_titles.size() > 1) {
             return true;
@@ -478,6 +482,10 @@ QVariant MediaObject::interfaceCall(Interface interface, int command, const QLis
     debug() << Q_FUNC_INFO << interface << ", " << command;
 
     switch (interface) {
+    case AddonInterface::NavigationInterface:
+        break;
+    case AddonInterface::AngleInterface:
+        break;
     case AddonInterface::ChapterInterface:
         switch (static_cast<AddonInterface::ChapterCommand>(command)) {
         case AddonInterface::availableChapters:
