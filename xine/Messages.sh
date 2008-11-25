@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/phonon-xine.pot
+$XGETTEXT_QT *.cpp -o $podir/phonon-xine.pot
