@@ -16,7 +16,7 @@ phonon_declare_examples(
     tutorial2
     tutorial3
     tutorial4
-    #outputselector
+    outputselector
     #videoplayer
     #crossfade
     #videoplayandforget
