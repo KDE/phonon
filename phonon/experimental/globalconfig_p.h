@@ -40,8 +40,8 @@ namespace Experimental
 class GlobalConfig : public Phonon::GlobalConfig
 {
 public:
-    QList<int> videoCaptureDeviceListFor(Phonon::Category category, HideAdvancedDevicesOverride override = FromSettings) const;
-    int videoCaptureDeviceFor(Phonon::Category category) const;
+    QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+    int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
 
 Q_SIGNALS:
     void videoCaptureDeviceConfigChanged();

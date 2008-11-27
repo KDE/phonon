@@ -31,6 +31,8 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
+class AudioOutputAdaptor;
+
 class AudioOutputPrivate : public AbstractAudioOutputPrivate
 {
     Q_DECLARE_PUBLIC(AudioOutput)
@@ -51,12 +53,16 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
             : AbstractAudioOutputPrivate(castId),
             name(Platform::applicationName()),
             volume(Platform::loadVolume(name)),
-            outputDeviceIndex(-1),
+#ifndef QT_NO_DBUS
+            adaptor(0),
+#endif
             deviceBeforeFallback(-1),
             outputDeviceOverridden(false),
             muted(false)
         {
         }
+
+        ~AudioOutputPrivate();
 
         enum DeviceChangeType {
             FallbackChange,
@@ -71,9 +77,12 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
 
     private:
         QString name;
+        Phonon::AudioOutputDevice device;
         qreal volume;
+#ifndef QT_NO_DBUS
+        Phonon::AudioOutputAdaptor *adaptor;
+#endif
         Category category;
-        int outputDeviceIndex;
         int deviceBeforeFallback;
         bool outputDeviceOverridden;
         bool muted;

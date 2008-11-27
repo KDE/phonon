@@ -17,6 +17,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include "phononnamespace_p.h"
+#include "objectdescription.h"
 
 #ifndef QT_NO_DBUS
 
@@ -24,8 +25,11 @@
  * Implementation of adaptor class AudioOutputAdaptor
  */
 
+namespace Phonon
+{
+
 AudioOutputAdaptor::AudioOutputAdaptor(QObject *parent)
-   : QDBusAbstractAdaptor(parent)
+    : QDBusAbstractAdaptor(parent)
 {
     // constructor
     setAutoRelaySignals(true);
@@ -74,6 +78,19 @@ QString AudioOutputAdaptor::name()
     name = static_cast<Phonon::AudioOutput *>(parent())->name();
     return name;
 }
+
+int AudioOutputAdaptor::outputDeviceIndex() const
+{
+    return static_cast<Phonon::AudioOutput *>(parent())->outputDevice().index();
+}
+
+void AudioOutputAdaptor::setOutputDeviceIndex(int newAudioOutputDeviceIndex)
+{
+    static_cast<Phonon::AudioOutput *>(parent())
+        ->setOutputDevice(Phonon::AudioOutputDevice::fromIndex(newAudioOutputDeviceIndex));
+}
+
+} // namespace Phonon
 
 #include "moc_audiooutputadaptor_p.cpp"
 
