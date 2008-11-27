@@ -284,23 +284,28 @@ void MediaObject::setTransitionTime(qint32 newTransitionTime)
     }
 }
 
+static inline bool isEmptyOrInvalid(MediaSource::Type t)
+{
+    return t == MediaSource::Empty || t == MediaSource::Invalid;
+}
+
 void MediaObject::setNextSource(const MediaSource &source)
 {
     m_waitingForNextSource = false;
     if (m_transitionTime < 0) {
         qWarning() <<  "crossfades are not supported with the xine backend";
     } else if (m_transitionTime > 0) {
-        if (source.type() == MediaSource::Invalid) {
+        if (isEmptyOrInvalid(source.type())) {
             // tells gapless playback logic to stop waiting and emit finished()
             QMetaObject::invokeMethod(m_stream, "playbackFinished", Qt::QueuedConnection);
         }
         setSourceInternal(source, HardSwitch);
-        if (source.type() != MediaSource::Invalid) {
+        if (!isEmptyOrInvalid(source.type())) {
             play();
         }
         return;
     }
-    if (source.type() == MediaSource::Invalid) {
+    if (isEmptyOrInvalid(source.type())) {
         // tells gapless playback logic to stop waiting and emit finished()
         m_stream->gaplessSwitchTo(QByteArray());
     }
@@ -320,6 +325,9 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
 
     switch (source.type()) {
     case MediaSource::Invalid:
+        m_stream->stop();
+        break;
+    case MediaSource::Empty:
         m_stream->stop();
         m_stream->unload();
         break;
