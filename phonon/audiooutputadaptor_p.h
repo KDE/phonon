@@ -28,6 +28,7 @@ class QVariant;
 namespace Phonon
 {
     class AudioOutputPrivate;
+    class AudioOutput;
 
 /*
  * Adaptor class for interface org.kde.Phonon.AudioOutput
@@ -35,6 +36,7 @@ namespace Phonon
 class AudioOutputAdaptor: public QDBusAbstractAdaptor
 {
     friend class Phonon::AudioOutputPrivate;
+    friend class Phonon::AudioOutput;
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.Phonon.AudioOutput")
     Q_CLASSINFO("D-Bus Introspection", ""
