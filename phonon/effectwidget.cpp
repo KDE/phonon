@@ -37,6 +37,12 @@
 #include <QtGui/QSlider>
 #include <limits>
 
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
 static const qreal DEFAULT_MIN = std::numeric_limits<qreal>::min();
 static const qreal DEFAULT_MAX = std::numeric_limits<qreal>::max();
 static const int DEFAULT_MIN_INT = std::numeric_limits<int>::min();

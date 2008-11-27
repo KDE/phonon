@@ -25,6 +25,8 @@
 #include <QtCore/QPair>
 #include "platform_p.h"
 
+QT_BEGIN_NAMESPACE
+
 namespace Phonon
 {
 
@@ -34,3 +36,5 @@ QList<QPair<QByteArray, QString> > AudioOutputInterface42::deviceAccessListFor(c
 }
 
 } // namespace Phonon
+
+QT_END_NAMESPACE
