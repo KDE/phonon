@@ -39,17 +39,19 @@ namespace Phonon
         GlobalConfig();
         virtual ~GlobalConfig();
 
-        enum HideAdvancedDevicesOverride {
+        enum DevicesToHideFlag {
+            ShowUnavailableDevices = 0,
             ShowAdvancedDevices = 0,
             HideAdvancedDevices = 1,
-            FromSettings = 2
+            AdvancedDevicesFromSettings = 2,
+            HideUnavailableDevices = 4
         };
-        QList<int> audioOutputDeviceListFor(Phonon::Category category, HideAdvancedDevicesOverride override = FromSettings) const;
-        int audioOutputDeviceFor(Phonon::Category category) const;
+        QList<int> audioOutputDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        int audioOutputDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
 
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
-        QList<int> audioCaptureDeviceListFor(Phonon::Category category, HideAdvancedDevicesOverride override = FromSettings) const;
-        int audioCaptureDeviceFor(Phonon::Category category) const;
+        QList<int> audioCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        int audioCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
     protected:
