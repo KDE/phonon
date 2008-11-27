@@ -342,39 +342,60 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
         pWarning() << "Phonon needs QCoreApplication::applicationName to be set to export audio output names through the DBUS interface";
     }
 #endif
-    const QString suffix(QLatin1String("/phonon_platform/"));
     Q_ASSERT(QCoreApplication::instance());
-    ensureLibraryPathSet();
-    foreach (QString libPath, QCoreApplication::libraryPaths()) {
-        libPath += suffix;
-        const QDir dir(libPath);
-        if (!dir.exists()) {
-            pDebug() << Q_FUNC_INFO << dir.absolutePath() << "does not exist";
-            continue;
-        }
-        foreach (const QString &pluginName, dir.entryList(QDir::Files)) {
-            QPluginLoader pluginLoader(libPath + pluginName);
-            if (!pluginLoader.load()) {
-                pDebug() << Q_FUNC_INFO << "  platform plugin load failed:"
-                    << pluginLoader.errorString();
-                continue;
-            }
-            pDebug() << pluginLoader.instance();
-            QObject *qobj = pluginLoader.instance();
-            m_platformPlugin = qobject_cast<PlatformPlugin *>(qobj);
-            pDebug() << m_platformPlugin;
+    if (!qgetenv("PHONON_PLATFORMPLUGIN").isEmpty()) {
+        QPluginLoader pluginLoader(qgetenv("PHONON_PLATFORMPLUGIN"));
+        if (pluginLoader.load()) {
+            m_platformPlugin = qobject_cast<PlatformPlugin *>(pluginLoader.instance());
             if (m_platformPlugin) {
-                connect(qobj, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
-                        SLOT(objectDescriptionChanged(ObjectDescriptionType)));
                 return m_platformPlugin;
-            } else {
-                delete qobj;
-                pDebug() << Q_FUNC_INFO << dir.absolutePath() << "exists but the platform plugin was not loadable:" << pluginLoader.errorString();
-                pluginLoader.unload();
             }
         }
     }
-    pDebug() << Q_FUNC_INFO << "phonon_platform/kde plugin could not be loaded";
+    const QString suffix(QLatin1String("/phonon_platform/"));
+    ensureLibraryPathSet();
+    QDir dir;
+    dir.setNameFilters(
+            !qgetenv("KDE_FULL_SESSION").isEmpty() ? QStringList(QLatin1String("kde.*")) :
+            (!qgetenv("GNOME_DESKTOP_SESSION_ID").isEmpty() ? QStringList(QLatin1String("gnome.*")) :
+             QStringList())
+            );
+    dir.setFilter(QDir::Files);
+    forever {
+        foreach (QString libPath, QCoreApplication::libraryPaths()) {
+            libPath += suffix;
+            dir.setPath(libPath);
+            if (!dir.exists()) {
+                continue;
+            }
+            foreach (const QString &pluginName, dir.entryList()) {
+                QPluginLoader pluginLoader(libPath + pluginName);
+                if (!pluginLoader.load()) {
+                    pDebug() << Q_FUNC_INFO << "  platform plugin load failed:"
+                        << pluginLoader.errorString();
+                    continue;
+                }
+                pDebug() << pluginLoader.instance();
+                QObject *qobj = pluginLoader.instance();
+                m_platformPlugin = qobject_cast<PlatformPlugin *>(qobj);
+                pDebug() << m_platformPlugin;
+                if (m_platformPlugin) {
+                    connect(qobj, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
+                            SLOT(objectDescriptionChanged(ObjectDescriptionType)));
+                    return m_platformPlugin;
+                } else {
+                    delete qobj;
+                    pDebug() << Q_FUNC_INFO << dir.absolutePath() << "exists but the platform plugin was not loadable:" << pluginLoader.errorString();
+                    pluginLoader.unload();
+                }
+            }
+        }
+        if (dir.nameFilters().isEmpty()) {
+            break;
+        }
+        dir.setNameFilters(QStringList());
+    }
+    pDebug() << Q_FUNC_INFO << "platform plugin could not be loaded";
     m_noPlatformPlugin = true;
     return 0;
 }
