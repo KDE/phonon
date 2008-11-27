@@ -124,7 +124,7 @@ void AudioOutput::setName(const QString &newName)
     }
     d->name = newName;
     setVolume(Platform::loadVolume(newName));
-#ifdef QT_NO_DBUS
+#ifndef QT_NO_DBUS
     emit adaptor->nameChanged(newName);
 #endif
 }
@@ -290,7 +290,7 @@ void AudioOutputPrivate::_k_revertFallback()
     callSetOutputDevice(this, device);
     Q_Q(AudioOutput);
     emit q->outputDeviceChanged(device);
-#ifdef QT_NO_DBUS
+#ifndef QT_NO_DBUS
     emit adaptor->outputDeviceIndex(device.index());
 #endif
 }
@@ -354,7 +354,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     deviceBeforeFallback = device.index();
     device = device2;
     emit q->outputDeviceChanged(device2);
-#ifdef QT_NO_DBUS
+#ifndef QT_NO_DBUS
     emit adaptor->outputDeviceIndex(outputDeviceIndex);
 #endif
     const AudioOutputDevice &device1 = AudioOutputDevice::fromIndex(deviceBeforeFallback);
@@ -388,7 +388,9 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
 
 AudioOutputPrivate::~AudioOutputPrivate()
 {
+#ifndef QT_NO_DBUS
     emit adaptor->outputDestroyed();
+#endif
 }
 
 } //namespace Phonon
