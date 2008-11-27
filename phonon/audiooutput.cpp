@@ -125,7 +125,7 @@ void AudioOutput::setName(const QString &newName)
     d->name = newName;
     setVolume(Platform::loadVolume(newName));
 #ifndef QT_NO_DBUS
-    emit adaptor->nameChanged(newName);
+    emit d->adaptor->nameChanged(newName);
 #endif
 }
 
@@ -291,7 +291,7 @@ void AudioOutputPrivate::_k_revertFallback()
     Q_Q(AudioOutput);
     emit q->outputDeviceChanged(device);
 #ifndef QT_NO_DBUS
-    emit adaptor->outputDeviceIndex(device.index());
+    emit adaptor->outputDeviceIndexChanged(device.index());
 #endif
 }
 
@@ -355,7 +355,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     device = device2;
     emit q->outputDeviceChanged(device2);
 #ifndef QT_NO_DBUS
-    emit adaptor->outputDeviceIndex(outputDeviceIndex);
+    emit adaptor->outputDeviceIndexChanged(device.index());
 #endif
     const AudioOutputDevice &device1 = AudioOutputDevice::fromIndex(deviceBeforeFallback);
     switch (type) {
