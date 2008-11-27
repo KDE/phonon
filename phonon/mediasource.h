@@ -94,11 +94,11 @@ class PHONON_EXPORT MediaSource
              */
             Stream,
             /**
-             * This MediaSource empties the current source.
+             * An empty MediaSource.
              *
-             * It can be used to reset the MediaObject into the state it has before setting the first source.
+             * It can be used to unload the current media from a MediaObject.
              *
-             * \see MediaSource::empty()
+             * \see MediaSource()
              */
             Empty
 /*          post 4.0:
@@ -110,9 +110,10 @@ class PHONON_EXPORT MediaSource
         };
 
         /**
-         * Creates a MediaSource that empties the current source.
+         * Creates an empty MediaSource.
          *
-         * It can be used to reset the MediaObject into the state it has before setting the first source.
+         * An empty MediaSource is considered valid and can be set on a MediaObject to unload its
+         * current media.
          *
          * \see Empty
          */
