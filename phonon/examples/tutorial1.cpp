@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
 
     Permission to use, copy, modify, and distribute this software
     and its documentation for any purpose and without fee is hereby
@@ -22,60 +22,23 @@
 */
 
 #include <Phonon/MediaObject>
-#include <QtGui/QApplication>
-#include <QtGui/QMainWindow>
-#include <QtGui/QDirModel>
-#include <QtGui/QColumnView>
-
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-    public:
-        MainWindow();
-        ~MainWindow();
-
-    private slots:
-        void play(const QModelIndex &index);
-
-    private:
-        QColumnView m_fileView;
-        QDirModel m_model;
-
-        Phonon::MediaObject *m_media;
-};
-
-MainWindow::MainWindow()
-    : m_fileView(this),
-    m_media(0)
-{
-    setCentralWidget(&m_fileView);
-    m_fileView.setModel(&m_model);
-    m_fileView.setFrameStyle(QFrame::NoFrame);
-
-    connect(&m_fileView, SIGNAL(updatePreviewWidget(const QModelIndex &)), SLOT(play(const QModelIndex &)));
-}
-
-MainWindow::~MainWindow()
-{
-    delete m_media;
-}
-
-void MainWindow::play(const QModelIndex &index)
-{
-    if (!m_media) {
-        m_media = Phonon::createPlayer(Phonon::MusicCategory);
-    }
-    m_media->setCurrentSource(m_model.filePath(index));
-    m_media->play();
-}
+#include <Phonon/AudioOutput>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QStringList>
 
 int main(int argc, char **argv)
 {
-    QApplication app(argc, argv);
-    QApplication::setApplicationName("Phonon Tutorial 1");
-    MainWindow mw;
-    mw.show();
+    QCoreApplication app(argc, argv);
+    if (app.arguments().size() != 2) {
+        return -1;
+    }
+    QCoreApplication::setApplicationName("Phonon Tutorial 1");
+    Phonon::MediaObject media;
+    media.setCurrentSource(app.arguments().at(1));
+    Phonon::AudioOutput output;
+    Phonon::createPath(&media, &output);
+    QObject::connect(&media, SIGNAL(finished()), &app, SLOT(quit()));
+    media.play();
+
     return app.exec();
 }
-
-#include "tutorial1.moc"
