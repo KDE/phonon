@@ -40,7 +40,7 @@ MediaSource::MediaSource(MediaSourcePrivate &dd)
 }
 
 MediaSource::MediaSource()
-    : d(new MediaSourcePrivate(Invalid))
+    : d(new MediaSourcePrivate(Empty))
 {
 }
 

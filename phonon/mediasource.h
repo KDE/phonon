@@ -92,7 +92,15 @@ class PHONON_EXPORT MediaSource
              *
              * \see AbstractMediaStream
              */
-            Stream
+            Stream,
+            /**
+             * This MediaSource empties the current source.
+             *
+             * It can be used to reset the MediaObject into the state it has before setting the first source.
+             *
+             * \see MediaSource::empty()
+             */
+            Empty
 /*          post 4.0:
             / **
              * Links multiple MediaSource objects together.
@@ -100,10 +108,13 @@ class PHONON_EXPORT MediaSource
             Link
 */
         };
+
         /**
-         * Creates an invalid MediaSource object.
+         * Creates a MediaSource that empties the current source.
          *
-         * \see Invalid
+         * It can be used to reset the MediaObject into the state it has before setting the first source.
+         *
+         * \see Empty
          */
         MediaSource();
 

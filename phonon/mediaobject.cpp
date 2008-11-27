@@ -90,11 +90,15 @@ PHONON_INTERFACE_GETTER(bool, hasVideo, false)
 PHONON_INTERFACE_GETTER(bool, isSeekable, false)
 PHONON_INTERFACE_GETTER(qint64, currentTime, d->currentTime)
 
+static inline bool isPlayable(const MediaSource::Type t)
+{
+    return t != MediaSource::Invalid && t != MediaSource::Empty;
+}
 
 void MediaObject::play()
 {
     K_D(MediaObject);
-    if (d->backendObject() && d->mediaSource.type() != MediaSource::Invalid) {
+    if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(play());
     }
 }
@@ -102,7 +106,7 @@ void MediaObject::play()
 void MediaObject::pause()
 {
     K_D(MediaObject);
-    if (d->backendObject() && d->mediaSource.type() != MediaSource::Invalid) {
+    if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(pause());
     }
 }
@@ -110,7 +114,7 @@ void MediaObject::pause()
 void MediaObject::stop()
 {
     K_D(MediaObject);
-    if (d->backendObject() && d->mediaSource.type() != MediaSource::Invalid) {
+    if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(stop());
     }
 }
@@ -118,7 +122,7 @@ void MediaObject::stop()
 void MediaObject::seek(qint64 time)
 {
     K_D(MediaObject);
-    if (d->backendObject() && d->mediaSource.type() != MediaSource::Invalid) {
+    if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(seek(time));
     }
 }
@@ -286,7 +290,8 @@ void MediaObject::setQueue(const QList<QUrl> &urls)
 void MediaObject::enqueue(const MediaSource &source)
 {
     K_D(MediaObject);
-    if (d->mediaSource.type() == MediaSource::Invalid) {
+    if (!isPlayable(d->mediaSource.type())) {
+        // the current source is nothing valid so this source needs to become the current one
         setCurrentSource(source);
     } else {
         d->sourceQueue << source;
@@ -422,7 +427,6 @@ void MediaObjectPrivate::_k_aboutToFinish()
     if (sourceQueue.isEmpty()) {
         emit q->aboutToFinish();
         if (sourceQueue.isEmpty()) {
-            pINTERFACE_CALL(setNextSource(MediaSource()));
             return;
         }
     }
@@ -504,7 +508,7 @@ void MediaObjectPrivate::setupBackendObject()
 #endif //QT_NO_PHONON_MEDIACONTROLLER
 
     // set up attributes
-    if (mediaSource.type() != MediaSource::Invalid) {
+    if (isPlayable(mediaSource.type())) {
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (mediaSource.type() == MediaSource::Stream) {
             Q_ASSERT(mediaSource.stream());
@@ -551,7 +555,7 @@ MediaObject *createPlayer(Phonon::Category category, const MediaSource &source)
     MediaObject *mo = new MediaObject;
     AudioOutput *ao = new AudioOutput(category, mo);
     createPath(mo, ao);
-    if (source.type() != MediaSource::Invalid) {
+    if (isPlayable(source.type())) {
         mo->setCurrentSource(source);
     }
     return mo;
