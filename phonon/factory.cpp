@@ -343,8 +343,9 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     }
 #endif
     Q_ASSERT(QCoreApplication::instance());
-    if (!qgetenv("PHONON_PLATFORMPLUGIN").isEmpty()) {
-        QPluginLoader pluginLoader(qgetenv("PHONON_PLATFORMPLUGIN"));
+    const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
+    if (!platform_plugin_env.isEmpty()) {
+        QPluginLoader pluginLoader(QString::fromLocal8Bit(platform_plugin_env.constData()));
         if (pluginLoader.load()) {
             m_platformPlugin = qobject_cast<PlatformPlugin *>(pluginLoader.instance());
             if (m_platformPlugin) {
