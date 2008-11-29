@@ -87,12 +87,13 @@ inline uint qHash(const AudioFormat &p)
 
 } // namespace Experimental
 } // namespace Phonon
-#if !defined(Q_WS_WIN) && !defined(__arm__) && !defined(Q_OS_MAC)
-inline uint qHash(const Phonon::Experimental::AudioFormat &p)
-{
-    return Phonon::Experimental::qHash(p);
-}
+
+#if defined(Q_CC_MSVC) && _MSC_VER <= 1300
+//this ensures that code outside Phonon can use the hash function
+//it also a workaround for some compilers
+inline uint qHash(const Phonon::Experimental::AudioFormat &p) { return Phonon::Experimental::qHash(p); } //krazy:exclude=inline
 #endif
+
 QT_END_NAMESPACE
 QT_END_HEADER
 
