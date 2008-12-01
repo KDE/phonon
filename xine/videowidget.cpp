@@ -151,6 +151,7 @@ VideoWidgetXT::VideoWidgetXT(VideoWidget *w)
     m_xcbConnection(0), //XcbConnection::instance()),
     m_videoPort(0), m_videoWidget(w), m_isValid(false)
 {
+    memset(&m_visual, 0, sizeof(m_visual));
     Q_ASSERT(!m_xine);
     m_xine = Backend::xine();
 }

@@ -34,6 +34,8 @@ class AudioDataOutputXT : public SinkNodeXT
 
 AudioDataOutput::AudioDataOutput(QObject *parent)
     : AbstractAudioOutput(new AudioDataOutputXT, parent)
+    , m_format(Phonon::Experimental::AudioDataOutput::FloatFormat)
+    , m_dataSize(0)
 {
 }
 

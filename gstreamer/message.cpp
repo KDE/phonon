@@ -34,7 +34,8 @@ namespace Gstreamer
     \internal
 */
 Message::Message():
-        m_message(0)
+        m_message(0),
+        m_source(0)
 {}
 
 Message::Message(GstMessage* message, MediaObject *source):
