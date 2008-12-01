@@ -70,7 +70,7 @@ bool GstHelper::setProperty(GstElement *elem, const char *propertyName, const QB
     Q_ASSERT(propertyName && strlen(propertyName));
 
     if (GST_IS_PROPERTY_PROBE(elem) && gst_property_probe_get_property( GST_PROPERTY_PROBE( elem), propertyName ) ) {
-        g_object_set(G_OBJECT(elem), propertyName, propertyValue.constData(), NULL);
+        g_object_set(G_OBJECT(elem), propertyName, propertyValue.constData(), (const char*)NULL);
         return true;
     }
     return false;
@@ -87,7 +87,7 @@ QByteArray GstHelper::property(GstElement *elem, const char *propertyName)
 
     if (GST_IS_PROPERTY_PROBE(elem) && gst_property_probe_get_property( GST_PROPERTY_PROBE(elem), propertyName)) {
         gchar *value = NULL;
-        g_object_get (G_OBJECT(elem), propertyName, &value, NULL);
+        g_object_get (G_OBJECT(elem), propertyName, &value, (const char*)NULL);
         retVal = QByteArray(value);
         g_free (value);
     }
@@ -139,7 +139,7 @@ GstElement* GstHelper::createPluggablePlaybin()
     gst_object_unref (audioPlaypad);
 
     //Done with our audio redirection
-    g_object_set (G_OBJECT(playbin), "audio-sink", audioSinkBin, NULL);
+    g_object_set (G_OBJECT(playbin), "audio-sink", audioSinkBin, (const char*)NULL);
 
     // * * Redirect video to "video_src" pad : * *
 
@@ -159,7 +159,7 @@ GstElement* GstHelper::createPluggablePlaybin()
     gst_object_unref (videoPlaypad);
 
     //Done with our video redirection
-    g_object_set (G_OBJECT(playbin), "video-sink", videoSinkBin, NULL);
+    g_object_set (G_OBJECT(playbin), "video-sink", videoSinkBin, (const char*)NULL);
     return playbin;
 }
 

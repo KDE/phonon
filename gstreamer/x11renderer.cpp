@@ -93,10 +93,10 @@ GstElement* X11Renderer::createVideoSink()
             // Note that this should not really be neccessary as these are 
             // default values, though under certain conditions values are retained
             // even between application instances. (reproducible on 0.10.16/Gutsy)
-            g_object_set(G_OBJECT(videoSink), "brightness", 0, NULL);
-            g_object_set(G_OBJECT(videoSink), "contrast", 0, NULL);
-            g_object_set(G_OBJECT(videoSink), "hue", 0, NULL);
-            g_object_set(G_OBJECT(videoSink), "saturation", 0, NULL);
+            g_object_set(G_OBJECT(videoSink), "brightness", 0, (const char*)NULL);
+            g_object_set(G_OBJECT(videoSink), "contrast", 0, (const char*)NULL);
+            g_object_set(G_OBJECT(videoSink), "hue", 0, (const char*)NULL);
+            g_object_set(G_OBJECT(videoSink), "saturation", 0, (const char*)NULL);
         }
     }
 
