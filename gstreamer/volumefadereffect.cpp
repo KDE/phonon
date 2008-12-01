@@ -72,7 +72,7 @@ GstElement* VolumeFaderEffect::createEffectBin()
 
 float VolumeFaderEffect::volume() const
 {
-    gdouble val;
+    gdouble val = 0.0;
     if (m_effectElement)
         g_object_get(G_OBJECT(m_effectElement), "volume", &val, (const char*)NULL);
     return (float)val;

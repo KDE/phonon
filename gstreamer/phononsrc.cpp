@@ -163,8 +163,7 @@ static void phonon_src_set_property (GObject * object, guint prop_id, const GVal
 static void phonon_src_get_property (GObject * object, guint prop_id, GValue * value,
                                         GParamSpec * pspec)
 {
-    PhononSrc *src;
-    Q_ASSERT(src->device);
+    PhononSrc *src = 0;
     g_return_if_fail (GST_IS_PHONON_SRC (object));
     src = GST_PHONON_SRC (object);
 
