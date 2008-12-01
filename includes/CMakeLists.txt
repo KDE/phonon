@@ -47,3 +47,7 @@ install(FILES
   Phonon/Experimental/VideoFrame2
   Phonon/Experimental/Visualization
 DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon/Experimental)
+
+install(FILES
+   phonon
+DESTINATION ${INCLUDE_INSTALL_DIR}/phonon)
