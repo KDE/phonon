@@ -38,7 +38,9 @@ class VideoPlayerPrivate
 {
     public:
         VideoPlayerPrivate()
-            : player(0) {}
+            : player(0)
+            , aoutput(0)
+            , voutput(0) {}
 
         void init(VideoPlayer *q, Phonon::Category category);
 

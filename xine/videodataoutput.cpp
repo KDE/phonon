@@ -100,6 +100,7 @@ VideoDataOutputXT::VideoDataOutputXT()
 #endif
     m_videoPort(0)
 {
+    memset(&m_visual, 0, sizeof(m_visual));
     m_xine = Backend::xine();
 }
 
