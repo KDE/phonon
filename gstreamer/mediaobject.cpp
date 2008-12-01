@@ -1107,9 +1107,9 @@ void MediaObject::handleBusMessage(const Message &message)
     if (m_backend->debugLevel() >= Backend::Debug) {
         int type = GST_MESSAGE_TYPE(gstMessage);
         gchar* name = gst_element_get_name(gstMessage->src);
-        QString message = QString("Bus: %0 (%1)").arg(gst_message_type_get_name ((GstMessageType)type)).arg(name);
+        QString msgString = QString("Bus: %0 (%1)").arg(gst_message_type_get_name ((GstMessageType)type)).arg(name);
         g_free(name);
-        m_backend->logMessage(message, Backend::Debug, this);
+        m_backend->logMessage(msgString, Backend::Debug, this);
     }
 
     switch (GST_MESSAGE_TYPE (gstMessage)) {
@@ -1198,7 +1198,6 @@ void MediaObject::handleBusMessage(const Message &message)
             QString logMessage;
             gst_message_parse_error (gstMessage, &err, &debug);
             gchar *errorMessage = gst_error_get_message (err->domain, err->code);
-            QString message = QString::fromUtf8(errorMessage);
             logMessage.sprintf("Error: %s Message:%s (%s) Code:%d", debug, err->message, errorMessage, err->code);
             m_backend->logMessage(logMessage, Backend::Warning);
             g_free(errorMessage);
@@ -1246,9 +1245,9 @@ void MediaObject::handleBusMessage(const Message &message)
             gchar *debug;
             GError *err;
             gst_message_parse_warning(gstMessage, &err, &debug);
-            QString message;
-            message.sprintf("Warning: %s\nMessage:%s", debug, err->message);
-            m_backend->logMessage(message, Backend::Warning);
+            QString msgString;
+            msgString.sprintf("Warning: %s\nMessage:%s", debug, err->message);
+            m_backend->logMessage(msgString, Backend::Warning);
             g_free (debug);
             g_error_free (err);
             break;
