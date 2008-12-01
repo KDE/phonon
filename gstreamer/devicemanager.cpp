@@ -234,7 +234,9 @@ GstElement *DeviceManager::createAudioSink(Category category)
     if (!sink) { //no suitable sink found so we'll make a fake one
         sink = gst_element_factory_make("fakesink", NULL);
         if (sink) {
-            m_backend->logMessage("AudioOutput Using fake audio sink");
+            if (m_backend) {
+                m_backend->logMessage("AudioOutput Using fake audio sink");
+            }
             //without sync the sink will pull the pipeline as fast as the CPU allows
             g_object_set (G_OBJECT (sink), "sync", TRUE, (const char*)NULL);
         }
