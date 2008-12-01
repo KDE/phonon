@@ -45,7 +45,6 @@ class VideoDataOutputPrivate : public AbstractVideoOutputPrivate
         }
 
         int latency;
-        Qt::AspectRatioMode frameAspectRatioMode;
 };
 
 } // namespace Experimental
