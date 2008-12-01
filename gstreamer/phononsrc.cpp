@@ -79,11 +79,9 @@ static void phonon_src_base_init (gpointer g_class) {
 static void phonon_src_class_init (PhononSrcClass * klass)
 {
     GObjectClass *gobject_class;
-    GstElementClass *gstelement_class;
     GstBaseSrcClass *gstbasesrc_class;
 
     gobject_class = G_OBJECT_CLASS (klass);
-    gstelement_class = GST_ELEMENT_CLASS (klass);
     gstbasesrc_class = GST_BASE_SRC_CLASS (klass);
 
     gobject_class->set_property = phonon_src_set_property;
