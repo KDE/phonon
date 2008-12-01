@@ -364,8 +364,8 @@ QStringList ObjectDescriptionModelData::mimeTypes(ObjectDescriptionType type) co
 
 #if !defined(Q_CC_MSVC) || _MSC_VER > 1300 || defined(Q_CC_INTEL) || defined(Q_CC_MINGW)
 #define INSTANTIATE_META_FUNCTIONS(type) \
-template PHONON_EXPORT const QMetaObject *ObjectDescriptionModel<type>::metaObject() const; \
-template PHONON_EXPORT void *ObjectDescriptionModel<type>::qt_metacast(const char *)
+template const QMetaObject *ObjectDescriptionModel<type>::metaObject() const; \
+template void *ObjectDescriptionModel<type>::qt_metacast(const char *)
 
 INSTANTIATE_META_FUNCTIONS(AudioOutputDeviceType);
 INSTANTIATE_META_FUNCTIONS(AudioCaptureDeviceType);
