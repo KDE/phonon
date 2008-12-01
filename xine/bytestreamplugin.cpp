@@ -196,7 +196,7 @@ static int kbytestream_plugin_open (input_plugin_t *this_gen)
     KByteStreamInputPlugin *that = static_cast<KByteStreamInputPlugin *>(this_gen);
 
     if (kbytestream_plugin_get_length (this_gen) == 0) {
-        _x_message(that->stream(), XINE_MSG_FILE_EMPTY, that->mrl(), NULL);
+        _x_message(that->stream(), XINE_MSG_FILE_EMPTY, that->mrl(), (const char*)NULL);
         xine_log (that->stream()->xine, XINE_LOG_MSG,
                 "input_kbytestream: File empty: >%s<\n", that->mrl());
         return 0;

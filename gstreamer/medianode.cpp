@@ -50,7 +50,7 @@ MediaNode::MediaNode(Backend *backend, NodeDescription description) :
 
         // Fake audio sink to swallow unconnected audio pads
         m_fakeAudioSink = gst_element_factory_make("fakesink", NULL);
-        g_object_set (G_OBJECT (m_fakeAudioSink), "sync", TRUE, NULL);
+        g_object_set (G_OBJECT (m_fakeAudioSink), "sync", TRUE, (const char*)NULL);
         gst_object_ref (GST_OBJECT (m_fakeAudioSink));
         gst_object_sink (GST_OBJECT (m_fakeAudioSink));
     }
@@ -62,7 +62,7 @@ MediaNode::MediaNode(Backend *backend, NodeDescription description) :
 
         // Fake video sink to swallow unconnected video pads
         m_fakeVideoSink = gst_element_factory_make("fakesink", NULL);
-        g_object_set (G_OBJECT (m_fakeVideoSink), "sync", TRUE, NULL);
+        g_object_set (G_OBJECT (m_fakeVideoSink), "sync", TRUE, (const char*)NULL);
         gst_object_ref (GST_OBJECT (m_fakeVideoSink));
         gst_object_sink (GST_OBJECT (m_fakeVideoSink));
     }
