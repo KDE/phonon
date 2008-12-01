@@ -313,6 +313,8 @@ bool ObjectDescriptionModelData::dropMimeData(ObjectDescriptionType type, const 
 
         if (obj->isValid()) {
             toInsert << QExplicitlySharedDataPointer<ObjectDescriptionData>(obj);
+        } else {
+            delete obj;
         }
     }
     d->model->beginInsertRows(QModelIndex(), row, row + toInsert.size() - 1);
