@@ -25,7 +25,6 @@
 #include "common.h"
 #include "medianode.h"
 #include "abstractrenderer.h"
-#include "videowidget.h"
 
 #include <gst/gst.h>
 
