@@ -192,11 +192,8 @@ set(INSTALL_TARGETS_DEFAULT_ARGS  RUNTIME DESTINATION "${BIN_INSTALL_DIR}"
 
 # on the Mac support an extra install directory for application bundles
 if(APPLE)
-   if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.6")
-      set(INSTALL_TARGETS_DEFAULT_ARGS  ${INSTALL_TARGETS_DEFAULT_ARGS}
-                                  BUNDLE DESTINATION "${BUNDLE_INSTALL_DIR}" )
-   endif("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" STREQUAL "2.6")
-	set(CMAKE_INSTALL_NAME_DIR ${LIB_DESTINATION})
+   set(INSTALL_TARGETS_DEFAULT_ARGS  ${INSTALL_TARGETS_DEFAULT_ARGS}
+                                     BUNDLE DESTINATION "${BUNDLE_INSTALL_DIR}" )
 endif(APPLE)
 
 if (CMAKE_SYSTEM_NAME MATCHES Linux)
@@ -431,6 +428,20 @@ macro (PHONON_INSTALL_ICONS _defaultpath )
    phonon_update_iconcache()
 
 endmacro (PHONON_INSTALL_ICONS)
+
+# Set up RPATH handling, so the libs are found if they are installed to a non-standard location.
+# By default cmake builds the targets with full RPATH to everything in the build directory,
+# but then removes the RPATH when installing.
+# These two options below make it set the RPATH of the installed targets to all
+# RPATH directories outside the current CMAKE_BINARY_DIR and also the library 
+# install directory. Alex
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
+set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}" )
+
+if(APPLE)
+   set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
+endif(APPLE)
+
 
 add_subdirectory(cmake)
 add_subdirectory(phonon)
