@@ -36,6 +36,7 @@
 
 #include <xine/audio_out.h>
 
+// the gcc 4.0 STL includes assert.h
 #undef assert
 
 namespace Phonon

@@ -27,6 +27,9 @@
 #include "backend.h"
 #include "shareddata.h"
 
+// the gcc 4.0 STL includes assert.h
+#undef assert
+
 namespace Phonon
 {
 namespace Xine
