@@ -227,7 +227,7 @@ namespace Phonon
             ComPointer<IVMRWindowlessControl9> windowlessControl(m_filter, IID_IVMRWindowlessControl9);
 
             HRESULT hr = windowlessControl ? windowlessControl->RepaintVideo(target->winId(), hDC) : E_POINTER;
-            if (FAILED(hr) || m_dstY > 0 || m_dstX > 0 || true) {
+            if (FAILED(hr) || m_dstY > 0 || m_dstX > 0) {
                 const QColor c = target->palette().color(target->backgroundRole());
                 COLORREF color = RGB(c.red(), c.green(), c.blue());
                 HPEN hPen = ::CreatePen(PS_SOLID, 1, color);
