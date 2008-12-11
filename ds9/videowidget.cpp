@@ -48,6 +48,11 @@ namespace Phonon
                 setAutoFillBackground(false);
             }
 
+            QPaintEngine* paintEngine() const
+            {
+                return 0;
+            }
+
             void setVisible(bool visible)
             {
                 if (isEmbedded() && m_currentRenderer->isNative()) {
