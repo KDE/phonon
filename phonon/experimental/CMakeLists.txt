@@ -45,6 +45,7 @@ install(FILES
     snapshotinterface.h
     packet.h
     packetpool.h
+    phononnamespace.h
     videodataoutput.h
     videodataoutput2.h
     videodataoutputinterface.h
