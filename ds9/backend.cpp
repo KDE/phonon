@@ -284,12 +284,11 @@ namespace Phonon
             for(QSet<QObject *>::const_iterator it = objects.begin(); it != objects.end(); ++it) {
                 if (BackendNode *node = qobject_cast<BackendNode*>(*it)) {
                     if (MediaObject *mo = node->mediaObject()) {
-
                         if (mo->state() != Phonon::StoppedState) {
                             mo->transactionState = mo->state();
                             mo->ensureStopped(); //we have to stop the graph..
-                            return true;
                         }
+                        return true;
                     }
                 }
             }
