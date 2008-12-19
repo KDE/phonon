@@ -22,6 +22,7 @@
 #include "xineengine.h"
 #include "backend.h"
 
+#include <QtCore/QSettings>
 #include <QtCore/QByteArray>
 #include <QtCore/QFile>
 #include <QtCore/QDebug>
@@ -45,8 +46,17 @@ XineEngineData::XineEngineData()
     debug() << Q_FUNC_INFO << "setting xine verbosity to" << phonon_xine_verbosity.toInt();
     xine_engine_set_param(m_xine, XINE_ENGINE_PARAM_VERBOSITY, phonon_xine_verbosity.toInt());
 
+    // Phonon-Xine is for "real QSettings", Xine.xine for the libxine handled settings
+    const QSettings cg("kde.org", "Phonon-Xine.xine");
+    const QString &configfileString = cg.fileName();
+    const QByteArray &configfile = QFile::encodeName(configfileString);
+    xine_config_load(m_xine, configfile.constData());
     xine_init(m_xine);
     xine_register_plugins(m_xine, phonon_xine_plugin_info);
+    if (!QFile::exists(configfileString)) {
+        debug() << "save xine config to" << configfile.constData();
+        xine_config_save(m_xine, configfile.constData());
+    }
 }
 
 XineEngineData::~XineEngineData()
