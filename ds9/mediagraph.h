@@ -19,7 +19,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #define PHONON_MEDIAGRAPH_H
 
 #include "backendnode.h"
-#include <QtCore/QSet>
 #include <QtCore/QMultiMap>
 
 #include <phonon/mediasource.h>
@@ -27,8 +26,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 //#define GRAPH_DEBUG
 
 QT_BEGIN_NAMESPACE
-
-uint qHash (const Phonon::DS9::Filter &f);
 
 namespace Phonon
 {
@@ -54,8 +51,8 @@ namespace Phonon
 
             QMultiMap<QString, QString> metadata() const;
 
-            static QSet<Filter> getAllFilters(Graph graph);
-            QSet<Filter> getAllFilters() const;
+            static QList<Filter> getAllFilters(Graph graph);
+            QList<Filter> getAllFilters() const;
 
             HRESULT loadSource(const Phonon::MediaSource &);
 
@@ -97,13 +94,12 @@ namespace Phonon
             void finishLoading(quint16 workId, HRESULT hr, Graph);
             void finishSeeking(quint16 workId, qint64 time);
 
-
+        private:
             bool isSourceFilter(const Filter &filter) const;
             bool isDemuxerFilter(const Filter &filter) const;
             bool isDecoderFilter(const Filter &filter);
-            static QSet<Filter> getFilterChain(const Filter &source, const Filter &sink);
+            static QList<Filter> getFilterChain(const Filter &source, const Filter &sink);
 
-        private:
             HRESULT reallyFinishLoading(HRESULT, const Graph &graph);
 
 
@@ -123,8 +119,8 @@ namespace Phonon
             ComPointer<IMediaSeeking> m_mediaSeeking;
             Filter m_fakeSource, m_realSource;
             Filter m_demux;
-            QSet<OutputPin> m_decoderPins;
-            QSet<Filter> m_decoders;
+            QList<OutputPin> m_decoderPins;
+            QList<Filter> m_decoders;
 
             bool m_hasVideo;
             bool m_hasAudio;
@@ -142,7 +138,7 @@ namespace Phonon
 
             MediaObject *m_mediaObject;
             Phonon::MediaSource m_mediaSource;
-            QSet<BackendNode*> m_sinkConnections; //connections to the source
+            QList<BackendNode*> m_sinkConnections; //connections to the source
 
             Q_DISABLE_COPY(MediaGraph);
         };

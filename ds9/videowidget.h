@@ -35,6 +35,12 @@ namespace Phonon
 
         class VideoWidget : public BackendNode, public Phonon::VideoWidgetInterface
         {
+            enum RendererType
+            {
+                Native = 0,
+                NonNative = 1
+            };
+
             Q_OBJECT
                 Q_INTERFACES(Phonon::VideoWidgetInterface)
         public:
@@ -58,26 +64,27 @@ namespace Phonon
 
             QWidget *widget();
 
-            AbstractVideoRenderer *ensureSoftwareRendering(AbstractVideoRenderer *renderer);
-
             void notifyVideoLoaded();
+            AbstractVideoRenderer *switchRendering(AbstractVideoRenderer *current);
+            void performSoftRendering(const QImage &currentImage);
+
+            //apply contrast/brightness/hue/saturation
+            void applyMixerSettings() const;
+            void updateVideoSize() const;
 
         protected:
             virtual void connected(BackendNode *, const InputPin& inpin);
 
         private:
-            AbstractVideoRenderer *getDefaultRenderer() const;
-    
-            //apply contrast/brightness/hue/saturation
-            void applyMixerSettings() const;
+            AbstractVideoRenderer *getRenderer(int graphIndex, RendererType type, bool autoCreate = false);
 
             Phonon::VideoWidget::AspectRatio m_aspectRatio;
             Phonon::VideoWidget::ScaleMode m_scaleMode;
 
             VideoWindow *m_widget;
             qreal m_brightness, m_contrast, m_hue, m_saturation;
-            QVector<AbstractVideoRenderer*> m_renderers;
-            bool m_hardwareRenderer;
+            AbstractVideoRenderer* m_renderers[4];
+            mutable bool m_noNativeRendererSupported;
         };
     }
 }

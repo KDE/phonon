@@ -25,7 +25,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore/QObject>
 #include <QtCore/QQueue>
 #include <QtCore/QBasicTimer>
-#include <QtCore/QWaitCondition>
 #include <QtCore/QMutex>
 #include <QtCore/QThread>
 
@@ -92,7 +91,7 @@ namespace Phonon
             virtual void run();
 
             //wants to know as soon as the state is set
-            void addStateChangeRequest(Graph graph, OAFilterState, QSet<Filter> = QSet<Filter>());
+            void addStateChangeRequest(Graph graph, OAFilterState, QList<Filter> = QList<Filter>());
 
             quint16 addSeekRequest(Graph graph, qint64 time);
             quint16 addUrlToRender(const QString &url);
@@ -108,8 +107,8 @@ namespace Phonon
         Q_SIGNALS:
             void asyncRenderFinished(quint16, HRESULT, Graph);
             void asyncSeekingFinished(quint16, qint64);
-            void stateReady(IGraphBuilder*, Phonon::State);
-            void eventReady(IGraphBuilder*, long eventCode, long param1);
+            void stateReady(Graph, Phonon::State);
+            void eventReady(Graph, long eventCode, long param1);
 
         private:
 
@@ -134,7 +133,7 @@ namespace Phonon
                     qint64 time;
                     OAFilterState state;
                 };
-                QSet<Filter> decoders; //for the state change requests
+                QList<Filter> decoders; //for the state change requests
             };
             Work dequeueWork();
             void handleTask();
@@ -146,10 +145,13 @@ namespace Phonon
             quint16 m_currentWorkId;
             QWinWaitCondition m_waitCondition;
             QMutex m_mutex;
-            QVector<Graph> m_graphs;
 
             //this is for WaitForMultipleObjects
-            QVector<HANDLE> m_handles;
+            struct
+            {
+                Graph graph;
+                HANDLE handle;
+            } m_graphHandle[FILTER_COUNT];
         };
 
 
@@ -215,11 +217,15 @@ namespace Phonon
             WorkerThread *workerThread();
             void loadingFinished(MediaGraph *mg);
             void seekingFinished(MediaGraph *mg);
+            MediaGraph *currentGraph() const;
+
+            //this is used by the backend only
+            Phonon::State transactionState;
 
          private Q_SLOTS:
             void switchToNextSource();
-            void slotStateReady(IGraphBuilder*, Phonon::State);
-            void handleEvents(IGraphBuilder *graph, long eventCode, long param1);
+            void slotStateReady(Graph, Phonon::State);
+            void handleEvents(Graph, long eventCode, long param1);
 
          Q_SIGNALS:
             void stateChanged(Phonon::State newstate, Phonon::State oldstate);
@@ -252,7 +258,6 @@ namespace Phonon
             void updateVideoGeometry();
 #endif // QT_NO_PHONON_VIDEO
             void handleComplete(IGraphBuilder *graph);
-            MediaGraph *currentGraph() const;
             MediaGraph *nextGraph() const;
 
             void updateTargetTick();
@@ -271,11 +276,11 @@ namespace Phonon
             qint32 m_tickInterval;
 
             //the graph(s)
-            QList<MediaGraph*> m_graphs;
+            MediaGraph* m_graphs[FILTER_COUNT];
 
             //...the videowidgets in the graph
-            QSet<VideoWidget*> m_videoWidgets;
-            QSet<AudioOutput*> m_audioOutputs;
+            QList<VideoWidget*> m_videoWidgets;
+            QList<AudioOutput*> m_audioOutputs;
 
             bool m_buffering:1;
             bool m_oldHasVideo:1;

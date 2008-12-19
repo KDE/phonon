@@ -71,9 +71,17 @@ namespace Phonon
             //nothing to do here: the renderer paints everything
         }
 
-        void VideoRendererVMR9::notifyResize(const QRect &rect, Phonon::VideoWidget::AspectRatio aspectRatio,
+        void VideoRendererVMR9::notifyResize(const QSize &size, Phonon::VideoWidget::AspectRatio aspectRatio,
             Phonon::VideoWidget::ScaleMode scaleMode)
         {
+            if (!isActive()) {
+                ComPointer<IBasicVideo> basic(m_filter, IID_IBasicVideo);
+                if (basic) {
+                    basic->SetDestinationPosition(0, 0, 0, 0);
+                }
+                return;
+            }
+
             ComPointer<IVideoWindow> video(m_filter, IID_IVideoWindow);
 
             OAHWND owner;
@@ -90,10 +98,10 @@ namespace Phonon
             }
 
             //make sure the widget takes the whole size of the parent
-            video->SetWindowPosition(0, 0, rect.width(), rect.height());
+            video->SetWindowPosition(0, 0, size.width(), size.height());
 
             const QSize vsize = videoSize();
-            internalNotifyResize(rect.size(), vsize, aspectRatio, scaleMode);
+            internalNotifyResize(size, vsize, aspectRatio, scaleMode);
 
             ComPointer<IBasicVideo> basic(m_filter, IID_IBasicVideo);
             if (basic) {
@@ -104,17 +112,6 @@ namespace Phonon
         void VideoRendererVMR9::applyMixerSettings(qreal /*brightness*/, qreal /*contrast*/, qreal /*m_hue*/, qreal /*saturation*/)
         {
             //this can't be supported for WinCE
-        }
-
-        void VideoRendererVMR9::setActive(bool b)
-        {
-            if (b) {
-            } else {
-                ComPointer<IBasicVideo> basic(m_filter, IID_IBasicVideo);
-                if (basic) {
-                    basic->SetDestinationPosition(0, 0, 0, 0);
-                }
-            }
         }
 
         QImage VideoRendererVMR9::snapshot() const
@@ -133,8 +130,8 @@ namespace Phonon
 
                     const BITMAPINFOHEADER  *bmi = reinterpret_cast<const BITMAPINFOHEADER*>(buffer.constData());
 
-                    const int w = bmi->biWidth,
-                        h = bmi->biHeight;
+                    const int w = qAbs(bmi->biWidth),
+                        h = qAbs(bmi->biHeight);
 
                     // Create image and copy data into image.
                     QImage ret(w, h, QImage::Format_RGB32);
@@ -158,7 +155,6 @@ namespace Phonon
 #else
         VideoRendererVMR9::VideoRendererVMR9(QWidget *target) : m_target(target)
         {
-            m_target->setAttribute(Qt::WA_PaintOnScreen, true);
             m_filter = Filter(CLSID_VideoMixingRenderer9, IID_IBaseFilter);
             if (!m_filter) {
                 qWarning("the video widget could not be initialized correctly");
@@ -184,10 +180,8 @@ namespace Phonon
                 if (SUCCEEDED(hr)) {
 
                     const BITMAPINFOHEADER  *bmi = reinterpret_cast<BITMAPINFOHEADER*>(buffer);
-
-
-                    const int w = bmi->biWidth,
-                        h = bmi->biHeight;
+                    const int w = qAbs(bmi->biWidth),
+                        h = qAbs(bmi->biHeight);
 
                     // Create image and copy data into image.
                     QImage ret(w, h, QImage::Format_RGB32);
@@ -220,7 +214,7 @@ namespace Phonon
             return QSize(w, h);
         }
        
-        void VideoRendererVMR9::repaintCurrentFrame(QWidget *target, const QRect &)
+        void VideoRendererVMR9::repaintCurrentFrame(QWidget *target, const QRect &rect)
         {
             HDC hDC = target->getDC();
             // repaint the video
@@ -255,11 +249,19 @@ namespace Phonon
 
         }
 
-        void VideoRendererVMR9::notifyResize(const QRect &rect, Phonon::VideoWidget::AspectRatio aspectRatio,
+        void VideoRendererVMR9::notifyResize(const QSize &size, Phonon::VideoWidget::AspectRatio aspectRatio,
             Phonon::VideoWidget::ScaleMode scaleMode)
         {
+            if (!isActive()) {
+                RECT dummyRect = { 0, 0, 0, 0};
+                ComPointer<IVMRWindowlessControl9> windowlessControl(m_filter, IID_IVMRWindowlessControl9);
+                windowlessControl->SetVideoPosition(&dummyRect, &dummyRect);
+                return;
+            }
+
+
             const QSize vsize = videoSize();
-            internalNotifyResize(rect.size(), vsize, aspectRatio, scaleMode);
+            internalNotifyResize(size, vsize, aspectRatio, scaleMode);
 
             RECT dstRectWin = { m_dstX, m_dstY, m_dstWidth + m_dstX, m_dstHeight + m_dstY};
             RECT srcRectWin = { 0, 0, vsize.width(), vsize.height()};
@@ -269,17 +271,6 @@ namespace Phonon
                 windowlessControl->SetVideoPosition(&srcRectWin, &dstRectWin);
             }
         }
-
-        void VideoRendererVMR9::setActive(bool b)
-        {
-            if (b) {
-            } else {
-                RECT dummyRect = { 0, 0, 0, 0};
-                ComPointer<IVMRWindowlessControl9> windowlessControl(m_filter, IID_IVMRWindowlessControl9);
-                windowlessControl->SetVideoPosition(&dummyRect, &dummyRect);
-            }
-        }
-
 
         void VideoRendererVMR9::applyMixerSettings(qreal brightness, qreal contrast, qreal hue, qreal saturation)
         {

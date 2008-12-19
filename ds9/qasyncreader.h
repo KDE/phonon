@@ -20,6 +20,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtCore/QWaitCondition>
 #include <QtCore/QQueue>
+#include <QtCore/QMutex>
 
 #include "qpin.h"
 
@@ -55,9 +56,8 @@ namespace Phonon
             virtual HRESULT read(LONGLONG pos, LONG length, BYTE *buffer, LONG *actual) = 0;
 
         private:
-            class AsyncRequest
+            struct AsyncRequest
             {
-            public:
                 AsyncRequest(IMediaSample *s = 0, DWORD_PTR u = 0) : sample(s), user(u) {}
                 IMediaSample *sample;
                 DWORD_PTR user;

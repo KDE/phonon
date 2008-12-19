@@ -31,16 +31,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 QT_BEGIN_NAMESPACE
 
-uint qHash (const Phonon::DS9::Filter &f)
-{
-    return uint(static_cast<IBaseFilter*>(f));
-}
-
-uint qHash (const Phonon::DS9::OutputPin &p)
-{
-    return uint(static_cast<IPin*>(p));
-}
-
 namespace Phonon
 {
     namespace DS9
@@ -58,9 +48,10 @@ namespace Phonon
         {
             QList<GraphConnection> ret;
             int outOffset = 0;
-            Q_FOREACH(const OutputPin &output, BackendNode::pins(source, PINDIR_OUTPUT)) {
+            const QList<OutputPin> outputs = BackendNode::pins(source, PINDIR_OUTPUT);
+            for (int i = 0; i < outputs.count(); ++i) {
                 InputPin input;
-                if (output->ConnectedTo(input.pparam()) == S_OK) {
+                if (outputs.at(i)->ConnectedTo(input.pparam()) == S_OK) {
                     PIN_INFO info;
                     input->QueryPinInfo(&info);
                     Filter current(info.pFilter);
@@ -127,7 +118,7 @@ namespace Phonon
             m_mediaSeeking = ComPointer<IMediaSeeking>(m_graph, IID_IMediaSeeking);
             Q_ASSERT(m_mediaSeeking);
 
-            HRESULT hr = m_graph->AddFilter(m_fakeSource, L"Fake Source");
+            HRESULT hr = m_graph->AddFilter(m_fakeSource, 0);
             if (m_mediaObject->catchComError(hr)) {
                 return;
             }
@@ -218,15 +209,18 @@ namespace Phonon
 
         void MediaGraph::ensureSourceDisconnected()
         {
-            Q_FOREACH(const BackendNode *node, m_sinkConnections) {
-                const Filter currentFilter = node->filter(m_index);
-                Q_FOREACH(const InputPin &inpin, BackendNode::pins(currentFilter, PINDIR_INPUT)) {
-                    Q_FOREACH(const OutputPin &outpin, BackendNode::pins(m_fakeSource, PINDIR_OUTPUT)) {
-                        tryDisconnect(outpin, inpin);
+            for (int i = 0; i < m_sinkConnections.count(); ++i) {
+                const Filter currentFilter = m_sinkConnections.at(i)->filter(m_index);
+                const QList<InputPin> inputs = BackendNode::pins(currentFilter, PINDIR_INPUT);
+                const QList<InputPin> outputs = BackendNode::pins(m_fakeSource, PINDIR_OUTPUT);
+
+                for (int i = 0; i < inputs.count(); ++i) {
+                    for (int o = 0; o < outputs.count(); o++) {
+                        tryDisconnect(outputs.at(o), inputs.at(i));
                     }
 
-                    Q_FOREACH(const OutputPin &outpin, m_decoderPins) {
-                        tryDisconnect(outpin, inpin);
+                    for (int d = 0; d < m_decoderPins.count(); ++d) {
+                        tryDisconnect(m_decoderPins.at(d), inputs.at(i));
                     }
                 }
             }
@@ -242,15 +236,16 @@ namespace Phonon
             ensureSourceDisconnected();
 
             //reconnect the pins
-            Q_FOREACH(const BackendNode *node, m_sinkConnections) {
-                const Filter currentFilter = node->filter(m_index);
-                Q_FOREACH(const InputPin &inpin, BackendNode::pins(currentFilter, PINDIR_INPUT)) {
+            for (int i = 0; i < m_sinkConnections.count(); ++i) {
+                const Filter currentFilter = m_sinkConnections.at(i)->filter(m_index);
+                const QList<InputPin> inputs = BackendNode::pins(currentFilter, PINDIR_INPUT);
+                for(int i = 0; i < inputs.count(); ++i) {
                     //we ensure the filter belongs to the graph
                     grabFilter(currentFilter);
 
-                    Q_FOREACH(const OutputPin &outpin, m_decoderPins) {
+                    for (int d = 0; d < m_decoderPins.count(); ++d) {
                         //a decoder has only one output
-                        if (tryConnect(outpin, inpin)) {
+                        if (tryConnect(m_decoderPins.at(d), inputs.at(i))) {
                             break;
                         }
                     }
@@ -258,9 +253,9 @@ namespace Phonon
             }
         }
 
-        QSet<Filter> MediaGraph::getAllFilters(Graph graph)
+        QList<Filter> MediaGraph::getAllFilters(Graph graph)
         {
-            QSet<Filter> ret;
+            QList<Filter> ret;
             ComPointer<IEnumFilters> enumFilters;
             graph->EnumFilters(enumFilters.pparam());
             Filter current;
@@ -270,7 +265,7 @@ namespace Phonon
             return ret;
         }
 
-        QSet<Filter> MediaGraph::getAllFilters() const
+        QList<Filter> MediaGraph::getAllFilters() const
         {
             return getAllFilters(m_graph);
         }
@@ -405,23 +400,21 @@ namespace Phonon
 
             ensureSourceDisconnected();
 
-            QSet<Filter> list = m_decoders;
+            QList<Filter> list = m_decoders;
             if (m_demux) {
                 list << m_demux;
             }
             if (m_realSource) {
                 list << m_realSource;
             }
+            list << m_decoders;
 
-            Q_FOREACH(const Filter &decoder, m_decoders) {
-                list += getFilterChain(m_demux, decoder);
+            for (int i = 0; i < m_decoders.count(); ++i) {
+                list += getFilterChain(m_demux, m_decoders.at(i));
             }
 
-            Q_FOREACH(const Filter &filter, list) {
-                HRESULT hr = removeFilter(filter);
-                if(FAILED(hr)) {
-                    return hr;
-                }
+            for (int i = 0; i < list.count(); ++i) {
+                removeFilter(list.at(i));
             }
 
             //Let's reinitialize the internal lists
@@ -442,22 +435,22 @@ namespace Phonon
             const Filter sinkFilter = sink->filter(m_index);
             const QList<InputPin> inputs = BackendNode::pins(sinkFilter, PINDIR_INPUT);
 
-            QSet<OutputPin> outputs;
+            QList<OutputPin> outputs;
             if (source == m_mediaObject) {
-                outputs = BackendNode::pins(m_fakeSource, PINDIR_OUTPUT).toSet();
+                outputs = BackendNode::pins(m_fakeSource, PINDIR_OUTPUT);
                 outputs += m_decoderPins;
             } else {
-                outputs = BackendNode::pins(source->filter(m_index), PINDIR_OUTPUT).toSet();
+                outputs = BackendNode::pins(source->filter(m_index), PINDIR_OUTPUT);
             }
 
 
-            Q_FOREACH(const InputPin &inPin, inputs) {
-                Q_FOREACH(const OutputPin &outPin, outputs) {
-                    tryDisconnect(outPin, inPin);
+            for (int i = 0; i < inputs.count(); ++i) {
+                for (int o = 0; o < outputs.count(); ++o) {
+                    tryDisconnect(outputs.at(o), inputs.at(i));
                 }
             }
 
-            if (m_sinkConnections.remove(sink)) {
+            if (m_sinkConnections.removeOne(sink)) {
                 m_connectionsDirty = true;
             }
             return true;
@@ -486,9 +479,7 @@ namespace Phonon
                             PIN_INFO info;
                             in->QueryPinInfo(&info);
                             Filter sink(info.pFilter);
-                            QSet<Filter> list = getFilterChain(tee, sink);
-                            list -= sink;
-                            list -= tee;
+                            QList<Filter> list = getFilterChain(tee, sink);
                             out->QueryPinInfo(&info);
                             Filter source(info.pFilter);
 
@@ -499,17 +490,18 @@ namespace Phonon
                                 }
                             } else {
                                 ret = true;
-                                Q_FOREACH(const Filter &f, list) {
-                                    ret = ret && SUCCEEDED(removeFilter(f));
+                                for (int i = 0; i < list.count(); ++i) {
+                                    ret = ret && SUCCEEDED(removeFilter(list.at(i)));
                                 }
                             }
 
                             //Let's try to see if the Tee filter is still useful
                             if (ret) {
                                 int connections = 0;
-                                Q_FOREACH (const OutputPin &out, BackendNode::pins(tee, PINDIR_OUTPUT)) {
+                                const QList<OutputPin> outputs = BackendNode::pins(tee, PINDIR_OUTPUT);
+                                for(int i = 0; i < outputs.count(); ++i) {
                                     InputPin p;
-                                    if ( SUCCEEDED(out->ConnectedTo(p.pparam()))) {
+                                    if ( SUCCEEDED(outputs.at(i)->ConnectedTo(p.pparam()))) {
                                         connections++;
                                     }
                                 }
@@ -548,12 +540,13 @@ namespace Phonon
                 filter->GetClassID(&clsid);
                 if (clsid == CLSID_InfTee) {
                     //there is already a Tee (namely 'filter') in use
-                    Q_FOREACH(const OutputPin &pin, BackendNode::pins(filter, PINDIR_OUTPUT)) {
+                    const QList<OutputPin> outputs = BackendNode::pins(filter, PINDIR_OUTPUT);
+                    for(int i = 0; i < outputs.count(); ++i) {
+                        const OutputPin &pin = outputs.at(i);
                         if (VFW_E_NOT_CONNECTED == pin->ConnectedTo(inPin.pparam())) {
                             return SUCCEEDED(pin->Connect(newIn, 0));
                         }
                     }
-
                     //we shoud never go here
                     return false;
                 } else {
@@ -637,11 +630,11 @@ namespace Phonon
             qDebug() << Q_FUNC_INFO << source << sink << this;
 #endif
 
-            Q_FOREACH(const OutputPin &outPin, outputs) {
-
+            for (int o = 0; o < outputs.count(); o++) {
                 InputPin p;
-                Q_FOREACH(const InputPin &inPin, inputs) {
-                    if (tryConnect(outPin, inPin)) {
+                for (int i = 0; i < inputs.count(); i++) {
+                    const InputPin &inPin = inputs.at(i);
+                    if (tryConnect(outputs.at(o), inPin)) {
                         //tell the sink node that it just got a new input
                         sink->connected(source, inPin);
                         ret = true;
@@ -692,7 +685,7 @@ namespace Phonon
  #ifndef QT_NO_PHONON_MEDIACONTROLLER
                } else if (source.discType() == Phonon::Cd) {
                     m_realSource = Filter(new QAudioCDPlayer);
-                    m_result = m_graph->AddFilter(m_realSource, L"Audio CD Reader");
+                    m_result = m_graph->AddFilter(m_realSource, 0);
 
 #endif //QT_NO_PHONON_MEDIACONTROLLER
                 } else {
@@ -772,34 +765,36 @@ namespace Phonon
             m_graph = graph;
 
             //we keep the source and all the way down to the decoders
-            QSet<Filter> keptFilters;
+            QList<Filter> removedFilters;
 
-			const QSet<Filter> allFilters = getAllFilters(graph);
-
-            Q_FOREACH(const Filter &filter, allFilters) {
+			const QList<Filter> allFilters = getAllFilters(graph);
+            for (int i = 0; i < allFilters.count(); ++i) {
+                const Filter &filter = allFilters.at(i);
                 if (isSourceFilter(filter)) {
                     m_realSource = filter; //save the source filter
                     if (!m_demux ) {
                         m_demux = filter; //in the WMV case, the demuxer is the source filter itself
                     }
-                    keptFilters << filter;
                 } else if (isDemuxerFilter(filter)) {
                     m_demux = filter;
-                    keptFilters << filter;
                 } else if (isDecoderFilter(filter)) {
                     m_decoders += filter;
                     m_decoderPins += BackendNode::pins(filter, PINDIR_OUTPUT).first();
-                    keptFilters << filter;
-                } 
+                }  else {
+                    removedFilters += filter;
+                }
             }
 
-            Q_FOREACH(const Filter &decoder, m_decoders) {
-                keptFilters += getFilterChain(m_demux, decoder);
+            for (int i = 0; i < m_decoders.count(); ++i) {
+                QList<Filter> chain = getFilterChain(m_demux, m_decoders.at(i));
+                for (int i = 0; i < chain.count(); ++i) {
+                    //we keep those filters
+                    removedFilters.removeOne(chain.at(i));
+                }
             }
 
-            const QSet<Filter> removedFilters = allFilters - keptFilters;
-            Q_FOREACH(const Filter &filter, removedFilters) {
-                graph->RemoveFilter(filter);
+            for (int i = 0; i < removedFilters.count(); ++i) {
+                graph->RemoveFilter(removedFilters.at(i));
             }
 
             m_mediaObject->workerThread()->replaceGraphForEventManagement(graph, oldGraph);
@@ -808,15 +803,17 @@ namespace Phonon
             QList<GraphConnection> connections; //we store the connections that need to be restored
 
             // First get all the sink nodes (nodes with no input connected)
-            Q_FOREACH(BackendNode *node, m_sinkConnections) {
-                Filter currentFilter = node->filter(m_index);
+            for (int i = 0; i < m_sinkConnections.count(); ++i) {
+                Filter currentFilter = m_sinkConnections.at(i)->filter(m_index);
                 connections += getConnections(currentFilter);
                 grabFilter(currentFilter);
             }
 
             //we need to do something smart to detect if the streams are unencoded
             if (m_demux) {
-                Q_FOREACH(const OutputPin &out, BackendNode::pins(m_demux, PINDIR_OUTPUT)) {
+                const QList<OutputPin> outputs = BackendNode::pins(m_demux, PINDIR_OUTPUT);
+                for (int i = 0; i < outputs.count(); ++i) {
+                    const OutputPin &out = outputs.at(i);
                     InputPin pin;
                     if (out->ConnectedTo(pin.pparam()) == VFW_E_NOT_CONNECTED) {
                         m_decoderPins += out; //unconnected outputs can be decoded outputs
@@ -827,7 +824,8 @@ namespace Phonon
             ensureSourceConnectedTo(true);
 
             //let's reestablish the connections
-            Q_FOREACH(const GraphConnection &connection, connections) {
+            for (int i = 0; i < connections.count(); ++i) {
+                const GraphConnection &connection = connections.at(i);
                 //check if we shoud transfer the sink node
 
                 grabFilter(connection.input);
@@ -847,12 +845,14 @@ namespace Phonon
         }
 
         //utility functions
-        QSet<Filter> MediaGraph::getFilterChain(const Filter &source, const Filter &sink)
+        //retrieves the filters between source and sink
+        QList<Filter> MediaGraph::getFilterChain(const Filter &source, const Filter &sink)
         {
-            QSet<Filter> ret;
+            QList<Filter> ret;
             Filter current = sink;
             while (current && BackendNode::pins(current, PINDIR_INPUT).count() == 1 && current != source) {
-                ret += current;
+                if (current != source)
+                    ret += current;
                 InputPin pin = BackendNode::pins(current, PINDIR_INPUT).first();
                 current = Filter();
                 OutputPin output;
@@ -981,10 +981,10 @@ namespace Phonon
                 return false;
             }
 
-            Q_FOREACH(const OutputPin &outpin, outputs) {
+            for (int i = 0; i < outputs.count(); ++i) {
                 QAMMediaType type;
                 //for now we support only video and audio
-                hr = outpin->ConnectionMediaType(&type);
+                hr = outputs.at(i)->ConnectionMediaType(&type);
                 if (SUCCEEDED(hr) && 
                     type.majortype != MEDIATYPE_Video && type.majortype != MEDIATYPE_Audio) {
                         return false;

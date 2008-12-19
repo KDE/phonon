@@ -52,7 +52,8 @@ namespace Phonon
         WorkerThread::WorkerThread()
           : QThread(), m_currentRenderId(0), m_finished(false), m_currentWorkId(1)
         {
-            m_handles << m_waitCondition;
+            //TODO: find a replacement
+//            m_handles << m_waitCondition;
         }
 
         WorkerThread::~WorkerThread()
@@ -80,7 +81,15 @@ namespace Phonon
         void WorkerThread::run()
         {
             while (m_finished == false) {
-                DWORD result = ::WaitForMultipleObjects(m_handles.count(), m_handles.data(), FALSE, INFINITE);
+                HANDLE handles[FILTER_COUNT +1];
+                handles[0] = m_waitCondition;
+                int count = 1;
+                for(int i = 0; i < FILTER_COUNT; ++i) {
+                    if (m_graphHandle[i].graph) {
+                        handles[count++] = m_graphHandle[i].handle;
+                    }
+                }
+                DWORD result = ::WaitForMultipleObjects(count, handles, FALSE, INFINITE);
                 if (result == WAIT_OBJECT_0) {
                     if (m_finished) {
                         //that's the end if the thread execution
@@ -90,7 +99,7 @@ namespace Phonon
                     handleTask();
                 } else {
                     //this is the event management
-                    Graph graph = m_graphs.at(result - WAIT_OBJECT_0 - 1);
+                    const Graph &graph = m_graphHandle[result - WAIT_OBJECT_0 - 1].graph;
                     long eventCode;
                     LONG_PTR param1, param2;
 
@@ -103,7 +112,7 @@ namespace Phonon
         }
 
         //wants to know as soon as the state is set
-        void WorkerThread::addStateChangeRequest(Graph graph, OAFilterState state, QSet<Filter> decoders)
+        void WorkerThread::addStateChangeRequest(Graph graph, OAFilterState state, QList<Filter> decoders)
         {
             QMutexLocker locker(&m_mutex);
             bool found = false;
@@ -207,33 +216,34 @@ namespace Phonon
                 QMutexLocker locker(&m_mutex);
                 HANDLE h;
 
-                //remove the old graph
-                if (SUCCEEDED(ComPointer<IMediaEvent>(w.oldGraph, IID_IMediaEvent)
-                    ->GetEventHandle(reinterpret_cast<OAEVENT*>(&h)))) {
-                    int index = m_handles.indexOf(h);
-                    if (index != -1) {
-                        m_handles.remove(index);
-                    }
-
-                    index = m_graphs.indexOf(w.oldGraph);
-                    if (index != -1) {
-                        m_graphs.remove(index);
+                int index = -1;
+                for(int i = 0; i < FILTER_COUNT; ++i) {
+                    if (m_graphHandle[i].graph == w.oldGraph) {
+                        m_graphHandle[i].graph = Graph();
+                        index = i;
+                        break;
+                    } else if (index == -1 && m_graphHandle[i].graph == 0) {
+                        //this is the first available slot
+                        index = i;
                     }
                 }
+
+                Q_ASSERT(index != -1);
 
                 //add the new graph
                 if (SUCCEEDED(ComPointer<IMediaEvent>(w.graph, IID_IMediaEvent)
                     ->GetEventHandle(reinterpret_cast<OAEVENT*>(&h)))) {
-                    m_graphs += w.graph;
-                    m_handles += h;
+                    m_graphHandle[index].graph = w.graph;
+                    m_graphHandle[index].handle = h;
                 }
             } else if (w.task == Render) {
                 if (w.filter) {
                     //let's render pins
                     w.graph->AddFilter(w.filter, 0);
-                    Q_FOREACH(const OutputPin &out, BackendNode::pins(w.filter, PINDIR_OUTPUT)) {
+                    const QList<OutputPin> outputs = BackendNode::pins(w.filter, PINDIR_OUTPUT);
+                    for (int i = 0; i < outputs.count(); ++i) {
                         //blocking call
-                        hr = w.graph->Render(out);
+                        hr = w.graph->Render(outputs.at(i));
                         if (FAILED(hr)) {
                             break;
                         }
@@ -263,13 +273,14 @@ namespace Phonon
             } else if (w.task == ChangeState) {
 
                 //remove useless decoders
-                QSet<Filter> unused;
-                Q_FOREACH(const Filter &filter, w.decoders) {
+                QList<Filter> unused;
+                for (int i = 0; i < w.decoders.count(); ++i) {
+                    const Filter &filter = w.decoders.at(i);
                     bool used = false;
                     const QList<OutputPin> pins = BackendNode::pins(filter, PINDIR_OUTPUT);
-                    Q_FOREACH(const OutputPin &pin, pins) {
+                    for( int i = 0; i < pins.count(); ++i) {
                         InputPin input;
-                        if (pin->ConnectedTo(input.pparam()) == S_OK) {
+                        if (pins.at(i)->ConnectedTo(input.pparam()) == S_OK) {
                             used = true;
                         }
                     }
@@ -279,9 +290,9 @@ namespace Phonon
                 }
 
                 //we can get the state
-                Q_FOREACH(const Filter &f, unused) {
+                for (int i = 0; i < unused.count(); ++i) {
                     //we should remove this filter from the graph
-                    w.graph->RemoveFilter(f);
+                    w.graph->RemoveFilter(unused.at(i));
                 }
 
 
@@ -372,16 +383,16 @@ namespace Phonon
 #endif //QT_NO_PHONON_MEDIACONTROLLER
             m_targetTick(INFINITE)
         {
-            for(int i = 0; i < 2; ++i) {
-                MediaGraph *graph = new MediaGraph(this, i);
-                m_graphs << graph;
+
+            for(int i = 0; i < FILTER_COUNT; ++i) {
+                m_graphs[i] = new MediaGraph(this, i);
             }
 
-            connect(&m_thread, SIGNAL(stateReady(IGraphBuilder *, Phonon::State)), 
-                               SLOT(slotStateReady(IGraphBuilder *, Phonon::State)));
+            connect(&m_thread, SIGNAL(stateReady(Graph, Phonon::State)), 
+                               SLOT(slotStateReady(Graph, Phonon::State)));
 
-            connect(&m_thread, SIGNAL(eventReady(IGraphBuilder *, long, long)), 
-                               SLOT(handleEvents(IGraphBuilder *, long, long)));
+            connect(&m_thread, SIGNAL(eventReady(Graph, long, long)), 
+                               SLOT(handleEvents(Graph, long, long)));
             //really special case
             m_mediaObject = this;
 
@@ -398,7 +409,9 @@ namespace Phonon
             m_thread.wait();
 
             //and then we delete the graphs
-            qDeleteAll(m_graphs);
+            for (int i = 0; i < FILTER_COUNT; ++i) {
+                delete m_graphs[i];
+            }
         }
 
         WorkerThread *MediaObject::workerThread()
@@ -408,12 +421,12 @@ namespace Phonon
 
         MediaGraph *MediaObject::currentGraph() const
         {
-            return m_graphs.first();
+            return m_graphs[0];
         }
 
         MediaGraph *MediaObject::nextGraph() const
         {
-            return m_graphs.last();
+            return m_graphs[FILTER_COUNT - 1];
         }
 
         //utility function to save the graph to a file
@@ -452,8 +465,8 @@ namespace Phonon
                             return;
                         } else if (current < -m_transitionTime) {
                             //we are currently crossfading
-                            Q_FOREACH(AudioOutput *audio, m_audioOutputs) {
-                                audio->setCrossFadingProgress( currentGraph()->index(), qMin( qreal(1.), qreal(current) / qreal(-m_transitionTime)));
+                            for (int i = 0; i < m_audioOutputs.count(); ++i) {
+                                m_audioOutputs.at(i)->setCrossFadingProgress( currentGraph()->index(), qMin( qreal(1.), qreal(current) / qreal(-m_transitionTime)));
                             }
                         }
                     }
@@ -501,12 +514,12 @@ namespace Phonon
 
             m_oldHasVideo = currentGraph()->hasVideo();
 
-            m_graphs.swap(0,1); //swap the graphs
+            qSwap(m_graphs[0], m_graphs[1]); //swap the graphs
 
             //we tell the video widgets to switch now to the new source
 #ifndef QT_NO_PHONON_VIDEO
-            Q_FOREACH(VideoWidget *video, m_videoWidgets) {
-                video->setCurrentGraph(currentGraph()->index());
+            for (int i = 0; i < m_videoWidgets.count(); ++i) {
+                m_videoWidgets.at(i)->setCurrentGraph(currentGraph()->index());
             }
 #endif //QT_NO_PHONON_VIDEO
 
@@ -734,7 +747,7 @@ namespace Phonon
             emit currentSourceChanged(source);
         }
 
-        void MediaObject::slotStateReady(IGraphBuilder *graph, Phonon::State newState)
+        void MediaObject::slotStateReady(Graph graph, Phonon::State newState)
         {
             if (graph == currentGraph()->graph() && !currentGraph()->isLoading()) {
                 setState(newState);
@@ -859,8 +872,8 @@ namespace Phonon
 
         void MediaObject::grabNode(BackendNode *node)
         {
-            Q_FOREACH(MediaGraph *graph, m_graphs) {
-                graph->grabNode(node);
+            for (int i = 0; i < FILTER_COUNT; ++i) {
+                m_graphs[i]->grabNode(node);
             }
             node->setMediaObject(this);
         }
@@ -868,8 +881,8 @@ namespace Phonon
         bool MediaObject::connectNodes(BackendNode *source, BackendNode *sink)
         {
             bool ret = true;
-            Q_FOREACH(MediaGraph *graph, m_graphs) {
-                ret = ret && graph->connectNodes(source, sink);
+            for (int i = 0; i < FILTER_COUNT; ++i) {
+                ret = ret && m_graphs[i]->connectNodes(source, sink);
             }
             if (ret) {
 #ifndef QT_NO_PHONON_VIDEO
@@ -887,17 +900,17 @@ namespace Phonon
         bool MediaObject::disconnectNodes(BackendNode *source, BackendNode *sink)
         {
             bool ret = true;
-            Q_FOREACH(MediaGraph *graph, m_graphs) {
-                ret = ret && graph->disconnectNodes(source, sink);
+            for (int i = 0; i < FILTER_COUNT; ++i) {
+                ret = ret && m_graphs[i]->disconnectNodes(source, sink);
             }
             if (ret) {
 #ifndef QT_NO_PHONON_VIDEO
                 if (VideoWidget *video = qobject_cast<VideoWidget*>(sink)) {
-                    m_videoWidgets -= video;
+                    m_videoWidgets.removeOne(video);
                 } else 
 #endif //QT_NO_PHONON_VIDEO
                     if (AudioOutput *audio = qobject_cast<AudioOutput*>(sink)) {
-                    m_audioOutputs -= audio;
+                        m_audioOutputs.removeOne(audio);
                 }
             }
             return ret;
@@ -906,8 +919,8 @@ namespace Phonon
 #ifndef QT_NO_PHONON_VIDEO
         void MediaObject::updateVideoGeometry()
         {
-            Q_FOREACH(VideoWidget *vw, m_videoWidgets) {
-                vw->notifyVideoLoaded();
+            for (int i = 0; i < m_videoWidgets.count(); ++i) {
+                m_videoWidgets.at(i)->notifyVideoLoaded();
             }
         }
 #endif //QT_NO_PHONON_VIDEO
@@ -945,12 +958,12 @@ namespace Phonon
                 //it is just the end of the previous source (in case of cross-fading)
                 nextGraph()->cleanup();
             }
-            Q_FOREACH(AudioOutput *audio, m_audioOutputs) {
-                audio->setCrossFadingProgress( currentGraph()->index(), 1.); //cross-fading is in any case finished
+            for (int i = 0; i < m_audioOutputs.count(); ++i) {
+                m_audioOutputs.at(i)->setCrossFadingProgress( currentGraph()->index(), 1.); //cross-fading is in any case finished
             }
         }
 
-        void MediaObject::handleEvents(IGraphBuilder *graph, long eventCode, long param1)
+        void MediaObject::handleEvents(Graph graph, long eventCode, long param1)
         {
             QString eventDescription;
             switch (eventCode)

@@ -33,11 +33,6 @@ namespace Phonon
 {
     namespace DS9
     {
-
-        // {A222A867-A6FF-4f90-B514-0719A44D9F66}
-        DEFINE_GUID(CLSID_IODeviceReader,
-            0xa222a867, 0xa6ff, 0x4f90, 0xb5, 0x14, 0x7, 0x19, 0xa4, 0x4d, 0x9f, 0x66);
-
         //these mediatypes define a stream, its type will be autodetected by DirectShow
         static QVector<AM_MEDIA_TYPE> getMediaTypes()
         {
@@ -208,7 +203,7 @@ namespace Phonon
         };
 
         IODeviceReader::IODeviceReader(const Phonon::MediaSource &source, const MediaGraph *mg) :
-        QBaseFilter(CLSID_IODeviceReader)
+        QBaseFilter(CLSID_NULL)
         {
             //create the output pin
             m_streamReader = new StreamReader(this, source, mg);

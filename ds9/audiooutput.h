@@ -19,7 +19,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #define PHONON_AUDIOOUTPUT_H
 
 #include "backendnode.h"
-#include <QtCore/QFile>
 #include <phonon/audiooutputinterface.h>
 
 #include "backend.h"

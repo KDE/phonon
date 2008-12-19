@@ -65,9 +65,9 @@ namespace Phonon
         STDMETHODIMP QMemInputPin::EndOfStream()
         {
             //this allows to serialize with Receive calls
-            QMutexLocker locker(&m_mutexReceive); 
-            Q_FOREACH(QPin *current, m_outputs) {
-                IPin *conn = current->connected();
+            QMutexLocker locker(&m_mutexReceive);
+            for(int i = 0; i < m_outputs.count(); ++i) {
+                IPin *conn = m_outputs.at(i)->connected();
                 if (conn) {
                     conn->EndOfStream();
                 }
@@ -78,8 +78,8 @@ namespace Phonon
         STDMETHODIMP QMemInputPin::BeginFlush()
         {
             //pass downstream
-            Q_FOREACH(QPin *current, m_outputs) {
-                IPin *conn = current->connected();
+            for(int i = 0; i < m_outputs.count(); ++i) {
+                IPin *conn = m_outputs.at(i)->connected();
                 if (conn) {
                     conn->BeginFlush();
                 }
@@ -92,8 +92,8 @@ namespace Phonon
         STDMETHODIMP QMemInputPin::EndFlush()
         {
             //pass downstream
-            Q_FOREACH(QPin *current, m_outputs) {
-                IPin *conn = current->connected();
+            for(int i = 0; i < m_outputs.count(); ++i) {
+                IPin *conn = m_outputs.at(i)->connected();
                 if (conn) {
                     conn->EndFlush();
                 }
@@ -105,8 +105,8 @@ namespace Phonon
 
         STDMETHODIMP QMemInputPin::NewSegment(REFERENCE_TIME start, REFERENCE_TIME stop, double rate)
         {
-            Q_FOREACH(IPin *current, m_outputs) {
-                current->NewSegment(start, stop, rate);
+            for(int i = 0; i < m_outputs.count(); ++i) {
+                m_outputs.at(i)->NewSegment(start, stop, rate);
             }
             return S_OK;
         }
@@ -121,8 +121,8 @@ namespace Phonon
                 mt->subtype != MEDIASUBTYPE_NULL &&
                 mt->formattype != GUID_NULL) {
                     //we tell the output pins that they should connect with this type
-                    Q_FOREACH(QPin *current, outputs()) {
-                        hr = current->setAcceptedMediaType(connectedType());
+                    for(int i = 0; i < m_outputs.count(); ++i) {
+                        hr = m_outputs.at(i)->setAcceptedMediaType(connectedType());
                         if (FAILED(hr)) {
                             break;
                         }
@@ -157,8 +157,8 @@ namespace Phonon
 
             setMemoryAllocator(alloc);
 
-            Q_FOREACH(QPin *current, outputs()) {
-                IPin *pin = current->connected();
+            for(int i = 0; i < m_outputs.count(); ++i) {
+                IPin *pin = m_outputs.at(i)->connected();
                 if (pin) {
                     ComPointer<IMemInputPin> input(pin, IID_IMemInputPin);
                     input->NotifyAllocator(alloc, m_shouldDuplicateSamples);
@@ -201,7 +201,8 @@ namespace Phonon
                 }
             }
 
-            Q_FOREACH(QPin *current, outputs()) {
+            for (int i = 0; i < m_outputs.count(); ++i) {
+                QPin *current = m_outputs.at(i);
                 IMediaSample *outSample = m_shouldDuplicateSamples ? 
                     duplicateSampleForOutput(sample, current->memoryAllocator())
                     : sample;
@@ -221,7 +222,6 @@ namespace Phonon
                 if (m_shouldDuplicateSamples) {
                     outSample->Release();
                 }
-
             }
             return S_OK;
         }
@@ -248,8 +248,8 @@ namespace Phonon
         STDMETHODIMP QMemInputPin::ReceiveCanBlock()
         {
             //we test the output to see if they can block
-            Q_FOREACH(QPin *current, m_outputs) {
-                IPin *input = current->connected();
+            for(int i = 0; i < m_outputs.count(); ++i) {
+                IPin *input = m_outputs.at(i)->connected();
                 if (input) {
                     ComPointer<IMemInputPin> meminput(input, IID_IMemInputPin);
                     if (meminput && meminput->ReceiveCanBlock() != S_FALSE) {
@@ -266,16 +266,16 @@ namespace Phonon
         void QMemInputPin::addOutput(QPin *output)
         {
             QWriteLocker locker(&m_lock);
-            m_outputs.insert(output);
+            m_outputs += output;
         }
 
         void QMemInputPin::removeOutput(QPin *output)
         {
             QWriteLocker locker(&m_lock);
-            m_outputs.remove(output);
+            m_outputs.removeOne(output);
         }
 
-        QSet<QPin*> QMemInputPin::outputs() const
+        QList<QPin*> QMemInputPin::outputs() const
         {
             QReadLocker locker(&m_lock);
             return m_outputs;
@@ -284,11 +284,7 @@ namespace Phonon
         ALLOCATOR_PROPERTIES QMemInputPin::getDefaultAllocatorProperties() const
         {
             //those values reduce buffering a lot (good for the volume effect)
-            ALLOCATOR_PROPERTIES prop;
-            prop.cbAlign = 1;
-            prop.cbBuffer = 4096;
-            prop.cBuffers = 1;
-            prop.cbPrefix = 0;
+            ALLOCATOR_PROPERTIES prop = {4096, 1, 1, 0};
             return prop;
         }
 
