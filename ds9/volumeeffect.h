@@ -44,9 +44,6 @@ namespace Phonon
             virtual void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve);
             virtual void fadeTo(float, int);
 
-            private Q_SLOTS:
-                void setVolumePercentage(int);
-
         private:
             float m_volume;
 

@@ -20,6 +20,8 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtCore/qnamespace.h>
 
+#define FILTER_COUNT 2 //number of ds9 filters per object
+
 #ifndef QT_BEGIN_NAMESPACE
 #define QT_BEGIN_NAMESPACE
 #endif

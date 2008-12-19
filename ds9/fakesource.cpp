@@ -28,10 +28,6 @@ namespace Phonon
 {
     namespace DS9
     {
-        // {DFBECCBE-4C37-4bb9-B5B6-C718EA5D1FE8}
-        DEFINE_GUID(CLSID_FakeSource,
-            0xdfbeccbe, 0x4c37, 0x4bb9, 0xb5, 0xb6, 0xc7, 0x18, 0xea, 0x5d, 0x1f, 0xe8);
-
         static WAVEFORMATEX g_defaultWaveFormat = {WAVE_FORMAT_PCM, 2, 44100, 176400, 4, 16, 0};
         static BITMAPINFOHEADER g_defautBitmapHeader = { sizeof(BITMAPINFOHEADER), 1, 1, 1, 0, 0, 0, 0, 0, 0, 0};
         static VIDEOINFOHEADER2 g_defaultVideoInfo = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -92,7 +88,7 @@ namespace Phonon
 
         };
 
-        FakeSource::FakeSource() : QBaseFilter(CLSID_FakeSource)
+        FakeSource::FakeSource() : QBaseFilter(CLSID_NULL)
         {
             createFakeAudioPin();
             createFakeVideoPin();

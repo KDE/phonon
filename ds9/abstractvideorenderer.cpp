@@ -30,7 +30,8 @@ namespace Phonon
     {
 
         AbstractVideoRenderer::AbstractVideoRenderer() : 
-            m_dstX(0), m_dstY(0), m_dstWidth(0), m_dstHeight(0)
+            m_dstX(0), m_dstY(0), m_dstWidth(0), m_dstHeight(0),
+                m_active(false)
         {
         }
 
@@ -52,6 +53,15 @@ namespace Phonon
             return s;
         }
 
+        void AbstractVideoRenderer::setActive(bool b)
+        {
+            m_active = b;
+        }
+
+        bool AbstractVideoRenderer::isActive() const
+        {
+            return m_active;
+        }
 
         void AbstractVideoRenderer::internalNotifyResize(const QSize &size, const QSize &videoSize,
             Phonon::VideoWidget::AspectRatio aspectRatio, Phonon::VideoWidget::ScaleMode scaleMode)

@@ -19,6 +19,8 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "qpin.h"
 #include "compointer.h"
 
+#include <QtCore/QMutex>
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -215,7 +217,6 @@ namespace Phonon
         //this is called on the input pins
         STDMETHODIMP QPin::ReceiveConnection(IPin *pin, const AM_MEDIA_TYPE *type)
         {
-            QMutexLocker locker(&m_mutex);
             if (!pin ||!type) {
                 return E_POINTER;
             }
@@ -241,7 +242,6 @@ namespace Phonon
         //this is called on the output pins
         STDMETHODIMP QPin::Connect(IPin *pin, const AM_MEDIA_TYPE *type)
         {
-            QMutexLocker locker(&m_mutex);
             if (!pin) {
                 return E_POINTER;
             }
@@ -306,7 +306,6 @@ namespace Phonon
 
         STDMETHODIMP QPin::Disconnect()
         {
-            QMutexLocker locker(&m_mutex);
             if (!connected()) {
                 return S_FALSE;
             }
@@ -398,8 +397,8 @@ namespace Phonon
                 return E_POINTER;
             }
 
-            Q_FOREACH(const AM_MEDIA_TYPE &current, m_mediaTypes) {
-
+            for (int i = 0; i < m_mediaTypes.count(); ++i) {
+                const AM_MEDIA_TYPE &current = m_mediaTypes.at(i);
                 if ( (type->majortype == current.majortype) &&
                     (current.subtype == MEDIASUBTYPE_NULL || type->subtype == current.subtype) &&
                     (type->majortype == MEDIATYPE_Stream || type->formattype != GUID_NULL || current.formattype != GUID_NULL) &&
@@ -483,7 +482,8 @@ namespace Phonon
 
         HRESULT QPin::checkOwnMediaTypesConnection(IPin *pin)
         {   
-            Q_FOREACH(const AM_MEDIA_TYPE &current, mediaTypes()) {
+            for(int i = 0; i < m_mediaTypes.count(); ++i) {
+                const AM_MEDIA_TYPE &current = m_mediaTypes.at(i);
                 setConnectedType(current);
                 HRESULT hr = pin->ReceiveConnection(this, &current);
                 if (hr == S_OK) {

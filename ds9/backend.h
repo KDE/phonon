@@ -74,7 +74,6 @@ namespace Phonon
             };
             mutable QVector<AudioMoniker> m_audioOutputs;
             mutable QVector<CLSID> m_audioEffects;
-            QHash<MediaObject*, Phonon::State> m_graphState;
         };
     }
 }

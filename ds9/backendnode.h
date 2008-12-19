@@ -27,6 +27,8 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 QT_BEGIN_NAMESPACE
 
+
+
 namespace Phonon
 {
     namespace DS9
@@ -60,7 +62,7 @@ namespace Phonon
                 void mediaObjectDestroyed();
 
         protected:
-            QVector<Filter> m_filters;
+            Filter m_filters[FILTER_COUNT];
             MediaObject *m_mediaObject;
         };
     }

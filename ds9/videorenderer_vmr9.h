@@ -37,11 +37,10 @@ namespace Phonon
 
             //Implementation from AbstractVideoRenderer
             void repaintCurrentFrame(QWidget *target, const QRect &rect);
-            void notifyResize(const QRect&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode);
+            void notifyResize(const QSize&, Phonon::VideoWidget::AspectRatio, Phonon::VideoWidget::ScaleMode);
             QSize videoSize() const;
             QImage snapshot() const;
             void applyMixerSettings(qreal brightness, qreal contrast, qreal m_hue, qreal saturation);
-            void setActive(bool);
             bool isNative() const;
         private:
             QWidget *m_target;

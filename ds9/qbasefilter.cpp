@@ -18,7 +18,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "qbasefilter.h"
 #include "qpin.h"
 
-#include <QtCore/QDebug>
+#include <QtCore/QMutex>
 
 QT_BEGIN_NAMESPACE
 
@@ -321,7 +321,8 @@ namespace Phonon
                 return E_POINTER;
             }
 
-            Q_FOREACH(IPin *current, pins()) {
+            for (int i = 0; i < m_pins.count(); ++i) {
+                IPin * current = m_pins.at(i);
                 PIN_INFO info;
                 current->QueryPinInfo(&info);
                 if (info.pFilter) {
@@ -779,7 +780,8 @@ namespace Phonon
         QList<QPin*> QBaseFilter::inputPins() const
         {
             QList<QPin*> ret;
-            Q_FOREACH(QPin *pin, pins()) {
+            for(int i = 0; i < m_pins.count(); ++i) {
+                QPin * pin = m_pins.at(i);
                 if (pin->direction() == PINDIR_INPUT) {
                     ret += pin;
                 }
@@ -790,7 +792,8 @@ namespace Phonon
         QList<QPin*> QBaseFilter::outputPins() const
         {
             QList<QPin*> ret;
-            Q_FOREACH(QPin *pin, pins()) {
+            for(int i = 0; i < m_pins.count(); ++i) {
+                QPin * pin = m_pins.at(i);
                 if (pin->direction() == PINDIR_OUTPUT) {
                     ret += pin;
                 }
@@ -800,8 +803,9 @@ namespace Phonon
 
         void *QBaseFilter::getUpStreamInterface(const IID &iid) const
         {
-            Q_FOREACH(QPin *pin, inputPins()) {
-                IPin *out = pin->connected();
+            const QList<QPin*> inputs = inputPins();
+            for (int i = 0; i < inputs.count(); ++i) {
+                IPin *out = inputs.at(i)->connected();
                 if (out) {
                     void *ms = 0;
                     out->QueryInterface(iid, &ms);

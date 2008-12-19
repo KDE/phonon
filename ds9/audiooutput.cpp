@@ -18,9 +18,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "audiooutput.h"
 #include "mediaobject.h"
 
-#include <QtCore/QVector>
-
-#include <cmath>
+#include <QtCore/qmath.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -47,7 +45,7 @@ namespace Phonon
 
         void AudioOutput::setVolume(qreal newVolume)
         {
-            for(int i = 0; i < m_filters.count(); ++i) {
+            for(int i = 0; i < FILTER_COUNT; ++i) {
                 ComPointer<IBasicAudio> audio(m_filters[i], IID_IBasicAudio);
                 if (audio) {
                     const qreal currentVolume = newVolume * (m_currentIndex == i ? m_crossfadeProgress : 1-m_crossfadeProgress);
@@ -87,8 +85,8 @@ namespace Phonon
             }
 
             //free the previous one if it was already set
-            for(int i = 0; i < m_filters.count(); ++i) {
-                Filter oldFilter = m_filters.at(i);
+            for(int i = 0; i < FILTER_COUNT; ++i) {
+                const Filter &oldFilter = m_filters[i];
 
                 Filter newFilter = m_backend->getAudioOutputFilter(newDevice);
 
