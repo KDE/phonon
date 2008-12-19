@@ -84,7 +84,7 @@ Backend::Backend(QObject *parent, const QVariantList &)
     setProperty("backendIcon",    QLatin1String("phonon-xine"));
     setProperty("backendWebsite", QLatin1String("http://multimedia.kde.org/"));
 
-    QSettings cg("Phonon", "Xine");
+    QSettings cg("kde.org", "Phonon-Xine");
     m_deinterlaceDVD = cg.value("Settings/deinterlaceDVD", true).toBool();
     m_deinterlaceVCD = cg.value("Settings/deinterlaceVCD", false).toBool();
     m_deinterlaceFile = cg.value("Settings/deinterlaceFile", false).toBool();
