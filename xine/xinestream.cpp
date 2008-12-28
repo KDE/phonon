@@ -852,7 +852,7 @@ bool XineStream::event(QEvent *ev)
             }
 
             {
-                int availableSubtitles = subtitlesSize();
+                const int availableSubtitles = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_SPU_CHANNEL);
                 if(availableSubtitles != m_availableSubtitles)
                 {
                     debug() << Q_FUNC_INFO << "available subtitles changed: " << availableSubtitles;
@@ -861,7 +861,7 @@ bool XineStream::event(QEvent *ev)
                 }
             }
             {
-                int availableAudioChannels = audioChannelsSize();
+                const int availableAudioChannels = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_AUDIO_CHANNEL);
                 if(availableAudioChannels != m_availableAudioChannels)
                 {
                     debug() << Q_FUNC_INFO << "available audio channels changed: " << availableAudioChannels;
@@ -1499,12 +1499,12 @@ QList<SubtitleDescription> XineStream::availableSubtitles() const
 {
     uint hash = streamHash();
     QList<SubtitleDescription> subtitles;
-    if(!m_stream)
-        return subtitles;
-    const int channels = subtitlesSize();
-    for(int index = 0; index < channels; index++)
-    {
-        subtitles << streamDescription<SubtitleDescription>(index, hash, SubtitleType, xine_get_spu_lang);
+    if (m_stream && m_mutex.tryLock(500)) {
+        const int channels = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_SPU_CHANNEL);
+        for(int index = 0; index < channels; index++) {
+            subtitles << streamDescription<SubtitleDescription>(index, hash, SubtitleType, xine_get_spu_lang);
+        }
+        m_mutex.unlock();
     }
     return subtitles;
 }
@@ -1513,24 +1513,40 @@ QList<AudioChannelDescription> XineStream::availableAudioChannels() const
 {
     const uint hash = streamHash();
     QList<AudioChannelDescription> audios;
-    if(!m_stream)
-        return audios;
-    const int channels = audioChannelsSize();
-    for(int index = 0; index < channels; index++)
-    {
-        audios << streamDescription<AudioChannelDescription>(index, hash, AudioChannelType, xine_get_audio_lang);
+    if (m_stream && m_mutex.tryLock(500)) {
+        if (m_stream) {
+            const int channels = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_AUDIO_CHANNEL);
+            for(int index = 0; index < channels; index++) {
+                audios << streamDescription<AudioChannelDescription>(index, hash, AudioChannelType, xine_get_audio_lang);
+            }
+        }
+        m_mutex.unlock();
     }
     return audios;
 }
 
 int XineStream::subtitlesSize() const
 {
-    return xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_SPU_CHANNEL);
+    int r = 0;
+    if (m_stream && m_mutex.tryLock(500)) {
+        if (m_stream) {
+            r = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_SPU_CHANNEL);
+        }
+        m_mutex.unlock();
+    }
+    return r;
 }
 
 int XineStream::audioChannelsSize() const
 {
-    return xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_AUDIO_CHANNEL);
+    int r = 0;
+    if (m_stream && m_mutex.tryLock(500)) {
+        if (m_stream) {
+            r = xine_get_stream_info(m_stream, XINE_STREAM_INFO_MAX_AUDIO_CHANNEL);
+        }
+        m_mutex.unlock();
+    }
+    return r;
 }
 
 void XineStream::setCurrentAudioChannel(const AudioChannelDescription& streamDesc)
@@ -1563,14 +1579,28 @@ S XineStream::streamDescription(int index, uint hash, ObjectDescriptionType type
 
 AudioChannelDescription XineStream::currentAudioChannel() const
 {
-    const int index = xine_get_param(m_stream, XINE_PARAM_AUDIO_CHANNEL_LOGICAL);
-    return streamDescription<AudioChannelDescription>(index, streamHash(), AudioChannelType, xine_get_audio_lang);
+    AudioChannelDescription r;
+    if (m_stream && m_mutex.tryLock(500)) {
+        if (m_stream) {
+            const int index = xine_get_param(m_stream, XINE_PARAM_AUDIO_CHANNEL_LOGICAL);
+            r = streamDescription<AudioChannelDescription>(index, streamHash(), AudioChannelType, xine_get_audio_lang);
+        }
+        m_mutex.unlock();
+    }
+    return r;
 }
 
 SubtitleDescription XineStream::currentSubtitle() const
 {
-    int index = xine_get_param(m_stream, XINE_PARAM_SPU_CHANNEL);
-    return streamDescription<SubtitleDescription>(index, streamHash(), SubtitleType, xine_get_spu_lang);
+    SubtitleDescription r;
+    if (m_stream && m_mutex.tryLock(500)) {
+        if (m_stream) {
+            const int index = xine_get_param(m_stream, XINE_PARAM_SPU_CHANNEL);
+            r = streamDescription<SubtitleDescription>(index, streamHash(), SubtitleType, xine_get_spu_lang);
+        }
+        m_mutex.unlock();
+    }
+    return r;
 }
 
 xine_post_out_t *XineStream::audioOutputPort() const
