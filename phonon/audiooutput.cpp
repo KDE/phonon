@@ -267,9 +267,13 @@ void AudioOutputPrivate::setupBackendObject()
             const AudioOutputDevice &dev = AudioOutputDevice::fromIndex(devIndex);
             if (callSetOutputDevice(this, dev)) {
                 handleAutomaticDeviceChange(dev, AudioOutputPrivate::FallbackChange);
-                break; // found one that works
+                return; // found one that works
             }
         }
+        // if we get here there is no working output device. Tell the backend.
+        const AudioOutputDevice none;
+        callSetOutputDevice(this, none);
+        handleAutomaticDeviceChange(none, FallbackChange);
     }
 }
 
@@ -307,10 +311,14 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
             const AudioOutputDevice &info = AudioOutputDevice::fromIndex(devIndex);
             if (callSetOutputDevice(this, info)) {
                 handleAutomaticDeviceChange(info, FallbackChange);
-                break; // found one that works
+                return; // found one that works
             }
         }
     }
+    // if we get here there is no working output device. Tell the backend.
+    const AudioOutputDevice none;
+    callSetOutputDevice(this, none);
+    handleAutomaticDeviceChange(none, FallbackChange);
 }
 
 void AudioOutputPrivate::_k_deviceListChanged()
@@ -362,8 +370,11 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     case FallbackChange:
         if (g_lastFallback.first != device1.index() || g_lastFallback.second != device2.index()) {
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-            const QString text = AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
-                    "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name());
+            const QString &text = //device2.isValid() ?
+                AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
+                        "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name()) /*:
+                AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
+                        "No other device available.</html>").arg(device1.name())*/;
             Platform::notification("AudioDeviceFallback", text);
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
             g_lastFallback.first = device1.index();

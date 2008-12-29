@@ -127,6 +127,12 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
 {
     K_XT(AudioOutput);
     xine_audio_port_t *port = 0;
+    if (!deviceDesc.isValid()) {
+        // use null output for invalid devices
+        port = xine_open_audio_driver(xt->m_xine, "none", 0);
+        debug() << Q_FUNC_INFO << "----------------------------------------------- null audio_port created";
+        return port;
+    }
 
     typedef QPair<QByteArray, QString> PhononDeviceAccess;
     QList<PhononDeviceAccess> deviceAccessList = deviceAccessListFor(deviceDesc);
