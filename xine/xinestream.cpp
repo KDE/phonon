@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2008      Ian Monroe <imonroe@kde.org>
 
     This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@
 #include "xinestream.h"
 
 #include <QMutexLocker>
+#include <QtCore/QTextCodec>
 #include <QEvent>
 #include <QCoreApplication>
 #include <QTimer>
@@ -669,27 +670,108 @@ void XineStream::changeState(Phonon::State newstate)
     emit stateChanged(newstate, oldstate);
 }
 
+static bool checkIsUtf8(const char *buf)
+{
+    if (!buf || !*buf) {
+        // it's actually neither true nor false, but the logic below needs us to return false here
+        // for empty/null strings
+        return false;
+    }
+
+    bool isValidUtf8 = false;
+    unsigned char c;
+    for (int i = 0; (c = buf[i]); ++i) {
+        if ((c & 0x80) == 0) {
+            // 0xxxxxxx is ASCII
+            continue;
+        }
+        if ((c & 0x40) == 0) {
+            // 10xxxxxx is never UTF-8
+            return false;
+        } else {
+            // 11xxxxxx begins UTF-8
+            int following;
+
+            if ((c & 0x20) == 0) {
+                // 110xxxxx
+                if (c == 0xC0 || c == 0xC1) {
+                    return false;
+                }
+                following = 1;
+            } else if ((c & 0x10) == 0) {
+                // 1110xxxx
+                following = 2;
+            } else if ((c & 0x08) == 0) {
+                // 11110xxx
+                if (c == 0xF5) {
+                    return false;
+                }
+                following = 3;
+            } else if ((c & 0x04) == 0) {
+                // 111110xx
+                following = 4;
+            } else if ((c & 0x02) == 0) {
+                // 1111110x
+                following = 5;
+            } else {
+                return false;
+            }
+
+            for (int n = 0; n < following; ++n) {
+                ++i;
+                if (!(c = buf[i])) {
+                    // null termination, this should make it invalid UTF-8
+                    return false;
+                }
+
+                if ((c & 0xC0) != 0x80) {
+                    return false;
+                }
+            }
+            isValidUtf8 = true;
+        }
+    }
+    return isValidUtf8;
+}
+
 // xine thread
 void XineStream::updateMetaData()
 {
     Q_ASSERT(QThread::currentThread() == XineThread::instance());
+    const char *meta[8] = {
+        xine_get_meta_info(m_stream, XINE_META_INFO_TITLE),
+        xine_get_meta_info(m_stream, XINE_META_INFO_ARTIST),
+        xine_get_meta_info(m_stream, XINE_META_INFO_GENRE),
+        xine_get_meta_info(m_stream, XINE_META_INFO_ALBUM),
+        xine_get_meta_info(m_stream, XINE_META_INFO_YEAR),
+        xine_get_meta_info(m_stream, XINE_META_INFO_TRACK_NUMBER),
+        xine_get_meta_info(m_stream, XINE_META_INFO_COMMENT),
+        xine_get_meta_info(m_stream, XINE_META_INFO_CDINDEX_DISCID)
+    };
+    bool isUtf8 = false;
+    for (int i = 0; !isUtf8 && i < 8; ++i) {
+        isUtf8 &= checkIsUtf8(meta[i]);
+    }
+    QTextCodec *codec = QTextCodec::codecForMib(106); // utf-8
+    if (!isUtf8) {
+        QTextCodec *localCodec = QTextCodec::codecForLocale();
+        if (localCodec == codec) {
+            // if the local codec also is UTF-8 our best guess is Latin-1
+            codec = QTextCodec::codecForName("ISO 8859-1");
+        } else {
+            // hoping that the local codec is the same as the one used in the meta data
+            codec = localCodec;
+        }
+    }
     QMultiMap<QString, QString> metaDataMap;
-    metaDataMap.insert(QLatin1String("TITLE"),
-            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_TITLE)));
-    metaDataMap.insert(QLatin1String("ARTIST"),
-            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_ARTIST)));
-    metaDataMap.insert(QLatin1String("GENRE"),
-            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_GENRE)));
-    metaDataMap.insert(QLatin1String("ALBUM"),
-            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_ALBUM)));
-    metaDataMap.insert(QLatin1String("DATE"),
-            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_YEAR)));
-    metaDataMap.insert(QLatin1String("TRACKNUMBER"),
-            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_TRACK_NUMBER)));
-    metaDataMap.insert(QLatin1String("DESCRIPTION"),
-            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_COMMENT)));
-    metaDataMap.insert(QLatin1String("MUSICBRAINZ_DISCID"),
-            QString::fromUtf8(xine_get_meta_info(m_stream, XINE_META_INFO_CDINDEX_DISCID)));
+    metaDataMap.insert(QLatin1String("TITLE"), codec->toUnicode(meta[0]));
+    metaDataMap.insert(QLatin1String("ARTIST"), codec->toUnicode(meta[1]));
+    metaDataMap.insert(QLatin1String("GENRE"), codec->toUnicode(meta[2]));
+    metaDataMap.insert(QLatin1String("ALBUM"), codec->toUnicode(meta[3]));
+    metaDataMap.insert(QLatin1String("DATE"), codec->toUnicode(meta[4]));
+    metaDataMap.insert(QLatin1String("TRACKNUMBER"), codec->toUnicode(meta[5]));
+    metaDataMap.insert(QLatin1String("DESCRIPTION"), codec->toUnicode(meta[6]));
+    metaDataMap.insert(QLatin1String("MUSICBRAINZ_DISCID"), codec->toUnicode(meta[7]));
     if(metaDataMap == m_metaDataMap)
         return;
     m_metaDataMap = metaDataMap;
