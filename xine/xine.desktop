@@ -14,6 +14,7 @@ Name[x-test]=xxXinexx
 
 Comment=Phonon Xine backend
 Comment[ca]=Dorsal del Xine pel Phonon
+Comment[de]=Phonon-Treiber für Xine
 Comment[el]=Σύστημα υποστήριξης του Phonon Xine
 Comment[es]=Motor Xine para Phonon
 Comment[et]=Phononi Xine taustaprogramm
