@@ -5,6 +5,7 @@ Exec=videocapturetestapp
 GenericName=Video Capture Test Application
 GenericName[ca]=Aplicació de proves de captura de vídeo
 GenericName[cs]=Testovací aplikace pro nahrávání videa
+GenericName[de]=Videoaufnahme-Testanwendung
 GenericName[el]=Δοκιμαστική εφαρμογή σύλληψης βίντεο
 GenericName[es]=Aplicación para probar la de captura de vídeo
 GenericName[et]=Videohõive testrakendus
