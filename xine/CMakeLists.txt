@@ -73,6 +73,7 @@ set(phonon_xine_SRCS
     net_buf_ctrl.c
     volumefader_plugin.cpp
     plugins.c
+    demux_wav.c
    )
 
 SET(XCB_VIDEO TRUE)

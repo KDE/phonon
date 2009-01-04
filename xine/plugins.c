@@ -24,6 +24,8 @@
 #include <xine/xine_internal.h>
 #include <xine/xineutils.h>
 
+#include "macros.h"
+
 extern void *init_kbytestream_plugin (xine_t *xine, void *data);
 extern void *init_kvolumefader_plugin (xine_t *xine, void *data);
 /*extern void *init_kmixer_plugin(xine_t *xine, void *data);*/
@@ -41,3 +43,12 @@ const plugin_info_t phonon_xine_plugin_info[] = {
     /*{ PLUGIN_POST , 9 , "KMixer"      , XINE_VERSION_CODE, &kmixer_special_info      , &init_kmixer_plugin       },*/
     { PLUGIN_NONE , 0 , (char *)""            , 0                , NULL                      , NULL                      }
 };
+
+#ifdef USE_CUSTOM_WAV_DEMUXER
+extern void *_k_demux_wav_init_plugin (xine_t *xine, void *data);
+static const demuxer_info_t _k_demux_info_wav = { 7 /* priority */ };
+const plugin_info_t phonon_xine_plugin_info_2[] = {
+    { PLUGIN_DEMUX, 26, (char *)"_k_wav"      , XINE_VERSION_CODE, &_k_demux_info_wav        , &_k_demux_wav_init_plugin },
+    { PLUGIN_NONE , 0 , (char *)""            , 0                , NULL                      , NULL                      }
+};
+#endif

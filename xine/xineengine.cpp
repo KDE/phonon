@@ -21,6 +21,7 @@
 
 #include "xineengine.h"
 #include "backend.h"
+#include "macros.h"
 
 #include <QtCore/QSettings>
 #include <QtCore/QByteArray>
@@ -32,6 +33,9 @@
 extern "C" {
 #include <xine/xine_plugin.h>
 extern plugin_info_t phonon_xine_plugin_info[];
+#ifdef USE_CUSTOM_WAV_DEMUXER
+extern plugin_info_t phonon_xine_plugin_info_2[];
+#endif
 }
 
 namespace Phonon
@@ -53,6 +57,13 @@ XineEngineData::XineEngineData()
     xine_config_load(m_xine, configfile.constData());
     xine_init(m_xine);
     xine_register_plugins(m_xine, phonon_xine_plugin_info);
+#ifdef USE_CUSTOM_WAV_DEMUXER
+    int xine_major, xine_minor, xine_sub;
+    xine_get_version(&xine_major, &xine_minor, &xine_sub);
+    if (xine_major == 1 && xine_minor == 1 && xine_sub < 16) {
+        xine_register_plugins(m_xine, phonon_xine_plugin_info_2);
+    }
+#endif
     if (!QFile::exists(configfileString)) {
         debug() << "save xine config to" << configfile.constData();
         xine_config_save(m_xine, configfile.constData());
