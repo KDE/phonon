@@ -30,6 +30,7 @@ GenericName[zh_TW]=影像擷取測試應用程式
 Icon=videocapturetestapp
 MimeType=
 Name=videocapturetestapp
+Name[da]=videooptager-testprogram
 Name[sk]=Video testovacia aplikácia
 Name[sv]=Videoinspelningstest
 Name[x-test]=xxvideocapturetestappxx
