@@ -1,6 +1,6 @@
 project(Phonon)
 
-cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # CMP0002: we have multiple targets with the same name for the unit tests
 cmake_policy(SET CMP0002 OLD)
@@ -149,7 +149,7 @@ set(CMAKE_COLOR_MAKEFILE ON)
 
 set(PHONON_LIB_MAJOR_VERSION "4")
 set(PHONON_LIB_MINOR_VERSION "2")
-set(PHONON_LIB_PATCH_VERSION "80")
+set(PHONON_LIB_PATCH_VERSION "96")
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.3.0")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
