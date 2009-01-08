@@ -10,6 +10,7 @@ Icon=phonon-xine
 InitialPreference=15
 
 Name=Xine
+Name[sr]=Ксине
 Name[x-test]=xxXinexx
 
 Comment=Phonon Xine backend
@@ -21,6 +22,7 @@ Comment[es]=Motor Xine para Phonon
 Comment[et]=Phononi Xine taustaprogramm
 Comment[ga]=Inneall Phonon Xine
 Comment[gl]=Infraestrutura de Xine para Phonon
+Comment[is]=Phonon Xine bakendi
 Comment[ja]=Phonon Xine バックエンド
 Comment[ko]=Phonon Xine 백엔드
 Comment[lv]=Phonon Xine aizmugure
@@ -31,6 +33,8 @@ Comment[pa]=ਫੋਨੋਨ ਜ਼ਾਇਨ ਬੈਕਐਂਡ
 Comment[pt]=Infra-estrutura de Xine para o Phonon
 Comment[pt_BR]=Infraestrutura Phonon Xine
 Comment[sk]=Phonon Xine podsystém
+Comment[sr]=Ксине као позадина Фонона
+Comment[sr@latin]=Xine kao pozadina Phonona
 Comment[sv]=Phonon Xine-gränssnitt
 Comment[tr]=Phonon Xine arka ucu
 Comment[uk]=Сервер Xine для Phonon
