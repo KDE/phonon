@@ -35,6 +35,7 @@ set(phonon_LIB_SRCS
    videowidget.cpp
    videoplayer.cpp
    seekslider.cpp
+   swiftslider.cpp
    volumeslider.cpp
    effectwidget.cpp
    iodevicestream.cpp
