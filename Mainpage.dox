@@ -25,9 +25,9 @@ you will probably want more control over the audio layer than Phonon will give y
 and you should probably be using something like <a href="http://jackaudio.org/">JACK</a>.
 
 @authors
-Matthias Kretz \<kretz@kde.org\>
-Ricardo Villalba \<rvm@escomposlinux.org\>
-Ian Monroe \<ian@monroe.nu\>
+Matthias Kretz \<kretz@kde.org\><br>
+Ricardo Villalba \<rvm@escomposlinux.org\><br>
+Ian Monroe \<ian@monroe.nu\><br>
 Nokia Corporation and/or its subsidiary(-ies)
 
 @maintainers
