@@ -40,7 +40,7 @@ class PHONONEXPERIMENTAL_EXPORT PacketPool
     friend class Packet;
     public:
         /**
-         * Allocates \p numberOfPackets packets of \packetSize bytes each. The memory can be
+         * Allocates \p numberOfPackets packets of \p packetSize bytes each. The memory can be
          * accessed through Packet objects.
          */
         PacketPool(int packetSize, int numberOfPackets);

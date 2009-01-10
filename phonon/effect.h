@@ -79,8 +79,7 @@ namespace Phonon
              * QObject constructor.
              *
              * \param description An EffectDescription object to determine the
-             * type of effect. See \ref
-             * BackendCapabilities::availableAudioEffects().
+             * type of effect. See BackendCapabilities::availableAudioEffects().
              * \param parent QObject parent
              */
             explicit Effect(const EffectDescription &description, QObject *parent = 0);

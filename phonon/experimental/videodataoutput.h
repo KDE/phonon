@@ -76,7 +76,7 @@ namespace Experimental
         void stop();
 
     Q_SIGNALS:
-        /**
+        /* FIXME: disabled this piece of documentation - add another * to enable
          * Fixme: I don't think this makes sense, but I've been wrong before.
          *
          * Emitted whenever another dataSize number of samples are ready and
@@ -91,11 +91,12 @@ namespace Experimental
 
         /**
          * The signal is emitted whenever a frame should be displayed.
-         * nowStamp is the current time, outStamp tells the users
-         * what time the frame should be displayed with.
          *
          * The relevant frames should be fetched and displayed using frameForTime
          * method.
+         *
+         * \param nowStamp the current time
+         * \param outStamp the time the frame should be displayed with
          */
         void displayFrame(qint64 nowStamp, qint64 outStamp);
 
