@@ -2,7 +2,6 @@
 
 <p><b>
 Overview |
-@ref components |
 @ref development |
 @ref search
 </b></p>
@@ -35,7 +34,6 @@ Backends: @lgpl or @gpl
 
 <p><b>
 @ref index "Overview" |
-@ref components |
 Development |
 @ref search
 </b></p>
@@ -54,7 +52,6 @@ of the <a href="http://techbase.kde.org">KDE Techbase</a>.
 
 <p><b>
 @ref index "Overview" |
-@ref components |
 @ref development |
 Search
 </b></p>
@@ -82,9 +79,9 @@ in the KDE SVN repository), you can do so using the
 // DOXYGEN_VERSION=4.3
 // DOXYGEN_NAME=Phonon
 // DOXYGEN_ENABLE=YES
-// DOXYGEN_SET_INPUT = @topdir@/phonon/phonon
-// DOXYGEN_SET_FILE_PATTERNS = *.h
+// DOXYGEN_SET_INPUT = @topdir@/phonon/phonon @topdir@/phonon/Mainpage.dox
+// DOXYGEN_SET_FILE_PATTERNS = *.h *.dox
 // ignore backend docs
-// DOXYGEN_SET_EXCLUDE_PATTERNS = *interface.h *phonon/examples/* */tests/* *_p.h */experimental/videocapturedevice/*
+// DOXYGEN_SET_EXCLUDE_PATTERNS = *interface.h */phonon/examples/* */tests/* *_p.h */experimental/videocapturedevice/* */phonon/backend*
 
 // vim:ts=4:sw=4:expandtab:filetype=doxygen
