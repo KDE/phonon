@@ -60,7 +60,7 @@ namespace Experimental
              * \internal
              * Constructor that is called from derived classes.
              *
-             * \param parent Standard QObject parent.
+             * \param d the private object
              */
             AbstractVideoOutput(AbstractVideoOutputPrivate &d);
     };

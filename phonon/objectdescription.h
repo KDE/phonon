@@ -52,8 +52,8 @@ namespace Phonon
          * other virtual outputs like playback on a different computer on the
          * network.
          *
-         * For Hardware devices the backend should use libkaudiodevicelist (\ref
-         * AudioDevice and \ref AudioDeviceEnumerator) which will list removable
+         * For Hardware devices the backend should use libkaudiodevicelist
+         * (AudioDevice and AudioDeviceEnumerator) which will list removable
          * devices even when they are unplugged and provide a unique identifier
          * that can make backends use the same identifiers.
          */
@@ -71,8 +71,8 @@ namespace Phonon
          * other virtual inputs like capture on a different computer on the
          * network.
          *
-         * For Hardware devices the backend should use libkaudiodevicelist (\ref
-         * AudioDevice and \ref AudioDeviceEnumerator) which will list removable
+         * For Hardware devices the backend should use libkaudiodevicelist
+         * (AudioDevice and AudioDeviceEnumerator) which will list removable
          * devices even when they are unplugged and provide a unique identifier
          * that can make backends use the same identifiers.
          */
