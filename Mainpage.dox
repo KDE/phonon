@@ -82,4 +82,9 @@ in the KDE SVN repository), you can do so using the
 // DOXYGEN_VERSION=4.3
 // DOXYGEN_NAME=Phonon
 // DOXYGEN_ENABLE=YES
+// DOXYGEN_SET_INPUT = @topdir@/phonon/phonon
+// DOXYGEN_SET_FILE_PATTERNS = *.h
+// ignore backend docs
+// DOXYGEN_SET_EXCLUDE_PATTERNS = *interface.h *phonon/examples/* */tests/* *_p.h */experimental/videocapturedevice/*
+
 // vim:ts=4:sw=4:expandtab:filetype=doxygen
