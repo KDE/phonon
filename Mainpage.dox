@@ -2,26 +2,36 @@
 
 <p><b>
 Overview |
-@ref development |
-@ref search
+@ref development
 </b></p>
 
-This is the online reference for developing with the Phonon libraries (libphonon).
+<a href="http://phonon.kde.org/">Phonon</a> provides a Qt-style interface for audio
+and video.  It is aimed at the average desktop application, whether that is a game
+that needs sound effects or a full-blown multimedia playback application like
+<a href="http://amarok.kde.org/">Amarok</a> or
+<a href="http://www.dragonplayer.org/">Dragon Player</a>.
 
-- straightforward multimedia 
-  (<a href="phonon/html/index.html">Phonon</a> and
+If you writing a Qt program and want audio or video playback, then Phonon is almost
+certainly the right choice for you.  It provides an API that any Qt developer will
+be comfortable with, and uses the native sound systems on Windows and MacOS.  On
+UNIX systems, where there is no one standard multimedia system, it offers
+<a href="http://www.gstreamer.net/">GStreamer</a> and <a href="http://xinehq.de/">Xine</a>
+backends, and more (such as <a href="http://www.videolan.org/">VLC</a>) are available
+from third parties.
+
+However, Phonon is not aimed at professional audio applications (in the style of
+<a href="http://audacity.sourceforge.net/">Audacity</a>, say).  For these applications,
+you will probably want more control over the audio layer than Phonon will give you,
+and you should probably be using something like <a href="http://jackaudio.org/">JACK</a>.
 
 @authors
-Far too many to list.  See the copyright notices on the individual files,
-as well as the pages for individual components.
+Matthias Kretz \<kretz@kde.org\>
+Ricardo Villalba \<rvm@escomposlinux.org\>
+Ian Monroe \<ian@monroe.nu\>
+Nokia Corporation and/or its subsidiary(-ies)
 
 @maintainers
-Matthias Kretz <kretz@kde.org>
-
-There is no single maintainer for kdelibs.  Overall direction is governed by the
-<a href="https://mail.kde.org/mailman/listinfo/kde-core-devel">kde-core-devel
-mailing list</a>.  Some of the individual components have their own maintainers:
-see the component pages for more information.
+Matthias Kretz \<kretz@kde.org\>
 
 @licenses
 Libraries: @lgpl<br>
@@ -34,45 +44,12 @@ Backends: @lgpl or @gpl
 
 <p><b>
 @ref index "Overview" |
-Development |
-@ref search
+Development
 </b></p>
 
-To follow or get involved with the development of the KDE libraries,
-join the <a href="https://mail.kde.org/mailman/listinfo/kde-core-devel">kde-core-devel
-mailing list</a>.
+If you want to get involved with Phonon backend development please subscribe to <a href="https://mail.kde.org/mailman/listinfo/phonon-backends">phonon-backends@kde.org</a>.
 
-Instructions for building a development version of KDE can be found in the
-<a href="http://techbase.kde.org/Getting_Started">getting started</a> section
-of the <a href="http://techbase.kde.org">KDE Techbase</a>.
-
-*/
-
-/** @page search Search
-
-<p><b>
-@ref index "Overview" |
-@ref development |
-Search
-</b></p>
-
-You can search for any class in the public API of the KDE libraries
-here.
-
-Note: only enter the class name, without any namespace qualifiers.
-
-@htmlonly
-<form action="http://api.kde.org/classmapper.php" method="get">
-<input type="text" name="class" value="[classname]" style="width:100%;" onClick="this.value='';"/>
-<input type="submit" name="go" value="Go" />
-<input type=hidden name="module" value="kdelibs">
-<input type=hidden name="version" value="4.1">
-</form>
-@endhtmlonly
-
-If you want to search for any sort of identifier in kdelibs (and other code
-in the KDE SVN repository), you can do so using the
-<a href="http://lxr.kde.org">KDE Source Cross-Reference</a> tool.
+If you want to contribute, make comments or useful suggestions you can also write to the <a href="mailto:kde-multimedia@kde.org">KDE Multimedia mailinglist</a> or <a href="mailto:kretz@kde.org">Matthias Kretz</a>. You can join the mailinglist using the <a href="https://mail.kde.org/mailman/listinfo/kde-multimedia">webinterface</a> or take a look at the <a href="http://lists.kde.org/?l=kde-multimedia">archives</a>
 
 */
 
