@@ -100,9 +100,8 @@ namespace Phonon
 
         QStringList Backend::availableMimeTypes() const
         {
-#if 0
-// needs Qt4.5
             QStringList ret;
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
             {
                 QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"), QSettings::NativeFormat);
                 ret += settings.childGroups();
@@ -114,7 +113,6 @@ namespace Phonon
 
             ret.removeDuplicates();
 #else
-            QStringList ret;
             {
                 QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"), QSettings::NativeFormat);
                 Q_FOREACH(const QString &s, settings.childGroups())
