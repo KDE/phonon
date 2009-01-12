@@ -101,6 +101,7 @@ namespace Phonon
         QStringList Backend::availableMimeTypes() const
         {
             QStringList ret;
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
             {
                 QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"), QSettings::NativeFormat);
                 ret += settings.childGroups();
@@ -111,6 +112,20 @@ namespace Phonon
             }
 
             ret.removeDuplicates();
+#else
+            {
+                QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"), QSettings::NativeFormat);
+                Q_FOREACH(const QString &s, settings.childGroups())
+                  if(!ret.contains(s))
+                    ret += s;
+            }
+            {
+                QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\wmplayer\\mime types"), QSettings::NativeFormat);
+                Q_FOREACH(const QString &s, settings.childGroups())
+                  if(!ret.contains(s))
+                    ret += s;
+            }
+#endif
             ret.replaceInStrings("\\", "/");
             qSort(ret);
             return ret;
