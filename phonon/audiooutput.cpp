@@ -166,14 +166,14 @@ qreal AudioOutput::volumeDecibel() const
 {
     K_D(const AudioOutput);
     if (d->muted || !d->m_backendObject) {
-        return -log(d->volume) / log10over20;
+        return log(d->volume) / log10over20;
     }
-    return -0.67 * log(INTERFACE_CALL(volume())) / log10over20;
+    return 0.67 * log(INTERFACE_CALL(volume())) / log10over20;
 }
 
 void AudioOutput::setVolumeDecibel(qreal newVolumeDecibel)
 {
-    setVolume(exp(-newVolumeDecibel * log10over20));
+    setVolume(exp(newVolumeDecibel * log10over20));
 }
 
 bool AudioOutput::isMuted() const
