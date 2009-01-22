@@ -176,8 +176,8 @@ FactoryPrivate::FactoryPrivate()
     // as the whole backend might still be alive.
     qAddPostRoutine(globalFactory.destroy);
 #ifndef QT_NO_DBUS
-    QDBusConnection::sessionBus().connect(QString(), QString(), "org.kde.Phonon.Factory",
-            "phononBackendChanged", this, SLOT(phononBackendChanged()));
+    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.Phonon.Factory"),
+        QLatin1String("phononBackendChanged"), this, SLOT(phononBackendChanged()));
 #endif
 }
 

@@ -129,8 +129,8 @@ void AudioOutput::setName(const QString &newName)
 #endif
 }
 
-static const qreal LOUDNESS_TO_VOLTAGE_EXPONENT = 0.67;
-static const qreal VOLTAGE_TO_LOUDNESS_EXPONENT = 1.0/LOUDNESS_TO_VOLTAGE_EXPONENT;
+static const qreal LOUDNESS_TO_VOLTAGE_EXPONENT = qreal(0.67);
+static const qreal VOLTAGE_TO_LOUDNESS_EXPONENT = qreal(1.0/LOUDNESS_TO_VOLTAGE_EXPONENT);
 
 void AudioOutput::setVolume(qreal volume)
 {
@@ -159,7 +159,7 @@ qreal AudioOutput::volume() const
 
 #ifndef PHONON_LOG10OVER20
 #define PHONON_LOG10OVER20
-static const qreal log10over20 = 0.1151292546497022842; // ln(10) / 20
+static const qreal log10over20 = qreal(0.1151292546497022842); // ln(10) / 20
 #endif // PHONON_LOG10OVER20
 
 qreal AudioOutput::volumeDecibel() const
