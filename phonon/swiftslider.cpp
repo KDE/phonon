@@ -20,7 +20,7 @@
 
 */
 
-#include "swiftslider.h"
+#include "swiftslider_p.h"
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QStyle>
@@ -100,4 +100,4 @@ void SwiftSlider::mousePressEvent(QMouseEvent *event)
 
 QT_END_NAMESPACE
 
-#include "moc_swiftslider.cpp"
+#include "moc_swiftslider_p.cpp"

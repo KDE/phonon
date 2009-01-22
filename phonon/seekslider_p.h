@@ -24,7 +24,7 @@
 #define SEEKSLIDER_P_H
 
 #include "seekslider.h"
-#include "swiftslider.h"
+#include "swiftslider_p.h"
 #include <QtGui/QBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QPixmap>
