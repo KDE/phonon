@@ -24,7 +24,7 @@
 #define VOLUMESLIDER_P_H
 
 #include "volumeslider.h"
-#include "swiftslider.h"
+#include "swiftslider_p.h"
 #include <QtGui/QBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QPixmap>
