@@ -58,7 +58,7 @@ namespace Phonon
      * media->play();
      * \endcode
      *
-     * If you want to play more that one media file (one after another) you can
+     * If you want to play more than one media file (one after another) you can
      * either tell MediaObject about all those files
      * \code
      * media->setCurrentSource(":/sounds/startsound.ogg");
