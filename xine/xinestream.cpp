@@ -619,12 +619,6 @@ void XineStream::useGapOf(int gap)
 }
 
 // called from main thread
-void XineStream::gaplessSwitchTo(const QUrl &url)
-{
-    gaplessSwitchTo(url.toEncoded());
-}
-
-// called from main thread
 void XineStream::gaplessSwitchTo(const QByteArray &mrl)
 {
     QCoreApplication::postEvent(this, new GaplessSwitchEvent(mrl));
@@ -1704,12 +1698,6 @@ xine_post_out_t *XineStream::videoOutputPort() const
         return xine_post_output(m_deinterlacer, "deinterlaced video");
     }
     return xine_get_video_source(m_stream);
-}
-
-// called from main thread
-void XineStream::setUrl(const QUrl &url)
-{
-    setMrl(url.toEncoded());
 }
 
 // called from main thread
