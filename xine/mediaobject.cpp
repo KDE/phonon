@@ -317,6 +317,20 @@ void MediaObject::setSource(const MediaSource &source)
     setSourceInternal(source, HardSwitch);
 }
 
+static QByteArray mrlEncode(QByteArray mrl)
+{
+    for (int i = 0; i < mrl.size(); ++i) {
+        const unsigned char c = static_cast<unsigned char>(mrl.at(i));
+        if (c & 0x80 || c == '\\' || c < 32 || c == '%') {
+            char enc[4];
+            qsnprintf(enc, 4, "%%%02X", c);
+            mrl = mrl.left(i) + QByteArray(enc, 3) + mrl.mid(i + 1);
+            i += 2;
+        }
+    }
+    return mrl;
+}
+
 void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl how)
 {
     //debug() << Q_FUNC_INFO;
@@ -340,13 +354,18 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
             m_stream->setError(Phonon::NormalError, tr("Cannot open media data at '<i>%1</i>'").arg(source.url().toString(QUrl::RemovePassword)));
             return;
         }
-        switch (how) {
-        case GaplessSwitch:
-            m_stream->gaplessSwitchTo(source.url());
-            break;
-        case HardSwitch:
-            m_stream->setUrl(source.url());
-            break;
+        {
+            const QByteArray &mrl = (source.url().scheme() == QLatin1String("file") ?
+                    "file:/" + mrlEncode(QFile::encodeName(source.url().toLocalFile())) :
+                    source.url().toEncoded());
+            switch (how) {
+                case GaplessSwitch:
+                    m_stream->gaplessSwitchTo(mrl);
+                    break;
+                case HardSwitch:
+                    m_stream->setMrl(mrl);
+                    break;
+            }
         }
         break;
     case MediaSource::Disc:
