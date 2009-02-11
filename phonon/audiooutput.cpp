@@ -126,7 +126,7 @@ void AudioOutput::setName(const QString &newName)
     d->name = newName;
     setVolume(Platform::loadVolume(newName));
 #ifndef QT_NO_DBUS
-    if (adaptor) {
+    if (d->adaptor) {
         emit d->adaptor->nameChanged(newName);
     }
 #endif
