@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -122,12 +122,6 @@ namespace Phonon
             if (m_mediaObject->catchComError(hr)) {
                 return;
             }
-
-            connect(mo->workerThread(), SIGNAL(asyncRenderFinished(quint16, HRESULT, Graph)),
-                SLOT(finishLoading(quint16, HRESULT, Graph)));
-
-            connect(mo->workerThread(), SIGNAL(asyncSeekingFinished(quint16, qint64)),
-                SLOT(finishSeeking(quint16, qint64)));
         }
 
         MediaGraph::~MediaGraph()
@@ -1103,5 +1097,3 @@ namespace Phonon
 }
 
 QT_END_NAMESPACE
-
-#include "moc_mediagraph.cpp"

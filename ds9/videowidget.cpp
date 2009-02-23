@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -175,14 +175,8 @@ namespace Phonon
             qMemSet(m_renderers, 0, sizeof(m_renderers));
 
             for(int i = 0; i< FILTER_COUNT ;++i) {
-                //First we try the native renderer
+                //This might return a non native (ie Qt) renderer in case native is not supported
                 AbstractVideoRenderer *renderer = getRenderer(i, Native, true);
-                if (renderer->getFilter() == 0) {
-                    m_noNativeRendererSupported = true;
-                    delete renderer;
-                    //if it fails, we create the software renderer
-                    renderer = getRenderer(i, NonNative, true);
-                }
                 m_filters[i] = renderer->getFilter();
             }
 
@@ -251,7 +245,10 @@ namespace Phonon
             AbstractVideoRenderer *r = m_widget->currentRenderer();
 
             //we determine dynamically if it is native or non native
-            m_widget->setCurrentRenderer(getRenderer(index, !r || r->isNative() ? Native : NonNative));
+            r = getRenderer(index, !r || r->isNative() ? Native : NonNative);
+			if (!r)
+				r = getRenderer(index, NonNative);
+            m_widget->setCurrentRenderer(r);
         }
 
 
@@ -332,12 +329,29 @@ namespace Phonon
 
         AbstractVideoRenderer *VideoWidget::getRenderer(int graphIndex, RendererType type, bool autoCreate)
         {
-            const int index = graphIndex * 2 + type;
+            int index = graphIndex * 2 + type;
             if (m_renderers[index] == 0 && autoCreate) {
-                if (type == Native)
-                    m_renderers[index] = new VideoRendererVMR9(m_widget);
-                else
-                    m_renderers[index] = new VideoRendererSoft(m_widget);
+                AbstractVideoRenderer *renderer = 0;
+				if (type == Native) {
+                    renderer = new VideoRendererVMR9(m_widget);
+                    if (renderer->getFilter() == 0) {
+                        //instanciating the renderer might fail with error VFW_E_DDRAW_CAPS_NOT_SUITABLE (0x80040273)
+                        m_noNativeRendererSupported = true;
+                        delete renderer;
+                        renderer = 0;
+                    }
+                }
+
+                if (renderer == 0) {
+                    type = NonNative;
+                    index = graphIndex * 2 + type;
+                    if (m_renderers[index] == 0)
+                        renderer = new VideoRendererSoft(m_widget); //this always succeeds
+                    else
+                        renderer = m_renderers[index];
+                }
+
+                m_renderers[index] = renderer;
 
                 //be sure to update all the things that needs an update
                 applyMixerSettings();

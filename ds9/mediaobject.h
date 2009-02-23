@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -226,6 +226,8 @@ namespace Phonon
             void switchToNextSource();
             void slotStateReady(Graph, Phonon::State);
             void handleEvents(Graph, long eventCode, long param1);
+            void finishLoading(quint16 workId, HRESULT hr, Graph);
+            void finishSeeking(quint16 workId, qint64 time);
 
          Q_SIGNALS:
             void stateChanged(Phonon::State newstate, Phonon::State oldstate);

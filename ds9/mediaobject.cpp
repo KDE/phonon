@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -52,8 +52,6 @@ namespace Phonon
         WorkerThread::WorkerThread()
           : QThread(), m_currentRenderId(0), m_finished(false), m_currentWorkId(1)
         {
-            //TODO: find a replacement
-//            m_handles << m_waitCondition;
         }
 
         WorkerThread::~WorkerThread()
@@ -367,6 +365,7 @@ namespace Phonon
 
 
         MediaObject::MediaObject(QObject *parent) : BackendNode(parent),
+            transactionState(Phonon::StoppedState),
             m_errorType(Phonon::NoError),
             m_state(Phonon::LoadingState),
             m_nextState(Phonon::StoppedState),
@@ -385,7 +384,7 @@ namespace Phonon
         {
 
             for(int i = 0; i < FILTER_COUNT; ++i) {
-                m_graphs[i] = new MediaGraph(this, i);
+                m_graphs[i] = new MediaGraph(this, i);                
             }
 
             connect(&m_thread, SIGNAL(stateReady(Graph, Phonon::State)), 
@@ -393,9 +392,14 @@ namespace Phonon
 
             connect(&m_thread, SIGNAL(eventReady(Graph, long, long)), 
                                SLOT(handleEvents(Graph, long, long)));
+
+            connect(&m_thread, SIGNAL(asyncRenderFinished(quint16, HRESULT, Graph)),
+                SLOT(finishLoading(quint16, HRESULT, Graph)));
+
+            connect(&m_thread, SIGNAL(asyncSeekingFinished(quint16, qint64)),
+                SLOT(finishSeeking(quint16, qint64)));
             //really special case
             m_mediaObject = this;
-
             m_thread.start();
         }
 
@@ -962,6 +966,21 @@ namespace Phonon
                 m_audioOutputs.at(i)->setCrossFadingProgress( currentGraph()->index(), 1.); //cross-fading is in any case finished
             }
         }
+
+        void MediaObject::finishLoading(quint16 workId, HRESULT hr, Graph graph)
+        {
+            for(int i = 0; i < FILTER_COUNT; ++i) {
+                m_graphs[i]->finishLoading(workId, hr, graph);
+            }
+        }
+
+        void MediaObject::finishSeeking(quint16 workId, qint64 time)
+        {
+            for(int i = 0; i < FILTER_COUNT; ++i) {
+                m_graphs[i]->finishSeeking(workId, time);
+            }
+        }
+
 
         void MediaObject::handleEvents(Graph graph, long eventCode, long param1)
         {
