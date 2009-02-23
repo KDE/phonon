@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ namespace Phonon
         //could be nice to then remove all the "*this" in the code of this class
         class MediaGraph : public QObject
         {
-            Q_OBJECT
         public:
             MediaGraph(MediaObject *mo, short index);
             ~MediaGraph();
@@ -90,7 +89,6 @@ namespace Phonon
 
             Graph graph() const;
 
-        private Q_SLOTS:
             void finishLoading(quint16 workId, HRESULT hr, Graph);
             void finishSeeking(quint16 workId, qint64 time);
 

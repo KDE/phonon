@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -101,7 +101,6 @@ namespace Phonon
         QStringList Backend::availableMimeTypes() const
         {
             QStringList ret;
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
             {
                 QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"), QSettings::NativeFormat);
                 ret += settings.childGroups();
@@ -112,20 +111,6 @@ namespace Phonon
             }
 
             ret.removeDuplicates();
-#else
-            {
-                QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\mplayer2\\mime types"), QSettings::NativeFormat);
-                Q_FOREACH(const QString &s, settings.childGroups())
-                  if(!ret.contains(s))
-                    ret += s;
-            }
-            {
-                QSettings settings(QLatin1String("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Multimedia\\wmplayer\\mime types"), QSettings::NativeFormat);
-                Q_FOREACH(const QString &s, settings.childGroups())
-                  if(!ret.contains(s))
-                    ret += s;
-            }
-#endif
             ret.replaceInStrings("\\", "/");
             qSort(ret);
             return ret;
@@ -259,8 +244,6 @@ namespace Phonon
 
         bool Backend::endConnectionChange(QSet<QObject *> objects)
         {
-            if (objects.isEmpty())
-                return true;
             //end of a transaction
             for(QSet<QObject *>::const_iterator it = objects.begin(); it != objects.end(); ++it) {
                 if (BackendNode *node = qobject_cast<BackendNode*>(*it)) {
@@ -274,27 +257,27 @@ namespace Phonon
                             //nothing to do
                             break;
                         case Phonon::PausedState:
+                            mo->transactionState = Phonon::StoppedState;
                             mo->pause();
                             break;
                         default:
+                            mo->transactionState = Phonon::StoppedState;
                             mo->play();
                             break;
                         }
 
-                        return mo->state() != Phonon::ErrorState;
+                        if (mo->state() == Phonon::ErrorState)
+                            return false;
                     }
                 }
             }
 
-            return false;
+            return true;
         }
 
 
         bool Backend::startConnectionChange(QSet<QObject *> objects)
         {
-            if (objects.isEmpty())
-                return true;
-
             //let's save the state of the graph (before we stop it)
             for(QSet<QObject *>::const_iterator it = objects.begin(); it != objects.end(); ++it) {
                 if (BackendNode *node = qobject_cast<BackendNode*>(*it)) {
@@ -302,13 +285,14 @@ namespace Phonon
                         if (mo->state() != Phonon::StoppedState) {
                             mo->transactionState = mo->state();
                             mo->ensureStopped(); //we have to stop the graph..
+                            if (mo->state() == Phonon::ErrorState)
+                                return false;
                         }
-                        return true;
                     }
                 }
             }
 
-            return false;
+            return true;
         }
 
         bool Backend::connectNodes(QObject *_source, QObject *_sink)

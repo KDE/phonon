@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2008 Nokia Corporation and/or its subsidiary(-ies).
+Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -738,9 +738,10 @@ namespace Phonon
                 uchar *data = 0;
                 m_sampleBuffer->GetPointer(&data);
 
+
                 //let's update the current image
                 if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YV12) {
-                    convertYUY2toRGB(data, m_size, m_currentImage,
+                    convertYV12toRGB(data, m_size, m_currentImage,
                         m_brightness, m_contrast, m_hue, m_saturation);
                 } else if (m_inputPin->connectedType().subtype == MEDIASUBTYPE_YUY2) {
                     convertYUY2toRGB(data, m_size, m_currentImage,
