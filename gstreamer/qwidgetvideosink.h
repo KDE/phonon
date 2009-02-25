@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,7 @@
 #define Phonon_GSTREAMER_VIDEOSINK_H
 
 #include "common.h"
+#include "qwidgetvideosink.h"
 
 #include <QtCore/QByteArray>
 #include <QtCore/QEvent>

@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2    //Copyright (C) 2007 Trolltech ASA. All rights reserved.007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2    //Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).007 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -43,6 +43,7 @@ public:
     virtual GstElement *videoSink() {return m_videoSink;}
     virtual void aspectRatioChanged(Phonon::VideoWidget::AspectRatio aspectRatio);
     virtual void scaleModeChanged(Phonon::VideoWidget::ScaleMode scaleMode);
+    virtual void movieSizeChanged(const QSize &movieSize);
     virtual void handleMediaNodeEvent(const MediaNodeEvent *event) = 0;
     virtual bool eventFilter(QEvent *) = 0;
     virtual void handlePaint(QPaintEvent *) {}

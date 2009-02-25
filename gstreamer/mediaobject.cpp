@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -55,6 +55,7 @@ MediaObject::MediaObject(Backend *backend, QObject *parent)
         , m_tickTimer(new QTimer(this))
         , m_prefinishMark(0)
         , m_transitionTime(0)
+        , m_posAtSeek(-1)
         , m_prefinishMarkReachedNotEmitted(true)
         , m_aboutToFinishEmitted(false)
         , m_loading(false)
@@ -198,8 +199,8 @@ void MediaObject::noMorePadsAvailable ()
             emit hasVideoChanged(false);
         }
         QString codecs = m_missingCodecs.join(", ");
-        setError(QString(tr("A required codec is missing. You need to install the following codec(s) to play this content: %0", 
-                            "", m_missingCodecs.size())).arg(codecs), error);
+        setError(QString(tr("A required codec is missing. You need to install the following codec(s) to play this content: %0")).arg(codecs), error);
+        m_missingCodecs.clear();
     }
 }
 
@@ -267,6 +268,12 @@ void MediaObject::setVideoCaps(GstCaps *caps)
 
     if ((str = gst_caps_get_structure (caps, 0))) {
         if (gst_structure_get_int (str, "width", &width) && gst_structure_get_int (str, "height", &height)) {
+            gint aspectNum = 0;
+            gint aspectDenum = 0;
+            if (gst_structure_get_fraction(str, "pixel-aspect-ratio", &aspectNum, &aspectDenum)) {
+                if (aspectDenum > 0)
+                    width = width*aspectNum/aspectDenum;
+            }
             // Let child nodes know about our new video size
             QSize size(width, height);
             MediaNodeEvent event(MediaNodeEvent::VideoSizeChanged, &size);
@@ -297,6 +304,11 @@ void MediaObject::connectVideo(GstPad *pad)
             m_backend->logMessage("Video track connected", Backend::Info, this);
             // Note that the notify::caps _must_ be installed after linking to work with Dapper
             m_capsHandler = g_signal_connect(pad, "notify::caps", G_CALLBACK(notifyVideoCaps), this);
+ 
+            if (!m_loading && !m_hasVideo) {
+                m_hasVideo = m_videoStreamFound;
+                emit hasVideoChanged(m_hasVideo);
+            }
         }
         gst_object_unref (videopad);
     } else {
@@ -318,6 +330,16 @@ void MediaObject::connectAudio(GstPad *pad)
     } else {
         m_backend->logMessage("The audio stream could not be plugged.", Backend::Info, this);
     }
+}
+
+void MediaObject::cb_pad_added(GstElement *decodebin,
+                               GstPad     *pad,
+                               gpointer    data)
+{
+    Q_UNUSED(decodebin);
+    GstPad *decodepad = static_cast<GstPad*>(data);
+    gst_pad_link (pad, decodepad);
+    gst_object_unref (decodepad);
 }
 
 /**
@@ -345,16 +367,18 @@ bool MediaObject::createPipefromURL(const QString &encodedUrl)
 
     // Create a new datasource based on the input URL
     QByteArray encoded_cstr_url = url.toEncoded();
-    m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), NULL);
+    m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), (const char*)NULL);
     if (!m_datasource)
         return false;
 
     // Link data source into pipeline
     gst_bin_add(GST_BIN(m_pipeline), m_datasource);
     if (!gst_element_link(m_datasource, m_decodebin)) {
-        gst_bin_remove(GST_BIN(m_pipeline), m_datasource);
-        return false;
+        // For sources with dynamic pads (such as RtspSrc) we need to connect dynamically
+        GstPad *decodepad = gst_element_get_pad (m_decodebin, "sink");
+        g_signal_connect (m_datasource, "pad-added", G_CALLBACK (&cb_pad_added), decodepad);
     }
+
     return true;
 }
 
@@ -714,7 +738,8 @@ MediaSource MediaObject::source() const
 
 void MediaObject::setNextSource(const MediaSource &source)
 {
-    if (source.type() == MediaSource::Invalid)
+    if (source.type() == MediaSource::Invalid &&
+        source.type() == MediaSource::Empty)
         return;
     m_nextSource = source;
 }
@@ -776,6 +801,8 @@ qint64 MediaObject::getPipelinePos() const
         return totalTime();
     if (m_atStartOfStream)
         return 0;
+    if (m_posAtSeek >= 0)
+        return m_posAtSeek;
 
     gint64 pos = 0;
     GstFormat format = GST_FORMAT_TIME;
@@ -847,11 +874,21 @@ void MediaObject::setSource(const MediaSource &source)
     m_metaData.clear();
 
     switch (source.type()) {
-    case MediaSource::Url:
-    case MediaSource::LocalFile:
-        if (!createPipefromURL(source.url().toString())) {
-            setError(tr("Could not open media source."));
-            return;
+    case MediaSource::Url: {            
+            QString urlString = source.url().toEncoded();
+            if (createPipefromURL(urlString))
+                m_loading = true;
+            else
+                setError(tr("Could not open media source."));
+        }
+        break;
+
+    case MediaSource::LocalFile: {
+            QString urlString = QUrl::fromLocalFile(source.fileName()).toString();
+            if (createPipefromURL(urlString))
+                m_loading = true;
+            else
+                setError(tr("Could not open media source."));
         }
         break;
 
@@ -859,11 +896,14 @@ void MediaObject::setSource(const MediaSource &source)
         setError(tr("Invalid source type."), Phonon::NormalError);
         break;
 
+    case MediaSource::Empty:
+        break;
+
     case MediaSource::Stream:
-        if (!createPipefromStream(source)) {
+        if (createPipefromStream(source))
+            m_loading = true;
+        else
             setError(tr("Could not open media source."));
-            return;
-        }
         break;
 
     case MediaSource::Disc: // CD tracks can be specified by setting the url in the following way uri=cdda:4
@@ -874,17 +914,16 @@ void MediaObject::setSource(const MediaSource &source)
     default:
         m_backend->logMessage("Source type not currently supported", Backend::Warning, this);
         setError(tr("Could not open media source."), Phonon::NormalError);
-        return;
+        break;
     }
 
-    // Setting to state paused will trigger fetching meta data and duration
     MediaNodeEvent event(MediaNodeEvent::SourceChanged);
     notify(&event);
 
     // We need to link this node to ensure that fake sinks are connected
     // before loading, otherwise the stream will be blocked
-    link();
-
+    if (m_loading)
+        link();
     beginLoad();
 }
 
@@ -951,8 +990,6 @@ void MediaObject::seek(qint64 time)
     if (!isValid())
         return;
 
-    Phonon::State oldState = state();
-
     if (isSeekable()) {
         switch (state()) {
         case Phonon::PlayingState:
@@ -966,11 +1003,12 @@ void MediaObject::seek(qint64 time)
             else
                 m_atStartOfStream = false;
 
-            // Go to buffering state, we resume paused state when ready
+            m_posAtSeek = getPipelinePos();
+            m_tickTimer->stop();
+
             if (gst_element_seek(m_pipeline, 1.0, GST_FORMAT_TIME,
                                  GST_SEEK_FLAG_FLUSH, GST_SEEK_TYPE_SET,
                                  time * GST_MSECOND, GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE))
-            setState(oldState);
             break;
         case Phonon::LoadingState:
         case Phonon::ErrorState:
@@ -1115,6 +1153,7 @@ void MediaObject::handleBusMessage(const Message &message)
     switch (GST_MESSAGE_TYPE (gstMessage)) {
 
     case GST_MESSAGE_EOS: 
+        m_backend->logMessage("EOS recieved", Backend::Info, this);
         handleEndOfStream();
         break;
 
@@ -1140,7 +1179,13 @@ void MediaObject::handleBusMessage(const Message &message)
 
             GstState oldState;
             GstState newState;
-            gst_message_parse_state_changed (gstMessage, &oldState, &newState, 0);
+            GstState pendingState;
+            gst_message_parse_state_changed (gstMessage, &oldState, &newState, &pendingState);
+
+            if (newState == pendingState)
+                return;
+
+            m_posAtSeek = -1;
 
             switch (newState) {
 
@@ -1164,6 +1209,8 @@ void MediaObject::handleBusMessage(const Message &message)
                 m_backend->logMessage("gstreamer: pipeline state set to paused", Backend::Info, this);
                 m_tickTimer->start();
                 if (state() == Phonon::LoadingState) {
+                    // No_more_pads is not emitted from the decodebin in older versions (0.10.4)
+                    noMorePadsAvailable();
                     loadingComplete();
                 } else if (m_resumeState && m_oldState == Phonon::PausedState) {
                     changeState(Phonon::PausedState);
@@ -1299,20 +1346,33 @@ void MediaObject::handleBusMessage(const Message &message)
 
 void MediaObject::handleEndOfStream()
 {
+    // If the stream is not seekable ignore
+    // otherwise chained radio broadcasts would stop
+
+
     if (m_atEndOfStream)
         return;
 
-    m_atEndOfStream = true;
+    if (!m_seekable)
+        m_atEndOfStream = true;
 
-    if (m_nextSource.type() != MediaSource::Invalid) {  // We only emit finish when the queue is actually empty
+    if (m_nextSource.type() != MediaSource::Invalid
+        && m_nextSource.type() != MediaSource::Empty) {  // We only emit finish when the queue is actually empty
         QTimer::singleShot (qMax(0, transitionTime()), this, SLOT(beginPlay()));
     } else {
         m_pendingState = Phonon::PausedState;
         emit finished();
-        // Only emit paused if the finished signal
-        // did not result in a new state
-        if (m_pendingState == Phonon::PausedState)
-            setState(m_pendingState);
+        if (!m_seekable) {
+            setState(Phonon::StoppedState);
+            // Note the behavior for live streams is not properly defined
+            // But since we cant seek to 0, we don't have much choice other than stopping
+            // the stream
+        } else {
+            // Only emit paused if the finished signal
+            // did not result in a new state
+            if (m_pendingState == Phonon::PausedState)
+                setState(m_pendingState);
+        }
     }
 }
 
