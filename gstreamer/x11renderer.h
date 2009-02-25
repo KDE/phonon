@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -45,6 +45,7 @@ public:
     void handlePaint(QPaintEvent *event);
     void aspectRatioChanged(Phonon::VideoWidget::AspectRatio aspectRatio);
     void scaleModeChanged(Phonon::VideoWidget::ScaleMode scaleMode);
+    void movieSizeChanged(const QSize &movieSize);
     void handleMediaNodeEvent(const MediaNodeEvent *event);
     bool eventFilter(QEvent *);
     bool paintsOnWidget() { return false; }

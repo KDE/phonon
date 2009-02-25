@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2008 Trolltech ASA. All rights reserved.
+Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -68,10 +68,14 @@ GST_BOILERPLATE_FULL (PhononSrc, phonon_src, GstBaseSrc, GST_TYPE_BASE_SRC, _do_
 // Register element details
 static void phonon_src_base_init (gpointer g_class) {
     GstElementClass *gstelement_class = GST_ELEMENT_CLASS (g_class);
-    GstElementDetails details = GST_ELEMENT_DETAILS ("Phonon Stream Source",
-                                          "Source/File",
-                                          "Read from a Phonon StreamInterface",
-                                          "Trolltech ASA <info@trolltech.com>");
+    static gchar longname[] = "Phonon Stream Source",
+                    klass[] = "Source/File",
+              description[] = "Read from a Phonon StreamInterface",
+                   author[] = "Nokia Corporation and/or its subsidiary(-ies) <qt-info@nokia.com>";
+    GstElementDetails details = GST_ELEMENT_DETAILS (longname,
+                                          klass,
+                                          description,
+                                          author);
     gst_element_class_set_details (gstelement_class, &details);
     gst_element_class_add_pad_template (gstelement_class, gst_static_pad_template_get (&srctemplate));
 }
@@ -79,9 +83,11 @@ static void phonon_src_base_init (gpointer g_class) {
 static void phonon_src_class_init (PhononSrcClass * klass)
 {
     GObjectClass *gobject_class;
+    GstElementClass *gstelement_class;
     GstBaseSrcClass *gstbasesrc_class;
 
     gobject_class = G_OBJECT_CLASS (klass);
+    gstelement_class = GST_ELEMENT_CLASS (klass);
     gstbasesrc_class = GST_BASE_SRC_CLASS (klass);
 
     gobject_class->set_property = phonon_src_set_property;
@@ -163,7 +169,7 @@ static void phonon_src_set_property (GObject * object, guint prop_id, const GVal
 static void phonon_src_get_property (GObject * object, guint prop_id, GValue * value,
                                         GParamSpec * pspec)
 {
-    PhononSrc *src = 0;
+    PhononSrc *src;
     g_return_if_fail (GST_IS_PHONON_SRC (object));
     src = GST_PHONON_SRC (object);
 
@@ -196,7 +202,7 @@ static GstFlowReturn phonon_src_create_read (PhononSrc * src, guint64 offset, gu
         return GST_FLOW_OK;
     }
 
-    g_object_unref(buf);
+    gst_mini_object_unref(GST_MINI_OBJECT(buf));
     return GST_FLOW_ERROR;
 }
 

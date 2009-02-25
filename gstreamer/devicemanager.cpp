@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -234,9 +234,7 @@ GstElement *DeviceManager::createAudioSink(Category category)
     if (!sink) { //no suitable sink found so we'll make a fake one
         sink = gst_element_factory_make("fakesink", NULL);
         if (sink) {
-            if (m_backend) {
-                m_backend->logMessage("AudioOutput Using fake audio sink");
-            }
+            m_backend->logMessage("AudioOutput Using fake audio sink");
             //without sync the sink will pull the pipeline as fast as the CPU allows
             g_object_set (G_OBJECT (sink), "sync", TRUE, (const char*)NULL);
         }

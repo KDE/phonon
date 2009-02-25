@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -59,8 +59,8 @@ Backend::Backend(QObject *parent, const QVariantList &)
     setProperty("identifier",     QLatin1String("phonon_gstreamer"));
     setProperty("backendName",    QLatin1String("Gstreamer"));
     setProperty("backendComment", QLatin1String("Gstreamer plugin for Phonon"));
-    setProperty("backendVersion", QLatin1String("0.1"));
-    setProperty("backendWebsite", QLatin1String("http://www.trolltech.com/"));
+    setProperty("backendVersion", QLatin1String("0.2"));
+    setProperty("backendWebsite", QLatin1String("http://qtsoftware.com/"));
 
     //check if we should enable debug output
     QString debugLevelString = qgetenv("PHONON_GST_DEBUG");
@@ -256,6 +256,8 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
             break;
         }
         break;
+    default:
+        break;
     }
     return list;
 }
@@ -292,6 +294,8 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
             } else
                 Q_ASSERT(1); // Since we use list position as ID, this should not happen
         }
+    default:
+        break;
     }
     return ret;
 }
