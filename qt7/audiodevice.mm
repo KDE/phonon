@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,6 @@
 #include "audiodevice.h"
 #include "audiograph.h"
 #include <QtCore/QVector>
-#include <private/qcore_mac_p.h>
 #include "backendheader.h"
 
 QT_BEGIN_NAMESPACE
@@ -130,7 +129,7 @@ QString AudioDevice::deviceName(AudioDeviceID deviceID)
 	OSStatus err = AudioDeviceGetProperty(deviceID, 0, 0, kAudioDevicePropertyDeviceNameCFString, &size, &cfString);
 	if (err != noErr)
         return QString();
-    QString name = QCFString::toQString(cfString);
+    QString name = PhononCFString::toQString(cfString);
     CFRelease(cfString);
     return name;
 }
@@ -153,7 +152,7 @@ QString AudioDevice::deviceSourceName(AudioDeviceID deviceID)
         CFRelease(cfName);
         return QString();
     }
-	QString name = QCFString::toQString(cfName);
+	QString name = PhononCFString::toQString(cfName);
     CFRelease(cfName);
     return name;
 }
@@ -168,7 +167,7 @@ QString AudioDevice::deviceUID(AudioDeviceID deviceID)
 	OSStatus err = AudioDeviceGetProperty(deviceID, 0, 0, kAudioDevicePropertyDeviceUID, &size, &cfString);
 	if (err != noErr)
         return QString();
-    QString uid = QCFString::toQString(cfString);
+    QString uid = PhononCFString::toQString(cfString);
     CFRelease(cfString);
     return uid;
 }

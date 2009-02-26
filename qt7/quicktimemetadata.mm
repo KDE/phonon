@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -16,8 +16,7 @@
 */
 
 #include "quicktimemetadata.h"
-#include "backendheader.h"
-#include <private/qcore_mac_p.h>
+#include "quicktimevideoplayer.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -28,7 +27,7 @@ namespace QT7
 
 QuickTimeMetaData::QuickTimeMetaData()
 {
-    m_movieRef = 0;
+    m_videoPlayer = 0;
     m_movieChanged = false;
 }
 
@@ -36,12 +35,14 @@ QuickTimeMetaData::~QuickTimeMetaData()
 {
 }
 
-void QuickTimeMetaData::setVideo(Movie movieRef)
+void QuickTimeMetaData::setVideo(QuickTimeVideoPlayer *videoPlayer)
 {
-    m_movieRef = movieRef;
+    m_videoPlayer = videoPlayer;
     m_movieChanged = true;
     m_metaData.clear();
 }
+
+#ifdef QUICKTIME_C_API_AVAILABLE
 
 QString QuickTimeMetaData::stripCopyRightSymbol(const QString &key)
 {
@@ -109,10 +110,10 @@ QString QuickTimeMetaData::getMetaValue(QTMetaDataRef metaDataRef, QTMetaDataIte
     switch (dataType){
     case kQTMetaDataTypeUTF8:
     case kQTMetaDataTypeMacEncodedText:
-        string = QCFString::toQString(CFStringCreateWithBytes(0, (UInt8*)value, size, kCFStringEncodingUTF8, false));
+        string = PhononCFString::toQString(CFStringCreateWithBytes(0, (UInt8*)value, size, kCFStringEncodingUTF8, false));
         break;
     case kQTMetaDataTypeUTF16BE:
-        string = QCFString::toQString(CFStringCreateWithBytes(0, (UInt8*)value, size, kCFStringEncodingUTF16BE, false));
+        string = PhononCFString::toQString(CFStringCreateWithBytes(0, (UInt8*)value, size, kCFStringEncodingUTF16BE, false));
         break;
     default:
         break;
@@ -142,19 +143,26 @@ void QuickTimeMetaData::readFormattedData(QTMetaDataRef metaDataRef, OSType form
 	}
 }
 
+#endif // QUICKTIME_C_API_AVAILABLE
+
 void QuickTimeMetaData::readMetaData()
 {
-	QTMetaDataRef metaDataRef;
-	if (!m_movieRef)
+	if (!m_videoPlayer)
         return;
-        
-	OSStatus err = QTCopyMovieMetaData(m_movieRef, &metaDataRef);
+    QMultiMap<QString, QString> metaMap;
+    
+#ifdef QUICKTIME_C_API_AVAILABLE
+	QTMetaDataRef metaDataRef;        
+	OSStatus err = QTCopyMovieMetaData([m_videoPlayer->qtMovie() quickTimeMovie], &metaDataRef);
     BACKEND_ASSERT2(err == noErr, "Could not read QuickTime meta data", NORMAL_ERROR)
 
-    QMultiMap<QString, QString> metaMap;
     readFormattedData(metaDataRef, kQTMetaDataStorageFormatUserData, metaMap);
     readFormattedData(metaDataRef, kQTMetaDataStorageFormatQuickTime, metaMap);
     readFormattedData(metaDataRef, kQTMetaDataStorageFormatiTunes, metaMap);
+#else
+	NSString *name = [m_videoPlayer->qtMovie() attributeForKey:@"QTMovieDisplayNameAttribute"];
+	metaMap.insert(QLatin1String("nam"), QString::fromUtf8([name UTF8String]));
+#endif // QUICKTIME_C_API_AVAILABLE
 
     m_metaData.insert(QLatin1String("ARTIST"), metaMap.value(QLatin1String("ART")));
     m_metaData.insert(QLatin1String("ALBUM"), metaMap.value(QLatin1String("alb")));
@@ -167,7 +175,7 @@ void QuickTimeMetaData::readMetaData()
 
 QMultiMap<QString, QString> QuickTimeMetaData::metaData()
 {
-    if (m_movieRef && m_movieChanged)
+    if (m_videoPlayer && m_videoPlayer->hasMovie() && m_movieChanged)
         readMetaData();
     return m_metaData;
 }

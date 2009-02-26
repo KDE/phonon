@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,11 +18,7 @@
 #ifndef Phonon_QT7_MEDIAOBJECT_H
 #define Phonon_QT7_MEDIAOBJECT_H
 
-#include <QuickTime/QuickTime.h>
-#undef check // avoid name clash;
-
 #include <QtCore>
-
 #include <phonon/mediaobjectinterface.h>
 #include <phonon/addoninterface.h>
 
@@ -92,6 +88,8 @@ namespace QT7
 
         void setVolumeOnMovie(float volume);
         bool setAudioDeviceOnMovie(int id);
+
+		int videoOutputCount();
         
     signals:
         void stateChanged(Phonon::State,Phonon::State);
@@ -149,10 +147,10 @@ namespace QT7
         void updateAudioBuffers();
         void updateLipSynch(int allowedOffset);
         void updateVideoFrames();
-        long updateQuickTime();
         void updateBufferStatus();
         void setMute(bool mute);
-        void inspectGraphRecursive(AudioConnection *connection, bool &hasEffects, bool &hasOutputs);
+		void inspectAudioGraphRecursive(AudioConnection *connection, int &effectCount, int &outputCount);
+		void inspectVideoGraphRecursive(MediaNode *node, int &effectCount, int &outputCount);
         void inspectGraph();
         bool isCrossFading();
         
@@ -160,8 +158,10 @@ namespace QT7
         Phonon::ErrorType m_errorType;
         bool checkForError();
 
-        bool m_hasAudioEffects;
-        bool m_hasAudioOutputs;
+	    int m_audioEffectCount;
+	    int m_audioOutputCount;
+	    int m_videoEffectCount;
+	    int m_videoOutputCount;
     };
 
 }} //namespace Phonon::QT7

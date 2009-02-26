@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,13 +18,15 @@
 #ifndef Phonon_QT7_QUICKTIMESTREAMREADER_H
 #define Phonon_QT7_QUICKTIMESTREAMREADER_H
 
-#include <QuickTime/QuickTime.h>
-#undef check // avoid name clash;
-
 #include <phonon/mediasource.h>
 #include <phonon/streaminterface.h>
 #include <QtCore>
+#include <qmacdefines_mac.h>
 #include <QReadWriteLock>
+
+#ifndef QT_MAC_USE_COCOA
+#include <QuickTime/Movies.h>
+#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -42,7 +44,8 @@ namespace QT7
         ~QuickTimeStreamReader();
 
         int readData(long offset, long size, void *data);
-        bool readAllDataIntoBuffer();
+        bool readAllData();
+        QByteArray *pointerToData();
         void writeData(const QByteArray &data);
         void endOfData();
         void setStreamSize(qint64 newSize);
@@ -52,10 +55,11 @@ namespace QT7
         void setCurrentPos(qint64 pos);
         qint64 currentPos() const;
         int currentBufferSize() const;
-        Movie QuickTimeStreamReader::movieRef();
+#ifndef QT_MAC_USE_COCOA
+        Movie movieRef();
+#endif
 
         QByteArray m_buffer;
-        void *m_QTMovieRef;
         mutable QReadWriteLock m_lock;
         bool m_seekable;
         qint64 m_pos;

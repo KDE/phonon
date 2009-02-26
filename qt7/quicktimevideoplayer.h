@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,13 +18,15 @@
 #ifndef Phonon_QT7_QUICKTIMEVIDEOPLAYER_H
 #define Phonon_QT7_QUICKTIMEVIDEOPLAYER_H
 
-#include <QuickTime/QuickTime.h>
-#undef check // avoid name clash;
-#include <AGL/agl.h>
+#include "backendheader.h"
+
+#import <QTKit/QTDataReference.h>
+#import <QTKit/QTMovie.h>
 
 #include <phonon/mediasource.h>
 #include <Carbon/Carbon.h>
 #include <QtCore>
+#include <QGLPixelBuffer>
 #include "videoframe.h"
 
 QT_BEGIN_NAMESPACE
@@ -36,6 +38,7 @@ namespace Phonon
 namespace QT7
 {
     class QuickTimeStreamReader;
+	class VideoRenderWidgetQTMovieView;
     
     class QuickTimeVideoPlayer : QObject
     {
@@ -58,15 +61,16 @@ namespace QT7
             void pause();
             void seek(quint64 milliseconds);
 
-            bool setGLContext(const QGLContext *qGLContext);
-            bool setCurrentGLContext();
-
-            bool videoFrameChanged(const LinkTimeProxy &timeStamp);
-            CVOpenGLTextureRef createCvTexture(const LinkTimeProxy &timeStamp);
+            bool videoFrameChanged();
+            CVOpenGLTextureRef currentFrameAsCVTexture();
+            GLuint currentFrameAsGLTexture();
+			void *currentFrameAsCIImage();
+            QImage currentFrameAsQImage();
             QRect videoRect() const;
 
             quint64 duration() const;
             quint64 currentTime() const;
+            long timeScale() const;
             QString currentTimeString();
 
             void setColors(qreal brightness = 0, qreal contrast = 1, qreal hue = 0, qreal saturation = 1);
@@ -78,15 +82,16 @@ namespace QT7
             bool audioEnabled();
             bool setAudioDevice(int id);
             void setPlaybackRate(float rate);
+            QTMovie *qtMovie() const;
             
             float playbackRate() const;
             float prefferedPlaybackRate() const;
 
-            Movie movieRef() const;
             QuickTimeVideoPlayer::State state() const;
 
             bool hasAudio() const;
             bool hasVideo() const;
+            bool hasMovie() const;
             bool canPlayMedia() const;
             bool isPlaying() const;
             bool isSeekable() const;
@@ -99,9 +104,18 @@ namespace QT7
 
             static QString timeToString(quint64 ms);
 
+			// Help functions when drawing to more that one widget in cocoa 64:
+			void *m_primaryRenderingTarget;
+            void setPrimaryRenderingTarget(NSObject *target);
+
+			void *primaryRenderingCIImage();
+			void setPrimaryRenderingCIImage(void *ciImage);
+
         private:
-            Movie m_movieRef;
+            QTMovie *m_QTMovie;
             State m_state;
+            QGLPixelBuffer *m_QImagePixelBuffer;
+
             bool m_playbackRateSat;
             bool m_isDrmProtected;
             bool m_isDrmAuthorized;
@@ -113,23 +127,35 @@ namespace QT7
             float m_playbackRate;
             quint64 m_currentTime;
             MediaSource m_mediaSource;
+			void *m_primaryRenderingCIImage; 
+			qreal m_brightness;
+			qreal m_contrast;
+			qreal m_hue;
+			qreal m_saturation;
+
+#ifdef QUICKTIME_C_API_AVAILABLE
             QTVisualContextRef m_visualContext;
+#endif
             VideoFrame m_currentFrame;
             QuickTimeStreamReader *m_streamReader;
-            const QGLContext *m_qGLContext;
 
+            void createVisualContext();
             void openMovieFromCurrentMediaSource();
-            void openMovieFromDataRef(DataReferenceRecord &dataRef);
+            void openMovieFromDataRef(QTDataReference *dataRef);
             void openMovieFromFile();
             void openMovieFromUrl();
             void openMovieFromStream();
+            void openMovieFromData(QByteArray *data, char *fileType);
+            void openMovieFromDataGuessType(QByteArray *data);
+			QString mediaSourcePath();
+			bool codecExistsAccordingToSuffix(const QString &fileName);
             
-            bool checkForError();
+            void setError(NSError *error);
+            bool errorOccured();
             void readProtection();
-            void getTrackProtection(const Track &track, bool &isProtected, bool &isAuthorized) const;
-            bool setGLContext(AGLContext aglContext, AGLPixelFormat aglPixelFormat);
             void checkIfVideoAwailable();
-            void waitForState(long waitState);
+            bool movieNotLoaded();
+            void waitStatePlayable();
     };
 
     Q_DECLARE_OPERATORS_FOR_FLAGS(QuickTimeVideoPlayer::State);

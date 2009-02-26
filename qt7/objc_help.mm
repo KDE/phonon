@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
 #include "backendheader.h"
 #import <QuartzCore/QuartzCore.h>
 #include "quicktimevideoplayer.h"
-#include <private/qcore_mac_p.h>
 
 void *objc_createPool()
 {
@@ -165,7 +164,7 @@ void *objc_createCiFilter(int filterId)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];    
     CiFilterInfo *info = objc_getCiFilterInfo();
-    NSString *filterName = (NSString *) QCFString::toCFStringRef(info->filterNames[filterId]);
+    NSString *filterName = (NSString *) PhononCFString::toCFStringRef(info->filterNames[filterId]);
     CIFilter *filter = [CIFilter filterWithName:filterName];
     if (filter){
         [filter retain];
@@ -184,7 +183,7 @@ void objc_setCiFilterParameter(void *ciFilter, int parameterId, QVariant value)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     QString name = objc_getCiFilterParameterInfo(ciFilter).parameterNames[parameterId];
-    NSString *nsName = (NSString *) QCFString::toCFStringRef(name);
+    NSString *nsName = (NSString *) PhononCFString::toCFStringRef(name);
     [(CIFilter *) ciFilter setValue:[NSNumber numberWithFloat:value.toDouble()] forKey:nsName];
     [pool release];
 }
@@ -193,7 +192,7 @@ QVariant objc_getCiFilterParameter(void *ciFilter, int parameterId)
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     QString name = objc_getCiFilterParameterInfo(ciFilter).parameterNames[parameterId];
-    NSString *nsName = (NSString *) QCFString::toCFStringRef(name);
+    NSString *nsName = (NSString *) PhononCFString::toCFStringRef(name);
     NSNumber *value = [(CIFilter *) ciFilter valueForKey:nsName];
     QVariant ret([value doubleValue]);
     [pool release];
