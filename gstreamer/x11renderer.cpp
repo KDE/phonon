@@ -137,6 +137,8 @@ void X11Renderer::scaleModeChanged(Phonon::VideoWidget::ScaleMode)
 
 void X11Renderer::movieSizeChanged(const QSize &movieSize)
 {
+    Q_UNUSED(movieSize);
+
     if (m_renderWidget) {
         m_renderWidget->setGeometry(m_videoWidget->calculateDrawFrameRect());
     }
