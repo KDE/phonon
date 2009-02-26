@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -15,20 +15,16 @@
     along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QuickTime/QuickTime.h>
-#undef check // avoid name clash;
-
 #include "mediaobject.h"
 #include "backendheader.h"
 #include "videowidget.h"
 #include "videoframe.h"
 #include "audiooutput.h"
-#include "quicktimeaudioplayer.h"
 #include "quicktimevideoplayer.h"
 #include "quicktimemetadata.h"
-#include "displaylinkcallback.h"
 #include "audiograph.h"
 #include "mediaobjectaudionode.h"
+#include "quicktimeaudioplayer.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -39,7 +35,6 @@ namespace QT7
 
 MediaObject::MediaObject(QObject *parent) : MediaNode(AudioSource | VideoSource, parent)
 {
-    DisplayLinkCallback::retain();
     m_owningMediaObject = this;
     m_state = Phonon::LoadingState;
 
@@ -59,8 +54,10 @@ MediaObject::MediaObject(QObject *parent) : MediaNode(AudioSource | VideoSource,
     m_transitionTime = 0;
     m_percentageLoaded = 0;
     m_waitNextSwap = false;
-    m_hasAudioEffects = false;
-    m_hasAudioOutputs = false;
+    m_audioEffectCount = 0;
+    m_audioOutputCount = 0;
+    m_videoEffectCount = 0;
+    m_videoOutputCount = 0;
     m_audioSystem = AS_Unset;
     m_errorType = Phonon::NoError;
 
@@ -79,7 +76,6 @@ MediaObject::~MediaObject()
     delete m_videoPlayer;
     delete m_nextVideoPlayer;
     delete m_metaData;
-    DisplayLinkCallback::release();
     checkForError();
 }
 
@@ -98,41 +94,55 @@ bool MediaObject::setState(Phonon::State state)
     return true;
 }
 
-void MediaObject::inspectGraphRecursive(AudioConnection *connection, bool &hasEffects, bool &hasOutputs)
+void MediaObject::inspectAudioGraphRecursive(AudioConnection *connection, int &effectCount, int &outputCount)
 {
     if ((connection->m_sink->m_description & (AudioSource | AudioSink)) == (AudioSource | AudioSink))
-        hasEffects = true;
-    else if (connection->m_sink->m_description & AudioSink)
-        hasOutputs = true;
+        ++effectCount;
+	else if (connection->m_sink->m_description & AudioSink)
+    	++outputCount;
 
-    if (hasEffects && hasOutputs)
-        return;
-        
-    for (int i=0; i<connection->m_sink->m_audioSinkList.size(); ++i){
-        inspectGraphRecursive(connection->m_sink->m_audioSinkList[i], hasEffects, hasOutputs);
-        if (hasEffects && hasOutputs)
-            return;
-    }
+    for (int i=0; i<connection->m_sink->m_audioSinkList.size(); ++i)
+        inspectAudioGraphRecursive(connection->m_sink->m_audioSinkList[i], effectCount, outputCount);
+}
+
+void MediaObject::inspectVideoGraphRecursive(MediaNode *node, int &effectCount, int &outputCount)
+{
+    if ((node->m_description & (VideoSource | VideoSink)) == (VideoSource | VideoSink))
+        ++effectCount;
+	else if (node->m_description & VideoSink)
+    	++outputCount;
+
+    for (int i=0; i<node->m_videoSinkList.size(); ++i)
+        inspectVideoGraphRecursive(node->m_videoSinkList[i], effectCount, outputCount);
 }
 
 void MediaObject::inspectGraph()
 {
     // Inspect the graph to check wether there are any
     // effects or outputs connected. This will have
-    // influence on the audio system that gets used:
-    m_hasAudioEffects = false;
-    m_hasAudioOutputs = false;
+    // influence on the audio system and video system that ends up beeing used:
+    int prevVideoOutputCount = m_videoOutputCount;	
+    m_audioEffectCount = 0;
+    m_audioOutputCount = 0;
+    m_videoEffectCount = 0;
+    m_videoOutputCount = 0;
     AudioConnection rootConnection(this);
-    inspectGraphRecursive(&rootConnection, m_hasAudioEffects, m_hasAudioOutputs);
+    inspectAudioGraphRecursive(&rootConnection, m_audioEffectCount, m_audioOutputCount);
+    inspectVideoGraphRecursive(this, m_videoEffectCount, m_videoOutputCount);
+
+	if (m_videoOutputCount != prevVideoOutputCount){
+	    MediaNodeEvent e1(MediaNodeEvent::VideoOutputCountChanged, &m_videoOutputCount);
+	    notify(&e1);
+	}	
 }
 
 void MediaObject::setupAudioSystem()
 {
     // Select which audio system to use:
     AudioSystem newAudioSystem = AS_Unset;
-    if (!m_hasAudioOutputs || !m_videoPlayer->canPlayMedia()){
+    if (!m_audioOutputCount || !m_videoPlayer->canPlayMedia()){
         newAudioSystem = AS_Silent;
-    } else if (!m_hasAudioEffects){
+    } else if (m_audioEffectCount == 0){
         newAudioSystem = AS_Video;
     } else if (QSysInfo::MacintoshVersion < QSysInfo::MV_10_4){
         newAudioSystem = AS_Video;
@@ -143,8 +153,16 @@ void MediaObject::setupAudioSystem()
     } else if (m_audioGraph->graphCannotPlay()){
         newAudioSystem = AS_Video;
         SET_ERROR("Audio effects are not supported for the current codec", NORMAL_ERROR);
-    } else
+#ifdef QUICKTIME_C_API_AVAILABLE
+    } else {
         newAudioSystem = AS_Graph;
+    }
+#else
+    } else {
+        newAudioSystem = AS_Video;
+        SET_ERROR("Audio effects are not supported for the 64-bit version of the Phonon QT7 backend", NORMAL_ERROR);
+    }
+#endif
 
     if (newAudioSystem == m_audioSystem)
         return;
@@ -193,6 +211,7 @@ void MediaObject::setupAudioSystem()
 void MediaObject::setSource(const MediaSource &source)
 {
     IMPLEMENTED;
+	PhononAutoReleasePool pool;
     setState(Phonon::LoadingState);
     
     // Save current state for event/signal handling below:
@@ -209,7 +228,8 @@ void MediaObject::setSource(const MediaSource &source)
     m_audioPlayer->unsetVideoPlayer();
     m_videoPlayer->setMediaSource(source);
     m_audioPlayer->setVideoPlayer(m_videoPlayer);
-    m_metaData->setVideo(m_videoPlayer->movieRef());        
+    m_metaData->setVideo(m_videoPlayer);        
+
     m_audioGraph->updateStreamSpecifications();        
     m_nextAudioPlayer->unsetVideoPlayer();
     m_nextVideoPlayer->unsetVideo();
@@ -234,7 +254,7 @@ void MediaObject::setSource(const MediaSource &source)
     if (checkForError())
         return;
     if (!m_videoPlayer->isDrmAuthorized())
-        SET_ERROR("This computer is not authorized to play media (DRM protected).", FATAL_ERROR)
+        SET_ERROR("This computer is not authorized to play current media (DRM protected).", FATAL_ERROR)
     if (checkForError())
         return;
     if (!m_videoPlayer->canPlayMedia())
@@ -261,6 +281,7 @@ void MediaObject::setNextSource(const MediaSource &source)
 
 void MediaObject::swapCurrentWithNext(qint32 transitionTime)
 {
+	PhononAutoReleasePool pool;
     setState(Phonon::LoadingState);
     // Save current state for event/signal handling below:
     bool prevHasVideo = m_videoPlayer->hasVideo();
@@ -270,7 +291,8 @@ void MediaObject::swapCurrentWithNext(qint32 transitionTime)
     qSwap(m_videoPlayer, m_nextVideoPlayer);
     m_mediaObjectAudioNode->startCrossFade(transitionTime);
     m_audioGraph->updateStreamSpecifications();
-    m_metaData->setVideo(m_videoPlayer->movieRef());
+    m_metaData->setVideo(m_videoPlayer);
+
     m_waitNextSwap = false;
     m_currentTime = 0;
         
@@ -289,7 +311,7 @@ void MediaObject::swapCurrentWithNext(qint32 transitionTime)
     if (checkForError())
         return;
     if (!m_videoPlayer->isDrmAuthorized())
-        SET_ERROR("This computer is not authorized to play media (DRM protected).", FATAL_ERROR)
+        SET_ERROR("This computer is not authorized to play current media (DRM protected).", FATAL_ERROR)
     if (checkForError())
         return;
     if (!m_videoPlayer->canPlayMedia())
@@ -364,6 +386,11 @@ void MediaObject::play()
         m_audioGraph->start();
         m_mediaObjectAudioNode->setMute(true);
     }
+	// Inform the graph that we are about to play:
+	bool playing = true;
+    MediaNodeEvent e1(MediaNodeEvent::MediaPlaying, &playing);
+    notify(&e1);
+	// Start to play:
     play_internal();
     m_mediaObjectAudioNode->setMute(false);
     checkForError();
@@ -377,6 +404,11 @@ void MediaObject::pause()
     if (!setState(Phonon::PausedState))
         return;
     pause_internal();
+	// Inform the graph that we are no longer playing:
+	bool playing = false;
+    MediaNodeEvent e1(MediaNodeEvent::MediaPlaying, &playing);
+    notify(&e1);
+	// But be prepared:
     if (m_audioSystem == AS_Graph)
         m_audioGraph->prepare();
     checkForError();
@@ -390,6 +422,8 @@ void MediaObject::stop()
     if (!setState(Phonon::StoppedState))
         return;
     m_waitNextSwap = false;
+    m_nextVideoPlayer->unsetVideo();
+    m_nextAudioPlayer->unsetVideoPlayer();
     pause_internal();
     seek(0);
     checkForError();
@@ -402,8 +436,8 @@ void MediaObject::seek(qint64 milliseconds)
         return;
         
     // Stop cross-fade if any:
-    m_nextVideoPlayer->pause();
-    m_nextAudioPlayer->pause();
+    m_nextVideoPlayer->unsetVideo();
+    m_nextAudioPlayer->unsetVideoPlayer();
     m_mediaObjectAudioNode->cancelCrossFade();
 
     // Seek to new position:
@@ -417,6 +451,8 @@ void MediaObject::seek(qint64 milliseconds)
         m_waitNextSwap = false;
 
     updateCurrentTime();
+	if (m_state != Phonon::PlayingState)
+		updateVideoFrames();
     checkForError();
 }
 
@@ -469,6 +505,11 @@ void MediaObject::setCurrentVideoStream(const QString &/*streamName*/,const QObj
 void MediaObject::setCurrentSubtitleStream(const QString &/*streamName*/,const QObject */*videoPath*/)
 {
     NOT_IMPLEMENTED;
+}
+
+int MediaObject::videoOutputCount()
+{
+	return m_videoOutputCount;
 }
 
 void MediaObject::synchAudioVideo()
@@ -684,20 +725,20 @@ bool MediaObject::isCrossFading()
 void MediaObject::updateVideoFrames()
 {
     // Draw next frame if awailable:
-    LinkTimeProxy displayLinkTime = DisplayLinkCallback::currentTime();
-    if (m_videoPlayer->videoFrameChanged(displayLinkTime)){
+    if (m_videoPlayer->videoFrameChanged()){
         updateLipSynch(50);
-        VideoFrame frame(m_videoPlayer, displayLinkTime);           
+        VideoFrame frame(m_videoPlayer);           
         if (m_nextVideoPlayer->isPlaying()
             && m_nextVideoPlayer->hasVideo()
             && isCrossFading()){
-            VideoFrame bgFrame(m_nextVideoPlayer, displayLinkTime);
+            VideoFrame bgFrame(m_nextVideoPlayer);
             frame.setBackgroundFrame(bgFrame);
             frame.setBaseOpacity(m_mediaObjectAudioNode->m_volume1);
         }
         
         // Send the frame through the graph:
         updateVideo(frame);    
+        checkForError();
     }
 }
 
@@ -721,25 +762,9 @@ void MediaObject::updateLipSynch(int allowedOffset)
     }
 }
 
-long MediaObject::updateQuickTime()
-{
-    long nextUpdateTime = 1000;
-    // QTGetTimeUntilNextTask does'nt really work, it
-    // returns zero all the time. Thats the reason for
-    // the nextUpdateTime guessing:
-    long ms = 0;
-    QTGetTimeUntilNextTask(&ms, 1000);
-    if (m_videoPlayer->hasVideo())
-        nextUpdateTime = qMax(ms, 30l);
-    else if (!m_videoPlayer->audioEnabled())
-        nextUpdateTime = qMax(ms, 100l);
-    return nextUpdateTime;
-}
-
 void MediaObject::bufferAudioVideo()
 {
-    MoviesTask(0, 0);
-    long nextVideoUpdate = updateQuickTime();
+    long nextVideoUpdate = m_videoPlayer->hasVideo() ? 30 : INT_MAX;
     long nextAudioUpdate = m_audioPlayer->regularTaskFrequency();
     updateAudioBuffers();
     updateVideoFrames();
@@ -792,7 +817,7 @@ void MediaObject::mediaNodeEvent(const MediaNodeEvent *event)
 bool MediaObject::event(QEvent *event)
 {
     switch (event->type()){
-        case QEvent::Timer:
+        case QEvent::Timer: {
             QTimerEvent *timerEvent = static_cast<QTimerEvent *>(event);
             if (timerEvent->timerId() == m_rapidTimer)
                 updateRapidly();
@@ -800,6 +825,7 @@ bool MediaObject::event(QEvent *event)
                 emit tick(currentTime());
             else if (timerEvent->timerId() == m_bufferTimer)
                 bufferAudioVideo();
+            }
             break;
         default:
             break;

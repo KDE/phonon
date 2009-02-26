@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -59,7 +59,7 @@ Backend::Backend(QObject *parent, const QStringList &) : QObject(parent)
     setProperty("backendComment", QLatin1String("Developed by Trolltech"));
     setProperty("backendVersion", QLatin1String("0.1"));
     setProperty("backendIcon",    QLatin1String(""));
-    setProperty("backendWebsite", QLatin1String("http://www.trolltech.com/"));
+    setProperty("backendWebsite", QLatin1String("http://qtsoftware.com/"));
 }
 
 Backend::~Backend()
@@ -128,12 +128,13 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
 bool Backend::startConnectionChange(QSet<QObject *> objects)
 {
     IMPLEMENTED;
+    QList<AudioGraph *> notifiedGraphs;
     for (int i=0; i<objects.size(); i++){
         MediaNode *node = qobject_cast<MediaNode*>(objects.values()[i]);
-        if (node && node->m_audioGraph){
+        if (node && node->m_audioGraph && !notifiedGraphs.contains(node->m_audioGraph)){
             MediaNodeEvent event(MediaNodeEvent::StartConnectionChange);
             node->m_audioGraph->notify(&event);
-            break;        
+            notifiedGraphs << node->m_audioGraph;
         }
     }        
     return true;
@@ -142,15 +143,15 @@ bool Backend::startConnectionChange(QSet<QObject *> objects)
 bool Backend::endConnectionChange(QSet<QObject *> objects)
 {
     IMPLEMENTED;
+    QList<AudioGraph *> notifiedGraphs;
     for (int i=0; i<objects.size(); i++){
         MediaNode *node = qobject_cast<MediaNode*>(objects.values()[i]);
-        if (node && node->m_audioGraph){
+        if (node && node->m_audioGraph && !notifiedGraphs.contains(node->m_audioGraph)){
             MediaNodeEvent event(MediaNodeEvent::EndConnectionChange);
             node->m_audioGraph->notify(&event);
-            break;
+            notifiedGraphs << node->m_audioGraph;
         }
     }
-    
     return true;
 }
 
@@ -181,7 +182,7 @@ bool Backend::disconnectNodes(QObject *aSource, QObject *aSink)
 QStringList Backend::availableMimeTypes() const
 {
     IMPLEMENTED;
-    return BackendInfo::quickTimeMimeTypes(BackendInfo::In).keys();
+    return BackendInfo::quickTimeMimeTypes(BackendInfo::In);
 }
 
 /**

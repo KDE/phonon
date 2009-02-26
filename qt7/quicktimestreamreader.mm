@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -25,31 +25,16 @@ namespace Phonon
 namespace QT7
 {
 
-// Defined in quicktimestreamreader_objc.m:
-void *QuickTimeStreamReader_createMovieFromBufferGuessType(QByteArray &buffer);
-Movie QuickTimeStreamReader_convertToQuickTime(void *qtmovie);
-void QuickTimeStreamReader_release(void *movie);
-
 QuickTimeStreamReader::QuickTimeStreamReader(const Phonon::MediaSource &source)
 {
     connectToSource(source);
-
-    // Regretfully, I need to load the whole movie into memory
-    // before I can tell QuickTime to play it. (whish 
-    // kQTDataLocationPropertyID_MovieUserProc worked...)    
-    if(!readAllDataIntoBuffer())
-        return;
-        
-    m_QTMovieRef = QuickTimeStreamReader_createMovieFromBufferGuessType(m_buffer);
 }
 
 QuickTimeStreamReader::~QuickTimeStreamReader()
 {
-    if (m_QTMovieRef)
-        QuickTimeStreamReader_release(m_QTMovieRef);
 }
 
-bool QuickTimeStreamReader::readAllDataIntoBuffer()
+bool QuickTimeStreamReader::readAllData()
 {
     int oldSize = m_buffer.size();
     while (m_buffer.size() < m_size){
@@ -63,9 +48,9 @@ bool QuickTimeStreamReader::readAllDataIntoBuffer()
     return true;
 }
 
-Movie QuickTimeStreamReader::movieRef()
+QByteArray *QuickTimeStreamReader::pointerToData()
 {
-    return QuickTimeStreamReader_convertToQuickTime(m_QTMovieRef);
+    return &m_buffer;
 }
 
 int QuickTimeStreamReader::readData(long offset, long size, void *data)

@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-    Copyright (C) 2007 Trolltech ASA. All rights reserved.
+    Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,7 +18,10 @@
 #include "backendheader.h"
 #include <QString>
 #include <QDebug>
- 
+
+#include <CoreFoundation/CoreFoundation.h>
+#include <QVarLengthArray>
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -69,6 +72,54 @@ void gClearError()
 {
     gErrorString()->clear();
     gErrorType = NO_ERROR;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+PhononAutoReleasePool::PhononAutoReleasePool()
+{
+    pool = (void*)[[NSAutoreleasePool alloc] init];
+}
+
+PhononAutoReleasePool::~PhononAutoReleasePool()
+{
+    [(NSAutoreleasePool*)pool release];
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+QString PhononCFString::toQString(CFStringRef str)
+{
+    if(!str)
+        return QString();
+    CFIndex length = CFStringGetLength(str);
+    const UniChar *chars = CFStringGetCharactersPtr(str);
+    if (chars)
+        return QString(reinterpret_cast<const QChar *>(chars), length);
+
+    QVarLengthArray<UniChar> buffer(length);
+    CFStringGetCharacters(str, CFRangeMake(0, length), buffer.data());
+    return QString(reinterpret_cast<const QChar *>(buffer.constData()), length);
+}
+
+PhononCFString::operator QString() const
+{
+    if (string.isEmpty() && type)
+        const_cast<PhononCFString*>(this)->string = toQString(type);
+    return string;
+}
+
+CFStringRef PhononCFString::toCFStringRef(const QString &string)
+{
+    return CFStringCreateWithCharacters(0, reinterpret_cast<const UniChar *>(string.unicode()),
+                                        string.length());
+}
+
+PhononCFString::operator CFStringRef() const
+{
+    if (!type)
+        const_cast<PhononCFString*>(this)->type = toCFStringRef(string);
+    return type;
 }
 
 }}
