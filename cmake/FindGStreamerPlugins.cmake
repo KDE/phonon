@@ -6,7 +6,7 @@
 #  GSTREAMERPLUGINSBASE_LIBRARIES - the libraries needed to use GStreamer_Plugins
 #  GSTREAMERPLUGINSBASE_DEFINITIONS - Compiler switches required for using GStreamer_Plugins
 #
-#  (c)2007, Trolltech ASA
+#  (c)2009 Nokia Corporation
 
 FIND_PACKAGE(PkgConfig REQUIRED)
 

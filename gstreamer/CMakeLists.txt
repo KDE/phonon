@@ -1,4 +1,4 @@
-# Copyright (C) 2007 Trolltech ASA. All rights reserved.
+# Copyright (C) 2009 Nokia Corporation. All rights reserved.
 # Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
 #
 # This library is free software: you can redistribute it and/or modify
