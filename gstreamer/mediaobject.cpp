@@ -347,11 +347,8 @@ void MediaObject::cb_pad_added(GstElement *decodebin,
  *
  * returns true if successful
  */
-bool MediaObject::createPipefromURL(const QString &encodedUrl)
+bool MediaObject::createPipefromURL(const QUrl &url)
 {
-    // Convert back to URL
-    QUrl url(encodedUrl, QUrl::StrictMode);
-
     // Remove any existing data source
     if (m_datasource) {
         gst_bin_remove(GST_BIN(m_pipeline), m_datasource);
@@ -361,7 +358,7 @@ bool MediaObject::createPipefromURL(const QString &encodedUrl)
 
     // Verify that the uri can be parsed
     if (!url.isValid()) {
-        m_backend->logMessage(QString("%1 is not a valid URI").arg(encodedUrl));
+        m_backend->logMessage(QString("%1 is not a valid URI").arg(url.toString()));
         return false;
     }
 
@@ -875,8 +872,7 @@ void MediaObject::setSource(const MediaSource &source)
 
     switch (source.type()) {
     case MediaSource::Url: {            
-            QString urlString = source.url().toEncoded();
-            if (createPipefromURL(urlString))
+            if (createPipefromURL(source.url()))
                 m_loading = true;
             else
                 setError(tr("Could not open media source."));
@@ -884,8 +880,7 @@ void MediaObject::setSource(const MediaSource &source)
         break;
 
     case MediaSource::LocalFile: {
-            QString urlString = QUrl::fromLocalFile(source.fileName()).toString();
-            if (createPipefromURL(urlString))
+            if (createPipefromURL(QUrl::fromLocalFile(source.fileName())))
                 m_loading = true;
             else
                 setError(tr("Could not open media source."));

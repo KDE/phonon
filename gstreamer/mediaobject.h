@@ -185,7 +185,7 @@ protected:
     /*
      * @param encodedUrl percent-encoded QString for source compat reasons.  Should change to QUrl
      */
-    bool createPipefromURL(const QString &encodedUrl);
+    bool createPipefromURL(const QUrl &url);
     bool createPipefromStream(const MediaSource &);
 
 private Q_SLOTS:
