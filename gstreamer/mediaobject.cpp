@@ -141,9 +141,9 @@ void MediaObject::saveState()
     if (m_resumeState)
         return;
 
-    if (m_state == Phonon::PlayingState || m_state == Phonon::PausedState) {
+    if (m_pendingState == Phonon::PlayingState || m_pendingState == Phonon::PausedState) {
         m_resumeState = true;
-        m_oldState = m_state;
+        m_oldState = m_pendingState;
         m_oldPos = getPipelinePos();
     }
 }
