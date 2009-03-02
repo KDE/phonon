@@ -22,8 +22,9 @@
 #import <AppKit/NSImage.h>
 #undef check // avoid name clash;
 
-#include <QtCore>
-#include <QtGui>
+#include <QtCore/QRect>
+#include <QtGui/QPainter>
+#include <QtGui/QImage>
 
 QT_BEGIN_NAMESPACE
 

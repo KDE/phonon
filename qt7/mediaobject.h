@@ -18,7 +18,8 @@
 #ifndef Phonon_QT7_MEDIAOBJECT_H
 #define Phonon_QT7_MEDIAOBJECT_H
 
-#include <QtCore>
+#include <QtCore/QStringList>
+#include <QtCore/QTime>
 #include <phonon/mediaobjectinterface.h>
 #include <phonon/addoninterface.h>
 
@@ -90,7 +91,7 @@ namespace QT7
         bool setAudioDeviceOnMovie(int id);
 
 		int videoOutputCount();
-        
+
     signals:
         void stateChanged(Phonon::State,Phonon::State);
         void tick(qint64);
@@ -124,7 +125,7 @@ namespace QT7
         quint32 m_prefinishMark;
         quint32 m_currentTime;
         float m_percentageLoaded;
-        
+
         int m_tickTimer;
         int m_bufferTimer;
         int m_rapidTimer;
@@ -153,7 +154,7 @@ namespace QT7
 		void inspectVideoGraphRecursive(MediaNode *node, int &effectCount, int &outputCount);
         void inspectGraph();
         bool isCrossFading();
-        
+
         QString m_errorString;
         Phonon::ErrorType m_errorType;
         bool checkForError();

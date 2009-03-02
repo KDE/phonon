@@ -19,7 +19,6 @@
 #ifdef QT_MAC_USE_COCOA
 #import <QTKit/QTMovieLayer.h>
 #endif
-#undef check
 
 #include "videowidget.h"
 #include "backendheader.h"
@@ -28,8 +27,10 @@
 #include "medianodeevent.h"
 #include "mediaobject.h"
 
-#include <QGLWidget>
-#include <QTime>
+#include <QtOpenGL/QGLWidget>
+#include <QtCore/QTime>
+#include <QtCore/QEvent>
+#include <QtCore/QCoreApplication>
 
 #import <AppKit/NSImage.h>
 #import <QTKit/QTMovieView.h>

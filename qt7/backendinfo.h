@@ -20,7 +20,7 @@
 
 #include <phonon/mediasource.h>
 #include <Carbon/Carbon.h>
-#include <QtCore>
+#include <QtCore/QStringList>
 
 QT_BEGIN_NAMESPACE
 
@@ -34,7 +34,7 @@ namespace QT7
             enum Scope {In, Out};
 
             static QString quickTimeVersionString();
-            static bool isQuickTimeVersionAvailable(int minHexVersion);      
+            static bool isQuickTimeVersionAvailable(int minHexVersion);
             static QStringList quickTimeMimeTypes(Scope scope);
             static QStringList quickTimeCompressionFormats();
             static QStringList coreAudioCodecs(Scope scope);

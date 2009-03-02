@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_AudioConnection_H
 #define Phonon_QT7_AudioConnection_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include "backendheader.h"
 
 #include <AudioToolbox/AudioToolbox.h>

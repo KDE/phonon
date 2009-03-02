@@ -16,7 +16,6 @@
 */
 
 #include "audiomixer.h"
-#include <QtCore>
 
 QT_BEGIN_NAMESPACE
 

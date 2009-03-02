@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_MEDIAOBJECTAUDIONODE_H
 #define Phonon_QT7_MEDIAOBJECTAUDIONODE_H
 
-#include <QtCore>
+#include <QtCore/qnamespace.h>
 #include "audionode.h"
 
 QT_BEGIN_NAMESPACE
@@ -50,7 +50,7 @@ namespace QT7
             void cancelCrossFade();
             void setMute(bool mute);
             bool isCrossFading();
-            
+
             QuickTimeAudioPlayer *m_player1;
             QuickTimeAudioPlayer *m_player2;
             AudioMixerAudioNode *m_mixer;
@@ -62,7 +62,7 @@ namespace QT7
             float m_volume1;
             float m_volume2;
             float m_mute;
-            
+
             float applyCurve(float volume);
             void updateVolume();
 

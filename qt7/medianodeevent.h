@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_MEDIANODEEVENT_H
 #define Phonon_QT7_MEDIANODEEVENT_H
 
-#include <QtCore>
+#include <QtCore/qnamespace.h>
 
 QT_BEGIN_NAMESPACE
 

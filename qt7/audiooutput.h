@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_AUDIOOUTPUT_H
 #define Phonon_QT7_AUDIOOUTPUT_H
 
-#include <QtCore>
+#include <QtCore/QObject>
 #include <phonon/audiooutputinterface.h>
 #include <phonon/abstractaudiooutput.h>
 
@@ -75,7 +75,7 @@ namespace QT7
 
         protected:
             void mediaNodeEvent(const MediaNodeEvent *event);
-            
+
         private:
             AudioOutputAudioPart *m_audioOutput;
             int m_device;

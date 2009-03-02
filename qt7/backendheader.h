@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_BACKENDHEADER_H
 #define Phonon_QT7_BACKENDHEADER_H
 
-#include <QString>
+#include <QtCore/QString>
 #import <Foundation/NSAutoreleasePool.h>
 #include <CoreFoundation/CFBase.h>
 
@@ -81,13 +81,13 @@ void gClearError();
 
 #define CASE_UNSUPPORTED(string, type) SET_ERROR(string, type)
 
-#if SET_DEBUG_IMPLEMENTED
+#ifdef SET_DEBUG_IMPLEMENTED
 #define IMPLEMENTED qDebug() << "QT7:" << __FUNCTION__ << "(" << __FILE__ << "):"
 #else
 #define IMPLEMENTED if (1); else qDebug()
 #endif
 
-#if SET_DEBUG_HALF_IMPLEMENTED
+#ifdef SET_DEBUG_HALF_IMPLEMENTED
 #define HALF_IMPLEMENTED qDebug() << "QT7: --- HALF IMPLEMENTED:" << __FUNCTION__ << "(" << __FILE__ << "," << __LINE__ << "):"
 #else
 #define HALF_IMPLEMENTED if (1); else qDebug()

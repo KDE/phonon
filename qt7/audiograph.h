@@ -21,7 +21,7 @@
 #include <AudioToolbox/AudioToolbox.h>
 #include <AudioUnit/AudioUnit.h>
 
-#include <QtCore>
+#include <QtCore/qnamespace.h>
 #include "audioconnection.h"
 #include "medianode.h"
 
@@ -63,7 +63,7 @@ namespace QT7
             bool updateStreamSpecificationRecursive(AudioConnection *connection);
             void createAndConnectAuNodesRecursive(AudioConnection *connection);
             bool createAudioUnitsRecursive(AudioConnection *connection);
- 
+
             void connectLate(AudioConnection *connection);
             void disconnectLate(AudioConnection *connection);
 

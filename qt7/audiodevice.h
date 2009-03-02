@@ -20,7 +20,7 @@
 
 #include <AudioToolbox/AudioToolbox.h>
 #include <AudioUnit/AudioUnit.h>
-#include <QtCore>
+#include <QtCore/QList>
 
 QT_BEGIN_NAMESPACE
 

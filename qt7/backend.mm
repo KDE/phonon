@@ -19,7 +19,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QSet>
 #include <QtCore/QVariant>
-#include <QtPlugin>
+#include <QtCore/QtPlugin>
 
 #include "backendheader.h"
 
@@ -219,7 +219,7 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
         // Just count the number of filters awailable (c), and
         // add return a set with the numbers 1..c inserted:
         IMPLEMENTED_SILENT << "Creating index set for type: VideoEffectType";
-        QList<QString> filters = objc_getCiFilterInfo()->filterDisplayNames;
+        QList<QtCore/QString> filters = objc_getCiFilterInfo()->filterDisplayNames;
         for (int i=0; i<filters.size(); i++)
             ret << insert(i);
         break; }
@@ -251,7 +251,7 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
     case VideoEffectType:{
         // Get list of effects, pick out filter at index, and return its name:
         IMPLEMENTED_SILENT << "Creating description hash for type: VideoEffectType";
-        QList<QString> filters = objc_getCiFilterInfo()->filterDisplayNames;
+        QList<QtCore/QString> filters = objc_getCiFilterInfo()->filterDisplayNames;
         ret.insert("name", filters[index]);
     case AudioCaptureDeviceType:{
         IMPLEMENTED_SILENT << "Creating description hash for type: AudioCaptureDeviceType";

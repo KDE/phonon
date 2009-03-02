@@ -18,9 +18,7 @@
 #ifndef Phonon_QT7_VIDEOWIDGET_H
 #define Phonon_QT7_VIDEOWIDGET_H
 
-#include <QtGui>
-#undef check
-
+#include <QtGui/QPaintEngine>
 #include <phonon/videowidgetinterface.h>
 #include "medianode.h"
 
@@ -54,7 +52,7 @@ namespace QT7
         void setHue(qreal);
         qreal saturation() const;
         void setSaturation(qreal);
-        
+
         QWidget *widget();
 
         void updateVideo(VideoFrame &frame);
