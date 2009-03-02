@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_MEDIANODEVIDEOPART_H
 #define Phonon_QT7_MEDIANODEVIDEOPART_H
 
-#include <QtCore>
+#include <QtCore/qnamespace.h>
 #include "backendheader.h"
 
 QT_BEGIN_NAMESPACE
@@ -32,7 +32,6 @@ namespace QT7
     public:
         MediaNodeVideoPart();
         virtual ~MediaNodeVideoPart();
-
         virtual void updateVideo(void *ciImage) = 0;
     };
 

@@ -27,9 +27,8 @@
 
 #include <phonon/mediasource.h>
 #include <Carbon/Carbon.h>
+#include <QtCore/QString>
 #include "audionode.h"
-
-#include <QtCore>
 
 QT_BEGIN_NAMESPACE
 
@@ -40,7 +39,7 @@ namespace QT7
     class AudioGraph;
     class MediaNodeEvent;
     class QuickTimeVideoPlayer;
-    
+
     class QuickTimeAudioPlayer : public AudioNode
     {
         public:
@@ -74,7 +73,7 @@ namespace QT7
 
             static bool soundPlayerIsAwailable();
 
-        private:            
+        private:
             void initSoundExtraction();
             void newGraphNotification();
             void allocateSoundSlices();
@@ -89,7 +88,7 @@ namespace QT7
 
             ScheduledAudioSlice *m_sliceList;
             AudioChannelLayout *m_audioChannelLayout;
-        	UInt32 m_audioChannelLayoutSize;
+            UInt32 m_audioChannelLayoutSize;
             AudioStreamBasicDescription m_audioStreamDescription;
 
             bool m_discrete;

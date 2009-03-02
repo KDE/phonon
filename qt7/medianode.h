@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_MediaNode_H
 #define Phonon_QT7_MediaNode_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include "backendheader.h"
 #include "medianodeevent.h"
 #include "audioconnection.h"

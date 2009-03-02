@@ -25,8 +25,8 @@
 
 #include <phonon/mediasource.h>
 #include <Carbon/Carbon.h>
-#include <QtCore>
-#include <QGLPixelBuffer>
+#include <QtCore/QString>
+#include <QtOpenGL/QGLPixelBuffer>
 #include "videoframe.h"
 
 QT_BEGIN_NAMESPACE
@@ -39,7 +39,7 @@ namespace QT7
 {
     class QuickTimeStreamReader;
 	class VideoRenderWidgetQTMovieView;
-    
+
     class QuickTimeVideoPlayer : QObject
     {
         public:
@@ -83,7 +83,7 @@ namespace QT7
             bool setAudioDevice(int id);
             void setPlaybackRate(float rate);
             QTMovie *qtMovie() const;
-            
+
             float playbackRate() const;
             float prefferedPlaybackRate() const;
 
@@ -127,7 +127,7 @@ namespace QT7
             float m_playbackRate;
             quint64 m_currentTime;
             MediaSource m_mediaSource;
-			void *m_primaryRenderingCIImage; 
+			void *m_primaryRenderingCIImage;
 			qreal m_brightness;
 			qreal m_contrast;
 			qreal m_hue;
@@ -149,7 +149,7 @@ namespace QT7
             void openMovieFromDataGuessType(QByteArray *data);
 			QString mediaSourcePath();
 			bool codecExistsAccordingToSuffix(const QString &fileName);
-            
+
             void setError(NSError *error);
             bool errorOccured();
             void readProtection();

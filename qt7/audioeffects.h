@@ -18,7 +18,7 @@
 #ifndef Phonon_QT7_AUDIOEFFECTS_H
 #define Phonon_QT7_AUDIOEFFECTS_H
 
-#include <QtCore>
+#include <QtCore/QVariant>
 #include <phonon/effectinterface.h>
 #include <phonon/effectparameter.h>
 #include "medianode.h"

@@ -18,7 +18,8 @@
 #ifndef Phonon_QT7_VIDEOEFFECT_H
 #define Phonon_QT7_VIDEOEFFECT_H
 
-#include <QtCore>
+#include <QtCore/QList>
+#include <QtCore/QString>
 #include <phonon/effectinterface.h>
 #include "medianode.h"
 #include "videoframe.h"

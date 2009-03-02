@@ -16,8 +16,8 @@
 */
 
 #include "backendheader.h"
-#include <QString>
-#include <QDebug>
+#include <QtCore/QString>
+#include <QtCore/QDebug>
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <QVarLengthArray>

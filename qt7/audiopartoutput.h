@@ -21,8 +21,7 @@
 #include <AudioToolbox/AudioToolbox.h>
 #include <AudioUnit/AudioUnit.h>
 #include "audionode.h"
-
-#include <QtCore>
+#include <QtCore/qnamespace.h>
 
 QT_BEGIN_NAMESPACE
 

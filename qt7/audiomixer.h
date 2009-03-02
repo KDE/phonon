@@ -18,7 +18,9 @@
 #ifndef Phonon_QT7_AUDIOMIXER_H
 #define Phonon_QT7_AUDIOMIXER_H
 
-#include <QtCore>
+#include <QtCore/QObject>
+#include <QtCore/QTime>
+#include <QtCore/QEvent>
 #include <phonon/effectinterface.h>
 #include <phonon/effectparameter.h>
 #include <phonon/volumefaderinterface.h>
@@ -64,7 +66,7 @@ namespace QT7
             float m_fadeToVolume;
             float m_fadeFromVolume;
             QTime m_fadeStartTime;
-            
+
             // EffectInterface:
             QList<Phonon::EffectParameter> parameters() const;
             QVariant parameterValue(const Phonon::EffectParameter &parameter) const;

@@ -21,7 +21,7 @@
 #include "backendheader.h"
 #include <phonon/mediasource.h>
 #include <Carbon/Carbon.h>
-#include <QtCore>
+#include <QtCore/QString>
 
 #ifdef QUICKTIME_C_API_AVAILABLE
     #include <QuickTime/QuickTime.h>
@@ -40,7 +40,7 @@ namespace QT7
         public:
             QuickTimeMetaData();
             virtual ~QuickTimeMetaData();
-            
+
             void setVideo(QuickTimeVideoPlayer *videoPlayer);
             QMultiMap<QString, QString> metaData();
 

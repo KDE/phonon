@@ -20,9 +20,7 @@
 
 #include <phonon/mediasource.h>
 #include <phonon/streaminterface.h>
-#include <QtCore>
-#include <qmacdefines_mac.h>
-#include <QReadWriteLock>
+#include <QtCore/QReadWriteLock>
 
 #ifndef QT_MAC_USE_COCOA
 #include <QuickTime/Movies.h>
@@ -30,7 +28,7 @@
 
 QT_BEGIN_NAMESPACE
 
-namespace Phonon 
+namespace Phonon
 {
 namespace QT7
 {
@@ -38,7 +36,7 @@ namespace QT7
     {
         Q_OBJECT
         Q_INTERFACES(Phonon::StreamInterface)
-        
+
     public:
         QuickTimeStreamReader(const Phonon::MediaSource &source);
         ~QuickTimeStreamReader();
