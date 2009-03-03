@@ -14,6 +14,8 @@
 project(phonon-qt7)
 include(ConfigureChecks.cmake)
 
+include_directories(${OPENGL_INCLUDE_DIR})
+
 if (BUILD_PHONON_QT7)
     set(phonon_qt7_SRCS
         quicktimevideoplayer.mm
@@ -43,7 +45,7 @@ if (BUILD_PHONON_QT7)
    automoc4_add_library(phonon_qt7 MODULE ${phonon_qt7_SRCS})
    target_link_libraries(phonon_qt7
        ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY}
-       "-framework phonon"
+       ${PHONON_LIBS}
        "-framework QuickTime"
        "-framework AudioUnit"
        "-framework AudioToolbox"
