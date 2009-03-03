@@ -56,7 +56,7 @@ if (BUILD_PHONON_GSTREAMER)
          )
    endif(ALSA_FOUND AND NOT GSTREAMER_HAS_NONBLOCKING_ALSASINK)
 
-   automoc4_add_library(phonon_gstreamer SHARED ${phonon_gstreamer_SRCS})
+   automoc4_add_library(phonon_gstreamer MODULE ${phonon_gstreamer_SRCS})
    set_target_properties(phonon_gstreamer PROPERTIES PREFIX "")
    target_link_libraries(phonon_gstreamer
       ${QT_QTOPENGL_LIBRARY}
