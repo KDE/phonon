@@ -26,7 +26,6 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QUrl>
 #include <QtOpenGL/QGLContext>
-#include <QtOpenGL/private/qgl_p.h>
 
 #import <QTKit/QTTrack.h>
 #import <QTKit/QTMedia.h>
