@@ -645,8 +645,8 @@ void Backend::checkAudioOutputs()
                             /*icon name */"audio-backend-jack", outputPlugins[i]);
             } else if (0 == strcmp(outputPlugins[i], "arts")) {
                 addAudioOutput(nextIndex++, -100, tr("aRts"),
-                        tr("<html><p>aRts is the old soundserver and media framework that was used "
-                            "in KDE2 and KDE3. Its use is discuraged.</p></html>"),
+                        tr("<html><p>aRts is the old sound server and media framework that was used "
+                            "in KDE2 and KDE3. Its use is discouraged.</p></html>"),
                         /*icon name */"audio-backend-arts", outputPlugins[i]);
             } else if (0 == strcmp(outputPlugins[i], "pulseaudio")) {
                 addAudioOutput(nextIndex++, 10, tr("PulseAudio"),
