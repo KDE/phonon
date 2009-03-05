@@ -138,12 +138,13 @@ typedef struct
 /*
  * description of params struct
  */
-static char *enum_fadeCurve[] = { "Fade3Decibel", "Fade6Decibel", "Fade9Decibel", "Fade12Decibel", NULL };
+static const char *enum_fadeCurve[] = { "Fade3Decibel", "Fade6Decibel", "Fade9Decibel", "Fade12Decibel", NULL };
+
 START_PARAM_DESCR(kvolumefader_parameters_t)
-PARAM_ITEM(POST_PARAM_TYPE_INT, fadeCurve, enum_fadeCurve, 0.0, 0.0, 0, I18N_NOOP ("fade curve"))
-PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, currentVolume, NULL, 0.0, maxVolume, 0, I18N_NOOP("current volume"))
-PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, fadeTo, NULL, 0.0, maxVolume, 0, I18N_NOOP("volume to fade to"))
-PARAM_ITEM(POST_PARAM_TYPE_INT, fadeTime, NULL, 0.0, 10000.0, 0, I18N_NOOP("fade time in milliseconds"))
+PARAM_ITEM(POST_PARAM_TYPE_INT, fadeCurve, const_cast<char**>(enum_fadeCurve), 0.0, 0.0, 0, const_cast<char*>( I18N_NOOP("fade curve") ))
+PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, currentVolume, NULL, 0.0, maxVolume, 0, const_cast<char*>( I18N_NOOP("current volume") ))
+PARAM_ITEM(POST_PARAM_TYPE_DOUBLE, fadeTo, NULL, 0.0, maxVolume, 0, const_cast<char*>( I18N_NOOP("volume to fade to") ))
+PARAM_ITEM(POST_PARAM_TYPE_INT, fadeTime, NULL, 0.0, 10000.0, 0, const_cast<char*>( I18N_NOOP("fade time in milliseconds") ))
 END_PARAM_DESCR(param_descr)
 
 static int set_parameters (xine_post_t *this_gen, void *param_gen) 
@@ -442,7 +443,7 @@ static post_plugin_t *kvolumefader_open_plugin(post_class_t *class_gen, int inpu
 static char *kvolumefader_get_identifier(post_class_t *class_gen)
 {
     Q_UNUSED(class_gen);
-    return PLUGIN_IDENTIFIER;
+    return const_cast<char*>(PLUGIN_IDENTIFIER);
 }
 
 static char *kvolumefader_get_description(post_class_t *class_gen)
