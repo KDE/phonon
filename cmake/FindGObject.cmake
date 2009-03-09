@@ -25,11 +25,10 @@ IF (NOT WIN32)
    SET(GOBJECT_DEFINITIONS ${PKG_GOBJECT2_CFLAGS})
 ENDIF (NOT WIN32)
 
-FIND_PATH(GOBJECT_INCLUDE_DIR gobject.h
+FIND_PATH(GOBJECT_INCLUDE_DIR gobject/gobject.h
    PATHS
    ${PKG_GOBJECT2_INCLUDE_DIRS}
-   ${PKG_GOBJECT2_INCLUDE_DIRS}/glib-2.0/gobject/
-   /usr/include/glib-2.0/gobject/
+   /usr/include/glib-2.0/
    #PATH_SUFFIXES gst
    )
 
