@@ -27,7 +27,7 @@
 namespace Phonon
 {
 
-class PacketPrivate;
+struct PacketPrivate;
 class PacketPoolPrivate
 {
     friend class PacketPool;
