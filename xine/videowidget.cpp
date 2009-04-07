@@ -472,10 +472,6 @@ void VideoWidget::mouseMoveEvent(QMouseEvent *mev)
 {
     K_XT(VideoWidget);
 
-    if (cursor().shape() == Qt::BlankCursor) {
-        setCursor(QCursor(Qt::ArrowCursor));
-    }
-
     x11_rectangle_t   rect;
     xine_event_t      *event = new xine_event_t;
     xine_input_data_t *input = new xine_input_data_t;
