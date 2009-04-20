@@ -153,7 +153,6 @@ class VideoWidget : public QWidget, public Phonon::VideoWidgetInterface, public 
 
         mutable QMutex m_snapshotLock;
         mutable QWaitCondition m_snapshotWait;
-        mutable QImage m_snapshotImage;
 
         QSize m_sizeHint;
 

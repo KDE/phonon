@@ -679,7 +679,7 @@ void MediaObject::upstreamEvent(Event *e)
         break;
     case Event::RequestSnapshot:
         // postEvent takes ownership of the event and will delete it when done
-        QCoreApplication::postEvent(m_stream, new Event(e->type()));
+        QCoreApplication::postEvent(m_stream, copyEvent(static_cast<RequestSnapshotEvent*>(e)));
         break;
     case Event::SetParam:
         // postEvent takes ownership of the event and will delete it when done
