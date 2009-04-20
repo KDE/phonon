@@ -344,12 +344,11 @@ QImage VideoWidget::snapshot() const
 {
     QImage img;
     QMutexLocker lock(&m_snapshotLock);
-    const_cast<VideoWidget *>(this)->upstreamEvent(new Event(Event::RequestSnapshot));
+    const_cast<VideoWidget *>(this)->upstreamEvent(new RequestSnapshotEvent(img, &m_snapshotWait) );
     if (m_snapshotWait.wait(&m_snapshotLock, 1000)) {
-        img = m_snapshotImage;
-        m_snapshotImage = QImage();
+      return img;
     }
-    return img;
+    return QImage();
 }
 
 /*
@@ -638,12 +637,6 @@ void VideoWidget::downstreamEvent(Event *e)
                 update();
             }
         }
-        break;
-    case Event::SnapshotReady:
-        m_snapshotLock.lock();
-        m_snapshotImage = static_cast<const SnapshotReadyEvent *>(e)->image;
-        m_snapshotWait.wakeAll();
-        m_snapshotLock.unlock();
         break;
     default:
         QCoreApplication::sendEvent(this, e);
