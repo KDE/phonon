@@ -25,6 +25,8 @@
 #include <QApplication>
 #include <gst/gst.h>
 #include <gst/interfaces/propertyprobe.h>
+#include <gst/base/gstbasesink.h>
+
 #include "mediaobject.h"
 #include "message.h"
 #include "common.h"
@@ -377,6 +379,10 @@ void VideoWidget::mediaNodeEvent(const MediaNodeEvent *event)
     // Forward events to renderer
     if (m_renderer)
         m_renderer->handleMediaNodeEvent(event);
+}
+QImage VideoWidget::snapshot() const {
+  // TODO implement
+  return QImage();
 }
 
 }

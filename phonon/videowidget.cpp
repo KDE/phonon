@@ -98,6 +98,9 @@ PHONON_INTERFACE_SETTER(setHue, hue, qreal)
 PHONON_INTERFACE_GETTER(qreal, saturation, d->saturation)
 PHONON_INTERFACE_SETTER(setSaturation, saturation, qreal)
 
+PHONON_INTERFACE_GETTER(QImage, snapshot, QImage() )
+
+
 void VideoWidget::setFullScreen(bool newFullScreen)
 {
     pDebug() << Q_FUNC_INFO << newFullScreen;

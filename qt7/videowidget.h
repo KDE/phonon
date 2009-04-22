@@ -56,6 +56,7 @@ namespace QT7
         QWidget *widget();
 
         void updateVideo(VideoFrame &frame);
+	QImage snapshot() const;
 
     protected:
         void mediaNodeEvent(const MediaNodeEvent *event);
