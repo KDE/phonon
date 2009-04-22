@@ -92,7 +92,7 @@ class VideoWidgetXT : public SinkNodeXT
         bool m_isValid;
 };
 
-class VideoWidget : public QWidget, public Phonon::VideoWidgetInterface, public Phonon::Xine::SinkNode, public Phonon::Experimental::SnapshotInterface
+class VideoWidget : public QWidget, public Phonon::VideoWidgetInterface4, public Phonon::Xine::SinkNode, public Phonon::Experimental::SnapshotInterface
 {
     Q_OBJECT
     Q_INTERFACES(Phonon::VideoWidgetInterface Phonon::Xine::SinkNode Phonon::Experimental::SnapshotInterface)

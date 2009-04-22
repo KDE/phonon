@@ -876,11 +876,6 @@ void VideoWidget::updateVideo(VideoFrame &frame){
     MediaNode::updateVideo(frame);
 }
 
-QImage VideoWidget::snapshot() const {
-  // TODO implement me
-  return QImage();
-}
-
 }} // namespace Phonon::QT7
 
 QT_END_NAMESPACE

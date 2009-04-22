@@ -384,12 +384,6 @@ namespace Phonon
                     renderer->notifyResize(m_widget->size(), m_aspectRatio, m_scaleMode);
             }
         }
-	
-	QImage VideoWidget::snapshot() const {
-	  // TODO implement me
-	  return QImage();
-	}
-
 
 
 

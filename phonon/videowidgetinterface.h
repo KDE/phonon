@@ -50,13 +50,19 @@ class VideoWidgetInterface
         virtual qreal saturation() const = 0;
         virtual void setSaturation(qreal) = 0;
         virtual QWidget *widget() = 0;
-	virtual QImage snapshot() const = 0;
 //X        virtual int overlayCapabilities() const = 0;
 //X        virtual bool createOverlay(QWidget *widget, int type) = 0;
+};
+
+class VideoWidgetInterface4 : public VideoWidgetInterface
+{
+    public:
+        virtual QImage snapshot() const = 0;
 };
 }
 
 Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface, "VideoWidgetInterface3.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface4, "VideoWidgetInterface4.phonon.kde.org")
 
 #endif //QT_NO_PHONON_VIDEO
 
