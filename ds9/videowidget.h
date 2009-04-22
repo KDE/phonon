@@ -71,6 +71,7 @@ namespace Phonon
             //apply contrast/brightness/hue/saturation
             void applyMixerSettings() const;
             void updateVideoSize() const;
+	    QImage snapshot() const;
 
         protected:
             virtual void connected(BackendNode *, const InputPin& inpin);
