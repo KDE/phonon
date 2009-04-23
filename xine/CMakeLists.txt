@@ -101,7 +101,7 @@ if(XINE_FOUND)
 
     configure_file(config-xine-widget.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-xine-widget.h )
     
-    add_definitions(-DPHONON_BACKEND_VERSION_4_2)
+    add_definitions(-DPHONON_BACKEND_VERSION_4_4)
     automoc4_add_library(phonon_xine MODULE ${phonon_xine_SRCS})
     set_target_properties(phonon_xine PROPERTIES PREFIX "")
     target_link_libraries(phonon_xine ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PHONON_LIBS} ${XINE_LIBRARY})
