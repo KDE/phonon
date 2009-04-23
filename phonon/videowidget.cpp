@@ -28,9 +28,8 @@
 #include "phononnamespace_p.h"
 
 #include <QtGui/QAction>
-#define IFACES2 VideoWidgetInterface44
-#define IFACES1 IFACES2
-#define IFACES0 VideoWidgetInterface43, IFACES1
+#define IFACES4 VideoWidgetInterface44
+#define IFACES0 VideoWidgetInterface43, IFACES4
 #define PHONON_INTERFACENAME IFACES0
 
 QT_BEGIN_NAMESPACE
@@ -104,7 +103,8 @@ PHONON_INTERFACE_SETTER(setSaturation, saturation, qreal)
 
 
 QImage VideoWidget::snapshot() const {
-    Iface<VideoWidgetInterface44> iface((VideoWidgetPrivate*) (k_ptr));
+    K_D(const VideoWidget);
+    ConstIface<IFACES4> iface(d);
     if(iface) return iface->snapshot();
     return QImage(); // TODO not implemented in VideoInterface
 }
