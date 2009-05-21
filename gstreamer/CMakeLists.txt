@@ -18,7 +18,8 @@ include(ConfigureChecks.cmake)
 
 if (BUILD_PHONON_GSTREAMER)
    include_directories(${GSTREAMER_INCLUDE_DIR} ${GLIB2_INCLUDE_DIR}
-      ${LIBXML2_INCLUDE_DIR})
+      ${LIBXML2_INCLUDE_DIR}
+       ${X11_X11_INCLUDE_PATH})
    add_definitions(-DPHONON_BACKEND_VERSION_4_2)
 
    set(phonon_gstreamer_SRCS
