@@ -72,6 +72,7 @@ set(phonon_xine_SRCS
     bytestreamplugin.cpp
     net_buf_ctrl.c
     volumefader_plugin.cpp
+    kequalizer_plugin.cpp
     plugins.c
     demux_wav.c
    )
