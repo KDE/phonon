@@ -264,6 +264,7 @@ namespace Phonon
         {
             m_aspectRatio = aspectRatio;
             updateVideoSize();
+            m_widget->update();
         }
 
         Phonon::VideoWidget::ScaleMode VideoWidget::scaleMode() const
@@ -282,6 +283,7 @@ namespace Phonon
         {
             m_scaleMode = scaleMode;
             updateVideoSize();
+            m_widget->update();
         }
 
         void VideoWidget::setBrightness(qreal b)
