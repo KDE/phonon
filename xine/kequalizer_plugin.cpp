@@ -186,7 +186,7 @@ static char *get_help ()
                  "\n"
                  "Parameters:\n"
                  "Preamp gain - used to alter up or down all gain values\n"
-                 "10 Equalizer bands - actual IIR equalizer paameters.\n").toUtf8());
+                 "10 Equalizer bands - actual IIR equalizer parameters.\n").toUtf8());
     return helpText.data();
 }
 
