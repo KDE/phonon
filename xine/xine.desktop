@@ -10,12 +10,12 @@ Icon=phonon-xine
 InitialPreference=15
 
 Name=Xine
+Name[mai]=एक्साइन
 Name[pa]=ਜ਼ਾਈਨ
 Name[sr]=Ксине
 Name[x-test]=xxXinexx
 
 Comment=Phonon Xine backend
-Comment[bg]=Phonon през Xine
 Comment[ca]=Dorsal del Xine pel Phonon
 Comment[da]=Xine-backend til Phonon
 Comment[de]=Phonon-Treiber für Xine
@@ -25,6 +25,7 @@ Comment[et]=Phononi Xine taustaprogramm
 Comment[fr]=Système de gestion Xine pour Phonon 
 Comment[ga]=Inneall Phonon Xine
 Comment[gl]=Infraestrutura de Xine para Phonon
+Comment[hu]=Phonon Xine modul
 Comment[is]=Phonon Xine bakendi
 Comment[it]=Motore Xine di Phonon
 Comment[ja]=Phonon Xine バックエンド
