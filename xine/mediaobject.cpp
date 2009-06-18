@@ -321,7 +321,7 @@ static QByteArray mrlEncode(QByteArray mrl)
 {
     for (int i = 0; i < mrl.size(); ++i) {
         const unsigned char c = static_cast<unsigned char>(mrl.at(i));
-        if (c & 0x80 || c == '\\' || c < 32 || c == '%') {
+        if (c & 0x80 || c == '\\' || c < 32 || c == '%' || c == '#') {
             char enc[4];
             qsnprintf(enc, 4, "%%%02X", c);
             mrl = mrl.left(i) + QByteArray(enc, 3) + mrl.mid(i + 1);
