@@ -8,6 +8,7 @@ X-KDE-PhononBackendInfo-Version=0.1
 X-KDE-PhononBackendInfo-Website=http://multimedia.kde.org/
 InitialPreference=1
 Name=Fake
+Name[bg]=Фалшиво
 Name[cs]=Falešný
 Name[el]=Εικονικό
 Name[es]=Imitación
