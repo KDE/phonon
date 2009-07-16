@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -88,19 +88,18 @@ namespace BackendCapabilities
     };
 
     /**
-     * Use this function to get a QObject pointer to connect to the capabilitiesChanged signal.
+     * Use this function to get a QObject pointer to connect to one of the Notifier signals.
      *
      * \return a pointer to a QObject.
      *
-     * The capabilitiesChanged signal is emitted if the capabilities have changed. This can
-     * happen if the user has requested a backend change.
-     *
-     * To connect to this signal do the following:
+     * To connect to the signal do the following:
      * \code
      * QObject::connect(BackendCapabilities::notifier(), SIGNAL(capabilitiesChanged()), ...
      * \endcode
      *
      * \see Notifier::capabilitiesChanged()
+     * \see Notifier::availableAudioOutputDevicesChanged()
+     * \see Notifier::availableAudioCaptureDevicesChanged()
      */
     PHONON_EXPORT Notifier *notifier();
 

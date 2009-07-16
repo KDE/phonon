@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -198,18 +198,18 @@ namespace Phonon
              * Check whether the current media may be seeked.
              *
              * \warning This information cannot be known immediately. It is best
-             * to also listen to the hasVideoChanged signal.
+             * to also listen to the seekableChanged signal.
              *
              * \code
-             *   connect(media, SIGNAL(hasVideoChanged(bool)), hasVideoChanged(bool));
+             *   connect(media, SIGNAL(seekableChanged(bool)), seekableChanged(bool));
              *   media->setCurrentSource("somevideo.avi");
-             *   media->hasVideo(); // returns false;
+             *   media->isSeekable(); // returns false;
              * }
              *
-             * void hasVideoChanged(bool b)
+             * void seekableChanged(bool b)
              * {
              *   // b == true
-             *   media->hasVideo(); // returns true;
+             *   media->isSeekable(); // returns true;
              * }
              * \endcode
              *
@@ -301,7 +301,7 @@ namespace Phonon
             void setCurrentSource(const MediaSource &source);
 
             /**
-             * Returns the queued media sources. This does list does not include
+             * Returns the queued media sources. This list does not include
              * the current source (returned by currentSource).
              */
             QList<MediaSource> queue() const;
@@ -456,8 +456,6 @@ namespace Phonon
         Q_SIGNALS:
             /**
              * Emitted when the state of the MediaObject has changed.
-             * In case you're not interested in the old state you can also
-             * connect to a slot that only has one State argument.
              *
              * @param newstate The state the Player is in now.
              * @param oldstate The state the Player was in before.
@@ -587,7 +585,7 @@ namespace Phonon
             /**
              * This signal is emitted as soon as the total time of the media file is
              * known or has changed. For most non-local media data the total
-             * time of the media can only be known after some time. At that time the
+             * time of the media can only be known after some time. Initially the
              * totalTime function can not return useful information. You have
              * to wait for this signal to know the real total time.
              *
