@@ -85,7 +85,6 @@ typedef struct KEqualizerPlugin
     float   g[KEQUALIZER_CHANNELS_MAX][KEQUALIZER_KM];        // Gain factor for each channel and band
     int     K;                    // Number of used eq bands
     int     channels;             // Number of channels
-    float   gain_factor;     // applied at output to avoid clipping
     /* Functions */
     void equalize_Buffer(xine_post_t *this_gen,audio_buffer_t *buf);
     void eq_calc_Bp2(float* a, float* b, float fc, float q);
@@ -425,25 +424,6 @@ void KEqualizerPlugin::eq_calc_Gains(xine_post_t *this_gen)
             that->g[i][k] = pow(10.0,b[k]/20.0)-1.0;
        }
     }
-    
-    // Calculate gain factor to prevent clipping at output
-    that->gain_factor=0.0;
-    for(int k=0;k<that->channels;k++){
-        
-        for(int i=0;i<KEQUALIZER_KM;i++){
-            
-            if(that->gain_factor < that->g[k][i])
-                that->gain_factor=that->g[k][i];
-        }
-    }
-    
-    that->gain_factor=log10(that->gain_factor + 1.0) * 20.0;
-         
-    if(that->gain_factor > 0.0){
-        that->gain_factor=0.1+(that->gain_factor/12.0);
-    }else{
-        that->gain_factor=1;
-    }
 }
 
 void KEqualizerPlugin::eq_setup_Filters(xine_post_t *this_gen)
@@ -500,8 +480,10 @@ void KEqualizerPlugin::equalize_Buffer(xine_post_t *this_gen, audio_buffer_t *bu
                         wq[1] = wq[0];
                         wq[0] = w;
                   }
-                  // Output data to buffer
-                  *out=yt*that->gain_factor;
+                  // Output data to buffer 
+                  // NOTE maybe we need to add more sophisticated convertion method from float to ine like in libSAD with dithering ??
+                  // NOTE for now this clipping have to be enough
+                  *out =  yt <= (float)32767 ? ( yt >= (float)-32768 ? (int16_t)yt : -32768 ) : 32767;
                   out+=nch;//nch;
                   } 
         }
