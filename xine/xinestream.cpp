@@ -1205,9 +1205,9 @@ bool XineStream::event(QEvent *ev)
                 default:
                     return true;
                 }
-		    RequestSnapshotEvent *event=static_cast<RequestSnapshotEvent*>(ev);
-		    event->image=qimg;
-		    event->waitCondition->wakeAll();
+                   RequestSnapshotEvent *event=static_cast<RequestSnapshotEvent*>(ev);
+                   event->image=qimg;
+                   event->waitCondition->wakeAll();
 //                 handleDownstreamEvent(new SnapshotReadyEvent(qimg));
             }
         }

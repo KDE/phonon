@@ -57,6 +57,9 @@ class SinkNode
 {
     friend class WireCall;
     friend class XineStream;
+    friend class AudioDataOutput;
+    friend class AudioOutput;
+
     public:
         SinkNode(SinkNodeXT *_xt);
         virtual ~SinkNode();

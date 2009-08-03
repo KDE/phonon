@@ -19,6 +19,7 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 #include "audiodataoutput.h"
 #include "audiodataoutput_p.h"
 #include "factory_p.h"
@@ -27,21 +28,19 @@
 
 namespace Phonon
 {
-namespace Experimental
-{
 
 PHONON_HEIR_IMPL(AbstractAudioOutput)
 
-PHONON_GETTER(Phonon::Experimental::AudioDataOutput::Format, format, d->format)
+PHONON_GETTER(Phonon::AudioDataOutput::Format, format, d->format)
 PHONON_GETTER(int, dataSize, d->dataSize)
 PHONON_GETTER(int, sampleRate, -1)
-PHONON_SETTER(setFormat, format, Phonon::Experimental::AudioDataOutput::Format)
+PHONON_SETTER(setFormat, format, Phonon::AudioDataOutput::Format)
 PHONON_SETTER(setDataSize, dataSize, int)
 
 bool AudioDataOutputPrivate::aboutToDeleteBackendObject()
 {
     Q_ASSERT(m_backendObject);
-    pBACKEND_GET(Phonon::Experimental::AudioDataOutput::Format, format, "format");
+    pBACKEND_GET(Phonon::AudioDataOutput::Format, format, "format");
     pBACKEND_GET(int, dataSize, "dataSize");
 
     return AbstractAudioOutputPrivate::aboutToDeleteBackendObject();
@@ -54,18 +53,20 @@ void AudioDataOutputPrivate::setupBackendObject()
     AbstractAudioOutputPrivate::setupBackendObject();
 
     // set up attributes
-    pBACKEND_CALL1("setFormat", Phonon::Experimental::AudioDataOutput::Format, format);
+    pBACKEND_CALL1("setFormat", Phonon::AudioDataOutput::Format, format);
     pBACKEND_CALL1("setDataSize", int, dataSize);
+
+    qRegisterMetaType<QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > >("QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >");
+        qRegisterMetaType<QMap<Phonon::AudioDataOutput::Channel, QVector<float> > >("QMap<Phonon::AudioDataOutput::Channel, QVector<float> >");
     QObject::connect(m_backendObject,
-            SIGNAL(dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<qint16> > &)),
-            q, SIGNAL(dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<qint16> > &)));
+            SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &)),
+            q, SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &)));
     QObject::connect(m_backendObject,
-            SIGNAL(dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<float> > &)),
-            q, SIGNAL(dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<float> > &)));
+            SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<float> > &)),
+            q, SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<float> > &)));
     QObject::connect(m_backendObject, SIGNAL(endOfMedia(int)), q, SIGNAL(endOfMedia(int)));
 }
 
-} // namespace Experimental
 } // namespace Phonon
 
 #include "audiodataoutput.moc"

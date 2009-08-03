@@ -44,6 +44,7 @@ if (BUILD_PHONON_GSTREAMER)
       widgetrenderer.cpp
       glrenderer.cpp
       volumefadereffect.cpp
+      audiodataoutput.cpp
       )
 
    find_package(Alsa)

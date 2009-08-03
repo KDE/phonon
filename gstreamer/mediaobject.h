@@ -55,6 +55,7 @@ class MediaObject : public QObject, public MediaObjectInterface
         , public MediaNode
 {
     friend class Stream;
+    friend class AudioDataOutput;
     Q_OBJECT
     Q_INTERFACES(Phonon::MediaObjectInterface
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
