@@ -39,6 +39,7 @@ set(phonon_LIB_SRCS
    volumeslider.cpp
    effectwidget.cpp
    iodevicestream.cpp
+   audiodataoutput.cpp
    )
 
 if (QT_QTDBUS_FOUND)
@@ -100,6 +101,8 @@ install(FILES
    volumeslider.h
    effectwidget.h
    platformplugin.h
+   audiodataoutput.h
+   audiodataoutputinterface.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
 install(FILES org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})

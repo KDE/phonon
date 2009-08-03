@@ -41,4 +41,4 @@ class AudioDataOutputInterface
 
 Q_DECLARE_INTERFACE(Phonon::AudioDataOutputInterface, "0AudioDataOutputInterface.phonon.kde.org")
 
-#endif // PHONON_AUDIODATAOUTPUTINTERFACE_H
+#endif // PHONON_X_AUDIODATAOUTPUTINTERFACE_H

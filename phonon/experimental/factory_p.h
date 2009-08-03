@@ -47,13 +47,6 @@ namespace Factory
     PHONONEXPERIMENTAL_EXPORT Sender *sender();
 
     /**
-     * Create a new backend object for a AudioDataOutput.
-     *
-     * \return a pointer to the AudioDataOutput the backend provides.
-     */
-    PHONONEXPERIMENTAL_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
-
-    /**
      * Create a new backend object for a VideoDataOutput.
      *
      * \return a pointer to the VideoDataOutput the backend provides.

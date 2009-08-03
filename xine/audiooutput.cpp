@@ -33,6 +33,7 @@
 #include "xineengine.h"
 #include "xinethread.h"
 #include "keepreference.h"
+#include "audiodataoutput.h"
 
 #include <xine/audio_out.h>
 
@@ -285,6 +286,11 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newDevice)
         QCoreApplication::postEvent(XineThread::instance(), new RewireEvent(wireCall, unwireCall));
         graphChanged();
     }
+
+    AudioDataOutputXT *dataOutput = dynamic_cast<AudioDataOutputXT*>(m_source->threadSafeObject().data());
+    if (dataOutput)
+        dataOutput->intercept(xt->m_audioPort);
+
     return true;
 }
 
@@ -303,6 +309,11 @@ void AudioOutput::xineEngineChanged()
 
         Q_ASSERT(xt->m_audioPort == 0);
         xt->m_audioPort = port;
+
+
+        AudioDataOutputXT *dataOutput = dynamic_cast<AudioDataOutputXT*>(m_source->threadSafeObject().data());
+        if (dataOutput)
+            dataOutput->intercept(xt->m_audioPort);
     }
 }
 

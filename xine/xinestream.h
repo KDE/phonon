@@ -61,6 +61,7 @@ class ByteStream;
 class XineStream : public QObject, public SourceNodeXT
 {
     Q_OBJECT
+
     public:
         static void xineEventListener(void *, const xine_event_t *);
 
@@ -119,6 +120,8 @@ class XineStream : public QObject, public SourceNodeXT
 
         int subtitlesSize() const;
         int audioChannelsSize() const;
+
+        int64_t currentVpts() { return xine_get_current_vpts(m_stream); }
 
         enum StateForNewMrl {
             // no use: Loading, Error, Buffering

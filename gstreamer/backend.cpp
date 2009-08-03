@@ -18,6 +18,7 @@
 #include "common.h"
 #include "backend.h"
 #include "audiooutput.h"
+#include "audiodataoutput.h"
 #include "audioeffect.h"
 #include "mediaobject.h"
 #include "videowidget.h"
@@ -112,17 +113,14 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
     case MediaObjectClass:
         return new MediaObject(this, parent);
 
-    case AudioOutputClass: {
-            AudioOutput *ao = new AudioOutput(this, parent);
-            m_audioOutputs.append(ao);
-            return ao;
-        }
+    case AudioOutputClass:
+        return new AudioOutput(this, parent);
+
     case EffectClass:
         return new AudioEffect(this, args[0].toInt(), parent);
 
     case AudioDataOutputClass:
-        logMessage("createObject() : AudioDataOutput not implemented");
-        break;
+        return new AudioDataOutput(this, parent);
 
     case VideoDataOutputClass:
         logMessage("createObject() : VideoDataOutput not implemented");

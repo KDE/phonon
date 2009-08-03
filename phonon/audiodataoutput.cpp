@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation
+    successor approved by the membership of KDE e.V.), Nokia Corporation 
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
+    You should have received a copy of the GNU Lesser General Public 
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -31,13 +31,16 @@ namespace Phonon
 
 PHONON_HEIR_IMPL(AbstractAudioOutput)
 
+PHONON_GETTER(Phonon::AudioDataOutput::Format, format, d->format)
 PHONON_GETTER(int, dataSize, d->dataSize)
 PHONON_GETTER(int, sampleRate, -1)
+PHONON_SETTER(setFormat, format, Phonon::AudioDataOutput::Format)
 PHONON_SETTER(setDataSize, dataSize, int)
 
 bool AudioDataOutputPrivate::aboutToDeleteBackendObject()
 {
     Q_ASSERT(m_backendObject);
+    pBACKEND_GET(Phonon::AudioDataOutput::Format, format, "format");
     pBACKEND_GET(int, dataSize, "dataSize");
 
     return AbstractAudioOutputPrivate::aboutToDeleteBackendObject();
@@ -50,13 +53,17 @@ void AudioDataOutputPrivate::setupBackendObject()
     AbstractAudioOutputPrivate::setupBackendObject();
 
     // set up attributes
+    pBACKEND_CALL1("setFormat", Phonon::AudioDataOutput::Format, format);
     pBACKEND_CALL1("setDataSize", int, dataSize);
 
     qRegisterMetaType<QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > >("QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >");
-
+        qRegisterMetaType<QMap<Phonon::AudioDataOutput::Channel, QVector<float> > >("QMap<Phonon::AudioDataOutput::Channel, QVector<float> >");
     QObject::connect(m_backendObject,
             SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &)),
             q, SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &)));
+    QObject::connect(m_backendObject,
+            SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<float> > &)),
+            q, SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<float> > &)));
     QObject::connect(m_backendObject, SIGNAL(endOfMedia(int)), q, SIGNAL(endOfMedia(int)));
 }
 

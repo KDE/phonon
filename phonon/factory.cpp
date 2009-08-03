@@ -325,6 +325,7 @@ FACTORY_IMPL(AudioOutput)
 #ifndef QT_NO_PHONON_VIDEO
 FACTORY_IMPL(VideoWidget)
 #endif //QT_NO_PHONON_VIDEO
+FACTORY_IMPL(AudioDataOutput)
 
 #undef FACTORY_IMPL
 

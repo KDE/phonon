@@ -35,10 +35,12 @@ class AudioDataOutputPrivate : public AbstractAudioOutputPrivate
     PHONON_PRIVATECLASS
     protected:
         AudioDataOutputPrivate()
-            : dataSize(512)
+            : format(AudioDataOutput::IntegerFormat)
+            , dataSize(512)
         {
         }
 
+        AudioDataOutput::Format format;
         int dataSize;
 };
 
