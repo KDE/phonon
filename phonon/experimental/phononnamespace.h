@@ -23,7 +23,7 @@
 #ifndef PHONON_X_PHONONNAMESPACE_H
 #define PHONON_X_PHONONNAMESPACE_H
 
-#include <phonon/phononnamespace.h>
+#include "../phononnamespace.h"
 
 namespace Phonon
 {

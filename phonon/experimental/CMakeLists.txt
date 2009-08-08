@@ -2,7 +2,9 @@ add_subdirectory(tests)
 
 ########### libphononexperimental ###############
 set(phononexperimental_LIB_SRCS
+    abstractaudiodataoutput.cpp
     abstractvideodataoutput.cpp
+    audiodataoutput.cpp
     audioformat.cpp
     avcapture.cpp
     backendcapabilities.cpp
@@ -29,7 +31,10 @@ install(TARGETS phononexperimental ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install headers ###############
 install(FILES
+    abstractaudiodataoutput.h
     abstractvideodataoutput.h
+    audiodataoutput.h
+    audiodataoutputinterface.h
     audioformat.h
     avcapture.h
     backendcapabilities.h

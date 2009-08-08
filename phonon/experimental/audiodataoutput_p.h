@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,23 +19,35 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef PHONON_EXPERIMENTAL_BACKENDINTERFACE_H
-#define PHONON_EXPERIMENTAL_BACKENDINTERFACE_H
+
+#ifndef AUDIODATAOUTPUT_P_H
+#define AUDIODATAOUTPUT_P_H
+
+#include "audiodataoutput.h"
+#include "../abstractaudiooutput_p.h"
 
 namespace Phonon
 {
 namespace Experimental
 {
-namespace BackendInterface
+
+class AudioDataOutputPrivate : public AbstractAudioOutputPrivate
 {
-enum Class {
-    VideoDataOutputClass = 0x10000,
-    AudioDataOutputClass,
-    VisualizationClass,
-    AvCaptureClass
+    Q_DECLARE_PUBLIC(AudioDataOutput)
+    PHONON_PRIVATECLASS
+    protected:
+        AudioDataOutputPrivate()
+            : format(AudioDataOutput::IntegerFormat)
+            , dataSize(512)
+        {
+        }
+
+        AudioDataOutput::Format format;
+        int dataSize;
 };
-} // namespace BackendInterface
+
 } // namespace Experimental
 } // namespace Phonon
 
-#endif // PHONON_EXPERIMENTAL_BACKENDINTERFACE_H
+#endif // AUDIODATAOUTPUT_P_H
+// vim: sw=4 ts=4 tw=80
