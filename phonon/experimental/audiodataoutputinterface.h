@@ -19,23 +19,29 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef PHONON_EXPERIMENTAL_BACKENDINTERFACE_H
-#define PHONON_EXPERIMENTAL_BACKENDINTERFACE_H
+
+#ifndef PHONON_X_AUDIODATAOUTPUTINTERFACE_H
+#define PHONON_X_AUDIODATAOUTPUTINTERFACE_H
 
 namespace Phonon
 {
 namespace Experimental
 {
-namespace BackendInterface
+
+class AbstractAudioDataOutput;
+
+class AudioDataOutputInterface
 {
-enum Class {
-    VideoDataOutputClass = 0x10000,
-    AudioDataOutputClass,
-    VisualizationClass,
-    AvCaptureClass
+    public:
+        virtual ~AudioDataOutputInterface() {}
+
+        virtual AbstractAudioDataOutput *frontendObject() const = 0;
+        virtual void setFrontendObject(AbstractAudioDataOutput *) = 0;
 };
-} // namespace BackendInterface
+
 } // namespace Experimental
 } // namespace Phonon
 
-#endif // PHONON_EXPERIMENTAL_BACKENDINTERFACE_H
+Q_DECLARE_INTERFACE(Phonon::Experimental::AudioDataOutputInterface, "0AudioDataOutputInterface.phonon.kde.org")
+
+#endif // PHONON_X_AUDIODATAOUTPUTINTERFACE_H
