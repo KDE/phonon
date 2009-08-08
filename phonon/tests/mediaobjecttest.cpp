@@ -272,7 +272,7 @@ void MediaObjectTest::initTestCase()
 
     QSignalSpy totalTimeChangedSignalSpy(m_media, SIGNAL(totalTimeChanged(qint64)));
     QVERIFY(m_media->queue().isEmpty());
-    QCOMPARE(m_media->currentSource().type(), MediaSource::Invalid);
+    QCOMPARE(m_media->currentSource().type(), MediaSource::Empty);
     QCOMPARE(m_media->state(), Phonon::LoadingState);
     QCOMPARE(m_stateChangedSignalSpy->count(), 0);
     if (m_file) {
