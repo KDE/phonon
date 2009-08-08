@@ -254,6 +254,7 @@ void MediaObject::setSource(const MediaSource &source)
     setState(Phonon::LoadingState);
     switch (m_source.type()) {
     case MediaSource::Invalid:
+    case MediaSource::Empty:
         return;
     case MediaSource::Disc:
         Q_ASSERT(m_source.discType() != NoDisc);
@@ -391,7 +392,7 @@ void MediaObject::emitTick()
     if (currentTime() >= totalTime()) // finished
     {
         emit aboutToFinish();
-        if (m_nextSource.type() == MediaSource::Invalid) {
+        if (m_nextSource.type() == MediaSource::Empty || m_nextSource.type() == MediaSource::Invalid) {
             stop();
             emit finished();
         } else {
@@ -399,6 +400,7 @@ void MediaObject::emitTick()
             m_source = m_nextSource;
             m_nextSource = MediaSource();
             switch (m_source.type()) {
+            case MediaSource::Empty:
             case MediaSource::Invalid:
                 abort();
             case MediaSource::Disc:
