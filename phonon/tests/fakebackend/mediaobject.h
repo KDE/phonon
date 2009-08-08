@@ -113,11 +113,14 @@ namespace Fake
             void availableChaptersChanged(int);
             void angleChanged(int);
             void availableAnglesChanged(int);
+            void availableAudioChannelsChanged();
+            void availableSubtitlesChanged();
 
             void finished();
             void prefinishMarkReached(qint32);
             void aboutToFinish();
             void totalTimeChanged(qint64 length);
+            void currentSourceChanged(const MediaSource &);
 
         protected:
             void fillBuffer(QVector<float> *buffer);

@@ -275,6 +275,7 @@ void MediaObject::setSource(const MediaSource &source)
     metaData.insert("TITLE", "Fake video");
     metaData.insert("ARTIST", "Matthias Kretz");
     emit metaDataChanged(metaData);
+    emit currentSourceChanged(m_source);
     QTimer::singleShot(50, this, SLOT(loadingComplete()));
 }
 
