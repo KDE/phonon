@@ -39,6 +39,7 @@ PHONON_EXECUTABLE_TESTS(
 	#bytestreamtest2
 	seekslidertest
 	volumeslidertest
+	audiodataoutputtest
 	)
 
 PHONON_UNIT_TESTS(
@@ -56,6 +57,7 @@ PHONON_UNIT_TESTS_FAKE(
 	#bytestreamtest2
 	seekslidertest
 	volumeslidertest
+	audiodataoutputtest
 )
 target_link_libraries(backendcapabilitiestest ${PHONON_KDECORE_LIBS})
 target_link_libraries(audiodevicelisttest ${PHONON_KAUDIODEVICELIST_LIBS})

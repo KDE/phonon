@@ -47,10 +47,8 @@ MACRO(PHONON_EXECUTABLE_TESTS)
 ENDMACRO(PHONON_EXECUTABLE_TESTS)
 
 PHONON_EXECUTABLE_TESTS(
-	audiodataoutputtest
    videodataoutputtest
 	)
 
 PHONON_UNIT_TESTS_FAKE(
-	audiodataoutputtest
 	)
