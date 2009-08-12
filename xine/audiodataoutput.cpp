@@ -68,7 +68,7 @@ AudioDataOutputXT::AudioDataOutputXT(AudioDataOutput *output) :
 
 AudioDataOutputXT::~AudioDataOutputXT()
 {
-    xine_post_dispose(m_xine, &((post_plugin_t*)m_plugin)->xine_post);
+    //xine_post_dispose(m_xine, &((post_plugin_t*)m_plugin)->xine_post); //TODO
     delete m_plugin;
 }
 
@@ -223,8 +223,8 @@ AudioDataOutput::AudioDataOutput(QObject*)
 
 AudioDataOutput::~AudioDataOutput()
 {
-    K_XT(AudioDataOutput);
-    delete xt;
+    //K_XT(AudioDataOutput);
+    //delete xt;
 }
 
 inline void AudioDataOutput::packetReady(const int samples, const qint16 *buffer, const qint64 vpts)
