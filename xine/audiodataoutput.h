@@ -118,7 +118,6 @@ class AudioDataOutput : public QObject,
         //Getters
         MediaStreamTypes inputMediaStreamTypes() const { return Phonon::Xine::Audio; }
         MediaStreamTypes outputMediaStreamTypes() const { return Phonon::Xine::Audio; }
-        Phonon::AudioDataOutput::Format format() const { return m_format; }
         Phonon::AudioDataOutput *frontendObject() const { return m_frontend; }
         int channels() const { return m_channels; }
         int dataSize() const { return m_dataSize; }
@@ -146,7 +145,6 @@ class AudioDataOutput : public QObject,
         int                           m_dataSize;
         int                         m_sampleRate;
         QList<Frame>       m_pendingFrames;
-        Phonon::AudioDataOutput::Format m_format;
         bool                        m_keepInSync;
         MediaObject               *m_mediaObject;
 

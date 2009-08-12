@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -37,7 +37,6 @@ class AudioDataOutputTest : public QObject
     private slots:
         void initTestCase();
         void testSampleRate();
-        void testFormat();
         void testDataSize();
         void cleanupTestCase();
 };
@@ -55,68 +54,6 @@ void AudioDataOutputTest::testSampleRate()
 {
     AudioDataOutput test(this);
     QVERIFY(test.sampleRate() > 0);
-}
-
-void AudioDataOutputTest::testFormat()
-{
-    qRegisterMetaType<QMap<Phonon::AudioDataOutput::Channel, QVector<float> > >
-        ("QMap<Phonon::AudioDataOutput::Channel,QVector<float> >");
-    qRegisterMetaType<QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > >
-        ("QMap<Phonon::AudioDataOutput::Channel,QVector<qint16> >");
-    AudioDataOutput test(this);
-    QSignalSpy floatReadySpy(&test, SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<float> > &)));
-    QSignalSpy intReadySpy(&test, SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &)));
-    QCOMPARE(floatReadySpy.size(), 0);
-    QCOMPARE(intReadySpy.size(), 0);
-    QCOMPARE(test.format(), Phonon::AudioDataOutput::IntegerFormat);
-    test.setFormat(Phonon::AudioDataOutput::IntegerFormat);
-    QCOMPARE(test.format(), Phonon::AudioDataOutput::IntegerFormat);
-    test.setFormat(Phonon::AudioDataOutput::FloatFormat);
-    QCOMPARE(test.format(), Phonon::AudioDataOutput::FloatFormat);
-    test.setFormat(Phonon::AudioDataOutput::FloatFormat);
-    QCOMPARE(test.format(), Phonon::AudioDataOutput::FloatFormat);
-    test.setFormat(Phonon::AudioDataOutput::IntegerFormat);
-    QCOMPARE(test.format(), Phonon::AudioDataOutput::IntegerFormat);
-
-    MediaObject media(this);
-    QUrl url(testUrl());
-    media.setCurrentSource(url);
-    Path path = createPath(&media, &test);
-    QVERIFY(media.outputPaths().contains(path));
-    QVERIFY(test.inputPaths().contains(path));
-
-    QCOMPARE(floatReadySpy.size(), 0);
-    QCOMPARE(intReadySpy.size(), 0);
-
-    media.play();
-    QTime startTime;
-    startTime.start();
-    while (startTime.elapsed() < 1000)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    QVERIFY(intReadySpy.size() > 0);
-    QCOMPARE(floatReadySpy.size(), 0);
-
-    media.pause();
-    test.setFormat(Phonon::AudioDataOutput::FloatFormat);
-    QCOMPARE(test.format(), Phonon::AudioDataOutput::FloatFormat);
-    intReadySpy.clear();
-    media.play();
-    startTime.start();
-    while (startTime.elapsed() < 1000)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    QVERIFY(floatReadySpy.size() > 0);
-    QCOMPARE(intReadySpy.size(), 0);
-
-    media.pause();
-    test.setFormat(Phonon::AudioDataOutput::IntegerFormat);
-    QCOMPARE(test.format(), Phonon::AudioDataOutput::IntegerFormat);
-    floatReadySpy.clear();
-    media.play();
-    startTime.start();
-    while (startTime.elapsed() < 1000)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-    QVERIFY(intReadySpy.size() > 0);
-    QCOMPARE(floatReadySpy.size(), 0);
 }
 
 void AudioDataOutputTest::testDataSize()

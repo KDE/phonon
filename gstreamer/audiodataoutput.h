@@ -48,10 +48,8 @@ namespace Gstreamer
             ~AudioDataOutput();
 
         public Q_SLOTS:
-            Phonon::AudioDataOutput::Format format() const;
             int dataSize() const;
             int sampleRate() const;
-            void setFormat(Phonon::AudioDataOutput::Format format);
             void setDataSize(int size);
 
         public:
@@ -74,7 +72,6 @@ namespace Gstreamer
         private:
             void convertAndEmit(const QVector<qint16>&, const QVector<qint16>&);
 
-            Phonon::AudioDataOutput::Format m_format;
             GstElement *m_queue;
             int m_dataSize;
             QVector<qint16> m_pendingData;
