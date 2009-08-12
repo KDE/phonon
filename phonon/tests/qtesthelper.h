@@ -81,6 +81,8 @@ namespace QTest
             return qstrdup("QVariant::Double");
         case QVariant::Font:
             return qstrdup("QVariant::Font");
+        case QVariant::Hash:
+            return qstrdup("QVariant::Hash");
         case QVariant::Icon:
             return qstrdup("QVariant::Icon");
         case QVariant::Image:
