@@ -35,8 +35,7 @@ namespace Gstreamer
 {
 AudioDataOutput::AudioDataOutput(Backend *backend, QObject *parent)
     : QObject(parent),
-    MediaNode(backend, AudioSink | AudioSource),
-    m_format(Phonon::AudioDataOutput::IntegerFormat)
+    MediaNode(backend, AudioSink | AudioSource)
 {
     static int count = 0;
     m_name = "AudioDataOutput" + QString::number(count++);
@@ -52,11 +51,6 @@ AudioDataOutput::~AudioDataOutput()
     gst_object_unref(m_queue);
 }
 
-Phonon::AudioDataOutput::Format AudioDataOutput::format() const
-{
-    return Phonon::AudioDataOutput::IntegerFormat;
-}
-
 int AudioDataOutput::dataSize() const
 {
     return m_dataSize;
@@ -65,10 +59,6 @@ int AudioDataOutput::dataSize() const
 int AudioDataOutput::sampleRate() const
 {
     return 44100;
-}
-
-void AudioDataOutput::setFormat(Phonon::AudioDataOutput::Format)
-{
 }
 
 void AudioDataOutput::setDataSize(int size)

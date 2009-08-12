@@ -215,7 +215,6 @@ void AudioDataOutputXT::putBufferCallback(xine_audio_port_t * port_gen, audio_bu
 AudioDataOutput::AudioDataOutput(QObject*)
 : SinkNode(new AudioDataOutputXT(this))
 , SourceNode(static_cast<AudioDataOutputXT *>(SinkNode::m_threadSafeObject.data()))
-, m_format(Phonon::AudioDataOutput::IntegerFormat)
 , m_mediaObject(0)
 {
     m_keepInSync = false;
@@ -229,10 +228,6 @@ AudioDataOutput::~AudioDataOutput()
 
 inline void AudioDataOutput::packetReady(const int samples, const qint16 *buffer, const qint64 vpts)
 {
-    //TODO: support floats, we currently only handle ints
-    if (m_format == Phonon::AudioDataOutput::FloatFormat)
-        return;
-
     if (m_channels < 0 || m_channels > 2)
         return;
 
