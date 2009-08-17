@@ -40,7 +40,7 @@ AudioDataOutput::AudioDataOutput(Backend *backend, QObject *parent)
     static int count = 0;
     m_name = "AudioDataOutput" + QString::number(count++);
 
-    m_queue = gst_element_factory_make ("queue", NULL);
+    m_queue = gst_element_factory_make ("identify", NULL);
     gst_object_ref(m_queue);
     m_isValid = true;
 }
