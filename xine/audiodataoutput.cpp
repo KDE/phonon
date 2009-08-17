@@ -218,6 +218,7 @@ AudioDataOutput::AudioDataOutput(QObject*)
 , m_mediaObject(0)
 {
     m_keepInSync = false;
+    m_sampleRate = 44100;
 }
 
 AudioDataOutput::~AudioDataOutput()
