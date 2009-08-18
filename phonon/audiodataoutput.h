@@ -105,6 +105,23 @@ namespace Phonon
              * \param data A mapping of Channel to a vector holding the audio data.
              */
             void dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &data);
+
+
+            /**
+             * This signal is emitted before the last dataReady signal of a
+             * media is emitted.
+             *
+             * If, for example, the playback of a media file has finished and the
+             * last audio data of that file is going to be passed with the next
+             * dataReady signal, and only the 28 first samples of the data
+             * vector are from that media file endOfMedia will be emitted right
+             * before dataReady with \p remainingSamples = 28.
+             *
+             * \param remainingSamples The number of samples in the next
+             * dataReady vector that belong to the media that was playing to
+             * this point.
+             */
+            void endOfMedia(int remainingSamples);
     };
 } // namespace Phonon
 
