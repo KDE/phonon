@@ -32,10 +32,10 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-class VideoWidgetInterface43
+class VideoWidgetInterface
 {
     public:
-        virtual ~VideoWidgetInterface43() {}
+        virtual ~VideoWidgetInterface() {}
 
         virtual Phonon::VideoWidget::AspectRatio aspectRatio() const = 0;
         virtual void setAspectRatio(Phonon::VideoWidget::AspectRatio) = 0;
@@ -54,7 +54,7 @@ class VideoWidgetInterface43
 //X        virtual bool createOverlay(QWidget *widget, int type) = 0;
 };
 
-class VideoWidgetInterface44 : public VideoWidgetInterface43
+class VideoWidgetInterface44 : public VideoWidgetInterface
 {
     public:
         virtual QImage snapshot() const = 0;
@@ -62,14 +62,13 @@ class VideoWidgetInterface44 : public VideoWidgetInterface43
 }
 
 #ifdef PHONON_BACKEND_VERSION_4_4
-namespace Phonon { typedef VideoWidgetInterface44 VideoWidgetInterface; }
-Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface, "VideoWidgetInterface44.phonon.kde.org")
-Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface43,   "VideoWidgetInterface.phonon.kde.org")
+namespace Phonon { typedef VideoWidgetInterface44 VideoWidgetInterfaceLatest; }
 #else
-namespace Phonon { typedef VideoWidgetInterface43 VideoWidgetInterface; }
-Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface44,   "VideoWidgetInterface44.phonon.kde.org")
-Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface, "VideoWidgetInterface.phonon.kde.org")
+namespace Phonon { typedef VideoWidgetInterface VideoWidgetInterfaceLatest; }
 #endif
+
+Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface44, "VideoWidgetInterface44.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface, "VideoWidgetInterface3.phonon.kde.org")
 
 #endif //QT_NO_PHONON_VIDEO
 

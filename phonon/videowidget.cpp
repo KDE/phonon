@@ -29,7 +29,7 @@
 
 #include <QtGui/QAction>
 #define IFACES4 VideoWidgetInterface44
-#define IFACES0 VideoWidgetInterface43, IFACES4
+#define IFACES0 VideoWidgetInterface, IFACES4
 #define PHONON_INTERFACENAME IFACES0
 
 QT_BEGIN_NAMESPACE
