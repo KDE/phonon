@@ -251,6 +251,7 @@ private:
     MediaSource m_nextSource;
     qint32 m_prefinishMark;
     qint32 m_transitionTime;
+	bool m_isStream;
 
     qint64 m_posAtSeek;
 
