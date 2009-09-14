@@ -17,10 +17,20 @@ project(phonon-gstreamer)
 include(ConfigureChecks.cmake)
 
 if (BUILD_PHONON_GSTREAMER)
-   include_directories(${GSTREAMER_INCLUDE_DIR} ${GLIB2_INCLUDE_DIR}
+   include_directories(
+	  ${CMAKE_CURRENT_BINARY_DIR}
+	  ${GSTREAMER_INCLUDE_DIR} 
+	  ${GLIB2_INCLUDE_DIR}
       ${LIBXML2_INCLUDE_DIR}
-       ${X11_X11_INCLUDE_PATH})
+	  ${X11_X11_INCLUDE_PATH})
    add_definitions(-DPHONON_BACKEND_VERSION_4_2)
+
+   # configure plugin api
+   if(USE_INSTALL_PLUGIN)
+      set(PLUGIN_INSTALL_API TRUE)
+   endif(USE_INSTALL_PLUGIN)
+
+   configure_file(phonon-config-gstreamer.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon-config-gstreamer.h )
 
    set(phonon_gstreamer_SRCS
       audiooutput.cpp
@@ -69,6 +79,9 @@ if (BUILD_PHONON_GSTREAMER)
    if(ALSA_FOUND)
       target_link_libraries(phonon_gstreamer ${ASOUND_LIBRARY})
    endif(ALSA_FOUND)
+   if(USE_INSTALL_PLUGIN)
+       target_link_libraries(phonon_gstreamer ${GSTREAMER_PLUGIN_PBUTILS_LIBRARIES})
+   endif(USE_INSTALL_PLUGIN)
 
    install(TARGETS phonon_gstreamer DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/phonon_backend)
    install(FILES gstreamer.desktop DESTINATION ${SERVICES_INSTALL_DIR}/phononbackends)

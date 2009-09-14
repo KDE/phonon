@@ -16,6 +16,7 @@
 */
 #include <cmath>
 #include <gst/interfaces/propertyprobe.h>
+#include <gst/pbutils/install-plugins.h>
 #include "common.h"
 #include "mediaobject.h"
 #include "videowidget.h"
@@ -23,6 +24,7 @@
 #include "backend.h"
 #include "streamreader.h"
 #include "phononsrc.h"
+#include "phonon-config-gstreamer.h"
 #include <QtCore>
 #include <QtCore/QTimer>
 #include <QtCore/QVector>
@@ -53,6 +55,7 @@ MediaObject::MediaObject(Backend *backend, QObject *parent)
         , m_tickTimer(new QTimer(this))
         , m_prefinishMark(0)
         , m_transitionTime(0)
+        , m_isStream(false)
         , m_posAtSeek(-1)
         , m_prefinishMarkReachedNotEmitted(true)
         , m_aboutToFinishEmitted(false)
@@ -136,6 +139,12 @@ QString stateString(const Phonon::State &state)
     return QString();
 }
 
+void
+pluginInstallationDone( GstInstallPluginsReturn res, gpointer userData )
+{
+    // Nothing inside yet
+}
+
 void MediaObject::saveState()
 {
     //Only first resumeState is respected
@@ -195,13 +204,35 @@ void MediaObject::noMorePadsAvailable ()
     if (m_missingCodecs.size() > 0) {
         bool canPlay = (m_hasAudio || m_videoStreamFound);
         Phonon::ErrorType error = canPlay ? Phonon::NormalError : Phonon::FatalError;
+#ifdef PLUGIN_INSTALL_API
+        GstInstallPluginsContext *ctx = gst_install_plugins_context_new ();
+        gchar *details[2];
+        details[0] = m_missingCodecs[0].toLocal8Bit().data();
+        details[1] = NULL;
+        GstInstallPluginsReturn status;
+        
+        status = gst_install_plugins_async( details, ctx, pluginInstallationDone, NULL );
+        gst_install_plugins_context_free ( ctx );
+
+        if ( status != GST_INSTALL_PLUGINS_STARTED_OK )
+        {
+            if( status == GST_INSTALL_PLUGINS_HELPER_MISSING )
+                setError(QString(tr("Missing codec helper script assistant.")), Phonon::FatalError );
+            else
+                setError(QString(tr("Plugin codec installation failed for codec: %0"))
+                        .arg(m_missingCodecs[0].split("|")[3]), error);
+        }
+        m_missingCodecs.clear();
+#else
+        QString codecs = m_missingCodecs.join(", ");
+
         if (error == Phonon::NormalError && m_hasVideo && !m_videoStreamFound) {
             m_hasVideo = false;
             emit hasVideoChanged(false);
         }
-        QString codecs = m_missingCodecs.join(", ");
         setError(QString(tr("A required codec is missing. You need to install the following codec(s) to play this content: %0")).arg(codecs), error);
         m_missingCodecs.clear();
+#endif
     }
 }
 
@@ -244,7 +275,16 @@ void MediaObject::cb_unknown_type (GstElement *decodebin, GstPad *pad, GstCaps *
         GstStructure *str = gst_caps_get_structure (caps, 0);
         value = QString::fromUtf8(gst_structure_get_name (str));
     }
-    media->addMissingCodecName(value);
+
+#ifdef PLUGIN_INSTALL_API
+    QString plugins = QString("gstreamer|0.10|%0|%1|decoder-%2")
+        .arg( qApp->applicationName() )
+        .arg( value )
+        .arg( QString::fromUtf8(gst_caps_to_string (caps) ) );
+    media->addMissingCodecName( plugins );
+#else
+    media->addMissingCodecName( value );
+#endif
 }
 
 static void notifyVideoCaps(GObject *obj, GParamSpec *, gpointer data)
@@ -368,6 +408,14 @@ bool MediaObject::createPipefromURL(const QUrl &url)
     m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), (const char*)NULL);
     if (!m_datasource)
         return false;
+    
+    /* make HTTP sources send extra headers so we get icecast
+     * metadata in case the stream is an icecast stream */
+    if (encoded_cstr_url.startsWith("http://")
+        && g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "iradio-mode")) {
+        g_object_set (m_datasource, "iradio-mode", TRUE, NULL);
+        m_isStream = true;
+    }
 
     // Link data source into pipeline
     gst_bin_add(GST_BIN(m_pipeline), m_datasource);
@@ -868,8 +916,9 @@ void MediaObject::setSource(const MediaSource &source)
     setTotalTime(-1);
     m_atEndOfStream = false;
 
-    // Clear exising meta tags
+    // Clear existing meta tags
     m_metaData.clear();
+    m_isStream = false;
 
     switch (source.type()) {
     case MediaSource::Url: {            
@@ -1175,14 +1224,98 @@ void MediaObject::handleBusMessage(const Message &message)
             GstTagList* tag_list = 0;
             gst_message_parse_tag(gstMessage, &tag_list);
             if (tag_list) {
-                TagMap oldMap = m_metaData; // Keep a copy of the old one for reference
-                // Append any new meta tags to the existing tag list
-                gst_tag_list_foreach (tag_list, &foreach_tag_function, &m_metaData);
-                m_backend->logMessage("Meta tags found", Backend::Info, this);
-                if (oldMap != m_metaData && !m_loading)
-                    emit metaDataChanged(m_metaData);
+                TagMap newTags;
+                gst_tag_list_foreach (tag_list, &foreach_tag_function, &newTags);
                 gst_tag_list_free(tag_list);
-            }
+
+                // Determine if we should no fake the album/artist tags.
+                // This is a little confusing as we want to fake it on initial
+                // connection where title, album and artist are all missing.
+                // There are however times when we get just other information,
+                // e.g. codec, and so we want to only do clever stuff if we
+                // have a commonly available tag (ORGANIZATION) or we have a
+                // change in title
+                bool fake_it =
+                   (m_isStream
+                    && ((!newTags.contains("TITLE")
+                         && newTags.contains("ORGANIZATION"))
+                        || (newTags.contains("TITLE")
+                            && m_metaData.value("TITLE") != newTags.value("TITLE")))
+                    && !newTags.contains("ALBUM")
+                    && !newTags.contains("ARTIST"));
+
+                TagMap oldMap = m_metaData; // Keep a copy of the old one for reference
+
+                // Now we've checked the new data, append any new meta tags to the existing tag list
+                // We cannot use TagMap::iterator as this is a multimap and when streaming data
+                // could in theory be lost.
+                QList<QString> keys = newTags.keys();
+                for (QList<QString>::iterator i = keys.begin(); i != keys.end(); ++i) {
+                    QString key = *i;
+                    if (m_isStream) {
+                        // If we're streaming, we need to remove data in m_metaData
+                        // in order to stop it filling up indefinitely (as it's a multimap)
+                        m_metaData.remove(key);
+                    }
+                    QList<QString> values = newTags.values(key);
+                    for (QList<QString>::iterator j = values.begin(); j != values.end(); ++j) {
+                        QString value = *j;
+                        QString currVal = m_metaData.value(key);
+                        if (!m_metaData.contains(key) || currVal != value) {
+                            m_metaData.insert(key, value);
+                        }
+                    }
+                }
+
+                m_backend->logMessage("Meta tags found", Backend::Info, this);
+                if (oldMap != m_metaData) {
+                    // This is a bit of a hack to ensure that stream metadata is
+                    // returned. We get as much as we can from the Shoutcast server's
+                    // StreamTitle= header. If further info is decoded from the stream
+                    // itself later, then it will overwrite this info.
+                    if (m_isStream && fake_it) {
+                        m_metaData.remove("ALBUM");
+                        m_metaData.remove("ARTIST");
+
+                        // Detect whether we want to "fill in the blanks"
+                        QString str;
+                        if (m_metaData.contains("TITLE"))
+                        {
+                            str = m_metaData.value("TITLE");
+                            int splitpoint;
+                            // Check to see if our title matches "%s - %s"
+                            // Where neither %s are empty...
+                            if ((splitpoint = str.indexOf(" - ")) > 0
+                                && str.size() > (splitpoint+3)) {
+                                m_metaData.insert("ARTIST", str.left(splitpoint));
+                                m_metaData.replace("TITLE", str.mid(splitpoint+3));
+                            }
+                        } else {
+                            str = m_metaData.value("GENRE");
+                            if (!str.isEmpty())
+                                m_metaData.insert("TITLE", str);
+                            else
+                                m_metaData.insert("TITLE", "Streaming Data");
+                        }
+                        if (!m_metaData.contains("ARTIST")) {
+                            str = m_metaData.value("LOCATION");
+                            if (!str.isEmpty())
+                                m_metaData.insert("ARTIST", str);
+                            else
+                                m_metaData.insert("ARTIST", "Streaming Data");
+                        }
+                        str = m_metaData.value("ORGANIZATION");
+                        if (!str.isEmpty())
+                            m_metaData.insert("ALBUM", str);
+                        else
+                            m_metaData.insert("ALBUM", "Streaming Data");
+                    }
+                    // As we manipulate the title, we need to recompare
+                    // oldMap and m_metaData here...
+                    if (oldMap != m_metaData && !m_loading)
+                        emit metaDataChanged(m_metaData);
+                }
+			}
         }
         break;
 
