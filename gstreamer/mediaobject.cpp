@@ -1053,6 +1053,9 @@ void MediaObject::getStreamInfo()
         gint64 titleCount;
         GstFormat format = gst_format_get_by_nick("track");
         if (gst_element_query_duration (m_pipeline, &format, &titleCount)) {
+        //check if returned format is still "track",
+        //gstreamer sometimes returns the total time, if tracks information is not available.
+        if (qstrcmp(gst_format_get_name(format), "track") == 0)  {
             int oldAvailableTitles = m_availableTitles;
             m_availableTitles = (int)titleCount;
             if (m_availableTitles != oldAvailableTitles) {
@@ -1061,7 +1064,6 @@ void MediaObject::getStreamInfo()
             }
         }
     }
-
 }
 
 void MediaObject::setPrefinishMark(qint32 newPrefinishMark)
