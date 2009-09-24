@@ -44,9 +44,7 @@ namespace Gstreamer
 AudioDevice::AudioDevice(DeviceManager *manager, const QByteArray &gstId)
         : gstId(gstId)
 {
-    //get an id
-    static int counter = 0;
-    id = counter++;
+    id = manager->allocateDeviceId();
     //get name from device
     if (gstId == "default") {
         description = "Default audio device";
@@ -71,6 +69,7 @@ AudioDevice::AudioDevice(DeviceManager *manager, const QByteArray &gstId)
 DeviceManager::DeviceManager(Backend *backend)
         : QObject(backend)
         , m_backend(backend)
+        , m_audioDeviceCounter(0)
 {
     QSettings settings(QLatin1String("Trolltech"));
     settings.beginGroup(QLatin1String("Qt"));
@@ -266,6 +265,15 @@ AbstractRenderer *DeviceManager::createVideoRenderer(VideoWidget *parent)
     return new WidgetRenderer(parent);
 }
 
+/**
+ * Allocate a device id for a new audio device
+ */
+int DeviceManager::allocateDeviceId()
+{
+    return m_audioDeviceCounter++;
+}
+
+
 /*
  * Returns a positive device id or -1 if device
  * does not exist
@@ -283,16 +291,15 @@ int DeviceManager::deviceId(const QByteArray &gstId) const
 }
 
 /**
- * Get a human-readable description from a device id
- */
-QByteArray DeviceManager::deviceDescription(int id) const
+* Get the AudioDevice for a given device id
+*/
+AudioDevice* DeviceManager::audioDevice(int id)
 {
     for (int i = 0 ; i < m_audioDeviceList.size() ; ++i) {
-        if (m_audioDeviceList[i].id == id) {
-            return m_audioDeviceList[i].description;
-        }
+        if (m_audioDeviceList[i].id == id)
+            return &m_audioDeviceList[i];
     }
-    return QByteArray();
+    return NULL;
 }
 
 /**
