@@ -85,7 +85,8 @@ Backend::Backend(QObject *parent, const QVariantList &)
 
 Backend::~Backend() 
 {
-    gst_deinit();
+    delete m_effectManager;
+    delete m_deviceManager;
 }
 
 gboolean Backend::busCall(GstBus *bus, GstMessage *msg, gpointer data)
