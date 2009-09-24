@@ -280,10 +280,10 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
 
     switch (type) {
     case Phonon::AudioOutputDeviceType: {
-            QList<AudioDevice> audioDevices = deviceManager()->audioOutputDevices();
-            if (index >= 0 && index < audioDevices.size()) {
-                ret.insert("name", audioDevices[index].gstId);
-                ret.insert("description", audioDevices[index].description);
+            AudioDevice* ad;
+            if ((ad = deviceManager()->audioDevice(index))) {
+                ret.insert("name", ad->gstId);
+                ret.insert("description", ad->description);
                 ret.insert("icon", QLatin1String("audio-card"));
             }
         }

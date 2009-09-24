@@ -135,12 +135,12 @@ bool AudioOutput::setOutputDevice(int newDevice)
     }
 
     bool success = false;
-    const QList<AudioDevice> deviceList = m_backend->deviceManager()->audioOutputDevices();
-    if (m_audioSink &&  newDevice >= 0 && newDevice < deviceList.size()) {
+    AudioDevice* ad;
+    if (m_audioSink &&  newDevice >= 0 && (ad = m_backend->deviceManager()->audioDevice(newDevice))) {
         // Save previous state
         GstState oldState = GST_STATE(m_audioSink);
         const QByteArray oldDeviceValue = GstHelper::property(m_audioSink, "device");
-        const QByteArray deviceId = deviceList.at(newDevice).gstId;
+        const QByteArray deviceId = ad->gstId;
         m_device = newDevice;
 
         // We test if the device can be opened by checking if it can go from NULL to READY state
