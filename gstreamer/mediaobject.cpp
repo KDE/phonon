@@ -143,6 +143,8 @@ void
 pluginInstallationDone( GstInstallPluginsReturn res, gpointer userData )
 {
     // Nothing inside yet
+    Q_UNUSED(res);
+    Q_UNUSED(userData);
 }
 
 void MediaObject::saveState()
