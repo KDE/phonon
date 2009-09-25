@@ -382,7 +382,7 @@ static post_plugin_t *kvolumefader_open_plugin(post_class_t *class_gen, int inpu
     Q_UNUSED(inputs);
     Q_UNUSED(video_target);
 
-    kvolumefader_plugin_t *that = static_cast<kvolumefader_plugin_t *>(qMalloc(sizeof(kvolumefader_plugin_t)));
+    kvolumefader_plugin_t *that = static_cast<kvolumefader_plugin_t *>(calloc(1, sizeof(kvolumefader_plugin_t)));
     post_in_t             *input;
     post_out_t            *output;
     xine_post_in_t        *input_api;
@@ -462,7 +462,7 @@ static void kvolumefader_class_dispose(post_class_t *class_gen)
 /* plugin class initialization function */
 void *init_kvolumefader_plugin (xine_t *xine, void *)
 {
-    kvolumefader_class_t *_class = static_cast<kvolumefader_class_t *>(malloc(sizeof(kvolumefader_class_t)));
+    kvolumefader_class_t *_class = static_cast<kvolumefader_class_t *>(calloc(1,sizeof(kvolumefader_class_t)));
 
     if (!_class) {
         return NULL;
