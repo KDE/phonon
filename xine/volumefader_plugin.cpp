@@ -159,7 +159,17 @@ static int set_parameters (xine_post_t *this_gen, void *param_gen)
     that->curvePosition = 0;
     that->fadeTime = param->fadeTime;
     that->curveLength = static_cast<int>((param->fadeTime * that->rate) / 1000);
-    that->oneOverCurveLength = 1000.0f / (param->fadeTime * that->rate);
+    if ( that->curveLength == 0 )
+    {
+        // we've been asked to fade instantly, so pre-calculate everything
+        that->oneOverCurveLength = 0.0f;
+        that->fadeStart += that->fadeDiff;
+        that->fadeDiff = 0.0f;
+    }
+    else
+    {
+        that->oneOverCurveLength = 1000.0f / (param->fadeTime * that->rate);
+    }
     const char *x = "unknown";
     switch (that->fadeCurve) {
     case Phonon::VolumeFaderEffect::Fade3Decibel:
@@ -284,7 +294,17 @@ static int kvolumefader_port_open(xine_audio_port_t *port_gen, xine_stream_t *st
         break;
     }
     that->curveLength = static_cast<int>((that->fadeTime * that->rate) / 1000);
-    that->oneOverCurveLength = 1000.0f / (that->fadeTime * that->rate);
+    if ( that->curveLength == 0 )
+    {
+        // we've been asked to fade instantly, so pre-calculate everything
+        that->oneOverCurveLength = 0.0f;
+        that->fadeStart += that->fadeDiff;
+        that->fadeDiff = 0.0f;
+    }
+    else
+    {
+        that->oneOverCurveLength = 1000.0f / (that->fadeTime * that->rate);
+    }
 
     return port->original_port->open(port->original_port, stream, bits, rate, mode);
 }
