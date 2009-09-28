@@ -99,9 +99,15 @@ void VolumeFaderEffect::setParameterValue(const EffectParameter &p, const QVaria
         break;
     case FadeToParameter:
         xt->m_parameters.fadeTo = newValue.toDouble();
+        if (xt->m_pluginApi) {
+            xt->m_pluginApi->set_parameters(xt->m_plugin, &xt->m_parameters);
+        }
         break;
     case FadeTimeParameter:
         xt->m_parameters.fadeTime = newValue.toInt();
+        if (xt->m_pluginApi) {
+            xt->m_pluginApi->set_parameters(xt->m_plugin, &xt->m_parameters);
+        }
         break;
     case StartFadeParameter:
         if (newValue.toBool()) {
@@ -152,6 +158,12 @@ void VolumeFaderEffect::setVolume(float volume)
 
     //debug() << Q_FUNC_INFO << volume;
     xt->m_parameters.currentVolume = volume;
+    // when we set the volume, set the fadeTo as well, so that we
+    // don't immediately fade back again
+    xt->m_parameters.fadeTo = volume;
+    if (xt->m_pluginApi) {
+        xt->m_pluginApi->set_parameters(xt->m_plugin, &xt->m_parameters);
+    }
 }
 
 Phonon::VolumeFaderEffect::FadeCurve VolumeFaderEffect::fadeCurve() const
@@ -169,6 +181,9 @@ void VolumeFaderEffect::setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve curve)
 
     //debug() << Q_FUNC_INFO << curve;
     xt->m_parameters.fadeCurve = curve;
+    if (xt->m_pluginApi) {
+        xt->m_pluginApi->set_parameters(xt->m_plugin, &xt->m_parameters);
+    }
 }
 
 void VolumeFaderEffect::fadeTo(float volume, int fadeTime)
