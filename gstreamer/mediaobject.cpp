@@ -419,7 +419,14 @@ bool MediaObject::createPipefromURL(const QUrl &url)
     m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), (const char*)NULL);
     if (!m_datasource)
         return false;
-    
+   
+    // Set optical disc speed to 2X for Audio CD
+    if ((m_source.discType() == Phonon::Cd)
+        && (g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "read-speed"))) {
+        g_object_set (G_OBJECT (m_datasource), "read-speed", 2, (const char*)NULL);
+        m_backend->logMessage(QString("new device speed : 2X"), Backend::Info, this);
+    }
+
     /* make HTTP sources send extra headers so we get icecast
      * metadata in case the stream is an icecast stream */
     if (encoded_cstr_url.startsWith("http://")
