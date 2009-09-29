@@ -405,6 +405,15 @@ bool MediaObject::createPipefromURL(const QUrl &url)
         return false;
     }
 
+    // Set the device for MediaSource::Disc
+    if ((m_source.type() == MediaSource::Disc) 
+        && (g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "device"))) {
+        QByteArray mediaDevice = QFile::encodeName(m_source.deviceName());
+        if (!mediaDevice.isEmpty()) {
+            g_object_set (G_OBJECT (m_datasource), "device", mediaDevice.constData(), (const char*)NULL);
+        }
+    }
+
     // Create a new datasource based on the input URL
     QByteArray encoded_cstr_url = url.toEncoded();
     m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), (const char*)NULL);
