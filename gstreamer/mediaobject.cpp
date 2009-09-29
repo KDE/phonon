@@ -1021,15 +1021,16 @@ void MediaObject::getStreamInfo()
         emit hasVideoChanged(m_hasVideo);
     }
 
-    m_availableTitles = 1;
-    gint64 titleCount;
-    GstFormat format = gst_format_get_by_nick("track");
-    if (gst_element_query_duration (m_pipeline, &format, &titleCount)) {
-        int oldAvailableTitles = m_availableTitles;
-        m_availableTitles = (int)titleCount;
-        if (m_availableTitles != oldAvailableTitles) {
-            emit availableTitlesChanged(m_availableTitles);
-            m_backend->logMessage(QString("Available titles changed: %0").arg(m_availableTitles), Backend::Info, this);
+    if (m_source.discType() == Phonon::Cd) {
+        gint64 titleCount;
+        GstFormat format = gst_format_get_by_nick("track");
+        if (gst_element_query_duration (m_pipeline, &format, &titleCount)) {
+            int oldAvailableTitles = m_availableTitles;
+            m_availableTitles = (int)titleCount;
+            if (m_availableTitles != oldAvailableTitles) {
+                emit availableTitlesChanged(m_availableTitles);
+                m_backend->logMessage(QString("Available titles changed: %0").arg(m_availableTitles), Backend::Info, this);
+            }      
         }
     }
 
