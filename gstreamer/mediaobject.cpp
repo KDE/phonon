@@ -405,27 +405,28 @@ bool MediaObject::createPipefromURL(const QUrl &url)
         return false;
     }
 
-    // Set the device for MediaSource::Disc
-    if ((m_source.type() == MediaSource::Disc) 
-        && (g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "device"))) {
-        QByteArray mediaDevice = QFile::encodeName(m_source.deviceName());
-        if (!mediaDevice.isEmpty()) {
-            g_object_set (G_OBJECT (m_datasource), "device", mediaDevice.constData(), (const char*)NULL);
-        }
-    }
-
     // Create a new datasource based on the input URL
     QByteArray encoded_cstr_url = url.toEncoded();
     m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), (const char*)NULL);
     if (!m_datasource)
-        return false;
-   
-    // Set optical disc speed to 2X for Audio CD
-    if ((m_source.discType() == Phonon::Cd)
-        && (g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "read-speed"))) {
-        g_object_set (G_OBJECT (m_datasource), "read-speed", 2, (const char*)NULL);
-        m_backend->logMessage(QString("new device speed : 2X"), Backend::Info, this);
-    }
+      return false;
+
+    // Set the device for MediaSource::Disc
+    if (m_source.type() == MediaSource::Disc) {
+
+        if (g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "device")) {
+            QByteArray mediaDevice = QFile::encodeName(m_source.deviceName());
+            if (!mediaDevice.isEmpty())
+                g_object_set (G_OBJECT (m_datasource), "device", mediaDevice.constData(), (const char*)NULL);
+        }
+
+        // Also Set optical disc speed to 2X for Audio CD
+        if (m_source.discType() == Phonon::Cd
+            && (g_object_class_find_property (G_OBJECT_GET_CLASS (m_datasource), "read-speed"))) {
+            g_object_set (G_OBJECT (m_datasource), "read-speed", 2, (const char*)NULL);
+            m_backend->logMessage(QString("new device speed : 2X"), Backend::Info, this);
+        }
+  }
 
     /* make HTTP sources send extra headers so we get icecast
      * metadata in case the stream is an icecast stream */
