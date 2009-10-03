@@ -110,6 +110,21 @@ QList<EffectDescription> BackendCapabilities::availableAudioEffects()
 }
 #endif //QT_NO_PHONON_EFFECT
 
+#ifndef QT_NO_PHONON_EFFECT
+QList<EffectDescription> BackendCapabilities::availableVideoEffects()
+{
+    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
+    QList<EffectDescription> ret;
+    if (backendIface) {
+        QList<int> deviceIndexes = backendIface->objectDescriptionIndexes(Phonon::VideoEffectType);
+        foreach (int i, deviceIndexes) {
+            ret.append(EffectDescription::fromIndex(i, Phonon::VideoEffectType));
+        }
+    }
+    return ret;
+}
+#endif //QT_NO_PHONON_EFFECT
+
 } // namespace Phonon
 
 QT_END_NAMESPACE

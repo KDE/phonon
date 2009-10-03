@@ -44,11 +44,14 @@ class EffectXT : public SourceNodeXT, public SinkNodeXT
         EffectXT(const char *name);
         ~EffectXT();
         xine_audio_port_t *audioPort() const;
+        xine_video_port_t *videoPort() const;
         xine_post_out_t *audioOutputPort() const;
+        xine_post_out_t *videoOutputPort() const;
         void rewireTo(SourceNodeXT *source);
         virtual void createInstance();
     protected:
         xine_audio_port_t *fakeAudioPort();
+        xine_video_port_t *fakeVideoPort();
 
         xine_post_t *m_plugin;
         xine_post_api_t *m_pluginApi;
@@ -57,10 +60,12 @@ class EffectXT : public SourceNodeXT, public SinkNodeXT
         void ensureInstance();
 
         xine_audio_port_t *m_fakeAudioPort;
+        xine_video_port_t *m_fakeVideoPort;
         mutable QMutex m_mutex;
         const char *m_pluginName;
         char *m_pluginParams;
         QList<Phonon::EffectParameter> m_parameterList;
+        bool m_isVideoPlugin;
 };
 
 class Effect : public QObject, public EffectInterface, public SinkNode, public SourceNode

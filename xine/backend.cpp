@@ -237,11 +237,16 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
             const char *const *postPlugins = xine_list_post_plugins_typed(m_xine, XINE_POST_TYPE_AUDIO_FILTER);
             for (int i = 0; postPlugins[i]; ++i)
                 list << 0x7F000000 + i;
-            /*const char *const *postVPlugins = xine_list_post_plugins_typed(m_xine, XINE_POST_TYPE_VIDEO_FILTER);
-            for (int i = 0; postVPlugins[i]; ++i) {
-                list << 0x7E000000 + i;
-            } */
         }
+        break;
+    case Phonon::VideoEffectType:
+        {
+            const char *const *postPlugins = xine_list_post_plugins_typed(m_xine, XINE_POST_TYPE_VIDEO_FILTER);
+            for (int i = 0; postPlugins[i]; ++i) {
+                list << 0x7E000000 + i;
+            }
+        }
+        break;
     case Phonon::AudioChannelType:
     case Phonon::SubtitleType:
         {
@@ -312,14 +317,20 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
                     break;
                 }
             }
-            /*const char *const *postVPlugins = xine_list_post_plugins_typed(m_xine, XINE_POST_TYPE_VIDEO_FILTER);
-            for (int i = 0; postVPlugins[i]; ++i) {
+        }
+        break;
+    case Phonon::VideoEffectType:
+        {
+            const char *const *postPlugins = xine_list_post_plugins_typed(m_xine, XINE_POST_TYPE_VIDEO_FILTER);
+            for (int i = 0; postPlugins[i]; ++i) {
                 if (0x7E000000 + i == index) {
                     ret.insert("name", QLatin1String(postPlugins[i]));
+                    ret.insert("description", QLatin1String(xine_get_post_plugin_description(m_xine, postPlugins[i])));
                     break;
                 }
-            } */
+            }
         }
+        break;
     case Phonon::AudioChannelType:
     case Phonon::SubtitleType:
         {

@@ -172,13 +172,15 @@ namespace BackendCapabilities
     PHONON_EXPORT QList<EffectDescription> availableAudioEffects();
 #endif //QT_NO_PHONON_EFFECT
 
-//X     /**
-//X      * Returns descriptions for the video effects the backend supports.
-//X      *
-//X      * \return A list of VideoEffectDescription objects that give a name and
-//X      * description for every supported video effect.
-//X      */
-//X     PHONON_EXPORT QList<EffectDescription> availableVideoEffects();
+    /**
+     * Returns descriptions for the video effects the backend supports.
+     *
+     * \return A list of EffectDescription objects that give a name and
+     * description for every supported video effect.
+     */
+#ifndef QT_NO_PHONON_EFFECT
+    PHONON_EXPORT QList<EffectDescription> availableVideoEffects();
+#endif //QT_NO_PHONON_EFFECT
 
     /**
      * Returns descriptions for the audio codecs the backend supports.

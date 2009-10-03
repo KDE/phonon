@@ -76,7 +76,9 @@ namespace Phonon
          * devices even when they are unplugged and provide a unique identifier
          * that can make backends use the same identifiers.
          */
-        AudioCaptureDeviceType
+        AudioCaptureDeviceType,
+
+        VideoEffectType
 
         //VideoOutputDeviceType,
         //VideoCaptureDeviceType,
@@ -186,6 +188,13 @@ class ObjectDescription
          */
         static inline ObjectDescription<T> fromIndex(int index) { //krazy:exclude=inline
             return ObjectDescription<T>(QExplicitlySharedDataPointer<ObjectDescriptionData>(ObjectDescriptionData::fromIndex(T, index)));
+        }
+
+        /** \internal
+         * This function is needed because video and audio effects share the EffectDescription class.
+         */
+        static inline ObjectDescription<T> fromIndex(int index, ObjectDescriptionType type) { //krazy:exclude=inline
+            return ObjectDescription<T>(QExplicitlySharedDataPointer<ObjectDescriptionData>(ObjectDescriptionData::fromIndex(type, index)));
         }
 
         /**

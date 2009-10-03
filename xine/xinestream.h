@@ -207,7 +207,6 @@ class XineStream : public QObject, public SourceNodeXT
 
         xine_stream_t *m_stream;
         xine_event_queue_t *m_event_queue;
-        xine_post_t *m_deinterlacer;
         mutable XineEngine m_xine;
         mutable xine_audio_port_t *m_nullAudioPort;
         mutable xine_video_port_t *m_nullVideoPort;
