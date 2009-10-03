@@ -143,6 +143,7 @@ XineStream::XineStream()
     SourceNodeXT("MediaObject"),
     m_stream(0),
     m_event_queue(0),
+    m_deinterlacer(0),
     m_xine(Backend::xineEngineForStream()),
     m_nullAudioPort(0),
     m_nullVideoPort(0),
@@ -179,6 +180,9 @@ XineStream::XineStream()
 XineStream::~XineStream()
 {
     Q_ASSERT(QThread::currentThread() == XineThread::instance());
+    if (m_deinterlacer) {
+        xine_post_dispose(m_xine, m_deinterlacer);
+    }
     if(m_event_queue) {
         xine_event_dispose_queue(m_event_queue);
         m_event_queue = 0;
@@ -284,6 +288,59 @@ bool XineStream::xineOpen(Phonon::State newstate)
         return false;
     }
     debug() << Q_FUNC_INFO << "xine_open succeeded for m_mrl =" << m_mrl.constData();
+    const bool needDeinterlacer =
+        (m_mrl.startsWith("dvd:/") && Backend::deinterlaceDVD()) ||
+        (m_mrl.startsWith("vcd:/") && Backend::deinterlaceVCD()) ||
+        (m_mrl.startsWith("file:/") && Backend::deinterlaceFile());
+    if (m_deinterlacer) {
+        if (!needDeinterlacer) {
+            xine_post_dispose(m_xine, m_deinterlacer);
+            m_deinterlacer = 0;
+        }
+    } else if (needDeinterlacer) {
+        xine_video_port_t *videoPort = 0;
+        Q_ASSERT(m_mediaObject);
+        QSet<SinkNode *> sinks = m_mediaObject->sinks();
+        foreach (SinkNode *sink, sinks) {
+            Q_ASSERT(sink->threadSafeObject());
+            if (sink->threadSafeObject()->videoPort()) {
+                Q_ASSERT(videoPort == 0);
+                videoPort = sink->threadSafeObject()->videoPort();
+            }
+        }
+        if (!videoPort) {
+            debug() << Q_FUNC_INFO << "creating xine_stream with null video port";
+            videoPort = nullVideoPort();
+        }
+        m_deinterlacer = xine_post_init(m_xine, "tvtime", 1, 0, &videoPort);
+        if (m_deinterlacer) {
+            // set method
+            xine_post_in_t *paraInput = xine_post_input(m_deinterlacer, "parameters");
+            Q_ASSERT(paraInput);
+            Q_ASSERT(paraInput->data);
+            xine_post_api_t *api = reinterpret_cast<xine_post_api_t *>(paraInput->data);
+            xine_post_api_descr_t *desc = api->get_param_descr();
+            char *pluginParams = static_cast<char *>(malloc(desc->struct_size));
+            api->get_parameters(m_deinterlacer, pluginParams);
+            for (int i = 0; desc->parameter[i].type != POST_PARAM_TYPE_LAST; ++i) {
+                xine_post_api_parameter_t &p = desc->parameter[i];
+                if (p.type == POST_PARAM_TYPE_INT && 0 == strcmp(p.name, "method")) {
+                    int *value = reinterpret_cast<int *>(pluginParams + p.offset);
+                    *value = Backend::deinterlaceMethod();
+                    break;
+                }
+            }
+            api->set_parameters(m_deinterlacer, pluginParams);
+            free(pluginParams);
+
+            // connect to xine_stream_t
+            xine_post_in_t *x = xine_post_input(m_deinterlacer, "video");
+            Q_ASSERT(x);
+            xine_post_out_t *videoOutputPort = xine_get_video_source(m_stream);
+            Q_ASSERT(videoOutputPort);
+            xine_post_wire(videoOutputPort, x);
+        }
+    }
 
     m_lastTimeUpdate.tv_sec = 0;
     xine_get_pos_length(m_stream, 0, &m_currentTime, &m_totalTime);
@@ -1360,6 +1417,10 @@ bool XineStream::event(QEvent *ev)
         return true;
     case Event::UnloadCommand:
         ev->accept();
+        if (m_deinterlacer) {
+            xine_post_dispose(m_xine, m_deinterlacer);
+            m_deinterlacer = 0;
+        }
         if(m_event_queue) {
             xine_event_dispose_queue(m_event_queue);
             m_event_queue = 0;
@@ -1635,6 +1696,9 @@ xine_post_out_t *XineStream::videoOutputPort() const
     Q_ASSERT(QThread::currentThread() == XineThread::instance());
     if (!m_stream) {
         return 0;
+    }
+    if (m_deinterlacer) {
+        return xine_post_output(m_deinterlacer, "deinterlaced video");
     }
     return xine_get_video_source(m_stream);
 }

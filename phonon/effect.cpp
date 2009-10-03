@@ -119,8 +119,9 @@ void EffectPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
 
     // set up attributes
-    for (QHash<EffectParameter, QVariant>::const_iterator it = parameterValues.constBegin(); it != parameterValues.constEnd(); ++it) {
-        pINTERFACE_CALL(setParameterValue(it.key(), it.value()));
+    const QList<EffectParameter> parameters = pINTERFACE_CALL(parameters());
+    foreach (const EffectParameter &p, parameters) {
+        pINTERFACE_CALL(setParameterValue(p, parameterValues[p]));
     }
 }
 
