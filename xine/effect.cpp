@@ -33,11 +33,28 @@ namespace Xine
 
 xine_audio_port_t *EffectXT::audioPort() const
 {
+    if (m_isVideoPlugin) {
+        return 0;
+    }
+
     const_cast<EffectXT *>(this)->ensureInstance();
     Q_ASSERT(m_plugin);
     Q_ASSERT(m_plugin->audio_input);
     Q_ASSERT(m_plugin->audio_input[0]);
     return m_plugin->audio_input[0];
+}
+
+xine_video_port_t *EffectXT::videoPort() const
+{
+    if (!m_isVideoPlugin) {
+        return 0;
+    }
+
+    const_cast<EffectXT *>(this)->ensureInstance();
+    Q_ASSERT(m_plugin);
+    Q_ASSERT(m_plugin->video_input);
+    Q_ASSERT(m_plugin->video_input[0]);
+    return m_plugin->video_input[0];
 }
 
 xine_post_out_t *EffectXT::audioOutputPort() const
@@ -49,15 +66,37 @@ xine_post_out_t *EffectXT::audioOutputPort() const
     return x;
 }
 
+xine_post_out_t *EffectXT::videoOutputPort() const
+{
+    const_cast<EffectXT *>(this)->ensureInstance();
+    Q_ASSERT(m_plugin);
+    const char *const *portNames = xine_post_list_outputs(m_plugin);
+    Q_ASSERT(portNames);
+    Q_ASSERT(portNames[0]);
+    xine_post_out_t *x = xine_post_output(m_plugin, portNames[0]);
+    Q_ASSERT(x);
+    return x;
+}
+
 void EffectXT::rewireTo(SourceNodeXT *source)
 {
-    if (!source->audioOutputPort()) {
-        return;
+    if (m_isVideoPlugin) {
+        if (!source->videoOutputPort()) {
+            return;
+        }
+        ensureInstance();
+        xine_post_in_t *x = xine_post_input(m_plugin, "video");
+        Q_ASSERT(x);
+        xine_post_wire(source->videoOutputPort(), x);
+    } else {
+        if (!source->audioOutputPort()) {
+            return;
+        }
+        ensureInstance();
+        xine_post_in_t *x = xine_post_input(m_plugin, "audio in");
+        Q_ASSERT(x);
+        xine_post_wire(source->audioOutputPort(), x);
     }
-    ensureInstance();
-    xine_post_in_t *x = xine_post_input(m_plugin, "audio in");
-    Q_ASSERT(x);
-    xine_post_wire(source->audioOutputPort(), x);
 }
 
 // lazy initialization
@@ -79,6 +118,14 @@ xine_audio_port_t *EffectXT::fakeAudioPort()
     return m_fakeAudioPort;
 }
 
+xine_video_port_t *EffectXT::fakeVideoPort()
+{
+    if (!m_fakeVideoPort) {
+        m_fakeVideoPort = xine_open_video_driver(m_xine, "none", XINE_VISUAL_TYPE_NONE, 0);
+    }
+    return m_fakeVideoPort;
+}
+
 void EffectXT::createInstance()
 {
     debug() << Q_FUNC_INFO << "m_pluginName =" << m_pluginName;
@@ -88,8 +135,14 @@ void EffectXT::createInstance()
         return;
     }
 
-    fakeAudioPort();
-    m_plugin = xine_post_init(m_xine, m_pluginName, 1, &m_fakeAudioPort, 0);
+    if (m_isVideoPlugin) {
+        fakeVideoPort();
+        m_plugin = xine_post_init(m_xine, m_pluginName, 1, 0, &m_fakeVideoPort);
+    } else {
+        fakeAudioPort();
+        m_plugin = xine_post_init(m_xine, m_pluginName, 1, &m_fakeAudioPort, 0);
+    }
+
     xine_post_in_t *paraInput = xine_post_input(m_plugin, "parameters");
     if (!paraInput) {
         return;
@@ -154,13 +207,26 @@ Effect::Effect(int effectId, QObject *parent)
     SourceNode(static_cast<EffectXT *>(SinkNode::threadSafeObject().data()))
 {
     K_XT(Effect);
-    const char *const *postPlugins = xine_list_post_plugins_typed(xt->m_xine, XINE_POST_TYPE_AUDIO_FILTER);
-    if (effectId >= 0x7F000000) {
+
+    if ((effectId & 0xff000000) == 0x7E000000) {
+        const char *const *postPlugins = xine_list_post_plugins_typed(xt->m_xine, XINE_POST_TYPE_VIDEO_FILTER);
+        effectId -= 0x7E000000;
+        for(int i = 0; postPlugins[i]; ++i) {
+            if (i == effectId) {
+                // found it
+                xt->m_pluginName = postPlugins[i];
+                xt->m_isVideoPlugin = true;
+                break;
+            }
+        }
+    } else if ((effectId & 0xff000000) == 0x7F000000) {
+        const char *const *postPlugins = xine_list_post_plugins_typed(xt->m_xine, XINE_POST_TYPE_AUDIO_FILTER);
         effectId -= 0x7F000000;
         for(int i = 0; postPlugins[i]; ++i) {
             if (i == effectId) {
                 // found it
                 xt->m_pluginName = postPlugins[i];
+                xt->m_isVideoPlugin = false;
                 break;
             }
         }
@@ -173,8 +239,8 @@ Effect::Effect(EffectXT *xt, QObject *parent)
 }
 
 EffectXT::EffectXT(const char *name)
-    : SourceNodeXT("Effect"), SinkNodeXT("Effect"), m_plugin(0), m_pluginApi(0), m_fakeAudioPort(0),
-    m_pluginName(name), m_pluginParams(0)
+    : SourceNodeXT("Effect"), SinkNodeXT("Effect"), m_plugin(0), m_pluginApi(0), m_fakeAudioPort(0), m_fakeVideoPort(0),
+    m_pluginName(name), m_pluginParams(0), m_isVideoPlugin(false)
 {
     m_xine = Backend::xine();
 }
@@ -189,6 +255,10 @@ EffectXT::~EffectXT()
             xine_close_audio_driver(m_xine, m_fakeAudioPort);
             m_fakeAudioPort = 0;
         }
+        if (m_fakeVideoPort) {
+            xine_close_video_driver(m_xine, m_fakeVideoPort);
+            m_fakeVideoPort = 0;
+        }
     }
     free(m_pluginParams);
     m_pluginParams = 0;
@@ -202,12 +272,14 @@ bool Effect::isValid() const
 
 MediaStreamTypes Effect::inputMediaStreamTypes() const
 {
-    return Phonon::Xine::Audio;
+    K_XT(const Effect);
+    return (xt->m_isVideoPlugin ? Phonon::Xine::Video : Phonon::Xine::Audio);
 }
 
 MediaStreamTypes Effect::outputMediaStreamTypes() const
 {
-    return Phonon::Xine::Audio;
+    K_XT(const Effect);
+    return (xt->m_isVideoPlugin ? Phonon::Xine::Video : Phonon::Xine::Audio);
 }
 
 QList<EffectParameter> Effect::parameters() const
@@ -337,9 +409,11 @@ void Effect::aboutToChangeXineEngine()
         xt2->m_plugin = xt->m_plugin;
         xt2->m_pluginApi = xt->m_pluginApi;
         xt2->m_fakeAudioPort = xt->m_fakeAudioPort;
+        xt2->m_fakeVideoPort = xt->m_fakeVideoPort;
         xt->m_plugin = 0;
         xt->m_pluginApi = 0;
         xt->m_fakeAudioPort = 0;
+        xt->m_fakeVideoPort = 0;
         KeepReference<> *keep = new KeepReference<>;
         keep->addObject(static_cast<SinkNodeXT *>(xt2));
         keep->ready();
