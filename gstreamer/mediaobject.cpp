@@ -82,6 +82,7 @@ MediaObject::MediaObject(Backend *backend, QObject *parent)
         , m_autoplayTitles(true)
         , m_availableTitles(0)
         , m_currentTitle(1)
+        , m_pendingTitle(1)
 {
     qRegisterMetaType<GstCaps*>("GstCaps*");
     qRegisterMetaType<State>("State");
@@ -972,6 +973,8 @@ void MediaObject::setSource(const MediaSource &source)
 
     case MediaSource::Disc: // CD tracks can be specified by setting the url in the following way uri=cdda:4
         {
+            m_pendingTitle = 1;
+            m_currentTitle = 1;
             QUrl cdurl(QLatin1String("cdda://"));
             if (createPipefromURL(cdurl))
                 m_loading = true;
@@ -1131,7 +1134,11 @@ void MediaObject::emitTick()
         }
         // Prepare load of next source
         if (currentTime >= totalTime - ABOUT_TO_FINNISH_TIME) {
-            if (!m_aboutToFinishEmitted) {
+            if (m_autoplayTitles &&
+                m_availableTitles > 1 &&
+                m_currentTitle < m_availableTitles) {
+                m_aboutToFinishEmitted = false;
+            } else if (!m_aboutToFinishEmitted) {
                 m_aboutToFinishEmitted = true; // track is about to finish
                 emit aboutToFinish();
             }
@@ -1361,6 +1368,9 @@ void MediaObject::handleBusMessage(const Message &message)
                 m_backend->logMessage("gstreamer: pipeline state set to playing", Backend::Info, this);
                 m_tickTimer->start();
                 changeState(Phonon::PlayingState);
+                if ((m_source.type() == MediaSource::Disc) && (m_currentTitle != m_pendingTitle)) {
+                    setTrack(m_pendingTitle);
+                }
                 if (m_resumeState && m_oldState == Phonon::PlayingState) {
                     seek(m_oldPos);
                     m_resumeState = false;
@@ -1396,6 +1406,9 @@ void MediaObject::handleBusMessage(const Message &message)
                     changeState(Phonon::StoppedState);
                 m_backend->logMessage("gstreamer: pipeline state set to ready", Backend::Debug, this);
                 m_tickTimer->stop();
+                if ((m_source.type() == MediaSource::Disc) && (m_currentTitle != m_pendingTitle)) {
+                    setTrack(m_pendingTitle);
+                }
                 break;
 
             case GST_STATE_VOID_PENDING :
@@ -1608,15 +1621,30 @@ int MediaObject::_iface_currentTitle() const
 
 void MediaObject::_iface_setCurrentTitle(int title)
 {
-    GstFormat trackFormat = gst_format_get_by_nick("track");
     m_backend->logMessage(QString("setCurrentTitle %0").arg(title), Backend::Info, this);
-    if ((title == m_currentTitle) || (title < 1) || (title > m_availableTitles))
+    if ((title == m_currentTitle) || (title == m_pendingTitle) || (title < 1) || (title > m_availableTitles))
         return;
 
-    m_currentTitle = title;
+    m_pendingTitle = title;
+
+    if (m_state == Phonon::PlayingState) {
+        setTrack(m_pendingTitle);
+    } else {
+        setState(Phonon::StoppedState);
+    }
+}
+
+void MediaObject::setTrack(int title)
+{
+    if ((m_state != Phonon::PlayingState) && (m_state != Phonon::StoppedState))
+        return;
+
 
     //let's seek to the beginning of the song
-    if (gst_element_seek_simple(m_pipeline, trackFormat, GST_SEEK_FLAG_FLUSH, m_currentTitle - 1)) {
+    GstFormat trackFormat = gst_format_get_by_nick("track");
+    m_backend->logMessage(QString("setTrack %0").arg(title), Backend::Info, this);
+    if (gst_element_seek_simple(m_pipeline, trackFormat, GST_SEEK_FLAG_FLUSH, title - 1)) {
+        m_currentTitle = title;
         updateTotalTime();
         m_atEndOfStream = false;
         emit titleChanged(title);

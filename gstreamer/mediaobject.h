@@ -237,6 +237,7 @@ private:
     int _iface_availableTitles() const;
     int _iface_currentTitle() const;
     void _iface_setCurrentTitle(int title);
+    void setTrack(int title);
 
     bool m_resumeState;
     State m_oldState;
@@ -287,6 +288,7 @@ private:
     bool m_autoplayTitles;
     int m_availableTitles;
     int m_currentTitle;
+    int m_pendingTitle;
 };
 }
 } //namespace Phonon::Gstreamer
