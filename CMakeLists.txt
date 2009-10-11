@@ -255,7 +255,6 @@ if(APPLE)
 endif(APPLE)
 
 
-add_subdirectory(cmake)
 add_subdirectory(phonon)
 add_subdirectory(includes)
 if (Q_WS_MAC AND BUILD_PHONON_QT7)
