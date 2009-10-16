@@ -130,9 +130,10 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
     case AudioOutputClass:
         return new AudioOutput(this, parent);
 
+#ifndef QT_NO_PHONON_EFFECT
     case EffectClass:
         return new AudioEffect(this, args[0].toInt(), parent);
-
+#endif //QT_NO_PHONON_EFFECT
     case AudioDataOutputClass:
         return new AudioDataOutput(this, parent);
 
