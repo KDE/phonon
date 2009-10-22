@@ -82,6 +82,7 @@ static void filter(ObjectDescriptionType type, BackendInterface *backendIface, Q
             if (var.isValid() && var.toBool()) {
                 it.remove();
                 continue;
+#ifndef QT_NO_PHONON_SETTINGSGROUP
             }
         }
         if (whatToFilter & FilterUnavailableDevices) {
@@ -274,7 +275,9 @@ void GlobalConfig::setAudioOutputDeviceListFor(Phonon::Category category, QList<
         backendConfig.setValue(QLatin1String("Category_") + QString::number(category), order);
     }
 }
+#endif //QT_NO_PHONON_SETTINGSGROUP
 
+#ifndef QT_NO_PHONON_SETTINGSGROUP
 QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int override) const
 {
     K_D(const GlobalConfig);
@@ -334,7 +337,7 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int
     const QSettingsGroup backendConfig(&d->config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
     return sortDevicesByCategoryPriority(this, &backendConfig, AudioOutputDeviceType, category, defaultList);
 }
-
+#endif //QT_NO_SETTINGSGROUPS
 int GlobalConfig::audioOutputDeviceFor(Phonon::Category category, int override) const
 {
     QList<int> ret = audioOutputDeviceListFor(category, override);
@@ -346,6 +349,7 @@ int GlobalConfig::audioOutputDeviceFor(Phonon::Category category, int override) 
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
 void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order)
 {
+#ifndef QT_NO_PHONON_SETTINGSGROUP
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive()) {
         pulse->setCaptureDevicePriorityForCategory(category, order);
@@ -388,6 +392,9 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
         BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
+#else //QT_NO_SETTINGSGROUP
+    return QList<int>();
+#endif //QT_NO_SETTINGSGROUP
         if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
             // the platform plugin lists the audio devices for the platform
             // this list already is in default order (as defined by the platform plugin)
