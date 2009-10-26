@@ -936,6 +936,10 @@ void MediaObject::setSource(const MediaSource &source)
     setTotalTime(-1);
     m_atEndOfStream = false;
 
+    m_availableTitles = 0;
+    m_pendingTitle = 1;
+    m_currentTitle = 1;
+
     // Clear existing meta tags
     m_metaData.clear();
     m_isStream = false;
@@ -973,8 +977,6 @@ void MediaObject::setSource(const MediaSource &source)
 
     case MediaSource::Disc: // CD tracks can be specified by setting the url in the following way uri=cdda:4
         {
-            m_pendingTitle = 1;
-            m_currentTitle = 1;
             QUrl cdurl(QLatin1String("cdda://"));
             if (createPipefromURL(cdurl))
                 m_loading = true;
@@ -1134,7 +1136,8 @@ void MediaObject::emitTick()
         }
         // Prepare load of next source
         if (currentTime >= totalTime - ABOUT_TO_FINNISH_TIME) {
-            if (m_autoplayTitles &&
+            if (m_source.type() == MediaSource::Disc &&
+                m_autoplayTitles &&
                 m_availableTitles > 1 &&
                 m_currentTitle < m_availableTitles) {
                 m_aboutToFinishEmitted = false;
@@ -1536,7 +1539,8 @@ void MediaObject::handleEndOfStream()
     if (!m_seekable)
         m_atEndOfStream = true;
 
-    if (m_autoplayTitles &&
+    if (m_source.type() == MediaSource::Disc &&
+        m_autoplayTitles &&
         m_availableTitles > 1 &&
         m_currentTitle < m_availableTitles) {
         _iface_setCurrentTitle(m_currentTitle + 1);
@@ -1622,12 +1626,12 @@ int MediaObject::_iface_currentTitle() const
 void MediaObject::_iface_setCurrentTitle(int title)
 {
     m_backend->logMessage(QString("setCurrentTitle %0").arg(title), Backend::Info, this);
-    if ((title == m_currentTitle) || (title == m_pendingTitle) || (title < 1) || (title > m_availableTitles))
+    if ((title == m_currentTitle) || (title == m_pendingTitle))
         return;
 
     m_pendingTitle = title;
 
-    if (m_state == Phonon::PlayingState) {
+    if (m_state == Phonon::PlayingState || m_state == Phonon::StoppedState) {
         setTrack(m_pendingTitle);
     } else {
         setState(Phonon::StoppedState);
@@ -1636,7 +1640,7 @@ void MediaObject::_iface_setCurrentTitle(int title)
 
 void MediaObject::setTrack(int title)
 {
-    if ((m_state != Phonon::PlayingState) && (m_state != Phonon::StoppedState))
+    if (((m_state != Phonon::PlayingState) && (m_state != Phonon::StoppedState)) || (title < 1) || (title > m_availableTitles))
         return;
 
 
