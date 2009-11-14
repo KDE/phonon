@@ -321,7 +321,9 @@ static QByteArray mrlEncode(QByteArray mrl)
 {
     for (int i = 0; i < mrl.size(); ++i) {
         const unsigned char c = static_cast<unsigned char>(mrl.at(i));
-        if (c & 0x80 || c == '\\' || c < 32 || c == '%' || c == '#') {
+        // we assume that the other invalid characters
+        // are already escaped due to the call to QUrl.toEncoded()
+        if (c == '#') {
             char enc[4];
             qsnprintf(enc, 4, "%%%02X", c);
             mrl = mrl.left(i) + QByteArray(enc, 3) + mrl.mid(i + 1);
@@ -355,9 +357,9 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
             return;
         }
         {
-            const QByteArray &mrl = (source.url().scheme() == QLatin1String("file") ?
-                    "file:/" + mrlEncode(QFile::encodeName(source.url().toLocalFile())) :
-                    source.url().toEncoded());
+            const QByteArray &mrl = (source.url().scheme() == QLatin1String("") ?
+                    "file:/" + mrlEncode (source.url().toEncoded()) :
+                    mrlEncode (source.url().toEncoded()));
             switch (how) {
                 case GaplessSwitch:
                     m_stream->gaplessSwitchTo(mrl);
@@ -430,7 +432,7 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
 //X void MediaObject::openMedia(Phonon::MediaObject::Media m, const QString &mediaDevice)
 //X {
 //X     m_titles.clear();
-//X 
+//X
 //X }
 
 QByteArray MediaObject::autoplayMrlsToTitles(const char *plugin, const char *defaultMrl)
