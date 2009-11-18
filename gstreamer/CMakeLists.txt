@@ -19,7 +19,7 @@ include(ConfigureChecks.cmake)
 if (BUILD_PHONON_GSTREAMER)
    include_directories(
 	  ${CMAKE_CURRENT_BINARY_DIR}
-	  ${GSTREAMER_INCLUDE_DIR} 
+	  ${GSTREAMER_INCLUDE_DIR}
 	  ${GLIB2_INCLUDE_DIR}
       ${LIBXML2_INCLUDE_DIR}
 	  ${X11_X11_INCLUDE_PATH})
@@ -57,7 +57,7 @@ if (BUILD_PHONON_GSTREAMER)
       audiodataoutput.cpp
       )
 
-   find_package(Alsa)
+   macro_optional_find_package(Alsa)
    macro_ensure_version("0.10.22" ${GSTREAMER_VERSION} GSTREAMER_HAS_NONBLOCKING_ALSASINK)
    if(ALSA_FOUND AND NOT GSTREAMER_HAS_NONBLOCKING_ALSASINK)
       add_definitions(-DUSE_ALSASINK2)
