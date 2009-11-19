@@ -99,7 +99,7 @@ MediaObject::MediaObject(Backend *backend, QObject *parent)
         m_backend->addBusWatcher(this);
         connect(m_tickTimer, SIGNAL(timeout()), SLOT(emitTick()));
     }
-    connect(this, SIGNAL(stateChanged(Phonon::State, Phonon::State)), 
+    connect(this, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
             this, SLOT(notifyStateChange(Phonon::State, Phonon::State)));
 
 }
@@ -213,7 +213,7 @@ void MediaObject::noMorePadsAvailable ()
         details[0] = m_missingCodecs[0].toLocal8Bit().data();
         details[1] = NULL;
         GstInstallPluginsReturn status;
-        
+
         status = gst_install_plugins_async( details, ctx, pluginInstallationDone, NULL );
         gst_install_plugins_context_free ( ctx );
 
@@ -348,7 +348,7 @@ void MediaObject::connectVideo(GstPad *pad)
             m_backend->logMessage("Video track connected", Backend::Info, this);
             // Note that the notify::caps _must_ be installed after linking to work with Dapper
             m_capsHandler = g_signal_connect(pad, "notify::caps", G_CALLBACK(notifyVideoCaps), this);
- 
+
             if (!m_loading && !m_hasVideo) {
                 m_hasVideo = m_videoStreamFound;
                 emit hasVideoChanged(m_hasVideo);
@@ -407,10 +407,13 @@ bool MediaObject::createPipefromURL(const QUrl &url)
     }
 
     // Create a new datasource based on the input URL
-    QByteArray encoded_cstr_url = url.toEncoded();
+    // add the 'file' scheme if it's missing; the double '/' is needed!
+    QByteArray encoded_cstr_url = (url.scheme() == QLatin1String("") ?
+                    "file://" + url.toEncoded() :
+                    url.toEncoded());
     m_datasource = gst_element_make_from_uri(GST_URI_SRC, encoded_cstr_url.constData(), (const char*)NULL);
     if (!m_datasource)
-      return false;
+        return false;
 
     // Set the device for MediaSource::Disc
     if (m_source.type() == MediaSource::Disc) {
@@ -718,7 +721,7 @@ void MediaObject::changeState(State newstate)
         return;
 
     Phonon::State oldState = m_state;
-    m_state = newstate; // m_state must be set before emitting, since 
+    m_state = newstate; // m_state must be set before emitting, since
                         // Error state requires that state() will return the new value
     m_pendingState = newstate;
     emit stateChanged(newstate, oldState);
@@ -903,7 +906,7 @@ void MediaObject::setSource(const MediaSource &source)
     // such as failing duration queries etc
     GstState state;
     gst_element_set_state(m_pipeline, GST_STATE_NULL);
-    gst_element_get_state (m_pipeline, &state, NULL, 2000);
+    gst_element_get_state(m_pipeline, &state, NULL, 2000);
 
     m_source = source;
     emit currentSourceChanged(m_source);
@@ -927,7 +930,7 @@ void MediaObject::setSource(const MediaSource &source)
     m_aboutToFinishEmitted = false;
     m_error = NoError;
     m_errorString = QString();
-    
+
     m_bufferPercent = 0;
     m_prefinishMarkReachedNotEmitted = true;
     m_aboutToFinishEmitted = false;
@@ -945,7 +948,7 @@ void MediaObject::setSource(const MediaSource &source)
     m_isStream = false;
 
     switch (source.type()) {
-    case MediaSource::Url: {            
+    case MediaSource::Url: {
             if (createPipefromURL(source.url()))
                 m_loading = true;
             else
@@ -975,7 +978,7 @@ void MediaObject::setSource(const MediaSource &source)
             setError(tr("Could not open media source."));
         break;
 
-    case MediaSource::Disc: 
+    case MediaSource::Disc:
         {
        QString mediaUrl;
        switch (source.discType()) {
@@ -1060,7 +1063,7 @@ void MediaObject::getStreamInfo()
             if (m_availableTitles != oldAvailableTitles) {
                 emit availableTitlesChanged(m_availableTitles);
                 m_backend->logMessage(QString("Available titles changed: %0").arg(m_availableTitles), Backend::Info, this);
-            }      
+            }
         }
     }
 
@@ -1121,7 +1124,7 @@ void MediaObject::seek(qint64 time)
         }
 
         quint64 current = currentTime();
-        quint64 total = totalTime(); 
+        quint64 total = totalTime();
 
         if (current < total - m_prefinishMark)
             m_prefinishMarkReachedNotEmitted = true;
@@ -1142,7 +1145,7 @@ void MediaObject::emitTick()
 
     if (m_tickInterval > 0 && currentTime != m_previousTickTime) {
         emit tick(currentTime);
-        m_previousTickTime = currentTime;        
+        m_previousTickTime = currentTime;
     }
     if (m_state == Phonon::PlayingState) {
         if (currentTime >= totalTime - m_prefinishMark) {
@@ -1262,7 +1265,7 @@ void MediaObject::handleBusMessage(const Message &message)
 
     switch (GST_MESSAGE_TYPE (gstMessage)) {
 
-    case GST_MESSAGE_EOS: 
+    case GST_MESSAGE_EOS:
         m_backend->logMessage("EOS recieved", Backend::Info, this);
         handleEndOfStream();
         break;
@@ -1467,7 +1470,7 @@ void MediaObject::handleBusMessage(const Message &message)
                             setError(err->message, Phonon::FatalError);
                         gst_caps_unref (caps);
                         gst_object_unref (sinkPad);
-                   } 
+                   }
                } else {
                     setError(QString(err->message), Phonon::FatalError);
                }
@@ -1539,8 +1542,8 @@ void MediaObject::handleBusMessage(const Message &message)
         //case GST_MESSAGE_STEP_DONE:
         //case GST_MESSAGE_LATENCY: only from 0.10.12
         //case GST_MESSAGE_ASYNC_DONE: only from 0.10.13
-    default: 
-        break; 
+    default:
+        break;
     }
 }
 
