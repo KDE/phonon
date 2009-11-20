@@ -24,6 +24,7 @@
 
 #include "export.h"
 #include "objectdescription.h"
+#include "../phononnamespace.h"
 
 namespace Phonon
 {
@@ -39,6 +40,36 @@ namespace BackendCapabilities
      * description for every supported video capture device.
      */
     PHONONEXPERIMENTAL_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
+
+    /**
+    * Returns the ordered list of audio output devices for a given category.
+    *
+    * \return An ordered list of AudioOutputDevice objects that give a name and
+    * description for every supported audio output device.
+    */
+    PHONONEXPERIMENTAL_EXPORT QList<AudioOutputDevice> availableAudioOutputDevicesForCategory(Phonon::Category category);
+
+    /**
+    * Returns the ordered list of audio capture devices for a given category.
+    *
+    * \return An ordered list of AudioCaptureDevice objects that give a name and
+    * description for every supported audio capture device.
+    */
+    PHONONEXPERIMENTAL_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevicesForCategory(Phonon::Category category);
+
+    /**
+    * Apply a priority list of output devices for a given category.
+    *
+    * \return An ordered list of device indexes that for the given category
+    */
+    PHONONEXPERIMENTAL_EXPORT void setAudioOutputDevicePriorityListForCategory(Phonon::Category category, QList<int> devices);
+
+    /**
+    * Apply a priority list of capture devices for a given category.
+    *
+    * \return An ordered list of device indexes that for the given category
+    */
+    PHONONEXPERIMENTAL_EXPORT void setAudioCaptureDevicePriorityListForCategory(Phonon::Category category, QList<int> devices);
 
 } // namespace BackendCapabilities
 } // namespace Experimental
