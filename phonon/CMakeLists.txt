@@ -8,18 +8,19 @@ endif (PHONON_BUILD_EXAMPLES)
 
 add_subdirectory(experimental)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 macro_optional_find_package(PulseAudio)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
+macro_optional_find_package(GLIB2)
+macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
 
-if(PULSEAUDIO_FOUND)
+if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
    add_definitions(-DHAVE_PULSEAUDIO)
-else(PULSEAUDIO_FOUND)
+else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_INCLUDE_DIR "")
    set(PULSEAUDIO_LIBRARY "")
-endif(PULSEAUDIO_FOUND)
+endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-include_directories(${PULSEAUDIO_INCLUDE_DIR})
+include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
 
 set(phonon_LIB_SRCS
    objectdescription.cpp
@@ -65,7 +66,7 @@ endif (QT_QTDBUS_FOUND)
 
 add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
-target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PULSEAUDIO_LIBRARY})
+target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 if (QT_QTDBUS_FOUND)
   target_link_libraries(phonon ${QT_QTDBUS_LIBRARY})
 endif (QT_QTDBUS_FOUND)

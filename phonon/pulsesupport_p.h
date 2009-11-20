@@ -31,8 +31,6 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
-class QVariant;
-
 namespace Phonon
 {
     class PHONON_EXPORT PulseSupport
@@ -41,14 +39,10 @@ namespace Phonon
             static PulseSupport* getInstance();
             static void shutdown();
 
-
             bool isActive();
         private:
             PulseSupport();
             ~PulseSupport();
-            static PulseSupport* s_instance;
-
-            bool m_pulseActive;
     };
 } // namespace Phonon
 
