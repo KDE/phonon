@@ -54,6 +54,7 @@ public:
     GstPad *requestPad(int device) const;
     int allocateDeviceId();
     int deviceId(const QByteArray &gstId) const;
+    const QByteArray gstId(int id);
     AudioDevice* audioDevice(int id);
     GstElement *createGNOMEAudioSink(Category category);
     GstElement *createAudioSink(Category category = NoCategory);

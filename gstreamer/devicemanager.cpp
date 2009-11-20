@@ -45,14 +45,14 @@ namespace Gstreamer
 AudioDevice::AudioDevice(DeviceManager *manager, const QByteArray &gstId)
         : gstId(gstId)
 {
+    // This should never be called when PulseAudio is active.
+    Q_ASSERT(!manager->pulseActive());
+
     id = manager->allocateDeviceId();
     icon = "audio-card";
+
     //get name from device
-    if (manager->pulseActive()) {
-        // Cosmetic hack 
-        description = QObject::tr("Pass all audio through the PulseAudio Sound Server.").toUtf8();
-        icon = "audio-backend-pulseaudio";
-     } else if (gstId == "default") {
+    if (gstId == "default") {
         description = "Default audio device";
     } else {
         GstElement *aSink= manager->createAudioSink();
@@ -282,9 +282,8 @@ int DeviceManager::allocateDeviceId()
 }
 
 
-/*
- * Returns a positive device id or -1 if device
- * does not exist
+/**
+ * Returns a positive device id or -1 if device does not exist
  *
  * The gstId is typically in the format hw:1,0
  */
@@ -296,6 +295,21 @@ int DeviceManager::deviceId(const QByteArray &gstId) const
         }
     }
     return -1;
+}
+
+/**
+ * Returns a gstId or "default" if device does not exist
+ *
+ * The gstId is typically in the format hw:1,0
+ */
+const QByteArray DeviceManager::gstId(int deviceId)
+{
+    if (!PulseSupport::getInstance()->isActive()) {
+        AudioDevice *ad = audioDevice(deviceId);
+        if (ad)
+            return QByteArray(ad->gstId);
+    }
+    return QByteArray("default");
 }
 
 /**
@@ -321,10 +335,8 @@ void DeviceManager::updateDeviceList()
     QList<QByteArray> list;
 
     if (audioSink) {
-        if (m_audioSink == "pulsesink") {
-            // If we're using pulse, just hide all other devices.
-            list.append("PulseAudio");
-        } else {
+        if (!pulseActive()) {
+            // If we're using pulse, the PulseSupport class takes care of things for us.
             list = GstHelper::extractProperties(audioSink, "device");
             list.prepend("default");
         }
