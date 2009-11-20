@@ -37,6 +37,16 @@ QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
     return ret;
 }
 
+bool BackendCapabilities::getHideAdvancedDevices()
+{
+    return GlobalConfig().getHideAdvancedDevices();
+}
+
+void BackendCapabilities::hideAdvancedDevices(bool hide)
+{
+    GlobalConfig().hideAdvancedDevices(hide);
+}
+
 QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevicesForCategory(Phonon::Category category)
 {
     QList<AudioOutputDevice> ret;

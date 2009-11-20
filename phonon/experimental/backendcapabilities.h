@@ -41,6 +41,9 @@ namespace BackendCapabilities
      */
     PHONONEXPERIMENTAL_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
 
+    PHONONEXPERIMENTAL_EXPORT bool getHideAdvancedDevices();
+    PHONONEXPERIMENTAL_EXPORT void hideAdvancedDevices(bool hide = true);
+
     /**
     * Returns the ordered list of audio output devices for a given category.
     *
