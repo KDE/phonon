@@ -27,6 +27,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 
 #include "phonon_export.h"
 #include "phononnamespace.h"
+#include "objectdescription.h"
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
@@ -62,6 +63,8 @@ namespace Phonon
 
     protected:
         QSettings m_config;
+        QList<int> _sortDevicesByCategoryPriority(ObjectDescriptionType type, Phonon::Category category, QList<int> &defaultList) const;
+
     };
 } // namespace Phonon
 
