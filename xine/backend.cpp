@@ -552,9 +552,10 @@ QHash<QByteArray, QVariant> Backend::audioOutputProperties(int audioDevice)
             ret.insert("description", that->m_audioOutputInfos[i].description);
 
             const QString iconName = that->m_audioOutputInfos[i].icon;
-            if (!iconName.isEmpty()) {
+            if (!iconName.isEmpty())
+                ret.insert("icon", iconName);
+            else
                 ret.insert("icon", QLatin1String("audio-card"));
-            }
             ret.insert("available", that->m_audioOutputInfos[i].available);
 
             ret.insert("initialPreference", that->m_audioOutputInfos[i].initialPreference);
