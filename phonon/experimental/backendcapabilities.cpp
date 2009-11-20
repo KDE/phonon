@@ -37,47 +37,5 @@ QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
     return ret;
 }
 
-bool BackendCapabilities::getHideAdvancedDevices()
-{
-    return GlobalConfig().getHideAdvancedDevices();
-}
-
-void BackendCapabilities::hideAdvancedDevices(bool hide)
-{
-    GlobalConfig().hideAdvancedDevices(hide);
-}
-
-QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevicesForCategory(Phonon::Category category)
-{
-    QList<AudioOutputDevice> ret;
-    const QList<int> deviceIndexes = GlobalConfig().audioOutputDeviceListFor(category);
-    foreach (int i, deviceIndexes) {
-        ret.append(AudioOutputDevice::fromIndex(i));
-    }
-    return ret;
-}
-
-void BackendCapabilities::setAudioOutputDevicePriorityListForCategory(Phonon::Category category, QList<int> devices)
-{
-    GlobalConfig().setAudioOutputDeviceListFor(category, devices);
-}
-
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
-QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevicesForCategory(Phonon::Category category)
-{
-    QList<AudioCaptureDevice> ret;
-    const QList<int> deviceIndexes = GlobalConfig().audioCaptureDeviceListFor(category);
-    foreach (int i, deviceIndexes) {
-        ret.append(AudioCaptureDevice::fromIndex(i));
-    }
-    return ret;
-}
-
-void BackendCapabilities::setAudioCaptureDevicePriorityListForCategory(Phonon::Category category, QList<int> devices)
-{
-    GlobalConfig().setAudioCaptureDeviceListFor(category, devices);
-}
-#endif //QT_NO_PHONON_AUDIOCAPTURE
-
 } // namespace Experimental
 } // namespace Phonon
