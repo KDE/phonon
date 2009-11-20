@@ -118,7 +118,6 @@ static QMap<QString, Phonon::Category> s_role_category_map;
 
 static PulseSupport* s_instance = NULL;
 static bool s_pulseActive = false;
-static bool s_pulseDeviceManager = false;
 
 static pa_glib_mainloop *s_mainloop = NULL;
 static pa_context *s_context = NULL;
@@ -130,11 +129,11 @@ static int s_deviceIndexCounter = 0;
 
 static QMap<QString, int> s_outputDeviceIndexes;
 static QMap<int, AudioDevice> s_outputDevices;
-static QMap<Phonon::Category, QMap<int, int> > s_outputDevicePriorities;
+static QMap<Phonon::Category, QMap<int, int> > s_outputDevicePriorities; // prio, device
 
 static QMap<QString, int> s_captureDeviceIndexes;
 static QMap<int, AudioDevice> s_captureDevices;
-static QMap<Phonon::Category, QMap<int, int> > s_captureDevicePriorities;
+static QMap<Phonon::Category, QMap<int, int> > s_captureDevicePriorities; // prio, device
 
 
 static void ext_device_manager_subscribe_cb(pa_context *, void *);
@@ -147,7 +146,6 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         s_connection_eventloop->exit(0);
         s_connection_eventloop = NULL;
         s_pulseActive = true;
-        s_pulseDeviceManager = true;
 
         pa_operation *o;
         pa_ext_device_manager_set_subscribe_cb(c, ext_device_manager_subscribe_cb, NULL);
@@ -157,7 +155,30 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 
     if (eol < 0) {
         logMessage(QString("Failed to initialize device manager extension: %1").arg(pa_strerror(pa_context_errno(c))));
-        s_pulseDeviceManager = false;
+        // OK so we don't have the device manager extension, but we can show a single device and fake it.
+        int index;
+        s_outputDeviceIndexes.clear();
+        s_outputDevices.clear();
+        s_outputDevicePriorities.clear();
+        index = s_deviceIndexCounter++;
+        s_outputDeviceIndexes.insert("sink:default", index);
+        s_outputDevices.insert(index, AudioDevice("sink:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 1));
+        for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
+            Phonon::Category cat = static_cast<Phonon::Category>(i);
+            s_outputDevicePriorities[cat].insert(0, index);
+        }
+
+        s_captureDeviceIndexes.clear();
+        s_captureDevices.clear();
+        s_captureDevicePriorities.clear();
+        index = s_deviceIndexCounter++;
+        s_captureDeviceIndexes.insert("source:default", index);
+        s_captureDevices.insert(index, AudioDevice("source:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 1));
+        for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
+            Phonon::Category cat = static_cast<Phonon::Category>(i);
+            s_captureDevicePriorities[cat].insert(0, index);
+        }
+
         return;
     }
 
@@ -351,7 +372,6 @@ static void context_state_callback(pa_context *c, void *)
 
         case PA_CONTEXT_FAILED:
             s_pulseActive = false;
-            s_pulseDeviceManager = false;
             if (s_connection_eventloop) {
                 s_connection_eventloop->exit(0);
                 s_connection_eventloop = NULL;
@@ -361,7 +381,6 @@ static void context_state_callback(pa_context *c, void *)
         case PA_CONTEXT_TERMINATED:
         default:
             s_pulseActive = false;
-            s_pulseDeviceManager = false;
             /// @todo Deal with reconnection...
             break;
     }
@@ -462,10 +481,25 @@ QList<int> PulseSupport::objectDescriptionIndexes(ObjectDescriptionType type) co
 
 #ifdef HAVE_PULSEAUDIO
     if (s_pulseActive) {
-        if (true || !s_pulseDeviceManager) {
-            // Just show a single "device"
-            list.append(0);
-        } else {
+        switch (type) {
+
+            case AudioOutputDeviceType: {
+                QMap<QString, int>::iterator it;
+                for (it = s_outputDeviceIndexes.begin(); it != s_outputDeviceIndexes.end(); ++it) {
+                    qDebug() << "Using device id " << *it;
+                    list.append(*it);
+                }
+                break;
+            }
+            case AudioCaptureDeviceType: {
+                QMap<QString, int>::iterator it;
+                for (it = s_captureDeviceIndexes.begin(); it != s_captureDeviceIndexes.end(); ++it) {
+                    list.append(*it);
+                }
+                break;
+            }
+            default:
+                break;
         }
     }
 #endif
@@ -482,13 +516,20 @@ QHash<QByteArray, QVariant> PulseSupport::objectDescriptionProperties(ObjectDesc
 
 #ifdef HAVE_PULSEAUDIO
     if (s_pulseActive) {
-        if (true || !s_pulseDeviceManager) {
-            if (0 == index) {
-                ret.insert("name", "PulseAudio Sound Server");
-                ret.insert("description", "Pass all sound through the PulseAudio Sound Server");
-                ret.insert("icon", "audio-backend-pulseaudio");
-            }
-        } else {
+        switch (type) {
+
+            case AudioOutputDeviceType:
+                Q_ASSERT(s_outputDevices.contains(index));
+                ret = s_outputDevices[index].properties;
+                break;
+
+            case AudioCaptureDeviceType:
+                Q_ASSERT(s_captureDevices.contains(index));
+                ret = s_captureDevices[index].properties;
+                break;
+
+            default:
+                break;
         }
     }
 #endif
