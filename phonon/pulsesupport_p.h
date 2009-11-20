@@ -38,18 +38,17 @@ namespace Phonon
     class PHONON_EXPORT PulseSupport
     {
         public:
-          PulseSupport();
+            static PulseSupport* getInstance();
+            static void shutdown();
 
-          /**
-          * \internal
-          *
-          * Silence gcc's warning.
-          */
-          virtual ~PulseSupport() {}
 
-          bool pulseActive();
-      private:
-        bool m_pulseActive;
+            bool isActive();
+        private:
+            PulseSupport();
+            ~PulseSupport();
+            static PulseSupport* s_instance;
+
+            bool m_pulseActive;
     };
 } // namespace Phonon
 

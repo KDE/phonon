@@ -27,6 +27,7 @@
 #include "message.h"
 #include "volumefadereffect.h"
 #include <gst/interfaces/propertyprobe.h>
+#include <phonon/pulsesupport_p.h>
 
 #include <QtCore/QSet>
 #include <QtCore/QVariant>
@@ -45,12 +46,14 @@ class MediaNode;
 
 Backend::Backend(QObject *parent, const QVariantList &)
         : QObject(parent)
-        , PulseSupport()
         , m_deviceManager(0)
         , m_effectManager(0)
         , m_debugLevel(Warning)
         , m_isValid(false)
 {
+    // Initialise PulseAudio support
+    PulseSupport::getInstance();
+
     // In order to support reloading, we only set the app name once...
     static bool first = true;
     if (first) {
@@ -94,6 +97,7 @@ Backend::~Backend()
 {
     delete m_effectManager;
     delete m_deviceManager;
+    PulseSupport::shutdown();
 }
 
 gboolean Backend::busCall(GstBus *bus, GstMessage *msg, gpointer data)
@@ -241,11 +245,6 @@ QStringList Backend::availableMimeTypes() const
     g_list_free(factoryList);
     availableMimeTypes.sort();
     return availableMimeTypes;
-}
-
-bool Backend::fullAudioDeviceEnumeration()
-{
-  return pulseActive();
 }
 
 /***

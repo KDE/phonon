@@ -29,6 +29,7 @@
 #include <QtCore/QStringList>
 #include "backendinterface.h"
 #include "platformplugin.h"
+#include "pulsesupport_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -112,7 +113,7 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
 
     // prefer to get the ObjectDescriptionData from the platform plugin for audio devices
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (!iface || !iface->fullAudioDeviceEnumeration()) {
+    if (!iface || !PulseSupport::getInstance()->isActive()) {
         if (type == AudioOutputDeviceType || type == AudioCaptureDeviceType) {
             PlatformPlugin *platformPlugin = Factory::platformPlugin();
             if (platformPlugin) {

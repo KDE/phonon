@@ -20,7 +20,7 @@
 
 */
 
-#include "pulsesupport.h"
+#include "pulsesupport_p.h"
 
 #include <QtCore/QtGlobal>
 
@@ -72,6 +72,24 @@ static void pulseContextStateCallback(pa_context *context, void *userdata)
 #endif // HAVE_PULSEAUDIO
 
 
+PulseSupport* PulseSupport::s_instance = NULL;
+
+PulseSupport* PulseSupport::getInstance()
+{
+    if (NULL == s_instance) {
+        s_instance = new PulseSupport();
+    }
+    return s_instance;
+}
+
+void PulseSupport::shutdown()
+{
+    if (NULL != s_instance) {
+        delete s_instance;
+        s_instance = NULL;
+    }
+}
+
 PulseSupport::PulseSupport()
 {
     m_pulseActive = false;
@@ -100,16 +118,25 @@ PulseSupport::PulseSupport()
 #endif
 }
 
+PulseSupport::~PulseSupport()
+{
+#ifdef HAVE_PULSEAUDIO
+#endif
+}
+
+
+
+
 #ifdef HAVE_PULSEAUDIO
 
-bool PulseSupport::pulseActive()
+bool PulseSupport::isActive()
 {
     return m_pulseActive;
 }
 
 #else
 
-bool PulseSupport::pulseActive()
+bool PulseSupport::isActive()
 {
     return false;
 }
@@ -119,7 +146,5 @@ bool PulseSupport::pulseActive()
 } // namespace Phonon
 
 QT_END_NAMESPACE
-
-#include "moc_pulsesupport.cpp"
 
 // vim: sw=4 ts=4
