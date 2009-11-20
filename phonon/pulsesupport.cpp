@@ -82,13 +82,13 @@ class AudioDevice
 {
     public:
         inline
-        AudioDevice(QString name, QString desc, QString icon, uint8_t available)
-        : pulseName(name)
+        AudioDevice(QString name, QString desc, QString icon, uint32_t index)
+        : pulseName(name), pulseIndex(index)
         {
             properties["name"] = desc;
             properties["description"] = ""; // We don't have descriptions (well we do, but we use them as the name!)
             properties["icon"] = icon;
-            properties["available"] = !!available;
+            properties["available"] = (index != PA_INVALID_INDEX);
             properties["isAdvanced"] = false; // Nothing is advanced!
         }
 
@@ -96,6 +96,7 @@ class AudioDevice
         inline AudioDevice() {}
 
         QString pulseName;
+        uint32_t pulseIndex;
         QHash<QByteArray, QVariant> properties;
 };
 bool operator!=(const AudioDevice &a, const AudioDevice &b)
@@ -133,10 +134,14 @@ static int s_deviceIndexCounter = 0;
 static QMap<QString, int> s_outputDeviceIndexes;
 static QMap<int, AudioDevice> s_outputDevices;
 static QMap<Phonon::Category, QMap<int, int> > s_outputDevicePriorities; // prio, device
+static QMap<QString, uint32_t> s_outputStreamIndexMap;
+static QMap<QString, int> s_outputStreamMoveQueue;
 
 static QMap<QString, int> s_captureDeviceIndexes;
 static QMap<int, AudioDevice> s_captureDevices;
 static QMap<Phonon::Category, QMap<int, int> > s_captureDevicePriorities; // prio, device
+static QMap<QString, uint32_t> s_captureStreamIndexMap;
+static QMap<QString, int> s_captureStreamMoveQueue;
 
 
 static void ext_device_manager_subscribe_cb(pa_context *, void *);
@@ -165,7 +170,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         s_outputDevicePriorities.clear();
         index = s_deviceIndexCounter++;
         s_outputDeviceIndexes.insert("sink:default", index);
-        s_outputDevices.insert(index, AudioDevice("sink:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 1));
+        s_outputDevices.insert(index, AudioDevice("sink:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 0));
         for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
             Phonon::Category cat = static_cast<Phonon::Category>(i);
             s_outputDevicePriorities[cat].insert(0, index);
@@ -176,7 +181,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         s_captureDevicePriorities.clear();
         index = s_deviceIndexCounter++;
         s_captureDeviceIndexes.insert("source:default", index);
-        s_captureDevices.insert(index, AudioDevice("source:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 1));
+        s_captureDevices.insert(index, AudioDevice("source:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 0));
         for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
             Phonon::Category cat = static_cast<Phonon::Category>(i);
             s_captureDevicePriorities[cat].insert(0, index);
@@ -336,7 +341,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     }
 
     // Add the new device itself.
-    new_devices->insert(name, AudioDevice(name, info->description, info->icon, info->available));
+    new_devices->insert(name, AudioDevice(name, info->description, info->icon, info->index));
 
     // For each role in the priority, map it to a phonon category and store the order.
     for (uint32_t i = 0; i < info->n_role_priorities; ++i) {
@@ -351,6 +356,169 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     }
 }
 
+static void set_output_device(QString streamUuid)
+{
+    // If we only have one device, bail. This will be true if we are not using module-device-manager
+    if (s_outputDevices.size() < 2)
+        return;
+
+    if (!s_outputStreamMoveQueue.contains(streamUuid))
+        return;
+
+    if (!s_outputStreamIndexMap.contains(streamUuid))
+        return;
+
+    int device = s_outputStreamMoveQueue[streamUuid];
+    if (!s_outputDevices.contains(device))
+        return;
+
+    // Remove so we don't process twice.
+    s_outputStreamMoveQueue.remove(streamUuid);
+
+    uint32_t pulse_device_index = s_outputDevices[device].pulseIndex;
+    uint32_t pulse_stream_index = s_outputStreamIndexMap[streamUuid];
+
+    logMessage(QString("Moving Pulse Sink Input %1 to Sink %2").arg(pulse_stream_index).arg(pulse_device_index));
+
+    /// @todo Find a way to move the stream without saving it... We don't want to pollute the stream restore db.
+    pa_operation* o;
+    if (!(o = pa_context_move_sink_input_by_index(s_context, pulse_stream_index, pulse_device_index, NULL, NULL))) {
+        logMessage(QString("pa_context_move_sink_input_by_index() failed"));
+        return;
+    }
+    pa_operation_unref(o);
+}
+
+static void set_capture_device(QString streamUuid)
+{
+    // If we only have one device, bail. This will be true if we are not using module-device-manager
+    if (s_captureDevices.size() < 2)
+        return;
+
+    if (!s_captureStreamMoveQueue.contains(streamUuid))
+        return;
+
+    if (!s_captureStreamIndexMap.contains(streamUuid))
+        return;
+
+    int device = s_captureStreamMoveQueue[streamUuid];
+    if (!s_captureDevices.contains(device))
+        return;
+
+    // Remove so we don't process twice.
+    s_captureStreamMoveQueue.remove(streamUuid);
+
+    uint32_t pulse_device_index = s_captureDevices[device].pulseIndex;
+    uint32_t pulse_stream_index = s_captureStreamIndexMap[streamUuid];
+
+    logMessage(QString("Moving Pulse Source Output %1 to Sink %2").arg(pulse_stream_index).arg(pulse_device_index));
+
+    /// @todo Find a way to move the stream without saving it... We don't want to pollute the stream restore db.
+    pa_operation* o;
+    if (!(o = pa_context_move_source_output_by_index(s_context, pulse_stream_index, pulse_device_index, NULL, NULL))) {
+        logMessage(QString("pa_context_move_source_output_by_index() failed"));
+        return;
+    }
+    pa_operation_unref(o);
+}
+
+void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata) {
+    Q_UNUSED(userdata);
+    Q_ASSERT(c);
+
+    if (eol < 0) {
+        if (pa_context_errno(c) == PA_ERR_NOENTITY)
+            return;
+
+        logMessage(QString("Sink input callback failure"));
+        return;
+    }
+
+    if (eol > 0)
+        return;
+
+    Q_ASSERT(i);
+
+    // loop through (*i) and extract phonon->streamindex...
+    const char *t;
+    if ((t = pa_proplist_gets(i->proplist, "phonon.streamid"))) {
+        logMessage(QString("Found PulseAudio stream index %1 for Phonon Output Stream %2").arg(i->index).arg(t));
+        s_outputStreamIndexMap[QString(t)] = i->index;
+        // Process any pending moves...
+        set_output_device(QString(t));
+    }
+}
+
+void source_output_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata) {
+    Q_UNUSED(userdata);
+    Q_ASSERT(c);
+
+    if (eol < 0) {
+        if (pa_context_errno(c) == PA_ERR_NOENTITY)
+            return;
+
+        logMessage(QString("Source output callback failure"));
+        return;
+    }
+
+    if (eol > 0)
+        return;
+
+    Q_ASSERT(i);
+
+    // loop through (*i) and extract phonon->streamindex...
+    const char *t;
+    if ((t = pa_proplist_gets(i->proplist, "phonon.streamid"))) {
+        logMessage(QString("Found PulseAudio stream index %1 for Phonon Capture Stream %2").arg(i->index).arg(t));
+        s_captureStreamIndexMap[QString(t)] = i->index;
+        // Process any pending moves...
+        set_capture_device(QString(t));
+    }
+}
+
+static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t index, void *userdata) {
+    Q_UNUSED(userdata);
+
+    switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
+        case PA_SUBSCRIPTION_EVENT_SINK_INPUT:
+            if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
+                QString phononid = s_outputStreamIndexMap.key(index);
+                if (!phononid.isEmpty()) {
+                    logMessage(QString("Removing Phonon Output Stream %1 (it's gone!)").arg(phononid));
+                    s_outputStreamIndexMap.remove(phononid);
+                    s_outputStreamMoveQueue.remove(phononid);
+                }
+            } else {
+                pa_operation *o;
+                if (!(o = pa_context_get_sink_input_info(c, index, sink_input_cb, NULL))) {
+                    logMessage(QString("pa_context_get_sink_input_info() failed"));
+                    return;
+                }
+                pa_operation_unref(o);
+            }
+            break;
+
+        case PA_SUBSCRIPTION_EVENT_SOURCE_OUTPUT:
+            if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
+                QString phononid = s_captureStreamIndexMap.key(index);
+                if (!phononid.isEmpty()) {
+                    logMessage(QString("Removing Phonon Capture Stream %1 (it's gone!)").arg(phononid));
+                    s_captureStreamIndexMap.remove(phononid);
+                    s_captureStreamMoveQueue.remove(phononid);
+                }
+            } else {
+                pa_operation *o;
+                if (!(o = pa_context_get_source_output_info(c, index, source_output_cb, NULL))) {
+                    logMessage(QString("pa_context_get_sink_input_info() failed"));
+                    return;
+                }
+                pa_operation_unref(o);
+            }
+            break;
+    }
+}
+
+
 static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
     Q_ASSERT(c);
 
@@ -363,6 +531,18 @@ static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
             s_connectionEventloop = NULL;
         }
         logMessage(QString("pa_ext_device_manager_read() failed"));
+        return;
+    }
+    pa_operation_unref(o);
+
+
+    // Register for the stream changes...
+    pa_context_set_subscribe_callback(c, subscribe_cb, NULL);
+
+    if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
+                                   (PA_SUBSCRIPTION_MASK_SINK_INPUT|
+                                    PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT), NULL, NULL))) {
+        logMessage(QString("pa_context_subscribe() failed"));
         return;
     }
     pa_operation_unref(o);
@@ -661,6 +841,7 @@ void PulseSupport::setStreamPropList(Category category, QString streamUuid)
 {
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(category);
+    Q_UNUSED(streamUuid);
 #else
     QString role = s_roleCategoryMap.key(category);
     if (role.isEmpty())
@@ -675,6 +856,46 @@ void PulseSupport::setStreamPropList(Category category, QString streamUuid)
 void PulseSupport::emitObjectDescriptionChanged(ObjectDescriptionType type)
 {
     emit objectDescriptionChanged(type);
+}
+
+bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(device);
+    return false;
+#else
+    logMessage(QString("Attempting to set Output Device to %1 for Output Stream %2").arg(device).arg(streamUuid));
+
+    s_outputStreamMoveQueue[streamUuid] = device;
+    // Attempt to look up the pulse stream index.
+    if (s_outputStreamIndexMap.contains(streamUuid)) {
+        logMessage(QString("... Found in map. Moving now"));
+        set_output_device(streamUuid);
+    } else {
+        logMessage(QString("... Not found in map. Saving move for when the stream appears"));
+    }
+    return true;
+#endif
+}
+
+bool PulseSupport::setCaptureDevice(QString streamUuid, int device) {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(device);
+    return false;
+#else
+    logMessage(QString("Attempting to set Capture Device to %1 for Capture Stream %2").arg(device).arg(streamUuid));
+
+    s_captureStreamMoveQueue[streamUuid] = device;
+    // Attempt to look up the pulse stream index.
+    if (s_captureStreamIndexMap.contains(streamUuid)) {
+        logMessage(QString("... Found in map. Moving now"));
+        set_capture_device(streamUuid);
+    } else {
+        logMessage(QString("... Not found in map. Saving move for when the stream appears"));
+    }
+    return true;
+#endif
 }
 
 } // namespace Phonon
