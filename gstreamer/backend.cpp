@@ -45,6 +45,7 @@ class MediaNode;
 
 Backend::Backend(QObject *parent, const QVariantList &)
         : QObject(parent)
+        , PulseSupport()
         , m_deviceManager(0)
         , m_effectManager(0)
         , m_debugLevel(Warning)
@@ -240,6 +241,11 @@ QStringList Backend::availableMimeTypes() const
     g_list_free(factoryList);
     availableMimeTypes.sort();
     return availableMimeTypes;
+}
+
+bool Backend::fullAudioDeviceEnumeration()
+{
+  return pulseActive();
 }
 
 /***
