@@ -28,6 +28,7 @@
 #include "audiooutputinterface.h"
 #include "phononnamespace_p.h"
 #include "platform_p.h"
+#include "pulsesupport_p.h"
 
 #include <QtCore/qmath.h>
 
@@ -89,6 +90,7 @@ void AudioOutputPrivate::init(Phonon::Category c)
 #endif
 
     category = c;
+    PulseSupport::getInstance()->setRoleForCategory(c);
 
     // select hardware device according to the category
     device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));

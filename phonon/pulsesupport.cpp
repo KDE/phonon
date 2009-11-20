@@ -621,7 +621,7 @@ void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<
 {
     QStringList list;
     QList<int>::iterator it;
-    
+
     for (it = order.begin(); it != order.end(); ++it) {
         if (s_captureDevices.contains(*it)) {
             list << s_captureDeviceIndexes.key(*it);
@@ -629,6 +629,17 @@ void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<
     }
     setDevicePriority(category, list);
 }
+
+void PulseSupport::setRoleForCategory(Category category)
+{
+    QString role = s_role_category_map.key(category);
+    if (role.isEmpty())
+        return;
+
+    logMessage(QString("Setting role to %1").arg(role));
+    setenv("PULSE_PROP_media.role", role.toLatin1().constData(), 1);
+}
+
 
 } // namespace Phonon
 
