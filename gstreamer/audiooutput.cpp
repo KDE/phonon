@@ -140,7 +140,10 @@ bool AudioOutput::setOutputDevice(int newDevice)
         // Save previous state
         GstState oldState = GST_STATE(m_audioSink);
         const QByteArray oldDeviceValue = GstHelper::property(m_audioSink, "device");
-        const QByteArray deviceId = ad->gstId;
+        // Due to Pulseaudio related cosmetic hacks in devicemanager.cpp we have to fix up the "device"
+        const QByteArray deviceId = (m_backend->deviceManager()->pulseActive()
+                                     ? "default"
+                                     : ad->gstId);
         m_device = newDevice;
 
         // We test if the device can be opened by checking if it can go from NULL to READY state
