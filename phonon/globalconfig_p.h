@@ -64,6 +64,7 @@ namespace Phonon
     protected:
         QSettings m_config;
         QList<int> _sortDevicesByCategoryPriority(ObjectDescriptionType type, Phonon::Category category, QList<int> &defaultList) const;
+        QList<int> _reindexList(Phonon::Category category, QList<int>newOrder, bool output) const;
 
     };
 } // namespace Phonon
