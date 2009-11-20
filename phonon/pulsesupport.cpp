@@ -84,7 +84,7 @@ class AudioDevice
             properties["name"] = desc;
             properties["description"] = ""; // We don't have descriptions (well we do, but we use them as the name!)
             properties["icon"] = icon;
-            properties["isAvailable"] = !!available;
+            properties["available"] = !!available;
             properties["isAdvanced"] = false; // Nothing is advanced!
         }
 
@@ -270,7 +270,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
                 logMessage(QString("  Phonon Category %1").arg(cat));
                 int count = 0;
                 foreach (int j, s_outputDevicePriorities[cat]) {
-                    logMessage(QString("    %1. %2").arg(++count).arg(s_outputDevices[j].properties["name"].toString()));
+                    QHash<QByteArray, QVariant> &props = s_outputDevices[j].properties;
+                    logMessage(QString("    %1. %2 (Available: %3)").arg(++count).arg(props["name"].toString()).arg(props["available"].toBool()));
                 }
             }
         }
@@ -281,7 +282,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
                 logMessage(QString("  Phonon Category %1").arg(cat));
                 int count = 0;
                 foreach (int j, s_captureDevicePriorities[cat]) {
-                    logMessage(QString("    %1. %2").arg(++count).arg(s_captureDevices[j].properties["name"].toString()));
+                    QHash<QByteArray, QVariant> &props = s_captureDevices[j].properties;
+                    logMessage(QString("    %1. %2 (Available: %3)").arg(++count).arg(props["name"].toString()).arg(props["available"].toBool()));
                 }
             }
         }
