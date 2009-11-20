@@ -68,9 +68,11 @@ static void filter(BackendInterface *backendIface, QList<int> *list, int whatToF
 
 QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, int override) const
 {
+    K_D(const GlobalConfig);
+
     //The devices need to be stored independently for every backend
-    const QSettingsGroup backendConfig(&m_private->config, QLatin1String("VideoCaptureDevice")); // + Factory::identifier());
-    const QSettingsGroup generalGroup(&m_private->config, QLatin1String("General"));
+    const QSettingsGroup backendConfig(&d->config, QLatin1String("VideoCaptureDevice")); // + Factory::identifier());
+    const QSettingsGroup generalGroup(&d->config, QLatin1String("General"));
     const bool hideAdvancedDevices = ((override & AdvancedDevicesFromSettings)
             ? generalGroup.value(QLatin1String("HideAdvancedDevices"), true)
             : static_cast<bool>(override & HideAdvancedDevices));
@@ -100,10 +102,10 @@ QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, in
         }
     }
 
-    //Now the list from m_private->config
+    //Now the list from d->config
     QList<int> deviceList = backendConfig.value(categoryKey, QList<int>());
 
-    //if there are devices in m_private->config that the backend doesn't report, remove them from the list
+    //if there are devices in d->config that the backend doesn't report, remove them from the list
     QMutableListIterator<int> i(deviceList);
     while (i.hasNext()) {
         if (0 == defaultList.removeAll(i.next())) {
@@ -111,7 +113,7 @@ QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, in
         }
     }
 
-    //if the backend reports more devices that are not in m_private->config append them to the list
+    //if the backend reports more devices that are not in d->config append them to the list
     deviceList += defaultList;
 
     return deviceList;

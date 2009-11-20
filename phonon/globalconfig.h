@@ -25,6 +25,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 
 #include "phonon_export.h"
 #include "phononnamespace.h"
+#include "phonondefs.h"
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
@@ -35,6 +36,7 @@ namespace Phonon
 
     class PHONON_EXPORT GlobalConfig
     {
+        K_DECLARE_PRIVATE(GlobalConfig)
     public:
         GlobalConfig();
         virtual ~GlobalConfig();
@@ -46,8 +48,8 @@ namespace Phonon
             AdvancedDevicesFromSettings = 2,
             HideUnavailableDevices = 4
         };
-        bool getHideAdvancedDevices() const;
-        void hideAdvancedDevices(bool hide = true);
+        bool hideAdvancedDevices() const;
+        void setHideAdvancedDevices(bool hide = true);
         void setAudioOutputDeviceListFor(Phonon::Category category, QList<int> order);
         QList<int> audioOutputDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         int audioOutputDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
@@ -59,8 +61,7 @@ namespace Phonon
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
     protected:
-        GlobalConfigPrivate *m_private;
-
+        GlobalConfigPrivate *const k_ptr;
     };
 } // namespace Phonon
 
