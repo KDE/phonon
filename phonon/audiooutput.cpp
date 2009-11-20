@@ -24,7 +24,7 @@
 #include "factory_p.h"
 #include "objectdescription.h"
 #include "audiooutputadaptor_p.h"
-#include "globalconfig_p.h"
+#include "globalconfig.h"
 #include "audiooutputinterface.h"
 #include "phononnamespace_p.h"
 #include "platform_p.h"

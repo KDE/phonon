@@ -20,6 +20,7 @@
 
 */
 
+#include "globalconfig.h"
 #include "globalconfig_p.h"
 
 #include "factory_p.h"
@@ -39,12 +40,19 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
-GlobalConfig::GlobalConfig() : m_config(QLatin1String("kde.org"), QLatin1String("libphonon"))
+GlobalConfigPrivate::GlobalConfigPrivate() : config(QLatin1String("kde.org"), QLatin1String("libphonon"))
 {
+}
+
+GlobalConfig::GlobalConfig()
+{
+    m_private = new GlobalConfigPrivate();
+    Q_ASSERT(m_private);
 }
 
 GlobalConfig::~GlobalConfig()
 {
+    delete m_private;
 }
 
 enum WhatToFilter {
@@ -120,11 +128,11 @@ static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, cons
             }
         }
 
-        //Now the list from m_config
+        //Now the list from m_private->config
         deviceList = backendConfig->value(categoryKey, QList<int>());
     }
 
-    //if there are devices in m_config that the backend doesn't report, remove them from the list
+    //if there are devices in m_private->config that the backend doesn't report, remove them from the list
     QMutableListIterator<int> i(deviceList);
     while (i.hasNext()) {
         if (0 == defaultList.removeAll(i.next())) {
@@ -132,7 +140,7 @@ static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, cons
         }
     }
 
-    //if the backend reports more devices that are not in m_config append them to the list
+    //if the backend reports more devices that are not in m_private->config append them to the list
     deviceList += defaultList;
 
     return deviceList;
@@ -141,13 +149,13 @@ static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, cons
 bool GlobalConfig::getHideAdvancedDevices() const
 {
     //The devices need to be stored independently for every backend
-    const QSettingsGroup generalGroup(&m_config, QLatin1String("General"));
+    const QSettingsGroup generalGroup(&m_private->config, QLatin1String("General"));
     return generalGroup.value(QLatin1String("HideAdvancedDevices"), true);
 }
 
 void GlobalConfig::hideAdvancedDevices(bool hide)
 {
-    QSettingsGroup generalGroup(&m_config, QLatin1String("General"));
+    QSettingsGroup generalGroup(&m_private->config, QLatin1String("General"));
     generalGroup.value(QLatin1String("HideAdvancedDevices"), hide);
 }
 
@@ -248,7 +256,7 @@ void GlobalConfig::setAudioOutputDeviceListFor(Phonon::Category category, QList<
         return;
     }
 
-    QSettingsGroup backendConfig(&m_config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
+    QSettingsGroup backendConfig(&m_private->config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
 
     order = reindexList(this, category, order, true);
 
@@ -304,7 +312,7 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int
         defaultList += list;
     }
 
-    const QSettingsGroup backendConfig(&m_config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
+    const QSettingsGroup backendConfig(&m_private->config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
     return sortDevicesByCategoryPriority(this, &backendConfig, AudioOutputDeviceType, category, defaultList);
 }
 
@@ -324,7 +332,7 @@ void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList
         return;
     }
 
-    QSettingsGroup backendConfig(&m_config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
+    QSettingsGroup backendConfig(&m_private->config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
 
     order = reindexList(this, category, order, false);
 
@@ -380,7 +388,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
         defaultList += list;
     }
 
-    const QSettingsGroup backendConfig(&m_config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
+    const QSettingsGroup backendConfig(&m_private->config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
     return sortDevicesByCategoryPriority(this, &backendConfig, AudioCaptureDeviceType, category, defaultList);
 }
 

@@ -25,7 +25,7 @@
 #include "avcapture_p.h"
 #include "factory_p.h"
 #include "objectdescription.h"
-#include "globalconfig_p.h"
+#include "globalconfig.h"
 
 #define PHONON_CLASSNAME AvCapture
 #define PHONON_INTERFACENAME AvCaptureInterface

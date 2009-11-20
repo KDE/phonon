@@ -20,7 +20,7 @@
 
 */
 #include "backendcapabilities.h"
-#include "globalconfig_p.h"
+#include "globalconfig.h"
 
 namespace Phonon
 {

@@ -53,4 +53,5 @@ install(FILES
     videoframe2.h
     videowidget.h
     visualization.h
+    globalconfig.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/phonon/experimental COMPONENT Devel)
