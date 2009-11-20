@@ -251,8 +251,9 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
 
 void GlobalConfig::setAudioOutputDeviceListFor(Phonon::Category category, QList<int> order)
 {
-    if (PulseSupport::getInstance()->isActive()) {
-        /// @todo Write support to push the priority list to pulseaudio
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        pulse->setOutputDevicePriorityForCategory(category, order);
         return;
     }
 
@@ -327,8 +328,9 @@ int GlobalConfig::audioOutputDeviceFor(Phonon::Category category, int override) 
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
 void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order)
 {
-    if (PulseSupport::getInstance()->isActive()) {
-        /// @todo Write support to push the priority list to pulseaudio
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        pulse->setCaptureDevicePriorityForCategory(category, order);
         return;
     }
 
