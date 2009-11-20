@@ -53,14 +53,6 @@ namespace BackendCapabilities
     PHONONEXPERIMENTAL_EXPORT QList<AudioOutputDevice> availableAudioOutputDevicesForCategory(Phonon::Category category);
 
     /**
-    * Returns the ordered list of audio capture devices for a given category.
-    *
-    * \return An ordered list of AudioCaptureDevice objects that give a name and
-    * description for every supported audio capture device.
-    */
-    PHONONEXPERIMENTAL_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevicesForCategory(Phonon::Category category);
-
-    /**
     * Apply a priority list of output devices for a given category.
     *
     * \return An ordered list of device indexes that for the given category
@@ -68,11 +60,23 @@ namespace BackendCapabilities
     PHONONEXPERIMENTAL_EXPORT void setAudioOutputDevicePriorityListForCategory(Phonon::Category category, QList<int> devices);
 
     /**
+    * Returns the ordered list of audio capture devices for a given category.
+    *
+    * \return An ordered list of AudioCaptureDevice objects that give a name and
+    * description for every supported audio capture device.
+    */
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
+    PHONONEXPERIMENTAL_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevicesForCategory(Phonon::Category category);
+#endif //QT_NO_PHONON_AUDIOCAPTURE
+
+    /**
     * Apply a priority list of capture devices for a given category.
     *
     * \return An ordered list of device indexes that for the given category
     */
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
     PHONONEXPERIMENTAL_EXPORT void setAudioCaptureDevicePriorityListForCategory(Phonon::Category category, QList<int> devices);
+#endif //QT_NO_PHONON_AUDIOCAPTURE
 
 } // namespace BackendCapabilities
 } // namespace Experimental

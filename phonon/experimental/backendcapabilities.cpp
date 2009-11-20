@@ -57,6 +57,12 @@ QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevicesForCate
     return ret;
 }
 
+void BackendCapabilities::setAudioOutputDevicePriorityListForCategory(Phonon::Category category, QList<int> devices)
+{
+    GlobalConfig().setAudioOutputDeviceListFor(category, devices);
+}
+
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
 QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevicesForCategory(Phonon::Category category)
 {
     QList<AudioCaptureDevice> ret;
@@ -67,15 +73,11 @@ QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevicesForCa
     return ret;
 }
 
-void BackendCapabilities::setAudioOutputDevicePriorityListForCategory(Phonon::Category category, QList<int> devices)
-{
-    GlobalConfig().setAudioOutputDeviceListFor(category, devices);
-}
-
 void BackendCapabilities::setAudioCaptureDevicePriorityListForCategory(Phonon::Category category, QList<int> devices)
 {
     GlobalConfig().setAudioCaptureDeviceListFor(category, devices);
 }
+#endif //QT_NO_PHONON_AUDIOCAPTURE
 
 } // namespace Experimental
 } // namespace Phonon
