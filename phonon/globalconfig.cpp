@@ -83,9 +83,11 @@ static void filter(ObjectDescriptionType type, BackendInterface *backendIface, Q
     }
 }
 
-static QList<int> listSortedByConfig(const QSettingsGroup &backendConfig, Phonon::Category category, QList<int> &defaultList)
+QList<int> GlobalConfig::_sortDevicesByCategoryPriority(ObjectDescriptionType type, Phonon::Category category, QList<int> &defaultList) const
 {
-    if (PulseSupport::getInstance()->isActive() || defaultList.size() <= 1) {
+    Q_ASSERT(type == AudioOutputDeviceType || type == AudioCaptureDeviceType);
+
+    if (defaultList.size() <= 1) {
         // nothing to sort
         return defaultList;
     } else {
@@ -101,18 +103,26 @@ static QList<int> listSortedByConfig(const QSettingsGroup &backendConfig, Phonon
         }
     }
 
-    QString categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(category));
-    if (!backendConfig.hasKey(categoryKey)) {
-        // no list in config for the given category
-        categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(Phonon::NoCategory));
+    QList<int> deviceList;
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        deviceList = pulse->objectIndexesByCategory(type, category);
+    } else {
+        //The devices need to be stored independently for every backend
+        const QSettingsGroup backendConfig(&m_config, QLatin1String(type == AudioOutputDeviceType ? "AudioOutputDevice" : "AudioCaptureDevice")); // + Factory::identifier());
+        QString categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(category));
         if (!backendConfig.hasKey(categoryKey)) {
-            // no list in config for NoCategory
-            return defaultList;
+            // no list in config for the given category
+            categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(Phonon::NoCategory));
+            if (!backendConfig.hasKey(categoryKey)) {
+                // no list in config for NoCategory
+                return defaultList;
+            }
         }
-    }
 
-    //Now the list from m_config
-    QList<int> deviceList = backendConfig.value(categoryKey, QList<int>());
+        //Now the list from m_config
+        deviceList = backendConfig.value(categoryKey, QList<int>());
+    }
 
     //if there are devices in m_config that the backend doesn't report, remove them from the list
     QMutableListIterator<int> i(deviceList);
@@ -165,8 +175,6 @@ void GlobalConfig::setAudioOutputDeviceListFor(Phonon::Category category, QList<
 
 QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int override) const
 {
-    //The devices need to be stored independently for every backend
-    const QSettingsGroup backendConfig(&m_config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
     const bool hideAdvancedDevices = ((override & AdvancedDevicesFromSettings)
             ? getHideAdvancedDevices()
             : static_cast<bool>(override & HideAdvancedDevices));
@@ -209,7 +217,7 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int
         defaultList += list;
     }
 
-    return listSortedByConfig(backendConfig, category, defaultList);
+    return _sortDevicesByCategoryPriority(AudioOutputDeviceType, category, defaultList);
 }
 
 int GlobalConfig::audioOutputDeviceFor(Phonon::Category category, int override) const
@@ -245,8 +253,6 @@ void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList
 
 QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, int override) const
 {
-    //The devices need to be stored independently for every backend
-    const QSettingsGroup backendConfig(&m_config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
     const bool hideAdvancedDevices = ((override & AdvancedDevicesFromSettings)
             ? getHideAdvancedDevices()
             : static_cast<bool>(override & HideAdvancedDevices));
@@ -289,7 +295,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
         defaultList += list;
     }
 
-    return listSortedByConfig(backendConfig, category, defaultList);
+    return _sortDevicesByCategoryPriority(AudioCaptureDeviceType, category, defaultList);
 }
 
 int GlobalConfig::audioCaptureDeviceFor(Phonon::Category category, int override) const
