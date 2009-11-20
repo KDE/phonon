@@ -27,7 +27,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QSettings>
 
 #include "../phononnamespace.h"
-#include "../globalconfig_p.h"
+#include "../globalconfig.h"
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
