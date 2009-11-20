@@ -24,6 +24,8 @@
 #define PHONON_PULSESUPPORT_H
 
 #include "phonon_export.h"
+#include "phononnamespace.h"
+#include "objectdescription.h"
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QSet>
@@ -40,6 +42,8 @@ namespace Phonon
             static void shutdown();
 
             bool isActive();
+            QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
+            QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
         private:
             PulseSupport();
             ~PulseSupport();
