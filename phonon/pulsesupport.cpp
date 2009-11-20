@@ -23,10 +23,12 @@
 #include <QtCore/QtGlobal>
 #include <QtCore/QEventLoop>
 #include <QtCore/QDebug>
+#include <QtCore/QStringList>
 
 #ifdef HAVE_PULSEAUDIO
 #include <glib.h>
 #include <pulse/pulseaudio.h>
+#include <pulse/xmalloc.h>
 #include <pulse/glib-mainloop.h>
 #include <pulse/ext-device-manager.h>
 #endif // HAVE_PULSEAUDIO
@@ -573,6 +575,59 @@ QList<int> PulseSupport::objectIndexesByCategory(ObjectDescriptionType type, Cat
     #endif
 
     return ret;
+}
+
+static void setDevicePriority(Category category, QStringList list)
+{
+    QString role = s_role_category_map.key(category);
+    if (role.isEmpty())
+        return;
+
+    logMessage(QString("Reindexing %1: %2").arg(role).arg(list.join(", ")));
+
+    char **devices;
+    devices = pa_xnew(char *, list.size()+1);
+    int i = 0;
+    foreach (QString str, list) {
+        devices[i++] = pa_xstrdup(str.toUtf8().constData());
+    }
+    devices[list.size()] = NULL;
+
+    pa_operation *o;
+    if (!(o = pa_ext_device_manager_reorder_devices_for_role(s_context, role.toUtf8().constData(), (const char**)devices, NULL, NULL)))
+        logMessage(QString("pa_ext_device_manager_reorder_devices_for_role() failed"));
+    else
+        pa_operation_unref(o);
+
+    for (i = 0; i < list.size(); ++i)
+        pa_xfree(devices[i]);
+    pa_xfree(devices);
+}
+
+void PulseSupport::setOutputDevicePriorityForCategory(Category category, QList<int> order)
+{
+    QStringList list;
+    QList<int>::iterator it;
+
+    for (it = order.begin(); it != order.end(); ++it) {
+        if (s_outputDevices.contains(*it)) {
+            list << s_outputDeviceIndexes.key(*it);
+        }
+    }
+    setDevicePriority(category, list);
+}
+
+void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<int> order)
+{
+    QStringList list;
+    QList<int>::iterator it;
+    
+    for (it = order.begin(); it != order.end(); ++it) {
+        if (s_captureDevices.contains(*it)) {
+            list << s_captureDeviceIndexes.key(*it);
+        }
+    }
+    setDevicePriority(category, list);
 }
 
 } // namespace Phonon

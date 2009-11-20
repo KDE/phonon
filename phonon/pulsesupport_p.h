@@ -47,6 +47,9 @@ namespace Phonon
             QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
             QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
             QList<int> objectIndexesByCategory(ObjectDescriptionType type, Category category) const;
+
+            void setOutputDevicePriorityForCategory(Category category, QList<int> order);
+            void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
         private:
             PulseSupport();
             ~PulseSupport();
