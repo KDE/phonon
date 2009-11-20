@@ -108,22 +108,24 @@ bool ObjectDescriptionData::isValid() const
 
 ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType type, int index)
 {
+    BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
+
     // prefer to get the ObjectDescriptionData from the platform plugin for audio devices
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (type == AudioOutputDeviceType || type == AudioCaptureDeviceType) {
-        PlatformPlugin *platformPlugin = Factory::platformPlugin();
-        if (platformPlugin) {
-            QList<int> indexes = platformPlugin->objectDescriptionIndexes(type);
-            if (indexes.contains(index)) {
-                QHash<QByteArray, QVariant> properties = platformPlugin->objectDescriptionProperties(type, index);
-                return new ObjectDescriptionData(index, properties);
+    if (!iface || !iface->fullAudioDeviceEnumeration()) {
+        if (type == AudioOutputDeviceType || type == AudioCaptureDeviceType) {
+            PlatformPlugin *platformPlugin = Factory::platformPlugin();
+            if (platformPlugin) {
+                QList<int> indexes = platformPlugin->objectDescriptionIndexes(type);
+                if (indexes.contains(index)) {
+                    QHash<QByteArray, QVariant> properties = platformPlugin->objectDescriptionProperties(type, index);
+                    return new ObjectDescriptionData(index, properties);
+                }
             }
         }
     }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
-    QObject *b = Factory::backend();
-    BackendInterface *iface = qobject_cast<BackendInterface *>(b);
     if (iface) {
         QList<int> indexes = iface->objectDescriptionIndexes(type);
         if (indexes.contains(index)) {
