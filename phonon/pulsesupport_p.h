@@ -54,6 +54,10 @@ namespace Phonon
 
             void setStreamPropList(Category category, QString streamUuid);
             void emitObjectDescriptionChanged(ObjectDescriptionType);
+
+            bool setOutputDevice(QString streamUuid, int device);
+            bool setCaptureDevice(QString streamUuid, int device);
+
         signals:
             void objectDescriptionChanged(ObjectDescriptionType);
         private:
