@@ -46,10 +46,14 @@ namespace Phonon
             AdvancedDevicesFromSettings = 2,
             HideUnavailableDevices = 4
         };
+        bool isHiddenAudioOutputDevice(int i);
+        void setAudioOutputDeviceListFor(Phonon::Category category, QList<int> order);
         QList<int> audioOutputDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         int audioOutputDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
 
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
+        bool isHiddenAudioCaptureDevice(int i);
+        void setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order);
         QList<int> audioCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         int audioCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
 #endif //QT_NO_PHONON_AUDIOCAPTURE
