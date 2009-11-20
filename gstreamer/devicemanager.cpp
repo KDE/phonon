@@ -46,7 +46,7 @@ AudioDevice::AudioDevice(DeviceManager *manager, const QByteArray &gstId)
         : gstId(gstId)
 {
     // This should never be called when PulseAudio is active.
-    Q_ASSERT(!manager->pulseActive());
+    Q_ASSERT(!PulseSupport::getInstance()->isActive());
 
     id = manager->allocateDeviceId();
     icon = "audio-card";
@@ -80,12 +80,15 @@ DeviceManager::DeviceManager(Backend *backend)
     QSettings settings(QLatin1String("Trolltech"));
     settings.beginGroup(QLatin1String("Qt"));
 
+    PulseSupport *pulse = PulseSupport::getInstance();
     m_audioSink = qgetenv("PHONON_GST_AUDIOSINK");
     if (m_audioSink.isEmpty()) {
         m_audioSink = settings.value(QLatin1String("audiosink"), "Auto").toByteArray().toLower();
-        if (m_audioSink == "auto" && PulseSupport::getInstance()->isActive())
+        if (m_audioSink == "auto" && pulse->isActive())
             m_audioSink = "pulsesink";
     }
+    if ("pulsesink" != m_audioSink)
+        pulse->disable();
 
     m_videoSinkWidget = qgetenv("PHONON_GST_VIDEOMODE");
     if (m_videoSinkWidget.isEmpty()) {
@@ -335,7 +338,7 @@ void DeviceManager::updateDeviceList()
     QList<QByteArray> list;
 
     if (audioSink) {
-        if (!pulseActive()) {
+        if (!PulseSupport::getInstance()->isActive()) {
             // If we're using pulse, the PulseSupport class takes care of things for us.
             list = GstHelper::extractProperties(audioSink, "device");
             list.prepend("default");
@@ -382,12 +385,6 @@ const QList<AudioDevice> DeviceManager::audioOutputDevices() const
 {
     return m_audioDeviceList;
 }
-
-bool DeviceManager::pulseActive()
-{
-    return ("pulsesink" == m_audioSink);
-}
-
 
 }
 }

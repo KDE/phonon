@@ -59,7 +59,6 @@ public:
     GstElement *createGNOMEAudioSink(Category category);
     GstElement *createAudioSink(Category category = NoCategory);
     AbstractRenderer *createVideoRenderer(VideoWidget *parent);
-    bool pulseActive();
 
 signals:
     void deviceAdded(int);
