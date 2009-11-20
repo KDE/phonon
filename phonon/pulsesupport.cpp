@@ -51,7 +51,15 @@ static PulseSupport* s_instance = NULL;
 */
 
 static int debugLevel() {
-    return 2;
+    static int level = -1;
+    if (level < 1) {
+        level = 0;
+        QString pulseenv = qgetenv("PHONON_PULSEAUDIO_DEBUG");
+        int l = pulseenv.toInt();
+        if (l > 0)
+            level = (l > 2 ? 2 : l);
+    }
+    return level;
 }
 
 static void logMessage(const QString &message, int priority = 2, QObject *obj=0);
@@ -614,7 +622,7 @@ PulseSupport::PulseSupport()
     s_roleCategoryMap["a11y"] = Phonon::AccessibilityCategory;
 
     // To allow for easy debugging, give an easy way to disable this pulseaudio check
-    QString pulseenv = qgetenv("PHONON_DISABLE_PULSEAUDIO");
+    QString pulseenv = qgetenv("PHONON_PULSEAUDIO_DISABLE");
     if (pulseenv.toInt())
         return;
 
