@@ -24,6 +24,7 @@
 #include "widgetrenderer.h"
 #include "x11renderer.h"
 #include "artssink.h"
+#include "pulsesupport_p.h"
 
 #ifdef USE_ALSASINK2
 #include "alsasink2.h"
@@ -82,7 +83,7 @@ DeviceManager::DeviceManager(Backend *backend)
     m_audioSink = qgetenv("PHONON_GST_AUDIOSINK");
     if (m_audioSink.isEmpty()) {
         m_audioSink = settings.value(QLatin1String("audiosink"), "Auto").toByteArray().toLower();
-        if (m_audioSink == "auto" && m_backend->pulseActive())
+        if (m_audioSink == "auto" && PulseSupport::getInstance()->isActive())
             m_audioSink = "pulsesink";
     }
 

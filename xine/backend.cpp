@@ -21,6 +21,7 @@
 
 #include "backend.h"
 #include <phonon/experimental/backendinterface.h>
+#include <phonon/pulsesupport_p.h>
 #include "mediaobject.h"
 #include "effect.h"
 #include "events.h"
@@ -71,6 +72,9 @@ Backend::Backend(QObject *parent, const QVariantList &)
     m_debugMessages(!qgetenv("PHONON_XINE_DEBUG").isEmpty()),
     m_thread(0)
 {
+    // Initialise PulseAudio support
+    PulseSupport::getInstance();
+
     Q_ASSERT(s_instance == 0);
     s_instance = this;
 
@@ -116,6 +120,7 @@ Backend::~Backend()
     }
 
     s_instance = 0;
+    PulseSupport::shutdown();
 }
 
 XineEngine Backend::xineEngineForStream()
@@ -201,11 +206,6 @@ QStringList Backend::availableMimeTypes() const
     }
 
     return m_supportedMimeTypes;
-}
-
-bool Backend::fullAudioDeviceEnumeration()
-{
-    return pulseActive();
 }
 
 QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
@@ -616,7 +616,7 @@ void Backend::checkAudioOutputs()
         // This will list the audio drivers, not the actual devices.
         const char *const *outputPlugins = xine_list_audio_output_plugins(m_xine);
 
-        bool using_pulse = pulseActive();
+        bool using_pulse = PulseSupport::getInstance()->isActive();
         if (using_pulse) {
             // Assume failure
             using_pulse = false;

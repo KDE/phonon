@@ -24,7 +24,6 @@
 
 #include <phonon/objectdescription.h>
 #include <phonon/backendinterface.h>
-#include <phonon/pulsesupport.h>
 
 #include <QtCore/QList>
 #include <QtCore/QPointer>
@@ -44,7 +43,7 @@ class MediaNode;
 class MediaObject;
 class EffectManager;
 
-class Backend : public QObject, public BackendInterface, public PulseSupport
+class Backend : public QObject, public BackendInterface
 {
     Q_OBJECT
     Q_INTERFACES(Phonon::BackendInterface)
@@ -63,7 +62,6 @@ public:
     bool isValid() const;
     bool supportsVideo() const;
     QStringList availableMimeTypes() const;
-    bool fullAudioDeviceEnumeration();
 
     QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
     QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;

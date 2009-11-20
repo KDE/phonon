@@ -276,12 +276,6 @@ class BackendInterface
          */
         virtual QStringList availableMimeTypes() const = 0;
 
-        /**
-         * Tells the client whether or not the backend handles all audio device
-         * enumeration
-         */
-        virtual bool fullAudioDeviceEnumeration() { return false; }
-
 };
 } // namespace Phonon
 

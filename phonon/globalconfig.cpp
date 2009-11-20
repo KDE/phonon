@@ -29,6 +29,7 @@
 #include "backendinterface.h"
 #include "qsettingsgroup_p.h"
 #include "phononnamespace_p.h"
+#include "pulsesupport_p.h"
 
 #include <QtCore/QList>
 #include <QtCore/QVariant>
@@ -174,7 +175,7 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (!backendIface || !backendIface->fullAudioDeviceEnumeration()) {
+    if (!backendIface || !PulseSupport::getInstance()->isActive()) {
         if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
             // the platform plugin lists the audio devices for the platform
             // this list already is in default order (as defined by the platform plugin)
@@ -254,7 +255,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (!backendIface || !backendIface->fullAudioDeviceEnumeration()) {
+    if (!backendIface || !PulseSupport::getInstance()->isActive()) {
         if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
             // the platform plugin lists the audio devices for the platform
             // this list already is in default order (as defined by the platform plugin)
