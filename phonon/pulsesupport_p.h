@@ -52,7 +52,7 @@ namespace Phonon
             void setOutputDevicePriorityForCategory(Category category, QList<int> order);
             void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
 
-            void setStreamPropList(Category category, unsigned int streamindex);
+            void setStreamPropList(Category category, QString streamUuid);
             void emitObjectDescriptionChanged(ObjectDescriptionType);
         signals:
             void objectDescriptionChanged(ObjectDescriptionType);
