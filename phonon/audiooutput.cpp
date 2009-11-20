@@ -43,8 +43,12 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
-static inline bool callSetOutputDevice(MediaNodePrivate *const d, int index)
+static inline bool callSetOutputDevice(AudioOutputPrivate *const d, int index)
 {
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive())
+        return pulse->setOutputDevice(d->getStreamUuid(), index);
+
     Iface<IFACES2> iface(d);
     if (iface) {
         return iface->setOutputDevice(AudioOutputDevice::fromIndex(index));
@@ -52,8 +56,12 @@ static inline bool callSetOutputDevice(MediaNodePrivate *const d, int index)
     return Iface<IFACES0>::cast(d)->setOutputDevice(index);
 }
 
-static inline bool callSetOutputDevice(MediaNodePrivate *const d, const AudioOutputDevice &dev)
+static inline bool callSetOutputDevice(AudioOutputPrivate *const d, const AudioOutputDevice &dev)
 {
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive())
+        return pulse->setOutputDevice(d->getStreamUuid(), dev.index());
+
     Iface<IFACES2> iface(d);
     if (iface) {
         return iface->setOutputDevice(dev);
@@ -224,10 +232,6 @@ AudioOutputDevice AudioOutput::outputDevice() const
 
 bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
 {
-    // If we are using PulseAudio we don't acutally change devices at all.
-    if (PulseSupport::getInstance()->isActive())
-        return true;
-
     K_D(AudioOutput);
     if (!newAudioOutputDevice.isValid()) {
         d->outputDeviceOverridden = false;
@@ -244,7 +248,7 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
         d->device = newAudioOutputDevice;
     }
     if (k_ptr->backendObject()) {
-        return callSetOutputDevice(k_ptr, d->device.index());
+        return callSetOutputDevice(d, d->device.index());
     }
     return true;
 }
