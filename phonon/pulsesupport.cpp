@@ -392,7 +392,8 @@ static void set_output_device(QString streamUuid)
     uint32_t pulse_device_index = s_outputDevices[device].pulseIndex;
     uint32_t pulse_stream_index = s_outputStreamIndexMap[streamUuid];
 
-    logMessage(QString("Moving Pulse Sink Input %1 to Sink %2").arg(pulse_stream_index).arg(pulse_device_index));
+    const QVariant var = s_outputDevices[device].properties["name"];
+    logMessage(QString("Moving Pulse Sink Input %1 to '%2' (Pulse Sink %3)").arg(pulse_stream_index).arg(var.toString()).arg(pulse_device_index));
 
     /// @todo Find a way to move the stream without saving it... We don't want to pollute the stream restore db.
     pa_operation* o;
@@ -425,7 +426,8 @@ static void set_capture_device(QString streamUuid)
     uint32_t pulse_device_index = s_captureDevices[device].pulseIndex;
     uint32_t pulse_stream_index = s_captureStreamIndexMap[streamUuid];
 
-    logMessage(QString("Moving Pulse Source Output %1 to Sink %2").arg(pulse_stream_index).arg(pulse_device_index));
+    const QVariant var = s_captureDevices[device].properties["name"];
+    logMessage(QString("Moving Pulse Source Output %1 to '%2' (Pulse Sink %3)").arg(pulse_stream_index).arg(var.toString()).arg(pulse_device_index));
 
     /// @todo Find a way to move the stream without saving it... We don't want to pollute the stream restore db.
     pa_operation* o;
@@ -878,7 +880,12 @@ bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
     Q_UNUSED(device);
     return false;
 #else
-    logMessage(QString("Attempting to set Output Device to %1 for Output Stream %2").arg(device).arg(streamUuid));
+    if (!s_outputDevices.contains(device)) {
+        logMessage(QString("Attempting to set Output Device for invalid device id %1.").arg(device));
+        return false;
+    }
+    const QVariant var = s_outputDevices[device].properties["name"];
+    logMessage(QString("Attempting to set Output Device to '%1' for Output Stream %2").arg(var.toString()).arg(streamUuid));
 
     s_outputStreamMoveQueue[streamUuid] = device;
     // Attempt to look up the pulse stream index.
@@ -898,7 +905,12 @@ bool PulseSupport::setCaptureDevice(QString streamUuid, int device) {
     Q_UNUSED(device);
     return false;
 #else
-    logMessage(QString("Attempting to set Capture Device to %1 for Capture Stream %2").arg(device).arg(streamUuid));
+    if (!s_captureDevices.contains(device)) {
+        logMessage(QString("Attempting to set Capture Device for invalid device id %1.").arg(device));
+        return false;
+    }
+    const QVariant var = s_captureDevices[device].properties["name"];
+    logMessage(QString("Attempting to set Capture Device to '%1' for Capture Stream %2").arg(var.toString()).arg(streamUuid));
 
     s_captureStreamMoveQueue[streamUuid] = device;
     // Attempt to look up the pulse stream index.
