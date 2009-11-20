@@ -210,6 +210,10 @@ QStringList Backend::availableMimeTypes() const
 
 QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
 {
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive() && (Phonon::AudioOutputDeviceType == type || Phonon::AudioCaptureDeviceType == type))
+        return pulse->objectDescriptionIndexes(type);
+
     QList<int> list;
     switch(type)
     {
@@ -262,6 +266,10 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
 
 QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescriptionType type, int index) const
 {
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive() && (Phonon::AudioOutputDeviceType == type || Phonon::AudioCaptureDeviceType == type))
+        return pulse->objectDescriptionProperties(type, index);
+
     //debug() << Q_FUNC_INFO << type << index;
     QHash<QByteArray, QVariant> ret;
     switch (type) {
@@ -577,6 +585,9 @@ QHash<QByteArray, QVariant> Backend::audioOutputProperties(int audioDevice)
 
 QByteArray Backend::audioDriverFor(int audioDevice)
 {
+    if (PulseSupport::getInstance()->isActive())
+        return "pulseaudio";
+
     instance()->checkAudioOutputs();
     const Backend *const that = instance();
     for (int i = 0; i < that->m_audioOutputInfos.size(); ++i) {
@@ -616,74 +627,70 @@ void Backend::checkAudioOutputs()
         // This will list the audio drivers, not the actual devices.
         const char *const *outputPlugins = xine_list_audio_output_plugins(m_xine);
 
-        bool using_pulse = PulseSupport::getInstance()->isActive();
-        if (using_pulse) {
-            // Assume failure
-            using_pulse = false;
+        PulseSupport *pulse = PulseSupport::getInstance();
+        if (pulse->isActive()) {
             for (int i = 0; outputPlugins[i]; ++i) {
                 if (0 == strcmp(outputPlugins[i], "pulseaudio")) {
-                    // Yay!
-                    using_pulse = true;
-                    addAudioOutput(nextIndex++, 100, tr("PulseAudio"),
-                            xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
-                            /*icon name */"audio-backend-pulseaudio", outputPlugins[i]);
-                    break;
+                    // We've detected the pulseaudio output plugin. We're done.
+                    return;
                 }
             }
+
+            // We cannot find the output plugin, so let the support class know.
+            pulse->disable();
         }
-        if (!using_pulse) {
-            for (int i = 0; outputPlugins[i]; ++i) {
-                debug() << Q_FUNC_INFO << "outputPlugin: " << outputPlugins[i];
-                if (0 == strcmp(outputPlugins[i], "alsa")) {
-                    // we just list "default" for fallback when the platform plugin fails to list
-                    // devices
-                    addAudioOutput(nextIndex++, 12, tr("ALSA default output"),
-                            tr("<html><p>The Platform Plugin failed. This is a fallback to use the "
-                                "first ALSA device available.</p></html>", "This string is only shown "
-                                "when the KDE runtime is broken. The technical term 'Platform Plugin' "
-                                "might help users to find a solution, so it might make sense to leave "
-                                "that term untranslated."),
-                            /*icon name */"audio-card", outputPlugins[i], false, true);
-                } else if (0 == strcmp(outputPlugins[i], "oss")) {
-                    // we just list /dev/dsp for fallback when the platform plugin fails to list
-                    // devices
-                    addAudioOutput(nextIndex++, 11, tr("OSS default output"),
-                            tr("<html><p>The Platform Plugin failed. This is a fallback to use the "
-                                "first OSS device available.</p></html>", "This string is only shown "
-                                "when the KDE runtime is broken. The technical term 'Platform Plugin' "
-                                "might help users to find a solution, so it might make sense to leave "
-                                "that term untranslated."),
-                            /*icon name */"audio-card", outputPlugins[i], false, true);
-                } else if (0 == strcmp(outputPlugins[i], "none")
-                        || 0 == strcmp(outputPlugins[i], "file")) {
-                    // ignore these drivers (hardware devices are listed by the KDE platform plugin)
-                } else if (0 == strcmp(outputPlugins[i], "jack")) {
-                    addAudioOutput(nextIndex++, 9, tr("Jack Audio Connection Kit"),
-                            tr("<html><p>JACK is a low-latency audio server. It can connect a number "
-                                "of different applications to an audio device, as well as allowing "
-                                "them to share audio between themselves.</p>"
-                                "<p>JACK was designed from the ground up for professional audio "
-                                "work, and its design focuses on two key areas: synchronous "
-                                "execution of all clients, and low latency operation.</p></html>"),
-                                /*icon name */"audio-backend-jack", outputPlugins[i]);
-                } else if (0 == strcmp(outputPlugins[i], "arts")) {
-                    addAudioOutput(nextIndex++, -100, tr("aRts"),
-                            tr("<html><p>aRts is the old sound server and media framework that was used "
-                                "in KDE2 and KDE3. Its use is discouraged.</p></html>"),
-                            /*icon name */"audio-backend-arts", outputPlugins[i]);
-                } else if (0 == strcmp(outputPlugins[i], "pulseaudio")) {
-                    addAudioOutput(nextIndex++, 10, tr("PulseAudio"),
-                            xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
-                            /*icon name */"audio-backend-pulseaudio", outputPlugins[i]);
-                } else if (0 == strcmp(outputPlugins[i], "esd")) {
-                    addAudioOutput(nextIndex++, 8, tr("Esound (ESD)"),
-                            xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
-                            /*icon name */"audio-backend-esd", outputPlugins[i]);
-                } else {
-                    addAudioOutput(nextIndex++, -20, outputPlugins[i],
-                            xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
-                            /*icon name */outputPlugins[i], outputPlugins[i]);
-                }
+
+        for (int i = 0; outputPlugins[i]; ++i) {
+            debug() << Q_FUNC_INFO << "outputPlugin: " << outputPlugins[i];
+            if (0 == strcmp(outputPlugins[i], "alsa")) {
+                // we just list "default" for fallback when the platform plugin fails to list
+                // devices
+                addAudioOutput(nextIndex++, 12, tr("ALSA default output"),
+                        tr("<html><p>The Platform Plugin failed. This is a fallback to use the "
+                            "first ALSA device available.</p></html>", "This string is only shown "
+                            "when the KDE runtime is broken. The technical term 'Platform Plugin' "
+                            "might help users to find a solution, so it might make sense to leave "
+                            "that term untranslated."),
+                        /*icon name */"audio-card", outputPlugins[i], false, true);
+            } else if (0 == strcmp(outputPlugins[i], "oss")) {
+                // we just list /dev/dsp for fallback when the platform plugin fails to list
+                // devices
+                addAudioOutput(nextIndex++, 11, tr("OSS default output"),
+                        tr("<html><p>The Platform Plugin failed. This is a fallback to use the "
+                            "first OSS device available.</p></html>", "This string is only shown "
+                            "when the KDE runtime is broken. The technical term 'Platform Plugin' "
+                            "might help users to find a solution, so it might make sense to leave "
+                            "that term untranslated."),
+                        /*icon name */"audio-card", outputPlugins[i], false, true);
+            } else if (0 == strcmp(outputPlugins[i], "none")
+                    || 0 == strcmp(outputPlugins[i], "file")) {
+                // ignore these drivers (hardware devices are listed by the KDE platform plugin)
+            } else if (0 == strcmp(outputPlugins[i], "jack")) {
+                addAudioOutput(nextIndex++, 9, tr("Jack Audio Connection Kit"),
+                        tr("<html><p>JACK is a low-latency audio server. It can connect a number "
+                            "of different applications to an audio device, as well as allowing "
+                            "them to share audio between themselves.</p>"
+                            "<p>JACK was designed from the ground up for professional audio "
+                            "work, and its design focuses on two key areas: synchronous "
+                            "execution of all clients, and low latency operation.</p></html>"),
+                            /*icon name */"audio-backend-jack", outputPlugins[i]);
+            } else if (0 == strcmp(outputPlugins[i], "arts")) {
+                addAudioOutput(nextIndex++, -100, tr("aRts"),
+                        tr("<html><p>aRts is the old sound server and media framework that was used "
+                            "in KDE2 and KDE3. Its use is discouraged.</p></html>"),
+                        /*icon name */"audio-backend-arts", outputPlugins[i]);
+            } else if (0 == strcmp(outputPlugins[i], "pulseaudio")) {
+                addAudioOutput(nextIndex++, 10, tr("PulseAudio"),
+                        xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
+                        /*icon name */"audio-backend-pulseaudio", outputPlugins[i]);
+            } else if (0 == strcmp(outputPlugins[i], "esd")) {
+                addAudioOutput(nextIndex++, 8, tr("Esound (ESD)"),
+                        xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
+                        /*icon name */"audio-backend-esd", outputPlugins[i]);
+            } else {
+                addAudioOutput(nextIndex++, -20, outputPlugins[i],
+                        xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
+                        /*icon name */outputPlugins[i], outputPlugins[i]);
             }
         }
 
