@@ -439,7 +439,7 @@ EffectManager* Backend::effectManager() const
 
 /**
  * Returns a debuglevel that is determined by the
- * PHONON_GSTREAMER_DEBUG environment variable.
+ * PHONON_GST_DEBUG environment variable.
  *
  *  Warning - important warnings
  *  Info    - general info
