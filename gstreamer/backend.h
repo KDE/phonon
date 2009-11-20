@@ -83,7 +83,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void handleBusMessage(Message);
-    void emitObjectDescriptionChanged(ObjectDescriptionType);
 
 private:
     static gboolean busCall(GstBus *bus, GstMessage *msg, gpointer data);
