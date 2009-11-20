@@ -37,6 +37,7 @@
 #include "xineengine.h"
 #include <phonon/objectdescription.h>
 #include <phonon/backendinterface.h>
+#include <phonon/pulsesupport.h>
 
 namespace Phonon
 {
@@ -66,7 +67,7 @@ class XineThread;
 typedef QHash< int, QHash<QByteArray, QVariant> > ChannelIndexHash;
 typedef QHash<ObjectDescriptionType, ChannelIndexHash> ObjectDescriptionHash;
 
-class Backend : public QObject, public Phonon::BackendInterface
+class Backend : public QObject, public BackendInterface, public PulseSupport
 {
     Q_OBJECT
     Q_INTERFACES(Phonon::BackendInterface)
@@ -87,6 +88,7 @@ class Backend : public QObject, public Phonon::BackendInterface
         bool endConnectionChange(QSet<QObject *>);
 
         QStringList availableMimeTypes() const;
+        bool fullAudioDeviceEnumeration();
 
     // phonon-xine internal:
         static void addCleanupObject(QObject *o) { instance()->m_cleanupObjects << o; }
