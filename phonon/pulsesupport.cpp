@@ -880,6 +880,9 @@ bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
     Q_UNUSED(device);
     return false;
 #else
+    if (s_outputDevices.size() < 2)
+        return true;
+
     if (!s_outputDevices.contains(device)) {
         logMessage(QString("Attempting to set Output Device for invalid device id %1.").arg(device));
         return false;
@@ -905,6 +908,9 @@ bool PulseSupport::setCaptureDevice(QString streamUuid, int device) {
     Q_UNUSED(device);
     return false;
 #else
+    if (s_captureDevices.size() < 2)
+        return true;
+
     if (!s_captureDevices.contains(device)) {
         logMessage(QString("Attempting to set Capture Device for invalid device id %1.").arg(device));
         return false;
