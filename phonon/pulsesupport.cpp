@@ -77,6 +77,11 @@ PulseSupport::PulseSupport()
     m_pulseActive = false;
 
 #ifdef HAVE_PULSEAUDIO
+    // To allow for easy debugging, give an easy way to disable this pulseaudio check
+    QString pulseenv = qgetenv("PHONON_DISABLE_PULSEAUDIO");
+    if (pulseenv.toInt())
+        return;
+
     pa_mainloop *mainloop = pa_mainloop_new();
     Q_ASSERT(mainloop);
     pa_mainloop_api *api = pa_mainloop_get_api(mainloop);
