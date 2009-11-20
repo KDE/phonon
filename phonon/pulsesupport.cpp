@@ -20,17 +20,19 @@
 
 */
 
-#include "pulsesupport_p.h"
-
+#include <stdio.h>
+#include <glib.h>
 #include <QtCore/QtGlobal>
+#include <QtCore/QEventLoop>
 
 #ifdef HAVE_PULSEAUDIO
 #include <pulse/pulseaudio.h>
+#include <pulse/glib-mainloop.h>
 #endif // HAVE_PULSEAUDIO
 
-QT_BEGIN_NAMESPACE
+#include "pulsesupport_p.h"
 
-class QVariant;
+QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
@@ -39,40 +41,45 @@ namespace Phonon
 class PulseUserData
 {
     public:
-        inline PulseUserData(PulseSupport *p, pa_mainloop_api *api, bool *active)
-        : m_pulseSupport(p), m_mainloopApi(api), m_active(active), ready(2)
-          {}
+        inline 
+        PulseUserData(QEventLoop *eventLoop)
+            : m_eventLoop(eventLoop)
+        {
+            Q_ASSERT(eventLoop);
+        }
 
-        PulseSupport *const m_pulseSupport;
-
-        inline void eol() { if (--ready == 0) { quit(); } }
-        inline void quit() { m_mainloopApi->quit(m_mainloopApi, 0); }
-        inline void setActive(bool active = true) { *m_active = active; }
+        inline void initialConnectionLoopExit()
+        {
+            m_eventLoop->exit(0);
+            m_eventLoop = NULL;
+        }
     private:
-        pa_mainloop_api *const m_mainloopApi;
-        bool *m_active;
-        int ready;
+        QEventLoop *m_eventLoop;
 };
+
+static PulseSupport* s_instance = NULL;
+static bool s_pulseActive = false;
+
+static pa_glib_mainloop *s_mainloop = NULL;
+static pa_context *s_context = NULL;
 
 static void pulseContextStateCallback(pa_context *context, void *userdata)
 {
     PulseUserData *d = reinterpret_cast<PulseUserData *>(userdata);
     switch (pa_context_get_state(context)) {
         case PA_CONTEXT_READY:
-            d->setActive();
-            d->quit();
+            s_pulseActive = true;
+            d->initialConnectionLoopExit();
             break;
         case PA_CONTEXT_FAILED:
-            d->quit();
+            d->initialConnectionLoopExit();
             break;
         default:
             break;
     }
 }
+
 #endif // HAVE_PULSEAUDIO
-
-
-PulseSupport* PulseSupport::s_instance = NULL;
 
 PulseSupport* PulseSupport::getInstance()
 {
@@ -92,56 +99,56 @@ void PulseSupport::shutdown()
 
 PulseSupport::PulseSupport()
 {
-    m_pulseActive = false;
-
 #ifdef HAVE_PULSEAUDIO
     // To allow for easy debugging, give an easy way to disable this pulseaudio check
     QString pulseenv = qgetenv("PHONON_DISABLE_PULSEAUDIO");
     if (pulseenv.toInt())
         return;
 
-    pa_mainloop *mainloop = pa_mainloop_new();
-    Q_ASSERT(mainloop);
-    pa_mainloop_api *api = pa_mainloop_get_api(mainloop);
-    PulseUserData userData(this, api, &m_pulseActive);
+    s_mainloop = pa_glib_mainloop_new(NULL);
+    Q_ASSERT(s_mainloop);
+    pa_mainloop_api *api = pa_glib_mainloop_get_api(s_mainloop);
+
+    // We create a simple event loop to allow the glib loop
+    // to iterate until we've connected or not to the server.
+    QEventLoop loop;
+    PulseUserData* userData = new PulseUserData(&loop);
+
     // XXX I don't want to show up in the client list. All I want to know is the list of sources
     // and sinks...
-    pa_context *context = pa_context_new(api, "KDE");
+    s_context = pa_context_new(api, "KDE");
     // (cg) Convert to PA_CONTEXT_NOFLAGS when PulseAudio 0.9.19 is required
-    if (pa_context_connect(context, NULL, static_cast<pa_context_flags_t>(0), 0) >= 0) {
-        pa_context_set_state_callback(context, &pulseContextStateCallback, &userData);
-        pa_mainloop_run(mainloop, NULL);
-        pa_context_disconnect(context);
+    if (pa_context_connect(s_context, NULL, static_cast<pa_context_flags_t>(0), 0) >= 0) {
+        pa_context_set_state_callback(s_context, &pulseContextStateCallback, userData);
+        // Now we block until we connect or otherwise...
+        loop.exec();
     }
-    pa_mainloop_free(mainloop);
-
 #endif
 }
 
 PulseSupport::~PulseSupport()
 {
 #ifdef HAVE_PULSEAUDIO
+    if (s_context) {
+        pa_context_disconnect(s_context);
+        s_context = NULL;
+    }
+
+    if (s_mainloop) {
+        pa_glib_mainloop_free(s_mainloop);
+        s_mainloop = NULL;
+    }
 #endif
 }
 
-
-
-
+bool PulseSupport::isActive()
+{
 #ifdef HAVE_PULSEAUDIO
-
-bool PulseSupport::isActive()
-{
-    return m_pulseActive;
-}
-
+    return s_pulseActive;
 #else
-
-bool PulseSupport::isActive()
-{
     return false;
-}
-
 #endif
+}
 
 } // namespace Phonon
 
