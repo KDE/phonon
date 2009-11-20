@@ -35,8 +35,9 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-    class PHONON_EXPORT PulseSupport
+    class PHONON_EXPORT PulseSupport : public QObject
     {
+        Q_OBJECT
         public:
             static PulseSupport* getInstance();
             static void shutdown();
@@ -52,6 +53,9 @@ namespace Phonon
             void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
 
             void setRoleForCategory(Category category);
+            void emitObjectDescriptionChanged(ObjectDescriptionType);
+        signals:
+            void objectDescriptionChanged(ObjectDescriptionType);
         private:
             PulseSupport();
             ~PulseSupport();

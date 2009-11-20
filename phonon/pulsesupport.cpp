@@ -193,6 +193,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         QMap<QString, AudioDevice>::iterator newdev_it;
 
         // Check for new output devices or things changing about known output devices.
+        bool output_changed = false;
         for (newdev_it = u->newOutputDevices.begin(); newdev_it != u->newOutputDevices.end(); ++newdev_it) {
             QString name = newdev_it.key();
 
@@ -202,13 +203,13 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             int index = s_outputDeviceIndexes[name];
             if (!s_outputDevices.contains(index)) {
                 // This is a totally new device
-                /// @todo Emit the fact that this device is brand new
-                logMessage(QString("+++ Brand New Device"));
+                output_changed = true;
+                logMessage(QString("Brand New Output Device Found."));
                 s_outputDevices.insert(index, *newdev_it);
             } else  if (s_outputDevices[index] != *newdev_it) {
                 // We have this device already, but is it different?
-                /// @todo Emit the fact that this device has changed (e.g. it may have become [un]available)
-                logMessage(QString("+++ Change to Existing Device (may be Added/Removed or something else)"));
+                output_changed = true;
+                logMessage(QString("Change to Existing Output Device (may be Added/Removed or something else)"));
                 s_outputDevices.remove(index);
                 s_outputDevices.insert(index, *newdev_it);
             }
@@ -218,14 +219,15 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         while (output_existing_it.hasNext()) {
             output_existing_it.next();
             if (!u->newOutputDevices.contains(output_existing_it.key())) {
-                /// @todo Emit the fact that this device has been removed.
-                logMessage(QString("--- Device Completely Removed"));
+                output_changed = true;
+                logMessage(QString("Output Device Completely Removed"));
                 s_outputDevices.remove(output_existing_it.value());
                 output_existing_it.remove();
             }
         }
 
         // Check for new capture devices or things changing about known capture devices.
+        bool capture_changed = false;
         for (newdev_it = u->newCaptureDevices.begin(); newdev_it != u->newCaptureDevices.end(); ++newdev_it) {
             QString name = newdev_it.key();
 
@@ -235,13 +237,13 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             int index = s_captureDeviceIndexes[name];
             if (!s_captureDevices.contains(index)) {
                 // This is a totally new device
-                /// @todo Emit the fact that this device is brand new
-                logMessage(QString("+++ Brand New Device"));
+                capture_changed = true;
+                logMessage(QString("Brand New Capture Device Found."));
                 s_captureDevices.insert(index, *newdev_it);
             } else  if (s_captureDevices[index] != *newdev_it) {
                 // We have this device already, but is it different?
-                /// @todo Emit the fact that this device has changed (e.g. it may have become [un]available)
-                logMessage(QString("+++ Change to Existing Device (may be Added/Removed or something else)"));
+                capture_changed = true;
+                logMessage(QString("Change to Existing Capture Device (may be Added/Removed or something else)"));
                 s_captureDevices.remove(index);
                 s_captureDevices.insert(index, *newdev_it);
             }
@@ -251,8 +253,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         while (capture_existing_it.hasNext()) {
             capture_existing_it.next();
             if (!u->newCaptureDevices.contains(capture_existing_it.key())) {
-                /// @todo Emit the fact that this device has been removed.
-                logMessage(QString("--- Device Completely Removed"));
+                capture_changed = true;
+                logMessage(QString("Capture Device Completely Removed"));
                 s_captureDevices.remove(capture_existing_it.value());
                 capture_existing_it.remove();
             }
@@ -262,7 +264,14 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         s_outputDevicePriorities = u->newOutputDevicePriorities;
         s_captureDevicePriorities = u->newCaptureDevicePriorities;
 
-        // Also free the user data as we will not be called again.
+        if (s_instance) {
+            if (output_changed)
+                s_instance->emitObjectDescriptionChanged(AudioOutputDeviceType);
+            if (capture_changed)
+                s_instance->emitObjectDescriptionChanged(AudioCaptureDeviceType);
+        }
+
+        // We can free the user data as we will not be called again.
         delete u;
 
         // Some debug
@@ -410,6 +419,7 @@ void PulseSupport::shutdown()
 }
 
 PulseSupport::PulseSupport()
+ : QObject()
 {
 #ifdef HAVE_PULSEAUDIO
     // Initialise our map (is there a better way to do this?)
@@ -661,9 +671,15 @@ void PulseSupport::setRoleForCategory(Category category)
 #endif
 }
 
+void PulseSupport::emitObjectDescriptionChanged(ObjectDescriptionType type)
+{
+    emit objectDescriptionChanged(type);
+}
 
 } // namespace Phonon
 
 QT_END_NAMESPACE
+
+#include "moc_pulsesupport_p.cpp"
 
 // vim: sw=4 ts=4
