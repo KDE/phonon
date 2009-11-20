@@ -274,8 +274,14 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         }
 
         // Just copy accross the new priority lists as we know they are valid
-        s_outputDevicePriorities = u->newOutputDevicePriorities;
-        s_captureDevicePriorities = u->newCaptureDevicePriorities;
+        if (s_outputDevicePriorities != u->newOutputDevicePriorities) {
+            output_changed = true;
+            s_outputDevicePriorities = u->newOutputDevicePriorities;
+        }
+        if (s_captureDevicePriorities != u->newCaptureDevicePriorities) {
+            capture_changed = true;
+            s_captureDevicePriorities = u->newCaptureDevicePriorities;
+        }
 
         if (s_instance) {
             if (output_changed)
