@@ -32,7 +32,6 @@
 #endif // HAVE_PULSEAUDIO
 
 #include "pulsesupport_p.h"
-#include "phononnamespace.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -79,25 +78,25 @@ class AudioDevice
 {
     public:
         inline
-        AudioDevice(QString name, unsigned int priority, QString desc, QString icon)
+        AudioDevice(QString name, QString desc, QString icon, uint8_t available)
         : pulseName(name)
-        , pulsePriority(priority)
-        , description(desc)
-        , icon(icon)
-        , isAdvanced(false)
         {
-            /*logMessage(QString("Adding '%1' (priority: %2)").arg(desc).arg(priority));*/
+            properties["name"] = desc;
+            properties["description"] = ""; // We don't have descriptions (well we do, but we use them as the name!)
+            properties["icon"] = icon;
+            properties["isAvailable"] = !!available;
+            properties["isAdvanced"] = false; // Nothing is advanced!
         }
 
+        // Needed for QMap
+        inline AudioDevice() {}
+
         QString pulseName;
-        unsigned int pulsePriority;
-        QString description;
-        QString icon;
-        bool isAdvanced;
+        QHash<QByteArray, QVariant> properties;
 };
-bool operator<(const AudioDevice &a, const AudioDevice &b)
+bool operator!=(const AudioDevice &a, const AudioDevice &b)
 {
-    return a.pulsePriority < b.pulsePriority;
+    return !(a.pulseName == b.pulseName && a.properties == b.properties);
 }
 
 class PulseUserData
@@ -108,21 +107,34 @@ class PulseUserData
         {
         }
 
-        QMap<Phonon::Category, QList<AudioDevice> > outputDevices;
-        QMap<Phonon::Category, QList<AudioDevice> > captureDevices;
+        QMap<QString, AudioDevice> newOutputDevices;
+        QMap<Phonon::Category, QMap<int, int> > newOutputDevicePriorities; // prio, device
+
+        QMap<QString, AudioDevice> newCaptureDevices;
+        QMap<Phonon::Category, QMap<int, int> > newCaptureDevicePriorities; // prio, device
 };
 
 static QMap<QString, Phonon::Category> s_role_category_map;
 
 static PulseSupport* s_instance = NULL;
 static bool s_pulseActive = false;
+static bool s_pulseDeviceManager = false;
 
 static pa_glib_mainloop *s_mainloop = NULL;
 static pa_context *s_context = NULL;
 static QEventLoop *s_connection_eventloop = NULL;
 
-QMap<Phonon::Category, QList<AudioDevice> > s_output_devices;
-QMap<Phonon::Category, QList<AudioDevice> > s_capture_devices;
+
+
+static int s_deviceIndexCounter = 0;
+
+static QMap<QString, int> s_outputDeviceIndexes;
+static QMap<int, AudioDevice> s_outputDevices;
+static QMap<Phonon::Category, QMap<int, int> > s_outputDevicePriorities;
+
+static QMap<QString, int> s_captureDeviceIndexes;
+static QMap<int, AudioDevice> s_captureDevices;
+static QMap<Phonon::Category, QMap<int, int> > s_captureDevicePriorities;
 
 
 static void ext_device_manager_subscribe_cb(pa_context *, void *);
@@ -135,6 +147,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         s_connection_eventloop->exit(0);
         s_connection_eventloop = NULL;
         s_pulseActive = true;
+        s_pulseDeviceManager = true;
 
         pa_operation *o;
         pa_ext_device_manager_set_subscribe_cb(c, ext_device_manager_subscribe_cb, NULL);
@@ -144,7 +157,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 
     if (eol < 0) {
         logMessage(QString("Failed to initialize device manager extension: %1").arg(pa_strerror(pa_context_errno(c))));
-        s_pulseActive = false;
+        s_pulseDeviceManager = false;
         return;
     }
 
@@ -153,17 +166,77 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         // We're done reading the data, so order it by priority and copy it into the
         // static variables where it can then be accessed by those classes that need it.
 
-        QMap<Phonon::Category, QList<AudioDevice> >::iterator it;
-        for (it = u->outputDevices.begin(); it != u->outputDevices.end(); ++it) {
-            QList<AudioDevice> &list = it.value();
-            qSort(list);
+        QMap<QString, AudioDevice>::iterator newdev_it;
+
+        // Check for new output devices or things changing about known output devices.
+        for (newdev_it = u->newOutputDevices.begin(); newdev_it != u->newOutputDevices.end(); ++newdev_it) {
+            QString name = newdev_it.key();
+
+            // The name + index map is always written when a new device is added.
+            Q_ASSERT(s_outputDeviceIndexes.contains(name));
+
+            int index = s_outputDeviceIndexes[name];
+            if (!s_outputDevices.contains(index)) {
+                // This is a totally new device
+                /// @todo Emit the fact that this device is brand new
+                logMessage(QString("+++ Brand New Device"));
+                s_outputDevices.insert(index, *newdev_it);
+            } else  if (s_outputDevices[index] != *newdev_it) {
+                // We have this device already, but is it different?
+                /// @todo Emit the fact that this device has changed (e.g. it may have become [un]available)
+                logMessage(QString("+++ Change to Existing Device (may be Added/Removed or something else)"));
+                s_outputDevices.remove(index);
+                s_outputDevices.insert(index, *newdev_it);
+            }
         }
-        s_output_devices = u->outputDevices;
-        for (it = u->captureDevices.begin(); it != u->captureDevices.end(); ++it) {
-            QList<AudioDevice> &list = it.value();
-            qSort(list);
+        // Go through the output devices we know about and see if any are no longer mentioned in the list.
+        QMutableMapIterator<QString, int> output_existing_it(s_outputDeviceIndexes);
+        while (output_existing_it.hasNext()) {
+            output_existing_it.next();
+            if (!u->newOutputDevices.contains(output_existing_it.key())) {
+                /// @todo Emit the fact that this device has been removed.
+                logMessage(QString("--- Device Completely Removed"));
+                s_outputDevices.remove(output_existing_it.value());
+                output_existing_it.remove();
+            }
         }
-        s_capture_devices = u->captureDevices;
+
+        // Check for new capture devices or things changing about known capture devices.
+        for (newdev_it = u->newCaptureDevices.begin(); newdev_it != u->newCaptureDevices.end(); ++newdev_it) {
+            QString name = newdev_it.key();
+
+            // The name + index map is always written when a new device is added.
+            Q_ASSERT(s_captureDeviceIndexes.contains(name));
+
+            int index = s_captureDeviceIndexes[name];
+            if (!s_captureDevices.contains(index)) {
+                // This is a totally new device
+                /// @todo Emit the fact that this device is brand new
+                logMessage(QString("+++ Brand New Device"));
+                s_captureDevices.insert(index, *newdev_it);
+            } else  if (s_captureDevices[index] != *newdev_it) {
+                // We have this device already, but is it different?
+                /// @todo Emit the fact that this device has changed (e.g. it may have become [un]available)
+                logMessage(QString("+++ Change to Existing Device (may be Added/Removed or something else)"));
+                s_captureDevices.remove(index);
+                s_captureDevices.insert(index, *newdev_it);
+            }
+        }
+        // Go through the capture devices we know about and see if any are no longer mentioned in the list.
+        QMutableMapIterator<QString, int> capture_existing_it(s_captureDeviceIndexes);
+        while (capture_existing_it.hasNext()) {
+            capture_existing_it.next();
+            if (!u->newCaptureDevices.contains(capture_existing_it.key())) {
+                /// @todo Emit the fact that this device has been removed.
+                logMessage(QString("--- Device Completely Removed"));
+                s_captureDevices.remove(capture_existing_it.value());
+                capture_existing_it.remove();
+            }
+        }
+
+        // Just copy accross the new priority lists as we know they are valid
+        s_outputDevicePriorities = u->newOutputDevicePriorities;
+        s_captureDevicePriorities = u->newCaptureDevicePriorities;
 
         // Also free the user data as we will not be called again.
         delete u;
@@ -172,24 +245,22 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         logMessage(QString("Output Device Priority List:"));
         for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
             Phonon::Category cat = static_cast<Phonon::Category>(i);
-            if (s_output_devices.contains(cat)) {
+            if (s_outputDevicePriorities.contains(cat)) {
                 logMessage(QString("  Phonon Category %1").arg(cat));
-                QList<AudioDevice>::iterator it;
-                int j = 0;
-                for (it = s_output_devices[cat].begin(); it != s_output_devices[cat].end(); ++it) {
-                    logMessage(QString("    %1. %2").arg(++j).arg((*it).description));
+                int count = 0;
+                foreach (int j, s_outputDevicePriorities[cat]) {
+                    logMessage(QString("    %1. %2").arg(++count).arg(s_outputDevices[j].properties["name"].toString()));
                 }
             }
         }
         logMessage(QString("Capture Device Priority List:"));
         for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
             Phonon::Category cat = static_cast<Phonon::Category>(i);
-            if (s_capture_devices.contains(cat)) {
+            if (s_captureDevicePriorities.contains(cat)) {
                 logMessage(QString("  Phonon Category %1").arg(cat));
-                QList<AudioDevice>::iterator it;
-                int j = 0;
-                for (it = s_capture_devices[cat].begin(); it != s_capture_devices[cat].end(); ++it) {
-                    logMessage(QString("    %1. %2").arg(++j).arg((*it).description));
+                int count = 0;
+                foreach (int j, s_captureDevicePriorities[cat]) {
+                    logMessage(QString("    %1. %2").arg(++count).arg(s_captureDevices[j].properties["name"].toString()));
                 }
             }
         }
@@ -202,6 +273,36 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     Q_ASSERT(info->description);
     Q_ASSERT(info->icon);
 
+    // QString wrapper
+    QString name(info->name);
+    int index;
+    QMap<Phonon::Category, QMap<int, int> > *new_prio_map_cats; // prio, device
+    QMap<QString, AudioDevice> *new_devices;
+
+    if (name.startsWith("sink:")) {
+        new_devices = &u->newOutputDevices;
+        new_prio_map_cats = &u->newOutputDevicePriorities;
+
+        if (s_outputDeviceIndexes.contains(name))
+            index = s_outputDeviceIndexes[name];
+        else
+            index = s_outputDeviceIndexes[name] = s_deviceIndexCounter++;
+    } else if (name.startsWith("source:")) {
+        new_devices = &u->newCaptureDevices;
+        new_prio_map_cats = &u->newCaptureDevicePriorities;
+
+        if (s_captureDeviceIndexes.contains(name))
+            index = s_captureDeviceIndexes[name];
+        else
+            index = s_captureDeviceIndexes[name] = s_deviceIndexCounter++;
+    } else {
+        // This indicates a bug in pulseaudio.
+        return;
+    }
+
+    // Add the new device itself.
+    new_devices->insert(name, AudioDevice(name, info->description, info->icon, info->available));
+
     // For each role in the priority, map it to a phonon category and store the order.
     for (uint32_t i = 0; i < info->n_role_priorities; ++i) {
         pa_ext_device_manager_role_priority_info* role_prio = &info->role_priorities[i];
@@ -209,22 +310,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 
         if (s_role_category_map.contains(role_prio->role)) {
             Phonon::Category cat = s_role_category_map[role_prio->role];
-            QList<AudioDevice> *list;
-            QString name(info->name);
 
-            if (name.startsWith("sink:")) {
-                if (!u->outputDevices.contains(cat))
-                    u->outputDevices.insert(cat, QList<AudioDevice>());
-                list = &u->outputDevices[cat];
-            } else if (name.startsWith("source:")) {
-                if (!u->captureDevices.contains(cat))
-                    u->captureDevices.insert(cat, QList<AudioDevice>());
-                list = &u->captureDevices[cat];
-            } else {
-                continue;
-            }
-
-            list->append(AudioDevice(info->name, role_prio->priority, info->description, info->icon));
+            (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
         }
     }
 }
@@ -264,6 +351,7 @@ static void context_state_callback(pa_context *c, void *)
 
         case PA_CONTEXT_FAILED:
             s_pulseActive = false;
+            s_pulseDeviceManager = false;
             if (s_connection_eventloop) {
                 s_connection_eventloop->exit(0);
                 s_connection_eventloop = NULL;
@@ -273,6 +361,7 @@ static void context_state_callback(pa_context *c, void *)
         case PA_CONTEXT_TERMINATED:
         default:
             s_pulseActive = false;
+            s_pulseDeviceManager = false;
             /// @todo Deal with reconnection...
             break;
     }
@@ -298,14 +387,15 @@ void PulseSupport::shutdown()
 
 PulseSupport::PulseSupport()
 {
+    // Initialise our map (is there a better way to do this?)
     s_role_category_map["none"] = Phonon::NoCategory;
     s_role_category_map["video"] = Phonon::VideoCategory;
     s_role_category_map["music"] = Phonon::MusicCategory;
     s_role_category_map["game"] = Phonon::GameCategory;
     s_role_category_map["event"] = Phonon::NotificationCategory;
     s_role_category_map["phone"] = Phonon::CommunicationCategory;
-    //s_role_category_map["animation"] = Phonon::NoCategory; // No Mapping
-    //s_role_category_map["production"] = Phonon::NoCategory; // No Mapping
+    //s_role_category_map["animation"]; // No Mapping
+    //s_role_category_map["production"]; // No Mapping
     s_role_category_map["a11y"] = Phonon::AccessibilityCategory;
 
 #ifdef HAVE_PULSEAUDIO
@@ -361,6 +451,49 @@ bool PulseSupport::isActive()
 #else
     return false;
 #endif
+}
+
+QList<int> PulseSupport::objectDescriptionIndexes(ObjectDescriptionType type) const
+{
+    QList<int> list;
+
+    if (type != AudioOutputDeviceType && type != AudioCaptureDeviceType)
+        return list;
+
+#ifdef HAVE_PULSEAUDIO
+    if (s_pulseActive) {
+        if (true || !s_pulseDeviceManager) {
+            // Just show a single "device"
+            list.append(0);
+        } else {
+        }
+    }
+#endif
+
+    return list;
+}
+
+QHash<QByteArray, QVariant> PulseSupport::objectDescriptionProperties(ObjectDescriptionType type, int index) const
+{
+    QHash<QByteArray, QVariant> ret;
+
+    if (type != AudioOutputDeviceType && type != AudioCaptureDeviceType)
+        return ret;
+
+#ifdef HAVE_PULSEAUDIO
+    if (s_pulseActive) {
+        if (true || !s_pulseDeviceManager) {
+            if (0 == index) {
+                ret.insert("name", "PulseAudio Sound Server");
+                ret.insert("description", "Pass all sound through the PulseAudio Sound Server");
+                ret.insert("icon", "audio-backend-pulseaudio");
+            }
+        } else {
+        }
+    }
+#endif
+
+    return ret;
 }
 
 } // namespace Phonon
