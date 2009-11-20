@@ -297,7 +297,7 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
             if ((ad = deviceManager()->audioDevice(index))) {
                 ret.insert("name", ad->gstId);
                 ret.insert("description", ad->description);
-                ret.insert("icon", QLatin1String("audio-card"));
+                ret.insert("icon", ad->icon);
             }
         }
         break;
