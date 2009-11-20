@@ -161,9 +161,67 @@ bool GlobalConfig::isHiddenAudioOutputDevice(int i) const
     return (var.isValid() && var.toBool());
 }
 
+
+QList<int> GlobalConfig::_reindexList(Phonon::Category category, QList<int>newOrder, bool output) const
+{
+    /*QString sb;
+    sb = QString("(Size %1)").arg(currentList.size());
+    foreach (int i, currentList)
+    sb += QString("%1, ").arg(i);
+    fprintf(stderr, "=== Reindex Current: %s\n", sb.toUtf8().constData());
+    sb = QString("(Size %1)").arg(newOrder.size());
+    foreach (int i, newOrder)
+    sb += QString("%1, ").arg(i);
+    fprintf(stderr, "=== Reindex Before : %s\n", sb.toUtf8().constData());*/
+
+    QList<int> currentList;
+    if (output)
+        currentList = audioOutputDeviceListFor(category, ShowUnavailableDevices|ShowAdvancedDevices);
+    else
+        currentList = audioCaptureDeviceListFor(category, ShowUnavailableDevices|ShowAdvancedDevices);
+
+    QList<int> newList;
+
+    foreach (int i, newOrder) {
+        int found = currentList.indexOf(i);
+        if (found < 0) {
+            // It's not in the list, so something is odd (e.g. client error). Ignore it.
+            continue;
+        }
+
+        // Iterate through the list from this point onward. If there are hidden devices
+        // immediately following, take them too.
+        newList.append(currentList.takeAt(found));
+        while (found < currentList.size()) {
+            bool hidden;
+            if (output)
+                hidden = isHiddenAudioOutputDevice(currentList.at(found));
+            else
+                hidden = isHiddenAudioCaptureDevice(currentList.at(found));
+
+            if (!hidden)
+                break;
+            newList.append(currentList.takeAt(found));
+        }
+    }
+
+    // If there are any devices left in.. just tack them on the end.
+    if (currentList.size() > 0)
+        newList += currentList;
+
+    /*sb = QString("(Size %1)").arg(newList.size());
+    foreach (int i, newList)
+    sb += QString("%1, ").arg(i);
+    fprintf(stderr, "=== Reindex After  : %s\n", sb.toUtf8().constData());*/
+    return newList;
+}
+
+
 void GlobalConfig::setAudioOutputDeviceListFor(Phonon::Category category, QList<int> order)
 {
     QSettingsGroup backendConfig(&m_config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
+
+    order = _reindexList(category, order, true);
 
     const QList<int> noCategoryOrder = audioOutputDeviceListFor(Phonon::NoCategory, ShowUnavailableDevices|ShowAdvancedDevices);
     if (category != Phonon::NoCategory && order == noCategoryOrder) {
@@ -242,6 +300,8 @@ bool GlobalConfig::isHiddenAudioCaptureDevice(int i) const
 void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order)
 {
     QSettingsGroup backendConfig(&m_config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
+
+    order = _reindexList(category, order, false);
 
     const QList<int> noCategoryOrder = audioCaptureDeviceListFor(Phonon::NoCategory, ShowUnavailableDevices|ShowAdvancedDevices);
     if (category != Phonon::NoCategory && order == noCategoryOrder) {
