@@ -657,7 +657,7 @@ void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<
 #endif
 }
 
-void PulseSupport::setRoleForCategory(Category category)
+void PulseSupport::setStreamPropList(Category category, unsigned int streamindex)
 {
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(category);
@@ -666,8 +666,9 @@ void PulseSupport::setRoleForCategory(Category category)
     if (role.isEmpty())
         return;
 
-    logMessage(QString("Setting role to %1").arg(role));
+    logMessage(QString("Setting role to %1 for streamindex %2").arg(role).arg(streamindex));
     setenv("PULSE_PROP_media.role", role.toLatin1().constData(), 1);
+    setenv("PULSE_PROP_phonon.streamindex", QString("%1").arg(streamindex).toLatin1().constData(), 1);
 #endif
 }
 
