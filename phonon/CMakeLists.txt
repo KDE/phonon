@@ -8,6 +8,19 @@ endif (PHONON_BUILD_EXAMPLES)
 
 add_subdirectory(experimental)
 
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+macro_optional_find_package(PulseAudio)
+macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
+
+if(PULSEAUDIO_FOUND)
+   add_definitions(-DHAVE_PULSEAUDIO)
+else(PULSEAUDIO_FOUND)
+   set(PULSEAUDIO_INCLUDE_DIR "")
+   set(PULSEAUDIO_LIBRARY "")
+endif(PULSEAUDIO_FOUND)
+
+include_directories(${PULSEAUDIO_INCLUDE_DIR})
+
 set(phonon_LIB_SRCS
    objectdescription.cpp
    objectdescriptionmodel.cpp
@@ -51,7 +64,7 @@ endif (QT_QTDBUS_FOUND)
 
 add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
-target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${PULSEAUDIO_LIBRARY})
 if (QT_QTDBUS_FOUND)
   target_link_libraries(phonon ${QT_QTDBUS_LIBRARY})
 endif (QT_QTDBUS_FOUND)
