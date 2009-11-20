@@ -16,13 +16,13 @@ macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseau
 
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
    add_definitions(-DHAVE_PULSEAUDIO)
+   include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
 else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_INCLUDE_DIR "")
    set(PULSEAUDIO_LIBRARY "")
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
 
 set(phonon_LIB_SRCS
    objectdescription.cpp
@@ -68,7 +68,11 @@ endif (QT_QTDBUS_FOUND)
 
 add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
-target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
+target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
+target_link_libraries(phonon ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
+endif (GLIB2_FOUND AND PULSEAUDIO_FOUND)
+
 if (QT_QTDBUS_FOUND)
   target_link_libraries(phonon ${QT_QTDBUS_LIBRARY})
 endif (QT_QTDBUS_FOUND)
