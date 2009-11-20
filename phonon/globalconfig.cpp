@@ -156,7 +156,7 @@ bool GlobalConfig::getHideAdvancedDevices() const
 void GlobalConfig::hideAdvancedDevices(bool hide)
 {
     QSettingsGroup generalGroup(&m_private->config, QLatin1String("General"));
-    generalGroup.value(QLatin1String("HideAdvancedDevices"), hide);
+    generalGroup.setValue(QLatin1String("HideAdvancedDevices"), hide);
 }
 
 static bool isHiddenAudioOutputDevice(const GlobalConfig *config, int i)
