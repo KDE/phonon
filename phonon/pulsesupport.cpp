@@ -100,6 +100,8 @@ static pa_glib_mainloop *s_mainloop = NULL;
 static pa_context *s_context = NULL;
 
 static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manager_info *info, int eol, void *) {
+    Q_ASSERT(c);
+
     if (eol < 0) {
         logMessage(QString("Failed to initialize device manager extension: %1").arg(pa_strerror(pa_context_errno(c))));
         return;
@@ -113,13 +115,13 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 }
 
 static void ext_device_manager_subscribe_cb(pa_context *c, void *userdata) {
-    pa_operation *o;
+    Q_ASSERT(c);
 
+    pa_operation *o;
     if (!(o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, userdata))) {
         logMessage(QString("pa_ext_device_manager_read() failed"));
         return;
     }
-
     pa_operation_unref(o);
 }
 
@@ -137,23 +139,6 @@ static void context_state_callback(pa_context *c, void *userdata)
             u->initialConnectionLoopExit();
 
             pa_operation *o;
-
-            /*
-            pa_context_set_subscribe_callback(c, subscribe_cb, w);
-
-            if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
-                                           (PA_SUBSCRIPTION_MASK_SINK|
-                                            PA_SUBSCRIPTION_MASK_SOURCE|
-                                            PA_SUBSCRIPTION_MASK_SINK_INPUT|
-                                            PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT|
-                                            PA_SUBSCRIPTION_MASK_CLIENT|
-                                            PA_SUBSCRIPTION_MASK_SERVER|
-                                            PA_SUBSCRIPTION_MASK_CARD), NULL, NULL))) {
-                show_error(_("pa_context_subscribe() failed"));
-                return;
-            }
-            pa_operation_unref(o);
-            */
 
             if ((o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, u))) {
                 pa_operation_unref(o);
