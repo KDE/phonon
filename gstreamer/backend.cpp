@@ -52,7 +52,8 @@ Backend::Backend(QObject *parent, const QVariantList &)
         , m_isValid(false)
 {
     // Initialise PulseAudio support
-    PulseSupport::getInstance();
+    PulseSupport *pulse = PulseSupport::getInstance();
+    connect(pulse, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)), SLOT(emitObjectDescriptionChanged(ObjectDescriptionType)));
 
     // In order to support reloading, we only set the app name once...
     static bool first = true;
@@ -419,6 +420,11 @@ void Backend::handleBusMessage(Message message)
 {
     MediaObject *mediaObject = message.source();
     mediaObject->handleBusMessage(message);
+}
+
+void Backend::emitObjectDescriptionChanged(ObjectDescriptionType type)
+{
+    emit objectDescriptionChanged(type);
 }
 
 DeviceManager* Backend::deviceManager() const
