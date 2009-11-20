@@ -50,6 +50,8 @@ namespace Phonon
 
             void setOutputDevicePriorityForCategory(Category category, QList<int> order);
             void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
+
+            void setRoleForCategory(Category category);
         private:
             PulseSupport();
             ~PulseSupport();
