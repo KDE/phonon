@@ -42,6 +42,7 @@ public :
     int id;
     QByteArray gstId;
     QByteArray description;
+    QString icon;
 };
 
 class DeviceManager : public QObject {
@@ -57,6 +58,7 @@ public:
     GstElement *createGNOMEAudioSink(Category category);
     GstElement *createAudioSink(Category category = NoCategory);
     AbstractRenderer *createVideoRenderer(VideoWidget *parent);
+    bool pulseActive();
 
 signals:
     void deviceAdded(int);

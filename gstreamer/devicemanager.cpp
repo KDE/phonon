@@ -45,8 +45,13 @@ AudioDevice::AudioDevice(DeviceManager *manager, const QByteArray &gstId)
         : gstId(gstId)
 {
     id = manager->allocateDeviceId();
+    icon = "audio-card";
     //get name from device
-    if (gstId == "default") {
+    if (manager->pulseActive()) {
+        // Cosmetic hack 
+        description = QObject::tr("Pass all audio through the PulseAudio Sound Server.").toUtf8();
+        icon = "audio-backend-pulseaudio";
+     } else if (gstId == "default") {
         description = "Default audio device";
     } else {
         GstElement *aSink= manager->createAudioSink();
@@ -77,6 +82,8 @@ DeviceManager::DeviceManager(Backend *backend)
     m_audioSink = qgetenv("PHONON_GST_AUDIOSINK");
     if (m_audioSink.isEmpty()) {
         m_audioSink = settings.value(QLatin1String("audiosink"), "Auto").toByteArray().toLower();
+        if (m_audioSink == "auto" && m_backend->pulseActive())
+            m_audioSink = "pulsesink";
     }
 
     m_videoSinkWidget = qgetenv("PHONON_GST_VIDEOMODE");
@@ -313,8 +320,13 @@ void DeviceManager::updateDeviceList()
     QList<QByteArray> list;
 
     if (audioSink) {
-        list = GstHelper::extractProperties(audioSink, "device");
-        list.prepend("default");
+        if (m_audioSink == "pulsesink") {
+            // If we're using pulse, just hide all other devices.
+            list.append("PulseAudio");
+        } else {
+            list = GstHelper::extractProperties(audioSink, "device");
+            list.prepend("default");
+        }
 
         for (int i = 0 ; i < list.size() ; ++i) {
             QByteArray gstId = list.at(i);
@@ -357,6 +369,12 @@ const QList<AudioDevice> DeviceManager::audioOutputDevices() const
 {
     return m_audioDeviceList;
 }
+
+bool DeviceManager::pulseActive()
+{
+    return ("pulsesink" == m_audioSink);
+}
+
 
 }
 }
