@@ -62,6 +62,7 @@ static void pulseContextStateCallback(pa_context *context, void *userdata)
     switch (pa_context_get_state(context)) {
         case PA_CONTEXT_READY:
             d->setActive();
+            d->quit();
             break;
         case PA_CONTEXT_FAILED:
             d->quit();
