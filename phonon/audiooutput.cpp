@@ -220,6 +220,10 @@ AudioOutputDevice AudioOutput::outputDevice() const
 
 bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
 {
+    // If we are using PulseAudio we don't acutally change devices at all.
+    if (PulseSupport::getInstance()->isActive())
+        return true;
+
     K_D(AudioOutput);
     if (!newAudioOutputDevice.isValid()) {
         d->outputDeviceOverridden = false;
@@ -363,6 +367,10 @@ static struct
 
 void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &device2, DeviceChangeType type)
 {
+    // If we are using PulseAudio we don't acutally change devices at all.
+    if (PulseSupport::getInstance()->isActive())
+        return;
+
     Q_Q(AudioOutput);
     deviceBeforeFallback = device.index();
     device = device2;
