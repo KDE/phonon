@@ -78,11 +78,10 @@ AudioOutput::AudioOutput(QObject *parent)
 void AudioOutputPrivate::init(Phonon::Category c)
 {
     Q_Q(AudioOutput);
-    static unsigned int number = 0;
-    streamindex = number++;
 #ifndef QT_NO_DBUS
     adaptor = new AudioOutputAdaptor(q);
-    const QString &path = QLatin1String("/AudioOutputs/") + QString::number(streamindex);
+    static unsigned int number = 0;
+    const QString &path = QLatin1String("/AudioOutputs/") + QString::number(number++);
     QDBusConnection con = QDBusConnection::sessionBus();
     con.registerObject(path, q);
     emit adaptor->newOutputAvailable(con.baseService(), path);
@@ -91,7 +90,8 @@ void AudioOutputPrivate::init(Phonon::Category c)
 #endif
 
     category = c;
-    PulseSupport::getInstance()->setStreamPropList(category, streamindex);
+    streamUuid = QUuid::createUuid().toString();
+    PulseSupport::getInstance()->setStreamPropList(category, streamUuid);
 
     // select hardware device according to the category
     device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
@@ -101,9 +101,9 @@ void AudioOutputPrivate::init(Phonon::Category c)
     q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(_k_deviceListChanged()));
 }
 
-unsigned int AudioOutputPrivate::getIndex()
+QString AudioOutputPrivate::getStreamUuid()
 {
-    return streamindex;
+    return streamUuid;
 }
 
 void AudioOutputPrivate::createBackendObject()

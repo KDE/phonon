@@ -46,7 +46,7 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
             return 0;
         }
         void init(Phonon::Category c);
-        unsigned int getIndex();
+        QString getStreamUuid();
 
 
     protected:
@@ -80,7 +80,7 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         QString name;
         Phonon::AudioOutputDevice device;
         qreal volume;
-        unsigned int streamindex;
+        QString streamUuid;
 #ifndef QT_NO_DBUS
         Phonon::AudioOutputAdaptor *adaptor;
 #endif
