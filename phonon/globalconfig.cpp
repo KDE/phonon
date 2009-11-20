@@ -227,6 +227,11 @@ QList<int> GlobalConfig::_reindexList(Phonon::Category category, QList<int>newOr
 
 void GlobalConfig::setAudioOutputDeviceListFor(Phonon::Category category, QList<int> order)
 {
+    if (PulseSupport::getInstance()->isActive()) {
+        /// @todo Write support to push the priority list to pulseaudio
+        return;
+    }
+
     QSettingsGroup backendConfig(&m_config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
 
     order = _reindexList(category, order, true);
@@ -307,6 +312,11 @@ bool GlobalConfig::isHiddenAudioCaptureDevice(int i) const
 
 void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order)
 {
+    if (PulseSupport::getInstance()->isActive()) {
+        /// @todo Write support to push the priority list to pulseaudio
+        return;
+    }
+
     QSettingsGroup backendConfig(&m_config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
 
     order = _reindexList(category, order, false);
