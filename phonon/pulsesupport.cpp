@@ -474,6 +474,13 @@ bool PulseSupport::isActive()
 #endif
 }
 
+void PulseSupport::disable()
+{
+#ifdef HAVE_PULSEAUDIO
+    s_pulseActive = false;
+#endif
+}
+
 QList<int> PulseSupport::objectDescriptionIndexes(ObjectDescriptionType type) const
 {
     QList<int> list;

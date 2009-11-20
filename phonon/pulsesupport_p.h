@@ -42,6 +42,8 @@ namespace Phonon
             static void shutdown();
 
             bool isActive();
+            void disable();
+
             QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
             QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
             QList<int> objectIndexesByCategory(ObjectDescriptionType type, Category category) const;
