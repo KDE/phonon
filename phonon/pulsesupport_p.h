@@ -44,6 +44,7 @@ namespace Phonon
             bool isActive();
             QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
             QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
+            QList<int> objectIndexesByCategory(ObjectDescriptionType type, Category category) const;
         private:
             PulseSupport();
             ~PulseSupport();

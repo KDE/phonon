@@ -486,7 +486,6 @@ QList<int> PulseSupport::objectDescriptionIndexes(ObjectDescriptionType type) co
             case AudioOutputDeviceType: {
                 QMap<QString, int>::iterator it;
                 for (it = s_outputDeviceIndexes.begin(); it != s_outputDeviceIndexes.end(); ++it) {
-                    qDebug() << "Using device id " << *it;
                     list.append(*it);
                 }
                 break;
@@ -533,6 +532,36 @@ QHash<QByteArray, QVariant> PulseSupport::objectDescriptionProperties(ObjectDesc
         }
     }
 #endif
+
+    return ret;
+}
+
+QList<int> PulseSupport::objectIndexesByCategory(ObjectDescriptionType type, Category category) const
+{
+    QList<int> ret;
+
+    if (type != AudioOutputDeviceType && type != AudioCaptureDeviceType)
+        return ret;
+
+    #ifdef HAVE_PULSEAUDIO
+    if (s_pulseActive) {
+        switch (type) {
+
+            case AudioOutputDeviceType:
+                if (s_outputDevicePriorities.contains(category))
+                    ret = s_outputDevicePriorities[category].values();
+                break;
+
+            case AudioCaptureDeviceType:
+                if (s_captureDevicePriorities.contains(category))
+                    ret = s_captureDevicePriorities[category].values();
+                break;
+
+            default:
+                break;
+        }
+    }
+    #endif
 
     return ret;
 }
