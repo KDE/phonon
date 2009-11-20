@@ -120,7 +120,8 @@ class Backend : public QObject, public BackendInterface
         void objectDescriptionChanged(ObjectDescriptionType);
 
     private slots:
-        void emitAudioDeviceChange();
+        void emitAudioOutputDeviceChange();
+        void emitObjectDescriptionChanged(ObjectDescriptionType);
 
     private:
         void checkAudioOutputs();

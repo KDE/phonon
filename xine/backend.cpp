@@ -73,7 +73,8 @@ Backend::Backend(QObject *parent, const QVariantList &)
     m_thread(0)
 {
     // Initialise PulseAudio support
-    PulseSupport::getInstance();
+    PulseSupport *pulse = PulseSupport::getInstance();
+    connect(pulse, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)), SLOT(emitObjectDescriptionChanged(ObjectDescriptionType)));
 
     Q_ASSERT(s_instance == 0);
     s_instance = this;
@@ -95,7 +96,7 @@ Backend::Backend(QObject *parent, const QVariantList &)
     m_deinterlaceMethod = cg.value("Settings/deinterlaceMethod", 0).toInt();
 
     signalTimer.setSingleShot(true);
-    connect(&signalTimer, SIGNAL(timeout()), SLOT(emitAudioDeviceChange()));
+    connect(&signalTimer, SIGNAL(timeout()), SLOT(emitAudioOutputDeviceChange()));
     QDBusConnection::sessionBus().registerObject("/internal/PhononXine", this, QDBusConnection::ExportScriptableSlots);
 
     debug() << Q_FUNC_INFO << "Using Xine version " << xine_get_version_string();
@@ -502,10 +503,15 @@ bool Backend::endConnectionChange(QSet<QObject *> nodes)
     return true;
 }
 
-void Backend::emitAudioDeviceChange()
+void Backend::emitAudioOutputDeviceChange()
 {
     debug() << Q_FUNC_INFO;
-    emit objectDescriptionChanged(AudioOutputDeviceType);
+    emitObjectDescriptionChanged(AudioOutputDeviceType);
+}
+
+void Backend::emitObjectDescriptionChanged(ObjectDescriptionType type)
+{
+    emit objectDescriptionChanged(type);
 }
 
 bool Backend::deinterlaceDVD()
