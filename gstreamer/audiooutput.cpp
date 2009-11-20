@@ -22,6 +22,7 @@
 #include "mediaobject.h"
 #include "gsthelper.h"
 #include <phonon/audiooutput.h>
+#include <phonon/pulsesupport_p.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -125,6 +126,12 @@ void AudioOutput::setVolume(qreal newVolume)
 bool AudioOutput::setOutputDevice(int newDevice)
 {
     m_backend->logMessage(Q_FUNC_INFO + QString::number(newDevice), Backend::Info, this);
+
+    // If we are using PulseAudio we don't acutally change devices at all.
+    // Also the fact that m_device is initialised to 0 breaks things totally when the index is not 0 :s
+    if (PulseSupport::getInstance()->isActive())
+        return true;
+
     if (newDevice == m_device)
         return true;
 
@@ -135,15 +142,12 @@ bool AudioOutput::setOutputDevice(int newDevice)
     }
 
     bool success = false;
-    AudioDevice* ad;
-    if (m_audioSink &&  newDevice >= 0 && (ad = m_backend->deviceManager()->audioDevice(newDevice))) {
+    if (m_audioSink &&  newDevice >= 0) {
         // Save previous state
         GstState oldState = GST_STATE(m_audioSink);
         const QByteArray oldDeviceValue = GstHelper::property(m_audioSink, "device");
         // Due to Pulseaudio related cosmetic hacks in devicemanager.cpp we have to fix up the "device"
-        const QByteArray deviceId = (m_backend->deviceManager()->pulseActive()
-                                     ? "default"
-                                     : ad->gstId);
+        const QByteArray deviceId = m_backend->deviceManager()->gstId(newDevice);
         m_device = newDevice;
 
         // We test if the device can be opened by checking if it can go from NULL to READY state
