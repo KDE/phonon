@@ -48,6 +48,10 @@ namespace Xine
 AudioOutput::AudioOutput(QObject *parent)
     : AbstractAudioOutput(new AudioOutputXT, parent)
 {
+    // Always initialise the "device" in use.
+    // This is needed for PulseAudio support as subsequent calls to setOutputDevice()
+    // are suppressed
+    setOutputDevice(0);
 }
 
 AudioOutput::~AudioOutput()
