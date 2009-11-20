@@ -24,8 +24,6 @@
 #define PHONON_PULSESUPPORT_H
 
 #include "phonon_export.h"
-#include "phononnamespace.h"
-#include "objectdescription.h"
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QSet>
@@ -33,37 +31,25 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+class QVariant;
+
 namespace Phonon
 {
-    class PHONON_EXPORT PulseSupport : public QObject
+    class PHONON_EXPORT PulseSupport
     {
-        Q_OBJECT
         public:
-            static PulseSupport* getInstance();
-            static void shutdown();
+          PulseSupport();
 
-            bool isActive();
-            void disable();
+          /**
+          * \internal
+          *
+          * Silence gcc's warning.
+          */
+          virtual ~PulseSupport() {}
 
-            QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
-            QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
-            QList<int> objectIndexesByCategory(ObjectDescriptionType type, Category category) const;
-
-            void setOutputDevicePriorityForCategory(Category category, QList<int> order);
-            void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
-
-            void setStreamPropList(Category category, QString streamUuid);
-            void emitObjectDescriptionChanged(ObjectDescriptionType);
-
-            bool setOutputDevice(QString streamUuid, int device);
-            bool setCaptureDevice(QString streamUuid, int device);
-            void clearStreamCache(QString streamUuid);
-
-        signals:
-            void objectDescriptionChanged(ObjectDescriptionType);
-        private:
-            PulseSupport();
-            ~PulseSupport();
+          bool pulseActive();
+      private:
+        bool m_pulseActive;
     };
 } // namespace Phonon
 
@@ -71,3 +57,4 @@ QT_END_NAMESPACE
 QT_END_HEADER
 
 #endif // PHONON_PULSESUPPORT_H
+  
