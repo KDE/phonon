@@ -85,7 +85,7 @@ static void filter(ObjectDescriptionType type, BackendInterface *backendIface, Q
 
 static QList<int> listSortedByConfig(const QSettingsGroup &backendConfig, Phonon::Category category, QList<int> &defaultList)
 {
-    if (defaultList.size() <= 1) {
+    if (PulseSupport::getInstance()->isActive() || defaultList.size() <= 1) {
         // nothing to sort
         return defaultList;
     } else {
