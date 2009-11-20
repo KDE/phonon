@@ -118,13 +118,13 @@ class PulseUserData
         QMap<Phonon::Category, QMap<int, int> > newCaptureDevicePriorities; // prio, device
 };
 
-static QMap<QString, Phonon::Category> s_role_category_map;
+static QMap<QString, Phonon::Category> s_roleCategoryMap;
 
 static bool s_pulseActive = false;
 
 static pa_glib_mainloop *s_mainloop = NULL;
 static pa_context *s_context = NULL;
-static QEventLoop *s_connection_eventloop = NULL;
+static QEventLoop *s_connectionEventloop = NULL;
 
 
 
@@ -145,9 +145,9 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     Q_ASSERT(userdata);
 
     // If this is our first iteration, set things up properly
-    if (s_connection_eventloop) {
-        s_connection_eventloop->exit(0);
-        s_connection_eventloop = NULL;
+    if (s_connectionEventloop) {
+        s_connectionEventloop->exit(0);
+        s_connectionEventloop = NULL;
         s_pulseActive = true;
 
         pa_operation *o;
@@ -334,8 +334,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         pa_ext_device_manager_role_priority_info* role_prio = &info->role_priorities[i];
         Q_ASSERT(role_prio->role);
 
-        if (s_role_category_map.contains(role_prio->role)) {
-            Phonon::Category cat = s_role_category_map[role_prio->role];
+        if (s_roleCategoryMap.contains(role_prio->role)) {
+            Phonon::Category cat = s_roleCategoryMap[role_prio->role];
 
             (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
         }
@@ -349,9 +349,9 @@ static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
     PulseUserData *u = new PulseUserData; /** @todo Make some object to receive the info... */
     if (!(o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, u))) {
         // We need to deal with failure on first iteration
-        if (s_connection_eventloop) {
-            s_connection_eventloop->exit(0);
-            s_connection_eventloop = NULL;
+        if (s_connectionEventloop) {
+            s_connectionEventloop->exit(0);
+            s_connectionEventloop = NULL;
         }
         logMessage(QString("pa_ext_device_manager_read() failed"));
         return;
@@ -377,9 +377,9 @@ static void context_state_callback(pa_context *c, void *)
 
         case PA_CONTEXT_FAILED:
             s_pulseActive = false;
-            if (s_connection_eventloop) {
-                s_connection_eventloop->exit(0);
-                s_connection_eventloop = NULL;
+            if (s_connectionEventloop) {
+                s_connectionEventloop->exit(0);
+                s_connectionEventloop = NULL;
             }
             break;
 
@@ -413,15 +413,15 @@ PulseSupport::PulseSupport()
 {
 #ifdef HAVE_PULSEAUDIO
     // Initialise our map (is there a better way to do this?)
-    s_role_category_map["none"] = Phonon::NoCategory;
-    s_role_category_map["video"] = Phonon::VideoCategory;
-    s_role_category_map["music"] = Phonon::MusicCategory;
-    s_role_category_map["game"] = Phonon::GameCategory;
-    s_role_category_map["event"] = Phonon::NotificationCategory;
-    s_role_category_map["phone"] = Phonon::CommunicationCategory;
-    //s_role_category_map["animation"]; // No Mapping
-    //s_role_category_map["production"]; // No Mapping
-    s_role_category_map["a11y"] = Phonon::AccessibilityCategory;
+    s_roleCategoryMap["none"] = Phonon::NoCategory;
+    s_roleCategoryMap["video"] = Phonon::VideoCategory;
+    s_roleCategoryMap["music"] = Phonon::MusicCategory;
+    s_roleCategoryMap["game"] = Phonon::GameCategory;
+    s_roleCategoryMap["event"] = Phonon::NotificationCategory;
+    s_roleCategoryMap["phone"] = Phonon::CommunicationCategory;
+    //s_roleCategoryMap["animation"]; // No Mapping
+    //s_roleCategoryMap["production"]; // No Mapping
+    s_roleCategoryMap["a11y"] = Phonon::AccessibilityCategory;
 
     // To allow for easy debugging, give an easy way to disable this pulseaudio check
     QString pulseenv = qgetenv("PHONON_DISABLE_PULSEAUDIO");
@@ -434,16 +434,16 @@ PulseSupport::PulseSupport()
 
     // We create a simple event loop to allow the glib loop
     // to iterate until we've connected or not to the server.
-    s_connection_eventloop = new QEventLoop;
+    s_connectionEventloop = new QEventLoop;
 
     // XXX I don't want to show up in the client list. All I want to know is the list of sources
     // and sinks...
     s_context = pa_context_new(api, "libphonon");
     // (cg) Convert to PA_CONTEXT_NOFLAGS when PulseAudio 0.9.19 is required
     if (pa_context_connect(s_context, NULL, static_cast<pa_context_flags_t>(0), 0) >= 0) {
-        pa_context_set_state_callback(s_context, &context_state_callback, s_connection_eventloop);
+        pa_context_set_state_callback(s_context, &context_state_callback, s_connectionEventloop);
         // Now we block until we connect or otherwise...
-        s_connection_eventloop->exec();
+        s_connectionEventloop->exec();
     }
 #endif
 }
@@ -461,9 +461,9 @@ PulseSupport::~PulseSupport()
         s_mainloop = NULL;
     }
 
-    if (s_connection_eventloop) {
-        delete s_connection_eventloop;
-        s_connection_eventloop = NULL;
+    if (s_connectionEventloop) {
+        delete s_connectionEventloop;
+        s_connectionEventloop = NULL;
     }
 #endif
 }
@@ -585,7 +585,7 @@ QList<int> PulseSupport::objectIndexesByCategory(ObjectDescriptionType type, Cat
 #ifdef HAVE_PULSEAUDIO
 static void setDevicePriority(Category category, QStringList list)
 {
-    QString role = s_role_category_map.key(category);
+    QString role = s_roleCategoryMap.key(category);
     if (role.isEmpty())
         return;
 
@@ -652,7 +652,7 @@ void PulseSupport::setRoleForCategory(Category category)
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(category);
 #else
-    QString role = s_role_category_map.key(category);
+    QString role = s_roleCategoryMap.key(category);
     if (role.isEmpty())
         return;
 
