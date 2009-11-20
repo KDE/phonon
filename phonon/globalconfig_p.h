@@ -60,14 +60,7 @@ namespace Phonon
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
     protected:
-        bool isHiddenAudioOutputDevice(int i) const;
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
-        bool isHiddenAudioCaptureDevice(int i) const;
-#endif //QT_NO_PHONON_AUDIOCAPTURE
-
         QSettings m_config;
-        QList<int> _sortDevicesByCategoryPriority(ObjectDescriptionType type, Phonon::Category category, QList<int> &defaultList) const;
-        QList<int> _reindexList(Phonon::Category category, QList<int>newOrder, bool output) const;
 
     };
 } // namespace Phonon
