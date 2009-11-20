@@ -40,6 +40,8 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
+static PulseSupport* s_instance = NULL;
+
 #ifdef HAVE_PULSEAUDIO
 /***
 * Prints a conditional debug message based on the current debug level
@@ -118,7 +120,6 @@ class PulseUserData
 
 static QMap<QString, Phonon::Category> s_role_category_map;
 
-static PulseSupport* s_instance = NULL;
 static bool s_pulseActive = false;
 
 static pa_glib_mainloop *s_mainloop = NULL;
@@ -410,6 +411,7 @@ void PulseSupport::shutdown()
 
 PulseSupport::PulseSupport()
 {
+#ifdef HAVE_PULSEAUDIO
     // Initialise our map (is there a better way to do this?)
     s_role_category_map["none"] = Phonon::NoCategory;
     s_role_category_map["video"] = Phonon::VideoCategory;
@@ -421,7 +423,6 @@ PulseSupport::PulseSupport()
     //s_role_category_map["production"]; // No Mapping
     s_role_category_map["a11y"] = Phonon::AccessibilityCategory;
 
-#ifdef HAVE_PULSEAUDIO
     // To allow for easy debugging, give an easy way to disable this pulseaudio check
     QString pulseenv = qgetenv("PHONON_DISABLE_PULSEAUDIO");
     if (pulseenv.toInt())
@@ -524,7 +525,9 @@ QHash<QByteArray, QVariant> PulseSupport::objectDescriptionProperties(ObjectDesc
     if (type != AudioOutputDeviceType && type != AudioCaptureDeviceType)
         return ret;
 
-#ifdef HAVE_PULSEAUDIO
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(index);
+#else
     if (s_pulseActive) {
         switch (type) {
 
@@ -554,7 +557,9 @@ QList<int> PulseSupport::objectIndexesByCategory(ObjectDescriptionType type, Cat
     if (type != AudioOutputDeviceType && type != AudioCaptureDeviceType)
         return ret;
 
-    #ifdef HAVE_PULSEAUDIO
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(category);
+#else
     if (s_pulseActive) {
         switch (type) {
 
@@ -572,11 +577,12 @@ QList<int> PulseSupport::objectIndexesByCategory(ObjectDescriptionType type, Cat
                 break;
         }
     }
-    #endif
+#endif
 
     return ret;
 }
 
+#ifdef HAVE_PULSEAUDIO
 static void setDevicePriority(Category category, QStringList list)
 {
     QString role = s_role_category_map.key(category);
@@ -603,9 +609,14 @@ static void setDevicePriority(Category category, QStringList list)
         pa_xfree(devices[i]);
     pa_xfree(devices);
 }
+#endif
 
 void PulseSupport::setOutputDevicePriorityForCategory(Category category, QList<int> order)
 {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(category);
+    Q_UNUSED(order);
+#else
     QStringList list;
     QList<int>::iterator it;
 
@@ -615,10 +626,15 @@ void PulseSupport::setOutputDevicePriorityForCategory(Category category, QList<i
         }
     }
     setDevicePriority(category, list);
+#endif
 }
 
 void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<int> order)
 {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(category);
+    Q_UNUSED(order);
+#else
     QStringList list;
     QList<int>::iterator it;
 
@@ -628,16 +644,21 @@ void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<
         }
     }
     setDevicePriority(category, list);
+#endif
 }
 
 void PulseSupport::setRoleForCategory(Category category)
 {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(category);
+#else
     QString role = s_role_category_map.key(category);
     if (role.isEmpty())
         return;
 
     logMessage(QString("Setting role to %1").arg(role));
     setenv("PULSE_PROP_media.role", role.toLatin1().constData(), 1);
+#endif
 }
 
 
