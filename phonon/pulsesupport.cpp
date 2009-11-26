@@ -382,12 +382,15 @@ static void set_output_device(QString streamUuid)
     if (!s_outputStreamIndexMap.contains(streamUuid))
         return;
 
+    if (s_outputStreamIndexMap[streamUuid] == PA_INVALID_INDEX)
+        return;
+
     int device = s_outputStreamMoveQueue[streamUuid];
     if (!s_outputDevices.contains(device))
         return;
 
-    // Remove so we don't process twice.
-    s_outputStreamMoveQueue.remove(streamUuid);
+    // We don't remove the uuid from the s_captureStreamMoveQueue
+    // as an application may reuse the phonon AudioOutput object
 
     uint32_t pulse_device_index = s_outputDevices[device].pulseIndex;
     uint32_t pulse_stream_index = s_outputStreamIndexMap[streamUuid];
@@ -416,12 +419,15 @@ static void set_capture_device(QString streamUuid)
     if (!s_captureStreamIndexMap.contains(streamUuid))
         return;
 
+    if (s_captureStreamIndexMap[streamUuid] == PA_INVALID_INDEX)
+        return;
+
     int device = s_captureStreamMoveQueue[streamUuid];
     if (!s_captureDevices.contains(device))
         return;
 
-    // Remove so we don't process twice.
-    s_captureStreamMoveQueue.remove(streamUuid);
+    // We don't remove the uuid from the s_captureStreamMoveQueue
+    // as an application may reuse the phonon AudioCapture object (when it exists!)
 
     uint32_t pulse_device_index = s_captureDevices[device].pulseIndex;
     uint32_t pulse_stream_index = s_captureStreamIndexMap[streamUuid];
@@ -500,9 +506,14 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
             if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
                 QString phononid = s_outputStreamIndexMap.key(index);
                 if (!phononid.isEmpty()) {
-                    logMessage(QString("Removing Phonon Output Stream %1 (it's gone!)").arg(phononid));
-                    s_outputStreamIndexMap.remove(phononid);
-                    s_outputStreamMoveQueue.remove(phononid);
+                    if (s_outputStreamIndexMap.contains(phononid)) {
+                        logMessage(QString("Phonon Output Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(phononid));
+                        s_outputStreamIndexMap[phononid] = PA_INVALID_INDEX;
+                    } else {
+                        logMessage(QString("Removing Phonon Output Stream %1 (it's gone!)").arg(phononid));
+                        s_outputStreamIndexMap.remove(phononid);
+                        s_outputStreamMoveQueue.remove(phononid);
+                    }
                 }
             } else {
                 pa_operation *o;
@@ -518,9 +529,14 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
             if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
                 QString phononid = s_captureStreamIndexMap.key(index);
                 if (!phononid.isEmpty()) {
-                    logMessage(QString("Removing Phonon Capture Stream %1 (it's gone!)").arg(phononid));
-                    s_captureStreamIndexMap.remove(phononid);
-                    s_captureStreamMoveQueue.remove(phononid);
+                    if (s_captureStreamIndexMap.contains(phononid)) {
+                        logMessage(QString("Phonon Capture Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(phononid));
+                        s_captureStreamIndexMap[phononid] = PA_INVALID_INDEX;
+                    } else {
+                        logMessage(QString("Removing Phonon Capture Stream %1 (it's gone!)").arg(phononid));
+                        s_captureStreamIndexMap.remove(phononid);
+                        s_captureStreamMoveQueue.remove(phononid);
+                    }
                 }
             } else {
                 pa_operation *o;
@@ -892,7 +908,7 @@ bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
 
     s_outputStreamMoveQueue[streamUuid] = device;
     // Attempt to look up the pulse stream index.
-    if (s_outputStreamIndexMap.contains(streamUuid)) {
+    if (s_outputStreamIndexMap.contains(streamUuid) && s_outputStreamIndexMap[streamUuid] != PA_INVALID_INDEX) {
         logMessage(QString("... Found in map. Moving now"));
         set_output_device(streamUuid);
     } else {
@@ -920,13 +936,26 @@ bool PulseSupport::setCaptureDevice(QString streamUuid, int device) {
 
     s_captureStreamMoveQueue[streamUuid] = device;
     // Attempt to look up the pulse stream index.
-    if (s_captureStreamIndexMap.contains(streamUuid)) {
+    if (s_captureStreamIndexMap.contains(streamUuid) && s_captureStreamIndexMap[streamUuid] == PA_INVALID_INDEX) {
         logMessage(QString("... Found in map. Moving now"));
         set_capture_device(streamUuid);
     } else {
         logMessage(QString("... Not found in map. Saving move for when the stream appears"));
     }
     return true;
+#endif
+}
+
+void PulseSupport::clearStreamCache(QString streamUuid) {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    return;
+#else
+    logMessage(QString("Clearing stream cache for stream %1").arg(streamUuid));
+    s_outputStreamIndexMap.remove(streamUuid);
+    s_outputStreamMoveQueue.remove(streamUuid);
+    s_captureStreamIndexMap.remove(streamUuid);
+    s_captureStreamMoveQueue.remove(streamUuid);
 #endif
 }
 

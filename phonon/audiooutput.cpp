@@ -416,6 +416,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
 
 AudioOutputPrivate::~AudioOutputPrivate()
 {
+    PulseSupport::getInstance()->clearStreamCache(streamUuid);
 #ifndef QT_NO_DBUS
     if (adaptor) {
         emit adaptor->outputDestroyed();
