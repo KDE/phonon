@@ -57,6 +57,7 @@ namespace Phonon
 
             bool setOutputDevice(QString streamUuid, int device);
             bool setCaptureDevice(QString streamUuid, int device);
+            void clearStreamCache(QString streamUuid);
 
         signals:
             void objectDescriptionChanged(ObjectDescriptionType);
