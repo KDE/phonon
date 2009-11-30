@@ -26,7 +26,7 @@ find_library(GLIB2_LIBRARIES
              PATHS ${PKG_GLIB_LIBRARY_DIRS} )
 
 find_path(GLIB2_INTERNAL_INCLUDE_DIR glibconfig.h
-          PATH_SUFFIXES glib-2.0/include
+          PATH_SUFFIXES glib-2.0/include ../lib/glib-2.0/include
           PATHS ${PKG_GLIB_INCLUDE_DIRS} ${PKG_GLIB_LIBRARIES} ${CMAKE_SYSTEM_LIBRARY_PATH})
 
 set(GLIB2_INCLUDE_DIR ${GLIB2_MAIN_INCLUDE_DIR})
