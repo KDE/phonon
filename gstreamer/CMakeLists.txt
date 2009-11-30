@@ -34,7 +34,6 @@ if (BUILD_PHONON_GSTREAMER)
 
    set(phonon_gstreamer_SRCS
       audiooutput.cpp
-      artssink.cpp
       backend.cpp
       devicemanager.cpp
       effectmanager.cpp
@@ -50,15 +49,18 @@ if (BUILD_PHONON_GSTREAMER)
       message.cpp
       audioeffect.cpp
       abstractrenderer.cpp
-      x11renderer.cpp
       widgetrenderer.cpp
       glrenderer.cpp
       volumefadereffect.cpp
       audiodataoutput.cpp
       )
 
-   macro_optional_find_package(Alsa)
    if(NOT WIN32)
+      set(phonon_gstreamer_SRCS
+          ${phonon_gstreamer_SRCS}
+          artssink.cpp
+          x11renderer.cpp)
+      macro_optional_find_package(Alsa)
       macro_ensure_version("0.10.22" ${GSTREAMER_VERSION} GSTREAMER_HAS_NONBLOCKING_ALSASINK)
    endif(NOT WIN32)
    if(ALSA_FOUND AND NOT GSTREAMER_HAS_NONBLOCKING_ALSASINK)
