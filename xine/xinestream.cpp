@@ -787,7 +787,12 @@ void XineStream::playbackFinished()
             emit prefinishMarkReached(0);
         }
         changeState(Phonon::StoppedState);
-        xine_close(m_stream); // TODO: is it necessary? should xine_close be called as late as possible?
+        // Some other thread may have "nicely" closed the stream before we got to it
+        // better to check for its existence first before we crash the program
+        // FIXME: This does happen in practice, but shouldn't. (B.K.O. 196320)
+        if (m_stream) {
+            xine_close(m_stream); // TODO: is it necessary? should xine_close be called as late as possible?
+        }
         m_streamInfoReady = false;
         m_prefinishMarkReachedNotEmitted = true;
         emit finished();
