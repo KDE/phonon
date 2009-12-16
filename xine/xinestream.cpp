@@ -504,7 +504,11 @@ bool XineStream::createStream()
     //debug() << Q_FUNC_INFO << "AudioPort.xinePort() = " << m_audioPort.xinePort();
     xine_audio_port_t *audioPort = 0;
     xine_video_port_t *videoPort = 0;
-    Q_ASSERT(m_mediaObject);
+    if (!m_mediaObject) {
+        qWarning("request to create a stream, but no valid audio/video outputs are given/available");
+        error(Phonon::FatalError, tr("Xine failed to create a stream."));
+        return false;
+    }
     QSet<SinkNode *> sinks = m_mediaObject->sinks();
     debug() << Q_FUNC_INFO << "MediaObject is connected to " << sinks.size() << " nodes";
     foreach (SinkNode *sink, sinks) {
