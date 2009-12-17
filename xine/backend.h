@@ -22,7 +22,6 @@
 #define Phonon_XINE_BACKEND_H
 
 #include <QtCore/QList>
-#include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QtCore/QPair>
 #include <QtCore/QPointer>
