@@ -434,7 +434,7 @@ void KEqualizerPlugin::eq_setup_Filters(xine_post_t *this_gen)
 
     // Calculate number of active filters
     that->K=KEQUALIZER_KM;
-    while(F[that->K-1] > (float)that->rate/2.2)
+    while(F[that->K-1] > (float)that->rate/(KEQUALIZER_Q*2.0))
       that->K--;
     
     if(that->K != KEQUALIZER_KM){
