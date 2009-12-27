@@ -162,7 +162,7 @@ bool AudioOutput::setOutputDevice(int newDevice)
                                   deviceId, Backend::Info, this);
         }
 
-        // Note the stopped state should not really be neccessary, but seems to be required to 
+        // Note the stopped state should not really be necessary, but seems to be required to
         // properly reset after changing the audio state
         if (root()) {
             QMetaObject::invokeMethod(root(), "setState", Qt::QueuedConnection, Q_ARG(State, StoppedState));

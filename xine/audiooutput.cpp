@@ -260,7 +260,7 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newDevice)
 {
     K_XT(AudioOutput);
     if (!xt->m_xine) {
-        // remeber the choice until we have a xine_t
+        // remember the choice until we have a xine_t
         m_device = newDevice;
         return true;
     }

@@ -1266,7 +1266,7 @@ void MediaObject::handleBusMessage(const Message &message)
     switch (GST_MESSAGE_TYPE (gstMessage)) {
 
     case GST_MESSAGE_EOS:
-        m_backend->logMessage("EOS recieved", Backend::Info, this);
+        m_backend->logMessage("EOS received", Backend::Info, this);
         handleEndOfStream();
         break;
 
