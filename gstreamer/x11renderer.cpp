@@ -90,7 +90,7 @@ GstElement* X11Renderer::createVideoSink()
             gst_object_unref(GST_OBJECT(videoSink));
             videoSink = 0;
         } else {
-            // Note that this should not really be neccessary as these are 
+            // Note that this should not really be necessary as these are
             // default values, though under certain conditions values are retained
             // even between application instances. (reproducible on 0.10.16/Gutsy)
             g_object_set(G_OBJECT(videoSink), "brightness", 0, (const char*)NULL);

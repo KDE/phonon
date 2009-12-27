@@ -41,7 +41,6 @@
 
 #include <QtCore/QByteArray>
 #include <QtCore/QThread>
-#include <QtCore/QVariant>
 #include <QtDBus/QDBusConnection>
 #include <QtGui/QApplication>
 #include <QtCore/QSet>

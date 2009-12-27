@@ -541,7 +541,7 @@ namespace Phonon
                             return SUCCEEDED(pin->Connect(newIn, 0));
                         }
                     }
-                    //we shoud never go here
+                    //we should never go here
                     return false;
                 } else {
                     QAMMediaType type;
@@ -820,7 +820,7 @@ namespace Phonon
             //let's reestablish the connections
             for (int i = 0; i < connections.count(); ++i) {
                 const GraphConnection &connection = connections.at(i);
-                //check if we shoud transfer the sink node
+                //check if we should transfer the sink node
 
                 grabFilter(connection.input);
                 grabFilter(connection.output);
