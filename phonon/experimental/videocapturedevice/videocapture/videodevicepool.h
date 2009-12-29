@@ -21,6 +21,7 @@
 
 #include "videoinput.h"
 #include "videodevicemodelpool.h"
+#include "videodevicevector.h"
 #include <qstring.h>
 #include <qimage.h>
 #include <q3valuevector.h>
@@ -40,7 +41,7 @@ This class allows kopete to check for the existence, open, configure, test, set 
 @author Cláudio da Silveira Pinheiro
 */
 
-typedef QVector<Phonon::VideoCapture::VideoDevice> VideoDeviceVector;
+
 
 
 class  KDE_EXPORT VideoDevicePool : public QObject
