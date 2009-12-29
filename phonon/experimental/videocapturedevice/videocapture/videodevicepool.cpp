@@ -57,6 +57,7 @@ VideoDevicePool* VideoDevicePool::self()
 }
 
 VideoDevicePool::VideoDevicePool()
+: m_current_device(0)
 {
 	connect( Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(const QString&)), SLOT(deviceAdded(const QString &)) );
     connect( Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(const QString&)), SLOT(deviceRemoved(const QString &)) );
@@ -482,6 +483,7 @@ int VideoDevicePool::getImage(QImage *qimage)
 			case PIXELFORMAT_UYVY   : break;
 			case PIXELFORMAT_YUV420P: break;
 			case PIXELFORMAT_YUV422P: break;
+			default: break;
 		}
 	}
 	kDebug() << "VideoDevicePool::getImage() exited successfuly.";
@@ -878,17 +880,22 @@ void VideoDevicePool::deviceRemoved( const QString & udi )
 {
 	kDebug() << "("<< udi << ") called";
 	int i = 0;
-	foreach ( VideoDevice vd, m_videodevice ) {
-		
-		if ( vd.udi() == udi ) {
+	foreach ( VideoDevice vd, m_videodevice )
+	{
+		if ( vd.udi() == udi )
+		{
 			kDebug() << "Video device '" << udi << "' has been removed!";
+			emit deviceUnregistered( udi );
+			// not sure if this is safe but at this point the device node is gone already anyway
+			m_videodevice.remove( i );
 		}
-		emit deviceUnregistered( udi );
-		m_videodevice.remove( i ); // not sure if this is safe but at this point the device node is
-								   // gone already anyway
-		i++;
+		else
+		{
+			i++;
+		}
 	}
 }
 
-} 
+}
+
 }
