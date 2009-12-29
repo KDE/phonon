@@ -7,6 +7,6 @@ set(videocapture_LIB_SRCS bayer.cpp  sonix_compress.cpp  videodevice.cpp  videod
 
 kde4_add_library(videocapture SHARED ${videocapture_LIB_SRCS} )
 
-target_link_libraries(videocapture  ${KDE4_KDECORE_LIBS} ${KDE4_SOLID_LIBS})
+target_link_libraries(videocapture  ${KDE4_KDECORE_LIBS} ${KDE4_SOLID_LIBS} ${QT_LIBRARIES})
 
 install(TARGETS videocapture ${INSTALL_TARGETS_DEFAULT_ARGS})
