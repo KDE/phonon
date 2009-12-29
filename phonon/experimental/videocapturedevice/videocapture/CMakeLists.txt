@@ -3,7 +3,8 @@ add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 include_directories( ${KDE4_INCLUDES} )
 add_definitions( ${KDE4_DEFINITIONS} )
 
-set(videocapture_LIB_SRCS bayer.cpp  sonix_compress.cpp  videodevice.cpp  videodevicemodelpool.cpp  videodevicepool.cpp  videoinput.cpp)
+set(videocapture_LIB_SRCS bayer.cpp  sonix_compress.cpp  videodevice.cpp
+videodevicemodelpool.cpp  videodevicepool.cpp  videoinput.cpp dummyvideodevice.cpp videodevicevector.cpp)
 
 kde4_add_library(videocapture SHARED ${videocapture_LIB_SRCS} )
 
