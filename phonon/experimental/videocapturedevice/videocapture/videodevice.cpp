@@ -144,7 +144,11 @@ int VideoDevice::xioctl(int request, void *arg)
 {
 	int r;
 
+#ifdef HAVE_LIBV4L2
+	do r = v4l2_ioctl (descriptor, request, arg);
+#else
 	do r = ioctl (descriptor, request, arg);
+#endif
 	while (-1 == r && EINTR == errno);
 	return r;
 }
@@ -182,7 +186,11 @@ int VideoDevice::open()
 		kDebug() << "Device is already open";
 		return EXIT_SUCCESS;
 	}
+#ifdef HAVE_LIBV4L2
+	descriptor = ::v4l2_open (QFile::encodeName(full_filename), O_RDWR, 0);
+#else
 	descriptor = ::open (QFile::encodeName(full_filename), O_RDWR, 0);
+#endif
 	if(isOpen())
 	{
 		kDebug() << "File " << full_filename << " was opened successfuly";
@@ -252,8 +260,10 @@ int VideoDevice::checkDevice()
 // Detect maximum and minimum resolution supported by the V4L2 device. VIDIOC_ENUM_FRAMESIZES is still experimental.
 			CLEAR (fmt);
 			fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    			if (-1 == xioctl (VIDIOC_G_FMT, &fmt))
+			if (-1 == xioctl (VIDIOC_G_FMT, &fmt))
+			{
 				kDebug() << "VIDIOC_G_FMT failed (" << errno << ").";
+			}
 			fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 			fmt.fmt.pix.width       = 32767;
 			fmt.fmt.pix.height      = 32767;
@@ -269,7 +279,9 @@ int VideoDevice::checkDevice()
 				maxheight = fmt.fmt.pix.height;
 			}
 			if (-1 == xioctl (VIDIOC_G_FMT, &fmt))
+			{
 				kDebug() << "VIDIOC_G_FMT failed (" << errno << ").";
+			}
 			fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 			fmt.fmt.pix.width       = 1;
 			fmt.fmt.pix.height      = 1;
@@ -445,19 +457,33 @@ int VideoDevice::showDeviceCapabilities()
 		kDebug() << "Device name : " << m_name;
 		kDebug() << "Capabilities:";
 		if(canCapture())
+		{
 			kDebug() << "    Video capture";
+		}
 		if(canRead())
+		{
 			kDebug() << "        Read";
+		}
 		if(canAsyncIO())
+		{
 			kDebug() << "        Asynchronous input/output";
+		}
 		if(canStream())
+		{
 			kDebug() << "        Streaming";
+		}
 		if(canChromakey())
+		{
 			kDebug() << "    Video chromakey";
+		}
 		if(canScale())
+		{
 			kDebug() << "    Video scales";
+		}
 		if(canOverlay())
+		{
 			kDebug() << "    Video overlay";
+		}
 //		kDebug() << "libkopete (avdevice):     Audios : " << V4L_capabilities.audios;
 		kDebug() << "    Max res: " << maxWidth() << " x " << maxHeight();
 		kDebug() << "    Min res: " << minWidth() << " x " << minHeight();
@@ -627,7 +653,9 @@ kDebug() << "setSize(" << newwidth << ", " << newheight << ") called.";
 										{
 											kDebug() <<  "Device doesn't seem to support SBGGR8 format. Trying SN9C10X.";
 											if(PIXELFORMAT_NONE == setPixelFormat(PIXELFORMAT_SN9C10X))
+											{
 												kDebug() <<  "Device doesn't seem to support BGR32 format. Fallback to it is not yet implemented.";
+											}
 										}
 									}
 								}
@@ -655,7 +683,9 @@ kDebug() << "setSize(" << newwidth << ", " << newheight << ") called.";
 			case VIDEODEV_DRIVER_V4L2:
 //				CLEAR (fmt);
 				if (-1 == xioctl (VIDIOC_G_FMT, &fmt))
+				{
 					kDebug() << "VIDIOC_G_FMT failed (" << errno << ").Returned width: " << pixelFormatName(fmt.fmt.pix.pixelformat) << " " << fmt.fmt.pix.width << "x" << fmt.fmt.pix.height;
+				}
 				fmt.type                = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 				fmt.fmt.pix.width       = width();
 				fmt.fmt.pix.height      = height();
@@ -671,10 +701,14 @@ kDebug() << "setSize(" << newwidth << ", " << newheight << ") called.";
 kDebug() << "VIDIOC_S_FMT worked (" << errno << ").Returned width: " << pixelFormatName(fmt.fmt.pix.pixelformat) << " " << fmt.fmt.pix.width << "x" << fmt.fmt.pix.height;
 					unsigned int min = fmt.fmt.pix.width * 2;
 					if (fmt.fmt.pix.bytesperline < min)
+					{
 						fmt.fmt.pix.bytesperline = min;
+					}
 					min = fmt.fmt.pix.bytesperline * fmt.fmt.pix.height;
 					if (fmt.fmt.pix.sizeimage < min)
+					{
 						fmt.fmt.pix.sizeimage = min;
+					}
 					m_buffer_size=fmt.fmt.pix.sizeimage ;
 				}
 				break;
@@ -769,7 +803,7 @@ pixel_format VideoDevice::setPixelFormat(pixel_format newformat)
 			}
 			else
 			{
-				if (fmt.fmt.pix.pixelformat == pixelFormatCode(newformat)) // Thih "if" (not what is contained within) is a fix for a bug in sn9c102 driver.
+				if (fmt.fmt.pix.pixelformat == (unsigned int) pixelFormatCode(newformat)) // Thih "if" (not what is contained within) is a fix for a bug in sn9c102 driver.
 				{
 					m_pixelformat = newformat;
 					ret = m_pixelformat;
@@ -781,7 +815,9 @@ pixel_format VideoDevice::setPixelFormat(pixel_format newformat)
 			{
 			struct video_picture V4L_picture;
 			if(-1 == xioctl(VIDIOCGPICT, &V4L_picture))
+			{
 				kDebug() << "VIDIOCGPICT failed (" << errno << ").";
+			}
 //			kDebug() << "V4L_picture.palette: " << V4L_picture.palette << " Depth: " << V4L_picture.depth;
 			V4L_picture.palette = pixelFormatCode(newformat);
 			V4L_picture.depth   = pixelFormatDepth(newformat);
@@ -791,7 +827,9 @@ pixel_format VideoDevice::setPixelFormat(pixel_format newformat)
 			}
 
 			if(-1 == xioctl(VIDIOCGPICT, &V4L_picture))
+			{
 				kDebug() << "VIDIOCGPICT failed (" << errno << ").";
+			}
 
 //			kDebug() << "V4L_picture.palette: " << V4L_picture.palette << " Depth: " << V4L_picture.depth;
 			m_pixelformat=pixelFormatForPalette(V4L_picture.palette);
@@ -982,7 +1020,14 @@ int VideoDevice::getFrame()
 				break;
 			case IO_METHOD_READ:
 // 				kDebug() << "Using IO_METHOD_READ.File descriptor: " << descriptor << " Buffer address: " << &m_currentbuffer.data[0] << " Size: " << m_currentbuffer.data.size();
+				if (m_currentbuffer.data.isEmpty())
+					return EXIT_FAILURE;
+
+#ifdef HAVE_LIBV4L2
+				bytesread = v4l2_read (descriptor, &m_currentbuffer.data[0], m_currentbuffer.data.size());
+#else
 				bytesread = read (descriptor, &m_currentbuffer.data[0], m_currentbuffer.data.size());
+#endif
 				if (-1 == bytesread) // must verify this point with ov511 driver.
 				{
 					kDebug() << "IO_METHOD_READ failed.";
@@ -1024,8 +1069,12 @@ int VideoDevice::getFrame()
 /*				if (v4l2buffer.index < m_streambuffers)
 					return EXIT_FAILURE;*/ //it was an assert()
 // kDebug() << "m_rawbuffers[" << v4l2buffer.index << "].start: " << (void *)m_rawbuffers[v4l2buffer.index].start << "   Size: " << m_currentbuffer.data.size();
+				if (m_currentbuffer.data.isEmpty() ||
+//					v4l2buffer.index < 0 ||  	// is always false: v4l2buffer.index is unsigned
+					(uint) m_rawbuffers.size() <= v4l2buffer.index)
+					return EXIT_FAILURE;
 
-memcpy(&m_currentbuffer.data[0], m_rawbuffers[v4l2buffer.index].start, m_currentbuffer.data.size());
+				memcpy(&m_currentbuffer.data[0], m_rawbuffers[v4l2buffer.index].start, m_currentbuffer.data.size());
 				if (-1 == xioctl (VIDIOC_QBUF, &v4l2buffer))
 					return errnoReturn ("VIDIOC_QBUF");
 #endif
@@ -1050,6 +1099,9 @@ memcpy(&m_currentbuffer.data[0], m_rawbuffers[v4l2buffer.index].start, m_current
 								return errnoReturn ("VIDIOC_DQBUF");
 						}
 					}
+					if ((unsigned int) m_rawbuffers.size() < m_streambuffers)
+						return EXIT_FAILURE;
+					
 					for (i = 0; i < m_streambuffers; ++i)
 						if (v4l2buffer.m.userptr == (unsigned long) m_rawbuffers[i].start && v4l2buffer.length == m_rawbuffers[i].length)
 							break;
@@ -1095,6 +1147,14 @@ int VideoDevice::getImage(QImage *qimage)
 	// do NOT delete qimage here, as it is received as a parameter
 	if (qimage->width() != width() || qimage->height() != height()) 
 		*qimage = QImage(width(), height(), QImage::Format_RGB32);
+
+	if (!m_currentbuffer.data.size())
+		{
+		//there is no data so if we continue something will try access it (as in bug 161536) and crash kopete
+		//perhaps we should look at having the interface reflect when the camera isn't available? as it thinks 
+		//it is for some reason, though the data size seems to be an ok check
+		return EXIT_FAILURE;
+		}
 
 	uchar *bits=qimage->bits();
 // kDebug() << "Capturing in " << pixelFormatName(m_currentbuffer.pixelformat);
@@ -1329,14 +1389,13 @@ int VideoDevice::getImage(QImage *qimage)
 // Proccesses image for automatic Brightness/Contrast/Color correction
 	if (getAutoBrightnessContrast()||getAutoColorCorrection())
 	{
-		unsigned long long result=0;
 		unsigned long long R=0, G=0, B=0, A=0, global=0;
 		int Rmax=0, Gmax=0, Bmax=0, Amax=0, globalmax=0;
 		int Rmin=255, Gmin=255, Bmin=255, Amin=255, globalmin=255;
-		int Rrange=255, Grange=255, Brange=255, Arange=255, globarange=255;
+		int Rrange=255, Grange=255, Brange=255;
 
 // Finds minimum and maximum intensity for each color component
-		for(unsigned int loop=0;loop < qimage->numBytes();loop+=4)
+		for(unsigned int loop=0;loop < (unsigned int) qimage->numBytes();loop+=4)
 		{
 			R+=bits[loop];
 			G+=bits[loop+1];
@@ -1375,7 +1434,7 @@ int VideoDevice::getImage(QImage *qimage)
 			" Rmin: " << Rmin << " Gmin: " << Gmin << " Bmin: " << Bmin << " Amin: " << Amin << " globalmin: " << globalmin <<
 			" Rmax: " << Rmax << " Gmax: " << Gmax << " Bmax: " << Bmax << " Amax: " << Amax << " globalmax: " << globalmax ;
 
-		for(unsigned int loop=0;loop < qimage->numBytes();loop+=4)
+		for(unsigned int loop=0;loop < (unsigned int) qimage->numBytes();loop+=4)
 		{
 			bits[loop]   = (bits[loop]   - Rmin) * 255 / (Rrange);
 			bits[loop+1] = (bits[loop+1] - Gmin) * 255 / (Grange);
@@ -1415,7 +1474,11 @@ int VideoDevice::stopCapturing()
 						unsigned int loop;
 						for (loop = 0; loop < m_streambuffers; ++loop)
 						{
+#ifdef HAVE_LIBV4L2
+							if (v4l2_munmap(m_rawbuffers[loop].start,m_rawbuffers[loop].length) != 0)
+#else
 							if (munmap(m_rawbuffers[loop].start,m_rawbuffers[loop].length) != 0)
+#endif
 							{
 								kDebug() << "unable to munmap.";
 							}
@@ -1443,7 +1506,12 @@ int VideoDevice::close()
 	{
 		kDebug() << " Device is open. Trying to properly shutdown the device.";
 		stopCapturing();
-		kDebug() << "::close() returns " << ::close(descriptor);
+#ifdef HAVE_LIBV4L2
+		int ret = ::v4l2_close(descriptor);
+#else
+		int ret = ::close(descriptor);
+#endif
+		kDebug() << "::close() returns " << ret;
 	}
 	descriptor = -1;
 	return EXIT_SUCCESS;
@@ -1492,6 +1560,7 @@ float VideoDevice::setBrightness(float brightness)
 					CLEAR (control);
 					control.id = V4L2_CID_BRIGHTNESS;
 					control.value = (__s32)((queryctrl.maximum - queryctrl.minimum)*getBrightness());
+					control.value += queryctrl.minimum;
 
 					if (-1 == xioctl (VIDIOC_S_CTRL, &control))
 					{
@@ -1505,10 +1574,14 @@ float VideoDevice::setBrightness(float brightness)
 			{
 				struct video_picture V4L_picture;
 				if(-1 == xioctl(VIDIOCGPICT, &V4L_picture))
+				{
 					kDebug() << "VIDIOCGPICT failed (" << errno << ").";
+				}
 				V4L_picture.brightness = uint(65535 * getBrightness());
 				if(-1 == xioctl(VIDIOCSPICT,&V4L_picture))
+				{
 					kDebug() << "Device seems to not support adjusting image brightness. Fallback to it is not yet implemented.";
+				}
 			}
 			break;
 #endif
@@ -1562,6 +1635,7 @@ float VideoDevice::setContrast(float contrast)
 					CLEAR (control);
 					control.id = V4L2_CID_CONTRAST;
 					control.value = (__s32)((queryctrl.maximum - queryctrl.minimum)*getContrast());
+					control.value += queryctrl.minimum;
 
 					if (-1 == xioctl (VIDIOC_S_CTRL, &control))
 					{
@@ -1575,10 +1649,14 @@ float VideoDevice::setContrast(float contrast)
 			{
 				struct video_picture V4L_picture;
 				if(-1 == xioctl(VIDIOCGPICT, &V4L_picture))
+				{
 					kDebug() << "VIDIOCGPICT failed (" << errno << ").";
+				}
 				V4L_picture.contrast = uint(65535*getContrast());
-				if(-1 == xioctl(VIDIOCSPICT,&V4L_picture))
+				if(-1 == xioctl(VIDIOCSPICT,&V4L_picture)) 
+				{
 					kDebug() << "Device seems to not support adjusting image contrast. Fallback to it is not yet implemented.";
+				}
 			}
 		break;
 #endif
@@ -1632,6 +1710,7 @@ float VideoDevice::setSaturation(float saturation)
 					CLEAR (control);
 					control.id = V4L2_CID_SATURATION;
 					control.value = (__s32)((queryctrl.maximum - queryctrl.minimum)*getSaturation());
+					control.value += queryctrl.minimum;
 
 					if (-1 == xioctl (VIDIOC_S_CTRL, &control))
 					{
@@ -1645,10 +1724,14 @@ float VideoDevice::setSaturation(float saturation)
 			{
 				struct video_picture V4L_picture;
 				if(-1 == xioctl(VIDIOCGPICT, &V4L_picture))
+				{
 					kDebug() << "VIDIOCGPICT failed (" << errno << ").";
+				}
 				V4L_picture.colour = uint(65535*getSaturation());
 				if(-1 == xioctl(VIDIOCSPICT,&V4L_picture))
+				{
 					kDebug() << "Device seems to not support adjusting image saturation. Fallback to it is not yet implemented.";
+				}
 			}
 		break;
 #endif
@@ -1702,6 +1785,7 @@ float VideoDevice::setWhiteness(float whiteness)
 					CLEAR (control);
 					control.id = V4L2_CID_WHITENESS;
 					control.value = (__s32)((queryctrl.maximum - queryctrl.minimum)*getWhiteness());
+					control.value += queryctrl.minimum;
 
 					if (-1 == xioctl (VIDIOC_S_CTRL, &control))
 					{
@@ -1715,10 +1799,14 @@ float VideoDevice::setWhiteness(float whiteness)
 			{
 				struct video_picture V4L_picture;
 				if(-1 == xioctl(VIDIOCGPICT, &V4L_picture))
+				{
 					kDebug() << "VIDIOCGPICT failed (" << errno << ").";
+				}
 				V4L_picture.whiteness = uint(65535*getWhiteness());
 				if(-1 == xioctl(VIDIOCSPICT,&V4L_picture))
+				{
 					kDebug() << "Device seems to not support adjusting white level. Fallback to it is not yet implemented.";
+				}
 			}
 		break;
 #endif
@@ -1772,6 +1860,7 @@ float VideoDevice::setHue(float hue)
 					CLEAR (control);
 					control.id = V4L2_CID_HUE;
 					control.value = (__s32)((queryctrl.maximum - queryctrl.minimum)*getHue());
+					control.value += queryctrl.minimum;
 
 					if (-1 == xioctl (VIDIOC_S_CTRL, &control))
 					{
@@ -1785,10 +1874,14 @@ float VideoDevice::setHue(float hue)
 			{
 				struct video_picture V4L_picture;
 				if(-1 == xioctl(VIDIOCGPICT, &V4L_picture))
+				{
 					kDebug() << "VIDIOCGPICT failed (" << errno << ").";
+				}
 				V4L_picture.hue = uint(65535*getHue());
 				if(-1 == xioctl(VIDIOCSPICT,&V4L_picture))
+				{
 					kDebug() << "Device seems to not support adjusting image hue. Fallback to it is not yet implemented.";
+				}
 			}
 		break;
 #endif
@@ -2259,42 +2352,42 @@ int VideoDevice::detectPixelFormats()
 
 // Packed RGB formats
 			kDebug() << "Supported pixel formats:";
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB332))	kDebug() << pixelFormatName(PIXELFORMAT_RGB332);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB444))	kDebug() << pixelFormatName(PIXELFORMAT_RGB444);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB555))	kDebug() << pixelFormatName(PIXELFORMAT_RGB555);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB565))	kDebug() << pixelFormatName(PIXELFORMAT_RGB565);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB555X))	kDebug() << pixelFormatName(PIXELFORMAT_RGB555X);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB565X))	kDebug() << pixelFormatName(PIXELFORMAT_RGB565X);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_BGR24))	kDebug() << pixelFormatName(PIXELFORMAT_BGR24);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB24))	kDebug() << pixelFormatName(PIXELFORMAT_RGB24);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_BGR32))	kDebug() << pixelFormatName(PIXELFORMAT_BGR32);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB32))	kDebug() << pixelFormatName(PIXELFORMAT_RGB32);
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB332))	{ kDebug() << pixelFormatName(PIXELFORMAT_RGB332); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB444))	{ kDebug() << pixelFormatName(PIXELFORMAT_RGB444); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB555))	{ kDebug() << pixelFormatName(PIXELFORMAT_RGB555); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB565))	{ kDebug() << pixelFormatName(PIXELFORMAT_RGB565); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB555X))	{ kDebug() << pixelFormatName(PIXELFORMAT_RGB555X); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB565X))	{ kDebug() << pixelFormatName(PIXELFORMAT_RGB565X); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_BGR24))	{ kDebug() << pixelFormatName(PIXELFORMAT_BGR24); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB24))	{ kDebug() << pixelFormatName(PIXELFORMAT_RGB24); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_BGR32))	{ kDebug() << pixelFormatName(PIXELFORMAT_BGR32); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_RGB32))	{ kDebug() << pixelFormatName(PIXELFORMAT_RGB32); }
 
 // Bayer RGB format
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_SBGGR8))	kDebug() << pixelFormatName(PIXELFORMAT_SBGGR8);
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_SBGGR8))	{ kDebug() << pixelFormatName(PIXELFORMAT_SBGGR8); }
 
 // YUV formats
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_GREY))	kDebug() << pixelFormatName(PIXELFORMAT_GREY);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_YUYV))	kDebug() << pixelFormatName(PIXELFORMAT_YUYV);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_UYVY))	kDebug() << pixelFormatName(PIXELFORMAT_UYVY);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_YUV420P))	kDebug() << pixelFormatName(PIXELFORMAT_YUV420P);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_YUV422P))	kDebug() << pixelFormatName(PIXELFORMAT_YUV422P);
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_GREY))	{ kDebug() << pixelFormatName(PIXELFORMAT_GREY); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_YUYV))	{ kDebug() << pixelFormatName(PIXELFORMAT_YUYV); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_UYVY))	{ kDebug() << pixelFormatName(PIXELFORMAT_UYVY); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_YUV420P))	{ kDebug() << pixelFormatName(PIXELFORMAT_YUV420P); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_YUV422P))	{ kDebug() << pixelFormatName(PIXELFORMAT_YUV422P); }
 
 // Compressed formats
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_JPEG))	kDebug() << pixelFormatName(PIXELFORMAT_JPEG);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_MPEG))	kDebug() << pixelFormatName(PIXELFORMAT_MPEG);
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_JPEG))	{ kDebug() << pixelFormatName(PIXELFORMAT_JPEG); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_MPEG))	{ kDebug() << pixelFormatName(PIXELFORMAT_MPEG); }
 
 // Reserved formats
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_DV))		kDebug() << pixelFormatName(PIXELFORMAT_DV);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_ET61X251))	kDebug() << pixelFormatName(PIXELFORMAT_ET61X251);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_HI240))	kDebug() << pixelFormatName(PIXELFORMAT_HI240);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_HM12))	kDebug() << pixelFormatName(PIXELFORMAT_HM12);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_MJPEG))	kDebug() << pixelFormatName(PIXELFORMAT_MJPEG);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_PWC1))	kDebug() << pixelFormatName(PIXELFORMAT_PWC1);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_PWC2))	kDebug() << pixelFormatName(PIXELFORMAT_PWC2);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_SN9C10X))	kDebug() << pixelFormatName(PIXELFORMAT_SN9C10X);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_WNVA))	kDebug() << pixelFormatName(PIXELFORMAT_WNVA);
-			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_YYUV))	kDebug() << pixelFormatName(PIXELFORMAT_YYUV);
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_DV))		{ kDebug() << pixelFormatName(PIXELFORMAT_DV); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_ET61X251))	{ kDebug() << pixelFormatName(PIXELFORMAT_ET61X251); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_HI240))	{ kDebug() << pixelFormatName(PIXELFORMAT_HI240); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_HM12))	{ kDebug() << pixelFormatName(PIXELFORMAT_HM12); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_MJPEG))	{ kDebug() << pixelFormatName(PIXELFORMAT_MJPEG); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_PWC1))	{ kDebug() << pixelFormatName(PIXELFORMAT_PWC1); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_PWC2))	{ kDebug() << pixelFormatName(PIXELFORMAT_PWC2); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_SN9C10X))	{ kDebug() << pixelFormatName(PIXELFORMAT_SN9C10X); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_WNVA))	{ kDebug() << pixelFormatName(PIXELFORMAT_WNVA); }
+			if(PIXELFORMAT_NONE != setPixelFormat(PIXELFORMAT_YYUV))	{ kDebug() << pixelFormatName(PIXELFORMAT_YYUV); }
 			break;
 #endif
 		case VIDEODEV_DRIVER_NONE:
@@ -2605,8 +2698,10 @@ int VideoDevice::detectSignalStandards()
 
 				while (0 == xioctl (VIDIOC_ENUMSTD, &standard)) {
 					if (standard.id & input.std)
+					{
 //						kDebug() << standard.name;
 						kDebug() << signalStandardName(standard.id) << " (" << standard.id << ")" << V4L2_STD_NTSC;
+					}
 
 					standard.index++;
 				}
@@ -2729,7 +2824,11 @@ int VideoDevice::initMmap()
 				return errnoReturn ("VIDIOC_QUERYBUF");
 
 			m_rawbuffers[m_streambuffers].length = v4l2buffer.length;
+#ifdef HAVE_LIBV4L2
+			m_rawbuffers[m_streambuffers].start = (uchar *) v4l2_mmap (NULL /* start anywhere */, v4l2buffer.length, PROT_READ | PROT_WRITE /* required */, MAP_SHARED /* recommended */, descriptor, v4l2buffer.m.offset);
+#else
 			m_rawbuffers[m_streambuffers].start = (uchar *) mmap (NULL /* start anywhere */, v4l2buffer.length, PROT_READ | PROT_WRITE /* required */, MAP_SHARED /* recommended */, descriptor, v4l2buffer.m.offset);
+#endif
 
 			if (MAP_FAILED == m_rawbuffers[m_streambuffers].start)
 			return errnoReturn ("mmap");
@@ -2844,4 +2943,5 @@ QString VideoDevice::udi() const
 }
 
 }
+
 }
