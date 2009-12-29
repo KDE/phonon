@@ -10,6 +10,8 @@ if(NOT V4L2_FOUND)
   message(FATAL_ERROR "Video4Linux2 not found")
 endif(NOT V4L2_FOUND)
 
+find_package(Qt4 REQUIRED)
+include(${QT_USE_FILE})
 find_package(KDE4 REQUIRED)
 
 add_subdirectory( videocapture )
