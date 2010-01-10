@@ -929,7 +929,7 @@ void MediaObject::setSource(const MediaSource &source)
     // Clear any existing errors
     m_aboutToFinishEmitted = false;
     m_error = NoError;
-    m_errorString = QString();
+    m_errorString.clear();
 
     m_bufferPercent = 0;
     m_prefinishMarkReachedNotEmitted = true;

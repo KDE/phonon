@@ -1234,7 +1234,7 @@ bool XineStream::event(QEvent *ev)
             State previousState = m_state;
             setMrlInternal(e->mrl);
             m_errorType = Phonon::NoError;
-            m_errorString = QString();
+            m_errorString.clear();
             if (!m_stream) {
                 changeState(Phonon::LoadingState);
                 m_mutex.lock();
