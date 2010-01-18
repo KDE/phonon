@@ -951,17 +951,13 @@ void MediaObject::setSource(const MediaSource &source)
 
     switch (source.type()) {
     case MediaSource::Url: {
-            if (createPipefromURL(source.url()))
-                m_loading = true;
-            else
+            if (!createPipefromURL(source.url()))
                 setError(tr("Could not open media source."));
         }
         break;
 
     case MediaSource::LocalFile: {
-            if (createPipefromURL(QUrl::fromLocalFile(source.fileName())))
-                m_loading = true;
-            else
+            if (!createPipefromURL(QUrl::fromLocalFile(source.fileName())))
                 setError(tr("Could not open media source."));
         }
         break;
@@ -974,9 +970,7 @@ void MediaObject::setSource(const MediaSource &source)
         break;
 
     case MediaSource::Stream:
-        if (createPipefromStream(source))
-            m_loading = true;
-        else
+        if (!createPipefromStream(source))
             setError(tr("Could not open media source."));
         break;
 
@@ -1000,9 +994,7 @@ void MediaObject::setSource(const MediaSource &source)
                 qWarning() <<  "media " << source.discType() << " not implemented";
                 return;
             }
-            if (!mediaUrl.isEmpty() && createPipefromURL(QUrl(mediaUrl)))
-                m_loading = true;
-            else
+            if (mediaUrl.isEmpty() || !createPipefromURL(QUrl(mediaUrl)))
                 setError(tr("Could not open media source."));
         }
         break;
@@ -1018,8 +1010,7 @@ void MediaObject::setSource(const MediaSource &source)
 
     // We need to link this node to ensure that fake sinks are connected
     // before loading, otherwise the stream will be blocked
-    if (m_loading)
-        link();
+    link();
     beginLoad();
 }
 
