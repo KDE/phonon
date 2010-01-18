@@ -916,7 +916,9 @@ void MediaObject::setSource(const MediaSource &source)
     // Go into to loading state
     changeState(Phonon::LoadingState);
     m_loading = true;
-    m_resetNeeded = false;
+    // IMPORTANT: Honor the m_resetNeeded flag as it currently stands.
+    // See https://qa.mandriva.com/show_bug.cgi?id=56807
+    //m_resetNeeded = false;
     m_resumeState = false;
     m_pendingState = Phonon::StoppedState;
 
