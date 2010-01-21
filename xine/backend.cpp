@@ -680,9 +680,7 @@ void Backend::checkAudioOutputs()
                             "in KDE2 and KDE3. Its use is discouraged.</p></html>"),
                         /*icon name */"audio-backend-arts", outputPlugins[i]);
             } else if (0 == strcmp(outputPlugins[i], "pulseaudio")) {
-                addAudioOutput(nextIndex++, 10, tr("PulseAudio"),
-                        xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
-                        /*icon name */"audio-backend-pulseaudio", outputPlugins[i]);
+                // Ignore this. We deal with it as a special case above.
             } else if (0 == strcmp(outputPlugins[i], "esd")) {
                 addAudioOutput(nextIndex++, 8, tr("Esound (ESD)"),
                         xine_get_audio_driver_plugin_description(m_xine, outputPlugins[i]),
