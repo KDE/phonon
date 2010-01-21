@@ -26,6 +26,7 @@
 #include <sys/ioctl.h>
 #include <iostream>
 #include <QSet>
+#include <phonon/pulsesupport_p.h>
 #include "mediaobject.h"
 #include "backend.h"
 #include "events.h"
@@ -48,10 +49,6 @@ namespace Xine
 AudioOutput::AudioOutput(QObject *parent)
     : AbstractAudioOutput(new AudioOutputXT, parent)
 {
-    // Always initialise the "device" in use.
-    // This is needed for PulseAudio support as subsequent calls to setOutputDevice()
-    // are suppressed
-    setOutputDevice(0);
 }
 
 AudioOutput::~AudioOutput()
@@ -132,6 +129,17 @@ xine_audio_port_t *AudioOutput::createPort(const AudioOutputDevice &deviceDesc)
 {
     K_XT(AudioOutput);
     xine_audio_port_t *port = 0;
+
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        // Here we trust that the PA plugin is setup correctly and we just want to use it.
+        const QByteArray &outputPlugin = "pulseaudio";
+        debug() << Q_FUNC_INFO << "PA Active: use output plugin:" << outputPlugin;
+        port = xine_open_audio_driver(xt->m_xine, outputPlugin.constData(), 0);
+        debug() << Q_FUNC_INFO << "----------------------------------------------- audio_port created";
+        return port;
+    }
+
     if (!deviceDesc.isValid()) {
         // use null output for invalid devices
         port = xine_open_audio_driver(xt->m_xine, "none", 0);
