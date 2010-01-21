@@ -741,6 +741,8 @@ void MediaObject::changeState(State newstate)
 
     case Phonon::StoppedState:
         m_backend->logMessage("phonon state changed: Stopped", Backend::Info, this);
+        // We must reset the pipeline when playing again
+        m_resetNeeded = true;
         m_tickTimer->stop();
         break;
 
