@@ -1582,6 +1582,14 @@ void MediaObject::handleEndOfStream()
     }
 }
 
+void MediaObject::invalidateGraph()
+{
+    m_resetNeeded = true;
+    if (m_state == Phonon::PlayingState || m_state == Phonon::PausedState) {
+        changeState(Phonon::StoppedState);
+    }
+}
+
 // Notifes the pipeline about state changes in the media object
 void MediaObject::notifyStateChange(Phonon::State newstate, Phonon::State oldstate)
 {

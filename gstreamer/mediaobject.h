@@ -145,12 +145,8 @@ public:
     void handleBusMessage(const Message &msg);
     void handleEndOfStream();
     void addMissingCodecName(const QString &codec) { m_missingCodecs.append(codec); }
-    void invalidateGraph() {
-        m_resetNeeded = true;
-        if (m_state == Phonon::PlayingState || m_state == Phonon::PausedState) {
-            changeState(Phonon::StoppedState);
-        }
-    }
+    void invalidateGraph();
+
     static void cb_newpad (GstElement *decodebin, GstPad *pad, gboolean last, gpointer data);
     static void cb_pad_added (GstElement *decodebin, GstPad *pad, gpointer data);
     static void cb_unknown_type (GstElement *decodebin, GstPad *pad, GstCaps *caps, gpointer data);
