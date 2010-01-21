@@ -588,9 +588,6 @@ QHash<QByteArray, QVariant> Backend::audioOutputProperties(int audioDevice)
 
 QByteArray Backend::audioDriverFor(int audioDevice)
 {
-    if (PulseSupport::getInstance()->isActive())
-        return "pulseaudio";
-
     instance()->checkAudioOutputs();
     const Backend *const that = instance();
     for (int i = 0; i < that->m_audioOutputInfos.size(); ++i) {
