@@ -244,6 +244,15 @@ QStringList Backend::availableMimeTypes() const
         }
     }
     g_list_free(factoryList);
+    if (availableMimeTypes.contains("audio/x-vorbis")
+        && availableMimeTypes.contains("application/x-ogm-audio")) {
+        if (!availableMimeTypes.contains("audio/x-vorbis+ogg"))
+            availableMimeTypes.append("audio/x-vorbis+ogg");
+        if (!availableMimeTypes.contains("application/ogg"))  /* *.ogg */
+            availableMimeTypes.append("application/ogg");
+        if (!availableMimeTypes.contains("audio/ogg")) /* *.oga */
+            availableMimeTypes.append("audio/ogg");
+    }
     availableMimeTypes.sort();
     return availableMimeTypes;
 }
