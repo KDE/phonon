@@ -8,15 +8,21 @@ endif (PHONON_BUILD_EXAMPLES)
 
 add_subdirectory(experimental)
 
-set(PULSEAUDIO_MINIMUM_VERSION "0.9.21")
+set(PULSEAUDIO_MINIMUM_VERSION "0.9.15")
 macro_optional_find_package(PulseAudio)
+# PULSEAUDIO_DEVICE_MANAGER feature check could be moved to FindPulseAudio.cmake, hint hint. -- Rex
+macro_ensure_version("0.9.21" "${PULSEAUDIO_VERSION}" PULSEAUDIO_DEVICE_MANAGER)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
 macro_optional_find_package(GLIB2)
 macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
 
+
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
    add_definitions(-DHAVE_PULSEAUDIO)
    include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
+   if (PULSEAUDIO_DEVICE_MANAGER)
+      add_definitions(-DHAVE_PULSEAUDIO_DEVICE_MANAGER)
+   endif(PULSEAUDIO_DEVICE_MANAGER)
 else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_INCLUDE_DIR "")
    set(PULSEAUDIO_LIBRARY "")

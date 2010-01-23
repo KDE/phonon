@@ -30,7 +30,9 @@
 #include <pulse/pulseaudio.h>
 #include <pulse/xmalloc.h>
 #include <pulse/glib-mainloop.h>
-#include <pulse/ext-device-manager.h>
+#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
+#  include <pulse/ext-device-manager.h>
+#endif
 #endif // HAVE_PULSEAUDIO
 
 #include "pulsesupport_p.h"
@@ -151,7 +153,34 @@ static QMap<Phonon::Category, QMap<int, int> > s_captureDevicePriorities; // pri
 static QMap<QString, uint32_t> s_captureStreamIndexMap;
 static QMap<QString, int> s_captureStreamMoveQueue;
 
+static void createGenericDevices()
+{
+    // OK so we don't have the device manager extension, but we can show a single device and fake it.
+    int index;
+    s_outputDeviceIndexes.clear();
+    s_outputDevices.clear();
+    s_outputDevicePriorities.clear();
+    index = s_deviceIndexCounter++;
+    s_outputDeviceIndexes.insert("sink:default", index);
+    s_outputDevices.insert(index, AudioDevice("sink:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 0));
+    for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
+        Phonon::Category cat = static_cast<Phonon::Category>(i);
+        s_outputDevicePriorities[cat].insert(0, index);
+    }
 
+    s_captureDeviceIndexes.clear();
+    s_captureDevices.clear();
+    s_captureDevicePriorities.clear();
+    index = s_deviceIndexCounter++;
+    s_captureDeviceIndexes.insert("source:default", index);
+    s_captureDevices.insert(index, AudioDevice("source:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 0));
+    for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
+        Phonon::Category cat = static_cast<Phonon::Category>(i);
+        s_captureDevicePriorities[cat].insert(0, index);
+    }
+}
+
+#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
 static void ext_device_manager_subscribe_cb(pa_context *, void *);
 static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manager_info *info, int eol, void *userdata) {
     Q_ASSERT(c);
@@ -159,6 +188,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 
     // If this is our first iteration, set things up properly
     if (s_connectionEventloop) {
+        logMessage("Exiting connection event loop (PulseAudio server found)");
         s_connectionEventloop->exit(0);
         s_connectionEventloop = NULL;
         s_pulseActive = true;
@@ -171,30 +201,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 
     if (eol < 0) {
         logMessage(QString("Failed to initialize device manager extension: %1").arg(pa_strerror(pa_context_errno(c))));
-        // OK so we don't have the device manager extension, but we can show a single device and fake it.
-        int index;
-        s_outputDeviceIndexes.clear();
-        s_outputDevices.clear();
-        s_outputDevicePriorities.clear();
-        index = s_deviceIndexCounter++;
-        s_outputDeviceIndexes.insert("sink:default", index);
-        s_outputDevices.insert(index, AudioDevice("sink:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 0));
-        for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
-            Phonon::Category cat = static_cast<Phonon::Category>(i);
-            s_outputDevicePriorities[cat].insert(0, index);
-        }
-
-        s_captureDeviceIndexes.clear();
-        s_captureDevices.clear();
-        s_captureDevicePriorities.clear();
-        index = s_deviceIndexCounter++;
-        s_captureDeviceIndexes.insert("source:default", index);
-        s_captureDevices.insert(index, AudioDevice("source:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 0));
-        for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
-            Phonon::Category cat = static_cast<Phonon::Category>(i);
-            s_captureDevicePriorities[cat].insert(0, index);
-        }
-
+        createGenericDevices();
         return;
     }
 
@@ -369,6 +376,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         }
     }
 }
+#endif
 
 static void set_output_device(QString streamUuid)
 {
@@ -555,10 +563,12 @@ static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
     Q_ASSERT(c);
 
     pa_operation *o;
+#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER 
     PulseUserData *u = new PulseUserData; /** @todo Make some object to receive the info... */
     if (!(o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, u))) {
         // We need to deal with failure on first iteration
         if (s_connectionEventloop) {
+            logMessage("Entering connection eventloop (initialisation failed)");
             s_connectionEventloop->exit(0);
             s_connectionEventloop = NULL;
         }
@@ -566,6 +576,17 @@ static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
         return;
     }
     pa_operation_unref(o);
+#else
+    // If we do not have Device Manager support. We just bail out now
+    // and say we are active with our single "devices" for playback and capture
+    s_pulseActive = true;
+    logMessage("Entering connection eventloop (successfully detected PulseAudio)");
+    if (s_connectionEventloop) {
+        s_connectionEventloop->exit(0);
+        s_connectionEventloop = NULL;
+    }
+    createGenericDevices();
+#endif
 
 
     // Register for the stream changes...
@@ -580,10 +601,30 @@ static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
     pa_operation_unref(o);
 }
 
+
+static const char* statename(pa_context_state_t state)
+{
+    switch (state)
+    {
+        case PA_CONTEXT_UNCONNECTED:  return "Unconnected";
+        case PA_CONTEXT_CONNECTING:   return "Connecting";
+        case PA_CONTEXT_AUTHORIZING:  return "Authorizing";
+        case PA_CONTEXT_SETTING_NAME: return "Setting Name";
+        case PA_CONTEXT_READY:        return "Ready";
+        case PA_CONTEXT_FAILED:       return "Failed";
+        case PA_CONTEXT_TERMINATED:   return "Terminated";
+    }
+
+    static QString unknown;
+    unknown = QString("Unknown state: %0").arg(state);
+    return unknown.toAscii().constData();
+}
+
 static void context_state_callback(pa_context *c, void *)
 {
     Q_ASSERT(c);
 
+    logMessage(QString("context_state_callback %1").arg(statename(pa_context_get_state(c))));
     switch (pa_context_get_state(c)) {
         case PA_CONTEXT_UNCONNECTED:
         case PA_CONTEXT_CONNECTING:
@@ -599,6 +640,7 @@ static void context_state_callback(pa_context *c, void *)
         case PA_CONTEXT_FAILED:
             s_pulseActive = false;
             if (s_connectionEventloop) {
+                logMessage("Entering connection eventloop (connection failed)");
                 s_connectionEventloop->exit(0);
                 s_connectionEventloop = NULL;
             }
@@ -665,6 +707,7 @@ PulseSupport::PulseSupport()
     if (pa_context_connect(s_context, NULL, static_cast<pa_context_flags_t>(0), 0) >= 0) {
         pa_context_set_state_callback(s_context, &context_state_callback, s_connectionEventloop);
         // Now we block until we connect or otherwise...
+        logMessage("Entering connection eventloop...");
         s_connectionEventloop->exec();
     }
 #endif
@@ -821,11 +864,13 @@ static void setDevicePriority(Category category, QStringList list)
     }
     devices[list.size()] = NULL;
 
+#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER 
     pa_operation *o;
     if (!(o = pa_ext_device_manager_reorder_devices_for_role(s_context, role.toUtf8().constData(), (const char**)devices, NULL, NULL)))
         logMessage(QString("pa_ext_device_manager_reorder_devices_for_role() failed"));
     else
         pa_operation_unref(o);
+#endif
 
     for (i = 0; i < list.size(); ++i)
         pa_xfree(devices[i]);
