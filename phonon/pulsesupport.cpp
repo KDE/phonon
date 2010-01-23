@@ -35,7 +35,7 @@
 #endif
 #endif // HAVE_PULSEAUDIO
 
-#include "pulsesupport_p.h"
+#include "pulsesupport.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -1008,6 +1008,6 @@ void PulseSupport::clearStreamCache(QString streamUuid) {
 
 QT_END_NAMESPACE
 
-#include "moc_pulsesupport_p.cpp"
+#include "moc_pulsesupport.cpp"
 
 // vim: sw=4 ts=4

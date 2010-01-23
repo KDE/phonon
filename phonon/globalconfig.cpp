@@ -30,7 +30,7 @@
 #include "backendinterface.h"
 #include "qsettingsgroup_p.h"
 #include "phononnamespace_p.h"
-#include "pulsesupport_p.h"
+#include "pulsesupport.h"
 
 #include <QtCore/QList>
 #include <QtCore/QVariant>

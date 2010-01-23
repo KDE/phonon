@@ -27,7 +27,7 @@
 #include "message.h"
 #include "volumefadereffect.h"
 #include <gst/interfaces/propertyprobe.h>
-#include <phonon/pulsesupport_p.h>
+#include <phonon/pulsesupport.h>
 
 #include <QtCore/QSet>
 #include <QtCore/QVariant>

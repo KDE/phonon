@@ -28,7 +28,7 @@
 #include "audiooutputinterface.h"
 #include "phononnamespace_p.h"
 #include "platform_p.h"
-#include "pulsesupport_p.h"
+#include "pulsesupport.h"
 
 #include <QtCore/qmath.h>
 
