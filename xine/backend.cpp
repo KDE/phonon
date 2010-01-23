@@ -21,7 +21,7 @@
 
 #include "backend.h"
 #include <phonon/experimental/backendinterface.h>
-#include <phonon/pulsesupport_p.h>
+#include <phonon/pulsesupport.h>
 #include "mediaobject.h"
 #include "effect.h"
 #include "events.h"

@@ -26,7 +26,7 @@
 #include <sys/ioctl.h>
 #include <iostream>
 #include <QSet>
-#include <phonon/pulsesupport_p.h>
+#include <phonon/pulsesupport.h>
 #include "mediaobject.h"
 #include "backend.h"
 #include "events.h"

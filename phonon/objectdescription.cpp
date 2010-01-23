@@ -29,7 +29,7 @@
 #include <QtCore/QStringList>
 #include "backendinterface.h"
 #include "platformplugin.h"
-#include "pulsesupport_p.h"
+#include "pulsesupport.h"
 
 QT_BEGIN_NAMESPACE
 

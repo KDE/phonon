@@ -24,7 +24,7 @@
 #include "widgetrenderer.h"
 #include "x11renderer.h"
 #include "artssink.h"
-#include "pulsesupport_p.h"
+#include "pulsesupport.h"
 
 #ifdef USE_ALSASINK2
 #include "alsasink2.h"
