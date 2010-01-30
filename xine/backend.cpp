@@ -208,10 +208,6 @@ QStringList Backend::availableMimeTypes() const
 
 QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
 {
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive() && (Phonon::AudioOutputDeviceType == type || Phonon::AudioCaptureDeviceType == type))
-        return pulse->objectDescriptionIndexes(type);
-
     QList<int> list;
     switch(type)
     {
@@ -264,10 +260,6 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
 
 QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescriptionType type, int index) const
 {
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive() && (Phonon::AudioOutputDeviceType == type || Phonon::AudioCaptureDeviceType == type))
-        return pulse->objectDescriptionProperties(type, index);
-
     //debug() << Q_FUNC_INFO << type << index;
     QHash<QByteArray, QVariant> ret;
     switch (type) {
