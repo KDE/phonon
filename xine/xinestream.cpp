@@ -1664,7 +1664,8 @@ S XineStream::streamDescription(int index, uint hash, ObjectDescriptionType type
 {
     QByteArray lang;
     lang.resize(150);
-    get_xine_stream_text(m_stream, index, lang.data());
+    if (!get_xine_stream_text(m_stream, index, lang.data()))
+        lang = QByteArray();
     QHash<QByteArray, QVariant> properities;
     properities.insert("name", QString(lang));
     Backend::setObjectDescriptionProperities(type, index + hash, properities);
