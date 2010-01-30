@@ -1522,7 +1522,13 @@ bool XineStream::event(QEvent *ev)
             case Phonon::LoadingState:
                 return true; // cannot seek
             }
-            m_currentTime = e->time;
+
+            // The stream demuxer will (hopefully) give us a better idea of
+            // where we are in the stream (maybe it will round the time to the
+            // nearest frame rather than the exact time desired).
+            if (!xine_get_pos_length(m_stream, 0, &m_currentTime, 0) || !m_currentTime)
+                m_currentTime = e->time;
+
             const int timeToSignal = m_totalTime - m_prefinishMark - e->time;
             if (m_prefinishMark > 0) {
                 if (timeToSignal > 0) { // not about to finish
