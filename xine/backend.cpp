@@ -71,6 +71,7 @@ Backend::Backend(QObject *parent, const QVariantList &)
 {
     // Initialise PulseAudio support
     PulseSupport *pulse = PulseSupport::getInstance();
+    pulse->enable();
     connect(pulse, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)), SLOT(emitObjectDescriptionChanged(ObjectDescriptionType)));
 
     Q_ASSERT(s_instance == 0);
@@ -629,7 +630,7 @@ void Backend::checkAudioOutputs()
             }
 
             // We cannot find the output plugin, so let the support class know.
-            pulse->disable();
+            pulse->enable(false);
         }
 
         for (int i = 0; outputPlugins[i]; ++i) {

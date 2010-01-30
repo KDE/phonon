@@ -88,7 +88,7 @@ DeviceManager::DeviceManager(Backend *backend)
             m_audioSink = "pulsesink";
     }
     if ("pulsesink" != m_audioSink)
-        pulse->disable();
+        pulse->enable(false);
 
     m_videoSinkWidget = qgetenv("PHONON_GST_VIDEOMODE");
     if (m_videoSinkWidget.isEmpty()) {

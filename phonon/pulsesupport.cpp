@@ -673,7 +673,7 @@ void PulseSupport::shutdown()
 }
 
 PulseSupport::PulseSupport()
- : QObject()
+ : QObject(), mEnabled(false)
 {
 #ifdef HAVE_PULSEAUDIO
     // Initialise our map (is there a better way to do this?)
@@ -736,17 +736,15 @@ PulseSupport::~PulseSupport()
 bool PulseSupport::isActive()
 {
 #ifdef HAVE_PULSEAUDIO
-    return s_pulseActive;
+    return mEnabled && s_pulseActive;
 #else
     return false;
 #endif
 }
 
-void PulseSupport::disable()
+void PulseSupport::enable(bool enabled)
 {
-#ifdef HAVE_PULSEAUDIO
-    s_pulseActive = false;
-#endif
+    mEnabled = enabled;
 }
 
 QList<int> PulseSupport::objectDescriptionIndexes(ObjectDescriptionType type) const

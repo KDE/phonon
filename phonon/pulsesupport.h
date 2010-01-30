@@ -43,7 +43,7 @@ namespace Phonon
             static void shutdown();
 
             bool isActive();
-            void disable();
+            void enable(bool enabled = true);
 
             QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
             QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const;
@@ -64,6 +64,8 @@ namespace Phonon
         private:
             PulseSupport();
             ~PulseSupport();
+
+            bool mEnabled;
     };
 } // namespace Phonon
 
