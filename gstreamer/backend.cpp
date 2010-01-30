@@ -267,10 +267,6 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
     if (!isValid())
         return list;
 
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive() && (Phonon::AudioOutputDeviceType == type || Phonon::AudioCaptureDeviceType == type))
-        return pulse->objectDescriptionIndexes(type);
-
     switch (type) {
     case Phonon::AudioOutputDeviceType: {
             QList<AudioDevice> deviceList = deviceManager()->audioOutputDevices();
@@ -303,10 +299,6 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
 
     if (!isValid())
         return ret;
-
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive() && (Phonon::AudioOutputDeviceType == type || Phonon::AudioCaptureDeviceType == type))
-        return pulse->objectDescriptionProperties(type, index);
 
     switch (type) {
     case Phonon::AudioOutputDeviceType: {
