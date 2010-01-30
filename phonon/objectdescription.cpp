@@ -109,12 +109,21 @@ bool ObjectDescriptionData::isValid() const
 
 ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType type, int index)
 {
-    BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
+    bool is_audio_device = (AudioOutputDeviceType == type || AudioCaptureDeviceType == type);
 
-    // prefer to get the ObjectDescriptionData from the platform plugin for audio devices
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (is_audio_device && pulse->isActive()) {
+        QList<int> indexes = pulse->objectDescriptionIndexes(type);
+        if (indexes.contains(index)) {
+            QHash<QByteArray, QVariant> properties = pulse->objectDescriptionProperties(type, index);
+            return new ObjectDescriptionData(index, properties);
+        }
+    } else {
+        BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
+
+        // prefer to get the ObjectDescriptionData from the platform plugin for audio devices
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (!iface || !PulseSupport::getInstance()->isActive()) {
-        if (type == AudioOutputDeviceType || type == AudioCaptureDeviceType) {
+        if (is_audio_device) {
             PlatformPlugin *platformPlugin = Factory::platformPlugin();
             if (platformPlugin) {
                 QList<int> indexes = platformPlugin->objectDescriptionIndexes(type);
@@ -124,14 +133,14 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
                 }
             }
         }
-    }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
-    if (iface) {
-        QList<int> indexes = iface->objectDescriptionIndexes(type);
-        if (indexes.contains(index)) {
-            QHash<QByteArray, QVariant> properties = iface->objectDescriptionProperties(type, index);
-            return new ObjectDescriptionData(index, properties);
+        if (iface) {
+            QList<int> indexes = iface->objectDescriptionIndexes(type);
+            if (indexes.contains(index)) {
+                QHash<QByteArray, QVariant> properties = iface->objectDescriptionProperties(type, index);
+                return new ObjectDescriptionData(index, properties);
+            }
         }
     }
     return new ObjectDescriptionData(0); // invalid

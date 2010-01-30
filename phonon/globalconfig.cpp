@@ -64,7 +64,11 @@ static void filter(ObjectDescriptionType type, BackendInterface *backendIface, Q
 {
     QMutableListIterator<int> it(*list);
     while (it.hasNext()) {
-        const QHash<QByteArray, QVariant> properties = backendIface->objectDescriptionProperties(type, it.next());
+        QHash<QByteArray, QVariant> properties;
+        if (backendIface)
+            properties = backendIface->objectDescriptionProperties(type, it.next());
+        else
+            properties = PulseSupport::getInstance()->objectDescriptionProperties(type, it.next());
         QVariant var;
         if (whatToFilter & FilterAdvancedDevices) {
             var = properties.value("isAdvanced");
@@ -280,10 +284,20 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int
             : static_cast<bool>(override & HideAdvancedDevices));
 
     QList<int> defaultList;
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
+
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        defaultList = pulse->objectDescriptionIndexes(Phonon::AudioOutputDeviceType);
+        if (hide || (override & HideUnavailableDevices)) {
+            filter(AudioOutputDeviceType, NULL, &defaultList,
+                    (hide ? FilterAdvancedDevices : 0)
+                    | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
+                    );
+        }
+    } else {
+        BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (!backendIface || !PulseSupport::getInstance()->isActive()) {
         if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
             // the platform plugin lists the audio devices for the platform
             // this list already is in default order (as defined by the platform plugin)
@@ -299,22 +313,22 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int
                 }
             }
         }
-    }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
-    // lookup the available devices directly from the backend
-    if (backendIface) {
-        // this list already is in default order (as defined by the backend)
-        QList<int> list = backendIface->objectDescriptionIndexes(Phonon::AudioOutputDeviceType);
-        if (hide || !defaultList.isEmpty() || (override & HideUnavailableDevices)) {
-            filter(AudioOutputDeviceType, backendIface, &list,
-                    (hide ? FilterAdvancedDevices : 0)
-                    // the platform plugin already provided the hardware devices
-                    | (defaultList.isEmpty() ? 0 : FilterHardwareDevices)
-                    | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
-                    );
+        // lookup the available devices directly from the backend
+        if (backendIface) {
+            // this list already is in default order (as defined by the backend)
+            QList<int> list = backendIface->objectDescriptionIndexes(Phonon::AudioOutputDeviceType);
+            if (hide || !defaultList.isEmpty() || (override & HideUnavailableDevices)) {
+                filter(AudioOutputDeviceType, backendIface, &list,
+                        (hide ? FilterAdvancedDevices : 0)
+                        // the platform plugin maybe already provided the hardware devices?
+                        | (defaultList.isEmpty() ? 0 : FilterHardwareDevices)
+                        | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
+                        );
+            }
+            defaultList += list;
         }
-        defaultList += list;
     }
 
     const QSettingsGroup backendConfig(&d->config, QLatin1String("AudioOutputDevice")); // + Factory::identifier());
@@ -360,10 +374,20 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
             : static_cast<bool>(override & HideAdvancedDevices));
 
     QList<int> defaultList;
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
+
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        defaultList = pulse->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
+        if (hide || (override & HideUnavailableDevices)) {
+            filter(AudioCaptureDeviceType, NULL, &defaultList,
+                    (hide ? FilterAdvancedDevices : 0)
+                    | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
+                    );
+        }
+    } else {
+        BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (!backendIface || !PulseSupport::getInstance()->isActive()) {
         if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
             // the platform plugin lists the audio devices for the platform
             // this list already is in default order (as defined by the platform plugin)
@@ -379,22 +403,22 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
                 }
             }
         }
-    }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
-    // lookup the available devices directly from the backend
-    if (backendIface) {
-        // this list already is in default order (as defined by the backend)
-        QList<int> list = backendIface->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
-        if (hide || !defaultList.isEmpty() || (override & HideUnavailableDevices)) {
-            filter(AudioCaptureDeviceType, backendIface, &list,
-                    (hide ? FilterAdvancedDevices : 0)
-                    // the platform plugin already provided the hardware devices
-                    | (defaultList.isEmpty() ? 0 : FilterHardwareDevices)
-                    | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
-                  );
+        // lookup the available devices directly from the backend
+        if (backendIface) {
+            // this list already is in default order (as defined by the backend)
+            QList<int> list = backendIface->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
+            if (hide || !defaultList.isEmpty() || (override & HideUnavailableDevices)) {
+                filter(AudioCaptureDeviceType, backendIface, &list,
+                        (hide ? FilterAdvancedDevices : 0)
+                        // the platform plugin maybe already provided the hardware devices?
+                        | (defaultList.isEmpty() ? 0 : FilterHardwareDevices)
+                        | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
+                      );
+            }
+            defaultList += list;
         }
-        defaultList += list;
     }
 
     const QSettingsGroup backendConfig(&d->config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
