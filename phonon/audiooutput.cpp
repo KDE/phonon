@@ -101,9 +101,6 @@ void AudioOutputPrivate::init(Phonon::Category c)
     streamUuid = QUuid::createUuid().toString();
     PulseSupport::getInstance()->setStreamPropList(category, streamUuid);
 
-    // select hardware device according to the category
-    device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
-
     createBackendObject();
 
     q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(_k_deviceListChanged()));
@@ -120,6 +117,7 @@ void AudioOutputPrivate::createBackendObject()
         return;
     Q_Q(AudioOutput);
     m_backendObject = Factory::createAudioOutput(q);
+    device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
     if (m_backendObject) {
         setupBackendObject();
     }
