@@ -203,6 +203,9 @@ namespace Phonon
             if (toNative && m_noNativeRendererSupported)
                 return current; //no switch here
 
+            if (!mediaObject())
+                return current;
+
             //firt we delete the renderer
             //initialization of the widgets
             for(int i = 0; i < FILTER_COUNT; ++i) {
