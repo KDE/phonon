@@ -350,6 +350,10 @@ void AudioOutputPrivate::_k_deviceListChanged()
         return;
 
     pDebug() << Q_FUNC_INFO;
+    // Check to see if we have an override and do not change to a higher priority device if the overridden device is still present.
+    if (outputDeviceOverridden && device.property("available").toBool()) {
+        return;
+    }
     // let's see if there's a usable device higher in the preference list
     QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings);
     DeviceChangeType changeType = HigherPreferenceChange;
