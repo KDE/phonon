@@ -99,7 +99,9 @@ void AudioOutputPrivate::init(Phonon::Category c)
 
     category = c;
     streamUuid = QUuid::createUuid().toString();
-    PulseSupport::getInstance()->setStreamPropList(category, streamUuid);
+    PulseSupport *pulse = PulseSupport::getInstance();
+    pulse->setStreamPropList(category, streamUuid);
+    q->connect(pulse, SIGNAL(usingDevice(QString,int)), SLOT(_k_deviceChanged(QString,int)));
 
     createBackendObject();
 
@@ -232,14 +234,14 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
 {
     K_D(AudioOutput);
     if (!newAudioOutputDevice.isValid()) {
-        d->outputDeviceOverridden = false;
+        d->outputDeviceOverridden = d->forceMove = false;
         const int newIndex = GlobalConfig().audioOutputDeviceFor(d->category);
         if (newIndex == d->device.index()) {
             return true;
         }
         d->device = AudioOutputDevice::fromIndex(newIndex);
     } else {
-        d->outputDeviceOverridden = true;
+        d->outputDeviceOverridden = d->forceMove = true;
         if (d->device == newAudioOutputDevice) {
             return true;
         }
@@ -272,7 +274,10 @@ void AudioOutputPrivate::setupBackendObject()
     pINTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
 
     // if the output device is not available and the device was not explicitly set
-    if (!callSetOutputDevice(this, device) && !outputDeviceOverridden) {
+    // There is no need to set the output device initially if PA is used as
+    // we know it will not work (stream doesn't exist yet) and that this will be
+    // handled by _k_deviceChanged()
+    if (!PulseSupport::getInstance()->isActive() && !callSetOutputDevice(this, device) && !outputDeviceOverridden) {
         // fall back in the preference list of output devices
         QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
         if (deviceList.isEmpty()) {
@@ -316,6 +321,9 @@ void AudioOutputPrivate::_k_revertFallback()
 
 void AudioOutputPrivate::_k_audioDeviceFailed()
 {
+    if (PulseSupport::getInstance()->isActive())
+        return;
+
     pDebug() << Q_FUNC_INFO;
     // outputDeviceIndex identifies a failing device
     // fall back in the preference list of output devices
@@ -338,6 +346,9 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
 
 void AudioOutputPrivate::_k_deviceListChanged()
 {
+    if (PulseSupport::getInstance()->isActive())
+        return;
+
     pDebug() << Q_FUNC_INFO;
     // let's see if there's a usable device higher in the preference list
     QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings);
@@ -361,6 +372,36 @@ void AudioOutputPrivate::_k_deviceListChanged()
         if (callSetOutputDevice(this, info)) {
             handleAutomaticDeviceChange(info, changeType);
             break; // found one with higher preference that works
+        }
+    }
+}
+
+void AudioOutputPrivate::_k_deviceChanged(QString inStreamUuid, int deviceIndex)
+{
+    // Note that this method is only used by PulseAudio at present.
+    if (inStreamUuid == streamUuid) {
+        // 1. Check to see if we are overridden. If we are, and devices do not match,
+        //    then try and apply our own device as the output device.
+        //    We only do this the first time
+        if (outputDeviceOverridden && forceMove) {
+            forceMove = false;
+            const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
+            if (currentDevice != device) {
+                if (!callSetOutputDevice(this, device)) {
+                    // What to do if we are overridden and cannot change to our preferred device?
+                }
+            }
+        }
+        // 2. If we are not overridden, then we need to update our perception of what
+        //    device we are using. If the devices do not match, something lower in the
+        //    stack is overriding our preferences (e.g. a per-application stream preference,
+        //    specific application move, priority list changed etc. etc.)
+        else if (!outputDeviceOverridden) {
+            const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
+            if (currentDevice != device) {
+                // The device is not what we think it is, so lets say what is happening.
+                handleAutomaticDeviceChange(currentDevice, SoundSystemChange);
+            }
         }
     }
 }
@@ -405,6 +446,27 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
                 QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
                 q, SLOT(_k_revertFallback()));
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
+        g_lastFallback.first = 0;
+        g_lastFallback.second = 0;
+        }
+        break;
+    case SoundSystemChange:
+        {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+        if (device1.property("available").toBool()) {
+            const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
+                    "which has higher preference or is specifically configured for this stream.</html>").arg(device2.name());
+            Platform::notification("AudioDeviceFallback", text,
+                    QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
+                    q, SLOT(_k_revertFallback()));
+        } else {
+            const QString &text =
+                AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
+                        "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name());
+            Platform::notification("AudioDeviceFallback", text);
+        }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
+        //outputDeviceOverridden = true;
         g_lastFallback.first = 0;
         g_lastFallback.second = 0;
         }
