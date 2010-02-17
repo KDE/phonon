@@ -487,7 +487,7 @@ void MediaObject::createPipeline()
     gst_object_ref (GST_OBJECT (m_pipeline));
     gst_object_sink (GST_OBJECT (m_pipeline));
 
-    m_decodebin = gst_element_factory_make ("decodebin", NULL);
+    m_decodebin = gst_element_factory_make ("decodebin2", NULL);
     g_signal_connect (m_decodebin, "new-decoded-pad", G_CALLBACK (&cb_newpad), this);
     g_signal_connect (m_decodebin, "unknown-type", G_CALLBACK (&cb_unknown_type), this);
     g_signal_connect (m_decodebin, "no-more-pads", G_CALLBACK (&cb_no_more_pads), this);
