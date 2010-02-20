@@ -91,7 +91,7 @@ MediaObject::MediaObject(Backend *backend, QObject *parent)
     m_name = "MediaObject" + QString::number(count++);
 
     if (!m_backend->isValid()) {
-        setError(tr("Cannot start playback. \n\nCheck your Gstreamer installation and make sure you "
+        setError(tr("Cannot start playback. \n\nCheck your GStreamer installation and make sure you "
                     "\nhave libgstreamer-plugins-base installed."), Phonon::FatalError);
     } else {
         m_root = this;
@@ -1064,12 +1064,13 @@ void MediaObject::getStreamInfo()
         if (gst_element_query_duration (m_pipeline, &format, &titleCount)) {
         //check if returned format is still "track",
         //gstreamer sometimes returns the total time, if tracks information is not available.
-        if (qstrcmp(gst_format_get_name(format), "track") == 0)  {
-            int oldAvailableTitles = m_availableTitles;
-            m_availableTitles = (int)titleCount;
-            if (m_availableTitles != oldAvailableTitles) {
-                emit availableTitlesChanged(m_availableTitles);
-                m_backend->logMessage(QString("Available titles changed: %0").arg(m_availableTitles), Backend::Info, this);
+            if (qstrcmp(gst_format_get_name(format), "track") == 0)  {
+                int oldAvailableTitles = m_availableTitles;
+                m_availableTitles = (int)titleCount;
+                if (m_availableTitles != oldAvailableTitles) {
+                    emit availableTitlesChanged(m_availableTitles);
+                    m_backend->logMessage(QString("Available titles changed: %0").arg(m_availableTitles), Backend::Info, this);
+                }
             }
         }
     }
