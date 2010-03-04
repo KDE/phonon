@@ -29,6 +29,7 @@ if (BUILD_PHONON_DS9)
             mediagraph.cpp
             mediaobject.cpp
             videowidget.cpp
+            videorenderer_evr.cpp
             videorenderer_vmr9.cpp
             videorenderer_soft.cpp
             volumeeffect.cpp
