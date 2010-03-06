@@ -648,6 +648,13 @@ PulseSupport::PulseSupport()
     if (pulseenv.toInt())
         return;
 
+    // We require a glib event loop
+    QString noglibenv = qgetenv("QT_NO_GLIB");
+    if (noglibenv.toInt()) {
+        logMessage("Disabling PulseAudio integration for lack of GLib event loop.");
+        return;
+    }
+
     s_mainloop = pa_glib_mainloop_new(NULL);
     Q_ASSERT(s_mainloop);
     pa_mainloop_api *api = pa_glib_mainloop_get_api(s_mainloop);
