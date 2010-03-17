@@ -45,7 +45,7 @@ namespace Experimental
 
     class AbstractVideoOutputPrivate;
 
-    /** \class AbstractVideoOutput abstractvideooutput.h Phonon/AbstractVideoOutput
+    /** \class AbstractVideoOutput abstractvideooutput.h phonon/AbstractVideoOutput
      * \brief Common base class for all video outputs.
      *
      * \see VideoWidget

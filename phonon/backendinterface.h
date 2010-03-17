@@ -37,7 +37,7 @@ class QVariant;
 namespace Phonon
 {
 
-/** \class BackendInterface backendinterface.h Phonon/BackendInterface
+/** \class BackendInterface backendinterface.h phonon/BackendInterface
  * \short Main Backend class interface
  *
  * This interface defines the main factory of the backend. The createObject function creates all the

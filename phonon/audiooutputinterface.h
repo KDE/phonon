@@ -33,7 +33,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-/** \class AudioOutputInterface audiooutputinterface.h Phonon/AudioOutputInterface
+/** \class AudioOutputInterface audiooutputinterface.h phonon/AudioOutputInterface
  * \short Interface for AudioOutput objects
  *
  * The implementation can make use of the signals

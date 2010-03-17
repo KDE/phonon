@@ -27,7 +27,7 @@ namespace Phonon
 
 class Packet;
 class PacketPoolPrivate;
-/** \class PacketPool packetpool.h Phonon/PacketPool
+/** \class PacketPool packetpool.h phonon/PacketPool
  * \brief Class to preallocate memory.
  *
  * \note PacketPool and Packet are threadsafe.

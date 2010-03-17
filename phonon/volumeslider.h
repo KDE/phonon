@@ -37,7 +37,7 @@ namespace Phonon
 class AudioOutput;
 class VolumeSliderPrivate;
 
-/** \class VolumeSlider volumeslider.h Phonon/VolumeSlider
+/** \class VolumeSlider volumeslider.h phonon/VolumeSlider
  * \short Widget providing a slider to control the volume of an AudioOutput.
  *
  * \ingroup PhononWidgets

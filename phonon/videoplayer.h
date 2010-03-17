@@ -40,7 +40,7 @@ class MediaObject;
 class AudioOutput;
 class VideoWidget;
 
-/** \class VideoPlayer videoplayer.h Phonon/VideoPlayer
+/** \class VideoPlayer videoplayer.h phonon/VideoPlayer
  * \short Playback class for simple tasks.
  *
  * With %VideoPlayer you can get results quickly and easily. You can do the standard

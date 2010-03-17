@@ -39,7 +39,7 @@ class MediaObject;
 
 class SeekSliderPrivate;
 
-/** \class SeekSlider seekslider.h Phonon/SeekSlider
+/** \class SeekSlider seekslider.h phonon/SeekSlider
  * \short Widget providing a slider for seeking in MediaObject objects.
  *
  * \ingroup PhononWidgets

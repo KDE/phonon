@@ -35,7 +35,7 @@ namespace Phonon
 class MediaObject;
 class AbstractMediaStream2Private;
 
-/** \class AbstractMediaStream2 abstractmediastream2.h Phonon/AbstractMediaStream2
+/** \class AbstractMediaStream2 abstractmediastream2.h phonon/AbstractMediaStream2
  * \brief Base class for custom media data streams.
  *
  * Implement this class to provide a custom data stream to the backend. The class supports both, the

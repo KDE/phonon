@@ -39,7 +39,7 @@ namespace Phonon
 class MediaControllerPrivate;
 class MediaObject;
 
-/** \class MediaController mediacontroller.h Phonon/MediaController
+/** \class MediaController mediacontroller.h phonon/MediaController
  * \brief Controls optional features of a media file/device like title, chapter, angle.
  *
  * \ingroup Playback

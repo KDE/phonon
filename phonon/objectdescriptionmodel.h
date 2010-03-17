@@ -52,7 +52,7 @@ namespace Phonon
     class ObjectDescriptionModelDataPrivate;
 
     /** \internal
-     * \class ObjectDescriptionModelData objectdescriptionmodel.h Phonon/ObjectDescriptionModelData
+     * \class ObjectDescriptionModelData objectdescriptionmodel.h phonon/ObjectDescriptionModelData
      * \brief Data class for models for ObjectDescription objects.
      *
      * \author Matthias Kretz <kretz@kde.org>
@@ -151,7 +151,7 @@ namespace Phonon
             ObjectDescriptionModelDataPrivate *const d;
     };
 
-    /** \class ObjectDescriptionModel objectdescriptionmodel.h Phonon/ObjectDescriptionModel
+    /** \class ObjectDescriptionModel objectdescriptionmodel.h phonon/ObjectDescriptionModel
      * \short The ObjectDescriptionModel class provides a model from
      * a list of ObjectDescription objects.
      *

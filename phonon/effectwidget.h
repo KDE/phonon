@@ -38,7 +38,7 @@ class Effect;
 
     class EffectWidgetPrivate;
 
-    /** \class EffectWidget effectwidget.h Phonon/EffectWidget
+    /** \class EffectWidget effectwidget.h phonon/EffectWidget
      * \brief Widget to control the parameters of an Effect.
      *
      * \ingroup PhononWidgets

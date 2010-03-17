@@ -38,7 +38,7 @@ namespace Phonon
 {
     class AudioOutputPrivate;
 
-    /** \class AudioOutput audiooutput.h Phonon/AudioOutput
+    /** \class AudioOutput audiooutput.h phonon/AudioOutput
      * \short Class for audio output to the soundcard.
      *
      * Use this class to define the audio output.

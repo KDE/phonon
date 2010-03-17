@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
     class EffectParameter;
-    /** \class EffectInterface effectinterface.h Phonon/EffectInterface
+    /** \class EffectInterface effectinterface.h phonon/EffectInterface
      * \short Interface for Effect objects
      *
      * \author Matthias Kretz <kretz@kde.org>

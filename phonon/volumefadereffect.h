@@ -35,7 +35,7 @@ namespace Phonon
 {
     class VolumeFaderEffectPrivate;
 
-    /** \class VolumeFaderEffect volumefadereffect.h Phonon/VolumeFaderEffect
+    /** \class VolumeFaderEffect volumefadereffect.h phonon/VolumeFaderEffect
      * Audio effect to gradually fade the audio volume.
      *
      * This effect differs from gradually changing the output volume in that

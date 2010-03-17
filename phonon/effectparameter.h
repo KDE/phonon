@@ -39,7 +39,7 @@ namespace Phonon
 class Effect;
 class EffectParameterPrivate;
 
-/** \class EffectParameter effectparameter.h Phonon/EffectParameter
+/** \class EffectParameter effectparameter.h phonon/EffectParameter
  * \brief This class describes one parameter of an effect.
  *
  * \ingroup PhononEffects

@@ -87,7 +87,7 @@ namespace Phonon
     };
 
 /** \internal
- * \class ObjectDescriptionData objectdescription.h Phonon/ObjectDescription
+ * \class ObjectDescriptionData objectdescription.h phonon/ObjectDescription
  * \brief Data class for objects describing devices or features of the backend.
  *
  * \author Matthias Kretz <kretz@kde.org>
@@ -165,7 +165,7 @@ class PHONON_EXPORT ObjectDescriptionData : public QSharedData //krazy:exclude=d
 
 template<ObjectDescriptionType T> class ObjectDescriptionModel;
 
-/** \class ObjectDescription objectdescription.h Phonon/ObjectDescription
+/** \class ObjectDescription objectdescription.h phonon/ObjectDescription
  * \short Provides a tuple of enduser visible name and description.
  *
  * Some parts give the enduser choices, e.g. what source to capture audio from.
