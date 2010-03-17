@@ -32,9 +32,9 @@
 #include <xcb/xcb.h>
 //#endif // PHONON_XINE_NO_VIDEOWIDGET
 
-#include <Phonon/VideoWidget>
-#include <Phonon/VideoWidgetInterface>
-//#include <Phonon/Experimental/SnapshotInterface>
+#include <phonon/VideoWidget>
+#include <phonon/VideoWidgetInterface>
+//#include <phonon/Experimental/SnapshotInterface>
 #include <phonon/experimental/snapshotinterface.h>
 #include "connectnotificationinterface.h"
 
