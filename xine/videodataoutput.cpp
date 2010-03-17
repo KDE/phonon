@@ -28,8 +28,8 @@
 
 #include <QtCore/QCoreApplication>
 
-#include <phonon/Experimental/AbstractVideoDataOutput>
-#include <phonon/Experimental/VideoFrame2>
+#include <phonon/experimental/abstractvideodataoutput.h>
+#include <phonon/experimental/videoframe2.h>
 
 namespace Phonon
 {
