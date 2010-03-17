@@ -135,7 +135,6 @@ static bool s_pulseActive = false;
 
 static pa_glib_mainloop *s_mainloop = NULL;
 static pa_context *s_context = NULL;
-static QEventLoop *s_connectionEventloop = NULL;
 
 
 
@@ -179,31 +178,25 @@ static void createGenericDevices()
 }
 
 #ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
-static void ext_device_manager_subscribe_cb(pa_context *, void *);
 static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manager_info *info, int eol, void *userdata) {
     Q_ASSERT(c);
     Q_ASSERT(userdata);
 
-    // If this is our first iteration, set things up properly
-    if (s_connectionEventloop) {
-        logMessage("Exiting connection event loop (PulseAudio server found)");
-        s_connectionEventloop->exit(0);
-        s_connectionEventloop = NULL;
-        s_pulseActive = true;
-
-        pa_operation *o;
-        pa_ext_device_manager_set_subscribe_cb(c, ext_device_manager_subscribe_cb, NULL);
-        if ((o = pa_ext_device_manager_subscribe(c, 1, NULL, NULL)))
-            pa_operation_unref(o);
-    }
+    PulseUserData *u = reinterpret_cast<PulseUserData*>(userdata);
 
     if (eol < 0) {
         logMessage(QString("Failed to initialize device manager extension: %1").arg(pa_strerror(pa_context_errno(c))));
+        logMessage("Falling back to single device mode");
         createGenericDevices();
+        delete u;
+
+        // If this is our probe phase, exit now
+        if (s_context != c)
+            pa_context_disconnect(c);
+
         return;
     }
 
-    PulseUserData *u = reinterpret_cast<PulseUserData*>(userdata);
     if (eol) {
         // We're done reading the data, so order it by priority and copy it into the
         // static variables where it can then be accessed by those classes that need it.
@@ -289,6 +282,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         }
 
         if (s_instance) {
+            // This wont be emitted durring the connection probe phase
+            // which is intensional
             if (output_changed)
                 s_instance->emitObjectDescriptionChanged(AudioOutputDeviceType);
             if (capture_changed)
@@ -323,6 +318,11 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
                 }
             }
         }
+
+        // If this is our probe phase, exit now as we're finished reading
+        // our device info and can exit and reconnect
+        if (s_context != c)
+            pa_context_disconnect(c);
     }
 
     if (!info)
@@ -373,6 +373,19 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
         }
     }
+}
+
+static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
+    Q_ASSERT(c);
+
+    pa_operation *o;
+    PulseUserData *u = new PulseUserData;
+    if (!(o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, u))) {
+        logMessage(QString("pa_ext_device_manager_read() failed."));
+        delete u;
+        return;
+    }
+    pa_operation_unref(o);
 }
 #endif
 
@@ -515,49 +528,6 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
 }
 
 
-static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
-    Q_ASSERT(c);
-
-    pa_operation *o;
-#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER 
-    PulseUserData *u = new PulseUserData; /** @todo Make some object to receive the info... */
-    if (!(o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, u))) {
-        // We need to deal with failure on first iteration
-        if (s_connectionEventloop) {
-            logMessage("Entering connection eventloop (initialisation failed)");
-            s_connectionEventloop->exit(0);
-            s_connectionEventloop = NULL;
-        }
-        logMessage(QString("pa_ext_device_manager_read() failed"));
-        return;
-    }
-    pa_operation_unref(o);
-#else
-    // If we do not have Device Manager support. We just bail out now
-    // and say we are active with our single "devices" for playback and capture
-    s_pulseActive = true;
-    logMessage("Entering connection eventloop (successfully detected PulseAudio)");
-    if (s_connectionEventloop) {
-        s_connectionEventloop->exit(0);
-        s_connectionEventloop = NULL;
-    }
-    createGenericDevices();
-#endif
-
-
-    // Register for the stream changes...
-    pa_context_set_subscribe_callback(c, subscribe_cb, NULL);
-
-    if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
-                                   (PA_SUBSCRIPTION_MASK_SINK_INPUT|
-                                    PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT), NULL, NULL))) {
-        logMessage(QString("pa_context_subscribe() failed"));
-        return;
-    }
-    pa_operation_unref(o);
-}
-
-
 static const char* statename(pa_context_state_t state)
 {
     switch (state)
@@ -581,32 +551,68 @@ static void context_state_callback(pa_context *c, void *)
     Q_ASSERT(c);
 
     logMessage(QString("context_state_callback %1").arg(statename(pa_context_get_state(c))));
-    switch (pa_context_get_state(c)) {
-        case PA_CONTEXT_UNCONNECTED:
-        case PA_CONTEXT_CONNECTING:
-        case PA_CONTEXT_AUTHORIZING:
-        case PA_CONTEXT_SETTING_NAME:
-            break;
+    pa_context_state_t state = pa_context_get_state(c);
+    if (state == PA_CONTEXT_READY) {
+        // We've connected to PA, so it is active
+        s_pulseActive = true;
 
-        case PA_CONTEXT_READY:
-            // Attempt to load things up
-            ext_device_manager_subscribe_cb(c, NULL);
-            break;
+        // Attempt to load things up
+        pa_operation *o;
 
-        case PA_CONTEXT_FAILED:
-            s_pulseActive = false;
-            if (s_connectionEventloop) {
-                logMessage("Entering connection eventloop (connection failed)");
-                s_connectionEventloop->exit(0);
-                s_connectionEventloop = NULL;
+        // 1. Register for the stream changes (except during probe)
+        if (s_context == c) {
+            pa_context_set_subscribe_callback(c, subscribe_cb, NULL);
+
+            if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
+                                              (PA_SUBSCRIPTION_MASK_SINK_INPUT|
+                                               PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT), NULL, NULL))) {
+                logMessage(QString("pa_context_subscribe() failed"));
+                return;
             }
-            break;
+            pa_operation_unref(o);
+        }
 
-        case PA_CONTEXT_TERMINATED:
-        default:
-            s_pulseActive = false;
-            /// @todo Deal with reconnection...
-            break;
+#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
+        // 2a. Attempt to initialise Device Manager info (except during probe)
+        if (s_context == c) {
+            pa_ext_device_manager_set_subscribe_cb(c, ext_device_manager_subscribe_cb, NULL);
+            if (!(o = pa_ext_device_manager_subscribe(c, 1, NULL, NULL))) {
+                logMessage(QString("pa_ext_device_manager_subscribe() failed"));
+                return;
+            }
+            pa_operation_unref(o);
+        }
+
+        // 3. Attempt to read info from Device Manager
+        PulseUserData *u = new PulseUserData;
+        if (!(o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, u))) {
+            logMessage(QString("pa_ext_device_manager_read() failed. Attempting to continue without device manager support"));
+            createGenericDevices();
+            delete u;
+
+            // If this is our probe phase, exit immediately
+            if (s_context != c)
+                pa_context_disconnect(c);
+
+            return;
+        }
+        pa_operation_unref(o);
+
+#else
+        // If we know do not have Device Manager support, we just create our dummy devices now
+        createGenericDevices();
+
+        // If this is our probe phase, exit immediately
+        if (s_context != c)
+            pa_context_disconnect(c);
+#endif
+    } else if (!PA_CONTEXT_IS_GOOD(state)) {
+        /// @todo Deal with reconnection...
+        //logMessage("Connection to PulseAudio lost");
+
+        // If this is our probe phase, exit our context immediately
+        if (s_context != c)
+            pa_context_disconnect(c);
     }
 }
 #endif // HAVE_PULSEAUDIO
@@ -645,8 +651,10 @@ PulseSupport::PulseSupport()
 
     // To allow for easy debugging, give an easy way to disable this pulseaudio check
     QString pulseenv = qgetenv("PHONON_PULSEAUDIO_DISABLE");
-    if (pulseenv.toInt())
+    if (pulseenv.toInt()) {
+        logMessage("PulseAudio support disabled: PHONON_PULSEAUDIO_DISABLE is set");
         return;
+    }
 
     // We require a glib event loop
     if (QLatin1String(QAbstractEventDispatcher::instance()->metaObject()->className())
@@ -655,24 +663,62 @@ PulseSupport::PulseSupport()
         return;
     }
 
+    // First of all conenct to PA via simple/blocking means and if that succeeds,
+    // use a fully async integrated mainloop method to connect and get proper support.
+    pa_mainloop *p_test_mainloop;
+    if (!(p_test_mainloop = pa_mainloop_new())) {
+        logMessage("PulseAudio support disabled: Unable to create mainloop");
+        return;
+    }
+
+    pa_context *p_test_context;
+    if (!(p_test_context = pa_context_new(pa_mainloop_get_api(p_test_mainloop), "libphonon-probe"))) {
+        logMessage("PulseAudio support disabled: Unable to create context");
+        pa_mainloop_free(p_test_mainloop);
+        return;
+    }
+
+    logMessage("Probing for PulseAudio...");
+    // (cg) Convert to PA_CONTEXT_NOFLAGS when PulseAudio 0.9.19 is required
+    if (pa_context_connect(p_test_context, NULL, static_cast<pa_context_flags_t>(0), NULL) < 0) {
+        logMessage(QString("PulseAudio support disabled: %1").arg(pa_strerror(pa_context_errno(p_test_context))));
+        pa_context_disconnect(p_test_context);
+        pa_context_unref(p_test_context);
+        pa_mainloop_free(p_test_mainloop);
+        return;
+    }
+
+    pa_context_set_state_callback(p_test_context, &context_state_callback, NULL);
+    for (;;) {
+        pa_mainloop_iterate(p_test_mainloop, 1, NULL);
+
+        if (!PA_CONTEXT_IS_GOOD(pa_context_get_state(p_test_context))) {
+            logMessage("PulseAudio probe complete.");
+            break;
+        }
+    }
+    pa_context_disconnect(p_test_context);
+    pa_context_unref(p_test_context);
+    pa_mainloop_free(p_test_mainloop);
+
+    if (!s_pulseActive) {
+        logMessage("PulseAudio support is not available.");
+        return;
+    }
+
+    // If we're still here, PA is available.
+    logMessage("PulseAudio support enabled");
+
+    // Now we connect for real using a proper main loop that we can forget
+    // all about processing.
     s_mainloop = pa_glib_mainloop_new(NULL);
     Q_ASSERT(s_mainloop);
     pa_mainloop_api *api = pa_glib_mainloop_get_api(s_mainloop);
 
-    // We create a simple event loop to allow the glib loop
-    // to iterate until we've connected or not to the server.
-    s_connectionEventloop = new QEventLoop;
-
-    // XXX I don't want to show up in the client list. All I want to know is the list of sources
-    // and sinks...
     s_context = pa_context_new(api, "libphonon");
     // (cg) Convert to PA_CONTEXT_NOFLAGS when PulseAudio 0.9.19 is required
-    if (pa_context_connect(s_context, NULL, static_cast<pa_context_flags_t>(0), 0) >= 0) {
-        pa_context_set_state_callback(s_context, &context_state_callback, s_connectionEventloop);
-        // Now we block until we connect or otherwise...
-        logMessage("Entering connection eventloop...");
-        s_connectionEventloop->exec();
-    }
+    if (pa_context_connect(s_context, NULL, static_cast<pa_context_flags_t>(0), 0) >= 0)
+        pa_context_set_state_callback(s_context, &context_state_callback, NULL);
 #endif
 }
 
@@ -687,11 +733,6 @@ PulseSupport::~PulseSupport()
     if (s_mainloop) {
         pa_glib_mainloop_free(s_mainloop);
         s_mainloop = NULL;
-    }
-
-    if (s_connectionEventloop) {
-        delete s_connectionEventloop;
-        s_connectionEventloop = NULL;
     }
 #endif
 }
