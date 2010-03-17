@@ -1,4 +1,54 @@
 install( FILES
+    phonon/AbstractAudioOutput
+    phonon/AbstractMediaStream
+    phonon/AbstractVideoOutput
+    phonon/AddonInterface
+    phonon/AudioCaptureDevice
+    phonon/AudioCaptureDeviceModel
+    phonon/AudioChannelDescription
+    phonon/AudioChannelDescriptionModel
+    phonon/AudioOutput
+    phonon/AudioOutputDevice
+    phonon/AudioOutputDeviceModel
+    phonon/AudioOutputInterface
+    phonon/AudioOutputInterface40
+    phonon/AudioOutputInterface42
+    phonon/BackendCapabilities
+    phonon/BackendInterface
+    phonon/Effect
+    phonon/EffectDescription
+    phonon/EffectDescriptionModel
+    phonon/EffectInterface
+    phonon/EffectParameter
+    phonon/EffectWidget
+    phonon/Global
+    phonon/MediaController
+    phonon/MediaNode
+    phonon/MediaObject
+    phonon/MediaObjectInterface
+    phonon/MediaSource
+    phonon/ObjectDescription
+    phonon/ObjectDescriptionData
+    phonon/ObjectDescriptionModel
+    phonon/ObjectDescriptionModelData
+    phonon/Path
+    phonon/PlatformPlugin
+    phonon/SeekSlider
+    phonon/StreamInterface
+    phonon/SubtitleDescription
+    phonon/SubtitleDescriptionModel
+    phonon/VideoPlayer
+    phonon/VideoWidget
+    phonon/VideoWidgetInterface
+    phonon/VideoWidgetInterface44
+    phonon/VideoWidgetInterfaceLatest
+    phonon/VolumeFaderEffect
+    phonon/VolumeFaderInterface
+    phonon/VolumeSlider
+DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
+
+
+install( FILES
   old/Phonon/AbstractAudioOutput
   old/Phonon/AbstractMediaStream
   old/Phonon/AbstractVideoOutput
