@@ -35,6 +35,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
+    class PulseStream;
     class PHONON_EXPORT PulseSupport : public QObject
     {
         Q_OBJECT
@@ -52,9 +53,9 @@ namespace Phonon
             void setOutputDevicePriorityForCategory(Category category, QList<int> order);
             void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
 
-            void setStreamPropList(Category category, QString streamUuid);
+            PulseStream *registerOutputStream(QString streamUuid, Category category);
+            PulseStream *registerCaptureStream(QString streamUuid, Category category);
             void emitObjectDescriptionChanged(ObjectDescriptionType);
-            void emitUsingDevice(QString streamUuid, int device);
 
             bool setOutputDevice(QString streamUuid, int device);
             bool setCaptureDevice(QString streamUuid, int device);
@@ -62,7 +63,6 @@ namespace Phonon
 
         signals:
             void objectDescriptionChanged(ObjectDescriptionType);
-            void usingDevice(QString streamUuid, int device);
 
         private:
             PulseSupport();

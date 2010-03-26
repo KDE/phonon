@@ -61,6 +61,7 @@ set(phonon_LIB_SRCS
    iodevicestream.cpp
    audiodataoutput.cpp
    pulsesupport.cpp
+   pulsestream.cpp
    )
 
 if (QT_QTDBUS_FOUND)
@@ -130,6 +131,7 @@ install(FILES
    audiodataoutputinterface.h
    globalconfig.h
    pulsesupport.h
+   pulsestream.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
 install(FILES org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})

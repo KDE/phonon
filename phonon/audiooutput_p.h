@@ -77,7 +77,7 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         void _k_revertFallback();
         void _k_audioDeviceFailed();
         void _k_deviceListChanged();
-        void _k_deviceChanged(QString streamUuid, int deviceIndex);
+        void _k_deviceChanged(int deviceIndex);
 
     private:
         QString name;

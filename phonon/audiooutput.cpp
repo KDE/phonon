@@ -29,6 +29,7 @@
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 #include "pulsesupport.h"
+#include "pulsestream.h"
 
 #include <QtCore/qmath.h>
 
@@ -100,8 +101,11 @@ void AudioOutputPrivate::init(Phonon::Category c)
     category = c;
     streamUuid = QUuid::createUuid().toString();
     PulseSupport *pulse = PulseSupport::getInstance();
-    pulse->setStreamPropList(category, streamUuid);
-    q->connect(pulse, SIGNAL(usingDevice(QString,int)), SLOT(_k_deviceChanged(QString,int)));
+    if (pulse->isActive()) {
+        PulseStream *stream = pulse->registerOutputStream(streamUuid, category);
+        if (stream)
+            q->connect(stream, SIGNAL(usingDevice(int)), SLOT(_k_deviceChanged(int)));
+    }
 
     createBackendObject();
 
@@ -389,32 +393,31 @@ void AudioOutputPrivate::_k_deviceListChanged()
 #endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
-void AudioOutputPrivate::_k_deviceChanged(QString inStreamUuid, int deviceIndex)
+void AudioOutputPrivate::_k_deviceChanged(int deviceIndex)
 {
-    // Note that this method is only used by PulseAudio at present.
-    if (inStreamUuid == streamUuid) {
-        // 1. Check to see if we are overridden. If we are, and devices do not match,
-        //    then try and apply our own device as the output device.
-        //    We only do this the first time
-        if (outputDeviceOverridden && forceMove) {
-            forceMove = false;
-            const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
-            if (currentDevice != device) {
-                if (!callSetOutputDevice(this, device)) {
-                    // What to do if we are overridden and cannot change to our preferred device?
-                }
+    // NB that this method is only used by PulseAudio at present.
+
+    // 1. Check to see if we are overridden. If we are, and devices do not match,
+    //    then try and apply our own device as the output device.
+    //    We only do this the first time
+    if (outputDeviceOverridden && forceMove) {
+        forceMove = false;
+        const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
+        if (currentDevice != device) {
+            if (!callSetOutputDevice(this, device)) {
+                // What to do if we are overridden and cannot change to our preferred device?
             }
         }
-        // 2. If we are not overridden, then we need to update our perception of what
-        //    device we are using. If the devices do not match, something lower in the
-        //    stack is overriding our preferences (e.g. a per-application stream preference,
-        //    specific application move, priority list changed etc. etc.)
-        else if (!outputDeviceOverridden) {
-            const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
-            if (currentDevice != device) {
-                // The device is not what we think it is, so lets say what is happening.
-                handleAutomaticDeviceChange(currentDevice, SoundSystemChange);
-            }
+    }
+    // 2. If we are not overridden, then we need to update our perception of what
+    //    device we are using. If the devices do not match, something lower in the
+    //    stack is overriding our preferences (e.g. a per-application stream preference,
+    //    specific application move, priority list changed etc. etc.)
+    else if (!outputDeviceOverridden) {
+        const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
+        if (currentDevice != device) {
+            // The device is not what we think it is, so lets say what is happening.
+            handleAutomaticDeviceChange(currentDevice, SoundSystemChange);
         }
     }
 }

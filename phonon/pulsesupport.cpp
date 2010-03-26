@@ -35,6 +35,7 @@
 #endif // HAVE_PULSEAUDIO
 
 #include "pulsesupport.h"
+#include "pulsestream.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -142,12 +143,21 @@ static int s_deviceIndexCounter = 0;
 static QMap<QString, int> s_outputDeviceIndexes;
 static QMap<int, AudioDevice> s_outputDevices;
 static QMap<Phonon::Category, QMap<int, int> > s_outputDevicePriorities; // prio, device
-static QMap<QString, uint32_t> s_outputStreamIndexMap;
+static QMap<QString, PulseStream*> s_outputStreams;
 
 static QMap<QString, int> s_captureDeviceIndexes;
 static QMap<int, AudioDevice> s_captureDevices;
 static QMap<Phonon::Category, QMap<int, int> > s_captureDevicePriorities; // prio, device
-static QMap<QString, uint32_t> s_captureStreamIndexMap;
+static QMap<QString, PulseStream*> s_captureStreams;
+
+static PulseStream* findStreamByPulseIndex(QMap<QString, PulseStream*> map, uint32_t index)
+{
+  QMap<QString, PulseStream*>::iterator it;
+  for (it = map.begin(); it != map.end(); ++it)
+    if ((*it)->index() == index)
+      return *it;
+  return NULL;
+}
 
 static void createGenericDevices()
 {
@@ -410,24 +420,29 @@ void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *us
     const char *t;
     if ((t = pa_proplist_gets(i->proplist, "phonon.streamid"))) {
         logMessage(QString("Found PulseAudio stream index %1 for Phonon Output Stream %2").arg(i->index).arg(t));
-        s_outputStreamIndexMap[QString(t)] = i->index;
 
-        // Find the sink's phonon index and notify whoever cares...
-        if (PA_INVALID_INDEX != i->sink) {
-            bool found = false;
-            int device;
-            QMap<int, AudioDevice>::iterator it;
-            for (it = s_outputDevices.begin(); it != s_outputDevices.end(); ++it) {
-                if ((*it).pulseIndex == i->sink) {
-                    found = true;
-                    device = it.key();
-                    break;
+        // We only care about our own streams (other phonon processes are irrelevent)
+        if (s_outputStreams.contains(QString(t))) {
+            PulseStream *stream = s_outputStreams[QString(t)];
+            stream->setIndex(i->index);
+
+            // Find the sink's phonon index and notify whoever cares...
+            if (PA_INVALID_INDEX != i->sink) {
+                bool found = false;
+                int device;
+                QMap<int, AudioDevice>::iterator it;
+                for (it = s_outputDevices.begin(); it != s_outputDevices.end(); ++it) {
+                    if ((*it).pulseIndex == i->sink) {
+                        found = true;
+                        device = it.key();
+                        break;
+                    }
                 }
-            }
-            if (found) {
-                // OK so we just emit our signal
-                logMessage(QString("Letting the rest of phonon know about this"));
-                s_instance->emitUsingDevice(QString(t), device);
+                if (found) {
+                    // OK so we just emit our signal
+                    logMessage(QString("Letting the rest of phonon know about this"));
+                    stream->setDevice(device);
+                }
             }
         }
     }
@@ -454,24 +469,29 @@ void source_output_cb(pa_context *c, const pa_source_output_info *i, int eol, vo
     const char *t;
     if ((t = pa_proplist_gets(i->proplist, "phonon.streamid"))) {
         logMessage(QString("Found PulseAudio stream index %1 for Phonon Capture Stream %2").arg(i->index).arg(t));
-        s_captureStreamIndexMap[QString(t)] = i->index;
 
-        // Find the source's phonon index and notify whoever cares...
-        if (PA_INVALID_INDEX != i->source) {
-            bool found = false;
-            int device;
-            QMap<int, AudioDevice>::iterator it;
-            for (it = s_captureDevices.begin(); it != s_captureDevices.end(); ++it) {
-                if ((*it).pulseIndex == i->source) {
-                    found = true;
-                    device = it.key();
-                    break;
+        // We only care about our own streams (other phonon processes are irrelevent)
+        if (s_captureStreams.contains(QString(t))) {
+            PulseStream *stream = s_captureStreams[QString(t)];
+            stream->setIndex(i->index);
+
+            // Find the source's phonon index and notify whoever cares...
+            if (PA_INVALID_INDEX != i->source) {
+                bool found = false;
+                int device;
+                QMap<int, AudioDevice>::iterator it;
+                for (it = s_captureDevices.begin(); it != s_captureDevices.end(); ++it) {
+                    if ((*it).pulseIndex == i->source) {
+                        found = true;
+                        device = it.key();
+                        break;
+                    }
                 }
-            }
-            if (found) {
-                // OK so we just emit our signal
-                logMessage(QString("Letting the rest of phonon know about this"));
-                s_instance->emitUsingDevice(QString(t), device);
+                if (found) {
+                    // OK so we just emit our signal
+                    logMessage(QString("Letting the rest of phonon know about this"));
+                    stream->setDevice(device);
+                }
             }
         }
     }
@@ -483,10 +503,10 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
     switch (t & PA_SUBSCRIPTION_EVENT_FACILITY_MASK) {
         case PA_SUBSCRIPTION_EVENT_SINK_INPUT:
             if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
-                QString phononid = s_outputStreamIndexMap.key(index);
-                if (!phononid.isEmpty()) {
-                    logMessage(QString("Phonon Output Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(phononid));
-                    s_outputStreamIndexMap[phononid] = PA_INVALID_INDEX;
+                PulseStream *stream = findStreamByPulseIndex(s_outputStreams, index);
+                if (stream) {
+                    logMessage(QString("Phonon Output Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(stream->uuid()));
+                    stream->setIndex(PA_INVALID_INDEX);
                 }
             } else {
                 pa_operation *o;
@@ -500,10 +520,10 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
 
         case PA_SUBSCRIPTION_EVENT_SOURCE_OUTPUT:
             if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
-                QString phononid = s_captureStreamIndexMap.key(index);
-                if (!phononid.isEmpty()) {
-                    logMessage(QString("Phonon Capture Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(phononid));
-                    s_captureStreamIndexMap[phononid] = PA_INVALID_INDEX;
+              PulseStream *stream = findStreamByPulseIndex(s_captureStreams, index);
+              if (stream) {
+                    logMessage(QString("Phonon Capture Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(stream->uuid()));
+                    stream->setIndex(PA_INVALID_INDEX);
                 }
             } else {
                 pa_operation *o;
@@ -909,30 +929,39 @@ void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<
 #endif
 }
 
-void PulseSupport::setStreamPropList(Category category, QString streamUuid)
+static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString streamUuid, Category category)
 {
 #ifndef HAVE_PULSEAUDIO
-    Q_UNUSED(category);
+    Q_UNUSED(map);
     Q_UNUSED(streamUuid);
+    Q_UNUSED(category);
 #else
     QString role = s_roleCategoryMap.key(category);
-    if (role.isEmpty())
-        return;
-
-    logMessage(QString("Setting role to %1 for streamindex %2").arg(role).arg(streamUuid));
-    setenv("PULSE_PROP_media.role", role.toLatin1().constData(), 1);
+    if (!role.isEmpty()) {
+        logMessage(QString("Setting role to %1 for streamindex %2").arg(role).arg(streamUuid));
+        setenv("PULSE_PROP_media.role", role.toLatin1().constData(), 1);
+    }
     setenv("PULSE_PROP_phonon.streamid", streamUuid.toLatin1().constData(), 1);
+    PulseStream *stream = new PulseStream(streamUuid);
+    map[streamUuid] = stream;
+    return stream;
 #endif
+    return NULL;
+}
+
+PulseStream *PulseSupport::registerOutputStream(QString streamUuid, Category category)
+{
+    return register_stream(s_outputStreams, streamUuid, category);
+}
+
+PulseStream *PulseSupport::registerCaptureStream(QString streamUuid, Category category)
+{
+  return register_stream(s_captureStreams, streamUuid, category);
 }
 
 void PulseSupport::emitObjectDescriptionChanged(ObjectDescriptionType type)
 {
     emit objectDescriptionChanged(type);
-}
-
-void PulseSupport::emitUsingDevice(QString streamUuid, int device)
-{
-    emit usingDevice(streamUuid, device);
 }
 
 bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
@@ -952,11 +981,11 @@ bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
     logMessage(QString("Attempting to set Output Device to '%1' for Output Stream %2").arg(var.toString()).arg(streamUuid));
 
     // Attempt to look up the pulse stream index.
-    if (s_outputStreamIndexMap.contains(streamUuid) && s_outputStreamIndexMap[streamUuid] != PA_INVALID_INDEX) {
+    if (s_outputStreams.contains(streamUuid) && s_outputStreams[streamUuid]->index() != PA_INVALID_INDEX) {
         logMessage(QString("... Found in map. Moving now"));
 
         uint32_t pulse_device_index = s_outputDevices[device].pulseIndex;
-        uint32_t pulse_stream_index = s_outputStreamIndexMap[streamUuid];
+        uint32_t pulse_stream_index = s_outputStreams[streamUuid]->index();
 
         logMessage(QString("Moving Pulse Sink Input %1 to '%2' (Pulse Sink %3)").arg(pulse_stream_index).arg(var.toString()).arg(pulse_device_index));
 
@@ -991,11 +1020,11 @@ bool PulseSupport::setCaptureDevice(QString streamUuid, int device) {
     logMessage(QString("Attempting to set Capture Device to '%1' for Capture Stream %2").arg(var.toString()).arg(streamUuid));
 
     // Attempt to look up the pulse stream index.
-    if (s_captureStreamIndexMap.contains(streamUuid) && s_captureStreamIndexMap[streamUuid] == PA_INVALID_INDEX) {
+    if (s_captureStreams.contains(streamUuid) && s_captureStreams[streamUuid]->index() == PA_INVALID_INDEX) {
         logMessage(QString("... Found in map. Moving now"));
 
         uint32_t pulse_device_index = s_captureDevices[device].pulseIndex;
-        uint32_t pulse_stream_index = s_captureStreamIndexMap[streamUuid];
+        uint32_t pulse_stream_index = s_captureStreams[streamUuid]->index();
 
         logMessage(QString("Moving Pulse Source Output %1 to '%2' (Pulse Sink %3)").arg(pulse_stream_index).arg(var.toString()).arg(pulse_device_index));
 
@@ -1019,8 +1048,15 @@ void PulseSupport::clearStreamCache(QString streamUuid) {
     return;
 #else
     logMessage(QString("Clearing stream cache for stream %1").arg(streamUuid));
-    s_outputStreamIndexMap.remove(streamUuid);
-    s_captureStreamIndexMap.remove(streamUuid);
+    if (s_outputStreams.contains(streamUuid)) {
+        PulseStream *stream = s_outputStreams[streamUuid];
+        s_outputStreams.remove(streamUuid);
+        delete stream;
+    } else if (s_captureStreams.contains(streamUuid)) {
+        PulseStream *stream = s_captureStreams[streamUuid];
+        s_captureStreams.remove(streamUuid);
+        delete stream;
+    }
 #endif
 }
 

@@ -169,7 +169,7 @@ namespace Phonon
             Q_PRIVATE_SLOT(k_func(), void _k_revertFallback())
             Q_PRIVATE_SLOT(k_func(), void _k_audioDeviceFailed())
             Q_PRIVATE_SLOT(k_func(), void _k_deviceListChanged())
-            Q_PRIVATE_SLOT(k_func(), void _k_deviceChanged(QString streamUuid, int device))
+            Q_PRIVATE_SLOT(k_func(), void _k_deviceChanged(int device))
     };
 } //namespace Phonon
 
