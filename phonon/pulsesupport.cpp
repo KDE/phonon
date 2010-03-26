@@ -21,7 +21,6 @@
 */
 
 #include <QtCore/QAbstractEventDispatcher>
-#include <QtCore/QEventLoop>
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
 
