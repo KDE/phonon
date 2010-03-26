@@ -20,13 +20,12 @@
 
 */
 
-#ifdef HAVE_PULSEAUDIO
-#include <pulse/pulseaudio.h>
-#else
+#ifndef HAVE_PULSEAUDIO
 #define PA_INVALID_INDEX ((uint32_t)-1)
 #endif
 
 #include "pulsestream.h"
+#include <stdio.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -37,7 +36,14 @@ PulseStream::PulseStream(QString streamUuid)
   : QObject()
   , mStreamUuid(streamUuid)
   , mIndex(PA_INVALID_INDEX)
+#ifdef HAVE_PULSEAUDIO
+  , mDevice(-1)
+  , mMute(false)
+#endif
 {
+#ifdef HAVE_PULSEAUDIO
+    pa_cvolume_init(&mVolume);
+#endif
 }
 
 PulseStream::~PulseStream()
@@ -59,10 +65,47 @@ void PulseStream::setIndex(uint32_t index)
     mIndex = index;
 }
 
+uint8_t PulseStream::channels()
+{
+#ifdef HAVE_PULSEAUDIO
+    return mVolume.channels;
+#endif
+    return 2;
+}
+
+#ifdef HAVE_PULSEAUDIO
 void PulseStream::setDevice(int device)
 {
-    emit usingDevice(device);
+    if (mDevice != device) {
+        mDevice = device;
+        emit usingDevice(device);
+    }
 }
+
+// Copied from AudioOutput
+static const qreal LOUDNESS_TO_VOLTAGE_EXPONENT = qreal(0.67);
+static const qreal VOLTAGE_TO_LOUDNESS_EXPONENT = qreal(1.0/LOUDNESS_TO_VOLTAGE_EXPONENT);
+
+void PulseStream::setVolume(const pa_cvolume *volume)
+{
+    if (pa_cvolume_equal(&mVolume, volume) == 0) {
+        memcpy(&mVolume, volume, sizeof(mVolume));
+        qreal vol = (qreal)pa_cvolume_avg(volume) / PA_VOLUME_NORM;
+        // AudioOutput expects the "backend" to supply values that have been
+        // adjusted for Stephens' law, so we need to fudge them accordingly
+        // so that the %ages match up in KMix/the application's own slider.
+        emit volumeChanged(pow(vol, VOLTAGE_TO_LOUDNESS_EXPONENT));
+    }
+}
+
+void PulseStream::setMute(bool mute)
+{
+    if (mMute != mute) {
+        mMute = mute;
+        emit muteChanged(mMute);
+    }
+}
+#endif
 
 
 } // namespace Phonon

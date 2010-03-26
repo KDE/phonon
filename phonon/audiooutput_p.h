@@ -74,6 +74,7 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         void handleAutomaticDeviceChange(const AudioOutputDevice &newDev, DeviceChangeType type);
 
         void _k_volumeChanged(qreal);
+        void _k_mutedChanged(bool);
         void _k_revertFallback();
         void _k_audioDeviceFailed();
         void _k_deviceListChanged();

@@ -425,23 +425,17 @@ void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *us
         if (s_outputStreams.contains(QString(t))) {
             PulseStream *stream = s_outputStreams[QString(t)];
             stream->setIndex(i->index);
+            stream->setVolume(&i->volume);
+            stream->setMute(!!i->mute);
 
             // Find the sink's phonon index and notify whoever cares...
             if (PA_INVALID_INDEX != i->sink) {
-                bool found = false;
-                int device;
                 QMap<int, AudioDevice>::iterator it;
                 for (it = s_outputDevices.begin(); it != s_outputDevices.end(); ++it) {
                     if ((*it).pulseIndex == i->sink) {
-                        found = true;
-                        device = it.key();
+                        stream->setDevice(it.key());
                         break;
                     }
-                }
-                if (found) {
-                    // OK so we just emit our signal
-                    logMessage(QString("Letting the rest of phonon know about this"));
-                    stream->setDevice(device);
                 }
             }
         }
@@ -474,23 +468,17 @@ void source_output_cb(pa_context *c, const pa_source_output_info *i, int eol, vo
         if (s_captureStreams.contains(QString(t))) {
             PulseStream *stream = s_captureStreams[QString(t)];
             stream->setIndex(i->index);
+            //stream->setVolume(&i->volume);
+            //stream->setMute(!!i->mute);
 
             // Find the source's phonon index and notify whoever cares...
             if (PA_INVALID_INDEX != i->source) {
-                bool found = false;
-                int device;
                 QMap<int, AudioDevice>::iterator it;
                 for (it = s_captureDevices.begin(); it != s_captureDevices.end(); ++it) {
                     if ((*it).pulseIndex == i->source) {
-                        found = true;
-                        device = it.key();
+                        stream->setDevice(it.key());
                         break;
                     }
-                }
-                if (found) {
-                    // OK so we just emit our signal
-                    logMessage(QString("Letting the rest of phonon know about this"));
-                    stream->setDevice(device);
                 }
             }
         }
@@ -964,6 +952,19 @@ void PulseSupport::emitObjectDescriptionChanged(ObjectDescriptionType type)
     emit objectDescriptionChanged(type);
 }
 
+bool PulseSupport::setOutputName(QString streamUuid, QString name) {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(name);
+    return false;
+#else
+    logMessage(QString("Unimplemented: Need to find a way to set either application.name or media.name in SI proplist"));
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(name);
+    return true;
+#endif
+}
+
 bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(streamUuid);
@@ -998,6 +999,61 @@ bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
         pa_operation_unref(o);
     } else {
         logMessage(QString("... Not found in map. We will be notified of the device when the stream appears and we can process any moves needed then"));
+    }
+    return true;
+#endif
+}
+
+bool PulseSupport::setOutputVolume(QString streamUuid, qreal volume) {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(device);
+    return false;
+#else
+    logMessage(QString("Attempting to set volume to %1 for Output Stream %2").arg(volume).arg(streamUuid));
+
+    // Attempt to look up the pulse stream index.
+    if (s_outputStreams.contains(streamUuid) && s_outputStreams[streamUuid]->index() != PA_INVALID_INDEX) {
+        PulseStream *stream = s_outputStreams[streamUuid];
+
+        uint8_t channels = stream->channels();
+        if (channels < 1) {
+            logMessage("Channel count is less than 1. Cannot set volume.");
+            return false;
+        }
+
+        pa_cvolume vol;
+        pa_cvolume_set(&vol, channels, (volume * PA_VOLUME_NORM));
+
+        pa_operation* o;
+        if (!(o = pa_context_set_sink_input_volume(s_context, stream->index(), &vol, NULL, NULL))) {
+            logMessage(QString("pa_context_set_sink_input_volume() failed"));
+            return false;
+        }
+        pa_operation_unref(o);
+    }
+    return true;
+#endif
+}
+
+bool PulseSupport::setOutputMute(QString streamUuid, bool mute) {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(device);
+    return false;
+#else
+    logMessage(QString("Attempting to set mute to %1 for Output Stream %2").arg(mute).arg(streamUuid));
+
+    // Attempt to look up the pulse stream index.
+    if (s_outputStreams.contains(streamUuid) && s_outputStreams[streamUuid]->index() != PA_INVALID_INDEX) {
+        PulseStream *stream = s_outputStreams[streamUuid];
+
+        pa_operation* o;
+        if (!(o = pa_context_set_sink_input_mute(s_context, stream->index(), (mute ? 1 : 0), NULL, NULL))) {
+            logMessage(QString("pa_context_set_sink_input_mute() failed"));
+            return false;
+        }
+        pa_operation_unref(o);
     }
     return true;
 #endif

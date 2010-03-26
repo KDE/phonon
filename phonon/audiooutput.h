@@ -166,6 +166,7 @@ namespace Phonon
 
         private:
             Q_PRIVATE_SLOT(k_func(), void _k_volumeChanged(qreal))
+            Q_PRIVATE_SLOT(k_func(), void _k_mutedChanged(bool))
             Q_PRIVATE_SLOT(k_func(), void _k_revertFallback())
             Q_PRIVATE_SLOT(k_func(), void _k_audioDeviceFailed())
             Q_PRIVATE_SLOT(k_func(), void _k_deviceListChanged())

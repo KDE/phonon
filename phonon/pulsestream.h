@@ -27,6 +27,10 @@
 #include "phononnamespace.h"
 
 #include <stdint.h>
+#ifdef HAVE_PULSEAUDIO
+#include <pulse/pulseaudio.h>
+#endif
+
 
 #include <QtCore/QtGlobal>
 
@@ -47,14 +51,27 @@ namespace Phonon
             uint32_t index();
             void setIndex(uint32_t index);
 
+            uint8_t channels();
+
+#ifdef HAVE_PULSEAUDIO
             void setDevice(int device);
+            void setVolume(const pa_cvolume *volume);
+            void setMute(bool mute);
+#endif
 
         signals:
             void usingDevice(int device);
+            void volumeChanged(qreal volume);
+            void muteChanged(bool mute);
 
         private:
             QString mStreamUuid;
             uint32_t mIndex;
+#ifdef HAVE_PULSEAUDIO
+            int mDevice;
+            pa_cvolume mVolume;
+            bool mMute;
+#endif
     };
 } // namespace Phonon
 

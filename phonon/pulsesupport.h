@@ -57,8 +57,13 @@ namespace Phonon
             PulseStream *registerCaptureStream(QString streamUuid, Category category);
             void emitObjectDescriptionChanged(ObjectDescriptionType);
 
+            bool setOutputName(QString streamUuid, QString name);
             bool setOutputDevice(QString streamUuid, int device);
+            bool setOutputVolume(QString streamUuid, qreal volume);
+            bool setOutputMute(QString streamUuid, bool mute);
             bool setCaptureDevice(QString streamUuid, int device);
+            // NB Capture Volume/Mute not set until PA supports per-source-output volumes/mutes
+            //    or phonon supports capture properly... which ever comes first.
             void clearStreamCache(QString streamUuid);
 
         signals:
