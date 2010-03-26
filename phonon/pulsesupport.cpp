@@ -484,13 +484,8 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
             if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
                 QString phononid = s_outputStreamIndexMap.key(index);
                 if (!phononid.isEmpty()) {
-                    if (s_outputStreamIndexMap.contains(phononid)) {
-                        logMessage(QString("Phonon Output Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(phononid));
-                        s_outputStreamIndexMap[phononid] = PA_INVALID_INDEX;
-                    } else {
-                        logMessage(QString("Removing Phonon Output Stream %1 (it's gone!)").arg(phononid));
-                        s_outputStreamIndexMap.remove(phononid);
-                    }
+                    logMessage(QString("Phonon Output Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(phononid));
+                    s_outputStreamIndexMap[phononid] = PA_INVALID_INDEX;
                 }
             } else {
                 pa_operation *o;
@@ -506,13 +501,8 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
             if ((t & PA_SUBSCRIPTION_EVENT_TYPE_MASK) == PA_SUBSCRIPTION_EVENT_REMOVE) {
                 QString phononid = s_captureStreamIndexMap.key(index);
                 if (!phononid.isEmpty()) {
-                    if (s_captureStreamIndexMap.contains(phononid)) {
-                        logMessage(QString("Phonon Capture Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(phononid));
-                        s_captureStreamIndexMap[phononid] = PA_INVALID_INDEX;
-                    } else {
-                        logMessage(QString("Removing Phonon Capture Stream %1 (it's gone!)").arg(phononid));
-                        s_captureStreamIndexMap.remove(phononid);
-                    }
+                    logMessage(QString("Phonon Capture Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(phononid));
+                    s_captureStreamIndexMap[phononid] = PA_INVALID_INDEX;
                 }
             } else {
                 pa_operation *o;
