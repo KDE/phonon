@@ -185,13 +185,14 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 
     if (eol < 0) {
         logMessage(QString("Failed to initialize device manager extension: %1").arg(pa_strerror(pa_context_errno(c))));
-        logMessage("Falling back to single device mode");
-        createGenericDevices();
-        delete u;
-
-        // If this is our probe phase, exit now
-        if (s_context != c)
+        if (s_context != c) {
+            logMessage("Falling back to single device mode");
+            // Only create our gerneric devices during the probe phase.
+            createGenericDevices();
+            // As this is our probe phase, exit immediately
             pa_context_disconnect(c);
+        }
+        delete u;
 
         return;
     }
@@ -575,13 +576,14 @@ static void context_state_callback(pa_context *c, void *)
         // 3. Attempt to read info from Device Manager
         PulseUserData *u = new PulseUserData;
         if (!(o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, u))) {
-            logMessage(QString("pa_ext_device_manager_read() failed. Attempting to continue without device manager support"));
-            createGenericDevices();
-            delete u;
-
-            // If this is our probe phase, exit immediately
-            if (s_context != c)
+            if (s_context != c) {
+                logMessage(QString("pa_ext_device_manager_read() failed. Attempting to continue without device manager support"));
+                // Only create our gerneric devices during the probe phase.
+                createGenericDevices();
+                // As this is our probe phase, exit immediately
                 pa_context_disconnect(c);
+            }
+            delete u;
 
             return;
         }
@@ -589,11 +591,13 @@ static void context_state_callback(pa_context *c, void *)
 
 #else
         // If we know do not have Device Manager support, we just create our dummy devices now
-        createGenericDevices();
-
-        // If this is our probe phase, exit immediately
-        if (s_context != c)
+        if (s_context != c) {
+            // Only create our gerneric devices during the probe phase.
+            createGenericDevices();
+            // As this is our probe phase, exit immediately
             pa_context_disconnect(c);
+        }
+
 #endif
     } else if (!PA_CONTEXT_IS_GOOD(state)) {
         /// @todo Deal with reconnection...
