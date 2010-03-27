@@ -100,6 +100,9 @@ void AudioOutputPrivate::init(Phonon::Category c)
 
     category = c;
     streamUuid = QUuid::createUuid().toString();
+
+    createBackendObject();
+
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive()) {
         PulseStream *stream = pulse->registerOutputStream(streamUuid, category);
@@ -109,8 +112,6 @@ void AudioOutputPrivate::init(Phonon::Category c)
             q->connect(stream, SIGNAL(muteChanged(bool)), SLOT(_k_mutedChanged(bool)));
         }
     }
-
-    createBackendObject();
 
     q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(_k_deviceListChanged()));
 }
