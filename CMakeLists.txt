@@ -7,7 +7,6 @@ cmake_policy(SET CMP0002 OLD)
 
 # enable unit tests
 option(PHONON_BUILD_TESTS "Build the tests")
-option(PHONON_BUILD_EXAMPLES "Build the examples")
 
 if (PHONON_BUILD_TESTS)
     enable_testing()
