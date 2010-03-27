@@ -741,6 +741,7 @@ PulseSupport::~PulseSupport()
 bool PulseSupport::isActive()
 {
 #ifdef HAVE_PULSEAUDIO
+    //logMessage(QString("Enabled Breakdown: mEnabled: %1, s_pulseActive %2").arg(mEnabled).arg(s_pulseActive));
     return mEnabled && s_pulseActive;
 #else
     return false;
@@ -924,6 +925,7 @@ static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString str
     Q_UNUSED(streamUuid);
     Q_UNUSED(category);
 #else
+    logMessage(QString("Initialising streamindex %1").arg(streamUuid));
     QString role = s_roleCategoryMap.key(category);
     if (!role.isEmpty()) {
         logMessage(QString("Setting role to %1 for streamindex %2").arg(role).arg(streamUuid));
