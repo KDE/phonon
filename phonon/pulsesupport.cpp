@@ -1025,6 +1025,7 @@ bool PulseSupport::setOutputVolume(QString streamUuid, qreal volume) {
         pa_cvolume vol;
         pa_cvolume_set(&vol, channels, (volume * PA_VOLUME_NORM));
 
+        logMessage(QString("Found PA index %1. Calling pa_context_set_sink_input_volume()").arg(stream->index()));
         pa_operation* o;
         if (!(o = pa_context_set_sink_input_volume(s_context, stream->index(), &vol, NULL, NULL))) {
             logMessage(QString("pa_context_set_sink_input_volume() failed"));
@@ -1042,12 +1043,13 @@ bool PulseSupport::setOutputMute(QString streamUuid, bool mute) {
     Q_UNUSED(device);
     return false;
 #else
-    logMessage(QString("Attempting to set mute to %1 for Output Stream %2").arg(mute).arg(streamUuid));
+    logMessage(QString("Attempting to %1 mute for Output Stream %2").arg(mute ? "set" : "unset").arg(streamUuid));
 
     // Attempt to look up the pulse stream index.
     if (s_outputStreams.contains(streamUuid) && s_outputStreams[streamUuid]->index() != PA_INVALID_INDEX) {
         PulseStream *stream = s_outputStreams[streamUuid];
 
+        logMessage(QString("Found PA index %1. Calling pa_context_set_sink_input_mute()").arg(stream->index()));
         pa_operation* o;
         if (!(o = pa_context_set_sink_input_mute(s_context, stream->index(), (mute ? 1 : 0), NULL, NULL))) {
             logMessage(QString("pa_context_set_sink_input_mute() failed"));
