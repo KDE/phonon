@@ -205,20 +205,28 @@ void VolumeSliderPrivate::_k_sliderChanged(int value)
         }
 #endif
 
-        ignoreVolumeChange = true;
-        output->setVolume((static_cast<qreal>(value)) * 0.01);
-        ignoreVolumeChange = false;
+        qreal newvolume = (static_cast<qreal>(value)) * 0.01;
+        if (!ignoreVolumeChangeObserve && output->volume() != newvolume) {
+          ignoreVolumeChangeAction = true;
+          output->setVolume(newvolume);
+        }
     } else {
         slider.setEnabled(false);
         muteButton.setEnabled(false);
     }
+
+    ignoreVolumeChangeObserve = false;
 }
 
 void VolumeSliderPrivate::_k_volumeChanged(qreal value)
 {
-    if (!ignoreVolumeChange) {
-        slider.setValue(qRound(100 * value));
+    int newslidervalue = qRound(100 * value);
+    if (!ignoreVolumeChangeAction && slider.value() != newslidervalue) {
+        ignoreVolumeChangeObserve = true;
+        slider.setValue(newslidervalue);
     }
+
+    ignoreVolumeChangeAction = false;
 }
 
 bool VolumeSlider::hasTracking() const
