@@ -54,7 +54,7 @@ class VolumeSliderPrivate
             mutedIcon(Platform::icon(QLatin1String("player-volume-muted"), parent->style())),
             output(0),
             ignoreVolumeChangeAction(false),
-            ignoreVolumeChangeObserve(false)
+            ignoreVolumeChangeObserve(true)
         {
             slider.setRange(0, 100);
             slider.setPageStep(5);
