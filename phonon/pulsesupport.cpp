@@ -35,7 +35,7 @@
 #endif // HAVE_PULSEAUDIO
 
 #include "pulsesupport.h"
-#include "pulsestream.h"
+#include "pulsestream_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -918,13 +918,9 @@ void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<
 #endif
 }
 
+#ifdef HAVE_PULSEAUDIO
 static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString streamUuid, Category category)
 {
-#ifndef HAVE_PULSEAUDIO
-    Q_UNUSED(map);
-    Q_UNUSED(streamUuid);
-    Q_UNUSED(category);
-#else
     logMessage(QString("Initialising streamindex %1").arg(streamUuid));
     QString role = s_roleCategoryMap.key(category);
     if (!role.isEmpty()) {
@@ -935,18 +931,29 @@ static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString str
     PulseStream *stream = new PulseStream(streamUuid);
     map[streamUuid] = stream;
     return stream;
-#endif
-    return NULL;
 }
+#endif
 
 PulseStream *PulseSupport::registerOutputStream(QString streamUuid, Category category)
 {
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(category);
+    return NULL;
+#else
     return register_stream(s_outputStreams, streamUuid, category);
+#endif
 }
 
 PulseStream *PulseSupport::registerCaptureStream(QString streamUuid, Category category)
 {
-  return register_stream(s_captureStreams, streamUuid, category);
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(category);
+    return NULL;
+#else
+    return register_stream(s_captureStreams, streamUuid, category);
+#endif
 }
 
 void PulseSupport::emitObjectDescriptionChanged(ObjectDescriptionType type)
@@ -1009,7 +1016,7 @@ bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
 bool PulseSupport::setOutputVolume(QString streamUuid, qreal volume) {
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(streamUuid);
-    Q_UNUSED(device);
+    Q_UNUSED(volume);
     return false;
 #else
     logMessage(QString("Attempting to set volume to %1 for Output Stream %2").arg(volume).arg(streamUuid));
@@ -1042,7 +1049,7 @@ bool PulseSupport::setOutputVolume(QString streamUuid, qreal volume) {
 bool PulseSupport::setOutputMute(QString streamUuid, bool mute) {
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(streamUuid);
-    Q_UNUSED(device);
+    Q_UNUSED(mute);
     return false;
 #else
     logMessage(QString("Attempting to %1 mute for Output Stream %2").arg(mute ? "set" : "unset").arg(streamUuid));

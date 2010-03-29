@@ -20,12 +20,7 @@
 
 */
 
-#ifndef HAVE_PULSEAUDIO
-#define PA_INVALID_INDEX ((uint32_t)-1)
-#endif
-
-#include "pulsestream.h"
-#include <stdio.h>
+#include "pulsestream_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -36,14 +31,10 @@ PulseStream::PulseStream(QString streamUuid)
   : QObject()
   , mStreamUuid(streamUuid)
   , mIndex(PA_INVALID_INDEX)
-#ifdef HAVE_PULSEAUDIO
   , mDevice(-1)
   , mMute(false)
-#endif
 {
-#ifdef HAVE_PULSEAUDIO
     pa_cvolume_init(&mVolume);
-#endif
 }
 
 PulseStream::~PulseStream()
@@ -67,13 +58,9 @@ void PulseStream::setIndex(uint32_t index)
 
 uint8_t PulseStream::channels()
 {
-#ifdef HAVE_PULSEAUDIO
     return mVolume.channels;
-#endif
-    return 2;
 }
 
-#ifdef HAVE_PULSEAUDIO
 void PulseStream::setDevice(int device)
 {
     if (mDevice != device) {
@@ -105,13 +92,12 @@ void PulseStream::setMute(bool mute)
         emit muteChanged(mMute);
     }
 }
-#endif
 
 
 } // namespace Phonon
 
 QT_END_NAMESPACE
 
-#include "moc_pulsestream.cpp"
+#include "moc_pulsestream_p.cpp"
 
 // vim: sw=4 ts=4

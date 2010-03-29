@@ -29,7 +29,9 @@
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 #include "pulsesupport.h"
-#include "pulsestream.h"
+#ifdef HAVE_PULSEAUDIO
+#  include "pulsestream_p.h"
+#endif
 
 #include <QtCore/qmath.h>
 
@@ -103,6 +105,7 @@ void AudioOutputPrivate::init(Phonon::Category c)
 
     createBackendObject();
 
+#ifdef HAVE_PULSEAUDIO
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive()) {
         PulseStream *stream = pulse->registerOutputStream(streamUuid, category);
@@ -112,6 +115,7 @@ void AudioOutputPrivate::init(Phonon::Category c)
             q->connect(stream, SIGNAL(muteChanged(bool)), SLOT(_k_mutedChanged(bool)));
         }
     }
+#endif
 
     q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(_k_deviceListChanged()));
 }
