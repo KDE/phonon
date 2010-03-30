@@ -23,6 +23,7 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
+#include <QTimer>
 
 #ifdef HAVE_PULSEAUDIO
 #include <glib.h>
@@ -609,11 +610,16 @@ static void context_state_callback(pa_context *c, void *)
 #endif
     } else if (!PA_CONTEXT_IS_GOOD(state)) {
         /// @todo Deal with reconnection...
-        //logMessage("Connection to PulseAudio lost");
+        //logMessage(QString("Connection to PulseAudio lost: %1").arg(pa_strerror(pa_context_errno(c))));
 
         // If this is our probe phase, exit our context immediately
         if (s_context != c)
             pa_context_disconnect(c);
+        else {
+            pa_context_unref(s_context);
+            s_context = NULL;
+            QTimer::singleShot(50, PulseSupport::getInstance(), SLOT(connectToDaemon()));
+        }
     }
 }
 #endif // HAVE_PULSEAUDIO
@@ -714,12 +720,8 @@ PulseSupport::PulseSupport()
     // all about processing.
     s_mainloop = pa_glib_mainloop_new(NULL);
     Q_ASSERT(s_mainloop);
-    pa_mainloop_api *api = pa_glib_mainloop_get_api(s_mainloop);
 
-    s_context = pa_context_new(api, "libphonon");
-    // (cg) Convert to PA_CONTEXT_NOFLAGS when PulseAudio 0.9.19 is required
-    if (pa_context_connect(s_context, NULL, static_cast<pa_context_flags_t>(0), 0) >= 0)
-        pa_context_set_state_callback(s_context, &context_state_callback, NULL);
+    connectToDaemon();
 #endif
 }
 
@@ -735,6 +737,18 @@ PulseSupport::~PulseSupport()
         pa_glib_mainloop_free(s_mainloop);
         s_mainloop = NULL;
     }
+#endif
+}
+
+
+void PulseSupport::connectToDaemon()
+{
+#ifdef HAVE_PULSEAUDIO
+    pa_mainloop_api *api = pa_glib_mainloop_get_api(s_mainloop);
+
+    s_context = pa_context_new(api, "libphonon");
+    if (pa_context_connect(s_context, NULL, PA_CONTEXT_NOFAIL, 0) >= 0)
+        pa_context_set_state_callback(s_context, &context_state_callback, NULL);
 #endif
 }
 

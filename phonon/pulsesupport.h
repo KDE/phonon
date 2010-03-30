@@ -66,6 +66,9 @@ namespace Phonon
             //    or phonon supports capture properly... which ever comes first.
             void clearStreamCache(QString streamUuid);
 
+        public slots:
+            void connectToDaemon();
+
         signals:
             void objectDescriptionChanged(ObjectDescriptionType);
 
