@@ -26,6 +26,7 @@
 #include <QTimer>
 
 #ifdef HAVE_PULSEAUDIO
+#include "pulsestream_p.h"
 #include <glib.h>
 #include <pulse/pulseaudio.h>
 #include <pulse/xmalloc.h>
@@ -36,7 +37,6 @@
 #endif // HAVE_PULSEAUDIO
 
 #include "pulsesupport.h"
-#include "pulsestream_p.h"
 
 QT_BEGIN_NAMESPACE
 
