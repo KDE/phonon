@@ -26,6 +26,9 @@
 
 #define PHONON_CLASSNAME AudioDataOutput
 
+QT_BEGIN_HEADER
+QT_BEGIN_NAMESPACE
+
 namespace Phonon
 {
 
@@ -63,6 +66,9 @@ void AudioDataOutputPrivate::setupBackendObject()
 } // namespace Phonon
 
 #include "audiodataoutput.moc"
+
+QT_END_NAMESPACE
+QT_END_HEADER
 
 #undef PHONON_CLASSNAME
 // vim: sw=4 ts=4 tw=80
