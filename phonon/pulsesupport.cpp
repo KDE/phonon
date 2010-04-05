@@ -169,7 +169,7 @@ static void createGenericDevices()
     s_outputDevicePriorities.clear();
     index = s_deviceIndexCounter++;
     s_outputDeviceIndexes.insert("sink:default", index);
-    s_outputDevices.insert(index, AudioDevice("sink:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 0));
+    s_outputDevices.insert(index, AudioDevice("sink:default", QObject::tr("PulseAudio Sound Server"), "audio-backend-pulseaudio", 0));
     for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
         Phonon::Category cat = static_cast<Phonon::Category>(i);
         s_outputDevicePriorities[cat].insert(0, index);
@@ -180,7 +180,7 @@ static void createGenericDevices()
     s_captureDevicePriorities.clear();
     index = s_deviceIndexCounter++;
     s_captureDeviceIndexes.insert("source:default", index);
-    s_captureDevices.insert(index, AudioDevice("source:default", QObject::tr("PulseAudio Sound Server").toUtf8(), "audio-backend-pulseaudio", 0));
+    s_captureDevices.insert(index, AudioDevice("source:default", QObject::tr("PulseAudio Sound Server"), "audio-backend-pulseaudio", 0));
     for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
         Phonon::Category cat = static_cast<Phonon::Category>(i);
         s_captureDevicePriorities[cat].insert(0, index);
@@ -371,7 +371,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     }
 
     // Add the new device itself.
-    new_devices->insert(name, AudioDevice(name, info->description, info->icon, info->index));
+    new_devices->insert(name, AudioDevice(name, QString::fromUtf8(info->description), QString::fromUtf8(info->icon), info->index));
 
     // For each role in the priority, map it to a phonon category and store the order.
     for (uint32_t i = 0; i < info->n_role_priorities; ++i) {
