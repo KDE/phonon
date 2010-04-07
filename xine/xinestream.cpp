@@ -973,6 +973,9 @@ bool XineStream::event(QEvent *ev)
                 m_currentTitle = currentTitle;
                 emit titleChanged(m_currentTitle);
             }
+            //Check if the MetaData needs to be updated, bug#199327.  -- klondike
+            getStreamInfo();
+            updateMetaData();
         }
         return true;
     case Event::Error:
