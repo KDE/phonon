@@ -22,8 +22,8 @@
 
 #include "sinknode.h"
 
-#include <Phonon/Experimental/VideoDataOutputInterface>
-#include <Phonon/Experimental/VideoFrame>
+#include <phonon/experimental/videodataoutputinterface.h>
+#include <phonon/experimental/videoframe.h>
 
 #include <QtCore/QByteArray>
 #include <QtCore/QList>

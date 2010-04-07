@@ -240,10 +240,13 @@ QStringList Backend::availableMimeTypes() const
                     GstCaps *caps = gst_static_pad_template_get_caps (padTemplate);
 
                     if (caps) {
-                        const GstStructure* capsStruct = gst_caps_get_structure (caps, 0);
-                        QString mime = QString::fromUtf8(gst_structure_get_name (capsStruct));
-                        if (!availableMimeTypes.contains(mime))
-                              availableMimeTypes.append(mime);
+                        for (unsigned int struct_idx = 0; struct_idx < gst_caps_get_size (caps); struct_idx++) {
+
+                            const GstStructure* capsStruct = gst_caps_get_structure (caps, struct_idx);
+                            QString mime = QString::fromUtf8(gst_structure_get_name (capsStruct));
+                            if (!availableMimeTypes.contains(mime))
+                                availableMimeTypes.append(mime);
+                        }
                     }
                 }
             }

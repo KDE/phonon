@@ -26,7 +26,7 @@
 #include <xine.h>
 
 #include "xineengine.h"
-#include <Phonon/StreamInterface>
+#include <phonon/StreamInterface>
 #include <QByteArray>
 #include <QSharedData>
 #include <QQueue>

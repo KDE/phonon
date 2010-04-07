@@ -26,8 +26,8 @@
 #include <QList>
 
 #include <xine.h>
-#include <Phonon/VolumeFaderEffect>
-#include <Phonon/VolumeFaderInterface>
+#include <phonon/VolumeFaderEffect>
+#include <phonon/VolumeFaderInterface>
 
 namespace Phonon
 {

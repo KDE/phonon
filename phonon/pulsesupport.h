@@ -35,6 +35,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
+    class PulseStream;
     class PHONON_EXPORT PulseSupport : public QObject
     {
         Q_OBJECT
@@ -52,17 +53,24 @@ namespace Phonon
             void setOutputDevicePriorityForCategory(Category category, QList<int> order);
             void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
 
-            void setStreamPropList(Category category, QString streamUuid);
+            PulseStream *registerOutputStream(QString streamUuid, Category category);
+            PulseStream *registerCaptureStream(QString streamUuid, Category category);
             void emitObjectDescriptionChanged(ObjectDescriptionType);
-            void emitUsingDevice(QString streamUuid, int device);
 
+            bool setOutputName(QString streamUuid, QString name);
             bool setOutputDevice(QString streamUuid, int device);
+            bool setOutputVolume(QString streamUuid, qreal volume);
+            bool setOutputMute(QString streamUuid, bool mute);
             bool setCaptureDevice(QString streamUuid, int device);
+            // NB Capture Volume/Mute not set until PA supports per-source-output volumes/mutes
+            //    or phonon supports capture properly... which ever comes first.
             void clearStreamCache(QString streamUuid);
+
+        public slots:
+            void connectToDaemon();
 
         signals:
             void objectDescriptionChanged(ObjectDescriptionType);
-            void usingDevice(QString streamUuid, int device);
 
         private:
             PulseSupport();

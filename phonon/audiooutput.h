@@ -38,7 +38,7 @@ namespace Phonon
 {
     class AudioOutputPrivate;
 
-    /** \class AudioOutput audiooutput.h Phonon/AudioOutput
+    /** \class AudioOutput audiooutput.h phonon/AudioOutput
      * \short Class for audio output to the soundcard.
      *
      * Use this class to define the audio output.
@@ -166,10 +166,11 @@ namespace Phonon
 
         private:
             Q_PRIVATE_SLOT(k_func(), void _k_volumeChanged(qreal))
+            Q_PRIVATE_SLOT(k_func(), void _k_mutedChanged(bool))
             Q_PRIVATE_SLOT(k_func(), void _k_revertFallback())
             Q_PRIVATE_SLOT(k_func(), void _k_audioDeviceFailed())
             Q_PRIVATE_SLOT(k_func(), void _k_deviceListChanged())
-            Q_PRIVATE_SLOT(k_func(), void _k_deviceChanged(QString streamUuid, int device))
+            Q_PRIVATE_SLOT(k_func(), void _k_deviceChanged(int device))
     };
 } //namespace Phonon
 

@@ -33,7 +33,7 @@ namespace Phonon
 {
 class StreamInterface;
 
-/** \class MediaObjectInterface mediaobjectinterface.h Phonon/MediaObjectInterface
+/** \class MediaObjectInterface mediaobjectinterface.h phonon/MediaObjectInterface
  * \short Backend interface for media sources.
  *
  * The backend implementation has to provide two signals, that are not defined

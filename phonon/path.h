@@ -40,7 +40,7 @@ class PathPrivate;
 class Effect;
 class MediaNode;
 
-/** \class Path path.h Phonon/Path
+/** \class Path path.h phonon/Path
  * \short Connection object providing convenient effect insertion
  *
  * \code

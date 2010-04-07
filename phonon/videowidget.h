@@ -38,7 +38,7 @@ namespace Phonon
 {
 class AbstractVideoOutput;
     class VideoWidgetPrivate;
-    /** \class VideoWidget videowidget.h Phonon/VideoWidget
+    /** \class VideoWidget videowidget.h phonon/VideoWidget
      * \short Widget to display video.
      *
      * This widget shows the video signal.

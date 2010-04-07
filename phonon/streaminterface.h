@@ -36,7 +36,7 @@ namespace Phonon
 class StreamInterfacePrivate;
 class MediaSource;
 
-/** \class StreamInterface streaminterface.h Phonon/StreamInterface
+/** \class StreamInterface streaminterface.h phonon/StreamInterface
  * \brief Backend interface to handle media streams (AbstractMediaStream).
  *
  * \author Matthias Kretz <kretz@kde.org>

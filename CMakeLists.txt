@@ -7,7 +7,6 @@ cmake_policy(SET CMP0002 OLD)
 
 # enable unit tests
 option(PHONON_BUILD_TESTS "Build the tests")
-option(PHONON_BUILD_EXAMPLES "Build the examples")
 
 if (PHONON_BUILD_TESTS)
     enable_testing()
@@ -69,6 +68,10 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       # they're built against the wrong QT.
       add_definitions(-DQT_NO_DEBUG)
    endif (MINGW)
+
+   if (QT_USE_FRAMEWORKS)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -F${QT_LIBRARY_DIR}")
+   endif (QT_USE_FRAMEWORKS)
 
    check_cxx_compiler_flag(-fPIE HAVE_FPIE_SUPPORT)
    if(KDE4_ENABLE_FPIE)

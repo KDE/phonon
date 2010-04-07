@@ -2,10 +2,6 @@ if (PHONON_BUILD_TESTS)
     add_subdirectory(tests)
 endif (PHONON_BUILD_TESTS)
 
-if (PHONON_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif (PHONON_BUILD_EXAMPLES)
-
 add_subdirectory(experimental)
 
 set(PULSEAUDIO_MINIMUM_VERSION "0.9.15")
@@ -66,6 +62,12 @@ set(phonon_LIB_SRCS
    audiodataoutput.cpp
    pulsesupport.cpp
    )
+
+if (PULSEAUDIO_FOUND)
+   list(APPEND phonon_LIB_SRCS
+      pulsestream.cpp
+   )
+endif (PULSEAUDIO_FOUND)
 
 if (QT_QTDBUS_FOUND)
    list(APPEND phonon_LIB_SRCS

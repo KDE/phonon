@@ -42,7 +42,7 @@ namespace Phonon
     class EffectParameter;
     class EffectPrivate;
 
-    /** \class Effect effect.h Phonon/Effect
+    /** \class Effect effect.h phonon/Effect
      * \short Effects that can be inserted into a Path.
      * An effect is a special object which can perform
      * transformations on the specified path. Examples may include simple

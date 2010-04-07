@@ -29,6 +29,9 @@
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 #include "pulsesupport.h"
+#ifdef HAVE_PULSEAUDIO
+#  include "pulsestream_p.h"
+#endif
 
 #include <QtCore/qmath.h>
 
@@ -99,11 +102,20 @@ void AudioOutputPrivate::init(Phonon::Category c)
 
     category = c;
     streamUuid = QUuid::createUuid().toString();
-    PulseSupport *pulse = PulseSupport::getInstance();
-    pulse->setStreamPropList(category, streamUuid);
-    q->connect(pulse, SIGNAL(usingDevice(QString,int)), SLOT(_k_deviceChanged(QString,int)));
 
     createBackendObject();
+
+#ifdef HAVE_PULSEAUDIO
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        PulseStream *stream = pulse->registerOutputStream(streamUuid, category);
+        if (stream) {
+            q->connect(stream, SIGNAL(usingDevice(int)), SLOT(_k_deviceChanged(int)));
+            q->connect(stream, SIGNAL(volumeChanged(qreal)), SLOT(_k_volumeChanged(qreal)));
+            q->connect(stream, SIGNAL(muteChanged(bool)), SLOT(_k_mutedChanged(bool)));
+        }
+    }
+#endif
 
     q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(_k_deviceListChanged()));
 }
@@ -138,7 +150,11 @@ void AudioOutput::setName(const QString &newName)
         return;
     }
     d->name = newName;
-    setVolume(Platform::loadVolume(newName));
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive())
+        pulse->setOutputName(d->getStreamUuid(), newName);
+    else
+        setVolume(Platform::loadVolume(newName));
 #ifndef QT_NO_DBUS
     if (d->adaptor) {
         emit d->adaptor->nameChanged(newName);
@@ -153,24 +169,31 @@ void AudioOutput::setVolume(qreal volume)
 {
     K_D(AudioOutput);
     d->volume = volume;
-    if (k_ptr->backendObject() && !d->muted) {
-        // using Stevens' power law loudness is proportional to (sound pressure)^0.67
-        // sound pressure is proportional to voltage:
-        // p² \prop P \prop V²
-        // => if a factor for loudness of x is requested
-        INTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (k_ptr->backendObject()) {
+        if (pulse->isActive()) {
+            pulse->setOutputVolume(d->getStreamUuid(), volume);
+        } else if (!d->muted) {
+            // using Stevens' power law loudness is proportional to (sound pressure)^0.67
+            // sound pressure is proportional to voltage:
+            // p² \prop P \prop V²
+            // => if a factor for loudness of x is requested
+            INTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
+      } else {
+          emit volumeChanged(volume);
+      }
     } else {
         emit volumeChanged(volume);
     }
-    Platform::saveVolume(d->name, volume);
+    if (!pulse->isActive())
+        Platform::saveVolume(d->name, volume);
 }
 
 qreal AudioOutput::volume() const
 {
     K_D(const AudioOutput);
-    if (d->muted || !d->m_backendObject) {
+    if (d->muted || !d->m_backendObject || PulseSupport::getInstance()->isActive())
         return d->volume;
-    }
     return pow(INTERFACE_CALL(volume()), LOUDNESS_TO_VOLTAGE_EXPONENT);
 }
 
@@ -182,9 +205,8 @@ static const qreal log10over20 = qreal(0.1151292546497022842); // ln(10) / 20
 qreal AudioOutput::volumeDecibel() const
 {
     K_D(const AudioOutput);
-    if (d->muted || !d->m_backendObject) {
+    if (d->muted || !d->m_backendObject || PulseSupport::getInstance()->isActive())
         return log(d->volume) / log10over20;
-    }
     return 0.67 * log(INTERFACE_CALL(volume())) / log10over20;
 }
 
@@ -203,14 +225,21 @@ void AudioOutput::setMuted(bool mute)
 {
     K_D(AudioOutput);
     if (d->muted != mute) {
+        PulseSupport *pulse = PulseSupport::getInstance();
         if (mute) {
             d->muted = mute;
             if (k_ptr->backendObject()) {
-                INTERFACE_CALL(setVolume(0.0));
+                if (pulse->isActive())
+                    pulse->setOutputMute(d->getStreamUuid(), mute);
+                else
+                    INTERFACE_CALL(setVolume(0.0));
             }
         } else {
             if (k_ptr->backendObject()) {
-                INTERFACE_CALL(setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
+                if (pulse->isActive())
+                    pulse->setOutputMute(d->getStreamUuid(), mute);
+                else
+                    INTERFACE_CALL(setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
             }
             d->muted = mute;
         }
@@ -270,41 +299,51 @@ void AudioOutputPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(volumeChanged(qreal)), q, SLOT(_k_volumeChanged(qreal)));
     QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()), q, SLOT(_k_audioDeviceFailed()));
 
-    // set up attributes
-    pINTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
+    if (!PulseSupport::getInstance()->isActive()) {
+        // set up attributes
+        pINTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
-    // if the output device is not available and the device was not explicitly set
-    // There is no need to set the output device initially if PA is used as
-    // we know it will not work (stream doesn't exist yet) and that this will be
-    // handled by _k_deviceChanged()
-    if (!PulseSupport::getInstance()->isActive() && !callSetOutputDevice(this, device) && !outputDeviceOverridden) {
-        // fall back in the preference list of output devices
-        QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
-        if (deviceList.isEmpty()) {
-            return;
-        }
-        for (int i = 0; i < deviceList.count(); ++i) {
-            const AudioOutputDevice &dev = AudioOutputDevice::fromIndex(deviceList.at(i));
-            if (callSetOutputDevice(this, dev)) {
-                handleAutomaticDeviceChange(dev, AudioOutputPrivate::FallbackChange);
-                return; // found one that works
+        // if the output device is not available and the device was not explicitly set
+        // There is no need to set the output device initially if PA is used as
+        // we know it will not work (stream doesn't exist yet) and that this will be
+        // handled by _k_deviceChanged()
+        if (!callSetOutputDevice(this, device) && !outputDeviceOverridden) {
+            // fall back in the preference list of output devices
+            QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
+            if (deviceList.isEmpty()) {
+                return;
             }
+            for (int i = 0; i < deviceList.count(); ++i) {
+                const AudioOutputDevice &dev = AudioOutputDevice::fromIndex(deviceList.at(i));
+                if (callSetOutputDevice(this, dev)) {
+                    handleAutomaticDeviceChange(dev, AudioOutputPrivate::FallbackChange);
+                    return; // found one that works
+                }
+            }
+            // if we get here there is no working output device. Tell the backend.
+            const AudioOutputDevice none;
+            callSetOutputDevice(this, none);
+            handleAutomaticDeviceChange(none, FallbackChange);
         }
-        // if we get here there is no working output device. Tell the backend.
-        const AudioOutputDevice none;
-        callSetOutputDevice(this, none);
-        handleAutomaticDeviceChange(none, FallbackChange);
-    }
 #endif //QT_NO_PHONON_SETTINGSGROUP
+    }
 }
 
 void AudioOutputPrivate::_k_volumeChanged(qreal newVolume)
 {
+    volume = pow(newVolume, LOUDNESS_TO_VOLTAGE_EXPONENT);
     if (!muted) {
         Q_Q(AudioOutput);
-        emit q->volumeChanged(pow(newVolume, qreal(0.67)));
+        emit q->volumeChanged(volume);
     }
+}
+
+void AudioOutputPrivate::_k_mutedChanged(bool newMuted)
+{
+    muted = newMuted;
+    Q_Q(AudioOutput);
+    emit q->mutedChanged(newMuted);
 }
 
 void AudioOutputPrivate::_k_revertFallback()
@@ -389,32 +428,31 @@ void AudioOutputPrivate::_k_deviceListChanged()
 #endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
-void AudioOutputPrivate::_k_deviceChanged(QString inStreamUuid, int deviceIndex)
+void AudioOutputPrivate::_k_deviceChanged(int deviceIndex)
 {
-    // Note that this method is only used by PulseAudio at present.
-    if (inStreamUuid == streamUuid) {
-        // 1. Check to see if we are overridden. If we are, and devices do not match,
-        //    then try and apply our own device as the output device.
-        //    We only do this the first time
-        if (outputDeviceOverridden && forceMove) {
-            forceMove = false;
-            const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
-            if (currentDevice != device) {
-                if (!callSetOutputDevice(this, device)) {
-                    // What to do if we are overridden and cannot change to our preferred device?
-                }
+    // NB that this method is only used by PulseAudio at present.
+
+    // 1. Check to see if we are overridden. If we are, and devices do not match,
+    //    then try and apply our own device as the output device.
+    //    We only do this the first time
+    if (outputDeviceOverridden && forceMove) {
+        forceMove = false;
+        const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
+        if (currentDevice != device) {
+            if (!callSetOutputDevice(this, device)) {
+                // What to do if we are overridden and cannot change to our preferred device?
             }
         }
-        // 2. If we are not overridden, then we need to update our perception of what
-        //    device we are using. If the devices do not match, something lower in the
-        //    stack is overriding our preferences (e.g. a per-application stream preference,
-        //    specific application move, priority list changed etc. etc.)
-        else if (!outputDeviceOverridden) {
-            const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
-            if (currentDevice != device) {
-                // The device is not what we think it is, so lets say what is happening.
-                handleAutomaticDeviceChange(currentDevice, SoundSystemChange);
-            }
+    }
+    // 2. If we are not overridden, then we need to update our perception of what
+    //    device we are using. If the devices do not match, something lower in the
+    //    stack is overriding our preferences (e.g. a per-application stream preference,
+    //    specific application move, priority list changed etc. etc.)
+    else if (!outputDeviceOverridden) {
+        const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
+        if (currentDevice != device) {
+            // The device is not what we think it is, so lets say what is happening.
+            handleAutomaticDeviceChange(currentDevice, SoundSystemChange);
         }
     }
 }

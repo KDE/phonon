@@ -34,7 +34,7 @@ namespace Phonon
 {
     class AbstractAudioOutputPrivate;
 
-    /** \class AbstractAudioOutput abstractaudiooutput.h Phonon/AbstractAudioOutput
+    /** \class AbstractAudioOutput abstractaudiooutput.h phonon/AbstractAudioOutput
     * Common base class for all audio outputs.
     *
     * \see AudioOutput

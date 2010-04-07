@@ -32,7 +32,7 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
-/** \class SwiftSlider swiftslider_p.h Phonon/SwiftSlider
+/** \class SwiftSlider swiftslider_p.h phonon/SwiftSlider
  * \short Modified QSlider that allows sudden/quick moves instead of stepped moves ("Click'n'Go" QSlider)
  *
  * This is an internal class used by SeekSlider and VolumeSlider.
