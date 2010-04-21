@@ -19,7 +19,7 @@ include(PhononMacros)
 include(MacroLogFeature)
 include(MacroOptionalFindPackage)
 
-set(QT_MIN_VERSION 4.4.0)
+set(QT_MIN_VERSION 4.6.0)
 find_package(Qt4 REQUIRED)
 if (NOT QT_QTDBUS_FOUND)
    message(STATUS "Warning: Phonon won't be compiled with DBus support.")
