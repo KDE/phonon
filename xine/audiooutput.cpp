@@ -48,6 +48,7 @@ namespace Xine
 
 AudioOutput::AudioOutput(QObject *parent)
     : AbstractAudioOutput(new AudioOutputXT, parent)
+    , m_volume(1.0)
 {
 }
 
