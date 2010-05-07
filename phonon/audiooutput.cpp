@@ -131,6 +131,9 @@ void AudioOutputPrivate::createBackendObject()
         return;
     Q_Q(AudioOutput);
     m_backendObject = Factory::createAudioOutput(q);
+    // (cg) Is it possible that PulseAudio initialisation means that the device here is not valid?
+    // User reports seem to suggest this possibility but I can't see how :s.
+    // See other comment and check for isValid() in handleAutomaticDeviceChange()
     device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
     if (m_backendObject) {
         setupBackendObject();
@@ -504,17 +507,22 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     case SoundSystemChange:
         {
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-        if (device1.property("available").toBool()) {
-            const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
-                    "which has higher preference or is specifically configured for this stream.</html>").arg(device2.name());
-            Platform::notification("AudioDeviceFallback", text,
-                    QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
-                    q, SLOT(_k_revertFallback()));
-        } else {
-            const QString &text =
-                AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
-                        "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name());
-            Platform::notification("AudioDeviceFallback", text);
+        // If device1 is not "valid" this indicates that the preferences used to select
+        // a device was perhaps not available when this object was created (although
+        // I can't quite work out how that would be....)
+        if (device1.isValid()) {
+            if (device1.property("available").toBool()) {
+                const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
+                        "which has higher preference or is specifically configured for this stream.</html>").arg(device2.name());
+                Platform::notification("AudioDeviceFallback", text,
+                        QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
+                        q, SLOT(_k_revertFallback()));
+            } else {
+                const QString &text =
+                    AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
+                            "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name());
+                Platform::notification("AudioDeviceFallback", text);
+            }
         }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
         //outputDeviceOverridden = true;
