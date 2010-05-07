@@ -400,7 +400,7 @@ static void ext_device_manager_subscribe_cb(pa_context *c, void *) {
 }
 #endif
 
-void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata) {
+static void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *userdata) {
     Q_UNUSED(userdata);
     Q_ASSERT(c);
 
@@ -443,7 +443,7 @@ void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, void *us
     }
 }
 
-void source_output_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata) {
+static void source_output_cb(pa_context *c, const pa_source_output_info *i, int eol, void *userdata) {
     Q_UNUSED(userdata);
     Q_ASSERT(c);
 
