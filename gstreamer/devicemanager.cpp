@@ -82,13 +82,21 @@ DeviceManager::DeviceManager(Backend *backend)
 
     PulseSupport *pulse = PulseSupport::getInstance();
     m_audioSink = qgetenv("PHONON_GST_AUDIOSINK");
-    if (m_audioSink.isEmpty()) {
+    if (m_audioSink.isEmpty())
         m_audioSink = settings.value(QLatin1String("audiosink"), "Auto").toByteArray().toLower();
-        if (m_audioSink == "auto" && pulse->isActive())
-            m_audioSink = "pulsesink";
-    }
-    if ("pulsesink" != m_audioSink)
+
+    if ("pulsesink" == m_audioSink && !pulse->isActive()) {
+        // If pulsesink is specifically requested, but not active, then
+        // fall back to auto.
+        m_audioSink = "auto";
+    } else if (m_audioSink == "auto" && pulse->isActive()) {
+        // We favour specific PA support if it's active and we're in 'auto' mode
+        // (although it may still be disabled if the pipeline cannot be made)
+        m_audioSink = "pulsesink";
+    } else if (m_audioSink != "pulsesink") {
+        // Otherwise, PA should not be used.
         pulse->enable(false);
+    }
 
     m_videoSinkWidget = qgetenv("PHONON_GST_VIDEOMODE");
     if (m_videoSinkWidget.isEmpty()) {
@@ -234,9 +242,19 @@ GstElement *DeviceManager::createAudioSink(Category category)
             sink = gst_element_factory_make (m_audioSink, NULL);
             if (canOpenDevice(sink))
                 m_backend->logMessage(QString("AudioOutput using %0").arg(QString::fromUtf8(m_audioSink)));
-            else if (sink) {
-                gst_object_unref(sink);
-                sink = 0;
+            else {
+                if (sink) {
+                    gst_object_unref(sink);
+                    sink = 0;
+                }
+                if ("pulsesink" == m_audioSink) {
+                    // We've tried to use PulseAudio support, but the GST plugin
+                    // doesn't exits. Let's try again, but not use PA support this time.
+                    m_backend->logMessage("PulseAudio support failed. Falling back to 'auto'");
+                    PulseSupport::getInstance()->enable(false);
+                    m_audioSink = "auto";
+                    sink = createAudioSink();
+                }
             }
         }
     }
