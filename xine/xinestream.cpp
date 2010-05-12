@@ -257,14 +257,6 @@ bool XineStream::xineOpen(Phonon::State newstate)
     }
 #endif
 
-    // FIXME: Make Phonon prefer KIO for all remote URLs, and remove all these hacks.
-    if (m_mrl.startsWith("http:/") || m_mrl.startsWith("https:/")) {
-        qDebug() << "Faking xine_open fail for http urls so we can use KIO, for cookies and stuff.";
-        error(Phonon::NormalError, tr("Cannot open media data at '<i>%1</i>'").arg(m_mrl.constData()));
-        return false;
-    }
-
-
     // xine_open can call functions from ByteStream which will block waiting for data.
     //debug() << Q_FUNC_INFO << "xine_open(" << m_mrl.constData() << ")";
     if (xine_open(m_stream, m_mrl.constData()) == 0) {
