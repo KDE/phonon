@@ -666,6 +666,19 @@ void PulseSupport::shutdown()
     }
 }
 
+void PulseSupport::debug()
+{
+#ifdef HAVE_PULSEAUDIO
+    logMessage(QString("Have we been initialised yet? %1").arg(s_instance ? "Yes" : "No"));
+    if (s_instance) {
+        logMessage(QString("Connected to PulseAudio? %1").arg(s_pulseActive ? "Yes" : "No"));
+        logMessage(QString("PulseAudio support 'Active'? %1").arg(s_instance->isActive() ? "Yes" : "No"));
+    }
+#else
+    logMessage("PulseAudio support not available.");
+#endif
+}
+
 PulseSupport::PulseSupport()
  : QObject(), mEnabled(false)
 {
@@ -780,7 +793,6 @@ void PulseSupport::connectToDaemon()
 bool PulseSupport::isActive()
 {
 #ifdef HAVE_PULSEAUDIO
-    //logMessage(QString("Enabled Breakdown: mEnabled: %1, s_pulseActive %2").arg(mEnabled).arg(s_pulseActive));
     return mEnabled && s_pulseActive;
 #else
     return false;
@@ -790,6 +802,9 @@ bool PulseSupport::isActive()
 void PulseSupport::enable(bool enabled)
 {
     mEnabled = enabled;
+#ifdef HAVE_PULSEAUDIO
+    logMessage(QString("Enabled Breakdown: mEnabled: %1, s_pulseActive %2").arg(mEnabled ? "Yes" : "No" ).arg(s_pulseActive ? "Yes" : "No"));
+#endif
 }
 
 QList<int> PulseSupport::objectDescriptionIndexes(ObjectDescriptionType type) const
@@ -997,7 +1012,8 @@ PulseStream *PulseSupport::registerCaptureStream(QString streamUuid, Category ca
 
 void PulseSupport::emitObjectDescriptionChanged(ObjectDescriptionType type)
 {
-    emit objectDescriptionChanged(type);
+    if (mEnabled)
+        emit objectDescriptionChanged(type);
 }
 
 bool PulseSupport::setOutputName(QString streamUuid, QString name) {
