@@ -674,8 +674,6 @@ void PulseSupport::debug()
         logMessage(QString("Connected to PulseAudio? %1").arg(s_pulseActive ? "Yes" : "No"));
         logMessage(QString("PulseAudio support 'Active'? %1").arg(s_instance->isActive() ? "Yes" : "No"));
     }
-#else
-    logMessage("PulseAudio support not available.");
 #endif
 }
 
