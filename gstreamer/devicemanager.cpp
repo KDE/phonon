@@ -392,10 +392,10 @@ void DeviceManager::updateDeviceList()
                 }
             }
         }
-    }
 
-    gst_element_set_state (audioSink, GST_STATE_NULL);
-    gst_object_unref (audioSink);
+        gst_element_set_state (audioSink, GST_STATE_NULL);
+        gst_object_unref (audioSink);
+    }
 }
 
 /**
