@@ -17,10 +17,19 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     Phonon::createPath(m_media, m_aoutput);
     Phonon::createPath(m_media, m_vwidget);
 
+    QHBoxLayout *urlLayout = new QHBoxLayout(this);
+
     m_urlEdit = new QLineEdit(this);
     m_urlEdit->setText("URL");
-    layout->addWidget(m_urlEdit);
+    urlLayout->addWidget(m_urlEdit);
     connect(m_urlEdit, SIGNAL(editingFinished()), this, SLOT(setUrl()));
+
+    m_browseButton = new QPushButton(this);
+    m_browseButton->setText("Browse...");
+    urlLayout->addWidget(m_browseButton);
+    connect(m_browseButton, SIGNAL(clicked()), this, SLOT(browseUrl()));
+
+    layout->addItem(urlLayout);
 
     m_playButton = new QPushButton(this);
     m_playButton->setText("Play");
@@ -45,5 +54,13 @@ void MediaPlayer::setUrl()
     m_media->play();
 }
 
-
+void MediaPlayer::browseUrl()
+{
+    QString newUrl = QFileDialog::getOpenFileName(this, "Open Media File", "~");
+    if (!newUrl.isEmpty())
+    {
+        m_urlEdit->setText(newUrl);
+        setUrl();
+    }
+}
 

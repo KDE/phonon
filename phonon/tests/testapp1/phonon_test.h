@@ -21,6 +21,7 @@ class MediaPlayer : public QWidget
 
     public slots:
         void setUrl();
+        void browseUrl();
 
     private:
         Phonon::MediaObject *m_media;
@@ -29,6 +30,7 @@ class MediaPlayer : public QWidget
         Phonon::VolumeSlider *m_volumeSlider;
 
         QPushButton *m_playButton;
+        QPushButton *m_browseButton;
         QLineEdit *m_urlEdit;
 };
 
