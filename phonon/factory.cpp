@@ -365,15 +365,20 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     Q_ASSERT(QCoreApplication::instance());
     const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
     if (!platform_plugin_env.isEmpty()) {
-        pDebug() << "Platform plugin path:" << platform_plugin_env;
+        pDebug() << Q_FUNC_INFO << "platform plugin path:" << platform_plugin_env;
         QPluginLoader pluginLoader(QString::fromLocal8Bit(platform_plugin_env.constData()));
         if (pluginLoader.load()) {
-            m_platformPlugin = qobject_cast<PlatformPlugin *>(pluginLoader.instance());
+            QObject *plInstance = pluginLoader.instance();
+            if (!plInstance)
+                pDebug() << Q_FUNC_INFO << "unable to grab root component object for the platform plugin";
+
+            m_platformPlugin = qobject_cast<PlatformPlugin *>(plInstance);
             if (m_platformPlugin) {
-                pDebug() << "Platform plugin" << m_platformPlugin->applicationName();
+                pDebug() << Q_FUNC_INFO << "platform plugin" << m_platformPlugin->applicationName();
                 return m_platformPlugin;
-            } else
-                pDebug() << "Platform plugin cast fail";
+            } else {
+                pDebug() << Q_FUNC_INFO << "platform plugin cast fail" << plInstance;
+            }
         }
     }
     const QString suffix(QLatin1String("/phonon_platform/"));
