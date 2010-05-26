@@ -76,7 +76,7 @@ if (QT_QTDBUS_FOUND)
 endif (QT_QTDBUS_FOUND)
 
 
-add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
+add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins" -DQT_NO_PHONON_PLATFORMPLUGIN)
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
 target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)

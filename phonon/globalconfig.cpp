@@ -394,9 +394,11 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
         BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-#else //QT_NO_SETTINGSGROUP
+#else //QT_NO_PHONON_SETTINGSGROUP
     return QList<int>();
-#endif //QT_NO_SETTINGSGROUP
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
+#endif //QT_NO_PHONON_SETTINGSGROUP
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
         if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
             // the platform plugin lists the audio devices for the platform
             // this list already is in default order (as defined by the platform plugin)
