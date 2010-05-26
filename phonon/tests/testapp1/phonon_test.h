@@ -13,23 +13,23 @@
 
 class MediaPlayer : public QWidget
 {
-  Q_OBJECT
-  
-  public:
-    MediaPlayer(QWidget *parent);
-    ~MediaPlayer();
-    
-  public slots:
-    void setUrl();
-    
-  private:
-    Phonon::MediaObject *m_media;
-    Phonon::AudioOutput *m_aoutput;
-    Phonon::VideoWidget *m_vwidget;
-    Phonon::VolumeSlider *m_volumeSlider;
-    
-    QPushButton *m_playButton;
-    QLineEdit *m_urlEdit;
+    Q_OBJECT
+
+    public:
+        MediaPlayer(QWidget *parent);
+        ~MediaPlayer();
+
+    public slots:
+        void setUrl();
+
+    private:
+        Phonon::MediaObject *m_media;
+        Phonon::AudioOutput *m_aoutput;
+        Phonon::VideoWidget *m_vwidget;
+        Phonon::VolumeSlider *m_volumeSlider;
+
+        QPushButton *m_playButton;
+        QLineEdit *m_urlEdit;
 };
 
 
