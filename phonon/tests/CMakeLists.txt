@@ -4,6 +4,13 @@ if(msvc)
 endif(msvc)
 add_subdirectory(fakebackend)
 
+# enable application tests
+option(PHONON_BUILD_APP_TESTS "Build the application tests")
+
+if(PHONON_BUILD_APP_TESTS)
+    add_subdirectory(testapp1)
+endif(PHONON_BUILD_APP_TESTS)
+
 MACRO(PHONON_UNIT_TESTS)
 	FOREACH(_testname ${ARGN})
 		phonon_add_unit_test(${_testname} ${_testname}.cpp)
