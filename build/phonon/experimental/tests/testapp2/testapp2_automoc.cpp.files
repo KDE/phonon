@@ -1,0 +1,14 @@
+SOURCES:
+/home/skelet/Projects/gsoc-phonon/phonon/experimental/tests/testapp2/main.cpp;/home/skelet/Projects/gsoc-phonon/phonon/experimental/tests/testapp2/phonon_test.cpp
+MOC_COMPILE_DEFINITIONS:
+_BSD_SOURCE;QT_NO_EXCEPTIONS
+MOC_DEFINITIONS:
+ -D_BSD_SOURCE -DQT_NO_EXCEPTIONS
+MOC_INCLUDES:
+/usr/include/QtXmlPatterns;/usr/include/QtWebKit;/usr/include/QtHelp;/usr/include/QtAssistant;/usr/include/QtDBus;/usr/include/QtTest;/usr/include/QtUiTools;/usr/include/QtScript;/usr/include/QtSvg;/usr/include/QtXml;/usr/include/QtSql;/usr/include/QtOpenGL;/usr/include/QtNetwork;/usr/include/QtDesigner;/usr/include/Qt3Support;/usr/include/QtGui;/usr/include/QtCore;/usr/include/Qt;/usr/share/qt4/mkspecs/default;/usr/include;/home/skelet/Projects/gsoc-phonon;/home/skelet/Projects/gsoc-phonon/includes;/home/skelet/Projects/gsoc-phonon/phonon;/home/skelet/Projects/gsoc-phonon/build;/home/skelet/Projects/gsoc-phonon/build/phonon
+CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE:
+ON
+CMAKE_BINARY_DIR:
+/home/skelet/Projects/gsoc-phonon/build
+CMAKE_SOURCE_DIR:
+/home/skelet/Projects/gsoc-phonon
