@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project.
 
-Copyright (C) 2009 Marek A. Ruszczyński <marek321@gmail.com>
+Copyright (C) 2009 Marek A. Ruszczynski <marek321@gmail.com>
 
 This library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -20,8 +20,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "abstractvideorenderer.h"
 #include "compointer.h"
-
-#include <Mfidl.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -46,18 +44,6 @@ namespace Phonon
             bool isNative() const;
         private:
             QWidget *m_target;
-
-            template <typename T> ComPointer<T> getService(REFGUID guidService, REFIID riid) const
-            {
-                ComPointer<IMFGetService> getService(m_filter, IID_IMFGetService);
-                Q_ASSERT(getService);
-                T *ptr = 0;
-                HRESULT hr = getService->GetService(guidService, riid, (void **) &ptr);
-                if (!SUCCEEDED(hr) || ptr == 0)
-                    Q_ASSERT(!SUCCEEDED(hr) && ptr != 0);
-                ComPointer<T> service(ptr);
-                return service;
-            }
         };
     }
 }
