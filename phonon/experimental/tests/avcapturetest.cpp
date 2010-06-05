@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <Qt/qobject.h>
 #include <Qt/qwidget.h>
+#include <Qt/qlist.h>
 #include <Qt/qdebug.h>
 #include <QtTest/QTest>
 #include <phonon/Global>
@@ -52,8 +53,13 @@ void AVCaptureTest::testDeviceList()
 {
     // Write info
     Phonon::Experimental::GlobalConfig pgc;
-    qDebug() << "Device list for audio capture music" << pgc.audioCaptureDeviceListFor(Phonon::MusicCategory);
-    qDebug() << "Device list for video capture" << pgc.videoCaptureDeviceListFor(Phonon::NoCategory);
+    QList<int> aoList = pgc.audioOutputDeviceListFor(Phonon::NoCategory);
+    QList<int> acList = pgc.audioCaptureDeviceListFor(Phonon::NoCategory);
+    QList<int> vcList = pgc.videoCaptureDeviceListFor(Phonon::NoCategory);
+    qDebug() << "Device list for audio output" << aoList;
+    qDebug() << "Device list for audio capture" << acList;
+    qDebug() << "Device list for video capture" << vcList;
+    QHash<QString, QByteArray> info;
 }
 
 
