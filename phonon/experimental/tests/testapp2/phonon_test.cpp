@@ -11,7 +11,7 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     m_vwidget->setMinimumSize(QSize(400, 300));
     layout->addWidget(m_vwidget);
 
-    m_aoutput = new Phonon::AudioOutput(Phonon::VideoCategory, this);
+    m_aoutput = new Phonon::AudioOutput();
 
     m_media = new Phonon::MediaObject();
 
@@ -42,10 +42,6 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     m_volumeSlider->setAudioOutput(m_aoutput);
 
     setLayout(layout);
-
-    Phonon::Experimental::GlobalConfig pgc;
-    qDebug() << "Device list for audio capture music" << pgc.audioCaptureDeviceListFor(Phonon::MusicCategory);
-    qDebug() << "Device list for video capture" << pgc.videoCaptureDeviceListFor(Phonon::NoCategory);
 }
 
 MediaPlayer::~MediaPlayer()
