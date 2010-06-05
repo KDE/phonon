@@ -45,6 +45,9 @@ public:
     QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
     int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
 
+    QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
+    QHash<QByteArray, QVariant> audioCaptureDeviceProperties(int index) const;
+
 Q_SIGNALS:
     void videoCaptureDeviceConfigChanged();
 };

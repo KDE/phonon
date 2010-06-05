@@ -11,7 +11,7 @@
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
 #include <phonon/VideoWidget>
-#include <experimental/globalconfig.h>
+#include <../globalconfig.h>
 
 using namespace std;
 using namespace Phonon::Experimental;
@@ -51,7 +51,7 @@ void AVCaptureTest::cleanupTestCase()
 
 void AVCaptureTest::testDeviceList()
 {
-    // Write info
+    // Write device indices
     Phonon::Experimental::GlobalConfig pgc;
     QList<int> aoList = pgc.audioOutputDeviceListFor(Phonon::NoCategory);
     QList<int> acList = pgc.audioCaptureDeviceListFor(Phonon::NoCategory);
@@ -59,7 +59,16 @@ void AVCaptureTest::testDeviceList()
     qDebug() << "Device list for audio output" << aoList;
     qDebug() << "Device list for audio capture" << acList;
     qDebug() << "Device list for video capture" << vcList;
-    QHash<QString, QByteArray> info;
+
+    // Write device properties
+    QHash<QByteArray, QVariant> info;
+    int index;
+    foreach(index, aoList)
+    {
+        info = pgc.audioOutputDeviceProperties(index);
+        qDebug() << "Device properties for audio output" << index << ":";
+        qDebug() << info;
+    }
 }
 
 

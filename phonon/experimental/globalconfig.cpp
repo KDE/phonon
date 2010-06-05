@@ -28,6 +28,8 @@
 #include "../phonondefs_p.h"
 #include "../backendinterface.h"
 #include "../qsettingsgroup_p.h"
+#include "../platformplugin.h"
+#include "pulsesupport.h"
 
 #include <QtCore/QList>
 #include <QtCore/QVariant>
@@ -125,6 +127,36 @@ int GlobalConfig::videoCaptureDeviceFor(Phonon::Category category, int override)
     if (ret.isEmpty())
         return -1;
     return ret.first();
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index) const
+{
+    #ifndef QT_NO_PHONON_SETTINGSGROUP
+
+    // Try a pulseaudio device
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive())
+        return pulse->objectDescriptionProperties(Phonon::AudioOutputDeviceType, index);
+
+    #ifndef QT_NO_PHONON_PLATFORMPLUGIN
+    // Try a device from the platform
+    if (PlatformPlugin *platformPlugin = Factory::platformPlugin())
+        return platformPlugin->objectDescriptionProperties(Phonon::AudioOutputDeviceType, index);
+    #endif //QT_NO_PHONON_PLATFORMPLUGIN
+
+    // Try a device from the backend
+    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
+    if (backendIface)
+        return backendIface->objectDescriptionProperties(Phonon::AudioOutputDeviceType, index);
+
+    #endif // QT_NO_PHONON_SETTINGSGROUP
+
+    return QHash<QByteArray, QVariant>();
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index) const
+{
+    return QHash<QByteArray, QVariant>();
 }
 
 } // namespace Experimental
