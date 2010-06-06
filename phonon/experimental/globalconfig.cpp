@@ -145,27 +145,35 @@ QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index
 
 QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::Experimental::ObjectDescriptionType deviceType, int index) const
 {
+    QHash<QByteArray, QVariant> props;
+
     #ifndef QT_NO_PHONON_SETTINGSGROUP
 
     // Try a pulseaudio device
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive())
-        return pulse->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+        props = pulse->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+    if (!props.isEmpty())
+        return props;
 
     #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     // Try a device from the platform
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin())
-        return platformPlugin->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+        props = platformPlugin->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+    if (!props.isEmpty())
+        return props;
     #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
     // Try a device from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
     if (backendIface)
-        return backendIface->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+        props = backendIface->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+    if (!props.isEmpty())
+        return props;
 
     #endif // QT_NO_PHONON_SETTINGSGROUP
 
-    return QHash<QByteArray, QVariant>();
+    return props;
 }
 
 } // namespace Experimental
