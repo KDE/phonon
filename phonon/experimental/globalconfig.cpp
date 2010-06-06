@@ -24,7 +24,6 @@
 #include "../globalconfig_p.h"
 
 #include "../factory_p.h"
-#include "objectdescription.h"
 #include "../phonondefs_p.h"
 #include "../backendinterface.h"
 #include "../qsettingsgroup_p.h"
@@ -131,31 +130,41 @@ int GlobalConfig::videoCaptureDeviceFor(Phonon::Category category, int override)
 
 QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index) const
 {
+    return deviceProperties(static_cast<Phonon::Experimental::ObjectDescriptionType>(AudioOutputDeviceType), index);
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index) const
+{
+    return deviceProperties(static_cast<Phonon::Experimental::ObjectDescriptionType>(AudioCaptureDeviceType), index);
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index) const
+{
+    return deviceProperties(VideoCaptureDeviceType, index);
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::Experimental::ObjectDescriptionType deviceType, int index) const
+{
     #ifndef QT_NO_PHONON_SETTINGSGROUP
 
     // Try a pulseaudio device
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive())
-        return pulse->objectDescriptionProperties(Phonon::AudioOutputDeviceType, index);
+        return pulse->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
 
     #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     // Try a device from the platform
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin())
-        return platformPlugin->objectDescriptionProperties(Phonon::AudioOutputDeviceType, index);
+        return platformPlugin->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
     #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
     // Try a device from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
     if (backendIface)
-        return backendIface->objectDescriptionProperties(Phonon::AudioOutputDeviceType, index);
+        return backendIface->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
 
     #endif // QT_NO_PHONON_SETTINGSGROUP
 
-    return QHash<QByteArray, QVariant>();
-}
-
-QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index) const
-{
     return QHash<QByteArray, QVariant>();
 }
 

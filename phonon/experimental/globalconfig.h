@@ -27,6 +27,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QSettings>
 
 #include "export.h"
+#include "objectdescription.h"
 #include "../phononnamespace.h.in"
 #include "../globalconfig.h"
 
@@ -47,6 +48,9 @@ public:
 
     QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
     QHash<QByteArray, QVariant> audioCaptureDeviceProperties(int index) const;
+    QHash<QByteArray, QVariant> videoCaptureDeviceProperties(int index) const;
+    QHash<QByteArray, QVariant> deviceProperties(Phonon::Experimental::ObjectDescriptionType deviceType, int index) const;
+
 
 Q_SIGNALS:
     void videoCaptureDeviceConfigChanged();
