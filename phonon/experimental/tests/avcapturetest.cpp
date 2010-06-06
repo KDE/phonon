@@ -21,12 +21,15 @@ class AVCaptureTest : public QObject
     Q_OBJECT
     private slots:
         void initTestCase();
-        void testDeviceList();
+        void testAudioOutput();
+        void testAudioCapture();
+        void testVideoOutput();
         void cleanupTestCase();
     private:
         Phonon::MediaObject *m_media;
         Phonon::AudioOutput *m_aout;
         Phonon::VideoWidget *m_vwid;
+        Phonon::Experimental::GlobalConfig *m_pgc;
 };
 
 
@@ -38,36 +41,73 @@ void AVCaptureTest::initTestCase()
 
     Phonon::createPath(m_media, m_vwid);
     Phonon::createPath(m_media, m_aout);
+
+    m_pgc = new Phonon::Experimental::GlobalConfig();
 }
 
 
 void AVCaptureTest::cleanupTestCase()
 {
+    delete m_pgc;
     delete m_aout;
     delete m_vwid;
     delete m_media;
 }
 
 
-void AVCaptureTest::testDeviceList()
+void AVCaptureTest::testAudioOutput()
 {
     // Write device indices
-    Phonon::Experimental::GlobalConfig pgc;
-    QList<int> aoList = pgc.audioOutputDeviceListFor(Phonon::NoCategory);
-    QList<int> acList = pgc.audioCaptureDeviceListFor(Phonon::NoCategory);
-    QList<int> vcList = pgc.videoCaptureDeviceListFor(Phonon::NoCategory);
+    QList<int> aoList = m_pgc->audioOutputDeviceListFor(Phonon::NoCategory);
     qDebug() << "Device list for audio output" << aoList;
-    qDebug() << "Device list for audio capture" << acList;
-    qDebug() << "Device list for video capture" << vcList;
 
     // Write device properties
     QHash<QByteArray, QVariant> info;
     int index;
     foreach(index, aoList)
     {
-        info = pgc.audioOutputDeviceProperties(index);
+        info = m_pgc->audioOutputDeviceProperties(index);
         qDebug() << "Device properties for audio output" << index << ":";
         qDebug() << info;
+        QVERIFY(!info.isEmpty());
+    }
+}
+
+
+void AVCaptureTest::testAudioCapture()
+{
+    // Write device indices
+    QList<int> acList = m_pgc->audioCaptureDeviceListFor(Phonon::NoCategory);
+    qDebug() << "Device list for audio capture" << acList;
+
+    // Write device properties
+    QHash<QByteArray, QVariant> info;
+    int index;
+    foreach(index, acList)
+    {
+        info = m_pgc->audioCaptureDeviceProperties(index);
+        qDebug() << "Device properties for audio capture" << index << ":";
+        qDebug() << info;
+        QVERIFY(!info.isEmpty());
+    }
+}
+
+
+void AVCaptureTest::testVideoOutput()
+{
+    // Write device indices
+    QList<int> vcList = m_pgc->videoCaptureDeviceListFor(Phonon::NoCategory);
+    qDebug() << "Device list for video capture" << vcList;
+
+    // Write device properties
+    QHash<QByteArray, QVariant> info;
+    int index;
+    foreach(index, vcList)
+    {
+        info = m_pgc->videoCaptureDeviceProperties(index);
+        qDebug() << "Device properties for video capture" << index << ":";
+        qDebug() << info;
+        QVERIFY(!info.isEmpty());
     }
 }
 
