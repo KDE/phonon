@@ -67,7 +67,7 @@ namespace Phonon
             }
             return ret;
         }
-                
+
 
 /*
         static HRESULT saveToFile(Graph graph, const QString &filepath)
@@ -110,7 +110,7 @@ namespace Phonon
         MediaGraph::MediaGraph(MediaObject *mo, short index) :
             m_graph(CLSID_FilterGraph, IID_IGraphBuilder),
             m_fakeSource(new FakeSource()),
-            m_hasVideo(false), m_hasAudio(false), m_connectionsDirty(false), 
+            m_hasVideo(false), m_hasAudio(false), m_connectionsDirty(false),
             m_isStopping(false), m_isSeekable(false), m_result(S_OK),
             m_index(index), m_renderId(0), m_seekId(0),
             m_currentTime(0), m_totalTime(0), m_mediaObject(mo)
@@ -352,7 +352,7 @@ namespace Phonon
             m_isStopping = true;
             //special case here because we want stopped to be synchronous
             m_graph->Abort();
-            m_mediaControl->Stop(); 
+            m_mediaControl->Stop();
             OAFilterState dummy;
             //this will wait until the change is effective
             m_mediaControl->GetState(INFINITE, &dummy);
@@ -618,7 +618,7 @@ namespace Phonon
             bool ret = false;
             const QList<InputPin> inputs = BackendNode::pins(sink->filter(m_index), PINDIR_INPUT);
             QList<OutputPin> outputs = BackendNode::pins(source == m_mediaObject ? m_fakeSource : source->filter(m_index), PINDIR_OUTPUT);
-            
+
             if (source == m_mediaObject) {
                 grabFilter(m_fakeSource);
             }
@@ -981,7 +981,7 @@ namespace Phonon
                 QAMMediaType type;
                 //for now we support only video and audio
                 hr = outputs.at(i)->ConnectionMediaType(&type);
-                if (SUCCEEDED(hr) && 
+                if (SUCCEEDED(hr) &&
                     type.majortype != MEDIATYPE_Video && type.majortype != MEDIATYPE_Audio) {
                         return false;
                 }
@@ -1008,27 +1008,27 @@ namespace Phonon
                 BSTR str;
                 HRESULT hr = mediaContent->get_AuthorName(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("ARTIST"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("ARTIST"), QString::fromUtf16((const unsigned short*) str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Title(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("TITLE"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("TITLE"), QString::fromUtf16((const unsigned short*) str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Description(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("DESCRIPTION"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("DESCRIPTION"), QString::fromUtf16((const unsigned short*) str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_Copyright(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("COPYRIGHT"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("COPYRIGHT"), QString::fromUtf16((const unsigned short*) str));
                     SysFreeString(str);
                 }
                 hr = mediaContent->get_MoreInfoText(&str);
                 if (SUCCEEDED(hr)) {
-                    ret.insert(QLatin1String("MOREINFO"), QString::fromWCharArray(str));
+                    ret.insert(QLatin1String("MOREINFO"), QString::fromUtf16((const unsigned short*) str));
                     SysFreeString(str);
                 }
             }
@@ -1064,10 +1064,10 @@ namespace Phonon
             }
 
             if (shouldSeek) {
-                m_mediaSeeking->SetPositions(&current, AM_SEEKING_AbsolutePositioning, 
+                m_mediaSeeking->SetPositions(&current, AM_SEEKING_AbsolutePositioning,
                     &time, AM_SEEKING_AbsolutePositioning);
             } else {
-                m_mediaSeeking->SetPositions(0, AM_SEEKING_NoPositioning, 
+                m_mediaSeeking->SetPositions(0, AM_SEEKING_NoPositioning,
                     &time, AM_SEEKING_AbsolutePositioning);
             }
         }

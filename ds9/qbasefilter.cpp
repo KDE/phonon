@@ -186,7 +186,7 @@ namespace Phonon
         {
             return m_state;
         }
-        
+
         IFilterGraph *QBaseFilter::graph() const
         {
             return m_graph;
@@ -221,7 +221,7 @@ namespace Phonon
                     *out = static_cast<IMediaSeeking*>(this);
                 } else if (iid == IID_IMediaPosition ||iid == IID_IDispatch) {
                     *out = static_cast<IMediaPosition*>(this);
-                } 
+                }
             } else {
                 *out = 0;
                 hr = E_NOINTERFACE;
@@ -358,7 +358,7 @@ namespace Phonon
         {
             QMutexLocker locker(&m_mutex);
             m_graph = graph;
-            m_name = QString::fromWCharArray(name);
+            m_name = QString::fromUtf16((unsigned short*) name);
             return S_OK;
         }
 
@@ -500,7 +500,7 @@ namespace Phonon
             return hr;
         }
 
-        STDMETHODIMP QBaseFilter::ConvertTimeFormat(LONGLONG *pTarget, 
+        STDMETHODIMP QBaseFilter::ConvertTimeFormat(LONGLONG *pTarget,
             const GUID *pTargetFormat, LONGLONG Source, const GUID *pSourceFormat)
         {
             IMediaSeeking *ms = getUpstreamMediaSeeking();
@@ -754,7 +754,7 @@ namespace Phonon
             return hr;
         }
 
-        STDMETHODIMP QBaseFilter::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, 
+        STDMETHODIMP QBaseFilter::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams,
             VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr)
         {
             IMediaPosition *mp = getUpstreamMediaPosition();
