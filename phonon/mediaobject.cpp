@@ -348,11 +348,6 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
 {
     Q_Q(MediaObject);
-    if (mediaSource.type() != MediaSource::Url) {
-        // special handling only necessary for URLs because of the fallback
-        emit q->stateChanged(newstate, oldstate);
-        return;
-    }
 
     if (errorOverride) {
         errorOverride = false;
@@ -360,6 +355,12 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
             return;
         }
         oldstate = ErrorState;
+    }
+
+    if (mediaSource.type() != MediaSource::Url) {
+        // special handling only necessary for URLs because of the fallback
+        emit q->stateChanged(newstate, oldstate);
+        return;
     }
 
     // backend MediaObject reached ErrorState, try a KioMediaSource
