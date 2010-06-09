@@ -25,13 +25,15 @@ you will probably want more control over the audio layer than Phonon will give y
 and you should probably be using something like <a href="http://jackaudio.org/">JACK</a>.
 
 @authors
-Matthias Kretz \<kretz@kde.org\><br>
-Ricardo Villalba \<rvm@escomposlinux.org\><br>
-Ian Monroe \<ian@monroe.nu\><br>
+Matthias Kretz \<kretz@kde.org\><br/>
+Ricardo Villalba \<rvm@escomposlinux.org\><br/>
+Ian Monroe \<ian@monroe.nu\><br/>
+Colin Guthrie \<phonon@colin.guthr.ie\><br/>
+Martin Sandsmark \<martin.sandsmark@kde.org\>
 Nokia Corporation and/or its subsidiary(-ies)
 
 @maintainers
-Matthias Kretz \<kretz@kde.org\>
+Martin Sandsmark \<martin.sandsmark@kde.org\>
 
 @licenses
 Libraries: @lgpl<br>
