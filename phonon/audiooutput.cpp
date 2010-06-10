@@ -30,6 +30,7 @@
 #include "platform_p.h"
 #include "pulsesupport.h"
 
+#include <QtCore/QUuid>
 #include <QtCore/qmath.h>
 
 #define PHONON_CLASSNAME AudioOutput
