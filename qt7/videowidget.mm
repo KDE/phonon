@@ -578,7 +578,7 @@ public:
                 PhononAutoReleasePool pool;
                 updateDrawFrameRect();
                 if (m_renderDrawWidget)
-                    dynamic_cast<QWidget *>(m_renderDrawWidget)->resize(size());
+                    static_cast<QWidget *>(m_renderDrawWidget)->resize(size());
                 break; }
             case QEvent::Paint:{
                 PhononAutoReleasePool pool;
