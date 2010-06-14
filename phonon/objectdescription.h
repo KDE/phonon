@@ -76,10 +76,11 @@ namespace Phonon
          * devices even when they are unplugged and provide a unique identifier
          * that can make backends use the same identifiers.
          */
-        AudioCaptureDeviceType
+        AudioCaptureDeviceType,
+
+        VideoCaptureDeviceType
 
         //VideoOutputDeviceType,
-        //VideoCaptureDeviceType,
         //AudioCodecType,
         //VideoCodecType,
         //ContainerFormatType,
