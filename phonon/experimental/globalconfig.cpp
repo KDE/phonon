@@ -48,7 +48,7 @@ static void filter(BackendInterface *backendIface, QList<int> *list, int whatToF
     QMutableListIterator<int> it(*list);
     while (it.hasNext()) {
         const QHash<QByteArray, QVariant> properties = backendIface->objectDescriptionProperties(
-                static_cast<Phonon::ObjectDescriptionType>(Phonon::Experimental::VideoCaptureDeviceType), it.next());
+                Phonon::VideoCaptureDeviceType, it.next());
         QVariant var;
         if (whatToFilter & FilterAdvancedDevices) {
             var = properties.value("isAdvanced");
@@ -85,7 +85,7 @@ QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, in
     }
 
     // this list already is in default order (as defined by the backend)
-    QList<int> defaultList = backendIface->objectDescriptionIndexes(static_cast<Phonon::ObjectDescriptionType>(Phonon::Experimental::VideoCaptureDeviceType));
+    QList<int> defaultList = backendIface->objectDescriptionIndexes(Phonon::VideoCaptureDeviceType);
     if (hideAdvancedDevices || (override & HideUnavailableDevices)) {
         filter(backendIface, &defaultList,
                 (hideAdvancedDevices ? FilterAdvancedDevices : 0) |
@@ -130,20 +130,20 @@ int GlobalConfig::videoCaptureDeviceFor(Phonon::Category category, int override)
 
 QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index) const
 {
-    return deviceProperties(static_cast<Phonon::Experimental::ObjectDescriptionType>(AudioOutputDeviceType), index);
+    return deviceProperties(AudioOutputDeviceType, index);
 }
 
 QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index) const
 {
-    return deviceProperties(static_cast<Phonon::Experimental::ObjectDescriptionType>(AudioCaptureDeviceType), index);
+    return deviceProperties(AudioCaptureDeviceType, index);
 }
 
 QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index) const
 {
-    return deviceProperties(VideoCaptureDeviceType, index);
+    return deviceProperties(Phonon::VideoCaptureDeviceType, index);
 }
 
-QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::Experimental::ObjectDescriptionType deviceType, int index) const
+QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const
 {
     QHash<QByteArray, QVariant> props;
 
@@ -152,14 +152,14 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::Experimental:
     // Try a pulseaudio device
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive())
-        props = pulse->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+        props = pulse->objectDescriptionProperties(deviceType, index);
     if (!props.isEmpty())
         return props;
 
     #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     // Try a device from the platform
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin())
-        props = platformPlugin->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+        props = platformPlugin->objectDescriptionProperties(deviceType, index);
     if (!props.isEmpty())
         return props;
     #endif //QT_NO_PHONON_PLATFORMPLUGIN
@@ -167,7 +167,7 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::Experimental:
     // Try a device from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
     if (backendIface)
-        props = backendIface->objectDescriptionProperties(static_cast<Phonon::ObjectDescriptionType>(deviceType), index);
+        props = backendIface->objectDescriptionProperties(deviceType, index);
     if (!props.isEmpty())
         return props;
 

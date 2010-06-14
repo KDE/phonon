@@ -49,7 +49,7 @@ public:
     QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
     QHash<QByteArray, QVariant> audioCaptureDeviceProperties(int index) const;
     QHash<QByteArray, QVariant> videoCaptureDeviceProperties(int index) const;
-    QHash<QByteArray, QVariant> deviceProperties(Phonon::Experimental::ObjectDescriptionType deviceType, int index) const;
+    QHash<QByteArray, QVariant> deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const;
 
 
 Q_SIGNALS:
