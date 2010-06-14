@@ -23,7 +23,6 @@ class AVCaptureTest : public QObject
         void initTestCase();
         void testAudioOutput();
         void testAudioCapture();
-        void testVideoOutput();
         void testVideoCapture();
         void cleanupTestCase();
     private:
@@ -88,25 +87,6 @@ void AVCaptureTest::testAudioCapture()
     {
         info = m_pgc->audioCaptureDeviceProperties(index);
         qDebug() << "Device properties for audio capture" << index << ":";
-        qDebug() << info;
-        QVERIFY(!info.isEmpty());
-    }
-}
-
-
-void AVCaptureTest::testVideoOutput()
-{
-    // Write device indices
-    QList<int> vcList = m_pgc->videoCaptureDeviceListFor(Phonon::NoCategory);
-    qDebug() << "Device list for video capture" << vcList;
-
-    // Write device properties
-    QHash<QByteArray, QVariant> info;
-    int index;
-    foreach(index, vcList)
-    {
-        info = m_pgc->videoCaptureDeviceProperties(index);
-        qDebug() << "Device properties for video capture" << index << ":";
         qDebug() << info;
         QVERIFY(!info.isEmpty());
     }
