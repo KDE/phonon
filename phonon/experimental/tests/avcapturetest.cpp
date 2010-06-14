@@ -24,6 +24,7 @@ class AVCaptureTest : public QObject
         void testAudioOutput();
         void testAudioCapture();
         void testVideoOutput();
+        void testVideoCapture();
         void cleanupTestCase();
     private:
         Phonon::MediaObject *m_media;
@@ -103,6 +104,25 @@ void AVCaptureTest::testVideoOutput()
     QHash<QByteArray, QVariant> info;
     int index;
     foreach(index, vcList)
+    {
+        info = m_pgc->videoCaptureDeviceProperties(index);
+        qDebug() << "Device properties for video capture" << index << ":";
+        qDebug() << info;
+        QVERIFY(!info.isEmpty());
+    }
+}
+
+
+void AVCaptureTest::testVideoCapture()
+{
+    // Write device indices
+    QList<int> acList = m_pgc->videoCaptureDeviceListFor(Phonon::NoCategory);
+    qDebug() << "Device list for video capture" << acList;
+
+    // Write device properties
+    QHash<QByteArray, QVariant> info;
+    int index;
+    foreach(index, acList)
     {
         info = m_pgc->videoCaptureDeviceProperties(index);
         qDebug() << "Device properties for video capture" << index << ":";
