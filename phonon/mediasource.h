@@ -94,6 +94,14 @@ class PHONON_EXPORT MediaSource
              */
             Stream,
             /**
+            * The MediaSource object describes a video capture device
+            */
+            VideoCaptureDeviceSource,
+            /**
+            * The MediaSource object describes an audio capture device
+            */
+            AudioCaptureDeviceSource,
+            /**
              * An empty MediaSource.
              *
              * It can be used to unload the current media from a MediaObject.

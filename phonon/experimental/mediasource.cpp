@@ -53,7 +53,7 @@ VideoCaptureDevice MediaSource::videoCaptureDevice() const
 }
 
 MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
-    : Phonon::MediaSource(*new MediaSourcePrivate(VideoCaptureDeviceSource))
+    : Phonon::MediaSource(*new MediaSourcePrivate(static_cast<Phonon::Experimental::MediaSource::Type>(VideoCaptureDeviceSource)))
 {
     S_D(MediaSource);
     d->videoCaptureDevice = videoDevice;
