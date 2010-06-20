@@ -213,6 +213,11 @@ Phonon::DiscType MediaSource::discType() const
     return d->discType;
 }
 
+Phonon::CaptureDeviceType MediaSource::captureDeviceType() const
+{
+    return d->cdevType;
+}
+
 QString MediaSource::deviceName() const
 {
     return d->deviceName;

@@ -257,8 +257,14 @@ class PHONON_EXPORT MediaSource
         Phonon::DiscType discType() const;
 
         /**
-         * Returns the device name of the MediaSource if type() == Disc; otherwise returns
-         * QString().
+         * Returns the type of capture device of the MediaSource if type() == CaptureDevice,
+         * otherwise returns \ref InvalidCaptureDevice.
+         */
+        Phonon::CaptureDeviceType captureDeviceType() const;
+
+        /**
+         * Returns the device name of the MediaSource if type() == Disc or CaptureDevice;
+         * otherwise returns QString().
          */
         QString deviceName() const;
 
