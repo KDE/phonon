@@ -61,6 +61,20 @@ namespace Experimental
         Float32Bit = 800
     };
 
+    enum VideoCaptureDeviceKind {
+        #ifdef HAVE_LIBV4L2
+        V4L,
+        #endif
+        NoVideoDevice = 0
+    };
+
+    enum AudioCaptureDeviceKind {
+        #ifdef HAVE_LIBV4L2
+        V4L,
+        #endif
+        NoAudioDevice = 0
+    };
+
 } // namespace Experimental
 } // namespace Phonon
 

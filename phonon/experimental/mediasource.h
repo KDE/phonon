@@ -26,6 +26,7 @@
 #include "../mediasource.h"
 #include "export.h"
 #include "objectdescription.h"
+#include "phononnamespace.h"
 
 namespace Phonon
 {
@@ -62,6 +63,8 @@ class PHONONEXPERIMENTAL_EXPORT MediaSource : public Phonon::MediaSource
 
         MediaSource(const VideoCaptureDevice &videoDevice);
         MediaSource(const QList<Phonon::MediaSource> &mediaList);
+        MediaSource(Phonon::Experimental::VideoCaptureDeviceKind deviceType, const QString &deviceName);
+        MediaSource(Phonon::Experimental::AudioCaptureDeviceKind deviceType, const QString &deviceName);
 
         QList<Phonon::MediaSource> substreams() const;
 };
