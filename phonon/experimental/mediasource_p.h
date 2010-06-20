@@ -40,9 +40,6 @@ class MediaSourcePrivate : public Phonon::MediaSourcePrivate
         {
         }
 
-        VideoCaptureDeviceKind vcType;
-        AudioCaptureDeviceKind acType;
-
         VideoCaptureDevice videoCaptureDevice;
         QList<Phonon::MediaSource> linkedSources;
 };

@@ -53,7 +53,7 @@ VideoCaptureDevice MediaSource::videoCaptureDevice() const
 }
 
 MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
-    : Phonon::MediaSource(*new MediaSourcePrivate(static_cast<Phonon::Experimental::MediaSource::Type>(VideoCaptureDeviceSource)))
+    : Phonon::MediaSource(*new MediaSourcePrivate(static_cast<Phonon::Experimental::MediaSource::Type>(CaptureDeviceSource)))
 {
     S_D(MediaSource);
     d->videoCaptureDevice = videoDevice;
@@ -69,37 +69,13 @@ MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
     }
 }
 
-MediaSource::MediaSource(Phonon::Experimental::VideoCaptureDeviceKind deviceType, const QString &deviceName)
-    : Phonon::MediaSource(*new MediaSourcePrivate(static_cast<Phonon::Experimental::MediaSource::Type>(VideoCaptureDeviceSource)))
-{
-    #ifdef HAVE_V4L2
-    if (deviceType == NoVideoDevice) {
-        d->type = Invalid;
-        return;
-    }
-    d->vcType = deviceType;
-    d->deviceName = deviceName;
-    #endif
-}
-
-MediaSource::MediaSource(Phonon::Experimental::AudioCaptureDeviceKind deviceType, const QString &deviceName)
-    : Phonon::MediaSource(*new MediaSourcePrivate(static_cast<Phonon::Experimental::MediaSource::Type>(AudioCaptureDeviceSource)))
-{
-    #ifdef HAVE_V4L2
-    if (deviceType == NoAudioDevice) {
-        d->type = Invalid;
-        return;
-    }
-    d->acType = deviceType;
-    d->deviceName = deviceName;
-    #endif
-}
-
 QList<Phonon::MediaSource> MediaSource::substreams() const
 {
     S_D(MediaSource);
     return d->linkedSources;
 }
+
+
 
 } // namespace Experimental
 } // namespace Phonon

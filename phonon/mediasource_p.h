@@ -61,6 +61,7 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         MediaSource::Type type;
         QUrl url;
         Phonon::DiscType discType;
+        Phonon::CaptureDeviceType cdevType;
         QString deviceName;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM

@@ -93,6 +93,18 @@ MediaSource::MediaSource(Phonon::DiscType dt, const QString &deviceName)
     d->deviceName = deviceName;
 }
 
+MediaSource::MediaSource(Phonon::CaptureDeviceType deviceType, const QString &deviceName)
+    : d(new MediaSourcePrivate(CaptureDeviceSource))
+{
+    if (deviceType == InvalidCaptureDevice) {
+        d->type = Invalid;
+        return;
+    }
+    d->cdevType = deviceType;
+    d->deviceName = deviceName;
+}
+
+
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 MediaSource::MediaSource(AbstractMediaStream *stream)
     : d(new MediaSourcePrivate(Stream))
