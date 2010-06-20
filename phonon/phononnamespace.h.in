@@ -93,11 +93,9 @@ namespace Phonon
      * Identifies the capture devices supported by MediaSource
      */
     enum CaptureDeviceType {
-        #ifdef HAVE_V4L
-        V4LVideo,
-        V4LAudio,
-        #endif
-        InvalidCaptureDevice
+        InvalidCaptureDevice = -1,
+        V4LVideo = 1,
+        V4LAudio = 2
     };
 
     /**
