@@ -32,6 +32,7 @@
 #include <QMultiMap>
 #include <QtDebug>
 #include <QMetaType>
+#include <QTextCodec>
 #include <QUrl>
 
 #include <cmath>
@@ -319,11 +320,13 @@ void MediaObject::setSource(const MediaSource &source)
 
 static QByteArray mrlEncode(QByteArray mrl)
 {
+    bool localeUnicode = qgetenv("LANG").contains("UTF"); // test this
+
+    unsigned char c;
     for (int i = 0; i < mrl.size(); ++i) {
-        const unsigned char c = static_cast<unsigned char>(mrl.at(i));
-        // we assume that the other invalid characters
-        // are already escaped due to the call to QUrl.toEncoded()
-        if (c == '#') {
+        c = mrl.at(i);
+        if ((localeUnicode && c=='#') || //TODO: remove this abomination in the far future when everyone has gotten sane locales :-D
+            (!localeUnicode && (c & 0x80 || c == '\\' || c < 32 || c == '%' || c == '#'))) {
             char enc[4];
             qsnprintf(enc, 4, "%%%02X", c);
             mrl = mrl.left(i) + QByteArray(enc, 3) + mrl.mid(i + 1);
@@ -357,9 +360,9 @@ void MediaObject::setSourceInternal(const MediaSource &source, HowToSetTheUrl ho
             return;
         }
         {
-            const QByteArray &mrl = (source.url().scheme() == QLatin1String("") ?
-                    "file:/" + mrlEncode (source.url().toEncoded()) :
-                    mrlEncode (source.url().toEncoded()));
+            const QByteArray &mrl = (source.url().scheme() == QLatin1String("file") ?
+                    "file:/" + mrlEncode (source.url().toLocalFile().toLocal8Bit()) :
+                    source.url().toEncoded());
             switch (how) {
                 case GaplessSwitch:
                     m_stream->gaplessSwitchTo(mrl);
