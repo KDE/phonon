@@ -4,12 +4,12 @@
 #include <Qt/QtCore>
 #include <Qt/QtGui>
 #include <KDE/KUrl>
-#include <phonon/AudioOutput>
-#include <phonon/VideoPlayer>
-#include <phonon/VideoWidget>
-#include <phonon/VolumeSlider>
-#include <phonon/MediaObject>
-#include <phonon/Global>
+#include <audiooutput.h>
+#include <videoplayer.h>
+#include <videowidget.h>
+#include <volumeslider.h>
+#include <mediaobject.h>
+#include <globalconfig.h>
 
 class MediaPlayer : public QWidget
 {

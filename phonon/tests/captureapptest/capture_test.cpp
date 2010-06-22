@@ -68,7 +68,7 @@ void MediaPlayer::setDeviceName(const QString &deviceName)
 
 void MediaPlayer::updateDeviceList()
 {
-    Phonon::Experimental::GlobalConfig gc;
+    Phonon::GlobalConfig gc;
     QHash<QByteArray, QVariant> info;
     QList<int> l = gc.videoCaptureDeviceListFor(Phonon::NoCategory);
 
