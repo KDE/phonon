@@ -232,7 +232,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
         return;
     }
 
-    pDebug() << Q_FUNC_INFO << newSource.url();
+    pDebug() << Q_FUNC_INFO << newSource.type() << newSource.url() << newSource.deviceName();
 
     stop(); // first call stop as that often is the expected state
             // for setting a new URL
