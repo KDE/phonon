@@ -1,6 +1,6 @@
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
-add_subdirectory(testapp2)
+add_subdirectory(captureapp)
 
 MACRO(PHONON_UNIT_TESTS)
 	FOREACH(_testname ${ARGN})
