@@ -27,8 +27,6 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QSettings>
 
 #include "export.h"
-#include "objectdescription.h"
-#include "../phononnamespace.h.in"
 #include "../globalconfig.h"
 
 QT_BEGIN_HEADER
@@ -43,13 +41,7 @@ class PHONONEXPERIMENTAL_EXPORT GlobalConfig : public Phonon::GlobalConfig
 {
     K_DECLARE_PRIVATE(Phonon::GlobalConfig)
 public:
-    QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
-    int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
 
-    QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
-    QHash<QByteArray, QVariant> audioCaptureDeviceProperties(int index) const;
-    QHash<QByteArray, QVariant> videoCaptureDeviceProperties(int index) const;
-    QHash<QByteArray, QVariant> deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const;
 
 
 Q_SIGNALS:

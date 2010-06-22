@@ -24,7 +24,6 @@
 #include "globalconfig_p.h"
 
 #include "factory_p.h"
-#include "objectdescription.h"
 #include "phonondefs_p.h"
 #include "platformplugin.h"
 #include "backendinterface.h"
@@ -445,6 +444,115 @@ int GlobalConfig::audioCaptureDeviceFor(Phonon::Category category, int override)
 }
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
+
+QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, int override) const
+{
+    K_D(const GlobalConfig);
+
+    //The devices need to be stored independently for every backend
+    const QSettingsGroup backendConfig(&d->config, QLatin1String("VideoCaptureDevice")); // + Factory::identifier());
+    const QSettingsGroup generalGroup(&d->config, QLatin1String("General"));
+    const bool hideAdvancedDevices = ((override & AdvancedDevicesFromSettings)
+    ? generalGroup.value(QLatin1String("HideAdvancedDevices"), true)
+    : static_cast<bool>(override & HideAdvancedDevices));
+
+    //First we lookup the available devices directly from the backend
+    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Phonon::Factory::backend());
+    if (!backendIface) {
+        return QList<int>();
+    }
+
+    // this list already is in default order (as defined by the backend)
+    QList<int> defaultList = backendIface->objectDescriptionIndexes(Phonon::VideoCaptureDeviceType);
+    if (hideAdvancedDevices || (override & HideUnavailableDevices)) {
+        filter(VideoCaptureDeviceType, backendIface, &defaultList,
+               (hideAdvancedDevices ? FilterAdvancedDevices : 0) |
+               ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
+               );
+    }
+
+    QString categoryKey = QLatin1String("Category") + QString::number(static_cast<int>(category));
+    if (!backendConfig.hasKey(categoryKey)) {
+        // no list in config for the given category
+        QString categoryKey = QLatin1String("Category") + QString::number(static_cast<int>(Phonon::NoCategory));
+        if (!backendConfig.hasKey(categoryKey)) {
+            // no list in config for NoCategory
+            return defaultList;
+        }
+    }
+
+    //Now the list from d->config
+    QList<int> deviceList = backendConfig.value(categoryKey, QList<int>());
+
+    //if there are devices in d->config that the backend doesn't report, remove them from the list
+    QMutableListIterator<int> i(deviceList);
+    while (i.hasNext()) {
+        if (0 == defaultList.removeAll(i.next())) {
+            i.remove();
+        }
+    }
+
+    //if the backend reports more devices that are not in d->config append them to the list
+    deviceList += defaultList;
+
+    return deviceList;
+}
+
+int GlobalConfig::videoCaptureDeviceFor(Phonon::Category category, int override) const
+{
+    QList<int> ret = videoCaptureDeviceListFor(category, override);
+    if (ret.isEmpty())
+        return -1;
+    return ret.first();
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const
+{
+    QHash<QByteArray, QVariant> props;
+
+    #ifndef QT_NO_PHONON_SETTINGSGROUP
+
+    // Try a pulseaudio device
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive())
+        props = pulse->objectDescriptionProperties(deviceType, index);
+    if (!props.isEmpty())
+        return props;
+
+    #ifndef QT_NO_PHONON_PLATFORMPLUGIN
+    // Try a device from the platform
+    if (PlatformPlugin *platformPlugin = Factory::platformPlugin())
+        props = platformPlugin->objectDescriptionProperties(deviceType, index);
+    if (!props.isEmpty())
+        return props;
+    #endif //QT_NO_PHONON_PLATFORMPLUGIN
+
+    // Try a device from the backend
+    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
+    if (backendIface)
+        props = backendIface->objectDescriptionProperties(deviceType, index);
+    if (!props.isEmpty())
+        return props;
+
+    #endif // QT_NO_PHONON_SETTINGSGROUP
+
+    return props;
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index) const
+{
+    return deviceProperties(AudioOutputDeviceType, index);
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index) const
+{
+    return deviceProperties(AudioCaptureDeviceType, index);
+}
+
+QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index) const
+{
+    return deviceProperties(Phonon::VideoCaptureDeviceType, index);
+}
 
 } // namespace Phonon
 
