@@ -360,6 +360,12 @@ int GlobalConfig::audioOutputDeviceFor(Phonon::Category category, int override) 
     return -1;
 }
 
+QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index) const
+{
+    return deviceProperties(AudioOutputDeviceType, index);
+}
+
+
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
 void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order)
 {
@@ -464,9 +470,15 @@ int GlobalConfig::audioCaptureDeviceFor(Phonon::Category category, int override)
         return -1;
     return ret.first();
 }
+
+QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index) const
+{
+    return deviceProperties(AudioCaptureDeviceType, index);
+}
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
 
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
 QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, int override) const
 {
     K_D(const GlobalConfig);
@@ -504,6 +516,12 @@ int GlobalConfig::videoCaptureDeviceFor(Phonon::Category category, int override)
     return ret.first();
 }
 
+QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index) const
+{
+    return deviceProperties(Phonon::VideoCaptureDeviceType, index);
+}
+#endif // QT_NO_PHONON_VIDEOCAPTURE
+
 QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const
 {
     QHash<QByteArray, QVariant> props;
@@ -537,20 +555,6 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescrip
     return props;
 }
 
-QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index) const
-{
-    return deviceProperties(AudioOutputDeviceType, index);
-}
-
-QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index) const
-{
-    return deviceProperties(AudioCaptureDeviceType, index);
-}
-
-QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index) const
-{
-    return deviceProperties(Phonon::VideoCaptureDeviceType, index);
-}
 
 } // namespace Phonon
 
