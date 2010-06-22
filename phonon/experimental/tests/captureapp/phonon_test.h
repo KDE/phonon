@@ -32,6 +32,8 @@ class MediaPlayer : public QWidget
         Phonon::VolumeSlider *m_volumeSlider;
 
         QPushButton *m_playButton;
+        QPushButton *m_pauseButton;
+        QPushButton *m_stopButton;
         QComboBox *m_deviceNameCombo;
 };
 

@@ -32,8 +32,21 @@ MediaPlayer::MediaPlayer(QWidget *parent)
 
     m_playButton = new QPushButton(this);
     m_playButton->setText("Play");
-    layout->addWidget(m_playButton);
     connect(m_playButton, SIGNAL(clicked()), m_media, SLOT(play()));
+
+    m_pauseButton = new QPushButton(this);
+    m_pauseButton->setText("Pause");
+    connect(m_pauseButton, SIGNAL(clicked()), m_media, SLOT(pause()));
+
+    m_stopButton = new QPushButton(this);
+    m_stopButton->setText("Stop");
+    connect(m_stopButton, SIGNAL(clicked()), m_media, SLOT(stop()));
+
+    QHBoxLayout *buttonsLayout = new QHBoxLayout(this);
+    buttonsLayout->addWidget(m_playButton);
+    buttonsLayout->addWidget(m_pauseButton);
+    buttonsLayout->addWidget(m_stopButton);
+    layout->addItem(buttonsLayout);
 
     m_volumeSlider = new Phonon::VolumeSlider(this);
     layout->addWidget(m_volumeSlider);
