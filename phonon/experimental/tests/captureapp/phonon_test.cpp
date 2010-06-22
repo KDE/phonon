@@ -21,7 +21,7 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     QHBoxLayout *urlLayout = new QHBoxLayout(this);
 
     m_deviceNameEdit = new QLineEdit(this);
-    m_deviceNameEdit->setText("URL");
+    m_deviceNameEdit->setText("/dev/video0");
     urlLayout->addWidget(m_deviceNameEdit);
     connect(m_deviceNameEdit, SIGNAL(editingFinished()), this, SLOT(setDeviceName()));
 
