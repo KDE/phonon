@@ -8,7 +8,6 @@ add_subdirectory(fakebackend)
 option(PHONON_BUILD_APP_TESTS "Build the application tests")
 
 if(PHONON_BUILD_APP_TESTS)
-    add_subdirectory(testapp1)
 endif(PHONON_BUILD_APP_TESTS)
 
 MACRO(PHONON_UNIT_TESTS)
