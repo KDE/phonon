@@ -18,14 +18,16 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     Phonon::createPath(m_media, m_aoutput);
     Phonon::createPath(m_media, m_vwidget);
 
-    QHBoxLayout *urlLayout = new QHBoxLayout(this);
+    QHBoxLayout *deviceNameLayout = new QHBoxLayout(this);
 
-    m_deviceNameEdit = new QLineEdit(this);
-    m_deviceNameEdit->setText("/dev/video0");
-    urlLayout->addWidget(m_deviceNameEdit);
-    connect(m_deviceNameEdit, SIGNAL(editingFinished()), this, SLOT(setDeviceName()));
+    m_deviceNameCombo = new QComboBox(this);
+    m_deviceNameCombo->setEditable(true);
+    m_deviceNameCombo->setEditText("/dev/video0");
+    deviceNameLayout->addWidget(m_deviceNameCombo);
+    connect(m_deviceNameCombo, SIGNAL(activated(QString)), this, SLOT(setDeviceName(QString)));
+    updateDeviceList();
 
-    layout->addItem(urlLayout);
+    layout->addItem(deviceNameLayout);
 
     m_playButton = new QPushButton(this);
     m_playButton->setText("Play");
@@ -44,10 +46,27 @@ MediaPlayer::~MediaPlayer()
     delete m_aoutput;
 }
 
-void MediaPlayer::setDeviceName()
+void MediaPlayer::setDeviceName(const QString &deviceName)
 {
-    Phonon::MediaSource mediaSource(Phonon::V4LVideo, m_deviceNameEdit->text());
+    Phonon::MediaSource mediaSource(Phonon::V4LVideo, deviceName);
     m_media->setCurrentSource(mediaSource);
     m_media->play();
+}
+
+void MediaPlayer::updateDeviceList()
+{
+    Phonon::Experimental::GlobalConfig gc;
+    QHash<QByteArray, QVariant> info;
+    QList<int> l = gc.videoCaptureDeviceListFor(Phonon::NoCategory);
+
+    m_deviceNameCombo->clear();
+
+    int index;
+    foreach (index, l) {
+        info = gc.videoCaptureDeviceProperties(index);
+        if (info["v4l"].toBool() && info.contains("hwname")) {
+            m_deviceNameCombo->addItem(info["hwname"].toString());
+        }
+    }
 }
 

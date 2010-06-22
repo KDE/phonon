@@ -20,7 +20,10 @@ class MediaPlayer : public QWidget
         ~MediaPlayer();
 
     public slots:
-        void setDeviceName();
+        void setDeviceName( const QString& device);
+
+    private:
+        void updateDeviceList();
 
     private:
         Phonon::MediaObject *m_media;
@@ -29,7 +32,7 @@ class MediaPlayer : public QWidget
         Phonon::VolumeSlider *m_volumeSlider;
 
         QPushButton *m_playButton;
-        QLineEdit *m_deviceNameEdit;
+        QComboBox *m_deviceNameCombo;
 };
 
 
