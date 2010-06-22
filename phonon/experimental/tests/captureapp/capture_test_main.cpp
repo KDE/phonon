@@ -1,4 +1,4 @@
-#include "phonon_test.h"
+#include "capture_test.h"
 
 int main(int argc, char *argv[])
 {

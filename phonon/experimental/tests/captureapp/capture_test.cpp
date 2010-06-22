@@ -1,5 +1,5 @@
 
-#include "phonon_test.h"
+#include "capture_test.h"
 #include <experimental/globalconfig.h>
 
 MediaPlayer::MediaPlayer(QWidget *parent)
