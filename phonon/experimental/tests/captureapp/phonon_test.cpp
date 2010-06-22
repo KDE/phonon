@@ -9,6 +9,7 @@ MediaPlayer::MediaPlayer(QWidget *parent)
 
     m_vwidget = new Phonon::VideoWidget(this);
     m_vwidget->setMinimumSize(QSize(400, 300));
+    m_vwidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(m_vwidget);
 
     m_aoutput = new Phonon::AudioOutput();
