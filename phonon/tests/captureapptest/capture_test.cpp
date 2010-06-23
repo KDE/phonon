@@ -4,6 +4,8 @@
 MediaPlayer::MediaPlayer(QWidget *parent)
 : QWidget(parent)
 {
+    m_deviceModel = NULL;
+
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     m_vwidget = new Phonon::VideoWidget(this);
@@ -21,10 +23,9 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     QHBoxLayout *deviceNameLayout = new QHBoxLayout(this);
 
     m_deviceNameCombo = new QComboBox(this);
-    m_deviceNameCombo->setEditable(true);
-    m_deviceNameCombo->setEditText("/dev/video0");
+    m_deviceNameCombo->setEditable(false);
     deviceNameLayout->addWidget(m_deviceNameCombo);
-    connect(m_deviceNameCombo, SIGNAL(activated(QString)), this, SLOT(setDeviceName(QString)));
+    connect(m_deviceNameCombo, SIGNAL(activated(int)), this, SLOT(setDeviceIndex(int)));
     updateDeviceList();
 
     layout->addItem(deviceNameLayout);
@@ -59,27 +60,21 @@ MediaPlayer::~MediaPlayer()
     delete m_aoutput;
 }
 
-void MediaPlayer::setDeviceName(const QString &deviceName)
+void MediaPlayer::setDeviceIndex(int index)
 {
-    Phonon::MediaSource mediaSource(Phonon::V4LVideo, deviceName);
+    QModelIndex mi = m_deviceModel->index(index, 0, QModelIndex());
+    Phonon::VideoCaptureDevice vc = m_deviceModel->modelData(mi);
+    Phonon::MediaSource mediaSource(Phonon::AudioCaptureDevice(), vc);
     m_media->setCurrentSource(mediaSource);
     m_media->play();
 }
 
 void MediaPlayer::updateDeviceList()
 {
-    Phonon::GlobalConfig gc;
-    QHash<QByteArray, QVariant> info;
-    QList<int> l = gc.videoCaptureDeviceListFor(Phonon::NoCategory);
+    QList<Phonon::VideoCaptureDevice> l = Phonon::BackendCapabilities::availableVideoCaptureDevices();
 
-    m_deviceNameCombo->clear();
-
-    int index;
-    foreach (index, l) {
-        info = gc.videoCaptureDeviceProperties(index);
-        if (info["v4l"].toBool() && info.contains("hwname")) {
-            m_deviceNameCombo->addItem(info["hwname"].toString());
-        }
-    }
+    if (!m_deviceModel)
+        m_deviceModel = new Phonon::VideoCaptureDeviceModel(l, 0);
+    m_deviceNameCombo->setModel(m_deviceModel);
 }
 

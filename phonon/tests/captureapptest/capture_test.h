@@ -4,12 +4,15 @@
 #include <Qt/QtCore>
 #include <Qt/QtGui>
 #include <KDE/KUrl>
+#include <backendcapabilities.h>
+#include <objectdescription.h>
 #include <audiooutput.h>
 #include <videoplayer.h>
 #include <videowidget.h>
 #include <volumeslider.h>
 #include <mediaobject.h>
 #include <globalconfig.h>
+#include <objectdescriptionmodel.h>
 
 class MediaPlayer : public QWidget
 {
@@ -20,7 +23,7 @@ class MediaPlayer : public QWidget
         ~MediaPlayer();
 
     public slots:
-        void setDeviceName( const QString& device);
+        void setDeviceIndex(int index);
 
     private:
         void updateDeviceList();
@@ -30,6 +33,7 @@ class MediaPlayer : public QWidget
         Phonon::AudioOutput *m_aoutput;
         Phonon::VideoWidget *m_vwidget;
         Phonon::VolumeSlider *m_volumeSlider;
+        Phonon::VideoCaptureDeviceModel *m_deviceModel;
 
         QPushButton *m_playButton;
         QPushButton *m_pauseButton;
