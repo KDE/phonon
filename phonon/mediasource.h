@@ -148,12 +148,17 @@ class PHONON_EXPORT MediaSource
         MediaSource(Phonon::DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
         /**
-         * Creates a MediaSource object that handles a capture device.
+         * Creates a MediaSource object for a capture device, directly from a device name.
          *
          * \param deviceType The type of capture device (video / audio / v4l) \ref CaptureDeviceType
          * \param deviceName A platform dependent device name.
          */
         MediaSource(Phonon::CaptureDeviceType deviceType, const QString &deviceName);
+
+        /**
+        * Creates a MediaSource object for capture devices.
+        */
+        MediaSource(const Phonon::AudioCaptureDevice& acDevice, const Phonon::VideoCaptureDevice& vcDevice);
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
@@ -181,11 +186,6 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(QIODevice *ioDevice); //krazy:exclude=explicit
 #endif
-
-        /**
-         * Creates a MediaSource object for capture devices.
-         */
-        //MediaSource(const AudioCaptureDevice &, const VideoCaptureDevice &);
 
         /**
          * Destroys the MediaSource object.
@@ -276,8 +276,8 @@ class PHONON_EXPORT MediaSource
         AbstractMediaStream *stream() const;
 #endif
 
-        //AudioCaptureDevice audioCaptureDevice() const;
-        //VideoCaptureDevice videoCaptureDevice() const;
+        AudioCaptureDevice audioCaptureDevice() const;
+        VideoCaptureDevice videoCaptureDevice() const;
 
 /*      post 4.0:
         MediaSource(const QList<MediaSource> &mediaList);

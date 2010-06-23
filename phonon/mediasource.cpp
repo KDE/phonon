@@ -104,6 +104,23 @@ MediaSource::MediaSource(Phonon::CaptureDeviceType deviceType, const QString &de
     d->deviceName = deviceName;
 }
 
+MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice, const Phonon::VideoCaptureDevice& vcDevice)
+    : d(new MediaSourcePrivate(CaptureDeviceSource))
+{
+    d->audioCaptureDevice = acDevice;
+    d->videoCaptureDevice = vcDevice;
+
+    // TODO handle audio capture device
+
+    // Check for a v4l video device
+    if (vcDevice.propertyNames().contains("v4l") && vcDevice.property("v4l").toBool()) {
+        d->cdevType = Phonon::V4LVideo;
+
+        if (vcDevice.propertyNames().contains("hwname"))
+            d->deviceName = vcDevice.property("hwname").toString();
+    }
+}
+
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 MediaSource::MediaSource(AbstractMediaStream *stream)
@@ -236,15 +253,15 @@ void MediaSourcePrivate::setStream(AbstractMediaStream *s)
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 
-//X AudioCaptureDevice MediaSource::audioCaptureDevice() const
-//X {
-//X     return d->audioCaptureDevice;
-//X }
-//X 
-//X VideoCaptureDevice MediaSource::videoCaptureDevice() const
-//X {
-//X     return d->videoCaptureDevice;
-//X }
+AudioCaptureDevice MediaSource::audioCaptureDevice() const
+{
+    return d->audioCaptureDevice;
+}
+
+VideoCaptureDevice MediaSource::videoCaptureDevice() const
+{
+    return d->videoCaptureDevice;
+}
 
 } // namespace Phonon
 

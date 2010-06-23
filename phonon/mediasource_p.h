@@ -72,8 +72,8 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         // StreamEventQueue where nobody answers.
         QPointer<AbstractMediaStream> stream;
 
-//        AudioCaptureDevice audioCaptureDevice;
-//        VideoCaptureDevice videoCaptureDevice;
+        AudioCaptureDevice audioCaptureDevice;
+        VideoCaptureDevice videoCaptureDevice;
         QIODevice *ioDevice;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         //QList<MediaSource> linkedSources;
