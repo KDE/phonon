@@ -97,6 +97,18 @@ QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
 }
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
+{
+    QList<VideoCaptureDevice> ret;
+    const QList<int> deviceIndexes = GlobalConfig().videoCaptureDeviceListFor(Phonon::NoCategory);
+    for (int i = 0; i < deviceIndexes.count(); ++i) {
+        ret.append(VideoCaptureDevice::fromIndex(deviceIndexes.at(i)));
+    }
+    return ret;
+}
+#endif //QT_NO_PHONON_VIDEOCAPTURE
+
 #ifndef QT_NO_PHONON_EFFECT
 QList<EffectDescription> BackendCapabilities::availableAudioEffects()
 {

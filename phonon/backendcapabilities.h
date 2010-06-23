@@ -85,6 +85,17 @@ namespace BackendCapabilities
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
             void availableAudioCaptureDevicesChanged();
 #endif //QT_NO_PHONON_AUDIOCAPTURE
+
+            /**
+             * This signal is emitted when video capture devices were plugged or
+             * unplugged.
+             *
+             * Check BackendCapabilities::availableVideoCaptureDevices to get the
+             * current list of available devices.
+             */
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+            void availableVideoCaptureDevicesChanged();
+#endif //QT_NO_PHONON_VIDEOCAPTURE
     };
 
     /**
@@ -100,6 +111,7 @@ namespace BackendCapabilities
      * \see Notifier::capabilitiesChanged()
      * \see Notifier::availableAudioOutputDevicesChanged()
      * \see Notifier::availableAudioCaptureDevicesChanged()
+     * \see Notifier::availableVideoCaptureDevicesChanged()
      */
     PHONON_EXPORT Notifier *notifier();
 
@@ -151,7 +163,7 @@ namespace BackendCapabilities
      * \return A list of VideoCaptureDevice objects that give a name and
      * description for every supported video capture device.
      */
-//    PHONON_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
+    PHONON_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
 
     /**
      * Returns the visualization effects the backend supports.
