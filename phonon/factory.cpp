@@ -234,6 +234,9 @@ void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
     case AudioCaptureDeviceType:
         emit availableAudioCaptureDevicesChanged();
         break;
+    case VideoCaptureDeviceType:
+        emit availableVideoCaptureDevicesChanged();
+        break;
     default:
         break;
     }
