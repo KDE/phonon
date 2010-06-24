@@ -159,8 +159,6 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
     case VisualizationClass:
         return new Visualization(parent);
     case VideoDataOutputClass:
-        return 0;
-    case Phonon::Experimental::BackendInterface::VideoDataOutputClass:
         return new VideoDataOutput(parent);
     case EffectClass:
         {
