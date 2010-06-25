@@ -163,7 +163,9 @@ namespace BackendCapabilities
      * \return A list of VideoCaptureDevice objects that give a name and
      * description for every supported video capture device.
      */
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
     PHONON_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
+#endif //QT_NO_PHONON_VIDEOCAPTURE
 
     /**
      * Returns the visualization effects the backend supports.
