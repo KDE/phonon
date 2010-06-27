@@ -59,9 +59,6 @@ class PHONONEXPERIMENTAL_EXPORT MediaSource : public Phonon::MediaSource
          */
         bool operator==(const MediaSource &rhs) const;
 
-        VideoCaptureDevice videoCaptureDevice() const;
-
-        MediaSource(const VideoCaptureDevice &videoDevice);
         MediaSource(const QList<Phonon::MediaSource> &mediaList);
 
         QList<Phonon::MediaSource> substreams() const;

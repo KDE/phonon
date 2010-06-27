@@ -29,8 +29,6 @@ namespace Phonon
 namespace Experimental
 {
 
-typedef Phonon::ObjectDescription<Phonon::VideoCaptureDeviceType> VideoCaptureDevice;
-
 } // namespace Experimental
 } // namespace Phonon
 

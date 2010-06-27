@@ -68,9 +68,6 @@ void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
 {
     qDebug() << Q_FUNC_INFO << type;
     switch (type) {
-    case VideoCaptureDeviceType:
-        emit availableVideoCaptureDevicesChanged();
-        break;
     default:
         break;
     }

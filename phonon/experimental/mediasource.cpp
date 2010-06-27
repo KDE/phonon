@@ -46,19 +46,6 @@ bool MediaSource::operator==(const MediaSource &rhs) const
     return d == rhs.d;
 }
 
-VideoCaptureDevice MediaSource::videoCaptureDevice() const
-{
-    S_D(const MediaSource);
-    return d->videoCaptureDevice;
-}
-
-MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
-    : Phonon::MediaSource(*new MediaSourcePrivate(static_cast<Phonon::Experimental::MediaSource::Type>(CaptureDeviceSource)))
-{
-    S_D(MediaSource);
-    d->videoCaptureDevice = videoDevice;
-}
-
 MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
     : Phonon::MediaSource(*new MediaSourcePrivate(Link))
 {
