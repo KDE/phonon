@@ -78,6 +78,9 @@ namespace Phonon
          */
         AudioCaptureDeviceType,
 
+        /**
+         * Video capture devices. Includes webcams.
+         */
         VideoCaptureDeviceType
 
         //VideoOutputDeviceType,
