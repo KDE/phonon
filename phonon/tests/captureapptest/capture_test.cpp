@@ -58,14 +58,22 @@ MediaPlayer::MediaPlayer(QWidget *parent)
 MediaPlayer::~MediaPlayer()
 {
     delete m_aoutput;
+    delete m_media;
 }
 
 void MediaPlayer::setDeviceIndex(int index)
 {
     #ifndef QT_NO_PHONON_VIDEOCAPTURE
     QModelIndex mi = m_deviceModel->index(index, 0, QModelIndex());
+    Q_ASSERT(mi.isValid());
+
     Phonon::VideoCaptureDevice vc = m_deviceModel->modelData(mi);
+    Q_ASSERT(vc.isValid());
+
     Phonon::MediaSource mediaSource(vc);
+    Q_ASSERT(mediaSource.captureDeviceType() != Phonon::InvalidCaptureDevice);
+    Q_ASSERT(!mediaSource.deviceName().isEmpty());
+
     m_media->setCurrentSource(mediaSource);
     m_media->play();
     #endif
@@ -79,6 +87,13 @@ void MediaPlayer::updateDeviceList()
     if (!m_deviceModel)
         m_deviceModel = new Phonon::VideoCaptureDeviceModel(l, 0);
     m_deviceNameCombo->setModel(m_deviceModel);
+
+    Q_ASSERT(m_deviceModel->rowCount() >= 0);
+
+    if (m_deviceModel->rowCount() == 0)
+        QMessageBox::critical(this, "Error", "No video capture devices found.");
+    #else
+    QMessageBox::critical(this, "Error", "Video capture is disabled.");
     #endif
 }
 
