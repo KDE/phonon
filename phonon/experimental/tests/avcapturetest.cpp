@@ -76,6 +76,7 @@ void AVCaptureTest::testAudioOutput()
 
 void AVCaptureTest::testAudioCapture()
 {
+    #ifndef QT_NO_PHONON_AUDIOCAPTURE
     // Write device indices
     QList<int> acList = m_pgc->audioCaptureDeviceListFor(Phonon::NoCategory);
     qDebug() << "Device list for audio capture" << acList;
@@ -90,11 +91,15 @@ void AVCaptureTest::testAudioCapture()
         qDebug() << info;
         QVERIFY(!info.isEmpty());
     }
+    #else
+    qDebug() << "Audio capture not supported";
+    #endif
 }
 
 
 void AVCaptureTest::testVideoCapture()
 {
+    #ifndef QT_NO_PHONON_VIDEOCAPTURE
     // Write device indices
     QList<int> acList = m_pgc->videoCaptureDeviceListFor(Phonon::NoCategory);
     qDebug() << "Device list for video capture" << acList;
@@ -109,6 +114,9 @@ void AVCaptureTest::testVideoCapture()
         qDebug() << info;
         QVERIFY(!info.isEmpty());
     }
+    #else
+    qDebug() << "Video capture is disabled";
+    #endif
 }
 
 

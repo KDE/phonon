@@ -62,19 +62,23 @@ MediaPlayer::~MediaPlayer()
 
 void MediaPlayer::setDeviceIndex(int index)
 {
+    #ifndef QT_NO_PHONON_VIDEOCAPTURE
     QModelIndex mi = m_deviceModel->index(index, 0, QModelIndex());
     Phonon::VideoCaptureDevice vc = m_deviceModel->modelData(mi);
     Phonon::MediaSource mediaSource(Phonon::AudioCaptureDevice(), vc);
     m_media->setCurrentSource(mediaSource);
     m_media->play();
+    #endif
 }
 
 void MediaPlayer::updateDeviceList()
 {
+    #ifndef QT_NO_PHONON_VIDEOCAPTURE
     QList<Phonon::VideoCaptureDevice> l = Phonon::BackendCapabilities::availableVideoCaptureDevices();
 
     if (!m_deviceModel)
         m_deviceModel = new Phonon::VideoCaptureDeviceModel(l, 0);
     m_deviceNameCombo->setModel(m_deviceModel);
+    #endif
 }
 

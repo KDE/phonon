@@ -71,11 +71,17 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         // another thread deletes the AbstractMediaStream2. StreamInterface(2) will then just get a
         // StreamEventQueue where nobody answers.
         QPointer<AbstractMediaStream> stream;
-
-        AudioCaptureDevice audioCaptureDevice;
-        VideoCaptureDevice videoCaptureDevice;
         QIODevice *ioDevice;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
+        AudioCaptureDevice audioCaptureDevice;
+#endif
+
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+        VideoCaptureDevice videoCaptureDevice;
+#endif
+
         //QList<MediaSource> linkedSources;
         bool autoDelete;
 };

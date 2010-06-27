@@ -155,10 +155,12 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(Phonon::CaptureDeviceType deviceType, const QString &deviceName);
 
+#if !defined(QT_NO_PHONON_AUDIOCAPTURE) && !defined(QT_NO_PHONON_VIDEOCAPTURE)
         /**
-        * Creates a MediaSource object for capture devices.
-        */
+         * Creates a MediaSource object for capture devices.
+         */
         MediaSource(const Phonon::AudioCaptureDevice& acDevice, const Phonon::VideoCaptureDevice& vcDevice);
+#endif
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
@@ -276,8 +278,13 @@ class PHONON_EXPORT MediaSource
         AbstractMediaStream *stream() const;
 #endif
 
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
         AudioCaptureDevice audioCaptureDevice() const;
+#endif
+
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
         VideoCaptureDevice videoCaptureDevice() const;
+#endif
 
 /*      post 4.0:
         MediaSource(const QList<MediaSource> &mediaList);

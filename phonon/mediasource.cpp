@@ -104,6 +104,7 @@ MediaSource::MediaSource(Phonon::CaptureDeviceType deviceType, const QString &de
     d->deviceName = deviceName;
 }
 
+#if !defined(QT_NO_PHONON_AUDIOCAPTURE) && !defined(QT_NO_PHONON_VIDEOCAPTURE)
 MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice, const Phonon::VideoCaptureDevice& vcDevice)
     : d(new MediaSourcePrivate(CaptureDeviceSource))
 {
@@ -120,7 +121,7 @@ MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice, const Phono
             d->deviceName = vcDevice.property("hwname").toString();
     }
 }
-
+#endif //QT_NO_PHONON_AUDIOCAPTURE && QT_NO_PHONON_VIDEOCAPTURE
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 MediaSource::MediaSource(AbstractMediaStream *stream)
@@ -252,16 +253,19 @@ void MediaSourcePrivate::setStream(AbstractMediaStream *s)
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
 AudioCaptureDevice MediaSource::audioCaptureDevice() const
 {
     return d->audioCaptureDevice;
 }
+#endif //QT_NO_PHONON_AUDIOCAPTURE
 
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
 VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
     return d->videoCaptureDevice;
 }
+#endif //QT_NO_PHONON_VIDEOCAPTURE
 
 } // namespace Phonon
 

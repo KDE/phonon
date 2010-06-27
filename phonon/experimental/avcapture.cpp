@@ -20,6 +20,12 @@
 
 */
 
+#if defined(QT_NO_PHONON_VIDEOCAPTURE) || defined(QT_NO_PHONON_AUDIOCAPTURE)
+#define NO_PHONON_AVCAPTURE
+#endif
+
+#ifndef NO_PHONON_AVCAPTURE
+
 #include "avcapture.h"
 #include "avcaptureinterface.h"
 #include "avcapture_p.h"
@@ -129,3 +135,5 @@ void AvCapturePrivate::setupBackendObject()
 
 #undef PHONON_CLASSNAME
 #undef PHONON_INTERFACENAME
+
+#endif // NO_PHONON_AVCAPTURE

@@ -1,3 +1,9 @@
+
+option(PHONON_NO_CAPTURE "Disable the capture API")
+if (PHONON_NO_CAPTURE)
+    add_definitions(-DQT_NO_PHONON_VIDEOCAPTURE -DQT_NO_PHONON_AUDIOCAPTURE)
+endif (PHONON_NO_CAPTURE)
+
 if (PHONON_BUILD_TESTS)
     add_subdirectory(tests)
 endif (PHONON_BUILD_TESTS)

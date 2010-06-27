@@ -23,6 +23,8 @@
 #ifndef AVCAPTURE_P_H
 #define AVCAPTURE_P_H
 
+#ifndef NO_PHONON_AVCAPTURE
+
 #include "avcapture.h"
 #include "../medianode_p.h"
 #include "../phonondefs_p.h"
@@ -44,6 +46,8 @@ class AvCapturePrivate : public MediaNodePrivate
 
 } // namespace Experimental
 } // namespace Phonon
+
+#endif // NO_PHONON_AVCAPTURE
 
 #endif // AVCAPTURE_P_H
 // vim: sw=4 ts=4 tw=80
