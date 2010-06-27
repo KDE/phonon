@@ -105,13 +105,30 @@ MediaSource::MediaSource(Phonon::CaptureDeviceType deviceType, const QString &de
 }
 
 #if !defined(QT_NO_PHONON_AUDIOCAPTURE) && !defined(QT_NO_PHONON_VIDEOCAPTURE)
-MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice, const Phonon::VideoCaptureDevice& vcDevice)
+#endif //QT_NO_PHONON_AUDIOCAPTURE && QT_NO_PHONON_VIDEOCAPTURE
+
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
+MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
     : d(new MediaSourcePrivate(CaptureDeviceSource))
 {
     d->audioCaptureDevice = acDevice;
-    d->videoCaptureDevice = vcDevice;
 
-    // TODO handle audio capture device
+    // Check for a v4l audio device
+    if (acDevice.propertyNames().contains("v4l") && acDevice.property("v4l").toBool()) {
+        d->cdevType = Phonon::V4LAudio;
+
+        if (acDevice.propertyNames().contains("hwname"))
+            d->deviceName = acDevice.property("hwname").toString();
+    } else
+        d->cdevType = Phonon::InvalidCaptureDevice;
+}
+#endif //QT_NO_PHONON_AUDIOCAPTURE
+
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
+    : d(new MediaSourcePrivate(CaptureDeviceSource))
+{
+    d->videoCaptureDevice = vcDevice;
 
     // Check for a v4l video device
     if (vcDevice.propertyNames().contains("v4l") && vcDevice.property("v4l").toBool()) {
@@ -119,9 +136,10 @@ MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice, const Phono
 
         if (vcDevice.propertyNames().contains("hwname"))
             d->deviceName = vcDevice.property("hwname").toString();
-    }
+    } else
+        d->cdevType = Phonon::InvalidCaptureDevice;
 }
-#endif //QT_NO_PHONON_AUDIOCAPTURE && QT_NO_PHONON_VIDEOCAPTURE
+#endif //QT_NO_PHONON_VIDEOCAPTURE
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 MediaSource::MediaSource(AbstractMediaStream *stream)
