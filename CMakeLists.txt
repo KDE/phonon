@@ -9,6 +9,7 @@ cmake_policy(SET CMP0002 OLD)
 option(PHONON_BUILD_TESTS "Build the tests")
 
 if (PHONON_BUILD_TESTS)
+    message(STATUS "Building tests.")
     enable_testing()
 endif (PHONON_BUILD_TESTS)
 
