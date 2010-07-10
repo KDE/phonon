@@ -23,7 +23,7 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
-#include <QTimer>
+#include <QtCore/QTimer>
 
 #ifdef HAVE_PULSEAUDIO
 #include "pulsestream_p.h"
