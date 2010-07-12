@@ -28,7 +28,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include "audioplayer.h"
 #include "effectparameter.h"
 #include "mmf_medianode.h"
-#include "mmf_videoplayer.h"
 
 class CMdaAudioOutputStream;
 
@@ -118,6 +117,10 @@ private:
 // Macro for defining functions which depend on the native class name
 // for each of the effects.  Using this reduces repetition of boilerplate
 // in the implementations of the backend effect nodes.
+
+#ifdef Q_CC_NOKIAX86
+#   pragma warn_illtokenpasting off
+#endif
 
 #define PHONON_MMF_DEFINE_EFFECT_FUNCTIONS(Effect)                      \
                                                                         \

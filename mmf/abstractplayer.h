@@ -55,6 +55,7 @@ public:
     AbstractPlayer(const AbstractPlayer *player);
 
     virtual void open(const Phonon::MediaSource&, RFile&) = 0;
+    virtual void close() = 0;
 
     // MediaObjectInterface (implemented)
     qint32 tickInterval() const;
@@ -133,7 +134,7 @@ protected:
     /**
      * Converts PrivateState into the corresponding Phonon::State
      */
-    static Phonon::State phononState(PrivateState state);
+    virtual Phonon::State phononState(PrivateState state) const;
 
     virtual void videoOutputChanged();
 
