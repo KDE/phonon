@@ -73,7 +73,7 @@ int QuickTimeStreamReader::readData(long offset, long size, void *data)
     
     int bytesRead = qMin(currentBufferSize(), int(size));
 //    QWriteLocker writeLocker(&m_lock);
-    qMemCopy(data, m_buffer.data(), bytesRead);
+    memcpy(data, m_buffer.data(), bytesRead);
     m_buffer = m_buffer.mid(bytesRead);
 
     return bytesRead;

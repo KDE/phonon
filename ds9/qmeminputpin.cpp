@@ -306,7 +306,7 @@ namespace Phonon
             hr = sample->GetPointer(&src);
             Q_ASSERT(SUCCEEDED(hr));
 
-            qMemCopy(dest, src, sample->GetActualDataLength());
+            memcpy(dest, src, sample->GetActualDataLength());
 
             return out;
         }

@@ -350,7 +350,7 @@ namespace Phonon
             if (m_graph) {
                 m_graph->AddRef();
             }
-            qMemCopy(info->achName, m_name.utf16(), qMin(MAX_FILTER_NAME, m_name.length()+1) *2);
+            memcpy(info->achName, m_name.utf16(), qMin(MAX_FILTER_NAME, m_name.length()+1) *2);
             return S_OK;
         }
 
