@@ -38,6 +38,7 @@ install(FILES
     audiodataoutputinterface.h
     audioformat.h
     avcapture.h
+    avcaptureinterface.h
     backendcapabilities.h
     backendinterface.h
     export.h
