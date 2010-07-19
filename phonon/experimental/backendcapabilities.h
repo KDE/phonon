@@ -24,6 +24,7 @@
 
 #include "export.h"
 #include "objectdescription.h"
+#include "../backendcapabilities.h"
 
 namespace Phonon
 {
