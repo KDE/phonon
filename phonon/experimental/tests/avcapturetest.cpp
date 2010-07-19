@@ -11,7 +11,9 @@
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
 #include <phonon/VideoWidget>
-#include <../globalconfig.h>
+#include "../globalconfig.h"
+#include "../avcapture.h"
+#include "backendcapabilities.h"
 
 using namespace std;
 using namespace Phonon::Experimental;
@@ -24,23 +26,26 @@ class AVCaptureTest : public QObject
         void testAudioOutput();
         void testAudioCapture();
         void testVideoCapture();
+        void testAVCapture();
         void cleanupTestCase();
     private:
         Phonon::MediaObject *m_media;
         Phonon::AudioOutput *m_aout;
         Phonon::VideoWidget *m_vwid;
+        Phonon::Experimental::AvCapture *m_avcap;
         Phonon::Experimental::GlobalConfig *m_pgc;
 };
 
 
 void AVCaptureTest::initTestCase()
 {
+    QCoreApplication::setApplicationName("avcapturetest");
+
     m_media = new Phonon::MediaObject();
+    m_avcap = new Phonon::Experimental::AvCapture();
     m_aout = new Phonon::AudioOutput(Phonon::VideoCategory, NULL);
     m_vwid = new Phonon::VideoWidget(NULL);
 
-    Phonon::createPath(m_media, m_vwid);
-    Phonon::createPath(m_media, m_aout);
 
     m_pgc = new Phonon::Experimental::GlobalConfig();
 }
@@ -51,6 +56,7 @@ void AVCaptureTest::cleanupTestCase()
     delete m_pgc;
     delete m_aout;
     delete m_vwid;
+    delete m_avcap;
     delete m_media;
 }
 
@@ -117,6 +123,34 @@ void AVCaptureTest::testVideoCapture()
     #else
     qDebug() << "Video capture is disabled";
     #endif
+}
+
+
+void AVCaptureTest::testAVCapture()
+{
+    QList<Phonon::AudioCaptureDevice> acaps = Phonon::BackendCapabilities::availableAudioCaptureDevices();
+    QList<Phonon::VideoCaptureDevice> vcaps = Phonon::BackendCapabilities::availableVideoCaptureDevices();
+
+    QVERIFY(!acaps.isEmpty());
+    QVERIFY(!vcaps.isEmpty());
+
+    m_avcap->setAudioCaptureDevice(acaps[0]);
+    m_avcap->setVideoCaptureDevice(vcaps[0]);
+
+    QVERIFY(m_avcap->audioCaptureDevice().isValid());
+    QVERIFY(m_avcap->videoCaptureDevice().isValid());
+    QVERIFY(!m_avcap->audioCaptureDevice().name().isEmpty());
+    QVERIFY(!m_avcap->videoCaptureDevice().name().isEmpty());
+
+    /*
+    Phonon::createPath(m_media, m_vwid);
+    Phonon::createPath(m_media, m_aout);
+    */
+    Phonon::Path pa = Phonon::createPath(m_avcap, m_vwid);
+    Phonon::Path pv = Phonon::createPath(m_avcap, m_aout);
+
+    QVERIFY(pa.isValid());
+    QVERIFY(pv.isValid());
 }
 
 
