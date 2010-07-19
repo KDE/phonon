@@ -28,10 +28,10 @@ namespace Phonon
 namespace Experimental
 {
 
-class AvCaptureInterface
+class AVCaptureInterface
 {
     public:
-        virtual ~AvCaptureInterface() {}
+        virtual ~AVCaptureInterface() {}
 
         virtual void start() = 0;
         virtual void stop() = 0;
@@ -45,6 +45,6 @@ class AvCaptureInterface
 } // namespace Experimental
 } // namespace Phonon
 
-Q_DECLARE_INTERFACE(Phonon::Experimental::AvCaptureInterface, "0AvCaptureInterface.Phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::Experimental::AVCaptureInterface, "0AVCaptureInterface.Phonon.kde.org")
 
 #endif // PHONON_EXPERIMENTAL_AVCAPTUREINTERFACE_H

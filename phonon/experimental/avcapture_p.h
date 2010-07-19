@@ -34,9 +34,9 @@ namespace Phonon
 namespace Experimental
 {
 
-class AvCapturePrivate : public MediaNodePrivate
+class AVCapturePrivate : public MediaNodePrivate
 {
-    Q_DECLARE_PUBLIC(AvCapture)
+    Q_DECLARE_PUBLIC(AVCapture)
     PHONON_PRIVATECLASS
     public:
     protected:
