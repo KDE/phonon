@@ -26,6 +26,7 @@
 #include "videowidget.h"
 #include "path.h"
 #include <QtGui/QBoxLayout>
+#include <QtCore/QEvent>
 
 QT_BEGIN_NAMESPACE
 
@@ -40,46 +41,55 @@ class VideoPlayerPrivate
         VideoPlayerPrivate()
             : player(0)
             , aoutput(0)
-            , voutput(0) {}
+            , voutput(0)
+            , category(Phonon::NoCategory)
+            , initialized(false) {}
 
-        void init(VideoPlayer *q, Phonon::Category category);
+        void ensureCreated() const;
 
-        MediaObject *player;
-        AudioOutput *aoutput;
-        VideoWidget *voutput;
+        mutable MediaObject *player;
+        mutable AudioOutput *aoutput;
+        mutable VideoWidget *voutput;
 
-        MediaSource src;
+        mutable MediaSource src;
+        mutable Phonon::Category category;
+        mutable bool initialized;
+        VideoPlayer *q_ptr;
 };
 
-void VideoPlayerPrivate::init(VideoPlayer *q, Phonon::Category category)
+void VideoPlayerPrivate::ensureCreated() const
 {
-    QVBoxLayout *layout = new QVBoxLayout(q);
-    layout->setMargin(0);
+    if (!initialized) {
+        initialized = true;
+        QVBoxLayout *layout = new QVBoxLayout(q_ptr);
+        layout->setMargin(0);
 
-    aoutput = new AudioOutput(category, q);
+        aoutput = new AudioOutput(category, q_ptr);
+        voutput = new VideoWidget(q_ptr);
+        layout->addWidget(voutput);
 
-    voutput = new VideoWidget(q);
-    layout->addWidget(voutput);
+        player = new MediaObject(q_ptr);
+        Phonon::createPath(player, aoutput);
+        Phonon::createPath(player, voutput);
 
-    player = new MediaObject(q);
-    Phonon::createPath(player, aoutput);
-    Phonon::createPath(player, voutput);
-
-    q->connect(player, SIGNAL(finished()), SIGNAL(finished()));
+        q_ptr->connect(player, SIGNAL(finished()), SIGNAL(finished()));
+    }
 }
 
 VideoPlayer::VideoPlayer(Phonon::Category category, QWidget *parent)
     : QWidget(parent)
     , d(new VideoPlayerPrivate)
 {
-    d->init(this, category);
+    d->q_ptr = this;
+    d->category = category;
 }
 
 VideoPlayer::VideoPlayer(QWidget *parent)
     : QWidget(parent)
     , d(new VideoPlayerPrivate)
 {
-    d->init(this, Phonon::VideoCategory);
+    d_ptr->q_ptr = this;
+    d->category = Phonon::VideoCategory;
 }
 
 VideoPlayer::~VideoPlayer()
@@ -89,26 +99,31 @@ VideoPlayer::~VideoPlayer()
 
 MediaObject *VideoPlayer::mediaObject() const
 {
+    d->ensureCreated();
     return d->player;
 }
 
 AudioOutput *VideoPlayer::audioOutput() const
 {
+    d->ensureCreated();
     return d->aoutput;
 }
 
 VideoWidget *VideoPlayer::videoWidget() const
 {
+    d->ensureCreated();
     return d->voutput;
 }
 
 void VideoPlayer::load(const MediaSource &source)
 {
+    d->ensureCreated();
     d->player->setCurrentSource(source);
 }
 
 void VideoPlayer::play(const MediaSource &source)
 {
+    d->ensureCreated();
     if (source == d->player->currentSource()) {
         if (!isPlaying())
             d->player->play();
@@ -125,52 +140,68 @@ void VideoPlayer::play(const MediaSource &source)
 
 void VideoPlayer::play()
 {
+    d->ensureCreated();
     d->player->play();
 }
 
 void VideoPlayer::pause()
 {
+    d->ensureCreated();
     d->player->pause();
 }
 
 void VideoPlayer::stop()
 {
+    d->ensureCreated();
     d->player->stop();
 }
 
 qint64 VideoPlayer::totalTime() const
 {
+    d->ensureCreated();
     return d->player->totalTime();
 }
 
 qint64 VideoPlayer::currentTime() const
 {
+    d->ensureCreated();
     return d->player->currentTime();
 }
 
 void VideoPlayer::seek(qint64 ms)
 {
+    d->ensureCreated();
     d->player->seek(ms);
 }
 
 float VideoPlayer::volume() const
 {
+    d->ensureCreated();
     return d->aoutput->volume();
 }
 
 void VideoPlayer::setVolume(float v)
 {
+    d->ensureCreated();
     d->aoutput->setVolume(v);
 }
 
 bool VideoPlayer::isPlaying() const
 {
+    d->ensureCreated();
     return (d->player->state() == PlayingState);
 }
 
 bool VideoPlayer::isPaused() const
 {
+    d->ensureCreated();
     return (d->player->state() == PausedState);
+}
+
+bool VideoPlayer::event(QEvent *e) {
+    if (e->type() == QEvent::Show)
+        d->ensureCreated();
+    return QWidget::event(e);
 }
 
 } // namespaces
