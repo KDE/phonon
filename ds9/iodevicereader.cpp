@@ -136,7 +136,7 @@ namespace Phonon
                   }
 
                   int bytesRead = qMin(m_buffer.size(), int(length));
-                  qMemCopy(buffer, m_buffer.data(), bytesRead);
+                  memcpy(buffer, m_buffer.data(), bytesRead);
                   //truncate the buffer
                   m_buffer = m_buffer.mid(bytesRead);
 

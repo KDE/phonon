@@ -41,7 +41,7 @@ bool StreamReader::read(quint64 pos, int length, char * buffer)
             return false; // We didn't get any data
     }
 
-    qMemCopy(buffer, m_buffer.data(), length);
+    memcpy(buffer, m_buffer.data(), length);
     //truncate the buffer
     m_buffer = m_buffer.mid(pos);    
     return true;

@@ -616,7 +616,7 @@ namespace Phonon
                 ret.formattype = GUID_NULL;
             } else {
                 ret.pbFormat = reinterpret_cast<BYTE*>(::CoTaskMemAlloc(type.cbFormat));
-                qMemCopy(ret.pbFormat, type.pbFormat, type.cbFormat);
+                memcpy(ret.pbFormat, type.pbFormat, type.cbFormat);
             }
 
             if (type.pUnk) {

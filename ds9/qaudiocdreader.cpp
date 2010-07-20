@@ -123,10 +123,10 @@ namespace Phonon
             formatTag(WAVE_FORMAT_PCM), nChannels(2), nSamplesPerSec(44100), nAvgBytesPerSec(176400), nBlockAlign(4), bitsPerSample(16),
             dataLength(0)
         {
-            qMemCopy(riff, "RIFF", 4);
-            qMemCopy(wave, "WAVE", 4);
-            qMemCopy(fmt,  "fmt ", 4);                    
-            qMemCopy(data, "data", 4);
+            memcpy(riff, "RIFF", 4);
+            memcpy(wave, "WAVE", 4);
+            memcpy(fmt,  "fmt ", 4);
+            memcpy(data, "data", 4);
         }
 
 
@@ -218,7 +218,7 @@ namespace Phonon
             if (pos < sizeof(WaveStructure)) {
                 //we first copy the content of the structure
                 nbRead = qMin(LONG(sizeof(WaveStructure) - pos), length);
-                qMemCopy(buffer, reinterpret_cast<char*>(&m_waveHeader) + pos, nbRead);
+                memcpy(buffer, reinterpret_cast<char*>(&m_waveHeader) + pos, nbRead);
             }
 
             const LONGLONG posInTrack = pos - sizeof(WaveStructure) + nbRead;
@@ -260,7 +260,7 @@ namespace Phonon
                 }
 
                 //consume bytes on the buffer
-                qMemCopy(buffer + nbRead, ba.data() + surplus, bytesLeft);
+                memcpy(buffer + nbRead, ba.data() + surplus, bytesLeft);
 
                 //at this point we have all we need in the buffer
                 nbRead += bytesLeft;
