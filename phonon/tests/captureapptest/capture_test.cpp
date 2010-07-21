@@ -71,7 +71,7 @@ void MediaPlayer::setDeviceIndex(int index)
     Q_ASSERT(vc.isValid());
 
     Phonon::MediaSource mediaSource(vc);
-    Q_ASSERT(mediaSource.captureDeviceType() != Phonon::InvalidCaptureDevice);
+    Q_ASSERT(!mediaSource.captureDeviceType().isEmpty());
     Q_ASSERT(!mediaSource.deviceName().isEmpty());
 
     m_media->setCurrentSource(mediaSource);

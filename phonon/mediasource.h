@@ -147,14 +147,6 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(Phonon::DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
-        /**
-         * Creates a MediaSource object for a capture device, directly from a device name.
-         *
-         * \param deviceType The type of capture device (video / audio / v4l) \ref CaptureDeviceType
-         * \param deviceName A platform dependent device name.
-         */
-        MediaSource(Phonon::CaptureDeviceType deviceType, const QString &deviceName);
-
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
         /**
         * Creates a MediaSource object for audio capture devices.
@@ -267,9 +259,9 @@ class PHONON_EXPORT MediaSource
 
         /**
          * Returns the type of capture device of the MediaSource if type() == CaptureDevice,
-         * otherwise returns \ref InvalidCaptureDevice.
+         * otherwise returns an empty QByteArray.
          */
-        Phonon::CaptureDeviceType captureDeviceType() const;
+        const QByteArray captureDeviceType() const;
 
         /**
          * Returns the device name of the MediaSource if type() == Disc or CaptureDevice;
@@ -301,6 +293,16 @@ class PHONON_EXPORT MediaSource
     protected:
         QExplicitlySharedDataPointer<MediaSourcePrivate> d;
         MediaSource(MediaSourcePrivate &);
+
+        /**
+         * Creates a MediaSource object for a capture device, directly from a device name.
+         *
+         * \param captureDeviceType The type of capture device
+         * \li "v4l2" - A Video4Linux2 device, device name is something like /dev/video14
+         * \li (other capture device implementations)
+         * \param deviceName A platform dependent device name.
+         */
+        MediaSource(const QByteArray& captureDeviceType, const QString& deviceName);
 };
 
 } // namespace Phonon

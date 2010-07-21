@@ -93,14 +93,15 @@ MediaSource::MediaSource(Phonon::DiscType dt, const QString &deviceName)
     d->deviceName = deviceName;
 }
 
-MediaSource::MediaSource(Phonon::CaptureDeviceType deviceType, const QString &deviceName)
+// NOTE: this is a protected constructor
+MediaSource::MediaSource(const QByteArray& captureDeviceType, const QString& deviceName)
     : d(new MediaSourcePrivate(CaptureDeviceSource))
 {
-    if (deviceType == InvalidCaptureDevice) {
+    if (captureDeviceType.isEmpty()) {
         d->type = Invalid;
         return;
     }
-    d->cdevType = deviceType;
+    d->cdevType = captureDeviceType;
     d->deviceName = deviceName;
 }
 
@@ -113,14 +114,19 @@ MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
 {
     d->audioCaptureDevice = acDevice;
 
-    // Check for a v4l audio device
-    if (acDevice.propertyNames().contains("v4l") && acDevice.property("v4l").toBool()) {
-        d->cdevType = Phonon::V4LAudio;
+    // Put the audio device type and device name in this media source
+    if (acDevice.propertyNames().contains("type") && acDevice.property("type").isValid() &&
+        acDevice.propertyNames().contains("hwname") && acDevice.property("hwname").isValid()) {
+
+        d->cdevType = acDevice.property("type").toByteArray();
 
         if (acDevice.propertyNames().contains("hwname"))
             d->deviceName = acDevice.property("hwname").toString();
-    } else
-        d->cdevType = Phonon::InvalidCaptureDevice;
+    } else {
+        // Invalidate the media source
+        d->type = Invalid;
+        d->cdevType = QByteArray();
+    }
 }
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
@@ -130,14 +136,19 @@ MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
 {
     d->videoCaptureDevice = vcDevice;
 
-    // Check for a v4l video device
-    if (vcDevice.propertyNames().contains("v4l") && vcDevice.property("v4l").toBool()) {
-        d->cdevType = Phonon::V4LVideo;
+    // Put the video device type and device name in this media source
+    if (vcDevice.propertyNames().contains("type") && vcDevice.property("type").isValid() &&
+        vcDevice.propertyNames().contains("hwname") && vcDevice.property("hwname").isValid()) {
+
+        d->cdevType = vcDevice.property("type").toByteArray();
 
         if (vcDevice.propertyNames().contains("hwname"))
             d->deviceName = vcDevice.property("hwname").toString();
-    } else
-        d->cdevType = Phonon::InvalidCaptureDevice;
+    } else {
+        // Invalidate the media source
+        d->type = Invalid;
+        d->cdevType = QByteArray();
+    }
 }
 #endif //QT_NO_PHONON_VIDEOCAPTURE
 
@@ -249,7 +260,7 @@ Phonon::DiscType MediaSource::discType() const
     return d->discType;
 }
 
-Phonon::CaptureDeviceType MediaSource::captureDeviceType() const
+const QByteArray MediaSource::captureDeviceType() const
 {
     return d->cdevType;
 }

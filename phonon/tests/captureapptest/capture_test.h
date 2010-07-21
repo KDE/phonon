@@ -3,7 +3,6 @@
 
 #include <Qt/QtCore>
 #include <Qt/QtGui>
-#include <KDE/KUrl>
 #include <backendcapabilities.h>
 #include <objectdescription.h>
 #include <audiooutput.h>

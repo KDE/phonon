@@ -270,9 +270,7 @@ void MediaObject::setSource(const MediaSource &source)
         //Q_ASSERT(qobject_cast<Stream *>(m_source.stream()->d_ptr->streamInterface));
         break;
     case MediaSource::CaptureDeviceSource:
-        Q_ASSERT(
-            m_source.captureDeviceType() == Phonon::V4LVideo ||
-            m_source.captureDeviceType() == Phonon::V4LAudio);
+        Q_ASSERT(!m_source.captureDeviceType().isEmpty());
         Q_ASSERT(!m_source.deviceName().isEmpty());
         break;
     }
