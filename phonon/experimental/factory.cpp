@@ -58,6 +58,8 @@ FactoryPrivate::FactoryPrivate()
     //}
     connect(backendObj, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
             SLOT(objectDescriptionChanged(ObjectDescriptionType)));
+    connect(Phonon::Factory::sender(), SIGNAL(availableVideoCaptureDevicesChanged()), Factory::sender(),
+            SLOT(availableVideoCaptureDevicesChanged()));
 }
 
 FactoryPrivate::~FactoryPrivate()

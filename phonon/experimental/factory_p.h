@@ -37,6 +37,9 @@ namespace Factory
     class Sender : public QObject
     {
         Q_OBJECT
+
+        Q_SIGNALS:
+            void availableVideoCaptureDevicesChanged();
     };
 
     PHONONEXPERIMENTAL_EXPORT Sender *sender();
