@@ -109,6 +109,20 @@ QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 }
 #endif //QT_NO_PHONON_VIDEOCAPTURE
 
+#if !defined(QT_NO_PHONON_VIDEOCAPTURE) && !defined(QT_NO_PHONON_AUDIOCAPTURE)
+QList<VideoCaptureDevice> BackendCapabilities::availableAVCaptureDevices()
+{
+    QList<VideoCaptureDevice> ret;
+    const QList<int> deviceIndexes = GlobalConfig().videoCaptureDeviceListFor(Phonon::NoCategory);
+    for (int i = 0; i < deviceIndexes.count(); ++i) {
+        VideoCaptureDevice vcd = VideoCaptureDevice::fromIndex(deviceIndexes.at(i));
+        if (vcd.propertyNames().contains("hasaudio") && vcd.property("hasaudio").isValid())
+            ret.append(vcd);
+    }
+    return ret;
+}
+#endif // NOT QT_NO_PHONON_VIDEOCAPTURE AND NOT QT_NO_PHONON_AUDIOCAPTURE
+
 #ifndef QT_NO_PHONON_EFFECT
 QList<EffectDescription> BackendCapabilities::availableAudioEffects()
 {
