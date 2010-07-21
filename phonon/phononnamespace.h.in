@@ -90,15 +90,6 @@ namespace Phonon
     };
 
     /**
-     * Identifies the capture devices supported by MediaSource
-     */
-    enum CaptureDeviceType {
-        InvalidCaptureDevice = -1,
-        V4LVideo = 1,
-        V4LAudio = 2
-    };
-
-    /**
      * Provided as keys for MediaObject::metaData for convenience, in addition to the strings defined in
      * the Ogg Vorbis specification.
      */
