@@ -8,6 +8,9 @@ cmake_policy(SET CMP0002 OLD)
 # enable unit tests
 option(PHONON_BUILD_TESTS "Build the tests")
 
+# enable application tests
+option(PHONON_BUILD_APP_TESTS "Build the application tests")
+
 if (PHONON_BUILD_TESTS)
     message(STATUS "Building tests.")
     enable_testing()

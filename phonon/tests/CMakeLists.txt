@@ -4,9 +4,6 @@ if(msvc)
 endif(msvc)
 add_subdirectory(fakebackend)
 
-# enable application tests
-option(PHONON_BUILD_APP_TESTS "Build the application tests")
-
 if(PHONON_BUILD_APP_TESTS)
 	add_subdirectory(captureapptest)
 endif(PHONON_BUILD_APP_TESTS)
