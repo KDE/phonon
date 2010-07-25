@@ -37,7 +37,7 @@ MediaPlayer::MediaPlayer(QWidget *parent)
 
     m_aoutput = new Phonon::AudioOutput();
 
-    m_avcapture = new Phonon::Experimental::AVCapture();
+    m_avcapture = new Phonon::Experimental::AvCapture();
 
     Phonon::createPath(m_avcapture, m_aoutput);
     Phonon::createPath(m_avcapture, m_vwidget);

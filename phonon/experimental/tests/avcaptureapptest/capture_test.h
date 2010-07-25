@@ -52,7 +52,7 @@ class MediaPlayer : public QWidget
         void updateDeviceList();
 
     private:
-        Phonon::Experimental::AVCapture *m_avcapture;
+        Phonon::Experimental::AvCapture *m_avcapture;
         Phonon::AudioOutput *m_aoutput;
         Phonon::VideoWidget *m_vwidget;
         Phonon::VolumeSlider *m_volumeSlider;
