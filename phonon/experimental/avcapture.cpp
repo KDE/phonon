@@ -33,8 +33,8 @@
 #include "objectdescription.h"
 #include "globalconfig.h"
 
-#define PHONON_CLASSNAME AVCapture
-#define PHONON_INTERFACENAME AVCaptureInterface
+#define PHONON_CLASSNAME AvCapture
+#define PHONON_INTERFACENAME AvCaptureInterface
 
 namespace Phonon
 {
@@ -42,84 +42,84 @@ namespace Experimental
 {
 PHONON_OBJECT_IMPL
 
-void AVCapture::start()
+void AvCapture::start()
 {
-    K_D(AVCapture);
+    K_D(AvCapture);
     if (d->backendObject()) {
         INTERFACE_CALL(start());
     }
 }
 
-void AVCapture::stop()
+void AvCapture::stop()
 {
-    K_D(AVCapture);
+    K_D(AvCapture);
     if (d->backendObject()) {
         INTERFACE_CALL(stop());
     }
 }
 
-AudioCaptureDevice AVCapture::audioCaptureDevice() const
+AudioCaptureDevice AvCapture::audioCaptureDevice() const
 {
-    K_D(const AVCapture);
+    K_D(const AvCapture);
     if (d->m_backendObject) {
         return INTERFACE_CALL(audioCaptureDevice());
     }
     return d->audioCaptureDevice;
 }
 
-void AVCapture::setAudioCaptureDevice(const AudioCaptureDevice &audioCaptureDevice)
+void AvCapture::setAudioCaptureDevice(const AudioCaptureDevice &audioCaptureDevice)
 {
-    K_D(AVCapture);
+    K_D(AvCapture);
     d->audioCaptureDevice = audioCaptureDevice;
     if (d->m_backendObject) {
         INTERFACE_CALL(setAudioCaptureDevice(d->audioCaptureDevice));
     }
 }
 
-void AVCapture::setAudioCaptureDevice(Phonon::Category category)
+void AvCapture::setAudioCaptureDevice(Phonon::Category category)
 {
-    K_D(AVCapture);
+    K_D(AvCapture);
     d->audioCaptureDevice = AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category));
     if (d->m_backendObject) {
         INTERFACE_CALL(setAudioCaptureDevice(d->audioCaptureDevice));
     }
 }
 
-VideoCaptureDevice AVCapture::videoCaptureDevice() const
+VideoCaptureDevice AvCapture::videoCaptureDevice() const
 {
-    K_D(const AVCapture);
+    K_D(const AvCapture);
     if (d->m_backendObject) {
         return INTERFACE_CALL(videoCaptureDevice());
     }
     return d->videoCaptureDevice;
 }
 
-void AVCapture::setVideoCaptureDevice(const VideoCaptureDevice &videoCaptureDevice)
+void AvCapture::setVideoCaptureDevice(const VideoCaptureDevice &videoCaptureDevice)
 {
-    K_D(AVCapture);
+    K_D(AvCapture);
     d->videoCaptureDevice = videoCaptureDevice;
     if (d->m_backendObject) {
         INTERFACE_CALL(setVideoCaptureDevice(d->videoCaptureDevice));
     }
 }
 
-void AVCapture::setVideoCaptureDevice(Phonon::Category category)
+void AvCapture::setVideoCaptureDevice(Phonon::Category category)
 {
-    K_D(AVCapture);
+    K_D(AvCapture);
     d->videoCaptureDevice = VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category));
     if (d->m_backendObject) {
         INTERFACE_CALL(setVideoCaptureDevice(d->videoCaptureDevice));
     }
 }
 
-bool AVCapturePrivate::aboutToDeleteBackendObject()
+bool AvCapturePrivate::aboutToDeleteBackendObject()
 {
     audioCaptureDevice = pINTERFACE_CALL(audioCaptureDevice());
     videoCaptureDevice = pINTERFACE_CALL(videoCaptureDevice());
     return true;
 }
 
-void AVCapturePrivate::setupBackendObject()
+void AvCapturePrivate::setupBackendObject()
 {
     Q_ASSERT(m_backendObject);
 

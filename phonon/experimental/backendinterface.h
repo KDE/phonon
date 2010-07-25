@@ -32,7 +32,7 @@ enum Class {
     VideoDataOutputClass = 0x10000,
     AudioDataOutputClass,
     VisualizationClass,
-    AVCaptureClass
+    AvCaptureClass
 };
 } // namespace BackendInterface
 } // namespace Experimental

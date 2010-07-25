@@ -42,7 +42,7 @@ namespace Phonon
 namespace Experimental
 {
 
-    class AVCapturePrivate;
+    class AvCapturePrivate;
 
     /**
      * @short Media data from a soundcard, soundserver, camera or any other
@@ -59,11 +59,11 @@ namespace Experimental
      * @see BackendCapabilities::availableAudioCaptureDevices
      * @see BackendCapabilities::availableVideoCaptureDevices
      */
-    class PHONONEXPERIMENTAL_EXPORT AVCapture : public QObject, public Phonon::MediaNode
+    class PHONONEXPERIMENTAL_EXPORT AvCapture : public QObject, public Phonon::MediaNode
     {
         Q_OBJECT
-        K_DECLARE_PRIVATE(AVCapture)
-        PHONON_OBJECT(AVCapture)
+        K_DECLARE_PRIVATE(AvCapture)
+        PHONON_OBJECT(AvCapture)
         Q_PROPERTY(AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
         Q_PROPERTY(VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
         public:

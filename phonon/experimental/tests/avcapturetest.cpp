@@ -32,7 +32,7 @@ class AVCaptureTest : public QObject
         Phonon::MediaObject *m_media;
         Phonon::AudioOutput *m_aout;
         Phonon::VideoWidget *m_vwid;
-        Phonon::Experimental::AVCapture *m_avcap;
+        Phonon::Experimental::AvCapture *m_avcap;
         Phonon::Experimental::GlobalConfig *m_pgc;
 };
 
@@ -42,7 +42,7 @@ void AVCaptureTest::initTestCase()
     QCoreApplication::setApplicationName("avcapturetest");
 
     m_media = new Phonon::MediaObject();
-    m_avcap = new Phonon::Experimental::AVCapture();
+    m_avcap = new Phonon::Experimental::AvCapture();
     m_aout = new Phonon::AudioOutput(Phonon::VideoCategory, NULL);
     m_vwid = new Phonon::VideoWidget(NULL);
 

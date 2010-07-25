@@ -102,12 +102,12 @@ QObject *Factory::createVideoDataOutput(QObject *parent)
     return 0;
 }
 
-QObject *Factory::createAVCapture(QObject *parent)
+QObject *Factory::createAvCapture(QObject *parent)
 {
     Phonon::BackendInterface *b = qobject_cast<Phonon::BackendInterface *>(Phonon::Factory::backend());
     if (b) {
         return Phonon::Factory::registerQObject(b->createObject(
-                    static_cast<Phonon::BackendInterface::Class>(Phonon::Experimental::BackendInterface::AVCaptureClass),
+                    static_cast<Phonon::BackendInterface::Class>(Phonon::Experimental::BackendInterface::AvCaptureClass),
                     parent));
     }
     return 0;

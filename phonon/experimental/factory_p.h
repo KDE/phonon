@@ -58,7 +58,7 @@ namespace Factory
      */
     QObject *createVideoDataOutput(QObject *parent = 0);
 
-    QObject *createAVCapture(QObject *parent = 0);
+    QObject *createAvCapture(QObject *parent = 0);
 
     /**
      * Create a new backend object for a Visualization.
