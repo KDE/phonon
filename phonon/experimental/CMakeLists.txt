@@ -11,6 +11,7 @@ set(phononexperimental_LIB_SRCS
     factory.cpp
     globalconfig.cpp
     mediasource.cpp
+    objectdescription.cpp
     packet.cpp
     packetpool.cpp
     videodataoutput.cpp

@@ -41,8 +41,8 @@ class PHONONEXPERIMENTAL_EXPORT GlobalConfig : public Phonon::GlobalConfig
 {
     K_DECLARE_PRIVATE(Phonon::GlobalConfig)
 public:
-
-
+    QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+    int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
 
 Q_SIGNALS:
     void videoCaptureDeviceConfigChanged();

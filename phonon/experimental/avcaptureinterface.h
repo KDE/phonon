@@ -36,10 +36,10 @@ class AvCaptureInterface
         virtual void start() = 0;
         virtual void stop() = 0;
 
-        virtual AudioCaptureDevice audioCaptureDevice() const = 0;
-        virtual VideoCaptureDevice videoCaptureDevice() const = 0;
-        virtual void setAudioCaptureDevice(const AudioCaptureDevice &) = 0;
-        virtual void setVideoCaptureDevice(const VideoCaptureDevice &) = 0;
+        virtual Phonon::AudioCaptureDevice audioCaptureDevice() const = 0;
+        virtual Phonon::VideoCaptureDevice videoCaptureDevice() const = 0;
+        virtual void setAudioCaptureDevice(const Phonon::AudioCaptureDevice &) = 0;
+        virtual void setVideoCaptureDevice(const Phonon::VideoCaptureDevice &) = 0;
 };
 
 } // namespace Experimental

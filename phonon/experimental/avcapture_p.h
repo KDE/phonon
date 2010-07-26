@@ -40,8 +40,8 @@ class AvCapturePrivate : public MediaNodePrivate
     PHONON_PRIVATECLASS
     public:
     protected:
-        AudioCaptureDevice audioCaptureDevice;
-        VideoCaptureDevice videoCaptureDevice;
+        Phonon::AudioCaptureDevice audioCaptureDevice;
+        Phonon::VideoCaptureDevice videoCaptureDevice;
 };
 
 } // namespace Experimental

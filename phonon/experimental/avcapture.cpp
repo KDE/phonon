@@ -58,7 +58,7 @@ void AvCapture::stop()
     }
 }
 
-AudioCaptureDevice AvCapture::audioCaptureDevice() const
+Phonon::AudioCaptureDevice AvCapture::audioCaptureDevice() const
 {
     K_D(const AvCapture);
     if (d->m_backendObject) {
@@ -67,7 +67,7 @@ AudioCaptureDevice AvCapture::audioCaptureDevice() const
     return d->audioCaptureDevice;
 }
 
-void AvCapture::setAudioCaptureDevice(const AudioCaptureDevice &audioCaptureDevice)
+void AvCapture::setAudioCaptureDevice(const Phonon::AudioCaptureDevice &audioCaptureDevice)
 {
     K_D(AvCapture);
     d->audioCaptureDevice = audioCaptureDevice;
@@ -85,7 +85,7 @@ void AvCapture::setAudioCaptureDevice(Phonon::Category category)
     }
 }
 
-VideoCaptureDevice AvCapture::videoCaptureDevice() const
+Phonon::VideoCaptureDevice AvCapture::videoCaptureDevice() const
 {
     K_D(const AvCapture);
     if (d->m_backendObject) {
@@ -94,7 +94,7 @@ VideoCaptureDevice AvCapture::videoCaptureDevice() const
     return d->videoCaptureDevice;
 }
 
-void AvCapture::setVideoCaptureDevice(const VideoCaptureDevice &videoCaptureDevice)
+void AvCapture::setVideoCaptureDevice(const Phonon::VideoCaptureDevice &videoCaptureDevice)
 {
     K_D(AvCapture);
     d->videoCaptureDevice = videoCaptureDevice;
@@ -106,7 +106,7 @@ void AvCapture::setVideoCaptureDevice(const VideoCaptureDevice &videoCaptureDevi
 void AvCapture::setVideoCaptureDevice(Phonon::Category category)
 {
     K_D(AvCapture);
-    d->videoCaptureDevice = VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category));
+    d->videoCaptureDevice = Phonon::VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category));
     if (d->m_backendObject) {
         INTERFACE_CALL(setVideoCaptureDevice(d->videoCaptureDevice));
     }

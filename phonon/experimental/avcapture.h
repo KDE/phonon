@@ -64,8 +64,8 @@ namespace Experimental
         Q_OBJECT
         K_DECLARE_PRIVATE(AvCapture)
         PHONON_OBJECT(AvCapture)
-        Q_PROPERTY(AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
-        Q_PROPERTY(VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
+        Q_PROPERTY(Phonon::AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
+        Q_PROPERTY(Phonon::VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
         public:
             /**
              * Returns the currently used capture source for the audio signal.
@@ -74,7 +74,7 @@ namespace Experimental
              * @see setAudioCaptureDevice(const AudioCaptureDevice &)
              * @see setAudioCaptureDevice(int)
              */
-            AudioCaptureDevice audioCaptureDevice() const;
+            Phonon::AudioCaptureDevice audioCaptureDevice() const;
 
             /**
              * Returns the currently used capture source for the video signal.
@@ -83,7 +83,7 @@ namespace Experimental
              * @see setVideoCaptureDevice(const VideoCaptureDevice &)
              * @see setVideoCaptureDevice(int)
              */
-            VideoCaptureDevice videoCaptureDevice() const;
+            Phonon::VideoCaptureDevice videoCaptureDevice() const;
 
             /**
              * Sets the audio capture source to use.
@@ -95,7 +95,7 @@ namespace Experimental
              * @see audioCaptureDevice
              * @see setAudioCaptureDevice(int)
              */
-            void setAudioCaptureDevice(const AudioCaptureDevice &source);
+            void setAudioCaptureDevice(const Phonon::AudioCaptureDevice &source);
             void setAudioCaptureDevice(Phonon::Category category);
 
             /**
@@ -108,7 +108,7 @@ namespace Experimental
              * @see videoCaptureDevice
              * @see setVideoCaptureDevice(int)
              */
-            void setVideoCaptureDevice(const VideoCaptureDevice &source);
+            void setVideoCaptureDevice(const Phonon::VideoCaptureDevice &source);
             void setVideoCaptureDevice(Phonon::Category category);
 
         public Q_SLOTS:

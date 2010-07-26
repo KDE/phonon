@@ -46,13 +46,13 @@ bool MediaSource::operator==(const MediaSource &rhs) const
     return d == rhs.d;
 }
 
-VideoCaptureDevice Experimental::MediaSource::videoCaptureDevice() const
+VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
-    return Phonon::MediaSource::videoCaptureDevice();
+    return phononVcdToExperimentalVcd(Phonon::MediaSource::videoCaptureDevice());
 }
 
-MediaSource::MediaSource(const VideoCaptureDevice& videoDevice)
-    : Phonon::MediaSource(videoDevice)
+MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
+    : Phonon::MediaSource(*new MediaSourcePrivate(VideoCaptureDeviceSource))
 {
 
 }

@@ -38,6 +38,7 @@ class PHONONEXPERIMENTAL_EXPORT MediaSource : public Phonon::MediaSource
     public:
         enum Type {
             Link = 0xffff,
+            VideoCaptureDeviceSource
         };
 
         /**

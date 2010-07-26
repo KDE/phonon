@@ -29,7 +29,14 @@ namespace Phonon
 namespace Experimental
 {
 
-typedef Phonon::VideoCaptureDevice VideoCaptureDevice;
+enum ObjectDescriptionType
+{
+    VideoCaptureDeviceType = 0x10000
+};
+
+typedef Phonon::ObjectDescription<static_cast<Phonon::ObjectDescriptionType>(Phonon::Experimental::VideoCaptureDeviceType)> VideoCaptureDevice;
+
+VideoCaptureDevice phononVcdToExperimentalVcd(const Phonon::VideoCaptureDevice &vcd);
 
 } // namespace Experimental
 } // namespace Phonon
