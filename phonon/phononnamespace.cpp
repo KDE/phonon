@@ -79,7 +79,7 @@ static int registerPhononMetaTypes()
     // need those for QSettings
     qRegisterMetaType<QList<int> >();
     qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
-	qRegisterMetaType<Phonon::Experimental::VideoFrame2>();
+    qRegisterMetaType<Phonon::Experimental::VideoFrame2>();
 
     return 0; // something
 }
