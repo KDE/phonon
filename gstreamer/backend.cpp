@@ -19,6 +19,7 @@
 #include "backend.h"
 #include "audiooutput.h"
 #include "audiodataoutput.h"
+#include "videodataoutput.h"
 #include "audioeffect.h"
 #include "mediaobject.h"
 #include "videowidget.h"
@@ -140,7 +141,7 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
 
 #ifndef QT_NO_PHONON_VIDEO
     case VideoDataOutputClass:
-        logMessage("createObject() : VideoDataOutput not implemented");
+        return new VideoDataOutput(this, parent);
         break;
 
     case VideoWidgetClass: {
