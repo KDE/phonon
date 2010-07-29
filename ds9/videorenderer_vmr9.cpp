@@ -80,7 +80,7 @@ namespace Phonon
                         uchar *data = buffer + bmi->biSize;
                         const int bytes_per_line = w * sizeof(QRgb);
                         for (int y = h - 1; y >= 0; --y) {
-                            qMemCopy(ret.scanLine(y), //destination
+                            memcpy(ret.scanLine(y), //destination
                                 data,     //source
                                 bytes_per_line);
                             data += bytes_per_line;

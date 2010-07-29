@@ -56,6 +56,7 @@ namespace Experimental
              * The frame is stored in data0 using a 24-bit RGB format (8-8-8).
              */
             Format_RGB888 = QImage::Format_RGB888,
+            Format_RGB32 = QImage::Format_RGB32,
             /**
              * The frame is stored in data0, data1 and data2 using data0 for the
              * Y data, data1 for the Cb data and data2 for the Cr data.

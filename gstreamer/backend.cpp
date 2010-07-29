@@ -209,7 +209,8 @@ QStringList Backend::availableMimeTypes() const
     GstElementFactory *mpegFactory;
     // Add mp3 as a separate mime type as people are likely to look for it.
     if ((mpegFactory = gst_element_factory_find ("ffmpeg")) || 
-        (mpegFactory = gst_element_factory_find ("mad"))) {
+        (mpegFactory = gst_element_factory_find ("mad")) ||
+        (mpegFactory = gst_element_factory_find ("flump3dec"))) {
         availableMimeTypes << QLatin1String("audio/x-mp3");
         gst_object_unref(GST_OBJECT(mpegFactory));
     }

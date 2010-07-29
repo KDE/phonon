@@ -223,7 +223,7 @@ namespace Phonon
             qint64 bytesRead = qMin(qint64(m_streamReader.currentBufferSize()), maxSize);
             {
                 QWriteLocker locker(&m_streamReader.m_lock);
-                qMemCopy(data, m_streamReader.m_buffer.data(), bytesRead);
+                memcpy(data, m_streamReader.m_buffer.data(), bytesRead);
                 //truncate the buffer
                 m_streamReader.m_buffer = m_streamReader.m_buffer.mid(bytesRead);
             }

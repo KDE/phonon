@@ -278,4 +278,6 @@ if(NOT WIN32) # pkgconfig file
    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
 
+install(FILES qt_phonon.pri DESTINATION  ${QT_MKSPECS_DIR}/modules)
+
 macro_display_feature_log()

@@ -193,6 +193,7 @@ class PHONON_EXPORT VideoPlayer : public QWidget
         void finished();
 
     protected:
+        bool event(QEvent *);
         VideoPlayerPrivate *const d;
 };
 
