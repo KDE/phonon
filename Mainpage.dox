@@ -55,10 +55,10 @@ If you want to contribute, make comments or useful suggestions you can also writ
 
 */
 
-// DOXYGEN_VERSION=4.3
+// DOXYGEN_VERSION=4.4.3
 // DOXYGEN_NAME=Phonon
 // DOXYGEN_ENABLE=YES
-// DOXYGEN_SET_INPUT = @topdir@/phonon/phonon @topdir@/phonon/Mainpage.dox
+// DOXYGEN_SET_INPUT = @topdir@/phonon-git/phonon @topdir@/phonon-git/Mainpage.dox
 // DOXYGEN_SET_FILE_PATTERNS = *.h *.dox */phononnamespace.h.in
 // ignore backend docs
 // DOXYGEN_SET_EXCLUDE_PATTERNS = *interface.h */phonon/examples/* */tests/* *_p.h */experimental/videocapturedevice/* */phonon/backend*
