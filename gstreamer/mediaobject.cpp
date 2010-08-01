@@ -210,8 +210,8 @@ void MediaObject::noMorePadsAvailable ()
 #ifdef PLUGIN_INSTALL_API
         GstInstallPluginsContext *ctx = gst_install_plugins_context_new ();
         gchar *details[2];
-        const QByteArray missingCodec = m_missingCodecs.first().toLocal8Bit();
-        details[0] = missingCodec.constData();
+        QByteArray missingCodec = m_missingCodecs.first().toLocal8Bit();
+        details[0] = missingCodec.data();
         details[1] = NULL;
         GstInstallPluginsReturn status;
 
