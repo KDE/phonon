@@ -9,7 +9,7 @@ Overview |
 and video.  It is aimed at the average desktop application, whether that is a game
 that needs sound effects or a full-blown multimedia playback application like
 <a href="http://amarok.kde.org/">Amarok</a> or
-<a href="http://www.dragonplayer.org/">Dragon Player</a>.
+<a href="http://bangarangkde.wordpress.com/">Bangarang</a>.
 
 If you writing a Qt program and want audio or video playback, then Phonon is
 almost certainly the right choice for you.  It provides an API that any Qt
