@@ -32,7 +32,8 @@ class SimpleTest : public QObject
 
     private Q_SLOTS:
         void sanityChecks();
-        void listDevices();
+        void listPlaybackDevices();
+        void listCaptureDevices();
         void checkCopy();
 };
 
@@ -43,9 +44,20 @@ void SimpleTest::sanityChecks()
     QVERIFY(AudioDeviceEnumerator::self() != 0);
 }
 
-void SimpleTest::listDevices()
+void SimpleTest::listPlaybackDevices()
 {
     QList<AudioDevice> deviceList = AudioDeviceEnumerator::availablePlaybackDevices();
+    foreach (const AudioDevice &dev, deviceList) {
+        qDebug() << dev.cardName() << dev.deviceIds() << dev.iconName() << dev.isAvailable();
+        foreach (const QString &id, dev.deviceIds()) {
+            QVERIFY(dev.deviceIds().count(id) == 1);
+        }
+    }
+}
+
+void SimpleTest::listCaptureDevices()
+{
+    QList<AudioDevice> deviceList = AudioDeviceEnumerator::availableCaptureDevices();
     foreach (const AudioDevice &dev, deviceList) {
         qDebug() << dev.cardName() << dev.deviceIds() << dev.iconName() << dev.isAvailable();
         foreach (const QString &id, dev.deviceIds()) {
