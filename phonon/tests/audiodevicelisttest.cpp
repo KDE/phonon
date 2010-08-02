@@ -24,7 +24,7 @@
 
 #include <qtest_kde.h>
 
-#include "../libkaudiodevicelist/audiodeviceenumerator.h"
+#include "phonon/audiodeviceenumerator.h"
 
 class SimpleTest : public QObject
 {
