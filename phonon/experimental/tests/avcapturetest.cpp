@@ -26,6 +26,7 @@ class AVCaptureTest : public QObject
         void testAudioOutput();
         void testAudioCapture();
         void testVideoCapture();
+        void testDeviceLists();
         void testAVCapture();
         void cleanupTestCase();
     private:
@@ -125,14 +126,24 @@ void AVCaptureTest::testVideoCapture()
     #endif
 }
 
-
-void AVCaptureTest::testAVCapture()
+void AVCaptureTest::testDeviceLists()
 {
     QList<Phonon::AudioCaptureDevice> acaps = Phonon::BackendCapabilities::availableAudioCaptureDevices();
     QList<Phonon::VideoCaptureDevice> vcaps = Phonon::BackendCapabilities::availableVideoCaptureDevices();
 
     QVERIFY(!acaps.isEmpty());
     QVERIFY(!vcaps.isEmpty());
+
+    foreach (Phonon::AudioCaptureDevice acDevice, acaps)
+        QVERIFY(acDevice.isValid());
+    foreach (Phonon::VideoCaptureDevice vcDevice, vcaps)
+        QVERIFY(vcDevice.isValid());
+}
+
+void AVCaptureTest::testAVCapture()
+{
+    QList<Phonon::AudioCaptureDevice> acaps = Phonon::BackendCapabilities::availableAudioCaptureDevices();
+    QList<Phonon::VideoCaptureDevice> vcaps = Phonon::BackendCapabilities::availableVideoCaptureDevices();
 
     m_avcap->setAudioCaptureDevice(acaps[0]);
     m_avcap->setVideoCaptureDevice(vcaps[0]);
