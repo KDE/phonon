@@ -88,7 +88,7 @@ VideoPlayer::VideoPlayer(QWidget *parent)
     : QWidget(parent)
     , d(new VideoPlayerPrivate)
 {
-    d_ptr->q_ptr = this;
+    d->q_ptr = this;
     d->category = Phonon::VideoCategory;
 }
 
