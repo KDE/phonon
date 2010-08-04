@@ -118,6 +118,10 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
             QHash<QByteArray, QVariant> properties = pulse->objectDescriptionProperties(type, index);
             return new ObjectDescriptionData(index, properties);
         }
+
+        // When Pulse is enabled, only try from the platform plugin or backend if it is about audio capture
+        if (type != AudioCaptureDeviceType)
+            return new ObjectDescriptionData(0); // invalid
     }
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
