@@ -25,10 +25,10 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QApplication::setApplicationName("Primitive Phonon Application");
+    QApplication::setApplicationName("Phonon Capture Test Application");
 
     MediaPlayer mp(NULL);
-    mp.setWindowTitle("Primitive Phonon Application");
+    mp.setWindowTitle("Phonon Capture Test Application");
     mp.show();
 
     return app.exec();
