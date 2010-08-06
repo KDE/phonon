@@ -39,13 +39,6 @@ namespace Phonon
 ObjectDescriptionData::ObjectDescriptionData(int index, const QHash<QByteArray, QVariant> &properties)
     : d(new ObjectDescriptionPrivate(index, properties))
 {
-    // Register the PhononDeviceAccessList type if it has not been registered yet
-    int t = QMetaType::type("PhononDeviceAccessList");
-    if (t && !QMetaType::isRegistered(t))
-    {
-        qRegisterMetaType<Phonon::DeviceAccessList>();
-        qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("PhononDeviceAccessList");
-    }
 }
 
 ObjectDescriptionData::ObjectDescriptionData(ObjectDescriptionPrivate *dd)
@@ -160,4 +153,22 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
 } //namespace Phonon
 
 QT_END_NAMESPACE
+
+
+void Phonon::registerMetaTypes()
+{
+    // Register the PhononDeviceAccessList type if it has not been registered yet
+    if (qMetaTypeId<Phonon::DeviceAccess>())
+    {
+        qRegisterMetaType<Phonon::DeviceAccess>();
+        qRegisterMetaTypeStreamOperators<Phonon::DeviceAccess>("Phonon::DeviceAccess");
+    }
+
+    if (qMetaTypeId<Phonon::DeviceAccessList>())
+    {
+        qRegisterMetaType<Phonon::DeviceAccessList>();
+        qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("Phonon::DeviceAccessList");
+    }
+}
+
 // vim: sw=4 ts=4

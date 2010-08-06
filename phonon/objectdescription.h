@@ -346,6 +346,22 @@ typedef QPair<QByteArray, QString> DeviceAccess;
  */
 typedef QList<DeviceAccess> DeviceAccessList;
 
+/**
+ * \short Registers Phonon's meta types
+ * \internal
+ *
+ * Any Phonon application should not be concerned about this function.
+ *
+ * Calls qRegisterMetaType() and qRegisterMetaTypeStreamOperators() for Phonon's
+ * meta-types that require streaming (DeviceAccess, DeviceAccessList).
+ *
+ * This function should be called by any entity outside the process of the Phonon application,
+ * if it uses any of these meta-types. This is the case of PhononServer from kdebase/runtime/phonon.
+ *
+ * See Qt Documentation for details.
+ */
+void PHONON_EXPORT registerMetaTypes();
+
 } //namespace Phonon
 
 QT_END_NAMESPACE
@@ -376,6 +392,7 @@ Q_DECLARE_METATYPE(QList<Phonon::AudioChannelDescription>)
 Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
 #endif //QT_NO_PHONON_MEDIACONTROLLER
 
+Q_DECLARE_METATYPE(Phonon::DeviceAccess)
 Q_DECLARE_METATYPE(Phonon::DeviceAccessList)
 
 QT_END_HEADER

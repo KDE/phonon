@@ -423,9 +423,6 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
         // the platform plugin lists the audio devices for the platform
         // this list already is in default order (as defined by the platform plugin)
         defaultList += platformPlugin->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
-
-        pDebug() << "PlatformPlugin returned for audio capture: " << defaultList;
-
         if (hide) {
             QMutableListIterator<int> it(defaultList);
             while (it.hasNext()) {
@@ -532,6 +529,17 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescrip
     QList<int> indices;
     QHash<QByteArray, QVariant> props;
 
+    // Try a pulseaudio device
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        // Check the index before passing it to PulseSupport
+        indices = pulse->objectDescriptionIndexes(deviceType);
+        if (indices.contains(index))
+            props = pulse->objectDescriptionProperties(deviceType, index);
+    }
+    if (!props.isEmpty())
+        return props;
+
     #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     // Try a device from the platform
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin())
@@ -544,17 +552,6 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescrip
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
     if (backendIface)
         props = backendIface->objectDescriptionProperties(deviceType, index);
-    if (!props.isEmpty())
-        return props;
-
-    // Try a pulseaudio device (last because it asserts the index is valid)
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
-        // Check the index before passing it to PulseSupport
-        indices = pulse->objectDescriptionIndexes(deviceType);
-        if (indices.contains(index))
-            props = pulse->objectDescriptionProperties(deviceType, index);
-    }
     if (!props.isEmpty())
         return props;
 
