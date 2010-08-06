@@ -529,6 +529,7 @@ QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index
 
 QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const
 {
+    QList<int> indices;
     QHash<QByteArray, QVariant> props;
 
     #ifndef QT_NO_PHONON_SETTINGSGROUP
@@ -550,8 +551,12 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescrip
 
     // Try a pulseaudio device (last because it asserts the index is valid)
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive())
-        props = pulse->objectDescriptionProperties(deviceType, index);
+    if (pulse->isActive()) {
+        // Check the index before passing it to PulseSupport
+        indices = pulse->objectDescriptionIndexes(deviceType);
+        if (indices.contains(index))
+            props = pulse->objectDescriptionProperties(deviceType, index);
+    }
     if (!props.isEmpty())
         return props;
 
