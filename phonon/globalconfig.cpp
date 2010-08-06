@@ -532,8 +532,6 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescrip
     QList<int> indices;
     QHash<QByteArray, QVariant> props;
 
-    #ifndef QT_NO_PHONON_SETTINGSGROUP
-
     #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     // Try a device from the platform
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin())
@@ -559,8 +557,6 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescrip
     }
     if (!props.isEmpty())
         return props;
-
-    #endif // QT_NO_PHONON_SETTINGSGROUP
 
     return props;
 }
