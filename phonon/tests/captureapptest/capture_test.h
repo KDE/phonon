@@ -44,6 +44,8 @@ class MediaPlayer : public QWidget
         ~MediaPlayer();
 
     public slots:
+        void setVideoCapture();
+        void setAudioCapture();
         void setDeviceIndex(int index);
 
     private:
@@ -54,11 +56,14 @@ class MediaPlayer : public QWidget
         Phonon::AudioOutput *m_aoutput;
         Phonon::VideoWidget *m_vwidget;
         Phonon::VolumeSlider *m_volumeSlider;
-        Phonon::VideoCaptureDeviceModel *m_deviceModel;
+        Phonon::VideoCaptureDeviceModel *m_videoDeviceModel;
+        Phonon::AudioCaptureDeviceModel *m_audioDeviceModel;
 
         QPushButton *m_playButton;
         QPushButton *m_pauseButton;
         QPushButton *m_stopButton;
+        QRadioButton *m_audioCaptureButton;
+        QRadioButton *m_videoCaptureButton;
         QComboBox *m_deviceNameCombo;
 };
 
