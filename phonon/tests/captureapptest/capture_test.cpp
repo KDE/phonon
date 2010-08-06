@@ -41,7 +41,7 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     Phonon::createPath(m_media, m_aoutput);
     Phonon::createPath(m_media, m_vwidget);
 
-    QHBoxLayout *deviceNameLayout = new QHBoxLayout(this);
+    QHBoxLayout *deviceNameLayout = new QHBoxLayout();
 
     m_deviceNameCombo = new QComboBox(this);
     m_deviceNameCombo->setEditable(false);
@@ -63,7 +63,7 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     m_stopButton->setText("Stop");
     connect(m_stopButton, SIGNAL(clicked()), m_media, SLOT(stop()));
 
-    QHBoxLayout *buttonsLayout = new QHBoxLayout(this);
+    QHBoxLayout *buttonsLayout = new QHBoxLayout();
     buttonsLayout->addWidget(m_playButton);
     buttonsLayout->addWidget(m_pauseButton);
     buttonsLayout->addWidget(m_stopButton);
@@ -72,8 +72,6 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     m_volumeSlider = new Phonon::VolumeSlider(this);
     layout->addWidget(m_volumeSlider);
     m_volumeSlider->setAudioOutput(m_aoutput);
-
-    setLayout(layout);
 }
 
 MediaPlayer::~MediaPlayer()
