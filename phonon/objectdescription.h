@@ -318,6 +318,34 @@ typedef ObjectDescription<AudioChannelType> AudioChannelDescription;
 typedef ObjectDescription<SubtitleType> SubtitleDescription;
 #endif //QT_NO_PHONON_MEDIACONTROLLER
 
+/**
+ * \short Information about how to access a device
+ * \ingroup BackendInformation
+ *
+ * To access a device, one needs the driver name (alsa, oss, pulse for example),
+ * and the device name (dependent on the driver name). This type is a pair of a
+ * driver and a device name.
+ *
+ * \see DeviceAccessList
+ */
+typedef QPair<QByteArray, QString> DeviceAccess;
+
+/**
+ * \short Information about methods for accessing a device
+ * \ingroup BackendInformation
+ *
+ * It is used by the platform plugin or the backend to provide information about how
+ * to access a certain device. To access a device, one needs the driver name (alsa, oss,
+ * pulse for example), and the device name (dependent on the driver name). This type
+ * is essentialy a list of pairs of driver and device names.
+ *
+ * It can be put in an ObjectDescriptionData property list.
+ *
+ * \see DeviceAccess
+ * \see AudioCaptureDevice
+ */
+typedef QList<DeviceAccess> DeviceAccessList;
+
 } //namespace Phonon
 
 QT_END_NAMESPACE
@@ -347,6 +375,8 @@ Q_DECLARE_METATYPE(Phonon::SubtitleDescription)
 Q_DECLARE_METATYPE(QList<Phonon::AudioChannelDescription>)
 Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
 #endif //QT_NO_PHONON_MEDIACONTROLLER
+
+Q_DECLARE_METATYPE(Phonon::DeviceAccessList)
 
 QT_END_HEADER
 

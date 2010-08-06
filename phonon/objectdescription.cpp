@@ -39,6 +39,13 @@ namespace Phonon
 ObjectDescriptionData::ObjectDescriptionData(int index, const QHash<QByteArray, QVariant> &properties)
     : d(new ObjectDescriptionPrivate(index, properties))
 {
+    // Register the PhononDeviceAccessList type if it has not been registered yet
+    int t = QMetaType::type("PhononDeviceAccessList");
+    if (t && !QMetaType::isRegistered(t))
+    {
+        qRegisterMetaType<Phonon::DeviceAccessList>();
+        qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("PhononDeviceAccessList");
+    }
 }
 
 ObjectDescriptionData::ObjectDescriptionData(ObjectDescriptionPrivate *dd)
