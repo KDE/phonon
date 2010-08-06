@@ -101,6 +101,10 @@ class AudioDevice
             properties["icon"] = icon;
             properties["available"] = (index != PA_INVALID_INDEX);
             properties["isAdvanced"] = false; // Nothing is advanced!
+
+            DeviceAccessList dal;
+            dal.append(DeviceAccess("pulse", desc));
+            properties["deviceAccessList"] = QVariant::fromValue<DeviceAccessList>(dal);
         }
 
         // Needed for QMap
