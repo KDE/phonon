@@ -61,8 +61,8 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         MediaSource::Type type;
         QUrl url;
         Phonon::DiscType discType;
-        QByteArray cdevType;
-        QString deviceName;
+        QString deviceName;                         // Used for discs
+        Phonon::DeviceAccessList deviceAccessList;  // Used for capture devices
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         // The AbstractMediaStream(2) may be deleted at any time by the application. If that happens

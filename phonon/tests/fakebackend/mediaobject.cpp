@@ -269,9 +269,10 @@ void MediaObject::setSource(const MediaSource &source)
         //Stream *s = new Stream(m_source, this);
         //Q_ASSERT(qobject_cast<Stream *>(m_source.stream()->d_ptr->streamInterface));
         break;
-    case MediaSource::CaptureDeviceSource:
-        Q_ASSERT(!m_source.captureDeviceType().isEmpty());
-        Q_ASSERT(!m_source.deviceName().isEmpty());
+    case MediaSource::CaptureDevice:
+        Q_ASSERT(!m_source.deviceAccessList().isEmpty());
+        Q_ASSERT(!m_source.deviceAccessList().first().first.isEmpty());
+        Q_ASSERT(!m_source.deviceAccessList().first().second.isEmpty());
         break;
     }
     emit totalTimeChanged(totalTime());

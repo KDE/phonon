@@ -96,7 +96,7 @@ class PHONON_EXPORT MediaSource
             /**
             * The MediaSource object describes a capture device
             */
-            CaptureDeviceSource,
+            CaptureDevice,
             /**
              * An empty MediaSource.
              *
@@ -258,10 +258,9 @@ class PHONON_EXPORT MediaSource
         Phonon::DiscType discType() const;
 
         /**
-         * Returns the type of capture device of the MediaSource if type() == CaptureDevice,
-         * otherwise returns an empty QByteArray.
+         * Returns the access list for the device of this media source. Valid for capture devices.
          */
-        const QByteArray captureDeviceType() const;
+        const DeviceAccessList& deviceAccessList() const;
 
         /**
          * Returns the device name of the MediaSource if type() == Disc or CaptureDevice;
@@ -295,14 +294,11 @@ class PHONON_EXPORT MediaSource
         MediaSource(MediaSourcePrivate &);
 
         /**
-         * Creates a MediaSource object for a capture device, directly from a device name.
+         * Creates a MediaSource object for a capture device, directly from the device access info.
          *
-         * \param captureDeviceType The type of capture device
-         * \li "v4l2" - A Video4Linux2 device, device name is something like /dev/video14
-         * \li (other capture device implementations)
-         * \param deviceName A platform dependent device name.
+         * \param access How can the device be accessed (driver name - alsa, oss, etc.) and device name
          */
-        MediaSource(const QByteArray& captureDeviceType, const QString& deviceName);
+        MediaSource(const DeviceAccess &access);
 };
 
 } // namespace Phonon

@@ -94,15 +94,14 @@ MediaSource::MediaSource(Phonon::DiscType dt, const QString &deviceName)
 }
 
 // NOTE: this is a protected constructor
-MediaSource::MediaSource(const QByteArray& captureDeviceType, const QString& deviceName)
-    : d(new MediaSourcePrivate(CaptureDeviceSource))
+MediaSource::MediaSource(const DeviceAccess &access)
+    : d(new MediaSourcePrivate(CaptureDevice))
 {
-    if (captureDeviceType.isEmpty()) {
+    if (access.first.isEmpty() || access.second.isEmpty()) {
         d->type = Invalid;
         return;
     }
-    d->cdevType = captureDeviceType;
-    d->deviceName = deviceName;
+    d->deviceAccessList.append(access);
 }
 
 #if !defined(QT_NO_PHONON_AUDIOCAPTURE) && !defined(QT_NO_PHONON_VIDEOCAPTURE)
@@ -110,44 +109,34 @@ MediaSource::MediaSource(const QByteArray& captureDeviceType, const QString& dev
 
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
 MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
-    : d(new MediaSourcePrivate(CaptureDeviceSource))
+    : d(new MediaSourcePrivate(CaptureDevice))
 {
     d->audioCaptureDevice = acDevice;
 
-    // Put the audio device type and device name in this media source
-    if (acDevice.propertyNames().contains("type") && acDevice.property("type").isValid() &&
-        acDevice.propertyNames().contains("hwname") && acDevice.property("hwname").isValid()) {
-
-        d->cdevType = acDevice.property("type").toByteArray();
-
-        if (acDevice.propertyNames().contains("hwname"))
-            d->deviceName = acDevice.property("hwname").toString();
+    // Grab the device access list from the properties
+    if (acDevice.propertyNames().contains("deviceAccessList") &&
+        !acDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+        d->deviceAccessList = acDevice.property("deviceAccessList").value<DeviceAccessList>();
     } else {
         // Invalidate the media source
         d->type = Invalid;
-        d->cdevType = QByteArray();
     }
 }
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
 #ifndef QT_NO_PHONON_VIDEOCAPTURE
 MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
-    : d(new MediaSourcePrivate(CaptureDeviceSource))
+    : d(new MediaSourcePrivate(CaptureDevice))
 {
     d->videoCaptureDevice = vcDevice;
 
-    // Put the video device type and device name in this media source
-    if (vcDevice.propertyNames().contains("type") && vcDevice.property("type").isValid() &&
-        vcDevice.propertyNames().contains("hwname") && vcDevice.property("hwname").isValid()) {
-
-        d->cdevType = vcDevice.property("type").toByteArray();
-
-        if (vcDevice.propertyNames().contains("hwname"))
-            d->deviceName = vcDevice.property("hwname").toString();
+    // Grab the device access list from the properties
+    if (vcDevice.propertyNames().contains("deviceAccessList") &&
+        !vcDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+        d->deviceAccessList = vcDevice.property("deviceAccessList").value<DeviceAccessList>();
     } else {
         // Invalidate the media source
         d->type = Invalid;
-        d->cdevType = QByteArray();
     }
 }
 #endif //QT_NO_PHONON_VIDEOCAPTURE
@@ -260,9 +249,9 @@ Phonon::DiscType MediaSource::discType() const
     return d->discType;
 }
 
-const QByteArray MediaSource::captureDeviceType() const
+const DeviceAccessList& MediaSource::deviceAccessList() const
 {
-    return d->cdevType;
+    return d->deviceAccessList;
 }
 
 QString MediaSource::deviceName() const
