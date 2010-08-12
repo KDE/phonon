@@ -22,7 +22,6 @@ set(phononexperimental_LIB_SRCS
     ../abstractvideooutput_p.cpp
    )
 automoc4_add_library(phononexperimental SHARED ${phononexperimental_LIB_SRCS})
-add_definitions(-DQT_NO_PHONON_PLATFORMPLUGIN)
 target_link_libraries(phononexperimental ${PHONON_LIBS})
 set_target_properties(phononexperimental PROPERTIES
                                          VERSION ${PHONON_LIB_VERSION}
