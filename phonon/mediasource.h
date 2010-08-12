@@ -263,8 +263,8 @@ class PHONON_EXPORT MediaSource
         const DeviceAccessList& deviceAccessList() const;
 
         /**
-         * Returns the device name of the MediaSource if type() == Disc or CaptureDevice;
-         * otherwise returns QString().
+         * Returns the device name of the MediaSource if type() == Disc; otherwise returns
+         * QString().
          */
         QString deviceName() const;
 
@@ -277,10 +277,16 @@ class PHONON_EXPORT MediaSource
 #endif
 
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
+        /**
+         * Returns the audio capture device for the media source if applicable.
+         */
         AudioCaptureDevice audioCaptureDevice() const;
 #endif
 
 #ifndef QT_NO_PHONON_VIDEOCAPTURE
+        /**
+         * Returns the video capture device for the media source if applicable.
+         */
         VideoCaptureDevice videoCaptureDevice() const;
 #endif
 
