@@ -26,7 +26,6 @@
 #include "../mediasource.h"
 #include "export.h"
 #include "objectdescription.h"
-#include "phononnamespace.h"
 
 namespace Phonon
 {
