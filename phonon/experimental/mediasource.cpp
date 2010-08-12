@@ -73,7 +73,5 @@ QList<Phonon::MediaSource> MediaSource::substreams() const
     return d->linkedSources;
 }
 
-
-
 } // namespace Experimental
 } // namespace Phonon
