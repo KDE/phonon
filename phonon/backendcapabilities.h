@@ -75,6 +75,7 @@ namespace BackendCapabilities
              */
             void availableAudioOutputDevicesChanged();
 
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
             /**
              * This signal is emitted when audio capture devices were plugged or
              * unplugged.
@@ -82,10 +83,10 @@ namespace BackendCapabilities
              * Check BackendCapabilities::availableAudioCaptureDevices to get the
              * current list of available devices.
              */
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
             void availableAudioCaptureDevicesChanged();
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
             /**
              * This signal is emitted when video capture devices were plugged or
              * unplugged.
@@ -93,7 +94,6 @@ namespace BackendCapabilities
              * Check BackendCapabilities::availableVideoCaptureDevices to get the
              * current list of available devices.
              */
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
             void availableVideoCaptureDevicesChanged();
 #endif //QT_NO_PHONON_VIDEOCAPTURE
     };
