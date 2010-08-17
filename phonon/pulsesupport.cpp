@@ -24,6 +24,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
+#include <QtCore/QMutex>
 
 #ifdef HAVE_PULSEAUDIO
 #include "pulsestream_p.h"
@@ -43,6 +44,7 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
+QMutex probeMutex;
 static PulseSupport* s_instance = NULL;
 
 #ifdef HAVE_PULSEAUDIO
@@ -657,7 +659,16 @@ static void context_state_callback(pa_context *c, void *)
 PulseSupport* PulseSupport::getInstance()
 {
     if (NULL == s_instance) {
-        s_instance = new PulseSupport();
+        /*
+         * In order to prevent the instance being used from multiple threads
+         * prior to it being contructed fully, we need to ensure we obtain a
+         * lock prior to creating it. After we aquire the lock, check to see
+         * if the object is created again before proceeding.
+         */
+        probeMutex.lock();
+        if (NULL == s_instance)
+            s_instance = new PulseSupport();
+        probeMutex.unlock();
     }
     return s_instance;
 }
