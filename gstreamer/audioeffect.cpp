@@ -40,7 +40,7 @@ AudioEffect::AudioEffect(Backend *backend, int effectId, QObject *parent)
         m_effectName = audioEffects[effectId]->name();
         init();
     } else {
-        Q_ASSERT(0); // Effect ID out of range
+        qWarning() << Q_FUNC_INFO << ": Effect ID (" << effectId << ") out of range (" << audioEffects.size() << ")!";
     }
 }
 
