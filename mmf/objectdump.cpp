@@ -55,7 +55,7 @@ QList<QByteArray> QAnnotatorBasic::annotation(const QObject& object)
     stream << ' ';
     stream << object.metaObject()->className();
 
-    if (object.objectName() != "")
+    if (!object.objectName().isEmpty())
         stream << " \"" << object.objectName() << '"';
 
     if (object.isWidgetType())

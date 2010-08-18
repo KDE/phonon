@@ -116,13 +116,13 @@ bool XineThread::event(QEvent *e)
         debug() << Q_FUNC_INFO << "XineThread Rewire event:";
         {
             RewireEvent *ev = static_cast<RewireEvent *>(e);
-            foreach (WireCall unwire, ev->unwireCalls) {
+            foreach (const WireCall &unwire, ev->unwireCalls) {
                 debug() << Q_FUNC_INFO << "     " << unwire.source.data() << " XX " << unwire.sink.data();
                 unwire.sink->assert();
                 unwire.source->assert();
                 unwire.source->m_xtSink = 0;
             }
-            foreach (WireCall wire, ev->wireCalls) {
+            foreach (const WireCall &wire, ev->wireCalls) {
                 debug() << Q_FUNC_INFO << "     " << wire.source.data() << " -> " << wire.sink.data();
                 wire.sink->assert();
                 wire.source->assert();

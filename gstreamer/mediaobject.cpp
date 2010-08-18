@@ -224,7 +224,7 @@ void MediaObject::noMorePadsAvailable ()
                 setError(QString(tr("Missing codec helper script assistant.")), Phonon::FatalError );
             else
                 setError(QString(tr("Plugin codec installation failed for codec: %1"))
-                        .arg(m_missingCodecs[0].split("|")[3]), error);
+                        .arg(m_missingCodecs[0].split('|')[3]), error);
         }
         m_missingCodecs.clear();
 #else

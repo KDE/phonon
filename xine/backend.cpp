@@ -193,7 +193,7 @@ QStringList Backend::availableMimeTypes() const
         char *mimeTypes_c = xine_get_mime_types(m_xine);
         QString mimeTypes(mimeTypes_c);
         free(mimeTypes_c);
-        QStringList lstMimeTypes = mimeTypes.split(";", QString::SkipEmptyParts);
+        QStringList lstMimeTypes = mimeTypes.split(';', QString::SkipEmptyParts);
         foreach (const QString &mimeType, lstMimeTypes) {
             m_supportedMimeTypes << mimeType.left(mimeType.indexOf(':')).trimmed();
         }

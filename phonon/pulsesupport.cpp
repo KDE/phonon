@@ -915,7 +915,7 @@ static void setDevicePriority(Category category, QStringList list)
     char **devices;
     devices = pa_xnew(char *, list.size()+1);
     int i = 0;
-    foreach (QString str, list) {
+    foreach (const QString &str, list) {
         devices[i++] = pa_xstrdup(str.toUtf8().constData());
     }
     devices[list.size()] = NULL;
