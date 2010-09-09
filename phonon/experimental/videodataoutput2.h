@@ -65,7 +65,7 @@ class PHONONEXPERIMENTAL_EXPORT VideoDataOutput2 : public QObject, public Abstra
          * The relevant frames should be fetched and displayed using frameForTime
          * method.
          */
-        void frameReadySignal(const VideoFrame2 &);
+        void frameReadySignal(const Phonon::Experimental::VideoFrame2 &);
 
         /**
          * This signal is emitted after the last frameReady signal of a

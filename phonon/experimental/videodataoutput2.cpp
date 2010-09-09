@@ -44,7 +44,7 @@ void VideoDataOutput2::frameReady(const VideoFrame2 &frame)
     if (QThread::currentThread() == thread()) {
         emit frameReadySignal(frame);
     } else {
-        QMetaObject::invokeMethod(this, "frameReadySignal", Qt::BlockingQueuedConnection, Q_ARG(VideoFrame2, frame));
+        QMetaObject::invokeMethod(this, "frameReadySignal", Qt::BlockingQueuedConnection, Q_ARG(Phonon::Experimental::VideoFrame2, frame));
     }
 }
 

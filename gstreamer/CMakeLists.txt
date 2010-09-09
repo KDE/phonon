@@ -56,6 +56,7 @@ if (BUILD_PHONON_GSTREAMER)
       glrenderer.cpp
       volumefadereffect.cpp
       audiodataoutput.cpp
+      videodataoutput.cpp
       )
 
    if(NOT WIN32)
