@@ -76,10 +76,14 @@ namespace Phonon
          * devices even when they are unplugged and provide a unique identifier
          * that can make backends use the same identifiers.
          */
-        AudioCaptureDeviceType
+        AudioCaptureDeviceType,
+
+        /**
+         * Video capture devices. Includes webcams.
+         */
+        VideoCaptureDeviceType
 
         //VideoOutputDeviceType,
-        //VideoCaptureDeviceType,
         //AudioCodecType,
         //VideoCodecType,
         //ContainerFormatType,
@@ -283,7 +287,9 @@ typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
 /**
  * \ingroup BackendInformation
  */
-//typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
+#endif
 /**
  * \ingroup BackendInformation
  */
@@ -312,6 +318,50 @@ typedef ObjectDescription<AudioChannelType> AudioChannelDescription;
 typedef ObjectDescription<SubtitleType> SubtitleDescription;
 #endif //QT_NO_PHONON_MEDIACONTROLLER
 
+/**
+ * \short Information about how to access a device
+ * \ingroup BackendInformation
+ *
+ * To access a device, one needs the driver name (alsa, oss, pulse for example),
+ * and the device name (dependent on the driver name). This type is a pair of a
+ * driver and a device name.
+ *
+ * \see DeviceAccessList
+ */
+typedef QPair<QByteArray, QString> DeviceAccess;
+
+/**
+ * \short Information about methods for accessing a device
+ * \ingroup BackendInformation
+ *
+ * It is used by the platform plugin or the backend to provide information about how
+ * to access a certain device. To access a device, one needs the driver name (alsa, oss,
+ * pulse for example), and the device name (dependent on the driver name). This type
+ * is essentialy a list of pairs of driver and device names.
+ *
+ * It can be put in an ObjectDescriptionData property list.
+ *
+ * \see DeviceAccess
+ * \see AudioCaptureDevice
+ */
+typedef QList<DeviceAccess> DeviceAccessList;
+
+/**
+ * \short Registers Phonon's meta types
+ * \internal
+ *
+ * Any Phonon application should not be concerned about this function.
+ *
+ * Calls qRegisterMetaType() and qRegisterMetaTypeStreamOperators() for Phonon's
+ * meta-types that require streaming (DeviceAccess, DeviceAccessList).
+ *
+ * This function should be called by any entity outside the process of the Phonon application,
+ * if it uses any of these meta-types. This is the case of PhononServer from kdebase/runtime/phonon.
+ *
+ * See Qt Documentation for details.
+ */
+void PHONON_EXPORT registerMetaTypes();
+
 } //namespace Phonon
 
 QT_END_NAMESPACE
@@ -323,6 +373,11 @@ Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)
 Q_DECLARE_METATYPE(Phonon::AudioCaptureDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioCaptureDevice>)
 #endif //QT_NO_PHONON_AUDIOCAPTURE
+
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+Q_DECLARE_METATYPE(Phonon::VideoCaptureDevice)
+Q_DECLARE_METATYPE(QList<Phonon::VideoCaptureDevice>)
+#endif //QT_NO_PHONON_VIDEOCAPTURE
 
 #ifndef QT_NO_PHONON_EFFECT
 Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
@@ -336,6 +391,9 @@ Q_DECLARE_METATYPE(Phonon::SubtitleDescription)
 Q_DECLARE_METATYPE(QList<Phonon::AudioChannelDescription>)
 Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
 #endif //QT_NO_PHONON_MEDIACONTROLLER
+
+Q_DECLARE_METATYPE(Phonon::DeviceAccess)
+Q_DECLARE_METATYPE(Phonon::DeviceAccessList)
 
 QT_END_HEADER
 

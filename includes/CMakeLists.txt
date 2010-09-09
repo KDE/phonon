@@ -37,6 +37,8 @@ install( FILES
     phonon/StreamInterface
     phonon/SubtitleDescription
     phonon/SubtitleDescriptionModel
+    phonon/VideoCaptureDevice
+    phonon/VideoCaptureDeviceModel
     phonon/VideoPlayer
     phonon/VideoWidget
     phonon/VideoWidgetInterface

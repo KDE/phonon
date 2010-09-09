@@ -94,6 +94,10 @@ class PHONON_EXPORT MediaSource
              */
             Stream,
             /**
+            * The MediaSource object describes a capture device
+            */
+            CaptureDevice,
+            /**
              * An empty MediaSource.
              *
              * It can be used to unload the current media from a MediaObject.
@@ -143,6 +147,20 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(Phonon::DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
+        /**
+        * Creates a MediaSource object for audio capture devices.
+        */
+        MediaSource(const Phonon::AudioCaptureDevice& acDevice);
+#endif
+
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+        /**
+        * Creates a MediaSource object for video capture devices.
+        */
+        MediaSource(const Phonon::VideoCaptureDevice& vcDevice);
+#endif
+
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
          * Creates a MediaSource object for a data stream.
@@ -169,11 +187,6 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(QIODevice *ioDevice); //krazy:exclude=explicit
 #endif
-
-        /**
-         * Creates a MediaSource object for capture devices.
-         */
-        //MediaSource(const AudioCaptureDevice &, const VideoCaptureDevice &);
 
         /**
          * Destroys the MediaSource object.
@@ -245,6 +258,11 @@ class PHONON_EXPORT MediaSource
         Phonon::DiscType discType() const;
 
         /**
+         * Returns the access list for the device of this media source. Valid for capture devices.
+         */
+        const DeviceAccessList& deviceAccessList() const;
+
+        /**
          * Returns the device name of the MediaSource if type() == Disc; otherwise returns
          * QString().
          */
@@ -258,8 +276,19 @@ class PHONON_EXPORT MediaSource
         AbstractMediaStream *stream() const;
 #endif
 
-        //AudioCaptureDevice audioCaptureDevice() const;
-        //VideoCaptureDevice videoCaptureDevice() const;
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
+        /**
+         * Returns the audio capture device for the media source if applicable.
+         */
+        AudioCaptureDevice audioCaptureDevice() const;
+#endif
+
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+        /**
+         * Returns the video capture device for the media source if applicable.
+         */
+        VideoCaptureDevice videoCaptureDevice() const;
+#endif
 
 /*      post 4.0:
         MediaSource(const QList<MediaSource> &mediaList);
@@ -269,6 +298,13 @@ class PHONON_EXPORT MediaSource
     protected:
         QExplicitlySharedDataPointer<MediaSourcePrivate> d;
         MediaSource(MediaSourcePrivate &);
+
+        /**
+         * Creates a MediaSource object for a capture device, directly from the device access info.
+         *
+         * \param access How can the device be accessed (driver name - alsa, oss, etc.) and device name
+         */
+        MediaSource(const DeviceAccess &access);
 };
 
 } // namespace Phonon

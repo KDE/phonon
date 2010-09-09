@@ -4,6 +4,10 @@ if(msvc)
 endif(msvc)
 add_subdirectory(fakebackend)
 
+if(PHONON_BUILD_APP_TESTS)
+	add_subdirectory(captureapptest)
+endif(PHONON_BUILD_APP_TESTS)
+
 MACRO(PHONON_UNIT_TESTS)
 	FOREACH(_testname ${ARGN})
 		phonon_add_unit_test(${_testname} ${_testname}.cpp)
@@ -68,6 +72,7 @@ phonon_add_executable(methodtest methodtest.cpp ../factory.cpp
                                                 ../mediaobject.cpp
                                                 ../phononnamespace.cpp
                                                 ../platform.cpp
+                                                ../objectdescription.cpp
                                                 )
 target_link_libraries(methodtest ${QT_QTTEST_LIBRARY} ${PHONON_LIBS})
 SET_TARGET_PROPERTIES(methodtest PROPERTIES COMPILE_FLAGS "-DPHONON_METHODTEST -DPHONON_EXPORT=")
@@ -75,9 +80,15 @@ phonon_add_unit_test(methodtest_fake methodtest.cpp ../factory.cpp
                                                     ../phononnamespace.cpp
                                                     ../mediaobject.cpp
                                                     ../platform.cpp
+                                                    ../objectdescription.cpp
                                                     )
 target_link_libraries(methodtest_fake ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} phonon_fake)
 SET_TARGET_PROPERTIES(methodtest_fake PROPERTIES COMPILE_FLAGS "-DUSE_FAKE_BACKEND -DPHONON_METHODTEST -DPHONON_EXPORT=")
+
+#audiodevicelisttest does not link agains libphonon, instead it links agains kde stuff
+#libkaudiodevicelist building is disabled (commented out) in the kde sources, you must enable it there first, to use this test
+#phonon_add_executable(audiodevicelisttest audiodevicelisttest.cpp)
+#target_link_libraries(audiodevicelisttest ${QT_QTTEST_LIBRARY} ${PHONON_KDECORE_LIBS} kaudiodevicelist)
 
 SET(mediasourcetest_SRCS mediasourcetest.cpp)
 qt4_add_resources(mediasourcetest_SRCS testresources.qrc)

@@ -36,6 +36,8 @@ enum ObjectDescriptionType
 
 typedef Phonon::ObjectDescription<static_cast<Phonon::ObjectDescriptionType>(Phonon::Experimental::VideoCaptureDeviceType)> VideoCaptureDevice;
 
+VideoCaptureDevice phononVcdToExperimentalVcd(const Phonon::VideoCaptureDevice &vcd);
+
 } // namespace Experimental
 } // namespace Phonon
 

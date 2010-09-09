@@ -11,6 +11,7 @@ set(phononexperimental_LIB_SRCS
     factory.cpp
     globalconfig.cpp
     mediasource.cpp
+    objectdescription.cpp
     packet.cpp
     packetpool.cpp
     videodataoutput.cpp
@@ -37,6 +38,7 @@ install(FILES
     audiodataoutputinterface.h
     audioformat.h
     avcapture.h
+    avcaptureinterface.h
     backendcapabilities.h
     backendinterface.h
     export.h

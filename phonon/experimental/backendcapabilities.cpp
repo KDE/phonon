@@ -20,6 +20,7 @@
 
 */
 #include "backendcapabilities.h"
+#include "../backendcapabilities.h"
 #include "globalconfig.h"
 
 namespace Phonon
@@ -27,15 +28,20 @@ namespace Phonon
 namespace Experimental
 {
 
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
 QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 {
-    QList<VideoCaptureDevice> ret;
-    const QList<int> deviceIndexes = GlobalConfig().videoCaptureDeviceListFor(Phonon::NoCategory);
-    foreach (int i, deviceIndexes) {
-        ret.append(VideoCaptureDevice::fromIndex(i));
+    QList<Phonon::VideoCaptureDevice> phononList;
+    QList<VideoCaptureDevice> experimentalList;
+
+    phononList = Phonon::BackendCapabilities::availableVideoCaptureDevices();
+    foreach (const Phonon::VideoCaptureDevice vcd, phononList) {
+        experimentalList << phononVcdToExperimentalVcd(vcd);
     }
-    return ret;
+
+    return experimentalList;
 }
+#endif
 
 } // namespace Experimental
 } // namespace Phonon

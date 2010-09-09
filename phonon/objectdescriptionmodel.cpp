@@ -52,12 +52,12 @@ static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
 
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioOutputDeviceType[]  = { "Phonon::AudioOutputDevice\0" };
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCaptureDeviceType[] = { "Phonon::AudioCaptureDevice\0" };
+static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCaptureDeviceType[] = { "Phonon::VideoCaptureDevice\0" };
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_EffectType[]             = { "Phonon::EffectDescription\0" };
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioChannelType[]        = { "Phonon::AudioChannelDescription\0" };
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_SubtitleType[]     = { "Phonon::SubtitleDescription\0" };
 /*
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoOutputDeviceType[]  = { "Phonon::VideoOutputDevice\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCaptureDeviceType[] = { "Phonon::VideoCaptureDevice\0" };
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCodecType[]         = { "Phonon::AudioCodecDescription\0" };
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCodecType[]         = { "Phonon::VideoCodecDescription\0" };
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_ContainerFormatType[]    = { "Phonon::ContainerFormatDescription\0" };
@@ -71,6 +71,14 @@ template<> const QMetaObject ObjectDescriptionModel<AudioOutputDeviceType>::stat
     { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioOutputDeviceType,
       qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
 };
+template<> const QMetaObject ObjectDescriptionModel<AudioCaptureDeviceType>::staticMetaObject = {
+    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCaptureDeviceType,
+    qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+};
+template<> const QMetaObject ObjectDescriptionModel<VideoCaptureDeviceType>::staticMetaObject = {
+    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCaptureDeviceType,
+    qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+};
 template<> const QMetaObject ObjectDescriptionModel<EffectType>::staticMetaObject = {
     { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_EffectType,
       qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
@@ -83,16 +91,8 @@ template<> const QMetaObject ObjectDescriptionModel<SubtitleType>::staticMetaObj
     { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_SubtitleType,
       qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
 };
-template<> const QMetaObject ObjectDescriptionModel<AudioCaptureDeviceType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCaptureDeviceType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
-};
 /*template<> const QMetaObject ObjectDescriptionModel<VideoOutputDeviceType>::staticMetaObject = {
     { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoOutputDeviceType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
-};
-template<> const QMetaObject ObjectDescriptionModel<VideoCaptureDeviceType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCaptureDeviceType,
       qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
 };
 template<> const QMetaObject ObjectDescriptionModel<AudioCodecType>::staticMetaObject = {
@@ -369,12 +369,12 @@ template void *ObjectDescriptionModel<type>::qt_metacast(const char *)
 
 INSTANTIATE_META_FUNCTIONS(AudioOutputDeviceType);
 INSTANTIATE_META_FUNCTIONS(AudioCaptureDeviceType);
+INSTANTIATE_META_FUNCTIONS(VideoCaptureDeviceType);
 INSTANTIATE_META_FUNCTIONS(EffectType);
 INSTANTIATE_META_FUNCTIONS(AudioChannelType);
 INSTANTIATE_META_FUNCTIONS(SubtitleType);
 #endif
 /*INSTANTIATE_META_FUNCTIONS(VideoOutputDeviceType);
-INSTANTIATE_META_FUNCTIONS(VideoCaptureDeviceType);
 INSTANTIATE_META_FUNCTIONS(AudioCodecType);
 INSTANTIATE_META_FUNCTIONS(VideoCodecType);
 INSTANTIATE_META_FUNCTIONS(ContainerFormatType);

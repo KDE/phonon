@@ -269,6 +269,11 @@ void MediaObject::setSource(const MediaSource &source)
         //Stream *s = new Stream(m_source, this);
         //Q_ASSERT(qobject_cast<Stream *>(m_source.stream()->d_ptr->streamInterface));
         break;
+    case MediaSource::CaptureDevice:
+        Q_ASSERT(!m_source.deviceAccessList().isEmpty());
+        Q_ASSERT(!m_source.deviceAccessList().first().first.isEmpty());
+        Q_ASSERT(!m_source.deviceAccessList().first().second.isEmpty());
+        break;
     }
     emit totalTimeChanged(totalTime());
     QMultiMap<QString, QString> metaData;

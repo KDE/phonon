@@ -22,6 +22,12 @@
 #ifndef PHONON_EXPERIMENTAL_AVCAPTURE_H
 #define PHONON_EXPERIMENTAL_AVCAPTURE_H
 
+#if defined(QT_NO_PHONON_VIDEOCAPTURE) || defined(QT_NO_PHONON_AUDIOCAPTURE)
+#define NO_PHONON_AVCAPTURE
+#endif
+
+#ifndef NO_PHONON_AVCAPTURE
+
 #include "export.h"
 #include "../medianode.h"
 #include "../phonondefs.h"
@@ -58,8 +64,8 @@ namespace Experimental
         Q_OBJECT
         K_DECLARE_PRIVATE(AvCapture)
         PHONON_OBJECT(AvCapture)
-        Q_PROPERTY(AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
-        Q_PROPERTY(VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
+        Q_PROPERTY(Phonon::AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
+        Q_PROPERTY(Phonon::VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
         public:
             /**
              * Returns the currently used capture source for the audio signal.
@@ -68,7 +74,7 @@ namespace Experimental
              * @see setAudioCaptureDevice(const AudioCaptureDevice &)
              * @see setAudioCaptureDevice(int)
              */
-            AudioCaptureDevice audioCaptureDevice() const;
+            Phonon::AudioCaptureDevice audioCaptureDevice() const;
 
             /**
              * Returns the currently used capture source for the video signal.
@@ -77,7 +83,7 @@ namespace Experimental
              * @see setVideoCaptureDevice(const VideoCaptureDevice &)
              * @see setVideoCaptureDevice(int)
              */
-            VideoCaptureDevice videoCaptureDevice() const;
+            Phonon::VideoCaptureDevice videoCaptureDevice() const;
 
             /**
              * Sets the audio capture source to use.
@@ -89,7 +95,7 @@ namespace Experimental
              * @see audioCaptureDevice
              * @see setAudioCaptureDevice(int)
              */
-            void setAudioCaptureDevice(const AudioCaptureDevice &source);
+            void setAudioCaptureDevice(const Phonon::AudioCaptureDevice &source);
             void setAudioCaptureDevice(Phonon::Category category);
 
             /**
@@ -102,7 +108,7 @@ namespace Experimental
              * @see videoCaptureDevice
              * @see setVideoCaptureDevice(int)
              */
-            void setVideoCaptureDevice(const VideoCaptureDevice &source);
+            void setVideoCaptureDevice(const Phonon::VideoCaptureDevice &source);
             void setVideoCaptureDevice(Phonon::Category category);
 
         public Q_SLOTS:
@@ -119,5 +125,7 @@ namespace Experimental
 
 } // namespace Experimental
 } // namespace Phonon
+
+#endif // NO_PHONON_AVCAPTURE
 
 #endif // PHONON_EXPERIMENTAL_AVCAPTURE_H

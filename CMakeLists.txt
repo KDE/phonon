@@ -8,6 +8,9 @@ cmake_policy(SET CMP0002 OLD)
 # enable unit tests
 option(PHONON_BUILD_TESTS "Build the tests")
 
+# enable application tests
+option(PHONON_BUILD_APP_TESTS "Build the application tests")
+
 if (PHONON_BUILD_TESTS)
     message(STATUS "Building tests.")
     enable_testing()
@@ -233,6 +236,8 @@ set(PHONON_LIBS phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 if(QT_QTDBUS_FOUND)
     list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
 endif(QT_QTDBUS_FOUND)
+
+set(PHONON_KDECORE_LIBS kdecore)
 
 set(EXECUTABLE_OUTPUT_PATH ${Phonon_BINARY_DIR}/bin)
 if (WIN32)

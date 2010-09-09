@@ -24,6 +24,7 @@
 
 #include "export.h"
 #include "objectdescription.h"
+#include "../backendcapabilities.h"
 
 namespace Phonon
 {
@@ -32,13 +33,9 @@ namespace Experimental
 namespace BackendCapabilities
 {
 
-    /**
-     * Returns the video capture devices the backend supports.
-     *
-     * \return A list of VideoCaptureDevice objects that give a name and
-     * description for every supported video capture device.
-     */
-    PHONONEXPERIMENTAL_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+PHONONEXPERIMENTAL_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
+#endif
 
 } // namespace BackendCapabilities
 } // namespace Experimental

@@ -26,7 +26,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QObject>
 #include <QtCore/QSettings>
 
-#include "../phononnamespace.h"
+#include "export.h"
 #include "../globalconfig.h"
 
 QT_BEGIN_HEADER
@@ -37,7 +37,7 @@ namespace Phonon
 namespace Experimental
 {
 
-class GlobalConfig : public Phonon::GlobalConfig
+class PHONONEXPERIMENTAL_EXPORT GlobalConfig : public Phonon::GlobalConfig
 {
     K_DECLARE_PRIVATE(Phonon::GlobalConfig)
 public:

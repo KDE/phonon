@@ -365,12 +365,12 @@ and existing builds. */
 
     typedef ObjectDescriptionModel<AudioOutputDeviceType> AudioOutputDeviceModel;
     typedef ObjectDescriptionModel<AudioCaptureDeviceType> AudioCaptureDeviceModel;
+    typedef ObjectDescriptionModel<VideoCaptureDeviceType> VideoCaptureDeviceModel;
     typedef ObjectDescriptionModel<EffectType> EffectDescriptionModel;
     typedef ObjectDescriptionModel<AudioChannelType> AudioChannelDescriptionModel;
     typedef ObjectDescriptionModel<SubtitleType> SubtitleDescriptionModel;
 /*
     typedef ObjectDescriptionModel<VideoOutputDeviceType> VideoOutputDeviceModel;
-    typedef ObjectDescriptionModel<VideoCaptureDeviceType> VideoCaptureDeviceModel;
     typedef ObjectDescriptionModel<AudioCodecType> AudioCodecDescriptionModel;
     typedef ObjectDescriptionModel<VideoCodecType> VideoCodecDescriptionModel;
     typedef ObjectDescriptionModel<ContainerFormatType> ContainerFormatDescriptionModel;

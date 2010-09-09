@@ -37,10 +37,8 @@ namespace Factory
     class Sender : public QObject
     {
         Q_OBJECT
+
         Q_SIGNALS:
-            /**
-             * \copydoc Phonon::Experimental::BackendCapabilities::Notifier::availableVideoCaptureDevicesChanged
-             */
             void availableVideoCaptureDevicesChanged();
     };
 

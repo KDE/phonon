@@ -48,15 +48,13 @@ bool MediaSource::operator==(const MediaSource &rhs) const
 
 VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
-    S_D(const MediaSource);
-    return d->videoCaptureDevice;
+    return phononVcdToExperimentalVcd(Phonon::MediaSource::videoCaptureDevice());
 }
 
 MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
     : Phonon::MediaSource(*new MediaSourcePrivate(VideoCaptureDeviceSource))
 {
-    S_D(MediaSource);
-    d->videoCaptureDevice = videoDevice;
+
 }
 
 MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)

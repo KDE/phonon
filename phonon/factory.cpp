@@ -204,6 +204,9 @@ FactoryPrivate::FactoryPrivate()
     QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.Phonon.Factory"),
         QLatin1String("phononBackendChanged"), this, SLOT(phononBackendChanged()));
 #endif
+
+    // Register the meta types from ObjectDescription
+    registerMetaTypes();
 }
 
 FactoryPrivate::~FactoryPrivate()
@@ -233,6 +236,9 @@ void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
         break;
     case AudioCaptureDeviceType:
         emit availableAudioCaptureDevicesChanged();
+        break;
+    case VideoCaptureDeviceType:
+        emit availableVideoCaptureDevicesChanged();
         break;
     default:
         break;
@@ -365,11 +371,19 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     Q_ASSERT(QCoreApplication::instance());
     const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
     if (!platform_plugin_env.isEmpty()) {
+        pDebug() << Q_FUNC_INFO << "platform plugin path:" << platform_plugin_env;
         QPluginLoader pluginLoader(QString::fromLocal8Bit(platform_plugin_env.constData()));
         if (pluginLoader.load()) {
-            m_platformPlugin = qobject_cast<PlatformPlugin *>(pluginLoader.instance());
+            QObject *plInstance = pluginLoader.instance();
+            if (!plInstance)
+                pDebug() << Q_FUNC_INFO << "unable to grab root component object for the platform plugin";
+
+            m_platformPlugin = qobject_cast<PlatformPlugin *>(plInstance);
             if (m_platformPlugin) {
+                pDebug() << Q_FUNC_INFO << "platform plugin" << m_platformPlugin->applicationName();
                 return m_platformPlugin;
+            } else {
+                pDebug() << Q_FUNC_INFO << "platform plugin cast fail" << plInstance;
             }
         }
     }

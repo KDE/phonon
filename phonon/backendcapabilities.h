@@ -75,6 +75,7 @@ namespace BackendCapabilities
              */
             void availableAudioOutputDevicesChanged();
 
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
             /**
              * This signal is emitted when audio capture devices were plugged or
              * unplugged.
@@ -82,9 +83,19 @@ namespace BackendCapabilities
              * Check BackendCapabilities::availableAudioCaptureDevices to get the
              * current list of available devices.
              */
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
             void availableAudioCaptureDevicesChanged();
 #endif //QT_NO_PHONON_AUDIOCAPTURE
+
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+            /**
+             * This signal is emitted when video capture devices were plugged or
+             * unplugged.
+             *
+             * Check BackendCapabilities::availableVideoCaptureDevices to get the
+             * current list of available devices.
+             */
+            void availableVideoCaptureDevicesChanged();
+#endif //QT_NO_PHONON_VIDEOCAPTURE
     };
 
     /**
@@ -100,6 +111,7 @@ namespace BackendCapabilities
      * \see Notifier::capabilitiesChanged()
      * \see Notifier::availableAudioOutputDevicesChanged()
      * \see Notifier::availableAudioCaptureDevicesChanged()
+     * \see Notifier::availableVideoCaptureDevicesChanged()
      */
     PHONON_EXPORT Notifier *notifier();
 
@@ -127,13 +139,13 @@ namespace BackendCapabilities
      */
     PHONON_EXPORT QList<AudioOutputDevice> availableAudioOutputDevices();
 
+#ifndef QT_NO_PHONON_AUDIOCAPTURE
     /**
      * Returns the audio capture devices the backend supports.
      *
      * \return A list of AudioCaptureDevice objects that give a name and
      * description for every supported audio capture device.
      */
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
     PHONON_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevices();
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
@@ -145,13 +157,38 @@ namespace BackendCapabilities
      */
 //    PHONON_EXPORT QList<VideoOutputDevice> availableVideoOutputDevices();
 
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
     /**
      * Returns the video capture devices the backend supports.
      *
      * \return A list of VideoCaptureDevice objects that give a name and
      * description for every supported video capture device.
      */
-//    PHONON_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
+    PHONON_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
+#endif //QT_NO_PHONON_VIDEOCAPTURE
+
+    /**
+     * Returns the video capture devices that have audio capture capabilities
+     * that the backend supports. In effect, these are both video and audio
+     * capture devices and one can connect them to both a VideoWidget and an
+     * AudioOutput, for example.
+     *
+     * The resulting VideoCaptureDevices have a "hasaudio" property to true.
+     *
+     * \note These devices appear both in availableVideoCaptureDevices() and
+     * availableAudioCaptureDevices()
+     *
+     * \warning Creating two separate MediaObject instances for the same capture
+     * device, one for video and the other for audio, most probably doesn't work.
+     * But, if there are two separate devices, use Experimental::AVCapture.
+     *
+     * \see availableVideoCaptureDevices()
+     * \see availableAudioCaptureDevices()
+     * \see Experimental::AVCapture
+     */
+#if !defined(QT_NO_PHONON_VIDEOCAPTURE) && !defined(QT_NO_PHONON_AUDIOCAPTURE)
+    PHONON_EXPORT QList<VideoCaptureDevice> availableAVCaptureDevices();
+#endif // NOT QT_NO_PHONON_VIDEOCAPTURE AND NOT QT_NO_PHONON_AUDIOCAPTURE
 
     /**
      * Returns the visualization effects the backend supports.
@@ -161,13 +198,13 @@ namespace BackendCapabilities
      */
 //    PHONON_EXPORT QList<VisualizationDescription> availableVisualizations();
 
+#ifndef QT_NO_PHONON_EFFECT
     /**
      * Returns descriptions for the audio effects the backend supports.
      *
      * \return A list of AudioEffectDescription objects that give a name and
      * description for every supported audio effect.
      */
-#ifndef QT_NO_PHONON_EFFECT
     PHONON_EXPORT QList<EffectDescription> availableAudioEffects();
 #endif //QT_NO_PHONON_EFFECT
 

@@ -118,35 +118,57 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
             QHash<QByteArray, QVariant> properties = pulse->objectDescriptionProperties(type, index);
             return new ObjectDescriptionData(index, properties);
         }
-    } else {
-        BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
 
-        // prefer to get the ObjectDescriptionData from the platform plugin for audio devices
+        // When Pulse is enabled, only try from the platform plugin or backend if it is about audio capture
+        if (type != AudioCaptureDeviceType)
+            return new ObjectDescriptionData(0); // invalid
+    }
+
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-        if (is_audio_device) {
-            PlatformPlugin *platformPlugin = Factory::platformPlugin();
-            if (platformPlugin) {
-                QList<int> indexes = platformPlugin->objectDescriptionIndexes(type);
-                if (indexes.contains(index)) {
-                    QHash<QByteArray, QVariant> properties = platformPlugin->objectDescriptionProperties(type, index);
-                    return new ObjectDescriptionData(index, properties);
-                }
-            }
-        }
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-
-        if (iface) {
-            QList<int> indexes = iface->objectDescriptionIndexes(type);
+    // prefer to get the ObjectDescriptionData from the platform plugin for audio devices
+    if (is_audio_device) {
+        PlatformPlugin *platformPlugin = Factory::platformPlugin();
+        if (platformPlugin) {
+            QList<int> indexes = platformPlugin->objectDescriptionIndexes(type);
             if (indexes.contains(index)) {
-                QHash<QByteArray, QVariant> properties = iface->objectDescriptionProperties(type, index);
+                QHash<QByteArray, QVariant> properties = platformPlugin->objectDescriptionProperties(type, index);
                 return new ObjectDescriptionData(index, properties);
             }
         }
     }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
+
+    BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
+    if (iface) {
+        QList<int> indexes = iface->objectDescriptionIndexes(type);
+        if (indexes.contains(index)) {
+            QHash<QByteArray, QVariant> properties = iface->objectDescriptionProperties(type, index);
+            return new ObjectDescriptionData(index, properties);
+        }
+    }
+
     return new ObjectDescriptionData(0); // invalid
 }
 
 } //namespace Phonon
 
 QT_END_NAMESPACE
+
+
+void Phonon::registerMetaTypes()
+{
+    // Register the PhononDeviceAccessList type if it has not been registered yet
+    if (qMetaTypeId<Phonon::DeviceAccess>())
+    {
+        qRegisterMetaType<Phonon::DeviceAccess>();
+        qRegisterMetaTypeStreamOperators<Phonon::DeviceAccess>("Phonon::DeviceAccess");
+    }
+
+    if (qMetaTypeId<Phonon::DeviceAccessList>())
+    {
+        qRegisterMetaType<Phonon::DeviceAccessList>();
+        qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("Phonon::DeviceAccessList");
+    }
+}
+
 // vim: sw=4 ts=4

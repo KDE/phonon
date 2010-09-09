@@ -24,10 +24,11 @@
 #include "../globalconfig_p.h"
 
 #include "../factory_p.h"
-#include "objectdescription.h"
 #include "../phonondefs_p.h"
 #include "../backendinterface.h"
 #include "../qsettingsgroup_p.h"
+#include "../platformplugin.h"
+#include "pulsesupport.h"
 
 #include <QtCore/QList>
 #include <QtCore/QVariant>
@@ -37,94 +38,14 @@ namespace Phonon
 namespace Experimental
 {
 
-enum WhatToFilter {
-    FilterAdvancedDevices = 1,
-    FilterUnavailableDevices = 4
-};
-
-static void filter(BackendInterface *backendIface, QList<int> *list, int whatToFilter)
+QList<int> GlobalConfig::videoCaptureDeviceListFor(Category category, int override) const
 {
-    QMutableListIterator<int> it(*list);
-    while (it.hasNext()) {
-        const QHash<QByteArray, QVariant> properties = backendIface->objectDescriptionProperties(
-                static_cast<Phonon::ObjectDescriptionType>(Phonon::Experimental::VideoCaptureDeviceType), it.next());
-        QVariant var;
-        if (whatToFilter & FilterAdvancedDevices) {
-            var = properties.value("isAdvanced");
-            if (var.isValid() && var.toBool()) {
-                it.remove();
-                continue;
-            }
-        }
-        if (whatToFilter & FilterUnavailableDevices) {
-            var = properties.value("available");
-            if (var.isValid() && !var.toBool()) {
-                it.remove();
-                continue;
-            }
-        }
-    }
+    return Phonon::GlobalConfig::videoCaptureDeviceListFor(category, override);
 }
 
-QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, int override) const
+int GlobalConfig::videoCaptureDeviceFor(Category category, int override) const
 {
-    K_D(const GlobalConfig);
-
-    //The devices need to be stored independently for every backend
-    const QSettingsGroup backendConfig(&d->config, QLatin1String("VideoCaptureDevice")); // + Factory::identifier());
-    const QSettingsGroup generalGroup(&d->config, QLatin1String("General"));
-    const bool hideAdvancedDevices = ((override & AdvancedDevicesFromSettings)
-            ? generalGroup.value(QLatin1String("HideAdvancedDevices"), true)
-            : static_cast<bool>(override & HideAdvancedDevices));
-
-    //First we lookup the available devices directly from the backend
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Phonon::Factory::backend());
-    if (!backendIface) {
-        return QList<int>();
-    }
-
-    // this list already is in default order (as defined by the backend)
-    QList<int> defaultList = backendIface->objectDescriptionIndexes(static_cast<Phonon::ObjectDescriptionType>(Phonon::Experimental::VideoCaptureDeviceType));
-    if (hideAdvancedDevices || (override & HideUnavailableDevices)) {
-        filter(backendIface, &defaultList,
-                (hideAdvancedDevices ? FilterAdvancedDevices : 0) |
-                ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
-                );
-    }
-
-    QString categoryKey = QLatin1String("Category") + QString::number(static_cast<int>(category));
-    if (!backendConfig.hasKey(categoryKey)) {
-        // no list in config for the given category
-        QString categoryKey = QLatin1String("Category") + QString::number(static_cast<int>(Phonon::NoCategory));
-        if (!backendConfig.hasKey(categoryKey)) {
-            // no list in config for NoCategory
-            return defaultList;
-        }
-    }
-
-    //Now the list from d->config
-    QList<int> deviceList = backendConfig.value(categoryKey, QList<int>());
-
-    //if there are devices in d->config that the backend doesn't report, remove them from the list
-    QMutableListIterator<int> i(deviceList);
-    while (i.hasNext()) {
-        if (0 == defaultList.removeAll(i.next())) {
-            i.remove();
-        }
-    }
-
-    //if the backend reports more devices that are not in d->config append them to the list
-    deviceList += defaultList;
-
-    return deviceList;
-}
-
-int GlobalConfig::videoCaptureDeviceFor(Phonon::Category category, int override) const
-{
-    QList<int> ret = videoCaptureDeviceListFor(category, override);
-    if (ret.isEmpty())
-        return -1;
-    return ret.first();
+    return Phonon::GlobalConfig::videoCaptureDeviceFor(category, override);
 }
 
 } // namespace Experimental

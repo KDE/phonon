@@ -26,6 +26,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include "phonon_export.h"
 #include "phononnamespace.h"
 #include "phonondefs.h"
+#include "objectdescription.h"
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
@@ -50,14 +51,25 @@ namespace Phonon
         };
         bool hideAdvancedDevices() const;
         void setHideAdvancedDevices(bool hide = true);
+
+        QHash<QByteArray, QVariant> deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const;
+
         void setAudioOutputDeviceListFor(Phonon::Category category, QList<int> order);
         QList<int> audioOutputDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         int audioOutputDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
+
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+        QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        QHash<QByteArray, QVariant> videoCaptureDeviceProperties(int index) const;
+#endif //QT_NO_PHONON_VIDEOCAPTURE
 
 #ifndef QT_NO_PHONON_AUDIOCAPTURE
         void setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order);
         QList<int> audioCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         int audioCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        QHash<QByteArray, QVariant> audioCaptureDeviceProperties(int index) const;
 #endif //QT_NO_PHONON_AUDIOCAPTURE
 
     protected:
