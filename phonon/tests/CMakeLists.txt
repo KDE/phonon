@@ -63,10 +63,6 @@ PHONON_UNIT_TESTS_FAKE(
 	volumeslidertest
 	audiodataoutputtest
 )
-target_link_libraries(backendcapabilitiestest ${PHONON_KDECORE_LIBS})
-target_link_libraries(audiodevicelisttest ${PHONON_KAUDIODEVICELIST_LIBS})
-target_link_libraries(mediaplayer ${PHONON_KIO_LIBS})
-target_link_libraries(backendcapabilitiestest_fake ${PHONON_KDECORE_LIBS})
 #methodtest does not link against libphonon
 phonon_add_executable(methodtest methodtest.cpp ../factory.cpp
                                                 ../mediaobject.cpp
@@ -88,7 +84,7 @@ SET_TARGET_PROPERTIES(methodtest_fake PROPERTIES COMPILE_FLAGS "-DUSE_FAKE_BACKE
 #audiodevicelisttest does not link agains libphonon, instead it links agains kde stuff
 #libkaudiodevicelist building is disabled (commented out) in the kde sources, you must enable it there first, to use this test
 #phonon_add_executable(audiodevicelisttest audiodevicelisttest.cpp)
-#target_link_libraries(audiodevicelisttest ${QT_QTTEST_LIBRARY} ${PHONON_KDECORE_LIBS} kaudiodevicelist)
+#target_link_libraries(audiodevicelisttest ${QT_QTTEST_LIBRARY} kaudiodevicelist)
 
 SET(mediasourcetest_SRCS mediasourcetest.cpp)
 qt4_add_resources(mediasourcetest_SRCS testresources.qrc)

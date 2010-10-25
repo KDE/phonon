@@ -39,8 +39,6 @@ if(QT_QTDBUS_FOUND)
     list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
 endif(QT_QTDBUS_FOUND)
 
-set(PHONON_KDECORE_LIBS kdecore)
-
 add_subdirectory(phonon)
 add_subdirectory(includes)
 
