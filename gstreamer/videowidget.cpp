@@ -24,6 +24,7 @@
 #include <QtGui/QBoxLayout>
 #include <QApplication>
 #include <gst/gst.h>
+#include <gst/interfaces/navigation.h>
 #include <gst/interfaces/propertyprobe.h>
 #include "mediaobject.h"
 #include "message.h"
@@ -378,6 +379,77 @@ void VideoWidget::mediaNodeEvent(const MediaNodeEvent *event)
     // Forward events to renderer
     if (m_renderer)
         m_renderer->handleMediaNodeEvent(event);
+}
+
+void VideoWidget::keyPressEvent(QKeyEvent *event)
+{
+    GstElement *videosink = m_renderer->videoSink();
+    if (GST_IS_NAVIGATION(videosink)) {
+        GstNavigation *navigation = GST_NAVIGATION(videosink);
+        if (navigation) {
+            // TODO key code via xlib?
+            gst_navigation_send_key_event(navigation, "key-pressed",
+                                          event->text().toAscii());
+        }
+    }
+}
+
+void VideoWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    GstElement *videosink = m_renderer->videoSink();
+    if (GST_IS_NAVIGATION(videosink)) {
+        GstNavigation *navigation = GST_NAVIGATION(videosink);
+        if (navigation) {
+            // TODO key code via xlib?
+            gst_navigation_send_key_event(navigation, "key-released",
+                                          event->text().toAscii());
+        }
+    }
+}
+
+void VideoWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    QRect frameRect = calculateDrawFrameRect();
+    int x = event->x() - frameRect.x();
+    int y = event->y() - frameRect.y();
+    GstElement *videosink = m_renderer->videoSink();
+    if (GST_IS_NAVIGATION(videosink)) {
+        GstNavigation *navigation = GST_NAVIGATION(videosink);
+        if (navigation) {
+            gst_navigation_send_mouse_event(navigation, "mouse-move",
+                                            0, x, y);
+        }
+    }
+}
+
+void VideoWidget::mousePressEvent(QMouseEvent *event)
+{
+    QRect frameRect = calculateDrawFrameRect();
+    int x = event->x() - frameRect.x();
+    int y = event->y() - frameRect.y();
+    GstElement *videosink = m_renderer->videoSink();
+    if (GST_IS_NAVIGATION(videosink)) {
+        GstNavigation *navigation = GST_NAVIGATION(videosink);
+        if (navigation) {
+            gst_navigation_send_mouse_event(navigation, "mouse-button-press",
+                                            1, x, y);
+        }
+    }
+}
+
+void VideoWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    QRect frameRect = calculateDrawFrameRect();
+    int x = event->x() - frameRect.x();
+    int y = event->y() - frameRect.y();
+    GstElement *videosink = m_renderer->videoSink();
+    if (GST_IS_NAVIGATION(videosink)) {
+        GstNavigation *navigation = GST_NAVIGATION(videosink);
+        if (navigation) {
+            gst_navigation_send_mouse_event(navigation, "mouse-button-release",
+                                            1, x, y);
+        }
+    }
 }
 
 }

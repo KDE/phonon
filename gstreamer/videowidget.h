@@ -86,6 +86,12 @@ public:
     }
 
 protected:
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void keyReleaseEvent(QKeyEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+
     GstElement *m_videoBin;
     QSize m_movieSize;
     AbstractRenderer *m_renderer;
