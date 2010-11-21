@@ -30,6 +30,8 @@
 #include "alsasink2.h"
 #endif
 
+#include <QtCore/QSettings>
+
 /*
  * This class manages the list of currently
  * active output devices

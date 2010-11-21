@@ -18,7 +18,6 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef PHONON_IODEVICEREADER_H
 #define PHONON_IODEVICEREADER_H
 
-#include <phonon/mediasource.h>
 #include <phonon/streaminterface.h>
 
 QT_BEGIN_NAMESPACE
@@ -27,70 +26,74 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
-    class MediaSource;
-    namespace Gstreamer
+
+class MediaSource;
+
+namespace Gstreamer
+{
+
+class StreamReader : public Phonon::StreamInterface
+{
+public:
+
+    StreamReader(const Phonon::MediaSource &source)
+        :  m_pos(0)
+        , m_size(0)
+        , m_seekable(false)
     {
-        class StreamReader : public Phonon::StreamInterface
-        {
-        public:
+        connectToSource(source);
+    }
 
-           StreamReader(const Phonon::MediaSource &source)
-            :  m_pos(0)
-             , m_size(0)
-             , m_seekable(false)
-            {
-                connectToSource(source);
-            }
+    int currentBufferSize() const
+    {
+        return m_buffer.size();
+    }
 
-            int currentBufferSize() const
-            {
-                return m_buffer.size();
-            }
+    void writeData(const QByteArray &data) {
+        m_pos += data.size();
+        m_buffer += data;
+    }
 
-            void writeData(const QByteArray &data) {
-                m_pos += data.size();
-                m_buffer += data;
-            }
+    void setCurrentPos(qint64 pos)
+    {
+        m_pos = pos;
+        seekStream(pos);
+        m_buffer.clear();
+    }
 
-            void setCurrentPos(qint64 pos)
-            {
-                m_pos = pos;
-                seekStream(pos);
-                m_buffer.clear();
-            }
-            
-            quint64 currentPos() const
-            {
-                return m_pos;
-            }
+    quint64 currentPos() const
+    {
+        return m_pos;
+    }
 
-            bool read(quint64 offset, int length, char * buffer);
+    bool read(quint64 offset, int length, char * buffer);
 
-            void endOfData() {}
+    void endOfData() {}
 
-            void setStreamSize(qint64 newSize) {
-                m_size = newSize;
-            }
+    void setStreamSize(qint64 newSize) {
+        m_size = newSize;
+    }
 
-            qint64 streamSize() const {
-                return m_size;
-            }
+    qint64 streamSize() const {
+        return m_size;
+    }
 
-            void setStreamSeekable(bool s) {
-                m_seekable = s;
-            }
+    void setStreamSeekable(bool s) {
+        m_seekable = s;
+    }
 
-            bool streamSeekable() const {
-                return m_seekable;
-            }
+    bool streamSeekable() const {
+        return m_seekable;
+    }
 
 private:
-            QByteArray m_buffer;
-            quint64 m_pos;
-            quint64 m_size;
-            bool m_seekable;
-        };
-    }
+    QByteArray m_buffer;
+    quint64 m_pos;
+    quint64 m_size;
+    bool m_seekable;
+};
+
+}
 }
 
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM

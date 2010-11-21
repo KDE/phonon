@@ -21,10 +21,7 @@
 #include "common.h"
 
 #include <QtCore/QObject>
-#include <QtCore/QTimer>
 #include <QtCore/QStringList>
-
-#include <gst/gst.h>
 
 QT_BEGIN_NAMESPACE
 

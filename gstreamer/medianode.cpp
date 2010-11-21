@@ -17,6 +17,7 @@
 
 #include "common.h"
 #include "medianode.h"
+#include "medianodeevent.h"
 #include "mediaobject.h"
 #include "message.h"
 #include "backend.h"
@@ -46,7 +47,7 @@ MediaNode::MediaNode(Backend *backend, NodeDescription description) :
     if (description & AudioSource) {
         m_audioTee = gst_element_factory_make("tee", NULL);
         gst_object_ref (GST_OBJECT (m_audioTee));
-        gst_object_sink (GST_OBJECT (m_audioTee));     
+        gst_object_sink (GST_OBJECT (m_audioTee));
 
         // Fake audio sink to swallow unconnected audio pads
         m_fakeAudioSink = gst_element_factory_make("fakesink", NULL);
@@ -58,7 +59,7 @@ MediaNode::MediaNode(Backend *backend, NodeDescription description) :
     if (description & VideoSource) {
         m_videoTee = gst_element_factory_make("tee", NULL);
         gst_object_ref (GST_OBJECT (m_videoTee));
-        gst_object_sink (GST_OBJECT (m_videoTee));     
+        gst_object_sink (GST_OBJECT (m_videoTee));
 
         // Fake video sink to swallow unconnected video pads
         m_fakeVideoSink = gst_element_factory_make("fakesink", NULL);
@@ -417,7 +418,7 @@ bool MediaNode::unlink()
     Q_ASSERT(root());
     if (description() & AudioSource) {
         if (GST_ELEMENT_PARENT(m_audioTee) == GST_ELEMENT(root()->audioGraph())) {
-           gst_element_set_state(m_audioTee, GST_STATE_NULL);    
+           gst_element_set_state(m_audioTee, GST_STATE_NULL);
            gst_bin_remove(GST_BIN(root()->audioGraph()), m_audioTee);
        }
         for (int i=0; i<m_audioSinkList.size(); ++i) {
@@ -425,14 +426,14 @@ bool MediaNode::unlink()
             if (MediaNode *output = qobject_cast<MediaNode*>(audioSink)) {
                 GstElement *element = output->audioElement();
                 if (GST_ELEMENT_PARENT(element) == GST_ELEMENT(root()->audioGraph())) {
-                    gst_element_set_state(element, GST_STATE_NULL);    
+                    gst_element_set_state(element, GST_STATE_NULL);
                     gst_bin_remove(GST_BIN(root()->audioGraph()), element);
                 }
             }
         }
     } else if (description() & VideoSource) {
         if (GST_ELEMENT_PARENT(m_videoTee) == GST_ELEMENT(root()->videoGraph())) {
-           gst_element_set_state(m_videoTee, GST_STATE_NULL);    
+           gst_element_set_state(m_videoTee, GST_STATE_NULL);
            gst_bin_remove(GST_BIN(root()->videoGraph()), m_videoTee);
         }
         for (int i=0; i <m_videoSinkList.size(); ++i) {
@@ -440,7 +441,7 @@ bool MediaNode::unlink()
             if (MediaNode *vw = qobject_cast<MediaNode*>(videoSink)) {
                 GstElement *element = vw->videoElement();
                 if (GST_ELEMENT_PARENT(element) == GST_ELEMENT(root()->videoGraph())) {
-                    gst_element_set_state(element, GST_STATE_NULL);    
+                    gst_element_set_state(element, GST_STATE_NULL);
                     gst_bin_remove(GST_BIN(root()->videoGraph()), element);
                 }
             }

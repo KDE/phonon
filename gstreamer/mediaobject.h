@@ -18,20 +18,15 @@
 #ifndef Phonon_GSTREAMER_MEDIAOBJECT_H
 #define Phonon_GSTREAMER_MEDIAOBJECT_H
 
-#include "backend.h"
-#include "common.h"
 #include "medianode.h"
 #include <phonon/mediaobjectinterface.h>
 #include <phonon/addoninterface.h>
 
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
 #include <QtCore/QObject>
-#include <QtCore/QDate>
-#include <QtCore/QEvent>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QUrl>
-#include <gst/gst.h>
+#include <QtCore/QVariant>
 
 QT_BEGIN_NAMESPACE
 
@@ -156,7 +151,7 @@ public:
 
 public Q_SLOTS:
     void setState(State);
-    
+
 Q_SIGNALS:
     void currentSourceChanged(const MediaSource &newSource);
     void stateChanged(Phonon::State newstate, Phonon::State oldstate);
@@ -200,7 +195,7 @@ protected:
     bool createPipefromStream(const MediaSource &);
 
 private Q_SLOTS:
-    void noMorePadsAvailable();    
+    void noMorePadsAvailable();
     void getStreamInfo();
     void emitTick();
     void beginPlay();
@@ -248,7 +243,7 @@ private:
     MediaSource m_nextSource;
     qint32 m_prefinishMark;
     qint32 m_transitionTime;
-	bool m_isStream;
+        bool m_isStream;
 
     qint64 m_posAtSeek;
 

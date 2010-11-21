@@ -31,6 +31,7 @@ QT_BEGIN_NAMESPACE
 
 namespace Phonon {
 namespace Gstreamer {
+
 class Backend;
 class DeviceManager;
 class AbstractRenderer;
@@ -55,7 +56,7 @@ public:
     int allocateDeviceId();
     int deviceId(const QByteArray &gstId) const;
     const QByteArray gstId(int id);
-    AudioDevice* audioDevice(int id);
+    AudioDevice *audioDevice(int id);
     GstElement *createGNOMEAudioSink(Category category);
     GstElement *createAudioSink(Category category = NoCategory);
     AbstractRenderer *createVideoRenderer(VideoWidget *parent);

@@ -18,8 +18,7 @@
 #ifndef Phonon_GSTREAMER_WIDGETRENDERER_H
 #define Phonon_GSTREAMER_WIDGETRENDERER_H
 
-#include "videowidget.h"
-#include "common.h"
+#include "abstractrenderer.h"
 
 #ifndef QT_NO_OPENGL
 #include <QtOpenGL/QGLFormat>
@@ -35,6 +34,8 @@ namespace Phonon
 {
 namespace Gstreamer
 {
+
+class VideoWidget;
 
 class WidgetRenderer : public AbstractRenderer
 {

@@ -17,7 +17,12 @@
 
 #include "volumefadereffect.h"
 #include "common.h"
-#include <QtCore>
+
+#include <gst/gstbin.h>
+#include <gst/gstghostpad.h>
+#include <gst/gstutils.h>
+
+#include <QtCore/QEvent>
 
 QT_BEGIN_NAMESPACE
 
@@ -26,7 +31,7 @@ namespace Phonon
 {
 namespace Gstreamer
 {
-VolumeFaderEffect::VolumeFaderEffect(Backend *backend, QObject *parent) 
+VolumeFaderEffect::VolumeFaderEffect(Backend *backend, QObject *parent)
     : Effect(backend, parent, AudioSource | AudioSink)
     , m_fadeCurve(Phonon::VolumeFaderEffect::Fade3Decibel)
     , m_fadeTimer(0)
@@ -127,10 +132,10 @@ void VolumeFaderEffect::updateFade()
             currVal = step;
             break;
         case Phonon::VolumeFaderEffect::Fade9Decibel: // Fast in the beginning / Linear
-            currVal = step * 0.5 + (1.0-(1.0-step)*(1.0-step)) * 0.5; 
+            currVal = step * 0.5 + (1.0-(1.0-step)*(1.0-step)) * 0.5;
             break;
         case Phonon::VolumeFaderEffect::Fade12Decibel: // Fast in the beginning
-            currVal = 1.0 - (1.0-step) * (1.0-step);  
+            currVal = 1.0 - (1.0-step) * (1.0-step);
             break;
         default:
             break;

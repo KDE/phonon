@@ -15,14 +15,18 @@
     along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtGui/QPainter>
 #include <gst/gst.h>
+#include "backend.h"
 #include "common.h"
 #include "message.h"
 #include "mediaobject.h"
 #include "qwidgetvideosink.h"
 #include "widgetrenderer.h"
+#include "videowidget.h"
 #include "qrgb.h"
+
+#include <QtCore/QTime>
+#include <QtGui/QPainter>
 
 // support old OpenGL installations (1.2)
 // assume that if TEXTURE0 isn't defined, none are
@@ -69,7 +73,7 @@ WidgetRenderer::WidgetRenderer(VideoWidget *videoWidget)
     if ((m_videoSink = GST_ELEMENT(g_object_new(get_type_RGB(), NULL)))) {
         gst_object_ref (GST_OBJECT (m_videoSink)); //Take ownership
         gst_object_sink (GST_OBJECT (m_videoSink));
-        
+
         QWidgetVideoSinkBase*  sink = reinterpret_cast<QWidgetVideoSinkBase*>(m_videoSink);
         // Let the videosink know which widget to direct frame updates to
         sink->renderWidget = videoWidget;
@@ -89,7 +93,7 @@ void WidgetRenderer::setNextFrame(const QByteArray &array, int w, int h)
     if (m_videoWidget->root()->state() == Phonon::LoadingState)
         return;
 
-    m_frame = QImage(); 
+    m_frame = QImage();
     {
         m_frame = QImage((uchar *)array.constData(), w, h, QImage::Format_RGB32);
     }

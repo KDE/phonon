@@ -26,14 +26,15 @@
 #include "streamreader.h"
 #include "phononsrc.h"
 #include "phonon-config-gstreamer.h"
-#include <QtCore>
+
+#include <QtCore/QByteRef>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QEvent>
+#include <QtCore/QFile>
+#include <QtCore/QLibrary>
+#include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QVector>
-#include <QtCore/QFile>
-#include <QtCore/QByteRef>
-#include <QtCore/QStringList>
-#include <QtCore/QEvent>
-#include <QApplication>
 
 #define ABOUT_TO_FINNISH_TIME 2000
 #define MAX_QUEUE_TIME 20 * GST_SECOND

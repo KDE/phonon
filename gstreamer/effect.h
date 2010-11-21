@@ -26,7 +26,7 @@
 
 #include <QtCore/QObject>
 
-#include <gst/gst.h>
+#include <gst/gstelement.h>
 
 #ifndef QT_NO_PHONON_EFFECT
 QT_BEGIN_NAMESPACE

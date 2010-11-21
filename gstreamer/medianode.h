@@ -25,7 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QSize>
 
-#include <gst/gst.h>
+#include <gst/gstelement.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -110,7 +110,7 @@ protected:
     GstElement *m_fakeVideoSink;
    Backend *m_backend;
     QString m_name;
- 
+
 private:
     bool addOutput(MediaNode *, GstElement *tee);
     NodeDescription m_description;

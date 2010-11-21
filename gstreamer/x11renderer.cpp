@@ -20,6 +20,10 @@
 
 #ifndef Q_WS_QWS
 
+#include "common.h"
+#include "backend.h"
+#include "mediaobject.h"
+#include "message.h"
 #include <QtGui/QPalette>
 #include <QtGui/QApplication>
 #include <QtGui/QPainter>
@@ -27,9 +31,6 @@
 #include <gst/gst.h>
 #include <gst/interfaces/xoverlay.h>
 #include <gst/interfaces/propertyprobe.h>
-#include "common.h"
-#include "mediaobject.h"
-#include "message.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -41,9 +42,9 @@ namespace Gstreamer
 class OverlayWidget : public QWidget
 {
 public:
-    OverlayWidget(VideoWidget *videoWidget, X11Renderer *renderer) : 
-                  QWidget(videoWidget), 
-                  m_videoWidget(videoWidget), 
+    OverlayWidget(VideoWidget *videoWidget, X11Renderer *renderer) :
+                  QWidget(videoWidget),
+                  m_videoWidget(videoWidget),
                   m_renderer(renderer) { }
     void paintEvent(QPaintEvent *) {
         Phonon::State state = m_videoWidget->root() ? m_videoWidget->root()->state() : Phonon::LoadingState;

@@ -18,9 +18,7 @@
 #ifndef Phonon_GSTREAMER_MEDIANODEEVENT_H
 #define Phonon_GSTREAMER_MEDIANODEEVENT_H
 
-#include "common.h"
-
-#include <QtCore>
+#include <QtCore/QtGlobal>
 
 QT_BEGIN_NAMESPACE
 

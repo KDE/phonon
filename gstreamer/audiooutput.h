@@ -23,11 +23,6 @@
 #include "medianode.h"
 
 #include <phonon/audiooutputinterface.h>
-#include <phonon/phononnamespace.h>
-
-#include <QtCore/QFile>
-
-#include <gst/gst.h>
 
 QT_BEGIN_NAMESPACE
 

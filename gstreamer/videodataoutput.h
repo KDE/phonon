@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -23,8 +23,6 @@
 #ifndef Phonon_GSTREAMER_VIDEODATAOUTPUT_H
 #define Phonon_GSTREAMER_VIDEODATAOUTPUT_H
 
-#include "abstractvideooutput.h"
-#include "backend.h"
 #include "medianode.h"
 #include <phonon/experimental/abstractvideodataoutput.h>
 #include <phonon/experimental/videodataoutputinterface.h>
@@ -37,6 +35,8 @@ namespace Phonon
 namespace Gstreamer
 {
 
+class Backend;
+
     /**
      * \author Trever Fischer <tdfischer@fedoraproject.org>
      */
@@ -46,20 +46,20 @@ namespace Gstreamer
     {
         Q_OBJECT
         Q_INTERFACES(Phonon::Experimental::VideoDataOutputInterface Phonon::Gstreamer::MediaNode);
-        
+
     public:
         VideoDataOutput(Backend *, QObject *);
         ~VideoDataOutput();
-        
+
         static void processBuffer(GstPad*, GstBuffer*, gpointer);
-        
+
         Phonon::Experimental::AbstractVideoDataOutput *frontendObject() const { return m_frontend; }
         void setFrontendObject(Phonon::Experimental::AbstractVideoDataOutput *object) { m_frontend = object; }
-        
+
         GstElement *videoElement() { return m_queue; }
-        
+
         void mediaNodeEvent(const MediaNodeEvent *event);
-    
+
     private:
         GstElement *m_queue;
         Phonon::Experimental::AbstractVideoDataOutput *m_frontend;

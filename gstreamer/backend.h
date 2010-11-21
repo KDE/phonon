@@ -19,18 +19,13 @@
 #define Phonon_GSTREAMER_BACKEND_H
 
 #include "common.h"
-#include "devicemanager.h"
-#include "medianode.h"
+#include "message.h"
 
 #include <phonon/objectdescription.h>
 #include <phonon/backendinterface.h>
 
 #include <QtCore/QList>
-#include <QtCore/QPointer>
 #include <QtCore/QStringList>
-#include <QtCore/QTimer>
-
-#include <gst/gst.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -39,9 +34,9 @@ namespace Phonon
 namespace Gstreamer
 {
 class AudioOutput;
-class MediaNode;
-class MediaObject;
+class DeviceManager;
 class EffectManager;
+class MediaObject;
 
 class Backend : public QObject, public BackendInterface
 {

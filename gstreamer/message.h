@@ -18,8 +18,6 @@
 #ifndef Phonon_GSTREAMER_MESSAGE_H
 #define Phonon_GSTREAMER_MESSAGE_H
 
-#include "common.h"
-
 #include <QtCore/QMetaType>
 
 #include <gst/gst.h>

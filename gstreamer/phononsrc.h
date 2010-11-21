@@ -18,10 +18,9 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __PHONON_SRC_H__
 #define __PHONON_SRC_H__
 
-#include <sys/types.h>
-#include <gst/gst.h>
-#include <gst/base/gstbasesrc.h>
 #include "streamreader.h"
+
+#include <gst/base/gstbasesrc.h>
 
 QT_BEGIN_NAMESPACE
 

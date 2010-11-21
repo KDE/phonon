@@ -18,9 +18,10 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __ARTS_SINK_H__
 #define __ARTS_SINK_H__
 
-#include <QtCore>
-#include <sys/types.h>
-#include <gst/gst.h>
+#include "common.h"
+
+#include <QtCore/QString>
+#include <QtCore/QLibrary>
 #include <gst/audio/gstaudiosink.h>
 
 QT_BEGIN_NAMESPACE

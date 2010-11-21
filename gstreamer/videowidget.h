@@ -18,16 +18,9 @@
 #ifndef Phonon_GSTREAMER_VIDEOWIDGET_H
 #define Phonon_GSTREAMER_VIDEOWIDGET_H
 
-#include <phonon/videowidget.h>
 #include <phonon/videowidgetinterface.h>
 
-#include "backend.h"
-#include "common.h"
 #include "medianode.h"
-#include "abstractrenderer.h"
-#include "videowidget.h"
-
-#include <gst/gst.h>
 
 #ifndef QT_NO_PHONON_VIDEO
 QT_BEGIN_NAMESPACE
@@ -38,6 +31,9 @@ namespace Phonon
 {
 namespace Gstreamer
 {
+
+class AbstractRenderer;
+class Backend;
 
 class VideoWidget : public QWidget, public Phonon::VideoWidgetInterface, public MediaNode
 {

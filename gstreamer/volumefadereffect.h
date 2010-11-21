@@ -18,16 +18,11 @@
 #ifndef Phonon_GSTREAMER_VOLUMEFADEREFFECT_H
 #define Phonon_GSTREAMER_VOLUMEFADEREFFECT_H
 
-#include "medianode.h"
 #include "effect.h"
 
-#include <phonon/effectinterface.h>
-#include <phonon/effectparameter.h>
 #include <phonon/volumefaderinterface.h>
 
-#include <QtCore>
-
-#include <gst/gst.h>
+#include <QtCore/QTime>
 
 QT_BEGIN_NAMESPACE
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT

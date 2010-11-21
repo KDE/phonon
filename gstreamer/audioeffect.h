@@ -20,36 +20,40 @@
 
 #include "common.h"
 #include "effect.h"
-#include "medianode.h"
 
-#include <phonon/effectparameter.h>
-#include <phonon/effectinterface.h>
-
-#include <QtCore/QObject>
-
-#include <gst/gst.h>
+#include <gst/gstelement.h>
 
 #ifndef QT_NO_PHONON_EFFECT
+
 QT_BEGIN_NAMESPACE
+
+class QObject;
+
 namespace Phonon
 {
 namespace Gstreamer
 {
-    class AudioOutput;
-    class EffectInfo;
 
-    class AudioEffect : public Effect
-    {
-        Q_OBJECT
-        public:
-            AudioEffect (Backend *backend, int effectId, QObject *parent);
-        protected:
-            GstElement* createEffectBin();
-            GstElement* audioElement() { return m_effectBin; }
-            QString m_effectName;
-    };
-}} //namespace Phonon::Gstreamer
+class AudioOutput;
+class EffectInfo;
+
+class AudioEffect : public Effect
+{
+    Q_OBJECT
+public:
+    AudioEffect (Backend *backend, int effectId, QObject *parent);
+protected:
+    GstElement* createEffectBin();
+    GstElement* audioElement() { return m_effectBin; }
+    QString m_effectName;
+};
+
+} // namespace Gstreamer
+} // namespace Phonon
+
+
 QT_END_NAMESPACE
+
 #endif //QT_NO_PHONON_EFFECT
 
 #endif // Phonon_GSTREAMER_AUDIOEFFECT_H

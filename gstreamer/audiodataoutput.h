@@ -23,8 +23,7 @@
 #ifndef Phonon_GSTREAMER_AUDIODATAOUTPUT_H
 #define Phonon_GSTREAMER_AUDIODATAOUTPUT_H
 
-#include "abstractaudiooutput.h"
-#include "backend.h"
+#include "common.h"
 #include "medianode.h"
 #include <phonon/audiodataoutput.h>
 #include <phonon/audiodataoutputinterface.h>
@@ -36,52 +35,53 @@ namespace Phonon
 {
 namespace Gstreamer
 {
-    /**
-     * \author Martin Sandsmark <sandsmark@samfundet.no>
-     */
-    class AudioDataOutput : public QObject,
-                            public AudioDataOutputInterface,
-                            public MediaNode
-    {
-        Q_OBJECT
-        Q_INTERFACES(Phonon::AudioDataOutputInterface Phonon::Gstreamer::MediaNode)
+/**
+ * \author Martin Sandsmark <sandsmark@samfundet.no>
+ */
+class AudioDataOutput : public QObject,
+        public AudioDataOutputInterface,
+        public MediaNode
+{
+    Q_OBJECT
+    Q_INTERFACES(Phonon::AudioDataOutputInterface Phonon::Gstreamer::MediaNode)
 
-        public:
-            AudioDataOutput(Backend *, QObject *);
-            ~AudioDataOutput();
+public:
+    AudioDataOutput(Backend *, QObject *);
+    ~AudioDataOutput();
 
-        public Q_SLOTS:
-            int dataSize() const;
-            int sampleRate() const;
-            void setDataSize(int size);
+public Q_SLOTS:
+    int dataSize() const;
+    int sampleRate() const;
+    void setDataSize(int size);
 
-        public:
-            /// callback function for handling new audio data
-            static void processBuffer(GstPad*, GstBuffer*, gpointer);
+public:
+    /// callback function for handling new audio data
+    static void processBuffer(GstPad*, GstBuffer*, gpointer);
 
-            Phonon::AudioDataOutput* frontendObject() const { return m_frontend; }
-            void setFrontendObject(Phonon::AudioDataOutput *frontend) { m_frontend = frontend; }
+    Phonon::AudioDataOutput* frontendObject() const { return m_frontend; }
+    void setFrontendObject(Phonon::AudioDataOutput *frontend) { m_frontend = frontend; }
 
-            GstElement *audioElement() { return m_queue; }
+    GstElement *audioElement() { return m_queue; }
 
-            void mediaNodeEvent(const MediaNodeEvent *event);
+    void mediaNodeEvent(const MediaNodeEvent *event);
 
 
-        signals:
-            void dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &data);
-            void dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<float> > &data);
-            void endOfMedia(int remainingSamples);
+signals:
+    void dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &data);
+    void dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<float> > &data);
+    void endOfMedia(int remainingSamples);
 
-        private:
-            void convertAndEmit(const QVector<qint16>&, const QVector<qint16>&);
+private:
+    void convertAndEmit(const QVector<qint16>&, const QVector<qint16>&);
 
-            GstElement *m_queue;
-            int m_dataSize;
-            QVector<qint16> m_pendingData;
-            Phonon::AudioDataOutput *m_frontend;
-            int m_channels;
-    };
-}} //namespace Phonon::Gstreamer
+    GstElement *m_queue;
+    int m_dataSize;
+    QVector<qint16> m_pendingData;
+    Phonon::AudioDataOutput *m_frontend;
+    int m_channels;
+};
+} // namespace Gstreamer
+} // namespace Phonon
 
 QT_END_NAMESPACE
 QT_END_HEADER

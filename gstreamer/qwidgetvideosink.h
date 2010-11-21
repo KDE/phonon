@@ -18,10 +18,6 @@
 #ifndef Phonon_GSTREAMER_VIDEOSINK_H
 #define Phonon_GSTREAMER_VIDEOSINK_H
 
-#include "common.h"
-#include "qwidgetvideosink.h"
-
-#include <QtCore/QByteArray>
 #include <QtCore/QEvent>
 
 #include <gst/video/gstvideosink.h>

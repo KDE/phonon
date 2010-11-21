@@ -18,12 +18,7 @@
 #ifndef Phonon_GSTREAMER_X11RENDERER_H
 #define Phonon_GSTREAMER_X11RENDERER_H
 
-#include "videowidget.h"
-#include "common.h"
-
-#include <QtGui/QWidget>
-
-#include <gst/gst.h>
+#include "abstractrenderer.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -37,6 +32,8 @@ namespace Gstreamer
 {
 
 class OverlayWidget;
+class VideoWidget;
+
 class X11Renderer : public AbstractRenderer
 {
 public:

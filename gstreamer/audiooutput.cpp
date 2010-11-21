@@ -19,7 +19,9 @@
 #include "common.h"
 #include "audiooutput.h"
 #include "backend.h"
+#include "devicemanager.h"
 #include "mediaobject.h"
+#include "medianodeevent.h"
 #include "gsthelper.h"
 #include <phonon/audiooutput.h>
 
@@ -44,7 +46,7 @@ AudioOutput::AudioOutput(Backend *backend, QObject *parent)
     if (m_backend->isValid()) {
         m_audioBin = gst_bin_new (NULL);
         gst_object_ref (GST_OBJECT (m_audioBin));
-        gst_object_sink (GST_OBJECT (m_audioBin));     
+        gst_object_sink (GST_OBJECT (m_audioBin));
 
         m_conv = gst_element_factory_make ("audioconvert", NULL);
 
@@ -52,15 +54,15 @@ AudioOutput::AudioOutput(Backend *backend, QObject *parent)
         Phonon::Category category = Phonon::NoCategory;
         if (Phonon::AudioOutput *audioOutput = qobject_cast<Phonon::AudioOutput *>(parent))
             category = audioOutput->category();
-    
+
         m_audioSink = m_backend->deviceManager()->createAudioSink(category);
         m_volumeElement = gst_element_factory_make ("volume", NULL);
         GstElement *queue = gst_element_factory_make ("queue", NULL);
         GstElement *audioresample = gst_element_factory_make ("audioresample", NULL);
-    
+
         if (queue && m_audioBin && m_conv && audioresample && m_audioSink && m_volumeElement) {
             gst_bin_add_many (GST_BIN (m_audioBin), queue, m_conv, audioresample, m_volumeElement, m_audioSink, (const char*)NULL);
-    
+
             if (gst_element_link_many (queue, m_conv, audioresample, m_volumeElement, m_audioSink, (const char*)NULL)) {
                 // Add ghost sink for audiobin
                 GstPad *audiopad = gst_element_get_pad (queue, "sink");

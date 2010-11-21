@@ -20,12 +20,16 @@
 
 #ifndef QT_NO_OPENGL
 
+#include "backend.h"
 #include "common.h"
 #include "message.h"
 #include "mediaobject.h"
 #include "qwidgetvideosink.h"
 #include "glrenderer.h"
 #include "qrgb.h"
+#include "videowidget.h"
+
+#include <QtCore/QTime>
 
 #if !defined(QT_OPENGL_ES)
 

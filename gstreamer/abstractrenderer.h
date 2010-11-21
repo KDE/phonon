@@ -18,10 +18,11 @@
 #ifndef Phonon_GSTREAMER_ABSTRACTRENDERER_H
 #define Phonon_GSTREAMER_ABSTRACTRENDERER_H
 
-#include "backend.h"
 #include "common.h"
-#include "medianode.h"
+
 #include <phonon/videowidget.h>
+
+#include <gst/gstelement.h>
 
 #ifndef QT_NO_PHONON_VIDEO
 QT_BEGIN_NAMESPACE
@@ -32,7 +33,7 @@ namespace Phonon
 namespace Gstreamer
 {
 
-class VideoWidget;
+class MediaNodeEvent;
 
 class AbstractRenderer
 {

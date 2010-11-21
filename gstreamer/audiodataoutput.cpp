@@ -24,10 +24,13 @@
 #include "audiodataoutput.h"
 #include "gsthelper.h"
 #include "medianode.h"
+#include "medianodeevent.h"
 #include "mediaobject.h"
 #include <QtCore/QVector>
 #include <QtCore/QMap>
 #include <phonon/audiooutput.h>
+
+#include <gst/gstutils.h>
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE

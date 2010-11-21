@@ -18,24 +18,25 @@
 #ifndef Phonon_GSTREAMER_GLRENDERER_H
 #define Phonon_GSTREAMER_GLRENDERER_H
 
-#include "videowidget.h"
 #include "common.h"
+#include "abstractrenderer.h"
 
 #ifndef QT_NO_OPENGL
 
-#include <QtOpenGL/QGLFormat>
 #include <QtOpenGL/QGLWidget>
 
 #ifndef QT_OPENGL_ES
 QT_BEGIN_NAMESPACE
 
 class QString;
+class QGLFormat;
 
 namespace Phonon
 {
 namespace Gstreamer
 {
 class GLRenderWidgetImplementation;
+class VideoWidget;
 
 class GLRenderer : public AbstractRenderer
 {

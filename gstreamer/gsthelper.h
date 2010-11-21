@@ -20,7 +20,7 @@
 
 #include "common.h"
 
-#include <gst/gst.h>
+#include <gst/gstelement.h>
 
 QT_BEGIN_NAMESPACE
 
