@@ -20,7 +20,8 @@
 
 #include <QtCore/QMetaType>
 
-#include <gst/gst.h>
+#include <glib-2.0/glib/gmacros.h> // For G_*_DECLS macros primarily
+#include <gst/gstmessage.h>
 
 QT_BEGIN_NAMESPACE
 

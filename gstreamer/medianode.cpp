@@ -23,6 +23,9 @@
 #include "backend.h"
 #include "gsthelper.h"
 
+#include <gst/gstbin.h>
+#include <gst/gstutils.h>
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon

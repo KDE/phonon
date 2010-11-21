@@ -25,6 +25,10 @@
 #include "gsthelper.h"
 #include <phonon/audiooutput.h>
 
+#include <gst/gstbin.h>
+#include <gst/gstghostpad.h>
+#include <gst/gstutils.h>
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon

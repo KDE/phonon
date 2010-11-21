@@ -25,7 +25,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 
-#include <gst/gst.h>
+#include <gst/gstelement.h>
 
 QT_BEGIN_NAMESPACE
 

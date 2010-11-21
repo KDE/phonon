@@ -24,7 +24,6 @@
 #ifndef ALSASINK2_H
 #define ALSASINK2_H
 
-#include <gst/gst.h>
 #include <gst/audio/gstaudiosink.h>
 #include <alsa/asoundlib.h>
 
