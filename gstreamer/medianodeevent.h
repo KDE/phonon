@@ -44,7 +44,7 @@ public:
         VideoHandleRequest,
         VideoSizeChanged,
         VideoMouseOver /**< Interface registred a mouse over event.
-                            Data portion contains gboolean whether mouse over is active  */
+                            Data portion contains gboolean* whether mouse over is active  */
     };
 
     MediaNodeEvent(Type type, const void *data = 0);
