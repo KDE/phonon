@@ -36,27 +36,27 @@ if (BUILD_PHONON_GSTREAMER)
    configure_file(phonon-config-gstreamer.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon-config-gstreamer.h )
 
    set(phonon_gstreamer_SRCS
+      abstractrenderer.cpp
+      audiodataoutput.cpp
+      audioeffect.cpp
       audiooutput.cpp
       backend.cpp
       devicemanager.cpp
-      effectmanager.cpp
-      gsthelper.cpp
-      mediaobject.cpp
-      medianode.cpp
       effect.cpp
+      effectmanager.cpp
+      glrenderer.cpp
+      gsthelper.cpp
+      medianode.cpp
       medianodeevent.cpp
-      videowidget.cpp
+      mediaobject.cpp
+      message.cpp
+      phononsrc.cpp
       qwidgetvideosink.cpp
       streamreader.cpp
-      phononsrc.cpp
-      message.cpp
-      audioeffect.cpp
-      abstractrenderer.cpp
-      widgetrenderer.cpp
-      glrenderer.cpp
-      volumefadereffect.cpp
-      audiodataoutput.cpp
       videodataoutput.cpp
+      videowidget.cpp
+      volumefadereffect.cpp
+      widgetrenderer.cpp
       )
 
    if(NOT WIN32)
