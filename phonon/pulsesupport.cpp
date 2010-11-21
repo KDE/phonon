@@ -77,8 +77,8 @@ static void logMessage(const QString &message, int priority, QObject *obj)
             QString className(obj->metaObject()->className());
             int nameLength = className.length() - className.lastIndexOf(':') - 1;
             className = className.right(nameLength);
-            output.sprintf("%s %s (%s %p)", message.toLatin1().constData(), 
-                           obj->objectName().toLatin1().constData(), 
+            output.sprintf("%s %s (%s %p)", message.toLatin1().constData(),
+                           obj->objectName().toLatin1().constData(),
                            className.toLatin1().constData(), obj);
         }
         else {
@@ -124,7 +124,7 @@ bool operator!=(const AudioDevice &a, const AudioDevice &b)
 class PulseUserData
 {
     public:
-        inline 
+        inline
         PulseUserData()
         {
         }
@@ -717,7 +717,7 @@ PulseSupport::PulseSupport()
     // We require a glib event loop
     if (QLatin1String(QAbstractEventDispatcher::instance()->metaObject()->className())
             != "QGuiEventDispatcherGlib") {
-        logMessage("Disabling PulseAudio integration for lack of GLib event loop.");
+        qWarning("WARNING: Disabling PulseAudio integration for lack of GLib event loop.");
         return;
     }
 
@@ -935,7 +935,7 @@ static void setDevicePriority(Category category, QStringList list)
     }
     devices[list.size()] = NULL;
 
-#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER 
+#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
     pa_operation *o;
     if (!(o = pa_ext_device_manager_reorder_devices_for_role(s_context, role.toUtf8().constData(), (const char**)devices, NULL, NULL)))
         logMessage(QString("pa_ext_device_manager_reorder_devices_for_role() failed"));
