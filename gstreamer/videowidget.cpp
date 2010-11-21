@@ -157,7 +157,7 @@ void VideoWidget::setVisible(bool val) {
         root()->invalidateGraph();
         root()->setState(root()->state());
     }
-    QWidget::setVisible(val);    
+    QWidget::setVisible(val);
 }
 
 bool VideoWidget::event(QEvent *event)
@@ -368,10 +368,19 @@ void VideoWidget::mediaNodeEvent(const MediaNodeEvent *event)
 {
     switch (event->type()) {
     case MediaNodeEvent::VideoSizeChanged: {
-            const QSize *size = static_cast<const QSize*>(event->data());
-            setMovieSize(*size);
+        const QSize *size = static_cast<const QSize*>(event->data());
+        setMovieSize(*size);
+        break;
+    }
+    case MediaNodeEvent::VideoMouseOver: {
+        const gboolean active = *static_cast<const gboolean*>(event->data());
+        if (active) {
+            setCursor(Qt::PointingHandCursor);
+        } else {
+            setCursor(Qt::ArrowCursor);
         }
         break;
+    }
     default:
         break;
     }

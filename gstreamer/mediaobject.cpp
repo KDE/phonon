@@ -15,6 +15,7 @@
     along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cmath>
+#include <gst/interfaces/navigation.h>
 #include <gst/interfaces/propertyprobe.h>
 #include <gst/pbutils/install-plugins.h>
 #include "common.h"
@@ -268,7 +269,7 @@ void MediaObject::cb_unknown_type (GstElement *decodebin, GstPad *pad, GstCaps *
         p_gst_pb_utils_init =  (Ptr_gst_pb_utils_init)QLibrary::resolve(QLatin1String("gstpbutils-0.10"), 0, "gst_pb_utils_init");
         p_gst_pb_utils_get_codec_description =  (Ptr_gst_pb_utils_get_codec_description)QLibrary::resolve(QLatin1String("gstpbutils-0.10"), 0, "gst_pb_utils_get_codec_description");
         if (p_gst_pb_utils_init)
-	    p_gst_pb_utils_init();
+            p_gst_pb_utils_init();
     }
     if (p_gst_pb_utils_get_codec_description) {
         gchar *codecName = NULL;
@@ -1373,7 +1374,7 @@ void MediaObject::handleBusMessage(const Message &message)
                     if (oldMap != m_metaData && !m_loading)
                         emit metaDataChanged(m_metaData);
                 }
-			}
+                        }
         }
         break;
 
@@ -1553,6 +1554,21 @@ void MediaObject::handleBusMessage(const Message &message)
     default:
         break;
     }
+
+    switch (gst_navigation_message_get_type(gstMessage)) {
+    case GST_NAVIGATION_MESSAGE_MOUSE_OVER: {
+        gboolean active;
+        if (!gst_navigation_message_parse_mouse_over(gstMessage, &active)) {
+            break;
+        }
+        MediaNodeEvent mouseOverEvent(MediaNodeEvent::VideoMouseOver, &active);
+        notify(&mouseOverEvent);
+        break;
+    }
+    default:
+        break;
+    }
+
 }
 
 void MediaObject::handleEndOfStream()
