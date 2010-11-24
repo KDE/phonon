@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
+    Copyright © 2008 Matthias Kretz <kretz@kde.org>
+    Copyright © 2010 Harald Sitter <apachelogger@ubuntu.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -37,6 +38,15 @@ enum ObjectDescriptionType
 typedef Phonon::ObjectDescription<static_cast<Phonon::ObjectDescriptionType>(Phonon::Experimental::VideoCaptureDeviceType)> VideoCaptureDevice;
 
 VideoCaptureDevice phononVcdToExperimentalVcd(const Phonon::VideoCaptureDevice &vcd);
+
+/**
+ * Generates a Phonon::VideoCaptureDevice from an equal object of
+ * the Phonon::Experimental namespace.
+ * 
+ * @arg vcd the VideoCaptureDevice to take as reference
+ * @return a Phonon::VideoCaptureDevice instance with the same properties as the incoming vcd
+ */
+Phonon::VideoCaptureDevice phononExperimentalVcdToVcd(const Phonon::Experimental::VideoCaptureDevice &vcd);
 
 } // namespace Experimental
 } // namespace Phonon

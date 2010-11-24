@@ -94,6 +94,11 @@ Phonon::VideoCaptureDevice AvCapture::videoCaptureDevice() const
     return d->videoCaptureDevice;
 }
 
+void AvCapture::setVideoCaptureDevice(const Phonon::Experimental::VideoCaptureDevice &videoCaptureDevice)
+{
+    setVideoCaptureDevice(phononExperimentalVcdToVcd(videoCaptureDevice));
+}
+
 void AvCapture::setVideoCaptureDevice(const Phonon::VideoCaptureDevice &videoCaptureDevice)
 {
     K_D(AvCapture);

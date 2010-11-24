@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
- *  Copyright (C) 2010 Casian Andrei <skeletk13@gmail.com>
+ *  Copyright © 2010 Casian Andrei <skeletk13@gmail.com>
+ *  Copyright © 2010 Harald Sitter <apachelogger@ubuntu.com>
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -37,6 +38,17 @@ VideoCaptureDevice phononVcdToExperimentalVcd(const Phonon::VideoCaptureDevice &
         properties[propertyNames[pi]] = vcd.property(propertyNames[pi].constData());
 
     return VideoCaptureDevice(vcd.index(), properties);
+}
+
+Phonon::VideoCaptureDevice phononExperimentalVcdToVcd(const Phonon::Experimental::VideoCaptureDevice &vcd)
+{
+    QHash<QByteArray, QVariant> properties;
+    const QList<QByteArray> &propertyNames = vcd.propertyNames();
+    int pi, pn = propertyNames.count();
+    for (pi = 0; pi < pn; ++ pi)
+        properties[propertyNames[pi]] = vcd.property(propertyNames[pi].constData());
+
+    return Phonon::VideoCaptureDevice(vcd.index(), properties);
 }
 
 } // Experimental namespace
