@@ -210,20 +210,24 @@ void MediaObject::noMorePadsAvailable ()
         bool canPlay = (m_hasAudio || m_videoStreamFound);
         Phonon::ErrorType error = canPlay ? Phonon::NormalError : Phonon::FatalError;
 #ifdef PLUGIN_INSTALL_API
-        GstInstallPluginsContext *ctx = gst_install_plugins_context_new ();
+        GstInstallPluginsContext *ctx = gst_install_plugins_context_new();
+        QWidget *activeWindow = QApplication::activeWindow();
+        if (activeWindow) {
+            gst_install_plugins_context_set_xid(ctx, static_cast<int>(activeWindow->winId()));
+        }
         gchar *details[2];
         QByteArray missingCodec = m_missingCodecs.first().toLocal8Bit();
         details[0] = missingCodec.data();
         details[1] = NULL;
         GstInstallPluginsReturn status;
 
-        status = gst_install_plugins_async( details, ctx, pluginInstallationDone, NULL );
-        gst_install_plugins_context_free ( ctx );
+        status = gst_install_plugins_async(details, ctx, pluginInstallationDone, NULL);
+        gst_install_plugins_context_free (ctx);
 
         if ( status != GST_INSTALL_PLUGINS_STARTED_OK )
         {
             if( status == GST_INSTALL_PLUGINS_HELPER_MISSING )
-                setError(QString(tr("Missing codec helper script assistant.")), Phonon::FatalError );
+                setError(QString(tr("Missing codec helper script assistant.")), Phonon::FatalError);
             else
                 setError(QString(tr("Plugin codec installation failed for codec: %1"))
                         .arg(m_missingCodecs[0].split('|')[3]), error);
