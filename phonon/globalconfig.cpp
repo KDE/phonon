@@ -96,7 +96,7 @@ static void filter(ObjectDescriptionType type, BackendInterface *backendIface, Q
 #ifndef QT_NO_PHONON_SETTINGSGROUP
 static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, const QSettingsGroup *backendConfig, ObjectDescriptionType type, Phonon::Category category, QList<int> &defaultList)
 {
-    Q_ASSERT(config);
+    Q_ASSERT(config); Q_UNUSED(config);
     Q_ASSERT(backendConfig);
     Q_ASSERT(type == AudioOutputDeviceType || type == AudioCaptureDeviceType || type == VideoCaptureDeviceType);
 
