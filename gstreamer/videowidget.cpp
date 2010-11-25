@@ -85,47 +85,61 @@ void VideoWidget::setupVideoBin()
     Q_ASSERT(m_videoBin);
     gst_object_ref (GST_OBJECT (m_videoBin)); //Take ownership
     gst_object_sink (GST_OBJECT (m_videoBin));
+    QByteArray tegraEnv = qgetenv("TEGRA_GST_OPENMAX");
+    if(tegraEnv.isEmpty())
+    {
+        //The videoplug element is the final element before the pluggable videosink
+        m_videoplug = gst_element_factory_make ("identity", NULL);
 
-    //The videoplug element is the final element before the pluggable videosink
-    m_videoplug = gst_element_factory_make ("identity", NULL);
+        //Colorspace ensures that the output of the stream matches the input format accepted by our video sink
+        m_colorspace = gst_element_factory_make ("ffmpegcolorspace", NULL);
 
-    //Colorspace ensures that the output of the stream matches the input format accepted by our video sink
-    m_colorspace = gst_element_factory_make ("ffmpegcolorspace", NULL);
+        //Video scale is used to prepare the correct aspect ratio and scale.
+        GstElement *videoScale = gst_element_factory_make ("videoscale", NULL);
 
-    //Video scale is used to prepare the correct aspect ratio and scale.
-    GstElement *videoScale = gst_element_factory_make ("videoscale", NULL);
+        //We need a queue to support the tee from parent node
+        GstElement *queue = gst_element_factory_make ("queue", NULL);
 
-    //We need a queue to support the tee from parent node
-    GstElement *queue = gst_element_factory_make ("queue", NULL);
-
-    if (queue && m_videoBin && videoScale && m_colorspace && videoSink && m_videoplug) {
+        if (queue && m_videoBin && videoScale && m_colorspace && videoSink && m_videoplug) {
         //Ensure that the bare essentials are prepared
-        gst_bin_add_many (GST_BIN (m_videoBin), queue, m_colorspace, m_videoplug, videoScale, videoSink, (const char*)NULL);
-        bool success = false;
-        //Video balance controls color/sat/hue in the YUV colorspace
-        m_videoBalance = gst_element_factory_make ("videobalance", NULL);
-        if (m_videoBalance) {
-            // For video balance to work we have to first ensure that the video is in YUV colorspace,
-            // then hand it off to the videobalance filter before finally converting it back to RGB.
-            // Hence we nede a videoFilter to convert the colorspace before and after videobalance
-            GstElement *m_colorspace2 = gst_element_factory_make ("ffmpegcolorspace", NULL);
-            gst_bin_add_many(GST_BIN(m_videoBin), m_videoBalance, m_colorspace2, (const char*)NULL);
-            success = gst_element_link_many(queue, m_colorspace, m_videoBalance, m_colorspace2, videoScale, m_videoplug, videoSink, (const char*)NULL);
-        } else {
-            //If video balance is not available, just connect to sink directly
-            success = gst_element_link_many(queue, m_colorspace, videoScale, m_videoplug, videoSink, (const char*)NULL);
-        }
-
-        if (success) {
-            GstPad *videopad = gst_element_get_pad (queue, "sink");
-            gst_element_add_pad (m_videoBin, gst_ghost_pad_new ("sink", videopad));
-            gst_object_unref (videopad);
-            QWidget *parentWidget = qobject_cast<QWidget*>(parent());
-            if (parentWidget)
-                parentWidget->winId();  // Due to some existing issues with alien in 4.4,
+            gst_bin_add_many (GST_BIN (m_videoBin), queue, m_colorspace, m_videoplug, videoScale, videoSink, (const char*)NULL);
+            bool success = false;
+            //Video balance controls color/sat/hue in the YUV colorspace
+            m_videoBalance = gst_element_factory_make ("videobalance", NULL);
+            if (m_videoBalance) {
+                // For video balance to work we have to first ensure that the video is in YUV colorspace,
+                // then hand it off to the videobalance filter before finally converting it back to RGB.
+                // Hence we nede a videoFilter to convert the colorspace before and after videobalance
+                GstElement *m_colorspace2 = gst_element_factory_make ("ffmpegcolorspace", NULL);
+                gst_bin_add_many(GST_BIN(m_videoBin), m_videoBalance, m_colorspace2, (const char*)NULL);
+                success = gst_element_link_many(queue, m_colorspace, m_videoBalance, m_colorspace2, videoScale, m_videoplug, videoSink, (const char*)NULL);
+            } else {
+                //If video balance is not available, just connect to sink directly
+                success = gst_element_link_many(queue, m_colorspace, videoScale, m_videoplug, videoSink, (const char*)NULL);
+            }
+            if (success) {
+                GstPad *videopad = gst_element_get_pad (queue, "sink");
+                gst_element_add_pad (m_videoBin, gst_ghost_pad_new ("sink", videopad));
+                gst_object_unref (videopad);
+                QWidget *parentWidget = qobject_cast<QWidget*>(parent());
+                if (parentWidget)
+                    parentWidget->winId();  // Due to some existing issues with alien in 4.4,
                                         //  we must currently force the creation of a parent widget.
-            m_isValid = true; //initialization ok, accept input
+                m_isValid = true; //initialization ok, accept input
+            }
         }
+    }
+    else
+    {
+        gst_bin_add_many (GST_BIN (m_videoBin), videoSink, NULL);
+        GstPad *videopad = gst_element_get_pad (videoSink,"sink");
+        gst_element_add_pad (m_videoBin, gst_ghost_pad_new ("sink", videopad));
+        gst_object_unref (videopad);
+        QWidget *parentWidget = qobject_cast<QWidget*>(parent());
+        if (parentWidget)
+            parentWidget->winId();  // Due to some existing issues with alien in 4.4,
+                                    //  we must currently force the creation of a parent widget.
+            m_isValid = true; //initialization ok, accept input
     }
 }
 
@@ -287,16 +301,27 @@ qreal clampedValue(qreal val)
 
 void VideoWidget::setBrightness(qreal newValue)
 {
-    newValue = clampedValue(newValue);
+   GstElement *videoSink = m_renderer->videoSink();
+   QByteArray tegraEnv = qgetenv("TEGRA_GST_OPENMAX");
 
+   newValue = clampedValue(newValue);
+   
     if (newValue == m_brightness)
         return;
 
     m_brightness = newValue;
 
-    if (m_videoBalance)
+    if (tegraEnv.isEmpty())
+    {
+        if (m_videoBalance)
         g_object_set(G_OBJECT(m_videoBalance), "brightness", newValue, (const char*)NULL); //gstreamer range is [-1, 1]
+    }
+    else
+    {
+        if (videoSink)   
+        g_object_set(G_OBJECT(videoSink), "brightness", newValue, (const char*)NULL); //gstreamer range is [-1, 1]
 
+    }
 }
 
 qreal VideoWidget::contrast() const
@@ -306,6 +331,10 @@ qreal VideoWidget::contrast() const
 
 void VideoWidget::setContrast(qreal newValue)
 {
+
+    GstElement *videoSink = m_renderer->videoSink();
+    QByteArray tegraEnv = qgetenv("TEGRA_GST_OPENMAX");
+
     newValue = clampedValue(newValue);
 
     if (newValue == m_contrast)
@@ -313,8 +342,16 @@ void VideoWidget::setContrast(qreal newValue)
 
     m_contrast = newValue;
 
-    if (m_videoBalance)
+    if (tegraEnv.isEmpty())
+    {
+        if (m_videoBalance)
         g_object_set(G_OBJECT(m_videoBalance), "contrast", (newValue + 1.0), (const char*)NULL); //gstreamer range is [0-2]
+    }
+    else
+    {
+       if (videoSink)
+       g_object_set(G_OBJECT(videoSink), "contrast", (newValue + 1.0), (const char*)NULL); //gstreamer range is [0-2]
+    }
 }
 
 qreal VideoWidget::hue() const
@@ -342,6 +379,10 @@ qreal VideoWidget::saturation() const
 
 void VideoWidget::setSaturation(qreal newValue)
 {
+
+    GstElement *videoSink = m_renderer->videoSink();
+    QByteArray tegraEnv = qgetenv("TEGRA_GST_OPENMAX");
+
     newValue = clampedValue(newValue);
 
     if (newValue == m_saturation)
@@ -349,8 +390,16 @@ void VideoWidget::setSaturation(qreal newValue)
 
     m_saturation = newValue;
 
+    if (tegraEnv.isEmpty())
+    {
     if (m_videoBalance)
         g_object_set(G_OBJECT(m_videoBalance), "saturation", newValue + 1.0, (const char*)NULL); //gstreamer range is [0, 2]
+    }
+    else
+    {
+       if (videoSink)
+       g_object_set(G_OBJECT(videoSink), "saturation", newValue + 1.0, (const char*)NULL); //gstreamer range is [0, 2] 
+    }
 }
 
 

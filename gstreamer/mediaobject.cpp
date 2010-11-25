@@ -519,6 +519,15 @@ void MediaObject::createPipeline()
     // reduce buffer overruns as these are not gracefully handled at the moment.
     m_audioPipe = gst_element_factory_make("queue", NULL);
     g_object_set(G_OBJECT(m_audioPipe), "max-size-time",  MAX_QUEUE_TIME, (const char*)NULL);
+
+    QByteArray tegraEnv = qgetenv("TEGRA_GST_OPENMAX");
+    if(!tegraEnv.isEmpty())
+    {
+        g_object_set(G_OBJECT(m_audioPipe), "max-size-time", 0 , (const char*)NULL);
+        g_object_set(G_OBJECT(m_audioPipe), "max-size-buffers", 0 , (const char*)NULL);
+        g_object_set(G_OBJECT(m_audioPipe), "max-size-bytes", 0 , (const char*)NULL);
+    }
+
     gst_bin_add(GST_BIN(m_audioGraph), m_audioPipe);
     GstPad *audiopad = gst_element_get_pad (m_audioPipe, "sink");
     gst_element_add_pad (m_audioGraph, gst_ghost_pad_new ("sink", audiopad));
@@ -531,6 +540,12 @@ void MediaObject::createPipeline()
 
     m_videoPipe = gst_element_factory_make("queue", NULL);
     g_object_set(G_OBJECT(m_videoPipe), "max-size-time", MAX_QUEUE_TIME, (const char*)NULL);
+    if(!tegraEnv.isEmpty())
+    {
+        g_object_set(G_OBJECT(m_videoPipe), "max-size-time", 33000, (const char*)NULL);  
+        g_object_set(G_OBJECT(m_audioPipe), "max-size-buffers", 1 , (const char*)NULL);
+        g_object_set(G_OBJECT(m_audioPipe), "max-size-bytes", 0 , (const char*)NULL);
+    }
     gst_bin_add(GST_BIN(m_videoGraph), m_videoPipe);
     GstPad *videopad = gst_element_get_pad (m_videoPipe, "sink");
     gst_element_add_pad (m_videoGraph, gst_ghost_pad_new ("sink", videopad));

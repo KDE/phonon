@@ -100,7 +100,11 @@ GstElement* X11Renderer::createVideoSink()
             g_object_set(G_OBJECT(videoSink), "saturation", 0, (const char*)NULL);
         }
     }
-
+    QByteArray tegraEnv = qgetenv("TEGRA_GST_OPENMAX");
+    if(!tegraEnv.isEmpty())
+    {
+        videoSink = gst_element_factory_make ("nv_gl_videosink", NULL);    
+    }
     if (!videoSink)
         videoSink = gst_element_factory_make ("ximagesink", NULL);
 
