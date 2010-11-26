@@ -453,6 +453,7 @@ void VideoWidget::keyPressEvent(QKeyEvent *event)
                                           event->text().toAscii());
         }
     }
+    QWidget::keyPressEvent(event);
 }
 
 void VideoWidget::keyReleaseEvent(QKeyEvent *event)
@@ -466,6 +467,7 @@ void VideoWidget::keyReleaseEvent(QKeyEvent *event)
                                           event->text().toAscii());
         }
     }
+    QWidget::keyReleaseEvent(event);
 }
 
 void VideoWidget::mouseMoveEvent(QMouseEvent *event)
@@ -481,6 +483,7 @@ void VideoWidget::mouseMoveEvent(QMouseEvent *event)
                                             0, x, y);
         }
     }
+    QWidget::mouseMoveEvent(event);
 }
 
 void VideoWidget::mousePressEvent(QMouseEvent *event)
@@ -496,6 +499,7 @@ void VideoWidget::mousePressEvent(QMouseEvent *event)
                                             1, x, y);
         }
     }
+    QWidget::mousePressEvent(event);
 }
 
 void VideoWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -511,6 +515,7 @@ void VideoWidget::mouseReleaseEvent(QMouseEvent *event)
                                             1, x, y);
         }
     }
+    QWidget::mouseReleaseEvent(event);
 }
 
 }
