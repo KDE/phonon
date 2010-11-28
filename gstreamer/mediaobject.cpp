@@ -546,7 +546,7 @@ void MediaObject::createPipeline()
     g_object_set(G_OBJECT(m_videoPipe), "max-size-time", MAX_QUEUE_TIME, (const char*)NULL);
     if(!tegraEnv.isEmpty())
     {
-        g_object_set(G_OBJECT(m_videoPipe), "max-size-time", 33000, (const char*)NULL);  
+        g_object_set(G_OBJECT(m_videoPipe), "max-size-time", 33000, (const char*)NULL);
         g_object_set(G_OBJECT(m_audioPipe), "max-size-buffers", 1 , (const char*)NULL);
         g_object_set(G_OBJECT(m_audioPipe), "max-size-bytes", 0 , (const char*)NULL);
     }
@@ -1575,6 +1575,7 @@ void MediaObject::handleBusMessage(const Message &message)
         break;
     }
 
+#if GST_VERSION >= GST_VERSION_CHECK(0,10,23,0)
     switch (gst_navigation_message_get_type(gstMessage)) {
     case GST_NAVIGATION_MESSAGE_MOUSE_OVER: {
         gboolean active;
@@ -1588,7 +1589,7 @@ void MediaObject::handleBusMessage(const Message &message)
     default:
         break;
     }
-
+#endif // GST_VERSION
 }
 
 void MediaObject::handleEndOfStream()
