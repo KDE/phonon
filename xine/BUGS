@@ -1,1 +1,0 @@
-currentTime() doesn't report any progress when the tickInterval isn't set

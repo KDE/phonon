@@ -263,20 +263,8 @@ if(APPLE)
    set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 endif(APPLE)
 
-
 add_subdirectory(phonon)
 add_subdirectory(includes)
-if (Q_WS_MAC AND BUILD_PHONON_QT7)
-  add_subdirectory(qt7)
-endif (Q_WS_MAC AND BUILD_PHONON_QT7)
-if (Q_WS_WIN)
-   add_subdirectory(ds9)
-endif (Q_WS_WIN)
-
-if (Q_WS_X11)
-   add_subdirectory(gstreamer)
-   add_subdirectory(xine)
-endif (Q_WS_X11)
 
 if(NOT WIN32) # pkgconfig file
    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)
