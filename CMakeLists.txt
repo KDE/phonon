@@ -46,19 +46,22 @@ endif(QT_QTDBUS_FOUND)
 
 set(PHONON_KDECORE_LIBS kdecore)
 
-set(EXECUTABLE_OUTPUT_PATH ${Phonon_BINARY_DIR}/bin)
-if (WIN32)
-   set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
-else (WIN32)
-   set(LIBRARY_OUTPUT_PATH ${Phonon_BINARY_DIR}/lib)
-endif (WIN32)
-
-if(APPLE)
-   set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
-endif(APPLE)
-
 add_subdirectory(phonon)
 add_subdirectory(includes)
+
+set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon-buildsystem/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindAutomoc4.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPackageHandleStandardArgs.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPhonon.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPhononInternal.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/PhononMacros.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindQt4.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacroEnsureVersion.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacroLogFeature.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacroOptionalFindPackage.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacroPushRequiredVars.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/PhononMacros.cmake
+        DESTINATION ${BUILDSYSTEM_INSTALL_DIR})
 
 if(NOT WIN32) # pkgconfig file
    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)
