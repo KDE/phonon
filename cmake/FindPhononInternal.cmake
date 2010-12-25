@@ -196,14 +196,6 @@ if(APPLE)
    set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 endif(APPLE)
 
-set(EXECUTABLE_OUTPUT_PATH ${Phonon_BINARY_DIR}/bin)
-if (WIN32)
-   set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
-else (WIN32)
-   set(LIBRARY_OUTPUT_PATH ${Phonon_BINARY_DIR}/lib)
-endif (WIN32)
-
-
 # RPATH Handling
 
 # Set up RPATH handling, so the libs are found if they are installed to a non-standard location.
@@ -212,8 +204,8 @@ endif (WIN32)
 # These two options below make it set the RPATH of the installed targets to all
 # RPATH directories outside the current CMAKE_BINARY_DIR and also the library 
 # install directory. Alex
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
-set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+# set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
+# set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
 
 
 # Imported from FindKDE4Internal.cmake
