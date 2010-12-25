@@ -204,8 +204,8 @@ endif(APPLE)
 # These two options below make it set the RPATH of the installed targets to all
 # RPATH directories outside the current CMAKE_BINARY_DIR and also the library 
 # install directory. Alex
-# set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
-# set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
+set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
 
 
 # Imported from FindKDE4Internal.cmake
