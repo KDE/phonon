@@ -9,6 +9,9 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 
+get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
+
+
 # Find Phonon
 
 macro(_phonon_find_version)
@@ -206,6 +209,14 @@ endif(APPLE)
 # install directory. Alex
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
 set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+
+
+# Uninstall Target
+if (NOT _phonon_uninstall_target_created)
+   set(_phonon_uninstall_target_created TRUE)
+   configure_file("${phonon_cmake_module_dir}/cmake_uninstall.cmake.in" "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake" @ONLY)
+   add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
+endif (NOT _phonon_uninstall_target_created)
 
 
 # Imported from FindKDE4Internal.cmake
