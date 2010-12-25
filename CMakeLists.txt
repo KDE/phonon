@@ -50,7 +50,8 @@ add_subdirectory(phonon)
 add_subdirectory(includes)
 
 set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon-buildsystem/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindAutomoc4.cmake
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
+              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindAutomoc4.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPackageHandleStandardArgs.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPhonon.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPhononInternal.cmake
