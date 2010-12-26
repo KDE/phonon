@@ -20,10 +20,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 find_package(PhononInternal)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
-set(CMAKE_COLOR_MAKEFILE ON)
-
 set(PHONON_LIB_MAJOR_VERSION "4")
 set(PHONON_LIB_MINOR_VERSION "4")
 set(PHONON_LIB_PATCH_VERSION "4")
@@ -36,8 +32,10 @@ if(MSVC)
   add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
 endif(MSVC)
 
-# for including config.h and for includes like <kparts/foo.h>
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR}/phonon ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/phonon)
+include_directories(${QT_INCLUDES}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/includes
+                    ${CMAKE_CURRENT_SOURCE_DIR}/phonon
+                    ${CMAKE_CURRENT_BINARY_DIR}/phonon)
 
 set(PHONON_LIBS phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 if(QT_QTDBUS_FOUND)
