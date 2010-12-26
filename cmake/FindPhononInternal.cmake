@@ -8,8 +8,29 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+# CMake Defaults
 
 get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
+
+set(CMAKE_COLOR_MAKEFILE ON)
+
+
+# Imported from KDE4Defaults.cmake
+# Keep this portion copy'n'pastable for updatability.
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# Always include srcdir and builddir in include path
+# This saves typing ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} in about every subdir
+# since cmake 2.4.0
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# put the include dirs which are in the source or build tree
+# before all other include dirs, so the headers in the sources
+# are prefered over the already installed ones
+# since cmake 2.4.1
+set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
+
+#-------------------------------------------------------------------------------
 
 
 # Find Phonon
