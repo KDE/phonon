@@ -8,6 +8,30 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+# CMake Defaults
+
+get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
+
+set(CMAKE_COLOR_MAKEFILE ON)
+
+
+# Imported from KDE4Defaults.cmake
+# Keep this portion copy'n'pastable for updatability.
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# Always include srcdir and builddir in include path
+# This saves typing ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} in about every subdir
+# since cmake 2.4.0
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# put the include dirs which are in the source or build tree
+# before all other include dirs, so the headers in the sources
+# are prefered over the already installed ones
+# since cmake 2.4.1
+set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
+
+#-------------------------------------------------------------------------------
+
 
 # Find Phonon
 
@@ -196,14 +220,6 @@ if(APPLE)
    set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 endif(APPLE)
 
-set(EXECUTABLE_OUTPUT_PATH ${Phonon_BINARY_DIR}/bin)
-if (WIN32)
-   set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
-else (WIN32)
-   set(LIBRARY_OUTPUT_PATH ${Phonon_BINARY_DIR}/lib)
-endif (WIN32)
-
-
 # RPATH Handling
 
 # Set up RPATH handling, so the libs are found if they are installed to a non-standard location.
@@ -214,6 +230,14 @@ endif (WIN32)
 # install directory. Alex
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
 set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+
+
+# Uninstall Target
+if (NOT _phonon_uninstall_target_created)
+   set(_phonon_uninstall_target_created TRUE)
+   configure_file("${phonon_cmake_module_dir}/cmake_uninstall.cmake.in" "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake" @ONLY)
+   add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
+endif (NOT _phonon_uninstall_target_created)
 
 
 # Imported from FindKDE4Internal.cmake
@@ -400,3 +424,11 @@ endif (CMAKE_COMPILER_IS_GNUCXX)
 if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_C_COMPILER MATCHES "icc")
    set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common")
 endif (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_C_COMPILER MATCHES "icc")
+
+# For Windows
+if(MSVC)
+    if(CMAKE_COMPILER_2005)
+        # to avoid a lot of deprecated warnings
+        add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
+    endif(CMAKE_COMPILER_2005)
+endif(MSVC)
