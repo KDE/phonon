@@ -67,17 +67,6 @@ MediaObject::~MediaObject()
 Phonon::State MediaObject::state() const
 {
     K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    if (d->errorOverride) {
-        return d->state;
-    }
-    if (d->ignoreLoadingToBufferingStateChange) {
-        return BufferingState;
-    }
-    if (d->ignoreErrorToLoadingStateChange) {
-        return LoadingState;
-    }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (!d->m_backendObject) {
         return d->state;
     }
@@ -131,11 +120,6 @@ QString MediaObject::errorString() const
 {
     if (state() == Phonon::ErrorState) {
         K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        if (d->errorOverride) {
-            return d->errorString;
-        }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
         return INTERFACE_CALL(errorString());
     }
     return QString();
@@ -145,11 +129,6 @@ ErrorType MediaObject::errorType() const
 {
     if (state() == Phonon::ErrorState) {
         K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        if (d->errorOverride) {
-            return d->errorType;
-        }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
         return INTERFACE_CALL(errorType());
     }
     return Phonon::NoError;
@@ -239,7 +218,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
 
     d->mediaSource = newSource;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    d->kiofallback = 0; // kiofallback auto-deletes
+    d->kiostream = 0; // kiofallback auto-deletes
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 //X         if (url.scheme() == "http") {
@@ -254,7 +233,17 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
-    } 
+    } else if (d->mediaSource.type() == MediaSource::Url && d->mediaSource.url().scheme() != "file") {
+        d->kiostream = Platform::createMediaStream(newSource.url(), this);
+        if (d->kiostream) {
+            d->kiostream->d_func()->setMediaObjectPrivate(d);
+
+            d->mediaSource = MediaSource (d->kiostream);
+            d->mediaSource.setAutoDelete(true);
+        } else {
+            pDebug() << "Unable to create KIO stream for url!";
+        }
+    }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     INTERFACE_CALL(setSource(d->mediaSource));
@@ -337,7 +326,6 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 {
     Q_Q(MediaObject);
     State lastState = q->state();
-    errorOverride = true;
     errorType = type;
     errorString = text;
     state = ErrorState;
@@ -349,69 +337,6 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
 {
     Q_Q(MediaObject);
 
-    if (errorOverride) {
-        errorOverride = false;
-        if (newstate == ErrorState) {
-            return;
-        }
-        oldstate = ErrorState;
-    }
-
-    if (mediaSource.type() != MediaSource::Url) {
-        // special handling only necessary for URLs because of the fallback
-        emit q->stateChanged(newstate, oldstate);
-        return;
-    }
-
-    // backend MediaObject reached ErrorState, try a KioMediaSource
-    if (newstate == Phonon::ErrorState && !kiofallback) {
-        kiofallback = Platform::createMediaStream(mediaSource.url(), q);
-        if (!kiofallback) {
-            pDebug() << "backend MediaObject reached ErrorState, no KIO fallback available";
-            emit q->stateChanged(newstate, oldstate);
-            return;
-        }
-        pDebug() << "backend MediaObject reached ErrorState, trying Platform::createMediaStream now";
-        ignoreLoadingToBufferingStateChange = false;
-        ignoreErrorToLoadingStateChange = false;
-        switch (oldstate) {
-        case Phonon::BufferingState:
-            // play() has already been called, we need to make sure it is called
-            // on the backend with the KioMediaStream MediaSource now, too
-            ignoreLoadingToBufferingStateChange = true;
-            break;
-        case Phonon::LoadingState:
-            ignoreErrorToLoadingStateChange = true;
-            // no extras
-            break;
-        default:
-            pError() << "backend MediaObject reached ErrorState after " << oldstate
-                << ". It seems a KioMediaStream will not help here, trying anyway.";
-            emit q->stateChanged(Phonon::LoadingState, oldstate);
-            break;
-        }
-        kiofallback->d_func()->setMediaObjectPrivate(this);
-        MediaSource mediaSource(kiofallback);
-        mediaSource.setAutoDelete(true);
-        pINTERFACE_CALL(setSource(mediaSource));
-        if (oldstate == Phonon::BufferingState) {
-            q->play();
-        }
-        return;
-    } else if (ignoreLoadingToBufferingStateChange &&
-            kiofallback &&
-            oldstate == Phonon::LoadingState) {
-        if (newstate != Phonon::BufferingState) {
-            emit q->stateChanged(newstate, Phonon::BufferingState);
-        }
-        return;
-    } else if (ignoreErrorToLoadingStateChange && kiofallback && oldstate == ErrorState) {
-        if (newstate != LoadingState) {
-            emit q->stateChanged(newstate, Phonon::LoadingState);
-        }
-        return;
-    }
-
     emit q->stateChanged(newstate, oldstate);
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -422,7 +347,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
     pDebug() << Q_FUNC_INFO;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    kiofallback = 0; // kiofallback auto-deletes
+    kiostream = 0; // kiofallback auto-deletes
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     if (sourceQueue.isEmpty()) {

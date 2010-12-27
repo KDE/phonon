@@ -71,14 +71,11 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             prefinishMark(0),
             transitionTime(0), // gapless playback
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            kiofallback(0),
+            kiostream(0),
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             state(Phonon::LoadingState)
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            , errorType(Phonon::NormalError),
-            errorOverride(false),
-            ignoreLoadingToBufferingStateChange(false),
-            ignoreErrorToLoadingStateChange(false)
+            , errorType(Phonon::NormalError)
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
         }
@@ -90,7 +87,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         qint32 prefinishMark;
         qint32 transitionTime;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        AbstractMediaStream *kiofallback;
+        AbstractMediaStream *kiostream;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         State state
 #ifdef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -98,9 +95,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #else
             : 8;
         ErrorType errorType : 4;
-        bool errorOverride : 1;
-        bool ignoreLoadingToBufferingStateChange : 1;
-        bool ignoreErrorToLoadingStateChange : 1;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
