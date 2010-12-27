@@ -5,10 +5,7 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 # CMP0002: we have multiple targets with the same name for the unit tests
 cmake_policy(SET CMP0002 OLD)
 
-# enable unit tests
 option(PHONON_BUILD_TESTS "Build the tests")
-
-# enable application tests
 option(PHONON_BUILD_APP_TESTS "Build the application tests")
 
 if (PHONON_BUILD_TESTS)
@@ -28,15 +25,13 @@ set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
-if(MSVC)
-  add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )
-endif(MSVC)
 
 include_directories(${QT_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${CMAKE_CURRENT_SOURCE_DIR}/phonon
                     ${CMAKE_CURRENT_BINARY_DIR}/phonon)
 
+# Convenience variable to hold target link libraries we always need.
 set(PHONON_LIBS phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 if(QT_QTDBUS_FOUND)
     list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
