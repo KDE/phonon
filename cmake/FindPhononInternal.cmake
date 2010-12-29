@@ -35,6 +35,8 @@ set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
 
 # Find Phonon
 
+if (NOT PHONON_INTERNAL)
+
 macro(_phonon_find_version)
    if (APPLE AND EXISTS "${PHONON_INCLUDE_DIR}/Headers/phononnamespace.h")
       set(_phonon_namespace_header_file "${PHONON_INCLUDE_DIR}/Headers/phononnamespace.h")
@@ -129,6 +131,8 @@ else(PHONON_FOUND)
         PHONON_INCLUDES
    )
 endif(PHONON_FOUND)
+
+endif (NOT PHONON_INTERNAL)
 
 
 # Include Additional Magic
