@@ -15,6 +15,7 @@ endif (PHONON_BUILD_TESTS)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+set(PHONON_INTERNAL TRUE)
 find_package(PhononInternal)
 
 set(PHONON_LIB_MAJOR_VERSION "4")
