@@ -138,15 +138,15 @@ QStringList MediaObject::metaData(Phonon::MetaData f) const
 {
     switch (f) {
     case ArtistMetaData:
-        return metaData(QLatin1String("ARTIST"     ));
+        return metaData(QLatin1String("ARTIST"));
     case AlbumMetaData:
-        return metaData(QLatin1String("ALBUM"      ));
+        return metaData(QLatin1String("ALBUM"));
     case TitleMetaData:
-        return metaData(QLatin1String("TITLE"      ));
+        return metaData(QLatin1String("TITLE"));
     case DateMetaData:
-        return metaData(QLatin1String("DATE"       ));
+        return metaData(QLatin1String("DATE"));
     case GenreMetaData:
-        return metaData(QLatin1String("GENRE"      ));
+        return metaData(QLatin1String("GENRE"));
     case TracknumberMetaData:
         return metaData(QLatin1String("TRACKNUMBER"));
     case DescriptionMetaData:
