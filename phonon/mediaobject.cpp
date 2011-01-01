@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -241,7 +241,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
             d->mediaSource = MediaSource (d->kiostream);
             d->mediaSource.setAutoDelete(true);
         } else {
-            pDebug() << "Unable to create KIO stream for url!";
+            pWarning() << "Unable to create abstract media stream for URL!";
         }
     }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -384,7 +384,7 @@ void MediaObjectPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)), q, SIGNAL(totalTimeChanged(qint64)));
     QObject::connect(m_backendObject, SIGNAL(metaDataChanged(const QMultiMap<QString, QString> &)),
             q, SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)));
-    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource&)), 
+    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource&)),
         q, SLOT(_k_currentSourceChanged(const MediaSource&)));
 
     // set up attributes
