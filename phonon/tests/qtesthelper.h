@@ -153,6 +153,20 @@ namespace QTest
             return qstrdup("QVariant::UserType");
         case QVariant::LastType:
             return qstrdup("QVariant::LastType");
+#if QT_VERSION >= 0x40600
+        case QVariant::EasingCurve:
+            return qstrdup("QVariant::EasingCurve");
+        case QVariant::Matrix4x4:
+            return qstrdup("QVariant::Matrix4x4");
+        case QVariant::Vector2D:
+            return qstrdup("QVariant::Vector2D");
+        case QVariant::Vector3D:
+            return qstrdup("QVariant::Vector3D");
+        case QVariant::Vector4D:
+            return qstrdup("QVariant::Vector4D");
+        case QVariant::Quaternion:
+            return qstrdup("QVariant::Quaternion");
+#endif
         }
         return 0;
     }
