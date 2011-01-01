@@ -218,7 +218,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
 
     d->mediaSource = newSource;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    d->kiostream = 0; // kiofallback auto-deletes
+    d->abstractStream = 0; // kiofallback auto-deletes
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -226,11 +226,11 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
     } else if (d->mediaSource.type() == MediaSource::Url && d->mediaSource.url().scheme() != "file") {
-        d->kiostream = Platform::createMediaStream(newSource.url(), this);
-        if (d->kiostream) {
-            d->kiostream->d_func()->setMediaObjectPrivate(d);
+        d->abstractStream = Platform::createMediaStream(newSource.url(), this);
+        if (d->abstractStream) {
+            d->abstractStream->d_func()->setMediaObjectPrivate(d);
 
-            d->mediaSource = MediaSource (d->kiostream);
+            d->mediaSource = MediaSource(d->abstractStream);
             d->mediaSource.setAutoDelete(true);
         } else {
             pWarning() << "Unable to create abstract media stream for URL!";
@@ -332,7 +332,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
     pDebug() << Q_FUNC_INFO;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    kiostream = 0; // kiofallback auto-deletes
+    abstractStream = 0; // kiofallback auto-deletes
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     if (sourceQueue.isEmpty()) {
