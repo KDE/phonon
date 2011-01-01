@@ -2,10 +2,10 @@
 #define QT_GUI_LIB
 
 #include <stdlib.h>
-#include <Qt/qobject.h>
-#include <Qt/qwidget.h>
-#include <Qt/qlist.h>
-#include <Qt/qdebug.h>
+#include <qobject.h>
+#include <qwidget.h>
+#include <qlist.h>
+#include <qdebug.h>
 #include <QtTest/QTest>
 #include <phonon/Global>
 #include <phonon/MediaObject>
