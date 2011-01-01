@@ -221,14 +221,6 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     d->kiostream = 0; // kiofallback auto-deletes
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-//X         if (url.scheme() == "http") {
-//X             d->kiofallback = Platform::createMediaStream(url, this);
-//X             if (d->kiofallback) {
-//X                 ...
-//X                 return;
-//X             }
-//X         }
-
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
