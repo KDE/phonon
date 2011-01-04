@@ -361,7 +361,13 @@ void MediaObjectPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
     //pDebug() << Q_FUNC_INFO;
 
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)));
+    // Queue the stateChanged connection to prevent issues with Amarok's engine controller.
+    // On error Amarok's engine controller will delete the MediaObject, meaning if
+    // the error state was emitted from the same thread it will destroy the backend's
+    // MediaObject *while* it is doing something.
+    // By queuing the connection the MediaObject can finish whatever it is doing
+    // before Amarok starts doing nasty things to us.
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),             q, SIGNAL(tick(qint64)));
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),    q, SIGNAL(seekableChanged(bool)));
 #ifndef QT_NO_PHONON_VIDEO
