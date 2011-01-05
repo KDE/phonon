@@ -470,7 +470,7 @@ void MediaObjectPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),    q, SIGNAL(hasVideoChanged(bool)));
 #endif //QT_NO_PHONON_VIDEO
     QObject::connect(m_backendObject, SIGNAL(bufferStatus(int)),        q, SIGNAL(bufferStatus(int)));
-    QObject::connect(m_backendObject, SIGNAL(finished()),               q, SIGNAL(finished()));
+    QObject::connect(m_backendObject, SIGNAL(finished()),               q, SIGNAL(finished()), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(aboutToFinish()),          q, SLOT(_k_aboutToFinish()));
     QObject::connect(m_backendObject, SIGNAL(prefinishMarkReached(qint32)), q, SIGNAL(prefinishMarkReached(qint32)));
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)), q, SIGNAL(totalTimeChanged(qint64)));
