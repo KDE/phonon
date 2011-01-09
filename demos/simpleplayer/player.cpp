@@ -51,7 +51,10 @@ void Player::playPause()
 
 void Player::load(const QUrl &url)
 {
-    m_media->setCurrentSource(url);
+    if (url.scheme().isEmpty())
+        m_media->setCurrentSource(QUrl::fromLocalFile(url.toString()));
+    else
+        m_media->setCurrentSource(url);
 }
 
 void Player::play()
