@@ -7,6 +7,7 @@ cmake_policy(SET CMP0002 OLD)
 
 option(PHONON_BUILD_TESTS "Build the tests")
 option(PHONON_BUILD_APP_TESTS "Build the application tests")
+option(PHONON_BUILD_DEMOS "Build the demos")
 
 if (PHONON_BUILD_TESTS)
     message(STATUS "Building tests.")
@@ -41,6 +42,10 @@ endif(QT_QTDBUS_FOUND)
 
 add_subdirectory(phonon)
 add_subdirectory(includes)
+if(PHONON_BUILD_DEMOS)
+    message(STATUS "Building demos.")
+    add_subdirectory(demos)
+endif(PHONON_BUILD_DEMOS)
 
 set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon-buildsystem/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
