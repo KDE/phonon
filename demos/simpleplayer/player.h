@@ -19,11 +19,12 @@ public:
 
 public slots:
     void load(const QUrl &url);
+    void load();
     void play();
     void pause();
 
 private slots:
-    void mediaStateChange(Phonon::State newState, Phonon::State oldState);
+    void mediaStateChanged(Phonon::State newState, Phonon::State oldState);
     void playPause();
 
 private:

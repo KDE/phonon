@@ -12,6 +12,7 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
     m_media = new Phonon::MediaObject(this);
+    connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
 
     Phonon::AudioOutput* audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::VideoWidget* videoOut = new Phonon::VideoWidget(this);
@@ -42,10 +43,10 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
 
 void Player::playPause()
 {
-    if (m_media->state() == Phonon::PausedState) {
-        play();
-    } else {
+    if (m_media->state() == Phonon::PlayingState) {
         pause();
+    } else {
+        play();
     }
 }
 
@@ -57,14 +58,18 @@ void Player::load(const QUrl &url)
         m_media->setCurrentSource(url);
 }
 
+void Player::load()
+{
+    QString url = QFileDialog::getOpenFileName(this);
+    if (url.isEmpty())
+        return;
+    load(QUrl::fromLocalFile(url));
+}
+
 void Player::play()
 {
-    if (m_media->currentSource().type() == Phonon::MediaSource::Empty || m_media->currentSource().type() == Phonon::MediaSource::Invalid) {
-        QString url = QFileDialog::getOpenFileName(this);
-        if (url.isEmpty())
-            return
-        m_media->setCurrentSource(QUrl(url));
-    }
+    if (m_media->currentSource().type() == Phonon::MediaSource::Empty)
+        load();
     m_media->play();
 }
 
@@ -73,7 +78,7 @@ void Player::pause()
     m_media->pause();
 }
 
-void Player::mediaStateChange(Phonon::State newState, Phonon::State oldState)
+void Player::mediaStateChanged(Phonon::State newState, Phonon::State oldState)
 {
     Q_UNUSED(oldState);
     switch(newState) {
@@ -84,13 +89,13 @@ void Player::mediaStateChange(Phonon::State newState, Phonon::State oldState)
         m_stop->setEnabled(false);
         break;
     case Phonon::PlayingState:
-        m_playPause->setText(tr("Play"));
+        m_playPause->setText(tr("Pause"));
         m_stop->setEnabled(true);
         break;
     case Phonon::BufferingState:
         break;
     case Phonon::PausedState:
-        m_playPause->setText(tr("Pause"));
+        m_playPause->setText(tr("Play"));
         break;
     case Phonon::ErrorState:
         break;
