@@ -13,17 +13,27 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
     m_media = new Phonon::MediaObject(this);
+    //The mediaStateChanged slot will update the GUI elements to reflect what
+    //the user can do next
     connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
 
     Phonon::AudioOutput* audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::VideoWidget* videoOut = new Phonon::VideoWidget(this);
     videoOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //By default, there is no minimum size on a video widget. Once a video
+    //stream is available, making the widget visible won't actually show the
+    //video, since it'll still be a 0x0 widget.
     videoOut->setMinimumSize(100, 100);
+
+    //After a MediaSource is loaded, this signal will be emitted to let us know
+    //if a video stream was found.
     connect(m_media, SIGNAL(hasVideoChanged(bool)), videoOut, SLOT(setVisible(bool)));
 
+    //Link the media object to our audio and video outputs.
     Phonon::createPath(m_media, audioOut);
     Phonon::createPath(m_media, videoOut);
 
+    //This widget will contain the stop/pause buttons
     QWidget* buttonBar = new QWidget(this);
 
     m_playPause = new QPushButton(tr("Play"), buttonBar);
@@ -31,7 +41,6 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
 
     Phonon::SeekSlider *seekSlider = new Phonon::SeekSlider(this);
     seekSlider->setMediaObject(m_media);
-    connect(m_media, SIGNAL(seekableChanged(bool)), seekSlider, SLOT(setVisible(bool)));
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(videoOut);

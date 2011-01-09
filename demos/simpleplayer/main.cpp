@@ -12,6 +12,7 @@ int main(int argc, char** argv)
     Player p;
     p.show();
 
+    //Not passing an argument of what to play will prompt for a file inside Player::load(), called by Player::playPause()
     QStringList args = QApplication::arguments();
     if (args.size() > 1) {
         p.load(QUrl(args[1]));
