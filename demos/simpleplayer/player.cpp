@@ -7,6 +7,7 @@
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
 #include <phonon/VideoWidget>
+#include <phonon/SeekSlider>
 
 Player::Player(QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
@@ -16,6 +17,9 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
 
     Phonon::AudioOutput* audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::VideoWidget* videoOut = new Phonon::VideoWidget(this);
+    videoOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    videoOut->setMinimumSize(100, 100);
+    connect(m_media, SIGNAL(hasVideoChanged(bool)), videoOut, SLOT(setVisible(bool)));
 
     Phonon::createPath(m_media, audioOut);
     Phonon::createPath(m_media, videoOut);
@@ -25,8 +29,13 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
     m_playPause = new QPushButton(tr("Play"), buttonBar);
     m_stop = new QPushButton(tr("Stop"), buttonBar);
 
+    Phonon::SeekSlider *seekSlider = new Phonon::SeekSlider(this);
+    seekSlider->setMediaObject(m_media);
+    connect(m_media, SIGNAL(seekableChanged(bool)), seekSlider, SLOT(setVisible(bool)));
+
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(videoOut);
+    layout->addWidget(seekSlider);
     layout->addWidget(buttonBar);
     setLayout(layout);
 
@@ -37,16 +46,20 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
 
     m_stop->setEnabled(false);
 
-    connect(m_stop, SIGNAL(clicked(bool)), this, SLOT(play()));
+    connect(m_stop, SIGNAL(clicked(bool)), m_media, SLOT(stop()));
     connect(m_playPause, SIGNAL(clicked(bool)), this, SLOT(playPause()));
+
+    videoOut->setVisible(false);
 }
 
 void Player::playPause()
 {
     if (m_media->state() == Phonon::PlayingState) {
-        pause();
+        m_media->pause();
     } else {
-        play();
+        if (m_media->currentSource().type() == Phonon::MediaSource::Empty)
+            load();
+        m_media->play();
     }
 }
 
@@ -56,6 +69,7 @@ void Player::load(const QUrl &url)
         m_media->setCurrentSource(QUrl::fromLocalFile(url.toString()));
     else
         m_media->setCurrentSource(url);
+    m_media->play();
 }
 
 void Player::load()
@@ -64,18 +78,6 @@ void Player::load()
     if (url.isEmpty())
         return;
     load(QUrl::fromLocalFile(url));
-}
-
-void Player::play()
-{
-    if (m_media->currentSource().type() == Phonon::MediaSource::Empty)
-        load();
-    m_media->play();
-}
-
-void Player::pause()
-{
-    m_media->pause();
 }
 
 void Player::mediaStateChanged(Phonon::State newState, Phonon::State oldState)

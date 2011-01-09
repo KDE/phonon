@@ -15,7 +15,6 @@ int main(int argc, char** argv)
     QStringList args = QApplication::arguments();
     if (args.size() > 1) {
         p.load(QUrl(args[1]));
-        p.play();
     }
 
     return app.exec();
