@@ -20,10 +20,11 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
     Phonon::AudioOutput* audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::VideoWidget* videoOut = new Phonon::VideoWidget(this);
     videoOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //By default, there is no minimum size on a video widget. Once a video
-    //stream is available, making the widget visible won't actually show the
-    //video, since it'll still be a 0x0 widget.
-    videoOut->setMinimumSize(100, 100);
+    //By default, there is no minimum size on a video widget. While the default
+    //size is controlled by Qt's layouting system it makes sense to provide a
+    //minimum size, so that the widget does not disappear, when the user resizes
+    //the window.
+    videoOut->setMinimumSize(64, 64);
 
     //After a MediaSource is loaded, this signal will be emitted to let us know
     //if a video stream was found.
@@ -57,8 +58,6 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
 
     connect(m_stop, SIGNAL(clicked(bool)), m_media, SLOT(stop()));
     connect(m_playPause, SIGNAL(clicked(bool)), this, SLOT(playPause()));
-
-    videoOut->setVisible(false);
 }
 
 void Player::playPause()
