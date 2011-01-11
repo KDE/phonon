@@ -19,6 +19,8 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
     Phonon::createPath(m_media, audioOut);
     Phonon::createPath(m_media, videoOut);
 
+    videoOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     QWidget* buttonBar = new QWidget(this);
 
     m_playPause = new QPushButton(tr("Play"), buttonBar);
