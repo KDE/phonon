@@ -223,7 +223,9 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
-    } else if (d->mediaSource.type() == MediaSource::Url && d->mediaSource.url().scheme() != "file") {
+    } else if (d->mediaSource.type() == MediaSource::Url &&
+               d->mediaSource.url().scheme() != "file" &&
+               !d->mediaSource.url().scheme().isEmpty()) {
         d->abstractStream = Platform::createMediaStream(newSource.url(), this);
         if (d->abstractStream) {
             d->abstractStream->d_func()->setMediaObjectPrivate(d);
