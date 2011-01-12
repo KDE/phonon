@@ -1,4 +1,4 @@
-# Find Phonon
+# Find Phonon: version=1
 
 # Copyright (c) 2010, Harald Sitter <sitter@kde.org>
 #
