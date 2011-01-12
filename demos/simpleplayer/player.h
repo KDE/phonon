@@ -3,7 +3,7 @@
 
 #include <QtGui/QWidget>
 #include <QtCore/QUrl>
-#include <phonon/phononnamespace.h>
+#include <phonon/Global>
 
 class QPushButton;
 namespace Phonon {

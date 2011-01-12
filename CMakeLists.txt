@@ -44,6 +44,10 @@ add_subdirectory(phonon)
 add_subdirectory(includes)
 if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
+    #Allows find_package(Phonon) to not die in the demos
+    set(PHONON_BUILDSYSTEM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+    #Lets the demos find the headers
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes)
     add_subdirectory(demos)
 endif(PHONON_BUILD_DEMOS)
 
