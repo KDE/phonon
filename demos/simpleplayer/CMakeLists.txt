@@ -6,8 +6,8 @@ include(${QT_USE_FILE})
 
 find_package(Phonon REQUIRED)
 
-add_definitions(${QT_DEFINITIONS})
-include_directories(${PHONON_INCLUDES} ${QT_INCLUDES})
+add_definitions(${QT_DEFINITIONS} ${PHONON_DEFINITIONS})
+include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${PHONON_INCLUDES})
 
 set(simpleplayer_SRCS
     main.cpp
@@ -18,4 +18,4 @@ qt4_automoc(${simpleplayer_SRCS})
 
 add_executable(simpleplayer ${simpleplayer_SRCS} ${simpleplayer_MOC_SRCS})
 
-target_link_libraries(simpleplayer ${QT_LIBRARIES} ${PHONON_LIBS})
+target_link_libraries(simpleplayer ${QT_LIBRARIES} ${PHONON_LIBRARY})
