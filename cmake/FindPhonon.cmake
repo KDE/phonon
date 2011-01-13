@@ -4,6 +4,10 @@
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
+# This version of FindPhonon.cmake should only be used to build a phonon
+# backend. For a FindPhonon suitable for inclusion in other projects, please
+# check out demos/cmake/FindPhonon.cmake included with the phonon sources.
 
 if (NOT PHONON_BUILDSYSTEM_DIR)
     find_program(PC_EXECUTABLE NAMES pkg-config
