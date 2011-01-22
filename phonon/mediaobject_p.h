@@ -61,8 +61,15 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
          * \param subjectMimetype The file's mimetype
          */
 
-        void send_to_zeitgeist(const QString &event_interpretation, const QString &event_manifestation, const QString &event_actor, time_t subject_timestamp,
-                               const QString &subject_uri, const QString &subject_text, const QString &subject_interpretation, const QString &subject_manifestation, const QString &subject_mimetype);
+        void send_to_zeitgeist(const QString &event_interpretation,
+                               const QString &event_manifestation,
+                               const QString &event_actor,
+                               time_t subject_timestamp,
+                               const QString &subject_uri,
+                               const QString &subject_text,
+                               const QString &subject_interpretation,
+                               const QString &subject_manifestation,
+                               const QString &subject_mimetype);
 
         QList<FrontendInterfacePrivate *> interfaceList;
     protected:
