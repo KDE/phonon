@@ -46,6 +46,24 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     Q_DECLARE_PUBLIC(MediaObject)
     public:
         virtual QObject *qObject() { return q_func(); }
+
+        /**
+         * Sends the metadata for this media file to the Zeitgeist tracker
+         *
+         * \param eventInterpretation The interpretation of the event
+         * \param eventManifestation The manifestation type of the event
+         * \param eventActor The application or entity responsible for emitting the zeitgeist event
+         * \param eventTimestamp The time
+         * \param subjectURI The file's URI
+         * \param subjectText A free-form annotation
+         * \param subjectInterpretation The interpretation type
+         * \param subjectManifestation The manifestation type
+         * \param subjectMimetype The file's mimetype
+         */
+
+        void send_to_zeitgeist(const QString &event_interpretation, const QString &event_manifestation, const QString &event_actor, time_t subject_timestamp,
+                               const QString &subject_uri, const QString &subject_text, const QString &subject_interpretation, const QString &subject_manifestation, const QString &subject_mimetype);
+
         QList<FrontendInterfacePrivate *> interfaceList;
     protected:
         virtual bool aboutToDeleteBackendObject();
