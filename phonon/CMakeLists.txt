@@ -28,6 +28,15 @@ else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
+macro_optional_find_package(QZeitgeist)
+if (QZEITGEIST_INCLUDE_DIR)
+    set(QZEITGEIST_FOUND TRUE)
+endif(QZEITGEIST_INCLUDE_DIR)
+macro_log_feature(QZEITGEIST_FOUND "QtZeitgeist" "Qt bindings for Zeitgeist" "http://gitorious.org/kde-zeitgeist/libqzeitgeist/" FALSE)
+if (QZEITGEIST_FOUND)
+    add_definitions(-DHAVE_QZEITGEIST)
+    include_directories(${QZEITGEIST_INCLUDE_DIR})
+endif(QZEITGEIST_FOUND)
 
 set(phonon_LIB_SRCS
    objectdescription.cpp
@@ -88,6 +97,11 @@ target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
 target_link_libraries(phonon ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (GLIB2_FOUND AND PULSEAUDIO_FOUND)
+
+if (QZEITGEIST_FOUND)
+    target_link_libraries(phonon ${QZEITGEIST_LIBRARY})
+endif(QZEITGEIST_FOUND)
+
 
 if (QT_QTDBUS_FOUND)
   target_link_libraries(phonon ${QT_QTDBUS_LIBRARY})
