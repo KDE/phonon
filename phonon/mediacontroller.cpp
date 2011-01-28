@@ -1,6 +1,7 @@
 /*  This file is part of the KDE project
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2008 Ian Monroe <ian@monroe.nu>
+    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -16,7 +17,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -86,11 +87,62 @@ MediaController::Features MediaController::supportedFeatures() const
     if (iface->hasInterface(AddonInterface::ChapterInterface)) {
         ret |= Chapters;
     }
+    if (iface->hasInterface(AddonInterface::NavigationInterface)) {
+        ret |= Navigations;
+    }
     if (iface->hasInterface(AddonInterface::TitleInterface)) {
         ret |= Titles;
     }
     return ret;
 }
+
+// -- Angle Control -- //
+
+int MediaController::availableAngles() const
+{
+    IFACE 0;
+    return iface->interfaceCall(AddonInterface::AngleInterface,
+            AddonInterface::availableAngles).toInt();
+}
+
+int MediaController::currentAngle() const
+{
+    IFACE 0;
+    return iface->interfaceCall(AddonInterface::AngleInterface,
+            AddonInterface::angle).toInt();
+}
+
+void MediaController::setCurrentAngle(int titleNumber)
+{
+    IFACE;
+    iface->interfaceCall(AddonInterface::AngleInterface,
+            AddonInterface::setAngle, QList<QVariant>() << QVariant(titleNumber));
+}
+
+// -- Chapter Control -- //
+
+int MediaController::availableChapters() const
+{
+    IFACE 0;
+    return iface->interfaceCall(AddonInterface::ChapterInterface,
+            AddonInterface::availableChapters).toInt();
+}
+
+int MediaController::currentChapter() const
+{
+    IFACE 0;
+    return iface->interfaceCall(AddonInterface::ChapterInterface,
+            AddonInterface::chapter).toInt();
+}
+
+void MediaController::setCurrentChapter(int titleNumber)
+{
+    IFACE;
+    iface->interfaceCall(AddonInterface::ChapterInterface,
+            AddonInterface::setChapter, QList<QVariant>() << QVariant(titleNumber));
+}
+
+// -- Title Control -- //
 
 int MediaController::availableTitles() const
 {
@@ -137,47 +189,7 @@ void MediaController::previousTitle()
     setCurrentTitle(currentTitle() - 1);
 }
 
-int MediaController::availableChapters() const
-{
-    IFACE 0;
-    return iface->interfaceCall(AddonInterface::ChapterInterface,
-            AddonInterface::availableChapters).toInt();
-}
-
-int MediaController::currentChapter() const
-{
-    IFACE 0;
-    return iface->interfaceCall(AddonInterface::ChapterInterface,
-            AddonInterface::chapter).toInt();
-}
-
-void MediaController::setCurrentChapter(int titleNumber)
-{
-    IFACE;
-    iface->interfaceCall(AddonInterface::ChapterInterface,
-            AddonInterface::setChapter, QList<QVariant>() << QVariant(titleNumber));
-}
-
-int MediaController::availableAngles() const
-{
-    IFACE 0;
-    return iface->interfaceCall(AddonInterface::AngleInterface,
-            AddonInterface::availableAngles).toInt();
-}
-
-int MediaController::currentAngle() const
-{
-    IFACE 0;
-    return iface->interfaceCall(AddonInterface::AngleInterface,
-            AddonInterface::angle).toInt();
-}
-
-void MediaController::setCurrentAngle(int titleNumber)
-{
-    IFACE;
-    iface->interfaceCall(AddonInterface::AngleInterface,
-            AddonInterface::setAngle, QList<QVariant>() << QVariant(titleNumber));
-}
+// -- Audio Channel & Subtitle Control -- //
 
 AudioChannelDescription MediaController::currentAudioChannel() const
 {
