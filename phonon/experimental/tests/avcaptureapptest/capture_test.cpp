@@ -39,8 +39,11 @@ MediaPlayer::MediaPlayer(QWidget *parent)
 
     m_avcapture = new Phonon::Experimental::AvCapture();
 
-    Phonon::createPath(m_avcapture, m_aoutput);
-    Phonon::createPath(m_avcapture, m_vwidget);
+    if (!Phonon::createPath(m_avcapture, m_aoutput).isValid())
+        QMessageBox::critical(this, "Error", "Your backend may not support audio capturing.");
+
+    if (!Phonon::createPath(m_avcapture, m_vwidget).isValid())
+        QMessageBox::critical(this, "Error", "Your backend may not support video capturing.");
 
     QHBoxLayout *deviceNameLayout = new QHBoxLayout(this);
 
