@@ -40,7 +40,7 @@ namespace Experimental
      *
      * \author Matthias Kretz <kretz@kde.org>
      */
-    struct PHONONEXPERIMENTAL_EXPORT VideoFrame2
+    struct VideoFrame2
     {
         /**
          * Video frames come in a variety of formats. Depending on the format
