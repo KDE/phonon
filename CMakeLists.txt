@@ -8,6 +8,12 @@ cmake_policy(SET CMP0002 OLD)
 option(PHONON_BUILD_TESTS "Build the tests")
 option(PHONON_BUILD_DEMOS "Build the demos")
 
+option(PHONON_NO_CAPTURE "Disable the capture capabilities")
+if (PHONON_NO_CAPTURE)
+    # Definitions to disable the compiling of any capture related components
+    add_definitions(-DQT_NO_PHONON_VIDEOCAPTURE -DQT_NO_PHONON_AUDIOCAPTURE)
+endif (PHONON_NO_CAPTURE)
+
 if (PHONON_BUILD_TESTS)
     message(STATUS "Building tests.")
     enable_testing()

@@ -29,6 +29,8 @@ namespace Phonon
 namespace Experimental
 {
 
+#ifndef QT_NO_PHONON_VIDEOCAPTURE
+
 VideoCaptureDevice phononVcdToExperimentalVcd(const Phonon::VideoCaptureDevice &vcd)
 {
     QHash<QByteArray, QVariant> properties;
@@ -50,6 +52,8 @@ Phonon::VideoCaptureDevice phononExperimentalVcdToVcd(const Phonon::Experimental
 
     return Phonon::VideoCaptureDevice(vcd.index(), properties);
 }
+
+#endif // QT_NO_PHONON_VIDEOCAPTURE
 
 } // Experimental namespace
 } // Phonon namespace
