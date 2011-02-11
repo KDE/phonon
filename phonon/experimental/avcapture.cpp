@@ -30,7 +30,6 @@
 #include "avcaptureinterface.h"
 #include "avcapture_p.h"
 #include "factory_p.h"
-#include "objectdescription.h"
 #include "globalconfig.h"
 
 #define PHONON_CLASSNAME AvCapture
