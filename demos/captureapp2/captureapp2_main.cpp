@@ -20,15 +20,27 @@
  *
  */
 
-#include "capture_test.h"
+/*
+ * This demo uses the AVCapture class from Phonon to capture video and audio
+ * at the same time. The object of this class is connected to a VideoWidget and
+ * an AudioOutput.
+ * 
+ * If you only want to capture video, or only audio, see the first capture demo.
+ * 
+ * Both the video capture device and the audio capture device can be selected from
+ * their own combo boxes. If you have a device that supports both video and audio
+ * capture, it should show in both combo boxes.
+ */
+
+#include "captureapp2.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QApplication::setApplicationName("Phonon Capture Test Application");
+    QApplication::setApplicationName("Phonon AVCapture Demo");
 
     MediaPlayer mp(NULL);
-    mp.setWindowTitle("Phonon Capture Test Application");
+    mp.setWindowTitle("Phonon AVCapture Demo");
     mp.show();
 
     return app.exec();

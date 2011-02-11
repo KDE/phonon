@@ -20,7 +20,7 @@
  *
  */
 
-#include "capture_test.h"
+#include "captureapp2.h"
 
 MediaPlayer::MediaPlayer(QWidget *parent)
 : QWidget(parent)
