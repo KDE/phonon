@@ -4,10 +4,6 @@ if(msvc)
 endif(msvc)
 add_subdirectory(fakebackend)
 
-if(PHONON_BUILD_APP_TESTS)
-	add_subdirectory(captureapptest)
-endif(PHONON_BUILD_APP_TESTS)
-
 MACRO(PHONON_UNIT_TESTS)
 	FOREACH(_testname ${ARGN})
 		phonon_add_unit_test(${_testname} ${_testname}.cpp)

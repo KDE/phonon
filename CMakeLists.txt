@@ -6,7 +6,6 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 cmake_policy(SET CMP0002 OLD)
 
 option(PHONON_BUILD_TESTS "Build the tests")
-option(PHONON_BUILD_APP_TESTS "Build the application tests")
 option(PHONON_BUILD_DEMOS "Build the demos")
 
 if (PHONON_BUILD_TESTS)

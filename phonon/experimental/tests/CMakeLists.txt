@@ -54,7 +54,3 @@ PHONON_EXECUTABLE_TESTS(
 PHONON_UNIT_TESTS_FAKE(
 	)
 
-# Application tests
-if (PHONON_BUILD_APP_TESTS)
-    add_subdirectory(avcaptureapptest)
-endif (PHONON_BUILD_APP_TESTS)

@@ -32,7 +32,7 @@
 #include "../medianode.h"
 #include "../phonondefs.h"
 #include "objectdescription.h"
-#include "../phononnamespace.h"
+#include "phonon/Global"
 
 class QString;
 class QStringList;
