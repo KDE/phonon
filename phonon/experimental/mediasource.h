@@ -49,9 +49,9 @@ class PHONONEXPERIMENTAL_EXPORT MediaSource : public Phonon::MediaSource
         
         MediaSource(const QList<Phonon::MediaSource> &mediaList);
         
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
         MediaSource(const VideoCaptureDevice &videoDevice);
-#endif // QT_NO_PHONON_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
 
         /**
@@ -66,9 +66,9 @@ class PHONONEXPERIMENTAL_EXPORT MediaSource : public Phonon::MediaSource
          */
         bool operator==(const MediaSource &rhs) const;
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
         VideoCaptureDevice videoCaptureDevice() const;
-#endif // QT_NO_PHONON_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
         QList<Phonon::MediaSource> substreams() const;
 };

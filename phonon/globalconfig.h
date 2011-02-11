@@ -59,18 +59,18 @@ namespace Phonon
         int audioOutputDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
         QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> videoCaptureDeviceProperties(int index) const;
-#endif //QT_NO_PHONON_VIDEOCAPTURE
+#endif //PHONON_NO_VIDEOCAPTURE
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
         void setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order);
         QList<int> audioCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         int audioCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> audioCaptureDeviceProperties(int index) const;
-#endif //QT_NO_PHONON_AUDIOCAPTURE
+#endif //PHONON_NO_AUDIOCAPTURE
 
     protected:
         GlobalConfigPrivate *const k_ptr;

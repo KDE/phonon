@@ -85,7 +85,7 @@ QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()
 }
 
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
 QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
 {
     QList<AudioCaptureDevice> ret;
@@ -95,9 +95,9 @@ QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
     }
     return ret;
 }
-#endif //QT_NO_PHONON_AUDIOCAPTURE
+#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 {
     QList<VideoCaptureDevice> ret;
@@ -107,9 +107,9 @@ QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
     }
     return ret;
 }
-#endif //QT_NO_PHONON_VIDEOCAPTURE
+#endif //PHONON_NO_VIDEOCAPTURE
 
-#if !defined(QT_NO_PHONON_VIDEOCAPTURE) && !defined(QT_NO_PHONON_AUDIOCAPTURE)
+#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
 QList<VideoCaptureDevice> BackendCapabilities::availableAVCaptureDevices()
 {
     QList<VideoCaptureDevice> ret;
@@ -121,7 +121,7 @@ QList<VideoCaptureDevice> BackendCapabilities::availableAVCaptureDevices()
     }
     return ret;
 }
-#endif // NOT QT_NO_PHONON_VIDEOCAPTURE AND NOT QT_NO_PHONON_AUDIOCAPTURE
+#endif // NOT PHONON_NO_VIDEOCAPTURE AND NOT PHONON_NO_AUDIOCAPTURE
 
 #ifndef QT_NO_PHONON_EFFECT
 QList<EffectDescription> BackendCapabilities::availableAudioEffects()

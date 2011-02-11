@@ -38,7 +38,7 @@ namespace Phonon
 namespace Experimental
 {
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 QList<int> GlobalConfig::videoCaptureDeviceListFor(Category category, int override) const
 {
     return Phonon::GlobalConfig::videoCaptureDeviceListFor(category, override);
@@ -48,7 +48,7 @@ int GlobalConfig::videoCaptureDeviceFor(Category category, int override) const
 {
     return Phonon::GlobalConfig::videoCaptureDeviceFor(category, override);
 }
-#endif // QT_NO_PHONON_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
 } // namespace Experimental
 } // namespace Phonon

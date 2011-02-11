@@ -11,7 +11,7 @@ option(PHONON_BUILD_DEMOS "Build the demos")
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 if (PHONON_NO_CAPTURE)
     # Definitions to disable the compiling of any capture related components
-    add_definitions(-DQT_NO_PHONON_VIDEOCAPTURE -DQT_NO_PHONON_AUDIOCAPTURE)
+    add_definitions(-DPHONON_NO_VIDEOCAPTURE -DPHONON_NO_AUDIOCAPTURE)
 endif (PHONON_NO_CAPTURE)
 
 if (PHONON_BUILD_TESTS)

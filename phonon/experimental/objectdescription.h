@@ -30,7 +30,7 @@ namespace Phonon
 namespace Experimental
 {
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 
 enum ObjectDescriptionType
 {
@@ -50,7 +50,7 @@ VideoCaptureDevice phononVcdToExperimentalVcd(const Phonon::VideoCaptureDevice &
  */
 Phonon::VideoCaptureDevice phononExperimentalVcdToVcd(const Phonon::Experimental::VideoCaptureDevice &vcd);
 
-#endif // QT_NO_PHONON_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
 } // namespace Experimental
 } // namespace Phonon
