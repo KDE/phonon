@@ -73,6 +73,8 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 
         void send_to_zeitgeist();
         void send_to_zeitgeist(State);
+        bool hasZeitgeistableOutput(MediaNode *that);
+        bool hasZeitgeistableOutput(MediaNode *that, QList<MediaNode*> *visited);
 
         QList<FrontendInterfacePrivate *> interfaceList;
     protected:
