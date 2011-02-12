@@ -343,7 +343,9 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
 {
 #ifdef HAVE_QZEITGEIST
     Q_Q(MediaObject);
-    if (readyForZeitgeist && hasZeitgeistableOutput(q)) {
+    if (readyForZeitgeist &&
+            (q->property("_p_LogPlayback").toBool() &&
+                (q->property("_p_ForceLogPlayback").toBool() ||  hasZeitgeistableOutput(q)))) {
         QStringList titles = q->metaData(TitleMetaData);
         QStringList artists = q->metaData(ArtistMetaData);
         QString title;
