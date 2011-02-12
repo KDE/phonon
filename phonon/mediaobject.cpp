@@ -313,11 +313,37 @@ void MediaObjectPrivate::send_to_zeitgeist()
     send_to_zeitgeist(q->state());
 }
 
+bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that) {
+    QList<MediaNode*> visited;
+    return hasZeitgeistableOutput(that, &visited);
+}
+
+bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that, QList<MediaNode*> *visited)
+{
+    visited->append(that);
+    AudioOutput *output = dynamic_cast<AudioOutput*>(that);
+    if (output) {
+        Phonon::Category cat = output->category();
+        if (cat == Phonon::MusicCategory || cat == Phonon::VideoCategory) {
+            qDebug() << "Found zeitgeistable output type.";
+            return true;
+        }
+    }
+    foreach(const Path p, that->outputPaths()) {
+        MediaNode* sink = p.sink();
+        if (!visited->contains(sink)) {
+            return hasZeitgeistableOutput(sink, visited);
+        }
+    }
+    qDebug() << "Did not find zeitgeistable output type.";
+    return false;
+}
+
 void MediaObjectPrivate::send_to_zeitgeist(State eventState)
 {
 #ifdef HAVE_QZEITGEIST
     Q_Q(MediaObject);
-    if (readyForZeitgeist) {
+    if (readyForZeitgeist && hasZeitgeistableOutput(q)) {
         QStringList titles = q->metaData(TitleMetaData);
         QStringList artists = q->metaData(ArtistMetaData);
         QString title;
