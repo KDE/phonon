@@ -40,7 +40,7 @@ class MediaPlayer : public QWidget
     Q_OBJECT
 
     public:
-        MediaPlayer(QWidget *parent);
+        MediaPlayer(QWidget *parent = 0, Qt::WindowFlags f = 0);
         ~MediaPlayer();
 
     public slots:

@@ -22,8 +22,8 @@
 
 #include "captureapp.h"
 
-MediaPlayer::MediaPlayer(QWidget *parent)
-    : QWidget(parent)
+MediaPlayer::MediaPlayer(QWidget *parent, Qt::WindowFlags f)
+    : QWidget(parent, f)
 {
     m_videoDeviceModel = NULL;
     m_audioDeviceModel = NULL;
@@ -35,9 +35,9 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     m_vwidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(m_vwidget);
 
-    m_aoutput = new Phonon::AudioOutput();
+    m_aoutput = new Phonon::AudioOutput(this);
 
-    m_media = new Phonon::MediaObject();
+    m_media = new Phonon::MediaObject(this);
 
     Phonon::createPath(m_media, m_aoutput);
     Phonon::createPath(m_media, m_vwidget);
@@ -86,8 +86,6 @@ MediaPlayer::MediaPlayer(QWidget *parent)
 
 MediaPlayer::~MediaPlayer()
 {
-    delete m_aoutput;
-    delete m_media;
 }
 
 void MediaPlayer::setVideoCapture()

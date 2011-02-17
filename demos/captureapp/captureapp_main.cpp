@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QApplication::setApplicationName("Phonon Capture Demo Application");
 
-    MediaPlayer mp(NULL);
+    MediaPlayer mp;
     mp.setWindowTitle("Phonon Capture Demo Application");
     mp.show();
 
