@@ -174,3 +174,5 @@ void MediaPlayer::updateDeviceList()
     #endif // PHONON_NO_AUDIOCAPTURE
 }
 
+#include "captureapp.moc"
+

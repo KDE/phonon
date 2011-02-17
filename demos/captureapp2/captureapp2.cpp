@@ -144,3 +144,5 @@ void MediaPlayer::updateDeviceList()
 #endif
 }
 
+#include "captureapp2.moc"
+
