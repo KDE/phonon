@@ -105,10 +105,10 @@ MediaSource::MediaSource(const DeviceAccess &access)
     d->deviceAccessList.append(access);
 }
 
-#if !defined(QT_NO_PHONON_AUDIOCAPTURE) && !defined(QT_NO_PHONON_VIDEOCAPTURE)
-#endif //QT_NO_PHONON_AUDIOCAPTURE && QT_NO_PHONON_VIDEOCAPTURE
+#if !defined(PHONON_NO_AUDIOCAPTURE) && !defined(PHONON_NO_VIDEOCAPTURE)
+#endif //PHONON_NO_AUDIOCAPTURE && PHONON_NO_VIDEOCAPTURE
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
 MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
@@ -123,9 +123,9 @@ MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
         d->type = Invalid;
     }
 }
-#endif //QT_NO_PHONON_AUDIOCAPTURE
+#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
@@ -140,7 +140,7 @@ MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
         d->type = Invalid;
     }
 }
-#endif //QT_NO_PHONON_VIDEOCAPTURE
+#endif //PHONON_NO_VIDEOCAPTURE
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 MediaSource::MediaSource(AbstractMediaStream *stream)
@@ -272,19 +272,19 @@ void MediaSourcePrivate::setStream(AbstractMediaStream *s)
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
 AudioCaptureDevice MediaSource::audioCaptureDevice() const
 {
     return d->audioCaptureDevice;
 }
-#endif //QT_NO_PHONON_AUDIOCAPTURE
+#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
     return d->videoCaptureDevice;
 }
-#endif //QT_NO_PHONON_VIDEOCAPTURE
+#endif //PHONON_NO_VIDEOCAPTURE
 
 } // namespace Phonon
 

@@ -147,14 +147,14 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(Phonon::DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
         /**
         * Creates a MediaSource object for audio capture devices.
         */
         MediaSource(const Phonon::AudioCaptureDevice& acDevice);
 #endif
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
         /**
         * Creates a MediaSource object for video capture devices.
         */
@@ -276,14 +276,14 @@ class PHONON_EXPORT MediaSource
         AbstractMediaStream *stream() const;
 #endif
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
         /**
          * Returns the audio capture device for the media source if applicable.
          */
         AudioCaptureDevice audioCaptureDevice() const;
 #endif
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
         /**
          * Returns the video capture device for the media source if applicable.
          */

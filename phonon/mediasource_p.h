@@ -74,11 +74,11 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         QIODevice *ioDevice;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
         AudioCaptureDevice audioCaptureDevice;
 #endif
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
         VideoCaptureDevice videoCaptureDevice;
 #endif
 

@@ -179,7 +179,7 @@ static bool isHiddenAudioOutputDevice(const GlobalConfig *config, int i)
     return (var.isValid() && var.toBool());
 }
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
 static bool isHiddenAudioCaptureDevice(const GlobalConfig *config, int i)
 {
     Q_ASSERT(config);
@@ -198,7 +198,7 @@ static bool isHiddenAudioCaptureDevice(const GlobalConfig *config, int i)
 static QList<int> reindexList(const GlobalConfig *config, Phonon::Category category, QList<int>newOrder, bool output)
 {
     Q_ASSERT(config);
-#ifdef QT_NO_PHONON_AUDIOCAPTURE
+#ifdef PHONON_NO_AUDIOCAPTURE
     Q_ASSERT(output);
 #endif
 
@@ -215,7 +215,7 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
     QList<int> currentList;
     if (output)
         currentList = config->audioOutputDeviceListFor(category, GlobalConfig::ShowUnavailableDevices|GlobalConfig::ShowAdvancedDevices);
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
     else
         currentList = config->audioCaptureDeviceListFor(category, GlobalConfig::ShowUnavailableDevices|GlobalConfig::ShowAdvancedDevices);
 #endif
@@ -236,7 +236,7 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
             bool hidden = true;
             if (output)
                 hidden = isHiddenAudioOutputDevice(config, currentList.at(found));
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
             else
                 hidden = isHiddenAudioCaptureDevice(config, currentList.at(found));
 #endif
@@ -366,7 +366,7 @@ QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index)
 }
 
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
 void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order)
 {
 
@@ -477,10 +477,10 @@ QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index
 {
     return deviceProperties(AudioCaptureDeviceType, index);
 }
-#endif //QT_NO_PHONON_AUDIOCAPTURE
+#endif //PHONON_NO_AUDIOCAPTURE
 
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, int override) const
 {
     K_D(const GlobalConfig);
@@ -522,7 +522,7 @@ QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index
 {
     return deviceProperties(Phonon::VideoCaptureDeviceType, index);
 }
-#endif // QT_NO_PHONON_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
 QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const
 {

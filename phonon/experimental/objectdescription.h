@@ -30,6 +30,8 @@ namespace Phonon
 namespace Experimental
 {
 
+#ifndef PHONON_NO_VIDEOCAPTURE
+
 enum ObjectDescriptionType
 {
     VideoCaptureDeviceType = 0x10000
@@ -47,6 +49,8 @@ VideoCaptureDevice phononVcdToExperimentalVcd(const Phonon::VideoCaptureDevice &
  * @return a Phonon::VideoCaptureDevice instance with the same properties as the incoming vcd
  */
 Phonon::VideoCaptureDevice phononExperimentalVcdToVcd(const Phonon::Experimental::VideoCaptureDevice &vcd);
+
+#endif // PHONON_NO_VIDEOCAPTURE
 
 } // namespace Experimental
 } // namespace Phonon

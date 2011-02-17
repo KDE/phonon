@@ -20,7 +20,7 @@
  *
  */
 
-#include "capture_test.h"
+#include "captureapp2.h"
 
 MediaPlayer::MediaPlayer(QWidget *parent)
 : QWidget(parent)
@@ -87,7 +87,7 @@ MediaPlayer::~MediaPlayer()
 
 void MediaPlayer::setVideoDeviceIndex(int index)
 {
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
     QModelIndex mi = m_videoDeviceModel->index(index, 0, QModelIndex());
     Q_ASSERT(mi.isValid());
 
@@ -100,7 +100,7 @@ void MediaPlayer::setVideoDeviceIndex(int index)
 
 void MediaPlayer::setAudioDeviceIndex(int index)
 {
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
     QModelIndex mi = m_audioDeviceModel->index(index, 0, QModelIndex());
     Q_ASSERT(mi.isValid());
 
@@ -108,12 +108,12 @@ void MediaPlayer::setAudioDeviceIndex(int index)
     Q_ASSERT(ac.isValid());
 
     m_avcapture->setAudioCaptureDevice(ac);
-#endif // QT_NO_PHONON_AUDIOCAPTURE
+#endif // PHONON_NO_AUDIOCAPTURE
 }
 
 void MediaPlayer::updateDeviceList()
 {
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
     QList<Phonon::VideoCaptureDevice> vl = Phonon::BackendCapabilities::availableVideoCaptureDevices();
 
     if (!m_videoDeviceModel)
@@ -128,7 +128,7 @@ void MediaPlayer::updateDeviceList()
     QMessageBox::critical(this, "Error", "Video capture is disabled.");
 #endif
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
     QList<Phonon::AudioCaptureDevice> al = Phonon::BackendCapabilities::availableAudioCaptureDevices();
 
     if (!m_audioDeviceModel)

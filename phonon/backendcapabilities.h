@@ -75,7 +75,7 @@ namespace BackendCapabilities
              */
             void availableAudioOutputDevicesChanged();
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
             /**
              * This signal is emitted when audio capture devices were plugged or
              * unplugged.
@@ -84,9 +84,9 @@ namespace BackendCapabilities
              * current list of available devices.
              */
             void availableAudioCaptureDevicesChanged();
-#endif //QT_NO_PHONON_AUDIOCAPTURE
+#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
             /**
              * This signal is emitted when video capture devices were plugged or
              * unplugged.
@@ -95,7 +95,7 @@ namespace BackendCapabilities
              * current list of available devices.
              */
             void availableVideoCaptureDevicesChanged();
-#endif //QT_NO_PHONON_VIDEOCAPTURE
+#endif //PHONON_NO_VIDEOCAPTURE
     };
 
     /**
@@ -139,7 +139,7 @@ namespace BackendCapabilities
      */
     PHONON_EXPORT QList<AudioOutputDevice> availableAudioOutputDevices();
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
     /**
      * Returns the audio capture devices the backend supports.
      *
@@ -147,7 +147,7 @@ namespace BackendCapabilities
      * description for every supported audio capture device.
      */
     PHONON_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevices();
-#endif //QT_NO_PHONON_AUDIOCAPTURE
+#endif //PHONON_NO_AUDIOCAPTURE
 
     /**
      * Returns the video output devices the backend supports.
@@ -157,7 +157,7 @@ namespace BackendCapabilities
      */
 //    PHONON_EXPORT QList<VideoOutputDevice> availableVideoOutputDevices();
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
     /**
      * Returns the video capture devices the backend supports.
      *
@@ -165,7 +165,7 @@ namespace BackendCapabilities
      * description for every supported video capture device.
      */
     PHONON_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
-#endif //QT_NO_PHONON_VIDEOCAPTURE
+#endif //PHONON_NO_VIDEOCAPTURE
 
     /**
      * Returns the video capture devices that have audio capture capabilities
@@ -186,9 +186,9 @@ namespace BackendCapabilities
      * \see availableAudioCaptureDevices()
      * \see Experimental::AVCapture
      */
-#if !defined(QT_NO_PHONON_VIDEOCAPTURE) && !defined(QT_NO_PHONON_AUDIOCAPTURE)
+#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
     PHONON_EXPORT QList<VideoCaptureDevice> availableAVCaptureDevices();
-#endif // NOT QT_NO_PHONON_VIDEOCAPTURE AND NOT QT_NO_PHONON_AUDIOCAPTURE
+#endif // NOT PHONON_NO_VIDEOCAPTURE AND NOT PHONON_NO_AUDIOCAPTURE
 
     /**
      * Returns the visualization effects the backend supports.
