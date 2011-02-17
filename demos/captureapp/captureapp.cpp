@@ -23,7 +23,7 @@
 #include "captureapp.h"
 
 MediaPlayer::MediaPlayer(QWidget *parent)
-: QWidget(parent)
+    : QWidget(parent)
 {
     m_videoDeviceModel = NULL;
     m_audioDeviceModel = NULL;
@@ -145,7 +145,7 @@ void MediaPlayer::setDeviceIndex(int index)
 
 void MediaPlayer::updateDeviceList()
 {
-    #ifndef PHONON_NO_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
     QList<Phonon::VideoCaptureDevice> lv = Phonon::BackendCapabilities::availableVideoCaptureDevices();
 
     if (!m_videoDeviceModel)
@@ -155,11 +155,11 @@ void MediaPlayer::updateDeviceList()
 
     if (m_videoDeviceModel->rowCount() == 0)
         QMessageBox::warning(this, "Warning", "No video capture devices found.");
-    #else
+#else
     QMessageBox::critical(this, "Error", "Video capture is disabled.");
-    #endif // PHONON_NO_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
-    #ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
     QList<Phonon::AudioCaptureDevice> la = Phonon::BackendCapabilities::availableAudioCaptureDevices();
 
     if (!m_audioDeviceModel)
@@ -169,9 +169,9 @@ void MediaPlayer::updateDeviceList()
 
     if (m_videoDeviceModel->rowCount() == 0)
         QMessageBox::warning(this, "Warning", "No audio capture devices found.");
-    #else
+#else
     QMessageBox::critical(this, "Error", "Audio capture is disabled.");
-    #endif // PHONON_NO_AUDIOCAPTURE
+#endif // PHONON_NO_AUDIOCAPTURE
 }
 
 #include "captureapp.moc"

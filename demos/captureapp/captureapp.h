@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef PHONON_TEST_H
-#define PHONON_TEST_H
+#ifndef CAPTUREAPP_H
+#define CAPTUREAPP_H
 
 #include <Qt/QtCore>
 #include <Qt/QtGui>
@@ -67,8 +67,5 @@ class MediaPlayer : public QWidget
         QComboBox *m_deviceNameCombo;
 };
 
-
-#endif
-
-
+#endif // CAPTUREAPP_H
 
