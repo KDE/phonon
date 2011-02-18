@@ -407,7 +407,6 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
 
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive()) {
-        pDebug() << "Getting audio capture device list from Pulse";
         defaultList = pulse->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
         if (hide || (override & HideUnavailableDevices)) {
             filter(AudioCaptureDeviceType, NULL, &defaultList,
@@ -418,7 +417,6 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
     }
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    pDebug() << "Getting audio capture device list from PlatformPlugin";
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
         // the platform plugin lists the audio devices for the platform
         // this list already is in default order (as defined by the platform plugin)
@@ -439,7 +437,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
     // lookup the available devices directly from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
-    if (backendIface) {pDebug() << "Getting audio capture device list from Backend";
+    if (backendIface) {
         // this list already is in default order (as defined by the backend)
         QList<int> list = backendIface->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
         if (hide || !defaultList.isEmpty() || (override & HideUnavailableDevices)) {
