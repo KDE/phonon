@@ -76,7 +76,7 @@ QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()
 {
     QList<AudioOutputDevice> ret;
 #ifndef QT_NO_PHONON_SETTINGSGROUP
-    const QList<int> deviceIndexes = GlobalConfig().audioOutputDeviceListFor(Phonon::NoCategory);
+    const QList<int> deviceIndexes = GlobalConfig().audioOutputDeviceListFor(Phonon::NoCategory, GlobalConfig::ShowAdvancedDevices);
     for (int i = 0; i < deviceIndexes.count(); ++i) {
         ret.append(AudioOutputDevice::fromIndex(deviceIndexes.at(i)));
     }
@@ -89,7 +89,7 @@ QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()
 QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
 {
     QList<AudioCaptureDevice> ret;
-    const QList<int> deviceIndexes = GlobalConfig().audioCaptureDeviceListFor(Phonon::NoCategory);
+    const QList<int> deviceIndexes = GlobalConfig().audioCaptureDeviceListFor(Phonon::NoCategory, GlobalConfig::ShowAdvancedDevices);
     for (int i = 0; i < deviceIndexes.count(); ++i) {
         ret.append(AudioCaptureDevice::fromIndex(deviceIndexes.at(i)));
     }
@@ -101,7 +101,7 @@ QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
 QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 {
     QList<VideoCaptureDevice> ret;
-    const QList<int> deviceIndexes = GlobalConfig().videoCaptureDeviceListFor(Phonon::NoCategory);
+    const QList<int> deviceIndexes = GlobalConfig().videoCaptureDeviceListFor(Phonon::NoCategory, GlobalConfig::ShowAdvancedDevices);
     for (int i = 0; i < deviceIndexes.count(); ++i) {
         ret.append(VideoCaptureDevice::fromIndex(deviceIndexes.at(i)));
     }
@@ -113,7 +113,7 @@ QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 QList<VideoCaptureDevice> BackendCapabilities::availableAVCaptureDevices()
 {
     QList<VideoCaptureDevice> ret;
-    const QList<int> deviceIndexes = GlobalConfig().videoCaptureDeviceListFor(Phonon::NoCategory);
+    const QList<int> deviceIndexes = GlobalConfig().videoCaptureDeviceListFor(Phonon::NoCategory, GlobalConfig::ShowAdvancedDevices);
     for (int i = 0; i < deviceIndexes.count(); ++i) {
         VideoCaptureDevice vcd = VideoCaptureDevice::fromIndex(deviceIndexes.at(i));
         if (vcd.propertyNames().contains("hasaudio") && vcd.property("hasaudio").isValid())
