@@ -35,38 +35,38 @@ endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
 
 set(phonon_LIB_SRCS
-   objectdescription.cpp
-   objectdescriptionmodel.cpp
-   phononnamespace.cpp
-   mediasource.cpp
-   abstractmediastream.cpp
-   streaminterface.cpp
-   mediaobject.cpp
-   medianode.cpp
-   path.cpp
-   effectparameter.cpp
-   effect.cpp
-   volumefadereffect.cpp
    abstractaudiooutput.cpp
    abstractaudiooutput_p.cpp
-   audiooutput.cpp
-   audiooutputinterface.cpp
+   abstractmediastream.cpp
    abstractvideooutput.cpp
    abstractvideooutput_p.cpp
-   backendcapabilities.cpp
-   globalconfig.cpp
-   factory.cpp
-   platform.cpp
-   mediacontroller.cpp
-   videowidget.cpp
-   videoplayer.cpp
-   seekslider.cpp
-   swiftslider.cpp
-   volumeslider.cpp
-   effectwidget.cpp
-   iodevicestream.cpp
    audiodataoutput.cpp
+   audiooutput.cpp
+   audiooutputinterface.cpp
+   backendcapabilities.cpp
+   effect.cpp
+   effectparameter.cpp
+   effectwidget.cpp
+   factory.cpp
+   globalconfig.cpp
+   iodevicestream.cpp
+   mediacontroller.cpp
+   mediaobject.cpp
+   medianode.cpp
+   mediasource.cpp
+   objectdescription.cpp
+   objectdescriptionmodel.cpp
+   path.cpp
+   phononnamespace.cpp
+   platform.cpp
    pulsesupport.cpp
+   seekslider.cpp
+   streaminterface.cpp
+   swiftslider.cpp
+   volumefadereffect.cpp
+   volumeslider.cpp
+   videoplayer.cpp
+   videowidget.cpp
    )
 
 if (PULSEAUDIO_FOUND)
