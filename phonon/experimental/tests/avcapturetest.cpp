@@ -83,7 +83,7 @@ void AVCaptureTest::testAudioOutput()
 
 void AVCaptureTest::testAudioCapture()
 {
-    #ifndef QT_NO_PHONON_AUDIOCAPTURE
+    #ifndef PHONON_NO_AUDIOCAPTURE
     // Write device indices
     QList<int> acList = m_pgc->audioCaptureDeviceListFor(Phonon::NoCategory);
     qDebug() << "Device list for audio capture" << acList;
@@ -106,7 +106,7 @@ void AVCaptureTest::testAudioCapture()
 
 void AVCaptureTest::testVideoCapture()
 {
-    #ifndef QT_NO_PHONON_VIDEOCAPTURE
+    #ifndef PHONON_NO_VIDEOCAPTURE
     // Write device indices
     QList<int> acList = m_pgc->videoCaptureDeviceListFor(Phonon::NoCategory);
     qDebug() << "Device list for video capture" << acList;

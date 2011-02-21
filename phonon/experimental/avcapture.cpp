@@ -20,7 +20,7 @@
 
 */
 
-#if defined(QT_NO_PHONON_VIDEOCAPTURE) || defined(QT_NO_PHONON_AUDIOCAPTURE)
+#if defined(PHONON_NO_VIDEOCAPTURE) || defined(PHONON_NO_AUDIOCAPTURE)
 #define NO_PHONON_AVCAPTURE
 #endif
 
@@ -30,7 +30,6 @@
 #include "avcaptureinterface.h"
 #include "avcapture_p.h"
 #include "factory_p.h"
-#include "objectdescription.h"
 #include "globalconfig.h"
 
 #define PHONON_CLASSNAME AvCapture

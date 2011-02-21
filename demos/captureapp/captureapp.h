@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef PHONON_TEST_H
-#define PHONON_TEST_H
+#ifndef CAPTUREAPP_H
+#define CAPTUREAPP_H
 
 #include <Qt/QtCore>
 #include <Qt/QtGui>
@@ -40,7 +40,7 @@ class MediaPlayer : public QWidget
     Q_OBJECT
 
     public:
-        MediaPlayer(QWidget *parent);
+        MediaPlayer(QWidget *parent = 0, Qt::WindowFlags f = 0);
         ~MediaPlayer();
 
     public slots:
@@ -67,8 +67,5 @@ class MediaPlayer : public QWidget
         QComboBox *m_deviceNameCombo;
 };
 
-
-#endif
-
-
+#endif // CAPTUREAPP_H
 

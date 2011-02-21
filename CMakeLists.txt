@@ -6,8 +6,13 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 cmake_policy(SET CMP0002 OLD)
 
 option(PHONON_BUILD_TESTS "Build the tests")
-option(PHONON_BUILD_APP_TESTS "Build the application tests")
 option(PHONON_BUILD_DEMOS "Build the demos")
+
+option(PHONON_NO_CAPTURE "Disable the capture capabilities")
+if (PHONON_NO_CAPTURE)
+    # Definitions to disable the compiling of any capture related components
+    add_definitions(-DPHONON_NO_VIDEOCAPTURE -DPHONON_NO_AUDIOCAPTURE)
+endif (PHONON_NO_CAPTURE)
 
 if (PHONON_BUILD_TESTS)
     message(STATUS "Building tests.")
@@ -75,6 +80,7 @@ if (NOT PHONON_MKSPECS_DIR)
     set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR})
 endif (NOT PHONON_MKSPECS_DIR)
 
-install(FILES qt_phonon.pri DESTINATION  ${PHONON_MKSPECS_DIR}/modules)
+# Don't do this, it makes Qt build phonon the next time it's built
+#install(FILES qt_phonon.pri DESTINATION  ${PHONON_MKSPECS_DIR}/modules)
 
 macro_display_feature_log()

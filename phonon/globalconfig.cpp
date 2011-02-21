@@ -179,7 +179,7 @@ static bool isHiddenAudioOutputDevice(const GlobalConfig *config, int i)
     return (var.isValid() && var.toBool());
 }
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
 static bool isHiddenAudioCaptureDevice(const GlobalConfig *config, int i)
 {
     Q_ASSERT(config);
@@ -198,7 +198,7 @@ static bool isHiddenAudioCaptureDevice(const GlobalConfig *config, int i)
 static QList<int> reindexList(const GlobalConfig *config, Phonon::Category category, QList<int>newOrder, bool output)
 {
     Q_ASSERT(config);
-#ifdef QT_NO_PHONON_AUDIOCAPTURE
+#ifdef PHONON_NO_AUDIOCAPTURE
     Q_ASSERT(output);
 #endif
 
@@ -215,7 +215,7 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
     QList<int> currentList;
     if (output)
         currentList = config->audioOutputDeviceListFor(category, GlobalConfig::ShowUnavailableDevices|GlobalConfig::ShowAdvancedDevices);
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
     else
         currentList = config->audioCaptureDeviceListFor(category, GlobalConfig::ShowUnavailableDevices|GlobalConfig::ShowAdvancedDevices);
 #endif
@@ -236,7 +236,7 @@ static QList<int> reindexList(const GlobalConfig *config, Phonon::Category categ
             bool hidden = true;
             if (output)
                 hidden = isHiddenAudioOutputDevice(config, currentList.at(found));
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
             else
                 hidden = isHiddenAudioCaptureDevice(config, currentList.at(found));
 #endif
@@ -366,7 +366,7 @@ QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index)
 }
 
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
 void GlobalConfig::setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order)
 {
 
@@ -407,7 +407,6 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
 
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive()) {
-        pDebug() << "Getting audio capture device list from Pulse";
         defaultList = pulse->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
         if (hide || (override & HideUnavailableDevices)) {
             filter(AudioCaptureDeviceType, NULL, &defaultList,
@@ -418,7 +417,6 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
     }
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    pDebug() << "Getting audio capture device list from PlatformPlugin";
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
         // the platform plugin lists the audio devices for the platform
         // this list already is in default order (as defined by the platform plugin)
@@ -439,7 +437,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
     // lookup the available devices directly from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
-    if (backendIface) {pDebug() << "Getting audio capture device list from Backend";
+    if (backendIface) {
         // this list already is in default order (as defined by the backend)
         QList<int> list = backendIface->objectDescriptionIndexes(Phonon::AudioCaptureDeviceType);
         if (hide || !defaultList.isEmpty() || (override & HideUnavailableDevices)) {
@@ -477,10 +475,10 @@ QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index
 {
     return deviceProperties(AudioCaptureDeviceType, index);
 }
-#endif //QT_NO_PHONON_AUDIOCAPTURE
+#endif //PHONON_NO_AUDIOCAPTURE
 
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, int override) const
 {
     K_D(const GlobalConfig);
@@ -522,7 +520,7 @@ QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index
 {
     return deviceProperties(Phonon::VideoCaptureDeviceType, index);
 }
-#endif // QT_NO_PHONON_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
 QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const
 {

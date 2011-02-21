@@ -20,10 +20,10 @@
  *
  */
 
-#include "capture_test.h"
+#include "captureapp.h"
 
-MediaPlayer::MediaPlayer(QWidget *parent)
-: QWidget(parent)
+MediaPlayer::MediaPlayer(QWidget *parent, Qt::WindowFlags f)
+    : QWidget(parent, f)
 {
     m_videoDeviceModel = NULL;
     m_audioDeviceModel = NULL;
@@ -35,9 +35,9 @@ MediaPlayer::MediaPlayer(QWidget *parent)
     m_vwidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(m_vwidget);
 
-    m_aoutput = new Phonon::AudioOutput();
+    m_aoutput = new Phonon::AudioOutput(this);
 
-    m_media = new Phonon::MediaObject();
+    m_media = new Phonon::MediaObject(this);
 
     Phonon::createPath(m_media, m_aoutput);
     Phonon::createPath(m_media, m_vwidget);
@@ -86,8 +86,6 @@ MediaPlayer::MediaPlayer(QWidget *parent)
 
 MediaPlayer::~MediaPlayer()
 {
-    delete m_aoutput;
-    delete m_media;
 }
 
 void MediaPlayer::setVideoCapture()
@@ -109,7 +107,7 @@ void MediaPlayer::setDeviceIndex(int index)
     Phonon::MediaSource mediaSource;
     QModelIndex mi;
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
     if (m_videoCaptureButton->isChecked()) {
         mi = m_videoDeviceModel->index(index, 0, QModelIndex());
         Q_ASSERT(mi.isValid());
@@ -122,9 +120,9 @@ void MediaPlayer::setDeviceIndex(int index)
         Q_ASSERT(!mediaSource.deviceAccessList().first().first.isEmpty());
         Q_ASSERT(!mediaSource.deviceAccessList().first().second.isEmpty());
     }
-#endif // QT_NO_PHONON_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
-#ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
     if (m_audioCaptureButton->isChecked()) {
         mi = m_audioDeviceModel->index(index, 0, QModelIndex());
         Q_ASSERT(mi.isValid());
@@ -137,7 +135,7 @@ void MediaPlayer::setDeviceIndex(int index)
         Q_ASSERT(!mediaSource.deviceAccessList().first().first.isEmpty());
         Q_ASSERT(!mediaSource.deviceAccessList().first().second.isEmpty());
     }
-#endif // QT_NO_PHONON_AUDIOCAPTURE
+#endif // PHONON_NO_AUDIOCAPTURE
 
     m_media->setCurrentSource(mediaSource);
     m_media->play();
@@ -145,7 +143,7 @@ void MediaPlayer::setDeviceIndex(int index)
 
 void MediaPlayer::updateDeviceList()
 {
-    #ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
     QList<Phonon::VideoCaptureDevice> lv = Phonon::BackendCapabilities::availableVideoCaptureDevices();
 
     if (!m_videoDeviceModel)
@@ -155,11 +153,11 @@ void MediaPlayer::updateDeviceList()
 
     if (m_videoDeviceModel->rowCount() == 0)
         QMessageBox::warning(this, "Warning", "No video capture devices found.");
-    #else
+#else
     QMessageBox::critical(this, "Error", "Video capture is disabled.");
-    #endif // QT_NO_PHONON_VIDEOCAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
-    #ifndef QT_NO_PHONON_AUDIOCAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
     QList<Phonon::AudioCaptureDevice> la = Phonon::BackendCapabilities::availableAudioCaptureDevices();
 
     if (!m_audioDeviceModel)
@@ -169,8 +167,10 @@ void MediaPlayer::updateDeviceList()
 
     if (m_videoDeviceModel->rowCount() == 0)
         QMessageBox::warning(this, "Warning", "No audio capture devices found.");
-    #else
+#else
     QMessageBox::critical(this, "Error", "Audio capture is disabled.");
-    #endif // QT_NO_PHONON_AUDIOCAPTURE
+#endif // PHONON_NO_AUDIOCAPTURE
 }
+
+#include "captureapp.moc"
 

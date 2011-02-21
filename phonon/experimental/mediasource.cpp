@@ -35,6 +35,24 @@ MediaSource::MediaSource(const MediaSource &rhs)
 {
 }
 
+MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
+    : Phonon::MediaSource(*new MediaSourcePrivate(Link))
+{
+    S_D(MediaSource);
+    d->linkedSources = mediaList;
+    foreach (const Phonon::MediaSource &ms, mediaList) {
+        Q_ASSERT(static_cast<MediaSource::Type>(ms.type()) != Link);
+    }
+}
+
+#ifndef PHONON_NO_VIDEOCAPTURE
+MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
+    : Phonon::MediaSource(*new MediaSourcePrivate(VideoCaptureDeviceSource))
+{
+
+}
+#endif // PHONON_NO_VIDEOCAPTURE
+
 MediaSource &MediaSource::operator=(const MediaSource &rhs)
 {
     d = rhs.d;
@@ -46,26 +64,12 @@ bool MediaSource::operator==(const MediaSource &rhs) const
     return d == rhs.d;
 }
 
+#ifndef PHONON_NO_VIDEOCAPTURE
 VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
     return phononVcdToExperimentalVcd(Phonon::MediaSource::videoCaptureDevice());
 }
-
-MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
-    : Phonon::MediaSource(*new MediaSourcePrivate(VideoCaptureDeviceSource))
-{
-
-}
-
-MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
-    : Phonon::MediaSource(*new MediaSourcePrivate(Link))
-{
-    S_D(MediaSource);
-    d->linkedSources = mediaList;
-    foreach (const Phonon::MediaSource &ms, mediaList) {
-        Q_ASSERT(static_cast<MediaSource::Type>(ms.type()) != Link);
-    }
-}
+#endif // PHONON_NO_VIDEOCAPTURE
 
 QList<Phonon::MediaSource> MediaSource::substreams() const
 {

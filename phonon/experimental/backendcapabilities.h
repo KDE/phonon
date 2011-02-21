@@ -33,7 +33,7 @@ namespace Experimental
 namespace BackendCapabilities
 {
 
-#ifndef QT_NO_PHONON_VIDEOCAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 PHONONEXPERIMENTAL_EXPORT QList<VideoCaptureDevice> availableVideoCaptureDevices();
 #endif
 

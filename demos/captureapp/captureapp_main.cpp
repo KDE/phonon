@@ -20,15 +20,24 @@
  *
  */
 
-#include "capture_test.h"
+/*
+ * This demo tries to capture from a single device, video or audio.
+ * Video and audio is not captured at the same time.
+ * 
+ * It shows how to use Phonon's MediaSource, VideoCaptureDevice and AudioCaptureDevice
+ * classes to capture video or audio. Phonon's capture device models are used to
+ * populate the combo box that selects the device.
+ */
+
+#include "captureapp.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QApplication::setApplicationName("Phonon::Experimental::AVCapture Test");
+    QApplication::setApplicationName("Phonon Capture Demo Application");
 
-    MediaPlayer mp(NULL);
-    mp.setWindowTitle("Phonon::Experimental::AVCapture Test");
+    MediaPlayer mp;
+    mp.setWindowTitle("Phonon Capture Demo Application");
     mp.show();
 
     return app.exec();
