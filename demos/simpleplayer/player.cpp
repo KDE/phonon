@@ -33,9 +33,6 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {
     m_media = new Phonon::MediaObject(this);
-    //The mediaStateChanged slot will update the GUI elements to reflect what
-    //the user can do next
-    connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
 
     Phonon::AudioOutput* audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::VideoWidget* videoOut = new Phonon::VideoWidget(this);
@@ -78,6 +75,10 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
 
     connect(m_stop, SIGNAL(clicked(bool)), m_media, SLOT(stop()));
     connect(m_playPause, SIGNAL(clicked(bool)), this, SLOT(playPause()));
+
+    //The mediaStateChanged slot will update the GUI elements to reflect what
+    //the user can do next
+    connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
 }
 
 void Player::playPause()
