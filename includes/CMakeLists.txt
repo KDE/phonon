@@ -7,6 +7,7 @@ install( FILES
     phonon/AudioCaptureDeviceModel
     phonon/AudioChannelDescription
     phonon/AudioChannelDescriptionModel
+    phonon/AudioDataOutput
     phonon/AudioOutput
     phonon/AudioOutputDevice
     phonon/AudioOutputDeviceModel
