@@ -27,7 +27,6 @@ install( FILES
     phonon/MediaObject
     phonon/MediaObjectInterface
     phonon/MediaSource
-    phonon/Mrl
     phonon/ObjectDescription
     phonon/ObjectDescriptionData
     phonon/ObjectDescriptionModel
