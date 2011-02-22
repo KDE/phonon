@@ -4,10 +4,6 @@ if(msvc)
 endif(msvc)
 add_subdirectory(fakebackend)
 
-if(PHONON_BUILD_APP_TESTS)
-    add_subdirectory(captureapptest)
-endif(PHONON_BUILD_APP_TESTS)
-
 MACRO(PHONON_UNIT_TESTS)
     FOREACH(_testname ${ARGN})
         phonon_add_unit_test(${_testname} ${_testname}.cpp)
@@ -89,7 +85,7 @@ SET_TARGET_PROPERTIES(methodtest_fake PROPERTIES COMPILE_FLAGS "-DUSE_FAKE_BACKE
 #audiodevicelisttest does not link agains libphonon, instead it links agains kde stuff
 #libkaudiodevicelist building is disabled (commented out) in the kde sources, you must enable it there first, to use this test
 #phonon_add_executable(audiodevicelisttest audiodevicelisttest.cpp)
-#target_link_libraries(audiodevicelisttest ${QT_QTTEST_LIBRARY} ${PHONON_KDECORE_LIBS} kaudiodevicelist)
+#target_link_libraries(audiodevicelisttest ${QT_QTTEST_LIBRARY} kaudiodevicelist)
 
 SET(mediasourcetest_SRCS mediasourcetest.cpp)
 qt4_add_resources(mediasourcetest_SRCS testresources.qrc)
