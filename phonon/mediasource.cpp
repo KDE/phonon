@@ -146,13 +146,18 @@ MediaSource::MediaSource(QIODevice *ioDevice)
     : d(new MediaSourcePrivate(Stream))
 {
     if (ioDevice) {
-        d->setStream(new IODeviceStream(ioDevice, ioDevice));
+#ifdef __GNUC__
+#warning TODO 4.5 - IODeviceStream leaks
+#endif
+        d->setStream(new IODeviceStream(ioDevice, 0));
 #ifdef __GNUC__
 #warning TODO 4.5 - thread is not deleted anywhere...
 #endif
         QThread *t = new QThread;
         d->stream->moveToThread(t);
+
         d->ioDevice = ioDevice;
+        t->start();
     } else {
         d->type = Invalid;
     }
