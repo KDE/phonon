@@ -18,4 +18,4 @@ qt4_automoc(${captureapp2_SRCS})
 
 add_executable(captureapp2 ${captureapp2_SRCS} ${captureapp2_MOC_SRCS})
 
-target_link_libraries(captureapp2 ${QT_LIBRARIES} ${PHONON_LIBRARY} phononexperimental)
+target_link_libraries(captureapp2 ${QT_LIBRARIES} phonon phononexperimental)
