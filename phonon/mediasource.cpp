@@ -29,6 +29,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
 #include <QtCore/QFSFileEngine>
+#include <QtCore/QThread>
 
 QT_BEGIN_NAMESPACE
 
@@ -146,6 +147,11 @@ MediaSource::MediaSource(QIODevice *ioDevice)
 {
     if (ioDevice) {
         d->setStream(new IODeviceStream(ioDevice, ioDevice));
+#ifdef __GNUC__
+#warning TODO 4.5 - thread is not deleted anywhere...
+#endif
+        QThread *t = new QThread;
+        d->stream->moveToThread(t);
         d->ioDevice = ioDevice;
     } else {
         d->type = Invalid;
