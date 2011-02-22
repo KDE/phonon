@@ -54,6 +54,7 @@ set(phonon_LIB_SRCS
    mediaobject.cpp
    medianode.cpp
    mediasource.cpp
+   mrl.cpp
    objectdescription.cpp
    objectdescriptionmodel.cpp
    path.cpp
@@ -116,6 +117,7 @@ install(FILES
    objectdescriptionmodel.h
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    mediasource.h
+   mrl.h
    abstractmediastream.h
    streaminterface.h
    mediaobject.h

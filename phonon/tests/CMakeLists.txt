@@ -5,23 +5,23 @@ endif(msvc)
 add_subdirectory(fakebackend)
 
 if(PHONON_BUILD_APP_TESTS)
-	add_subdirectory(captureapptest)
+    add_subdirectory(captureapptest)
 endif(PHONON_BUILD_APP_TESTS)
 
 MACRO(PHONON_UNIT_TESTS)
-	FOREACH(_testname ${ARGN})
-		phonon_add_unit_test(${_testname} ${_testname}.cpp)
-		target_link_libraries(${_testname} ${PHONON_LIBS} ${QT_QTTEST_LIBRARY})
-	ENDFOREACH(_testname)
+    FOREACH(_testname ${ARGN})
+        phonon_add_unit_test(${_testname} ${_testname}.cpp)
+        target_link_libraries(${_testname} ${PHONON_LIBS} ${QT_QTTEST_LIBRARY})
+    ENDFOREACH(_testname)
 ENDMACRO(PHONON_UNIT_TESTS)
 
 # same as above but using the fake backend
 MACRO(PHONON_UNIT_TESTS_FAKE)
-	FOREACH(_testname ${ARGN})
-		phonon_add_unit_test(${_testname}_fake ${_testname}.cpp)
-      target_link_libraries(${_testname}_fake ${PHONON_LIBS} ${QT_QTTEST_LIBRARY} phonon_fake)
-		SET_TARGET_PROPERTIES(${_testname}_fake PROPERTIES COMPILE_FLAGS -DUSE_FAKE_BACKEND)
-	ENDFOREACH(_testname)
+    FOREACH(_testname ${ARGN})
+        phonon_add_unit_test(${_testname}_fake ${_testname}.cpp)
+        target_link_libraries(${_testname}_fake ${PHONON_LIBS} ${QT_QTTEST_LIBRARY} phonon_fake)
+        SET_TARGET_PROPERTIES(${_testname}_fake PROPERTIES COMPILE_FLAGS -DUSE_FAKE_BACKEND)
+    ENDFOREACH(_testname)
 ENDMACRO(PHONON_UNIT_TESTS_FAKE)
 
 MACRO(PHONON_EXECUTABLE_TESTS)
@@ -32,36 +32,37 @@ MACRO(PHONON_EXECUTABLE_TESTS)
 ENDMACRO(PHONON_EXECUTABLE_TESTS)
 
 PHONON_EXECUTABLE_TESTS(
-	mediaobjecttest
-	pathtest
-	backendcapabilitiestest
-	audiooutputtest
-	audiooutputdevicetest
-	#audiocapturedevicetest
-	#videocapturedevicetest
-	#bytestreamtest
-	#bytestreamtest2
-	seekslidertest
-	volumeslidertest
-	audiodataoutputtest
-	)
+    mediaobjecttest
+    mrltest
+    pathtest
+    backendcapabilitiestest
+    audiooutputtest
+    audiooutputdevicetest
+    #audiocapturedevicetest
+    #videocapturedevicetest
+    #bytestreamtest
+    #bytestreamtest2
+    seekslidertest
+    volumeslidertest
+    audiodataoutputtest
+    )
 
 PHONON_UNIT_TESTS(
-	)
+    )
 
 PHONON_UNIT_TESTS_FAKE(
-	mediaobjecttest
-	pathtest
-	backendcapabilitiestest
-	audiooutputtest
-	audiooutputdevicetest
-	#audiocapturedevicetest
-	#videocapturedevicetest
-	#bytestreamtest
-	#bytestreamtest2
-	seekslidertest
-	volumeslidertest
-	audiodataoutputtest
+    mediaobjecttest
+    pathtest
+    backendcapabilitiestest
+    audiooutputtest
+    audiooutputdevicetest
+    #audiocapturedevicetest
+    #videocapturedevicetest
+    #bytestreamtest
+    #bytestreamtest2
+    seekslidertest
+    volumeslidertest
+    audiodataoutputtest
 )
 target_link_libraries(backendcapabilitiestest ${PHONON_KDECORE_LIBS})
 target_link_libraries(audiodevicelisttest ${PHONON_KAUDIODEVICELIST_LIBS})
@@ -69,19 +70,19 @@ target_link_libraries(mediaplayer ${PHONON_KIO_LIBS})
 target_link_libraries(backendcapabilitiestest_fake ${PHONON_KDECORE_LIBS})
 #methodtest does not link against libphonon
 phonon_add_executable(methodtest methodtest.cpp ../factory.cpp
-                                                ../mediaobject.cpp
-                                                ../phononnamespace.cpp
-                                                ../platform.cpp
-                                                ../objectdescription.cpp
-                                                )
+                        ../mediaobject.cpp
+                        ../phononnamespace.cpp
+                        ../platform.cpp
+                        ../objectdescription.cpp
+                        )
 target_link_libraries(methodtest ${QT_QTTEST_LIBRARY} ${PHONON_LIBS})
 SET_TARGET_PROPERTIES(methodtest PROPERTIES COMPILE_FLAGS "-DPHONON_METHODTEST -DPHONON_EXPORT=")
 phonon_add_unit_test(methodtest_fake methodtest.cpp ../factory.cpp
-                                                    ../phononnamespace.cpp
-                                                    ../mediaobject.cpp
-                                                    ../platform.cpp
-                                                    ../objectdescription.cpp
-                                                    )
+                            ../phononnamespace.cpp
+                            ../mediaobject.cpp
+                            ../platform.cpp
+                            ../objectdescription.cpp
+                            )
 target_link_libraries(methodtest_fake ${QT_QTTEST_LIBRARY} ${PHONON_LIBS} phonon_fake)
 SET_TARGET_PROPERTIES(methodtest_fake PROPERTIES COMPILE_FLAGS "-DUSE_FAKE_BACKEND -DPHONON_METHODTEST -DPHONON_EXPORT=")
 
