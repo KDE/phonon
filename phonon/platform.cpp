@@ -68,10 +68,10 @@ AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *paren
     PlatformPlugin *f = Factory::platformPlugin();
     if (f) {
 #ifdef __GNUC__
-#warning TODO 4.5 - the platform plugin might return a mediastream that is in a thread or force-parented to something -> find solution
+#warning TODO 4.5 - thread is not deleted anywhere... && parent missing
 #endif
         AbstractMediaStream *stream = f->createMediaStream(url, 0);
-        QThread *t = new QThread(parent);
+        QThread *t = new QThread;
         stream->moveToThread(t);
         t->start();
         return stream;
