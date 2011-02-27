@@ -236,7 +236,10 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     } else if (d->mediaSource.type() == MediaSource::Url &&
                d->mediaSource.url().scheme() != QLatin1String("file") &&
                !d->mediaSource.url().scheme().isEmpty()) {
-        d->abstractStream = Platform::createMediaStream(newSource.url(), this);
+#ifdef __GNUC__
+#warning TODO 4.5 - this might be a bit fishy, but parenting by the mediaSource seems better than parenting by the MO
+#endif
+        d->abstractStream = Platform::createMediaStream(newSource.url(), d->mediaSource);
         if (d->abstractStream) {
             d->abstractStream->d_func()->setMediaObjectPrivate(d);
 
