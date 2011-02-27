@@ -58,13 +58,8 @@ MediaSource::MediaSource(const QString &filename)
             // it's a Qt resource -> use QFile
             d->type = Stream;
             d->ioDevice = new QFile(filename);
-
-            QThread *t = new QThread(this);
-            d->setStream(new IODeviceStream(d->ioDevice));
-            d->stream->moveToThread(t);
-            t->start();
-
-            d->url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
+            d->setStream(new IODeviceStream(d->ioDevice, d->ioDevice));
+            d->url =  QUrl::fromLocalFile(fileInfo.absoluteFilePath());
 #else
             d->type = Invalid;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -152,9 +147,6 @@ MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
 MediaSource::MediaSource(AbstractMediaStream *stream)
     : d(new MediaSourcePrivate(Stream))
 {
-#ifdef __GNUC__
-#warning TODO 4.5 - if one uses the abstractmedia stream ctor it will not be threaded -> find solution
-#endif
     if (stream) {
         d->setStream(stream);
     } else {
@@ -166,11 +158,17 @@ MediaSource::MediaSource(QIODevice *ioDevice)
     : d(new MediaSourcePrivate(Stream))
 {
     if (ioDevice) {
-        d->ioDevice = ioDevice;
-
-        QThread *t = new QThread(this);
-        d->setStream(new IODeviceStream(ioDevice));
+#ifdef __GNUC__
+#warning TODO 4.5 - IODeviceStream leaks
+#endif
+        d->setStream(new IODeviceStream(ioDevice, 0));
+#ifdef __GNUC__
+#warning TODO 4.5 - thread is not deleted anywhere...
+#endif
+        QThread *t = new QThread;
         d->stream->moveToThread(t);
+
+        d->ioDevice = ioDevice;
         t->start();
     } else {
         d->type = Invalid;
