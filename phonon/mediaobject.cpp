@@ -336,6 +336,13 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
     QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::ErrorState), Q_ARG(Phonon::State, lastState));
     //emit q->stateChanged(ErrorState, lastState);
 }
+
+void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
+{
+    Q_Q(MediaObject);
+
+    emit q->stateChanged(newstate, oldstate);
+}
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 void MediaObjectPrivate::_k_aboutToFinish()
@@ -381,7 +388,11 @@ void MediaObjectPrivate::setupBackendObject()
     // MediaObject *while* it is doing something.
     // By queuing the connection the MediaObject can finish whatever it is doing
     // before Amarok starts doing nasty things to us.
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+#else
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),             q, SIGNAL(tick(qint64)));
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),    q, SIGNAL(seekableChanged(bool)));
 #ifndef QT_NO_PHONON_VIDEO
