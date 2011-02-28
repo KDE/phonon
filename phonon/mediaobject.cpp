@@ -233,7 +233,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
     } else if (d->mediaSource.type() == MediaSource::Url &&
-               d->mediaSource.url().scheme() != "file" &&
+               d->mediaSource.url().scheme() != QLatin1String("file") &&
                !d->mediaSource.url().scheme().isEmpty()) {
         d->abstractStream = Platform::createMediaStream(newSource.url(), this);
         if (d->abstractStream) {
@@ -413,7 +413,7 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
 
         send_to_zeitgeist(eventInterpretation,
                           QtZeitgeist::Manifestation::Event::ZGUserActivity,
-                          QString("app://" ) % Platform::applicationName() % QString(".desktop"),
+                          QLatin1Literal("app://" ) % Platform::applicationName() % QLatin1Literal(".desktop"),
                           QDateTime::currentDateTime(),
                           mediaSource.url(),
                           title,
