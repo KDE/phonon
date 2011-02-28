@@ -30,9 +30,10 @@
 #include "abstractmediastream_p.h"
 #include "frontendinterface_p.h"
 
+#include <QtCore/QStringBuilder>
 #include <QtCore/QStringList>
-#include <QtCore/QUrl>
 #include <QtCore/QTimer>
+#include <QtCore/QUrl>
 
 #ifdef HAVE_QZEITGEIST
 #include <QtZeitgeist/DataModel/Event>
@@ -374,7 +375,7 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
             if (artists.empty()) {
                 title = titles[0];
             } else {
-                title = QString(tr("%0 by %1")).arg(titles[0]).arg(artists[0]);
+                title = QString(QObject::tr("%0 by %1")).arg(titles[0]).arg(artists[0]);
             }
         }
         pDebug() << "Sending" << title << "to zeitgeist";
@@ -412,7 +413,7 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
 
         send_to_zeitgeist(eventInterpretation,
                           QtZeitgeist::Manifestation::Event::ZGUserActivity,
-                          "app://"+Platform::applicationName()+".desktop",
+                          QString("app://" ) % Platform::applicationName() % QString(".desktop"),
                           QDateTime::currentDateTime(),
                           mediaSource.url(),
                           title,
