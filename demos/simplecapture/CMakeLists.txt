@@ -18,4 +18,4 @@ qt4_automoc(${simplecapture_SRCS})
 
 add_executable(simplecapture ${simplecapture_SRCS} ${simplecapture_MOC_SRCS})
 
-target_link_libraries(simplecapture ${QT_LIBRARIES} ${PHONON_LIBRARY})
+target_link_libraries(simplecapture ${QT_LIBRARIES} ${PHONON_LIBRARY} phononexperimental)

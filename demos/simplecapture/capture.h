@@ -24,10 +24,20 @@
 
 #include <QtGui/QWidget>
 #include <phonon/Global>
+#include <phonon/Path>
 
 class QPushButton;
+class QRadioButton;
+
 namespace Phonon {
+    class AudioOutput;
+    class MediaNode;
     class MediaObject;
+    class VideoWidget;
+
+    namespace Experimental {
+        class AvCapture;
+    }
 }
 
 /**
@@ -41,7 +51,6 @@ public:
     CaptureWidget(QWidget *parent = NULL, Qt::WindowFlags f = 0);
 
 private slots:
-
     /**
      * @brief Updates the GUI when the underlying MediaObject changes states
      */
@@ -52,10 +61,36 @@ private slots:
      */
     void playPause();
 
+    /**
+     * @brief Stops the capture
+     */
+    void stop();
+
+    /**
+     * @brief Switch to MediaObject capture method
+     */
+    void enableMOCapture(bool enable);
+
+    /**
+     * @brief Switch to AvCapture capture method
+     */
+    void enableAvCapture(bool enable);
+
 private:
+    void setupCaptureSource();
+
+private:
+    Phonon::AudioOutput *m_audioOutput;
+    Phonon::VideoWidget *m_videoWidget;
+    Phonon::MediaNode *m_captureNode;
     Phonon::MediaObject *m_media;
-    QPushButton* m_playButton;
-    QPushButton* m_stopButton;
+    Phonon::Experimental::AvCapture *m_avcapture;
+    Phonon::Path m_audioPath;
+    Phonon::Path m_videoPath;
+    QPushButton *m_playButton;
+    QPushButton *m_stopButton;
+    QRadioButton *m_moButton;
+    QRadioButton *m_avcapButton;
 };
 
 #endif // CAPTURE_H
