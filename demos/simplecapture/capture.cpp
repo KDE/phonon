@@ -118,7 +118,6 @@ void CaptureWidget::setupCaptureSource()
         m_audioPath = Phonon::createPath(m_media, m_audioOutput);
         m_videoPath = Phonon::createPath(m_media, m_videoWidget);
     }
-
     if (m_captureNode == m_avcapture) {
         m_audioPath = Phonon::createPath(m_avcapture, m_audioOutput);
         m_videoPath = Phonon::createPath(m_avcapture, m_videoWidget);
@@ -131,39 +130,22 @@ void CaptureWidget::setupCaptureSource()
         QMessageBox::critical(this, "Error", "Your backend may not support video capturing.");
     }
 
-    Phonon::GlobalConfig pgc;
-
-    const Phonon::AudioCaptureDevice acd = Phonon::AudioCaptureDevice::fromIndex(pgc.audioCaptureDeviceFor(Phonon::NoCategory));
-    if (acd.isValid()) {
-        if (m_captureNode == m_media) {
-            // m_media->setCurrentSource(acd);
-        }
-
-        if (m_captureNode == m_avcapture) {
-            m_avcapture->setAudioCaptureDevice(acd);
-        }
-    } else {
-        QMessageBox::warning(this, tr("Warning"), tr("No audio capture devices found."));
+    if (m_captureNode == m_media) {
+        Phonon::GlobalConfig pgc;
+        m_media->setCurrentSource(Phonon::VideoCaptureDevice::fromIndex(pgc.videoCaptureDeviceFor(Phonon::NoCategory)));
+    }
+    if (m_captureNode == m_avcapture) {
+        m_avcapture->setVideoCaptureDevice(Phonon::NoCategory);
     }
 
-    Phonon::VideoCaptureDevice vcd = Phonon::VideoCaptureDevice::fromIndex(pgc.videoCaptureDeviceFor(Phonon::NoCategory));
-    if (vcd.isValid()) {
-        if (m_captureNode == m_media) {
-            m_media->setCurrentSource(vcd);
-        }
-
-        if (m_captureNode == m_avcapture) {
-            m_avcapture->setVideoCaptureDevice(vcd);
-        }
-    } else {
-        QMessageBox::warning(this, tr("Warning"), tr("No video capture devices found."));
+    if (m_captureNode == m_avcapture) {
+        m_avcapture->setAudioCaptureDevice(Phonon::NoCategory);
     }
 
     if (m_captureNode == m_media) {
         disconnect(m_avcapture, SIGNAL(stateChanged(Phonon::State,Phonon::State)));
         connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
     }
-
     if (m_captureNode == m_avcapture) {
         disconnect(m_media, SIGNAL(stateChanged(Phonon::State,Phonon::State)));
         connect(m_avcapture, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State,Phonon::State)));
