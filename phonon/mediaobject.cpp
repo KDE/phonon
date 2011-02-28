@@ -347,7 +347,7 @@ void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
 #ifdef HAVE_QZEITGEIST
     QtZeitgeist::init();
 #ifdef __GNUC__
-#warning log does not get deleted
+#warning TODO log does not get deleted
 #endif
     QtZeitgeist::Log *log = new QtZeitgeist::Log(qObject());
     QtZeitgeist::DataModel::Subject subject;
@@ -392,6 +392,9 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
 {
 #ifdef HAVE_QZEITGEIST
     Q_Q(MediaObject);
+#ifdef __GNUC__
+#warning TODO properties need documenting and maybe renaming?
+#endif
     if (readyForZeitgeist &&
             (q->property("_p_LogPlayback").toBool() &&
                 (q->property("_p_ForceLogPlayback").toBool() || hasZeitgeistableOutput(q)))) {
