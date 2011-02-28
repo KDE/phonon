@@ -174,16 +174,18 @@ void CaptureWidget::playPause()
 {
     if (m_captureNode == m_media) {
         if (m_media->state() == Phonon::PlayingState) {
-            m_media->stop();
+            m_media->pause();
         } else {
             m_media->play();
         }
     }
 
     if (m_captureNode == m_avcapture) {
-        // TODO AvCapture state
-
-        m_avcapture->start();
+        if (m_avcapture->state() == Phonon::PlayingState) {
+            m_avcapture->pause();
+        } else {
+            m_avcapture->start();
+        }
     }
 }
 
