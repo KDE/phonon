@@ -27,7 +27,7 @@
 #include <QtGui/QRadioButton>
 #include <QtGui/QMessageBox>
 #include <phonon/MediaObject>
-#include <phonon/experimental/avcapture.h>  // TODO AvCapture
+#include <phonon/AvCapture>
 #include <phonon/AudioOutput>
 #include <phonon/VideoWidget>
 #include <phonon/VolumeSlider>
