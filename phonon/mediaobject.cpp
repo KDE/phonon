@@ -308,12 +308,6 @@ void MediaObject::clearQueue()
     d->sourceQueue.clear();
 }
 
-void MediaObjectPrivate::send_to_zeitgeist()
-{
-    Q_Q(MediaObject);
-    send_to_zeitgeist(q->state());
-}
-
 bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that) {
     QList<MediaNode*> visited;
     return hasZeitgeistableOutput(that, &visited);
@@ -340,7 +334,61 @@ bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that, QList<MediaNode
     return false;
 }
 
-void MediaObjectPrivate::send_to_zeitgeist(State eventState)
+void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
+                                         const QString &event_manifestation,
+                                         const QString &event_actor,
+                                         const QDateTime &subject_timestamp,
+                                         const QUrl &subject_uri,
+                                         const QString &subject_text,
+                                         const QString &subject_interpretation,
+                                         const QString &subject_manifestation,
+                                         const QString &subject_mimetype)
+{
+#ifdef HAVE_QZEITGEIST
+    QtZeitgeist::init();
+#ifdef __GNUC__
+#warning log does not get deleted
+#endif
+    QtZeitgeist::Log *log = new QtZeitgeist::Log(qObject());
+    QtZeitgeist::DataModel::Subject subject;
+    QString url = subject_uri.toString();
+    QString path = url.left(url.lastIndexOf("/"));
+    subject.setUri(url);
+    subject.setText(subject_text);
+    subject.setInterpretation(subject_interpretation);
+    subject.setManifestation(subject_manifestation);
+    subject.setOrigin(path);
+    subject.setMimeType(subject_mimetype);
+
+    QtZeitgeist::DataModel::SubjectList subjects;
+    subjects << subject;
+
+    QtZeitgeist::DataModel::Event event;
+    event.setTimestamp(subject_timestamp);
+    event.setInterpretation(event_interpretation);
+    event.setManifestation(event_manifestation);
+    event.setActor(event_actor);
+    event.setSubjects(subjects);
+
+    QtZeitgeist::DataModel::EventList events;
+    events << event;
+
+    QDBusPendingReply<QtZeitgeist::DataModel::EventIdList> reply =
+        log->insertEvents(events);
+#else
+    Q_UNUSED(event_interpretation)
+    Q_UNUSED(event_manifestation)
+    Q_UNUSED(event_actor)
+    Q_UNUSED(subject_timestamp)
+    Q_UNUSED(subject_uri)
+    Q_UNUSED(subject_text)
+    Q_UNUSED(subject_interpretation)
+    Q_UNUSED(subject_manifestation)
+    Q_UNUSED(subject_mimetype)
+#endif
+}
+
+void MediaObjectPrivate::sendToZeitgeist(State eventState)
 {
 #ifdef HAVE_QZEITGEIST
     Q_Q(MediaObject);
@@ -411,15 +459,15 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
             break;
         }
 
-        send_to_zeitgeist(eventInterpretation,
-                          QtZeitgeist::Manifestation::Event::ZGUserActivity,
-                          QLatin1Literal("app://" ) % Platform::applicationName() % QLatin1Literal(".desktop"),
-                          QDateTime::currentDateTime(),
-                          mediaSource.url(),
-                          title,
-                          subjectInterpretation,
-                          subjectType,
-                          mime);
+        sendToZeitgeist(eventInterpretation,
+                        QtZeitgeist::Manifestation::Event::ZGUserActivity,
+                        QLatin1Literal("app://" ) % Platform::applicationName() % QLatin1Literal(".desktop"),
+                        QDateTime::currentDateTime(),
+                        mediaSource.url(),
+                        title,
+                        subjectInterpretation,
+                        subjectType,
+                        mime);
     }
     // Unset this so we don't send it again after a pause+play
     readyForZeitgeist = false;
@@ -428,55 +476,10 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
 #endif
 }
 
-void MediaObjectPrivate::send_to_zeitgeist(const QString &event_interpretation,
-                                           const QString &event_manifestation,
-                                           const QString &event_actor,
-                                           const QDateTime &subject_timestamp,
-                                           const QUrl &subject_uri,
-                                           const QString &subject_text,
-                                           const QString &subject_interpretation,
-                                           const QString &subject_manifestation,
-                                           const QString &subject_mimetype)
+void MediaObjectPrivate::sendToZeitgeist()
 {
-#ifdef HAVE_QZEITGEIST
-    QtZeitgeist::init();
-    QtZeitgeist::Log *log = new QtZeitgeist::Log(qObject());
-    QtZeitgeist::DataModel::Subject subject;
-    QString url = subject_uri.toString();
-    QString path = url.left(url.lastIndexOf("/"));
-    subject.setUri(url);
-    subject.setText(subject_text);
-    subject.setInterpretation(subject_interpretation);
-    subject.setManifestation(subject_manifestation);
-    subject.setOrigin(path);
-    subject.setMimeType(subject_mimetype);
-
-    QtZeitgeist::DataModel::SubjectList subjects;
-    subjects << subject;
-
-    QtZeitgeist::DataModel::Event event;
-    event.setTimestamp(subject_timestamp);
-    event.setInterpretation(event_interpretation);
-    event.setManifestation(event_manifestation);
-    event.setActor(event_actor);
-    event.setSubjects(subjects);
-
-    QtZeitgeist::DataModel::EventList events;
-    events << event;
-
-    QDBusPendingReply<QtZeitgeist::DataModel::EventIdList> reply =
-        log->insertEvents(events);
-#else
-    Q_UNUSED(event_interpretation)
-    Q_UNUSED(event_manifestation)
-    Q_UNUSED(event_actor)
-    Q_UNUSED(subject_timestamp)
-    Q_UNUSED(subject_uri)
-    Q_UNUSED(subject_text)
-    Q_UNUSED(subject_interpretation)
-    Q_UNUSED(subject_manifestation)
-    Q_UNUSED(subject_mimetype)
-#endif
+    Q_Q(MediaObject);
+    sendToZeitgeist(q->state());
 }
 
 bool MediaObjectPrivate::aboutToDeleteBackendObject()
@@ -512,7 +515,7 @@ void MediaObjectPrivate::_k_stateChanged(State newState, State oldState)
         readyForZeitgeist = true;
     }
     pDebug() << "State changed from" << oldState << "to" << newState << "-> sending to zeitgeist.";
-    send_to_zeitgeist(newState);
+    sendToZeitgeist(newState);
 }
 
 void MediaObjectPrivate::_k_aboutToFinish()
@@ -647,7 +650,7 @@ void MediaObjectPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &n
     emit q_func()->metaDataChanged();
     pDebug() << "Metadata ready, sending to zeitgeist";
     readyForZeitgeist = true;
-    send_to_zeitgeist();
+    sendToZeitgeist();
 }
 
 void MediaObjectPrivate::phononObjectDestroyed(MediaNodePrivate *bp)

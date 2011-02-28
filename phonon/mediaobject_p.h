@@ -47,6 +47,9 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     public:
         virtual QObject *qObject() { return q_func(); }
 
+        bool hasZeitgeistableOutput(MediaNode *that);
+        bool hasZeitgeistableOutput(MediaNode *that, QList<MediaNode *> *visited);
+
         /**
          * Sends the metadata for this media file to the Zeitgeist tracker
          *
@@ -60,23 +63,20 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
          * \param subjectManifestation The manifestation type
          * \param subjectMimetype The file's mimetype
          */
+        void sendToZeitgeist(const QString &event_interpretation,
+                             const QString &event_manifestation,
+                             const QString &event_actor,
+                             const QDateTime &subject_timestamp,
+                             const QUrl &subject_uri,
+                             const QString &subject_text,
+                             const QString &subject_interpretation,
+                             const QString &subject_manifestation,
+                             const QString &subject_mimetype);
 
-        void send_to_zeitgeist(const QString &event_interpretation,
-                               const QString &event_manifestation,
-                               const QString &event_actor,
-                               const QDateTime &subject_timestamp,
-                               const QUrl &subject_uri,
-                               const QString &subject_text,
-                               const QString &subject_interpretation,
-                               const QString &subject_manifestation,
-                               const QString &subject_mimetype);
+        void sendToZeitgeist(State);
+        void sendToZeitgeist();
 
-        void send_to_zeitgeist();
-        void send_to_zeitgeist(State);
-        bool hasZeitgeistableOutput(MediaNode *that);
-        bool hasZeitgeistableOutput(MediaNode *that, QList<MediaNode*> *visited);
-
-        QList<FrontendInterfacePrivate *> interfaceList;
+    QList<FrontendInterfacePrivate *> interfaceList;
     protected:
         virtual bool aboutToDeleteBackendObject();
         virtual void createBackendObject();
