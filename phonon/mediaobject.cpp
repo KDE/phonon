@@ -352,7 +352,7 @@ void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
     QtZeitgeist::Log *log = new QtZeitgeist::Log(qObject());
     QtZeitgeist::DataModel::Subject subject;
     QString url = subject_uri.toString();
-    QString path = url.left(url.lastIndexOf("/"));
+    QString path = url.left(url.lastIndexOf(QLatin1Char('/')));
     subject.setUri(url);
     subject.setText(subject_text);
     subject.setInterpretation(subject_interpretation);
