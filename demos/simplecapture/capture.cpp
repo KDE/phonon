@@ -40,7 +40,7 @@ CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent
 {
     m_media = new Phonon::MediaObject(this);
     m_avcapture = new Phonon::Experimental::AvCapture(this);
-    m_captureNode = m_media;
+    m_captureNode = m_avcapture;
 
     m_audioOutput = new Phonon::AudioOutput(this);
     m_videoWidget = new Phonon::VideoWidget(this);
@@ -57,12 +57,12 @@ CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent
     m_moButton = new QRadioButton(this);
     m_moButton->setText(tr("Use MediaObject"));
     m_moButton->setAutoExclusive(true);
-    m_moButton->setChecked(true);
     connect(m_moButton, SIGNAL(toggled(bool)), this, SLOT(enableMOCapture(bool)));
 
     m_avcapButton = new QRadioButton(this);
     m_avcapButton->setText(tr("Use Audio Video Capture (AvCapture)"));
     m_avcapButton->setAutoExclusive(true);
+    m_avcapButton->setChecked(true);
     connect(m_avcapButton, SIGNAL(toggled(bool)), this, SLOT(enableAvCapture(bool)));
 
     setLayout(new QVBoxLayout);
