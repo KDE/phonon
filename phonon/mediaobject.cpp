@@ -346,20 +346,6 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
     if (readyForZeitgeist &&
             (q->property("_p_LogPlayback").toBool() &&
                 (q->property("_p_ForceLogPlayback").toBool() || hasZeitgeistableOutput(q)))) {
-        QStringList titles = q->metaData(TitleMetaData);
-        QStringList artists = q->metaData(ArtistMetaData);
-        QString title;
-        if (titles.empty()) {
-            QString file = mediaSource.url().toString();
-            title = file.right(file.length()-file.lastIndexOf("/")-1);
-        } else {
-            if (artists.empty()) {
-                title = titles[0];
-            } else {
-                title = QString(tr("%0 by %1")).arg(titles[0]).arg(artists[0]);
-            }
-        }
-        pDebug() << "Sending" << title << "to zeitgeist";
         pDebug() << "Current state:" << eventState;
         QString eventInterpretation;
         switch (eventState) {
@@ -377,6 +363,22 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
             return;
             break;
         }
+
+        QStringList titles = q->metaData(TitleMetaData);
+        QStringList artists = q->metaData(ArtistMetaData);
+        QString title;
+        if (titles.empty()) {
+            QString file = mediaSource.url().toString();
+            title = file.right(file.length()-file.lastIndexOf("/")-1);
+        } else {
+            if (artists.empty()) {
+                title = titles[0];
+            } else {
+                title = QString(tr("%0 by %1")).arg(titles[0]).arg(artists[0]);
+            }
+        }
+        pDebug() << "Sending" << title << "to zeitgeist";
+
         QString mime;
         QString subjectInterpretation;
         if (q->hasVideo()) {
@@ -389,8 +391,9 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
         pDebug() << "Zeitgeist mime type:" << mime;
         pDebug() << "Zeitgeist URL:" << mediaSource.url();
         pDebug() << "mediasource type:" << mediaSource.type();
-        pString subjectType;
-        switch(mediaSource.type()) {
+
+        QString subjectType;
+        switch (mediaSource.type()) {
         case MediaSource::Empty:
         case MediaSource::Invalid:
             return;
@@ -406,15 +409,16 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
             subjectType = QtZeitgeist::Manifestation::Subject::NFOFileDataObject;
             break;
         }
+
         send_to_zeitgeist(eventInterpretation,
-                             QtZeitgeist::Manifestation::Event::ZGUserActivity,
-                             "app://"+Platform::applicationName()+".desktop",
-                             QDateTime::currentDateTime(),
-                             mediaSource.url(),
-                             title,
-                             subjectInterpretation,
-                             subjectType,
-                             mime);
+                          QtZeitgeist::Manifestation::Event::ZGUserActivity,
+                          "app://"+Platform::applicationName()+".desktop",
+                          QDateTime::currentDateTime(),
+                          mediaSource.url(),
+                          title,
+                          subjectInterpretation,
+                          subjectType,
+                          mime);
     }
     // Unset this so we don't send it again after a pause+play
     readyForZeitgeist = false;
