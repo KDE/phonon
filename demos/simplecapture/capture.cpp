@@ -26,13 +26,13 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
 #include <QtGui/QMessageBox>
-#include <phonon/MediaObject>
-#include <phonon/AvCapture>
+
 #include <phonon/AudioOutput>
+#include <phonon/AvCapture>
+#include <phonon/MediaObject>
 #include <phonon/VideoWidget>
 #include <phonon/VolumeSlider>
-#include <phonon/VideoCaptureDeviceModel>
-#include <phonon/AudioCaptureDeviceModel>
+
 #include <phonon/backendcapabilities.h>
 #include <phonon/globalconfig.h>
 
