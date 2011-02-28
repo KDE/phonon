@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,27 +15,29 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "player.h"
 
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPushButton>
 #include <QtGui/QFileDialog>
-#include <phonon/MediaObject>
-#include <phonon/AudioOutput>
-#include <phonon/VideoWidget>
-#include <phonon/SeekSlider>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QPushButton>
+#include <QtGui/QVBoxLayout>
 
-Player::Player(QWidget* parent, Qt::WindowFlags f)
-    : QWidget(parent, f)
+#include <phonon/AudioOutput>
+#include <phonon/MediaObject>
+#include <phonon/Mrl>
+#include <phonon/SeekSlider>
+#include <phonon/VideoWidget>
+
+Player::Player(QWidget* parent, Qt::WindowFlags flags)
+    : QWidget(parent, flags)
 {
     m_media = new Phonon::MediaObject(this);
 
-    Phonon::AudioOutput* audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
-    Phonon::VideoWidget* videoOut = new Phonon::VideoWidget(this);
+    Phonon::AudioOutput *audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
+    Phonon::VideoWidget *videoOut = new Phonon::VideoWidget(this);
     videoOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     //By default, there is no minimum size on a video widget. While the default
     //size is controlled by Qt's layouting system it makes sense to provide a
@@ -52,7 +54,7 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
     Phonon::createPath(m_media, videoOut);
 
     //This widget will contain the stop/pause buttons
-    QWidget* buttonBar = new QWidget(this);
+    QWidget *buttonBar = new QWidget(this);
 
     m_playPause = new QPushButton(tr("Play"), buttonBar);
     m_stop = new QPushButton(tr("Stop"), buttonBar);
@@ -60,13 +62,13 @@ Player::Player(QWidget* parent, Qt::WindowFlags f)
     Phonon::SeekSlider *seekSlider = new Phonon::SeekSlider(this);
     seekSlider->setMediaObject(m_media);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(videoOut);
     layout->addWidget(seekSlider);
     layout->addWidget(buttonBar);
     setLayout(layout);
 
-    QHBoxLayout* buttonLayout = new QHBoxLayout(buttonBar);
+    QHBoxLayout *buttonLayout = new QHBoxLayout(buttonBar);
     buttonLayout->addWidget(m_stop);
     buttonLayout->addWidget(m_playPause);
     buttonBar->setLayout(buttonLayout);
@@ -92,12 +94,12 @@ void Player::playPause()
     }
 }
 
-void Player::load(const QUrl &url)
+void Player::load(const Phonon::Mrl &mrl)
 {
-    if (url.scheme().isEmpty())
-        m_media->setCurrentSource(QUrl::fromLocalFile(url.toString()));
+    if (mrl.scheme().isEmpty())
+        m_media->setCurrentSource(Phonon::Mrl::fromLocalFile(mrl.toString()));
     else
-        m_media->setCurrentSource(url);
+        m_media->setCurrentSource(mrl);
     m_media->play();
 }
 
@@ -106,7 +108,7 @@ void Player::load()
     QString url = QFileDialog::getOpenFileName(this);
     if (url.isEmpty())
         return;
-    load(QUrl::fromLocalFile(url));
+    load(Phonon::Mrl::fromLocalFile(url));
 }
 
 void Player::mediaStateChanged(Phonon::State newState, Phonon::State oldState)

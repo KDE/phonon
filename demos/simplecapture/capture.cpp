@@ -33,9 +33,6 @@
 #include <phonon/VideoWidget>
 #include <phonon/VolumeSlider>
 
-#include <phonon/backendcapabilities.h>
-#include <phonon/globalconfig.h>
-
 CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f)
 {
     m_media = new Phonon::MediaObject(this);
@@ -131,8 +128,9 @@ void CaptureWidget::setupCaptureSource()
     }
 
     if (m_captureNode == m_media) {
-        Phonon::GlobalConfig pgc;
-        m_media->setCurrentSource(Phonon::VideoCaptureDevice::fromIndex(pgc.videoCaptureDeviceFor(Phonon::NoCategory)));
+        Phonon::MediaSource source;
+        source.setVideoCaptureDevice(Phonon::NoCategory);
+        m_media->setCurrentSource(source);
     }
     if (m_captureNode == m_avcapture) {
         m_avcapture->setVideoCaptureDevice(Phonon::NoCategory);

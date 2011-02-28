@@ -281,6 +281,16 @@ class PHONON_EXPORT MediaSource
          * Returns the audio capture device for the media source if applicable.
          */
         AudioCaptureDevice audioCaptureDevice() const;
+
+        /**
+         * Sets the source to the specified audio capture device
+         */
+        void setAudioCaptureDevice(const Phonon::AudioCaptureDevice& acDevice);
+
+        /**
+         * Sets the source to the preferred audio capture device for the specified category
+         */
+        void setAudioCaptureDevice(Phonon::Category category);
 #endif
 
 #ifndef PHONON_NO_VIDEOCAPTURE
@@ -288,6 +298,16 @@ class PHONON_EXPORT MediaSource
          * Returns the video capture device for the media source if applicable.
          */
         VideoCaptureDevice videoCaptureDevice() const;
+
+        /**
+         * Sets the source to the specified video capture device
+         */
+        void setVideoCaptureDevice(const Phonon::VideoCaptureDevice& vcDevice);
+
+        /**
+         * Sets the source to the preferred audio capture device for the specified category
+         */
+        void setVideoCaptureDevice(Phonon::Category category);
 #endif
 
 /*      post 4.0:

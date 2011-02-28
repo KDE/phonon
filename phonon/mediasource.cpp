@@ -24,6 +24,7 @@
 #include "mediasource_p.h"
 #include "iodevicestream_p.h"
 #include "abstractmediastream_p.h"
+#include "globalconfig.h"
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
@@ -112,16 +113,7 @@ MediaSource::MediaSource(const DeviceAccess &access)
 MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
-    d->audioCaptureDevice = acDevice;
-
-    // Grab the device access list from the properties
-    if (acDevice.propertyNames().contains("deviceAccessList") &&
-        !acDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
-        d->deviceAccessList = acDevice.property("deviceAccessList").value<DeviceAccessList>();
-    } else {
-        // Invalidate the media source
-        d->type = Invalid;
-    }
+    setAudioCaptureDevice(acDevice);
 }
 #endif //PHONON_NO_AUDIOCAPTURE
 
@@ -129,16 +121,7 @@ MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
 MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
-    d->videoCaptureDevice = vcDevice;
-
-    // Grab the device access list from the properties
-    if (vcDevice.propertyNames().contains("deviceAccessList") &&
-        !vcDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
-        d->deviceAccessList = vcDevice.property("deviceAccessList").value<DeviceAccessList>();
-    } else {
-        // Invalidate the media source
-        d->type = Invalid;
-    }
+    setVideoCaptureDevice(vcDevice);
 }
 #endif //PHONON_NO_VIDEOCAPTURE
 
@@ -277,12 +260,50 @@ AudioCaptureDevice MediaSource::audioCaptureDevice() const
 {
     return d->audioCaptureDevice;
 }
+
+void MediaSource::setAudioCaptureDevice(const Phonon::AudioCaptureDevice& acDevice)
+{
+    d->audioCaptureDevice = acDevice;
+
+    // Grab the device access list from the properties
+    if (acDevice.propertyNames().contains("deviceAccessList") &&
+        !acDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+        d->deviceAccessList = acDevice.property("deviceAccessList").value<DeviceAccessList>();
+    } else {
+        // Invalidate the media source
+        d->type = Invalid;
+    }
+}
+
+void MediaSource::setAudioCaptureDevice(Category category)
+{
+    setAudioCaptureDevice(AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)));
+}
 #endif //PHONON_NO_AUDIOCAPTURE
 
 #ifndef PHONON_NO_VIDEOCAPTURE
 VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
     return d->videoCaptureDevice;
+}
+
+void MediaSource::setVideoCaptureDevice(const Phonon::VideoCaptureDevice& vcDevice)
+{
+    d->videoCaptureDevice = vcDevice;
+
+    // Grab the device access list from the properties
+    if (vcDevice.propertyNames().contains("deviceAccessList") &&
+        !vcDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+        d->deviceAccessList = vcDevice.property("deviceAccessList").value<DeviceAccessList>();
+    } else {
+        // Invalidate the media source
+        d->type = Invalid;
+    }
+}
+
+void MediaSource::setVideoCaptureDevice(Category category)
+{
+    setVideoCaptureDevice(VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
 }
 #endif //PHONON_NO_VIDEOCAPTURE
 
