@@ -325,7 +325,7 @@ bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that, QList<MediaNode
     if (output) {
         Phonon::Category cat = output->category();
         if (cat == Phonon::MusicCategory || cat == Phonon::VideoCategory) {
-            qDebug() << "Found zeitgeistable output type.";
+            pDebug() << "Found zeitgeistable output type.";
             return true;
         }
     }
@@ -335,7 +335,7 @@ bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that, QList<MediaNode
             return hasZeitgeistableOutput(sink, visited);
         }
     }
-    qDebug() << "Did not find zeitgeistable output type.";
+    pDebug() << "Did not find zeitgeistable output type.";
     return false;
 }
 
@@ -356,11 +356,11 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
             if (artists.empty()) {
                 title = titles[0];
             } else {
-                title = QString("%0 by %1").arg(titles[0]).arg(artists[0]);
+                title = QString(tr("%0 by %1")).arg(titles[0]).arg(artists[0]);
             }
         }
-        qDebug() << "Sending" << title << "to zeitgeist";
-        qDebug() << "Current state:" << eventState;
+        pDebug() << "Sending" << title << "to zeitgeist";
+        pDebug() << "Current state:" << eventState;
         QString eventInterpretation;
         switch(eventState) {
         case PlayingState:
@@ -386,10 +386,10 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
             subjectInterpretation = QtZeitgeist::Interpretation::Subject::NFOAudio;
             mime = "audio/raw";
         }
-        qDebug() << "Zeitgeist mime type:" << mime;
-        qDebug() << "Zeitgeist URL:" << mediaSource.url();
-        qDebug() << "mediasource type:" << mediaSource.type();
-        QString subjectType;
+        pDebug() << "Zeitgeist mime type:" << mime;
+        pDebug() << "Zeitgeist URL:" << mediaSource.url();
+        pDebug() << "mediasource type:" << mediaSource.type();
+        pString subjectType;
         switch(mediaSource.type()) {
         case MediaSource::Empty:
         case MediaSource::Invalid:
@@ -455,7 +455,7 @@ void MediaObjectPrivate::send_to_zeitgeist(const QString &event_interpretation,
     event.setManifestation(event_manifestation);
     event.setActor(event_actor);
     event.setSubjects(subjects);
-    
+
     QtZeitgeist::DataModel::EventList events;
     events << event;
 
@@ -506,7 +506,7 @@ void MediaObjectPrivate::_k_stateChanged(State newState, State oldState)
     if (newState == StoppedState) {
         readyForZeitgeist = true;
     }
-    qDebug() << "State changed from" << oldState << "to" << newState << "-> sending to zeitgeist.";
+    pDebug() << "State changed from" << oldState << "to" << newState << "-> sending to zeitgeist.";
     send_to_zeitgeist(newState);
 }
 
@@ -640,7 +640,7 @@ void MediaObjectPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &n
 {
     metaData = newMetaData;
     emit q_func()->metaDataChanged();
-    qDebug() << "Metadata ready, sending to zeitgeist";
+    pDebug() << "Metadata ready, sending to zeitgeist";
     readyForZeitgeist = true;
     send_to_zeitgeist();
 }
