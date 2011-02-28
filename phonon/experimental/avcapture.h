@@ -32,7 +32,7 @@
 #include "../medianode.h"
 #include "../phonondefs.h"
 #include "objectdescription.h"
-#include "phonon/Global"
+#include "phonon/phononnamespace.h"
 
 class QString;
 class QStringList;
@@ -127,6 +127,17 @@ namespace Experimental
              * Stop capture.
              */
             void stop();
+
+        Q_SIGNALS:
+            /**
+             * Emitted when the state of the video or audio capture device has been changed.
+             *
+             * \li If only the audio capture device is valid, it notifies about the audio capture state.
+             * \li If only the video capture device is valid, it notifies about the video capture state.
+             * \li If both the audio and video capture devices are valid, it only notifies about the
+             * video capture state.
+             */
+            void stateChanged(Phonon::State newstate, Phonon::State oldstate);
     };
 
 } // namespace Experimental
