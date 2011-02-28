@@ -309,14 +309,14 @@ void MediaObject::clearQueue()
 }
 
 bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that) {
-    QList<MediaNode*> visited;
+    QList<MediaNode *> visited;
     return hasZeitgeistableOutput(that, &visited);
 }
 
 bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that, QList<MediaNode*> *visited)
 {
     visited->append(that);
-    AudioOutput *output = dynamic_cast<AudioOutput*>(that);
+    AudioOutput *output = dynamic_cast<AudioOutput *>(that);
     if (output) {
         Phonon::Category cat = output->category();
         if (cat == Phonon::MusicCategory || cat == Phonon::VideoCategory) {
@@ -324,8 +324,8 @@ bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that, QList<MediaNode
             return true;
         }
     }
-    foreach(const Path p, that->outputPaths()) {
-        MediaNode* sink = p.sink();
+    foreach (const Path p, that->outputPaths()) {
+        MediaNode *sink = p.sink();
         if (!visited->contains(sink)) {
             return hasZeitgeistableOutput(sink, visited);
         }
