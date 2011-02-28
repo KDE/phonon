@@ -345,7 +345,7 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
     Q_Q(MediaObject);
     if (readyForZeitgeist &&
             (q->property("_p_LogPlayback").toBool() &&
-                (q->property("_p_ForceLogPlayback").toBool() ||  hasZeitgeistableOutput(q)))) {
+                (q->property("_p_ForceLogPlayback").toBool() || hasZeitgeistableOutput(q)))) {
         QStringList titles = q->metaData(TitleMetaData);
         QStringList artists = q->metaData(ArtistMetaData);
         QString title;
@@ -362,7 +362,7 @@ void MediaObjectPrivate::send_to_zeitgeist(State eventState)
         pDebug() << "Sending" << title << "to zeitgeist";
         pDebug() << "Current state:" << eventState;
         QString eventInterpretation;
-        switch(eventState) {
+        switch (eventState) {
         case PlayingState:
             eventInterpretation = QtZeitgeist::Interpretation::Event::ZGAccessEvent;
             break;
