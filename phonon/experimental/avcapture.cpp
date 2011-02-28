@@ -41,11 +41,28 @@ namespace Experimental
 {
 PHONON_OBJECT_IMPL
 
+Phonon::State AvCapture::state() const
+{
+    K_D(const AvCapture);
+    if (d->m_backendObject) {
+        return INTERFACE_CALL(state());
+    }
+    return Phonon::StoppedState;
+}
+
 void AvCapture::start()
 {
     K_D(AvCapture);
     if (d->backendObject()) {
         INTERFACE_CALL(start());
+    }
+}
+
+void AvCapture::pause()
+{
+    K_D(AvCapture);
+    if (d->backendObject()) {
+        INTERFACE_CALL(pause());
     }
 }
 

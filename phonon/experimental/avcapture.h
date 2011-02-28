@@ -68,6 +68,16 @@ namespace Experimental
         Q_PROPERTY(Phonon::VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
         public:
             /**
+             * Returns the current state of the capture.
+             *
+             * \li If only the audio capture device is valid, it returns the audio capture state.
+             * \li If only the video capture device is valid, it returns the video capture state.
+             * \li If both the audio and video capture devices are valid, it only returns the
+             * video capture state.
+             */
+            State state() const;
+
+            /**
              * Returns the currently used capture source for the audio signal.
              *
              * @see AudioCaptureDevice
@@ -122,6 +132,11 @@ namespace Experimental
              * Start capture.
              */
             void start();
+
+            /**
+             * Pause capture.
+             */
+            void pause();
 
             /**
              * Stop capture.
