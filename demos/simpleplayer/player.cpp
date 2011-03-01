@@ -36,8 +36,19 @@ Player::Player(QWidget* parent, Qt::WindowFlags flags)
 {
     m_media = new Phonon::MediaObject(this);
 
-    Phonon::AudioOutput *audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
-    Phonon::VideoWidget *videoOut = new Phonon::VideoWidget(this);
+    //Some platforms (i.e. Linux) provide a mechanism for a user to view a system-wide
+    //history of content interactions. This is opt-in, and done via setting the
+    //_p_LogPlayback property to true.
+    m_media->setProperty("_p_LogPlayback", true);
+
+    //There is also a _p_ForceLogPlayback property to eschew intelligent detection
+    //of whether or not to log playback events for cases otherwise ignored, such as
+    //output to a notification category.
+    //m_media->setProperty("_p_ForceLogPlayback", true);
+
+    Phonon::AudioOutput* audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
+    Phonon::VideoWidget* videoOut = new Phonon::VideoWidget(this);
+
     videoOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     //By default, there is no minimum size on a video widget. While the default
     //size is controlled by Qt's layouting system it makes sense to provide a
