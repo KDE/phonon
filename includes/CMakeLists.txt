@@ -14,6 +14,7 @@ install( FILES
     phonon/AudioOutputInterface
     phonon/AudioOutputInterface40
     phonon/AudioOutputInterface42
+    phonon/AvCapture
     phonon/BackendCapabilities
     phonon/BackendInterface
     phonon/Effect

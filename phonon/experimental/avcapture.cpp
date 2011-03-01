@@ -41,11 +41,28 @@ namespace Experimental
 {
 PHONON_OBJECT_IMPL
 
+Phonon::State AvCapture::state() const
+{
+    K_D(const AvCapture);
+    if (d->m_backendObject) {
+        return INTERFACE_CALL(state());
+    }
+    return Phonon::StoppedState;
+}
+
 void AvCapture::start()
 {
     K_D(AvCapture);
     if (d->backendObject()) {
         INTERFACE_CALL(start());
+    }
+}
+
+void AvCapture::pause()
+{
+    K_D(AvCapture);
+    if (d->backendObject()) {
+        INTERFACE_CALL(pause());
     }
 }
 
@@ -125,7 +142,10 @@ bool AvCapturePrivate::aboutToDeleteBackendObject()
 
 void AvCapturePrivate::setupBackendObject()
 {
+    Q_Q(AvCapture);
     Q_ASSERT(m_backendObject);
+
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
 
     // set up attributes
     pINTERFACE_CALL(setAudioCaptureDevice(audioCaptureDevice));

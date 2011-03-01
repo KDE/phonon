@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -32,7 +32,12 @@
 #include "../medianode.h"
 #include "../phonondefs.h"
 #include "objectdescription.h"
-#include "phonon/Global"
+
+#if defined(MAKE_PHONONEXPERIMENTAL_LIB)
+#include "../phononnamespace.h"
+#else
+#include "phonon/phononnamespace.h"
+#endif
 
 class QString;
 class QStringList;
@@ -67,6 +72,16 @@ namespace Experimental
         Q_PROPERTY(Phonon::AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
         Q_PROPERTY(Phonon::VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
         public:
+            /**
+             * Returns the current state of the capture.
+             *
+             * \li If only the audio capture device is valid, it returns the audio capture state.
+             * \li If only the video capture device is valid, it returns the video capture state.
+             * \li If both the audio and video capture devices are valid, it only returns the
+             * video capture state.
+             */
+            State state() const;
+
             /**
              * Returns the currently used capture source for the audio signal.
              *
@@ -112,10 +127,10 @@ namespace Experimental
             void setVideoCaptureDevice(Phonon::Category category);
 
             /**
-             * @deprecated since 4.4.3, use 
+             * @deprecated since 4.4.3, use
              * setVideoCaptureDevice(const Phonon::VideoCaptureDevice &source) instead
              */
-            Q_DECL_DEPRECATED void setVideoCaptureDevice(const Phonon::Experimental::VideoCaptureDevice &source);
+            PHONON_EXPORT_DEPRECATED void setVideoCaptureDevice(const Phonon::Experimental::VideoCaptureDevice &source);
 
         public Q_SLOTS:
             /**
@@ -124,9 +139,25 @@ namespace Experimental
             void start();
 
             /**
+             * Pause capture.
+             */
+            void pause();
+
+            /**
              * Stop capture.
              */
             void stop();
+
+        Q_SIGNALS:
+            /**
+             * Emitted when the state of the video or audio capture device has been changed.
+             *
+             * \li If only the audio capture device is valid, it notifies about the audio capture state.
+             * \li If only the video capture device is valid, it notifies about the video capture state.
+             * \li If both the audio and video capture devices are valid, it only notifies about the
+             * video capture state.
+             */
+            void stateChanged(Phonon::State newstate, Phonon::State oldstate);
     };
 
 } // namespace Experimental

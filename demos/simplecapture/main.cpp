@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2010 Trever Fischer <tdfischer@fedoraproject.org>
+    Copyright (C) 2011 Casian Andrei <skeletk13@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,27 +19,19 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "capture.h"
+
 #include <QtGui/QApplication>
+#include <QtCore/QUrl>
 
-#include <phonon/Mrl>
-
-#include "player.h"
-
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
 
-    //On most platforms, this tells the audio system the name of the application responsible for which stream
-    app.setApplicationName("simpleplayer");
+    app.setApplicationName("simplecapture");
 
-    Player p;
-    p.show();
-
-    //Not passing an argument of what to play will prompt for a file inside Player::load(), called by Player::playPause()
-    QStringList args = QApplication::arguments();
-    if (args.size() > 1) {
-        p.load(Phonon::Mrl(args[1]));
-    }
+    CaptureWidget w;
+    w.show();
 
     return app.exec();
 }

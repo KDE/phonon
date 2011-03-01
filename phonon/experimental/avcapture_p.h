@@ -26,7 +26,6 @@
 #ifndef NO_PHONON_AVCAPTURE
 
 #include "avcapture.h"
-#include "../medianode_p.h"
 #include "../phonondefs_p.h"
 
 namespace Phonon
@@ -39,6 +38,8 @@ class AvCapturePrivate : public MediaNodePrivate
     Q_DECLARE_PUBLIC(AvCapture)
     PHONON_PRIVATECLASS
     public:
+    protected:
+        PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
     protected:
         Phonon::AudioCaptureDevice audioCaptureDevice;
         Phonon::VideoCaptureDevice videoCaptureDevice;
