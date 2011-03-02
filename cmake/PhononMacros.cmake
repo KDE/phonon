@@ -2,6 +2,7 @@
 # Phonon helper macros:
 #
 # macro (phonon_add_executable _target)
+# macro (phonon_add_designer_plugin _target _qrc_file)
 # macro (PHONON_ADD_UNIT_TEST _test_NAME)
 # macro (PHONON_UPDATE_ICONCACHE)
 # macro (PHONON_UPDATE_ICONCACHE)
@@ -21,6 +22,12 @@ macro(phonon_add_executable _target)
    set(_srcs ${ARGN})
    automoc4_add_executable(${_target} ${_global_add_executable_param} ${_srcs})
 endmacro(phonon_add_executable _target)
+
+macro(phonon_add_designer_plugin _target _qrc_file)
+    set(_srcs ${ARGN})
+    qt4_add_resources(_srcs ${_qrc_file})
+    automoc4_add_library(${_target} SHARED ${_global_add_executable_param} ${_srcs})
+endmacro(phonon_add_designer_plugin)
 
 macro (PHONON_ADD_UNIT_TEST _test_NAME)
    set(_srcList ${ARGN})
@@ -203,4 +210,3 @@ macro (PHONON_INSTALL_ICONS _defaultpath )
    phonon_update_iconcache()
 
 endmacro (PHONON_INSTALL_ICONS)
-
