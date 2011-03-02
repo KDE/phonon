@@ -3,6 +3,7 @@ set(phononwidgetsplugin_SRCS
     seeksliderplugin.cpp
     videoplayerplugin.cpp
     videoplayertaskmenu.cpp
+    videowidgetplugin.cpp
     volumesliderplugin.cpp
 )
 
