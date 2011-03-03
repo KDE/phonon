@@ -155,7 +155,7 @@ namespace Experimental
 } // namespace Experimental
 } // namespace Phonon
 
-Q_DECLARE_METATYPE(Phonon::Experimental::VideoFrame2);
+Q_DECLARE_METATYPE(Phonon::Experimental::VideoFrame2)
 
 // vim: sw=4 ts=4 tw=80
 #endif // PHONON_EXPERIMENTAL_VIDEOFRAME2_H
