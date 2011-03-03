@@ -103,8 +103,21 @@ class PlatformPlugin
 
         /**
          * Returns a list of (driver, handle) pairs for the given AudioOutputDevice description.
+         * Implementation is optional.
          */
-        virtual QList<QPair<QByteArray, QString> > deviceAccessListFor(const Phonon::AudioOutputDevice &) const { return QList<QPair<QByteArray, QString> >(); }
+        virtual DeviceAccessList deviceAccessListFor(const AudioOutputDevice &) const { return DeviceAccessList(); }
+
+        /**
+         * Returns a list of (driver, handle) pairs for the given AudioCaptureDevice description.
+         * Implementation is optional.
+         */
+        virtual DeviceAccessList deviceAccessListFor(const AudioCaptureDevice &) const { return DeviceAccessList(); }
+
+        /**
+         * Returns a list of (driver, handle) pairs for the given VideoCaptureDevice description.
+         * Implementation is optional.
+         */
+        virtual DeviceAccessList deviceAccessListFor(const VideoCaptureDevice &) const { return DeviceAccessList(); }
 };
 } // namespace Phonon
 
