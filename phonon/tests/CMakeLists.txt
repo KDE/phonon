@@ -1,3 +1,5 @@
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/../../) # For phonon/ includes.
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 if(msvc)
   add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS )

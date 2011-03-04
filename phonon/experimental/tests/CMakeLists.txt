@@ -1,3 +1,5 @@
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/../../../) # For phonon/ includes.
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 MACRO(PHONON_UNIT_TESTS)
