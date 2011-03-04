@@ -5,8 +5,9 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 # CMP0002: we have multiple targets with the same name for the unit tests
 cmake_policy(SET CMP0002 OLD)
 
-option(PHONON_BUILD_TESTS "Build the tests")
-option(PHONON_BUILD_DEMOS "Build the demos")
+option(PHONON_BUILD_DEMOS "Build the demos" OFF)
+option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
+option(PHONON_BUILD_TESTS "Build the tests" OFF)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 if (PHONON_NO_CAPTURE)
@@ -45,9 +46,9 @@ if(QT_QTDBUS_FOUND)
     list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
 endif(QT_QTDBUS_FOUND)
 
-if(${QT_QTDESIGNER_FOUND})
+if(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
-endif(${QT_QTDESIGNER_FOUND})
+endif(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
 add_subdirectory(phonon)
 add_subdirectory(includes)
 if(PHONON_BUILD_DEMOS)
