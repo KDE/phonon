@@ -50,9 +50,14 @@ ENDMACRO(PHONON_EXECUTABLE_TESTS)
 
 PHONON_EXECUTABLE_TESTS(
    videodataoutputtest
-   avcapturetest
-	)
+)
+
+if (NOT PHONON_NO_CAPTURE)
+    PHONON_EXECUTABLE_TESTS(
+        avcapturetest
+    )
+endif (NOT PHONON_NO_CAPTURE)
 
 PHONON_UNIT_TESTS_FAKE(
-	)
+)
 

@@ -107,17 +107,21 @@ class PlatformPlugin
          */
         virtual DeviceAccessList deviceAccessListFor(const AudioOutputDevice &) const { return DeviceAccessList(); }
 
+#ifndef PHONON_NO_AUDIOCAPTURE
         /**
          * Returns a list of (driver, handle) pairs for the given AudioCaptureDevice description.
          * Implementation is optional.
          */
         virtual DeviceAccessList deviceAccessListFor(const AudioCaptureDevice &) const { return DeviceAccessList(); }
+#endif // PHONON_NO_AUDIOCAPTURE
 
+#ifndef PHONON_NO_VIDEOCAPTURE
         /**
          * Returns a list of (driver, handle) pairs for the given VideoCaptureDevice description.
          * Implementation is optional.
          */
         virtual DeviceAccessList deviceAccessListFor(const VideoCaptureDevice &) const { return DeviceAccessList(); }
+#endif // PHONON_NO_VIDEOCAPTURE
 };
 } // namespace Phonon
 
