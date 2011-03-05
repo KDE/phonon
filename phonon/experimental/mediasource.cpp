@@ -49,7 +49,7 @@ MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
 MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
     : Phonon::MediaSource(*new MediaSourcePrivate(VideoCaptureDeviceSource))
 {
-
+    Q_UNUSED(videoDevice);
 }
 #endif // PHONON_NO_VIDEOCAPTURE
 
