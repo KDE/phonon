@@ -60,6 +60,7 @@ namespace Phonon
         QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
 
 #ifndef PHONON_NO_VIDEOCAPTURE
+        void setVideoCaptureDeviceListFor(Phonon::Category category, QList<int> order);
         QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> videoCaptureDeviceProperties(int index) const;
