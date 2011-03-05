@@ -125,15 +125,13 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
     }
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    // prefer to get the ObjectDescriptionData from the platform plugin for audio devices
-    if (is_audio_device) {
-        PlatformPlugin *platformPlugin = Factory::platformPlugin();
-        if (platformPlugin) {
-            QList<int> indexes = platformPlugin->objectDescriptionIndexes(type);
-            if (indexes.contains(index)) {
-                QHash<QByteArray, QVariant> properties = platformPlugin->objectDescriptionProperties(type, index);
-                return new ObjectDescriptionData(index, properties);
-            }
+    // prefer to get the ObjectDescriptionData from the platform plugin
+    PlatformPlugin *platformPlugin = Factory::platformPlugin();
+    if (platformPlugin) {
+        QList<int> indexes = platformPlugin->objectDescriptionIndexes(type);
+        if (indexes.contains(index)) {
+            QHash<QByteArray, QVariant> properties = platformPlugin->objectDescriptionProperties(type, index);
+            return new ObjectDescriptionData(index, properties);
         }
     }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN

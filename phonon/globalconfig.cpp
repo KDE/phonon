@@ -545,6 +545,14 @@ QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, in
 {
     K_D(const GlobalConfig);
 
+#ifndef QT_NO_PHONON_SETTINGSGROUP
+    const bool hide = ((override & AdvancedDevicesFromSettings)
+        ? hideAdvancedDevices()
+        : static_cast<bool>(override & HideAdvancedDevices));
+#else
+    const bool hide = !((override & AdvancedDevicesFromSettings) && static_cast<bool>(override & HideAdvancedDevices));
+#endif
+
     //First we lookup the available devices directly from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Phonon::Factory::backend());
     if (!backendIface) {
@@ -553,6 +561,24 @@ QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, in
 
     // this list already is in default order (as defined by the backend)
     QList<int> defaultList = backendIface->objectDescriptionIndexes(Phonon::VideoCaptureDeviceType);
+
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+    if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
+        // the platform plugin lists the video devices for the platform
+        // this list already is in default order (as defined by the platform plugin)
+        defaultList += platformPlugin->objectDescriptionIndexes(Phonon::VideoCaptureDeviceType);
+        if (hide) {
+            QMutableListIterator<int> it(defaultList);
+            while (it.hasNext()) {
+                VideoCaptureDevice objDesc = VideoCaptureDevice::fromIndex(it.next());
+                const QVariant var = objDesc.property("isAdvanced");
+                if (var.isValid() && var.toBool()) {
+                    it.remove();
+                }
+            }
+        }
+    }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
     if (hideAdvancedDevices() || (override & HideUnavailableDevices)) {
