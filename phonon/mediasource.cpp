@@ -267,7 +267,8 @@ void MediaSource::setAudioCaptureDevice(const Phonon::AudioCaptureDevice& acDevi
 
     // Grab the device access list from the properties
     if (acDevice.propertyNames().contains("deviceAccessList") &&
-        !acDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+            !acDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+        d->type = MediaSource::CaptureDevice;
         d->deviceAccessList = acDevice.property("deviceAccessList").value<DeviceAccessList>();
     } else {
         // Invalidate the media source
@@ -293,7 +294,8 @@ void MediaSource::setVideoCaptureDevice(const Phonon::VideoCaptureDevice& vcDevi
 
     // Grab the device access list from the properties
     if (vcDevice.propertyNames().contains("deviceAccessList") &&
-        !vcDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+            !vcDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+        d->type = MediaSource::CaptureDevice;
         d->deviceAccessList = vcDevice.property("deviceAccessList").value<DeviceAccessList>();
     } else {
         // Invalidate the media source
