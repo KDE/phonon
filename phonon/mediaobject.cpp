@@ -565,9 +565,6 @@ void MediaObjectPrivate::setupBackendObject()
     // MediaObject *while* it is doing something.
     // By queuing the connection the MediaObject can finish whatever it is doing
     // before Amarok starts doing nasty things to us.
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),             q, SIGNAL(tick(qint64)));
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),    q, SIGNAL(seekableChanged(bool)));
