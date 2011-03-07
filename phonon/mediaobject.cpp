@@ -32,6 +32,7 @@
 
 #include <QtCore/QStringBuilder>
 #include <QtCore/QStringList>
+#include <QtCore/QDateTime>
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
 
