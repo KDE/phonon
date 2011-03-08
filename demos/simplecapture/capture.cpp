@@ -156,11 +156,11 @@ void CaptureWidget::setupCaptureSource()
     // Connect the stateChanged signal from the object used for capture to our handling slot
     if (m_captureNode == m_media) {
         disconnect(m_avcapture, SIGNAL(stateChanged(Phonon::State,Phonon::State)));
-        connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
+        connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State)));
     }
     if (m_captureNode == m_avcapture) {
         disconnect(m_media, SIGNAL(stateChanged(Phonon::State,Phonon::State)));
-        connect(m_avcapture, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State,Phonon::State)));
+        connect(m_avcapture, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State)));
     }
 }
 
@@ -194,9 +194,8 @@ void CaptureWidget::stop()
     }
 }
 
-void CaptureWidget::mediaStateChanged(Phonon::State newState, Phonon::State oldState)
+void CaptureWidget::mediaStateChanged(Phonon::State newState)
 {
-    Q_UNUSED(oldState);
     switch(newState) {
     case Phonon::LoadingState:
         break;

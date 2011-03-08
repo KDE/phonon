@@ -83,7 +83,7 @@ private slots:
      * Changes the caption of the play / pause button, depending on the state.
      * Enables or disables the stop button.
      */
-    void mediaStateChanged(Phonon::State newState, Phonon::State oldState);
+    void mediaStateChanged(Phonon::State newState);
 
     /**
      * @brief Plays or pauses the media, depending on current state
