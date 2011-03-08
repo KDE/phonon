@@ -49,10 +49,8 @@ class SeekSliderPrivate
             : layout(QBoxLayout::LeftToRight, parent),
             slider(Qt::Horizontal, parent),
             iconLabel(parent),
-            ticking(false)
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-            ,icon(Platform::icon(QLatin1String("player-time"), parent->style()))
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
+            ticking(false),
+            icon(Platform::icon(QLatin1String("player-time"), parent->style()))
         {
             const int e = parent->style()->pixelMetric(QStyle::PM_ButtonIconSize);
             iconSize = QSize(e, e);

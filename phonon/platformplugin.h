@@ -32,8 +32,6 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-
 class QUrl;
 class QObject;
 class QIcon;
@@ -126,8 +124,6 @@ class PlatformPlugin
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::PlatformPlugin, "3PlatformPlugin.phonon.kde.org")
-
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
 QT_END_NAMESPACE
 QT_END_HEADER

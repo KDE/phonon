@@ -352,7 +352,6 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int
     } else {
         BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
         if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
             // the platform plugin lists the audio devices for the platform
             // this list already is in default order (as defined by the platform plugin)
@@ -368,7 +367,6 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Phonon::Category category, int
                 }
             }
         }
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
         // lookup the available devices directly from the backend
         if (backendIface) {
@@ -461,7 +459,6 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
         }
     }
 
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
         // the platform plugin lists the audio devices for the platform
         // this list already is in default order (as defined by the platform plugin)
@@ -477,7 +474,6 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
             }
         }
     }
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
     // lookup the available devices directly from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
@@ -500,11 +496,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Phonon::Category category, in
     const QSettingsGroup backendConfig(&d->config, QLatin1String("AudioCaptureDevice")); // + Factory::identifier());
     return sortDevicesByCategoryPriority(this, &backendConfig, AudioCaptureDeviceType, category, defaultList);
 #else //QT_NO_PHONON_SETTINGSGROUP
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     return defaultList;
-#else //QT_NO_PHONON_PLATFORMPLUGIN
-    return QList<int>();
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
 #endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
@@ -562,7 +554,6 @@ QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, in
     // this list already is in default order (as defined by the backend)
     QList<int> defaultList = backendIface->objectDescriptionIndexes(Phonon::VideoCaptureDeviceType);
 
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
         // the platform plugin lists the video devices for the platform
         // this list already is in default order (as defined by the platform plugin)
@@ -578,7 +569,6 @@ QList<int> GlobalConfig::videoCaptureDeviceListFor(Phonon::Category category, in
             }
         }
     }
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
     if (hideAdvancedDevices() || (override & HideUnavailableDevices)) {
@@ -626,13 +616,11 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(Phonon::ObjectDescrip
     if (!props.isEmpty())
         return props;
 
-    #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     // Try a device from the platform
     if (PlatformPlugin *platformPlugin = Factory::platformPlugin())
         props = platformPlugin->objectDescriptionProperties(deviceType, index);
     if (!props.isEmpty())
         return props;
-    #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
     // Try a device from the backend
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
