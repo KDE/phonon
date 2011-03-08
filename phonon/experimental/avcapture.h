@@ -130,7 +130,7 @@ namespace Experimental
              * @deprecated since 4.4.3, use
              * setVideoCaptureDevice(const Phonon::VideoCaptureDevice &source) instead
              */
-            Q_DECL_DEPRECATED void setVideoCaptureDevice(const Phonon::Experimental::VideoCaptureDevice &source);
+            PHONON_DEPRECATED void setVideoCaptureDevice(const Phonon::Experimental::VideoCaptureDevice &source);
 
         public Q_SLOTS:
             /**
