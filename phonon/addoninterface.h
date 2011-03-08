@@ -57,12 +57,7 @@ class AddonInterface
 
         enum NavigationCommand {
             availableMenus,
-            MenuMain,
-            MenuTitle,
-            MenuRoot,
-            MenuAudio,
-            MenuAngle,
-            MenuChapter
+            setMenu
         };
 
         enum ChapterCommand {

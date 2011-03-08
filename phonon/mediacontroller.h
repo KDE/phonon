@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -58,6 +59,15 @@ class PHONON_EXPORT MediaController : public QObject
         };
         Q_DECLARE_FLAGS(Features, Feature)
 
+        enum NavigationMenu {
+            MenuMain,
+            MenuTitle,
+            MenuRoot,
+            MenuAudio,
+            MenuAngle,
+            MenuChapter
+        };
+
         MediaController(MediaObject *parent);
         ~MediaController();
 
@@ -68,6 +78,35 @@ class PHONON_EXPORT MediaController : public QObject
 
         int availableChapters() const;
         int currentChapter() const;
+
+        /**
+         * Translates a NavigationMenu enum to a string you can use in your GUI.
+         * Please note that keyboard shortucts will not be present in the returned
+         * String, therefore it is probably not a good idea to use this function
+         * if you are providing keyboard shortcuts for every other clickable.
+         *
+         * Example:
+         * \code
+         * QString s = Phonon::MediaController::navigationMenuToString(MenuMain);
+         * // s now contains "Main Menu"
+         * \endcode
+         *
+         * \returns the QString representation of the menu
+         */
+        static QString navigationMenuToString(NavigationMenu menu);
+
+        /**
+         * Get the list of currently available menus for the present media source.
+         *
+         * The list is always ordered by occurance in the NavgiationMenu enum.
+         * Should you wish to use a different order in your application you will
+         * have to make appropriate changes.
+         *
+         * \returns list of available menus (supported by backend and media source).
+         *
+         * \see navigationMenuToString()
+         */
+        QList<NavigationMenu> availableMenus() const;
 
         int availableTitles() const;
         int currentTitle() const;
@@ -97,7 +136,7 @@ class PHONON_EXPORT MediaController : public QObject
          * \see selectedAudioChannel
          * \see setCurrentAudioChannel
          */
-        QList<AudioChannelDescription> availableAudioChannels() const;
+        QList<Phonon::AudioChannelDescription> availableAudioChannels() const;
 
         /**
          * Returns the subtitle streams that can be selected by the user. The
@@ -120,6 +159,13 @@ class PHONON_EXPORT MediaController : public QObject
          * \see currentAudioChannel()
          */
         void setCurrentAudioChannel(const Phonon::AudioChannelDescription &stream);
+
+        /**
+         * Switches to a menu (e.g. on a DVD).
+         *
+         * \see availableMenus()
+         */
+        void setCurrentMenu(NavigationMenu menu);
 
         /**
          * Selects a subtitle stream from the media.
@@ -164,13 +210,26 @@ class PHONON_EXPORT MediaController : public QObject
         void previousTitle();
 
     Q_SIGNALS:
-        void availableSubtitlesChanged();
-        void availableAudioChannelsChanged();
         void availableAnglesChanged(int availableAngles);
-        void angleChanged(int angleNumber);
+        void availableAudioChannelsChanged();
         void availableChaptersChanged(int availableChapters);
-        void chapterChanged(int chapterNumber);
+
+        /**
+         * The available menus changed, this for example emitted when Phonon switches
+         * from a media source without menus to one with menus (e.g. a DVD).
+         *
+         * \param menus is a list of all currently available menus, you should update
+         * GUI representations of the available menus with the new set.
+         *
+         * \see availableMenus()
+         * \see navigationMenuToString()
+         */
+        void availableMenusChanged(QList<NavigationMenu> menus);
+        void availableSubtitlesChanged();
         void availableTitlesChanged(int availableTitles);
+
+        void angleChanged(int angleNumber);
+        void chapterChanged(int chapterNumber);
         void titleChanged(int titleNumber);
 
     protected:
@@ -180,6 +239,9 @@ class PHONON_EXPORT MediaController : public QObject
 } // namespace Phonon
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::MediaController::Features)
+
+Q_DECLARE_METATYPE(Phonon::MediaController::NavigationMenu)
+Q_DECLARE_METATYPE(QList<Phonon::MediaController::NavigationMenu>)
 
 #endif //QT_NO_PHONON_MEDIACONTROLLER
 
