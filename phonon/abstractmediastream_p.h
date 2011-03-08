@@ -32,8 +32,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
 class MediaObjectPrivate;
 
 namespace Phonon
@@ -74,8 +72,6 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHan
         QString errorText;
 };
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE
 

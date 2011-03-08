@@ -29,8 +29,6 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
 namespace Phonon
 {
 class StreamInterfacePrivate;
@@ -114,8 +112,6 @@ class PHONON_EXPORT StreamInterface
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::StreamInterface, "StreamInterface1.phonon.kde.org")
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE
 QT_END_HEADER

@@ -161,7 +161,6 @@ class PHONON_EXPORT MediaSource
         MediaSource(const Phonon::VideoCaptureDevice& vcDevice);
 #endif
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
          * Creates a MediaSource object for a data stream.
          *
@@ -186,7 +185,6 @@ class PHONON_EXPORT MediaSource
          * \see setAutoDelete
          */
         MediaSource(QIODevice *ioDevice); //krazy:exclude=explicit
-#endif
 
         /**
          * Destroys the MediaSource object.
@@ -268,13 +266,11 @@ class PHONON_EXPORT MediaSource
          */
         QString deviceName() const;
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
          * Returns the media stream of the MediaSource if type() == Stream; otherwise returns 0.
          * QIODevices are handled as streams, too.
          */
         AbstractMediaStream *stream() const;
-#endif
 
 #ifndef PHONON_NO_AUDIOCAPTURE
         /**

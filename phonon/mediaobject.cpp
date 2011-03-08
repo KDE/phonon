@@ -227,8 +227,6 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
             // for setting a new URL
 
     d->mediaSource = newSource;
-
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     d->abstractStream = 0; // abstractStream auto-deletes
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
@@ -246,7 +244,6 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
             pWarning() << "Unable to create abstract media stream for URL!";
         }
     }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     INTERFACE_CALL(setSource(d->mediaSource));
 }
@@ -500,7 +497,6 @@ bool MediaObjectPrivate::aboutToDeleteBackendObject()
     return true;
 }
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text)
 {
     Q_Q(MediaObject);
@@ -511,7 +507,6 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
     QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::ErrorState), Q_ARG(Phonon::State, lastState));
     //emit q->stateChanged(ErrorState, lastState);
 }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 void MediaObjectPrivate::_k_stateChanged(State newState, State oldState)
 {
@@ -527,9 +522,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
     Q_Q(MediaObject);
     pDebug() << Q_FUNC_INFO;
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     abstractStream = 0; // abstractStream auto-deletes
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     if (sourceQueue.isEmpty()) {
         emit q->aboutToFinish();
@@ -622,12 +615,10 @@ void MediaObjectPrivate::setupBackendObject()
     // set up attributes
     if (isPlayable(mediaSource.type())) {
         readyForZeitgeist = false;
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (mediaSource.type() == MediaSource::Stream) {
             Q_ASSERT(mediaSource.stream());
             mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
         }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         pINTERFACE_CALL(setSource(mediaSource));
     }
 }
