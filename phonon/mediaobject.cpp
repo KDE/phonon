@@ -604,11 +604,9 @@ void MediaObjectPrivate::setupBackendObject()
         state = backendState;
     }
 
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
     for (int i = 0 ; i < interfaceList.count(); ++i) {
         interfaceList.at(i)->_backendObjectChanged();
     }
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
     // set up attributes
     if (isPlayable(mediaSource.type())) {

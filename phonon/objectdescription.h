@@ -313,10 +313,9 @@ typedef ObjectDescription<EffectType> EffectDescription;
  * \ingroup BackendInformation
  */
 //typedef ObjectDescription<VisualizationType> VisualizationDescription;
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
+
 typedef ObjectDescription<AudioChannelType> AudioChannelDescription;
 typedef ObjectDescription<SubtitleType> SubtitleDescription;
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 /**
  * \short Information about how to access a device
@@ -384,13 +383,10 @@ Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
 Q_DECLARE_METATYPE(Phonon::EffectDescription)
 #endif //QT_NO_PHONON_EFFECT
 
-
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
 Q_DECLARE_METATYPE(Phonon::AudioChannelDescription)
 Q_DECLARE_METATYPE(Phonon::SubtitleDescription)
 Q_DECLARE_METATYPE(QList<Phonon::AudioChannelDescription>)
 Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 Q_DECLARE_METATYPE(Phonon::DeviceAccess)
 Q_DECLARE_METATYPE(Phonon::DeviceAccessList)
