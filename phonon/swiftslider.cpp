@@ -28,7 +28,7 @@
 
 QT_BEGIN_NAMESPACE
 
-#if !defined(QT_NO_PHONON_SEEKSLIDER) && !defined(QT_NO_PHONON_VOLUMESLIDER)
+#if !defined(QT_NO_PHONON_SEEKSLIDER)
 
 namespace Phonon
 {
@@ -96,7 +96,7 @@ void SwiftSlider::mousePressEvent(QMouseEvent *event)
 
 } // namespace Phonon
 
-#endif //QT_NO_PHONON_VOLUMESLIDER && QT_NO_PHONON_VOLUMESLIDER
+#endif //QT_NO_PHONON_SEEKSLIDER
 
 QT_END_NAMESPACE
 
