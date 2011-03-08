@@ -35,13 +35,18 @@
 
 CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f)
 {
+    // Create the objects used for capture and set up a default capture method
     m_media = new Phonon::MediaObject(this);
     m_avcapture = new Phonon::Experimental::AvCapture(this);
     m_captureNode = m_avcapture;
 
+    // Create the audio and video outputs (sinks)
     m_audioOutput = new Phonon::AudioOutput(this);
     m_videoWidget = new Phonon::VideoWidget(this);
 
+    /*
+     * Set up the buttons and layouts and widgets
+     */
     m_playButton = new QPushButton(this);
     m_playButton->setText(tr("Play"));
     connect(m_playButton, SIGNAL(clicked()), this, SLOT(playPause()));
@@ -64,6 +69,7 @@ CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent
 
     setLayout(new QVBoxLayout);
 
+    // Configure the video widget a bit
     m_videoWidget->setMinimumSize(QSize(400, 300));
     m_videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout()->addWidget(m_videoWidget);
@@ -78,6 +84,7 @@ CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent
     buttonsLayout->addWidget(m_stopButton);
     layout()->addItem(buttonsLayout);
 
+    // Set up capture and start it
     setupCaptureSource();
     playPause();
 }
@@ -104,6 +111,7 @@ void CaptureWidget::enableAvCapture(bool enable)
 
 void CaptureWidget::setupCaptureSource()
 {
+    // Disconnect the old paths, if they exist
     if (m_audioPath.isValid()) {
         m_audioPath.disconnect();
     }
@@ -111,6 +119,7 @@ void CaptureWidget::setupCaptureSource()
         m_videoPath.disconnect();
     }
 
+    // Reconnect the paths using the object used for capture
     if (m_captureNode == m_media) {
         m_audioPath = Phonon::createPath(m_media, m_audioOutput);
         m_videoPath = Phonon::createPath(m_media, m_videoWidget);
@@ -127,6 +136,10 @@ void CaptureWidget::setupCaptureSource()
         QMessageBox::critical(this, "Error", "Your backend may not support video capturing.");
     }
 
+    /*
+     * Set up the devices used for capture
+     * Phonon can easily get you the devices appropriate for a specific category.
+     */
     if (m_captureNode == m_media) {
         Phonon::MediaSource source;
         source.setVideoCaptureDevice(Phonon::NoCategory);
@@ -140,6 +153,7 @@ void CaptureWidget::setupCaptureSource()
         m_avcapture->setAudioCaptureDevice(Phonon::NoCategory);
     }
 
+    // Connect the stateChanged signal from the object used for capture to our handling slot
     if (m_captureNode == m_media) {
         disconnect(m_avcapture, SIGNAL(stateChanged(Phonon::State,Phonon::State)));
         connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
