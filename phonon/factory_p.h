@@ -106,9 +106,7 @@ namespace Factory
      *
      * \return a pointer to the VolumeFaderEffect the backend provides.
      */
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
     QObject *createVolumeFaderEffect(QObject *parent = 0);
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
     /**
      * Create a new backend object for a AudioOutput.
      *

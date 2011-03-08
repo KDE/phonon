@@ -332,9 +332,7 @@ QObject *Factory::create ## classname(int arg1, QObject *parent) \
 
 FACTORY_IMPL(MediaObject)
 FACTORY_IMPL_1ARG(Effect)
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(VolumeFaderEffect)
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(AudioOutput)
 FACTORY_IMPL(VideoWidget)
 FACTORY_IMPL(AudioDataOutput)
