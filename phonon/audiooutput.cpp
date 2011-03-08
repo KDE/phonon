@@ -307,7 +307,6 @@ void AudioOutputPrivate::setupBackendObject()
         // set up attributes
         pINTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
 
-#ifndef QT_NO_PHONON_SETTINGSGROUP
         // if the output device is not available and the device was not explicitly set
         // There is no need to set the output device initially if PA is used as
         // we know it will not work (stream doesn't exist yet) and that this will be
@@ -330,7 +329,6 @@ void AudioOutputPrivate::setupBackendObject()
             callSetOutputDevice(this, none);
             handleAutomaticDeviceChange(none, FallbackChange);
         }
-#endif //QT_NO_PHONON_SETTINGSGROUP
     }
 }
 
@@ -369,8 +367,6 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
     if (PulseSupport::getInstance()->isActive())
         return;
 
-#ifndef QT_NO_PHONON_SETTINGSGROUP
-
     pDebug() << Q_FUNC_INFO;
     // outputDeviceIndex identifies a failing device
     // fall back in the preference list of output devices
@@ -386,7 +382,7 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
             }
         }
     }
-#endif //QT_NO_PHONON_SETTINGSGROUP
+
     // if we get here there is no working output device. Tell the backend.
     const AudioOutputDevice none;
     callSetOutputDevice(this, none);
@@ -398,7 +394,6 @@ void AudioOutputPrivate::_k_deviceListChanged()
     if (PulseSupport::getInstance()->isActive())
         return;
 
-#ifndef QT_NO_PHONON_SETTINGSGROUP
     pDebug() << Q_FUNC_INFO;
     // Check to see if we have an override and do not change to a higher priority device if the overridden device is still present.
     if (outputDeviceOverridden && device.property("available").toBool()) {
@@ -429,7 +424,6 @@ void AudioOutputPrivate::_k_deviceListChanged()
             break; // found one with higher preference that works
         }
     }
-#endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
 void AudioOutputPrivate::_k_deviceChanged(int deviceIndex)
