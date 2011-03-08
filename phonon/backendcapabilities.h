@@ -198,7 +198,6 @@ namespace BackendCapabilities
      */
 //    PHONON_EXPORT QList<VisualizationDescription> availableVisualizations();
 
-#ifndef QT_NO_PHONON_EFFECT
     /**
      * Returns descriptions for the audio effects the backend supports.
      *
@@ -206,7 +205,6 @@ namespace BackendCapabilities
      * description for every supported audio effect.
      */
     PHONON_EXPORT QList<EffectDescription> availableAudioEffects();
-#endif //QT_NO_PHONON_EFFECT
 
 //X     /**
 //X      * Returns descriptions for the video effects the backend supports.

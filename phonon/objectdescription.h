@@ -293,9 +293,7 @@ typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
 /**
  * \ingroup BackendInformation
  */
-#ifndef QT_NO_PHONON_EFFECT
 typedef ObjectDescription<EffectType> EffectDescription;
-#endif //QT_NO_PHONON_EFFECT
 
 /**
  * \ingroup BackendInformation
@@ -378,10 +376,8 @@ Q_DECLARE_METATYPE(Phonon::VideoCaptureDevice)
 Q_DECLARE_METATYPE(QList<Phonon::VideoCaptureDevice>)
 #endif //PHONON_NO_VIDEOCAPTURE
 
-#ifndef QT_NO_PHONON_EFFECT
 Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
 Q_DECLARE_METATYPE(Phonon::EffectDescription)
-#endif //QT_NO_PHONON_EFFECT
 
 Q_DECLARE_METATYPE(Phonon::AudioChannelDescription)
 Q_DECLARE_METATYPE(Phonon::SubtitleDescription)

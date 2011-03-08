@@ -29,8 +29,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_EFFECTWIDGET
-
 namespace Phonon
 {
     class EffectWidgetPrivate
@@ -54,8 +52,6 @@ namespace Phonon
             void autogenerateUi();
     };
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_EFFECTWIDGET
 
 QT_END_NAMESPACE
 

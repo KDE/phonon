@@ -122,7 +122,6 @@ QList<VideoCaptureDevice> BackendCapabilities::availableAVCaptureDevices()
 }
 #endif // NOT PHONON_NO_VIDEOCAPTURE AND NOT PHONON_NO_AUDIOCAPTURE
 
-#ifndef QT_NO_PHONON_EFFECT
 QList<EffectDescription> BackendCapabilities::availableAudioEffects()
 {
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
@@ -135,7 +134,6 @@ QList<EffectDescription> BackendCapabilities::availableAudioEffects()
     }
     return ret;
 }
-#endif //QT_NO_PHONON_EFFECT
 
 } // namespace Phonon
 

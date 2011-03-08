@@ -100,9 +100,7 @@ namespace Factory
      *
      * \return a pointer to the Effect the backend provides.
      */
-#ifndef QT_NO_PHONON_EFFECT
     QObject *createEffect(int effectId, QObject *parent = 0);
-#endif //QT_NO_PHONON_EFFECT
     /**
      * Create a new backend object for a VolumeFaderEffect.
      *
