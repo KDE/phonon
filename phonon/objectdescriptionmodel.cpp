@@ -34,8 +34,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
-
 
 static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
 
@@ -381,7 +379,5 @@ INSTANTIATE_META_FUNCTIONS(ContainerFormatType);
 INSTANTIATE_META_FUNCTIONS(VisualizationType);
 */
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 
 QT_END_NAMESPACE
