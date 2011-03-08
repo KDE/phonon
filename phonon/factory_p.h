@@ -122,9 +122,7 @@ namespace Factory
      *
      * \return a pointer to the VideoWidget the backend provides.
      */
-#ifndef QT_NO_PHONON_VIDEO
     QObject *createVideoWidget(QObject *parent = 0);
-#endif //QT_NO_PHONON_VIDEO
 
     /**
     * Create a new backend object for a AudioDataOutput.
