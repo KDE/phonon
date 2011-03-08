@@ -60,12 +60,12 @@ class PHONON_EXPORT MediaController : public QObject
         Q_DECLARE_FLAGS(Features, Feature)
 
         enum NavigationMenu {
-            MenuMain,
-            MenuTitle,
-            MenuRoot,
-            MenuAudio,
-            MenuAngle,
-            MenuChapter
+            MenuMain,   /** < Main menu on a DVD for example. */
+            MenuTitle,  /** < Title Menu. */
+            MenuRoot,   /** < Root menu, will mostly be equal to main menu. */
+            MenuAudio,  /** < Audio menu for language and subtitle settings etc. */
+            MenuAngle,  /** < Angle menu. */
+            MenuChapter /** < Chapter menu for chapter selection. */
         };
 
         MediaController(MediaObject *parent);
