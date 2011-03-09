@@ -204,9 +204,6 @@ FactoryPrivate::FactoryPrivate()
     QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.Phonon.Factory"),
         QLatin1String("phononBackendChanged"), this, SLOT(phononBackendChanged()));
 #endif
-
-    // Register the meta types from ObjectDescription
-    registerMetaTypes();
 }
 
 FactoryPrivate::~FactoryPrivate()

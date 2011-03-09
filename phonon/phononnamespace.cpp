@@ -86,7 +86,6 @@ namespace Phonon
     }
 }
 
-// TODO merge with Phonon::registerMetaTypes from objectdescription
 static int registerPhononMetaTypes()
 {
     qRegisterMetaType<Phonon::State>();
