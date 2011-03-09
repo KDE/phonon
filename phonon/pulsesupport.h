@@ -51,7 +51,9 @@ namespace Phonon
             QList<int> objectIndexesByCategory(ObjectDescriptionType type, Category category) const;
 
             void setOutputDevicePriorityForCategory(Category category, QList<int> order);
-            void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
+            void setCaptureDevicePriorityForCategory(CaptureCategory category, QList<int> order);
+
+            PHONON_DEPRECATED void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
 
             PulseStream *registerOutputStream(QString streamUuid, Category category);
             PulseStream *registerCaptureStream(QString streamUuid, Category category);

@@ -98,7 +98,7 @@ static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, cons
 {
     Q_ASSERT(config); Q_UNUSED(config);
     Q_ASSERT(backendConfig);
-    Q_ASSERT(type == AudioOutputDeviceType || type == AudioCaptureDeviceType || type == VideoCaptureDeviceType);
+    Q_ASSERT(type == AudioOutputDeviceType);
 
     if (defaultList.size() <= 1) {
         // nothing to sort
@@ -134,6 +134,57 @@ static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, cons
         //Now the list from d->config
         deviceList = backendConfig->value(categoryKey, QList<int>());
     }
+
+    //if there are devices in d->config that the backend doesn't report, remove them from the list
+    QMutableListIterator<int> i(deviceList);
+    while (i.hasNext()) {
+        if (0 == defaultList.removeAll(i.next())) {
+            i.remove();
+        }
+    }
+
+    //if the backend reports more devices that are not in d->config append them to the list
+    deviceList += defaultList;
+
+    return deviceList;
+}
+
+static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, const QSettingsGroup *backendConfig, ObjectDescriptionType type, CaptureCategory category, QList<int> &defaultList)
+{
+    Q_ASSERT(config); Q_UNUSED(config);
+    Q_ASSERT(backendConfig);
+    Q_ASSERT(type == AudioCaptureDeviceType || type == VideoCaptureDeviceType);
+
+    if (defaultList.size() <= 1) {
+        // nothing to sort
+        return defaultList;
+    } else {
+        // make entries unique
+        QSet<int> seen;
+        QMutableListIterator<int> it(defaultList);
+        while (it.hasNext()) {
+            if (seen.contains(it.next())) {
+                it.remove();
+            } else {
+                seen.insert(it.value());
+            }
+        }
+    }
+
+    QList<int> deviceList;
+
+    QString categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(category));
+    if (!backendConfig->hasKey(categoryKey)) {
+        // no list in config for the given category
+        categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(NoCategory));
+        if (!backendConfig->hasKey(categoryKey)) {
+            // no list in config for NoCategory
+            return defaultList;
+        }
+    }
+
+    //Now the list from d->config
+    deviceList = backendConfig->value(categoryKey, QList<int>());
 
     //if there are devices in d->config that the backend doesn't report, remove them from the list
     QMutableListIterator<int> i(deviceList);
@@ -214,7 +265,7 @@ static bool isHiddenVideoCaptureDevice(const GlobalConfig *config, int i)
 static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType type, Category category, QList<int>newOrder)
 {
     Q_ASSERT(config);
-    Q_ASSERT(type == AudioOutputDeviceType || type == AudioCaptureDeviceType || type == VideoCaptureDeviceType);
+    Q_ASSERT(type == AudioOutputDeviceType);
 
     /*QString sb;
     sb = QString("(Size %1)").arg(currentList.size());
@@ -226,14 +277,52 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
     sb += QString("%1, ").arg(i);
     fprintf(stderr, "=== Reindex Before : %s\n", sb.toUtf8().constData());*/
 
+    int override = GlobalConfig::ShowUnavailableDevices | GlobalConfig::ShowAdvancedDevices;
+    QList<int> currentList = config->audioOutputDeviceListFor(category, override);
+
+
+    QList<int> newList;
+
+    foreach (int i, newOrder) {
+        int found = currentList.indexOf(i);
+        if (found < 0) {
+            // It's not in the list, so something is odd (e.g. client error). Ignore it.
+            continue;
+        }
+
+        // Iterate through the list from this point onward. If there are hidden devices
+        // immediately following, take them too.
+        newList.append(currentList.takeAt(found));
+
+        while (found < currentList.size()) {
+            bool hidden = isHiddenAudioOutputDevice(config, currentList.at(found));
+            if (!hidden)
+                break;
+
+            newList.append(currentList.takeAt(found));
+        }
+    }
+
+    // If there are any devices left in.. just tack them on the end.
+    if (currentList.size() > 0)
+        newList += currentList;
+
+    /*sb = QString("(Size %1)").arg(newList.size());
+    foreach (int i, newList)
+    sb += QString("%1, ").arg(i);
+    fprintf(stderr, "=== Reindex After  : %s\n", sb.toUtf8().constData());*/
+    return newList;
+}
+
+static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType type, CaptureCategory category, QList<int>newOrder)
+{
+    Q_ASSERT(config);
+    Q_ASSERT(type == AudioCaptureDeviceType || type == VideoCaptureDeviceType);
+
     QList<int> currentList;
     int override = GlobalConfig::ShowUnavailableDevices | GlobalConfig::ShowAdvancedDevices;
 
     switch (type) {
-    case AudioOutputDeviceType:
-        currentList = config->audioOutputDeviceListFor(category, override);
-        break;
-
 #ifndef PHONON_NO_AUDIOCAPTURE
     case AudioCaptureDeviceType:
         currentList = config->audioCaptureDeviceListFor(category, override);
@@ -266,10 +355,6 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
             bool hidden = true;
 
             switch (type) {
-            case AudioOutputDeviceType:
-                hidden = isHiddenAudioOutputDevice(config, currentList.at(found));
-                break;
-
 #ifndef PHONON_NO_AUDIOCAPTURE
             case AudioCaptureDeviceType:
                 hidden = isHiddenAudioCaptureDevice(config, currentList.at(found));
@@ -296,10 +381,6 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
     if (currentList.size() > 0)
         newList += currentList;
 
-    /*sb = QString("(Size %1)").arg(newList.size());
-    foreach (int i, newList)
-    sb += QString("%1, ").arg(i);
-    fprintf(stderr, "=== Reindex After  : %s\n", sb.toUtf8().constData());*/
     return newList;
 }
 
@@ -412,7 +493,7 @@ QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index)
 
 
 #ifndef PHONON_NO_AUDIOCAPTURE
-void GlobalConfig::setAudioCaptureDeviceListFor(Category category, QList<int> order)
+void GlobalConfig::setAudioCaptureDeviceListFor(CaptureCategory category, QList<int> order)
 {
 
     PulseSupport *pulse = PulseSupport::getInstance();
@@ -427,8 +508,8 @@ void GlobalConfig::setAudioCaptureDeviceListFor(Category category, QList<int> or
 
     order = reindexList(this, AudioCaptureDeviceType, category, order);
 
-    const QList<int> noCategoryOrder = audioCaptureDeviceListFor(NoCategory, ShowUnavailableDevices|ShowAdvancedDevices);
-    if (category != NoCategory && order == noCategoryOrder) {
+    const QList<int> noCategoryOrder = audioCaptureDeviceListFor(NoCaptureCategory, ShowUnavailableDevices|ShowAdvancedDevices);
+    if (category != NoCaptureCategory && order == noCategoryOrder) {
         backendConfig.removeEntry(QLatin1String("Category_") + QString::number(category));
     } else {
         backendConfig.setValue(QLatin1String("Category_") + QString::number(category), order);
@@ -436,7 +517,7 @@ void GlobalConfig::setAudioCaptureDeviceListFor(Category category, QList<int> or
 #endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
-QList<int> GlobalConfig::audioCaptureDeviceListFor(Category category, int override) const
+QList<int> GlobalConfig::audioCaptureDeviceListFor(CaptureCategory category, int override) const
 {
     K_D(const GlobalConfig);
 
@@ -508,7 +589,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(Category category, int overri
 #endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
-int GlobalConfig::audioCaptureDeviceFor(Category category, int override) const
+int GlobalConfig::audioCaptureDeviceFor(CaptureCategory category, int override) const
 {
     QList<int> ret = audioCaptureDeviceListFor(category, override);
     if (ret.isEmpty())
@@ -520,11 +601,30 @@ QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index
 {
     return deviceProperties(AudioCaptureDeviceType, index);
 }
+
+void GlobalConfig::setAudioCaptureDeviceListFor(Category category, QList<int> order)
+{
+    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    setAudioCaptureDeviceListFor(cat, order);
+}
+
+QList<int> GlobalConfig::audioCaptureDeviceListFor(Category category, int override) const
+{
+    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    return audioCaptureDeviceListFor(cat, override);
+}
+
+int GlobalConfig::audioCaptureDeviceFor(Category category, int override) const
+{
+    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    return audioCaptureDeviceFor(cat, override);
+}
+
 #endif //PHONON_NO_AUDIOCAPTURE
 
 
 #ifndef PHONON_NO_VIDEOCAPTURE
-void GlobalConfig::setVideoCaptureDeviceListFor(Category category, QList< int > order)
+void GlobalConfig::setVideoCaptureDeviceListFor(CaptureCategory category, QList<int> order)
 {
 #ifndef QT_NO_PHONON_SETTINGSGROUP
     K_D(GlobalConfig);
@@ -532,8 +632,8 @@ void GlobalConfig::setVideoCaptureDeviceListFor(Category category, QList< int > 
 
     order = reindexList(this, VideoCaptureDeviceType, category, order);
 
-    const QList<int> noCategoryOrder = videoCaptureDeviceListFor(NoCategory, ShowUnavailableDevices|ShowAdvancedDevices);
-    if (category != NoCategory && order == noCategoryOrder) {
+    const QList<int> noCategoryOrder = videoCaptureDeviceListFor(NoCaptureCategory, ShowUnavailableDevices|ShowAdvancedDevices);
+    if (category != NoCaptureCategory && order == noCategoryOrder) {
         backendConfig.removeEntry(QLatin1String("Category_") + QString::number(category));
     } else {
         backendConfig.setValue(QLatin1String("Category_") + QString::number(category), order);
@@ -541,7 +641,7 @@ void GlobalConfig::setVideoCaptureDeviceListFor(Category category, QList< int > 
 #endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
-QList<int> GlobalConfig::videoCaptureDeviceListFor(Category category, int override) const
+QList<int> GlobalConfig::videoCaptureDeviceListFor(CaptureCategory category, int override) const
 {
     K_D(const GlobalConfig);
 
@@ -596,7 +696,7 @@ QList<int> GlobalConfig::videoCaptureDeviceListFor(Category category, int overri
 #endif // QT_NO_PHONON_SETTINGSGROUP
 }
 
-int GlobalConfig::videoCaptureDeviceFor(Category category, int override) const
+int GlobalConfig::videoCaptureDeviceFor(CaptureCategory category, int override) const
 {
     QList<int> ret = videoCaptureDeviceListFor(category, override);
     if (ret.isEmpty())
@@ -608,6 +708,25 @@ QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index
 {
     return deviceProperties(VideoCaptureDeviceType, index);
 }
+
+void GlobalConfig::setVideoCaptureDeviceListFor(Category category, QList<int> order)
+{
+    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    setVideoCaptureDeviceListFor(cat, order);
+}
+
+QList<int> GlobalConfig::videoCaptureDeviceListFor(Category category, int override) const
+{
+    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    return videoCaptureDeviceListFor(cat, override);
+}
+
+int GlobalConfig::videoCaptureDeviceFor(Category category, int override) const
+{
+    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    return videoCaptureDeviceFor(cat, override);
+}
+
 #endif // PHONON_NO_VIDEOCAPTURE
 
 QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(ObjectDescriptionType deviceType, int index) const

@@ -965,7 +965,7 @@ void PulseSupport::setOutputDevicePriorityForCategory(Category category, QList<i
 #endif
 }
 
-void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<int> order)
+void PulseSupport::setCaptureDevicePriorityForCategory(CaptureCategory category, QList<int> order)
 {
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(category);
@@ -981,6 +981,12 @@ void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<
     }
     setDevicePriority(category, list);
 #endif
+}
+
+void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<int> order)
+{
+    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    setCaptureDevicePriorityForCategory(cat, order);
 }
 
 #ifdef HAVE_PULSEAUDIO
