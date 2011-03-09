@@ -30,6 +30,9 @@ int main(int argc, char** argv)
 
     app.setApplicationName("simplecapture");
 
+    /*
+     * Just create the capture window and show it.
+     */
     CaptureWidget w;
     w.show();
 

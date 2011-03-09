@@ -264,9 +264,14 @@ void MediaSource::setAudioCaptureDevice(const Phonon::AudioCaptureDevice& acDevi
     }
 }
 
-void MediaSource::setAudioCaptureDevice(Category category)
+void MediaSource::setAudioCaptureDevice(CaptureCategory category)
 {
     setAudioCaptureDevice(AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)));
+}
+
+void MediaSource::setAudioCaptureDevice(Category category)
+{
+    setAudioCaptureDevice(static_cast<CaptureCategory>(category));
 }
 #endif //PHONON_NO_AUDIOCAPTURE
 
@@ -291,9 +296,14 @@ void MediaSource::setVideoCaptureDevice(const Phonon::VideoCaptureDevice& vcDevi
     }
 }
 
-void MediaSource::setVideoCaptureDevice(Category category)
+void MediaSource::setVideoCaptureDevice(CaptureCategory category)
 {
     setVideoCaptureDevice(VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
+}
+
+void MediaSource::setVideoCaptureDevice(Category category)
+{
+    setVideoCaptureDevice(static_cast<CaptureCategory>(category));
 }
 #endif //PHONON_NO_VIDEOCAPTURE
 

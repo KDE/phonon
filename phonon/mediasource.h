@@ -286,7 +286,9 @@ class PHONON_EXPORT MediaSource
         /**
          * Sets the source to the preferred audio capture device for the specified category
          */
-        void setAudioCaptureDevice(Phonon::Category category);
+        void setAudioCaptureDevice(Phonon::CaptureCategory category);
+
+        PHONON_DEPRECATED void setAudioCaptureDevice(Phonon::Category category);
 #endif
 
 #ifndef PHONON_NO_VIDEOCAPTURE
@@ -303,7 +305,9 @@ class PHONON_EXPORT MediaSource
         /**
          * Sets the source to the preferred audio capture device for the specified category
          */
-        void setVideoCaptureDevice(Phonon::Category category);
+        void setVideoCaptureDevice(Phonon::CaptureCategory category);
+
+        PHONON_DEPRECATED void setVideoCaptureDevice(Phonon::Category category);
 #endif
 
 /*      post 4.0:

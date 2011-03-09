@@ -68,6 +68,22 @@ namespace Phonon
         }
         return QString();
     }
+
+    QString categoryToString(CaptureCategory c)
+    {
+        switch(c)
+        {
+        case Phonon::NoCategory:
+            break;
+        case Phonon::CommunicationCategory:
+            return QCoreApplication::translate("Phonon::", "Communication");
+        case Phonon::RecordingCategory:
+            return QCoreApplication::translate("Phonon::", "Recording");
+        case Phonon::ControlCategory:
+            return QCoreApplication::translate("Phonon::", "Control");
+        }
+        return QString();
+    }
 }
 
 static int registerPhononMetaTypes()
@@ -75,11 +91,17 @@ static int registerPhononMetaTypes()
     qRegisterMetaType<Phonon::State>();
     qRegisterMetaType<Phonon::ErrorType>();
     qRegisterMetaType<Phonon::Category>();
+    qRegisterMetaType<Phonon::CaptureCategory>();
 
     // need those for QSettings
     qRegisterMetaType<QList<int> >();
     qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
     qRegisterMetaType<Phonon::Experimental::VideoFrame2>();
+
+    qRegisterMetaType<Phonon::DeviceAccess>();
+    qRegisterMetaTypeStreamOperators<Phonon::DeviceAccess>("Phonon::DeviceAccess");
+    qRegisterMetaType<Phonon::DeviceAccessList>();
+    qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("Phonon::DeviceAccessList");
 
     return 0; // something
 }

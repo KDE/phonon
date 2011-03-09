@@ -85,7 +85,7 @@ void AVCaptureTest::testAudioCapture()
 {
     #ifndef PHONON_NO_AUDIOCAPTURE
     // Write device indices
-    QList<int> acList = m_pgc->audioCaptureDeviceListFor(Phonon::NoCategory);
+    QList<int> acList = m_pgc->audioCaptureDeviceListFor(Phonon::NoCaptureCategory);
     qDebug() << "Device list for audio capture" << acList;
 
     // Write device properties
