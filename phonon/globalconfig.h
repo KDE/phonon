@@ -52,24 +52,24 @@ namespace Phonon
         bool hideAdvancedDevices() const;
         void setHideAdvancedDevices(bool hide = true);
 
-        QHash<QByteArray, QVariant> deviceProperties(Phonon::ObjectDescriptionType deviceType, int index) const;
+        QHash<QByteArray, QVariant> deviceProperties(ObjectDescriptionType deviceType, int index) const;
 
-        void setAudioOutputDeviceListFor(Phonon::Category category, QList<int> order);
-        QList<int> audioOutputDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
-        int audioOutputDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        void setAudioOutputDeviceListFor(Category category, QList<int> order);
+        QList<int> audioOutputDeviceListFor(Category category, int override = AdvancedDevicesFromSettings) const;
+        int audioOutputDeviceFor(Category category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
 
 #ifndef PHONON_NO_VIDEOCAPTURE
-        void setVideoCaptureDeviceListFor(Phonon::Category category, QList<int> order);
-        QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
-        int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        void setVideoCaptureDeviceListFor(Category category, QList<int> order);
+        QList<int> videoCaptureDeviceListFor(Category category, int override = AdvancedDevicesFromSettings) const;
+        int videoCaptureDeviceFor(Category category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> videoCaptureDeviceProperties(int index) const;
 #endif //PHONON_NO_VIDEOCAPTURE
 
 #ifndef PHONON_NO_AUDIOCAPTURE
-        void setAudioCaptureDeviceListFor(Phonon::Category category, QList<int> order);
-        QList<int> audioCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
-        int audioCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+        void setAudioCaptureDeviceListFor(Category category, QList<int> order);
+        QList<int> audioCaptureDeviceListFor(Category category, int override = AdvancedDevicesFromSettings) const;
+        int audioCaptureDeviceFor(Category category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> audioCaptureDeviceProperties(int index) const;
 #endif //PHONON_NO_AUDIOCAPTURE
 
