@@ -23,6 +23,8 @@
 #include "iodevicestream_p.h"
 #include "abstractmediastream_p.h"
 
+#include <QtNetwork/QNetworkReply>
+
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -35,7 +37,8 @@ class IODeviceStreamPrivate : public AbstractMediaStreamPrivate
     Q_DECLARE_PUBLIC(IODeviceStream)
     protected:
         IODeviceStreamPrivate(QIODevice *_ioDevice)
-            : ioDevice(_ioDevice)
+            : ioDevice(_ioDevice),
+              networkReply(0)
         {
             if (!ioDevice->isOpen()) {
                 ioDevice->open(QIODevice::ReadOnly);
@@ -44,10 +47,14 @@ class IODeviceStreamPrivate : public AbstractMediaStreamPrivate
             Q_ASSERT(ioDevice->isReadable());
             streamSize = ioDevice->size();
             streamSeekable = !ioDevice->isSequential();
+
+            // Allow handling of QNetworkReplies WRT its isFinished() function..
+            networkReply = qobject_cast<QNetworkReply *>(_ioDevice);
         }
 
     private:
         QIODevice *ioDevice;
+        QNetworkReply *networkReply;
 };
 
 IODeviceStream::IODeviceStream(QIODevice *ioDevice, QObject *parent)
@@ -81,7 +88,11 @@ void IODeviceStream::needData()
 //    }
     writeData(data);
     if (d->ioDevice->atEnd()) {
-        endOfData();
+        // If the IO device was identified as QNetworkReply also take its
+        // isFinished() into account, when triggering EOD.
+        if (!d->networkReply || d->networkReply->isFinished()) {
+            endOfData();
+        }
     }
 }
 
