@@ -155,18 +155,7 @@ QT_END_NAMESPACE
 
 void Phonon::registerMetaTypes()
 {
-    // Register the PhononDeviceAccessList type if it has not been registered yet
-    if (qMetaTypeId<Phonon::DeviceAccess>())
-    {
-        qRegisterMetaType<Phonon::DeviceAccess>();
-        qRegisterMetaTypeStreamOperators<Phonon::DeviceAccess>("Phonon::DeviceAccess");
-    }
-
-    if (qMetaTypeId<Phonon::DeviceAccessList>())
-    {
-        qRegisterMetaType<Phonon::DeviceAccessList>();
-        qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("Phonon::DeviceAccessList");
-    }
+    // Deprecated, does nothing
 }
 
 // vim: sw=4 ts=4

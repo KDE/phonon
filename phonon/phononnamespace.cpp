@@ -81,6 +81,11 @@ static int registerPhononMetaTypes()
     qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
     qRegisterMetaType<Phonon::Experimental::VideoFrame2>();
 
+    qRegisterMetaType<Phonon::DeviceAccess>();
+    qRegisterMetaTypeStreamOperators<Phonon::DeviceAccess>("Phonon::DeviceAccess");
+    qRegisterMetaType<Phonon::DeviceAccessList>();
+    qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("Phonon::DeviceAccessList");
+
     return 0; // something
 }
 
