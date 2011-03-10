@@ -1095,7 +1095,7 @@ PulseStream *PulseSupport::registerCaptureStream(QString streamUuid, Category ca
     Q_UNUSED(category);
     return NULL;
 #else
-    return register_stream(s_captureStreams, streamUuid, static_cast<CaptureCategory>(category));
+    return register_stream(s_captureStreams, streamUuid, category);
 #endif
 }
 
