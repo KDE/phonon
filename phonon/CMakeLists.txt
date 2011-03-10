@@ -147,7 +147,6 @@ install(FILES
    path.h
    phonon_export.h
    phonondefs.h
-   phononnamespace.h
    platformplugin.h
    pulsesupport.h
    seekslider.h
@@ -158,7 +157,7 @@ install(FILES
    volumefadereffect.h
    volumefaderinterface.h
    volumeslider.h
-   ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
+   ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
 install(FILES org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
