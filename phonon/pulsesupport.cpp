@@ -156,8 +156,8 @@ static QMap<QString, PulseStream*> s_outputStreams;
 static const Phonon::CaptureCategory s_audioCapCategories[] = {
     Phonon::NoCaptureCategory,
     Phonon::CommunicationCaptureCategory,
-    Phonon::RecordingCategory,
-    Phonon::ControlCategory
+    Phonon::RecordingCaptureCategory,
+    Phonon::ControlCaptureCategory
 };
 
 static const int s_audioCapCategoriesCount = sizeof(s_audioCapCategories) / sizeof(Phonon::CaptureCategory);
@@ -728,11 +728,14 @@ PulseSupport::PulseSupport()
     //s_roleCategoryMap[QLatin1String("production")]; // No Mapping
     s_roleCategoryMap[QLatin1String("a11y")] = Phonon::AccessibilityCategory;
 
+#if __GNUC__
+#warning TODO 4.5 - this looks fishy
+#endif
     // Same thing for capture
     s_roleCaptureCategoryMap[QLatin1String("none")] = Phonon::NoCaptureCategory;
     s_roleCaptureCategoryMap[QLatin1String("phone")] = Phonon::CommunicationCaptureCategory;
-    s_roleCaptureCategoryMap[QLatin1String("production")] = Phonon::RecordingCategory;
-    s_roleCaptureCategoryMap[QLatin1String("a11y")] = Phonon::ControlCategory;
+    s_roleCaptureCategoryMap[QLatin1String("production")] = Phonon::RecordingCaptureCategory;
+    s_roleCaptureCategoryMap[QLatin1String("a11y")] = Phonon::ControlCaptureCategory;
 
     // To allow for easy debugging, give an easy way to disable this pulseaudio check
     QByteArray pulseenv = qgetenv("PHONON_PULSEAUDIO_DISABLE");

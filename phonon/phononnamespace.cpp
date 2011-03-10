@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -76,11 +76,11 @@ namespace Phonon
         case Phonon::NoCategory:
             break;
         case Phonon::CommunicationCategory:
-            return QCoreApplication::translate("Phonon::", "Communication");
-        case Phonon::RecordingCategory:
-            return QCoreApplication::translate("Phonon::", "Recording");
-        case Phonon::ControlCategory:
-            return QCoreApplication::translate("Phonon::", "Control");
+            return QCoreApplication::translate("Phonon::", "CaptureCommunication");
+        case Phonon::RecordingCaptureCategory:
+            return QCoreApplication::translate("Phonon::", "CaptureRecording");
+        case Phonon::ControlCaptureCategory:
+            return QCoreApplication::translate("Phonon::", "CaptureControl");
         }
         return QString();
     }
