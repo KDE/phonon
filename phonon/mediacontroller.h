@@ -60,15 +60,18 @@ class PHONON_EXPORT MediaController : public QObject
         Q_DECLARE_FLAGS(Features, Feature)
 
         enum NavigationMenu {
-            MainMenu,   /** < Main menu on a DVD for example. */
-            TitleMenu,  /** < Title Menu to access different titles on the media source.
-                              The title menu is usually where one would select
-                              the episode of a TV series DVD. It can be equal to
-                              the main menu but does not need to be. */
-            RootMenu,   /** < Root menu, will mostly be equal to main menu. */
-            AudioMenu,  /** < Audio menu for language and subtitle settings etc. */
-            AngleMenu,  /** < Angle menu. */
-            ChapterMenu /** < Chapter menu for chapter selection. */
+            RootMenu,     /** < Root/main menu. */
+            TitleMenu,    /** < Title Menu to access different titles on the media source.
+                                The title menu is usually where one would select
+                                the episode of a TV series DVD. It can be equal to
+                                the main menu but does not need to be. */
+            AudioMenu,    /** < Audio menu for language (and somtimes also subtitle)
+                                settings etc. */
+            SubtitleMenu, /** < Subtitle menu. Usually this represents the same menu
+                                as AudioMenu or is not present at all (in which case
+                                subtitle settings are propably also in the AudioMenu). */
+            ChapterMenu,  /** < Chapter menu for chapter selection. */
+            AngleMenu     /** < Angle menu. Rarely supported on any media source. */
         };
 
         MediaController(MediaObject *parent);
@@ -87,6 +90,9 @@ class PHONON_EXPORT MediaController : public QObject
          * Please note that keyboard shortucts will not be present in the returned
          * String, therefore it is probably not a good idea to use this function
          * if you are providing keyboard shortcuts for every other clickable.
+         *
+         * Please note that RootMenu has the string representation "Main Menu" as
+         * root is a rather technical term when talking about menus.
          *
          * Example:
          * \code
