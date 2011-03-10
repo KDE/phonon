@@ -141,7 +141,7 @@ void CaptureWidget::setupCaptureSource()
      * Phonon can easily get you the devices appropriate for a specific category.
      */
     if (m_captureNode == m_media) {
-        Phonon::MediaSource source(Phonon::CaptureDevice::VideoType, Phonon::NoCaptureCategory);
+        Phonon::MediaSource source(Phonon::Capture::VideoType, Phonon::NoCaptureCategory);
         m_media->setCurrentSource(source);
     }
     if (m_captureNode == m_avcapture) {

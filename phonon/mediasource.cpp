@@ -126,14 +126,14 @@ MediaSource::MediaSource(const VideoCaptureDevice& device)
 #endif //PHONON_NO_VIDEOCAPTURE
 
 #if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
-MediaSource::MediaSource(CaptureDevice::Type deviceType, CaptureCategory category)
+MediaSource::MediaSource(Capture::DeviceType deviceType, CaptureCategory category)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     switch (deviceType) {
-        case CaptureDevice::VideoType:
+        case Capture::VideoType:
             setVideoCaptureDevice(VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
             break;
-        case CaptureDevice::AudioType:
+        case Capture::AudioType:
             setAudioCaptureDevice(AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)));
             break;
         default:

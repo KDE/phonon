@@ -168,7 +168,7 @@ class PHONON_EXPORT MediaSource
         /**
          * Sets the source to the preferred audio capture device for the specified category
          */
-        MediaSource(CaptureDevice::Type deviceType, CaptureCategory category = NoCaptureCategory);
+        MediaSource(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
 #endif
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM

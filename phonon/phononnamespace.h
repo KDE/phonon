@@ -232,11 +232,11 @@ namespace Phonon
         ControlCaptureCategory = AccessibilityCategory
     };
 
-    namespace CaptureDevice {
+    namespace Capture {
         /**
          * Describes the type of a capture device, audio or video
          */
-        enum Type {
+        enum DeviceType {
             AudioType,
             VideoType
         };
