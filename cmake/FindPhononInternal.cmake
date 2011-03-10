@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2008, Matthias Kretz <kretz@kde.org>
 # Copyright (c) 2010, Mark Kretschmann <kretschmann@kde.org>
-# Copyright (c) 2010-2011, Harald Sitter <sitter@kde.org>
+# Copyright (c) 2010, Harald Sitter <sitter@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -40,25 +40,15 @@ if (NOT PHONON_INTERNAL)
 macro(_phonon_find_version)
    if (APPLE AND EXISTS "${PHONON_INCLUDE_DIR}/Headers/phononnamespace.h")
       set(_phonon_namespace_header_file "${PHONON_INCLUDE_DIR}/Headers/phononnamespace.h")
-      set(_phonon_version_header_file "${PHONON_INCLUDE_DIR}/Headers/phononversion.h")
       set(_phonon_pulsesupport_header_file "${PHONON_INCLUDE_DIR}/Headers/pulsesupport.h")
    else ()
       set(_phonon_namespace_header_file "${PHONON_INCLUDE_DIR}/phonon/phononnamespace.h")
-      set(_phonon_version_header_file "${PHONON_INCLUDE_DIR}/phonon/phononversion.h")
       set(_phonon_pulsesupport_header_file "${PHONON_INCLUDE_DIR}/phonon/pulsesupport.h")
    endif (APPLE AND EXISTS "${PHONON_INCLUDE_DIR}/Headers/phononnamespace.h")
 
-   file(READ ${_phonon_version_header_file} _phonon_header LIMIT 5000 OFFSET 1000)
+   file(READ ${_phonon_namespace_header_file} _phonon_header LIMIT 5000 OFFSET 1000)
    string(REGEX MATCH "define PHONON_VERSION_STR \"(4\\.[0-9]+\\.[0-9a-z]+)\"" _phonon_version_match "${_phonon_header}")
    set(PHONON_VERSION "${CMAKE_MATCH_1}")
-
-    # Older versions of Phonon have the version string in the namespace header
-    if(NOT PHONON_VERSION)
-        file(READ ${_phonon_namespace_header_file} _phonon_header LIMIT 5000 OFFSET 1000)
-        string(REGEX MATCH "define PHONON_VERSION_STR \"(4\\.[0-9]+\\.[0-9a-z]+)\"" _phonon_version_match "${_phonon_header}")
-        set(PHONON_VERSION "${CMAKE_MATCH_1}")
-    endif(NOT PHONON_VERSION)
-
    message(STATUS "Phonon Version: ${PHONON_VERSION}")
 endmacro(_phonon_find_version)
 
@@ -240,7 +230,7 @@ endif(APPLE)
 # By default cmake builds the targets with full RPATH to everything in the build directory,
 # but then removes the RPATH when installing.
 # These two options below make it set the RPATH of the installed targets to all
-# RPATH directories outside the current CMAKE_BINARY_DIR and also the library
+# RPATH directories outside the current CMAKE_BINARY_DIR and also the library 
 # install directory. Alex
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
 set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
