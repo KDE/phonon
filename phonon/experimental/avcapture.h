@@ -55,9 +55,8 @@ namespace Experimental
      *
      * This class gives you access to the capture capabilities of the backend.
      * There might be more than only one possible capture source, for audio, as
-     * well as for video. The list of available sources is available through
-     * BackendCapabilities::availableAudioCaptureDevices and
-     * BackendCapabilities::availableVideoCaptureDevices.
+     * well as for video. A prefferable device may easily be obtained by providing
+     * a capture category.
      *
      * @ingroup Recording
      * @author Matthias Kretz <kretz@kde.org>
@@ -73,44 +72,59 @@ namespace Experimental
         Q_PROPERTY(Phonon::VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)
         public:
             /**
+             * Constructs an AvCapture with the devices preferred for the specified
+             * capture category.
+             *
+             * @param category Used to determine what devices are most suited for
+             * the AvCapture.
+             *
+             * @see CaptureCategory
+             */
+            AvCapture(Phonon::CaptureCategory category, QObject *parent = NULL);
+
+            /**
              * Returns the current state of the capture.
              *
-             * \li If only the audio capture device is valid, it returns the audio capture state.
-             * \li If only the video capture device is valid, it returns the video capture state.
-             * \li If both the audio and video capture devices are valid, it only returns the
+             * @li If only the audio capture device is valid, it returns the audio capture state.
+             * @li If only the video capture device is valid, it returns the video capture state.
+             * @li If both the audio and video capture devices are valid, it only returns the
              * video capture state.
              */
             State state() const;
 
             /**
              * Returns the currently used capture source for the audio signal.
-             *
-             * @see AudioCaptureDevice
-             * @see setAudioCaptureDevice(const AudioCaptureDevice &)
-             * @see setAudioCaptureDevice(int)
              */
             Phonon::AudioCaptureDevice audioCaptureDevice() const;
 
             /**
              * Returns the currently used capture source for the video signal.
-             *
-             * @see VideoCaptureDevice
-             * @see setVideoCaptureDevice(const VideoCaptureDevice &)
-             * @see setVideoCaptureDevice(int)
              */
             Phonon::VideoCaptureDevice videoCaptureDevice() const;
 
             /**
+             * Sets both the video and audio devices to the ones most suited for the
+             * specified category
+             *
+             * @param category Used to determine what devices are most suited for
+             * the AvCapture.
+             */
+            void setCaptureDevices(Phonon::CaptureCategory category);
+
+            /**
              * Sets the audio capture source to use.
              *
-             * @param source An object of class AudioCaptureDevice. A list of
-             * available objects can be queried from
-             * BackendCapabilities::availableAudioCaptureDevices.
+             * @param source An object of class AudioCaptureDevice.
              *
-             * @see audioCaptureDevice
-             * @see setAudioCaptureDevice(int)
              */
             void setAudioCaptureDevice(const Phonon::AudioCaptureDevice &source);
+
+            /**
+             * Sets the audio capture device by using a capture category to get
+             * the appropriate device.
+             *
+             * @param category Capture category to use for getting a device
+             */
             void setAudioCaptureDevice(Phonon::CaptureCategory category);
 
             PHONON_DEPRECATED void setAudioCaptureDevice(Phonon::Category category);
@@ -118,14 +132,19 @@ namespace Experimental
             /**
              * Sets the video capture source to use.
              *
-             * @param source An object of class VideoCaptureDevice. A list of
-             * available objects can be queried from
-             * BackendCapabilities::availableVideoCaptureDevices.
+             * @param source An object of class VideoCaptureDevice.
              *
              * @see videoCaptureDevice
              * @see setVideoCaptureDevice(int)
              */
             void setVideoCaptureDevice(const Phonon::VideoCaptureDevice &source);
+
+            /**
+             * Sets the audio capture device by using a capture category to get
+             * the appropriate device.
+             *
+             * @param category Capture category to use for getting a device
+             */
             void setVideoCaptureDevice(Phonon::CaptureCategory category);
 
             PHONON_DEPRECATED void setVideoCaptureDevice(Phonon::Category category);

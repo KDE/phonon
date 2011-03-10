@@ -145,11 +145,7 @@ void CaptureWidget::setupCaptureSource()
         m_media->setCurrentSource(source);
     }
     if (m_captureNode == m_avcapture) {
-        m_avcapture->setVideoCaptureDevice(Phonon::NoCaptureCategory);
-    }
-
-    if (m_captureNode == m_avcapture) {
-        m_avcapture->setAudioCaptureDevice(Phonon::NoCaptureCategory);
+        m_avcapture->setCaptureDevices(Phonon::NoCaptureCategory);
     }
 
     // Connect the stateChanged signal from the object used for capture to our handling slot

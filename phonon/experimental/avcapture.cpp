@@ -42,6 +42,12 @@ namespace Experimental
 {
 PHONON_OBJECT_IMPL
 
+AvCapture::AvCapture(Phonon::CaptureCategory category, QObject *parent)
+    : QObject(parent), MediaNode(*new AvCapturePrivate())
+{
+    setCaptureDevices(category);
+}
+
 Phonon::State AvCapture::state() const
 {
     K_D(const AvCapture);
@@ -73,6 +79,12 @@ void AvCapture::stop()
     if (d->backendObject()) {
         INTERFACE_CALL(stop());
     }
+}
+
+void AvCapture::setCaptureDevices(Phonon::CaptureCategory category)
+{
+    setAudioCaptureDevice(category);
+    setVideoCaptureDevice(category);
 }
 
 Phonon::AudioCaptureDevice AvCapture::audioCaptureDevice() const
