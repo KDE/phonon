@@ -120,43 +120,44 @@ install(TARGETS phonon ${INSTALL_TARGETS_DEFAULT_ARGS})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h)
 
 install(FILES
-   phonon_export.h
-   objectdescription.h
-   objectdescriptionmodel.h
-   ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
-   mediasource.h
-   mrl.h
-   abstractmediastream.h
-   streaminterface.h
-   mediaobject.h
-   audiooutput.h
-   medianode.h
-   path.h
-   effectparameter.h
-   effect.h
-   effectinterface.h
-   volumefadereffect.h
-   volumefaderinterface.h
    abstractaudiooutput.h
+   abstractmediastream.h
    abstractvideooutput.h
-   backendcapabilities.h
-   phonondefs.h
-   backendinterface.h
-   mediaobjectinterface.h
-   audiooutputinterface.h
    addoninterface.h
-   mediacontroller.h
-   videowidget.h
-   videowidgetinterface.h
-   videoplayer.h
-   seekslider.h
-   volumeslider.h
-   effectwidget.h
-   platformplugin.h
    audiodataoutput.h
    audiodataoutputinterface.h
+   audiooutput.h
+   audiooutputinterface.h
+   backendcapabilities.h
+   backendinterface.h
+   effect.h
+   effectinterface.h
+   effectparameter.h
+   effectwidget.h
    globalconfig.h
+   mediacontroller.h
+   medianode.h
+   mediaobject.h
+   mediaobjectinterface.h
+   mediasource.h
+   mrl.h
+   objectdescription.h
+   objectdescriptionmodel.h
+   path.h
+   phonon_export.h
+   phonondefs.h
+   phononnamespace.h
+   platformplugin.h
    pulsesupport.h
+   seekslider.h
+   streaminterface.h
+   videoplayer.h
+   videowidget.h
+   videowidgetinterface.h
+   volumefadereffect.h
+   volumefaderinterface.h
+   volumeslider.h
+   ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
 install(FILES org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
