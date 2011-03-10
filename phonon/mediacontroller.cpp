@@ -176,7 +176,7 @@ void MediaController::setCurrentMenu(NavigationMenu menu)
 {
     IFACE;
     iface->interfaceCall(AddonInterface::NavigationInterface,
-                         AddonInterface::setMenu, QList<QVariant>() << QVariant(menu));
+                         AddonInterface::setMenu, QList<QVariant>() << QVariant::fromValue(menu));
 }
 // -- Title Control -- //
 
