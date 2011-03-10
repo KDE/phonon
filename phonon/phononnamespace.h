@@ -232,6 +232,16 @@ namespace Phonon
         ControlCaptureCategory = AccessibilityCategory
     };
 
+    namespace CaptureDevice {
+        /**
+         * Describes the type of a capture device, audio or video
+         */
+        enum Type {
+            AudioType,
+            VideoType
+        };
+    }
+
     /**
      * Tells your program how to recover from an error.
      *

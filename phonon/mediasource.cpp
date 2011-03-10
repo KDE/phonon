@@ -110,20 +110,37 @@ MediaSource::MediaSource(const DeviceAccess &access)
 #endif //PHONON_NO_AUDIOCAPTURE && PHONON_NO_VIDEOCAPTURE
 
 #ifndef PHONON_NO_AUDIOCAPTURE
-MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
+MediaSource::MediaSource(const Phonon::AudioCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
-    setAudioCaptureDevice(acDevice);
+    setAudioCaptureDevice(device);
 }
 #endif //PHONON_NO_AUDIOCAPTURE
 
 #ifndef PHONON_NO_VIDEOCAPTURE
-MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
+MediaSource::MediaSource(const Phonon::VideoCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
-    setVideoCaptureDevice(vcDevice);
+    setVideoCaptureDevice(device);
 }
 #endif //PHONON_NO_VIDEOCAPTURE
+
+#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
+MediaSource::MediaSource(CaptureDevice::Type deviceType, CaptureCategory category)
+    : d(new MediaSourcePrivate(CaptureDevice))
+{
+    switch (deviceType) {
+        case CaptureDevice::VideoType:
+            setVideoCaptureDevice(VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
+            break;
+        case CaptureDevice::AudioType:
+            setAudioCaptureDevice(AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)));
+            break;
+        default:
+            d->type = Invalid;
+    }
+}
+#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 MediaSource::MediaSource(AbstractMediaStream *stream)
@@ -266,29 +283,20 @@ AudioCaptureDevice MediaSource::audioCaptureDevice() const
     return d->audioCaptureDevice;
 }
 
-void MediaSource::setAudioCaptureDevice(const Phonon::AudioCaptureDevice &acDevice)
+// NOTE this is private
+void MediaSource::setAudioCaptureDevice(const Phonon::AudioCaptureDevice& device)
 {
-    d->audioCaptureDevice = acDevice;
+    d->audioCaptureDevice = device;
 
     // Grab the device access list from the properties
-    if (acDevice.propertyNames().contains("deviceAccessList") &&
-            !acDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+    if (device.propertyNames().contains("deviceAccessList") &&
+            !device.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
         d->type = MediaSource::CaptureDevice;
-        d->deviceAccessList = acDevice.property("deviceAccessList").value<DeviceAccessList>();
+        d->deviceAccessList = device.property("deviceAccessList").value<DeviceAccessList>();
     } else {
         // Invalidate the media source
         d->type = Invalid;
     }
-}
-
-void MediaSource::setAudioCaptureDevice(CaptureCategory category)
-{
-    setAudioCaptureDevice(AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)));
-}
-
-void MediaSource::setAudioCaptureDevice(Category category)
-{
-    setAudioCaptureDevice(static_cast<CaptureCategory>(category));
 }
 #endif //PHONON_NO_AUDIOCAPTURE
 
@@ -298,29 +306,20 @@ VideoCaptureDevice MediaSource::videoCaptureDevice() const
     return d->videoCaptureDevice;
 }
 
-void MediaSource::setVideoCaptureDevice(const Phonon::VideoCaptureDevice &vcDevice)
+// NOTE this is private
+void MediaSource::setVideoCaptureDevice(const Phonon::VideoCaptureDevice& device)
 {
-    d->videoCaptureDevice = vcDevice;
+    d->videoCaptureDevice = device;
 
     // Grab the device access list from the properties
-    if (vcDevice.propertyNames().contains("deviceAccessList") &&
-            !vcDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+    if (device.propertyNames().contains("deviceAccessList") &&
+            !device.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
         d->type = MediaSource::CaptureDevice;
-        d->deviceAccessList = vcDevice.property("deviceAccessList").value<DeviceAccessList>();
+        d->deviceAccessList = device.property("deviceAccessList").value<DeviceAccessList>();
     } else {
         // Invalidate the media source
         d->type = Invalid;
     }
-}
-
-void MediaSource::setVideoCaptureDevice(CaptureCategory category)
-{
-    setVideoCaptureDevice(VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
-}
-
-void MediaSource::setVideoCaptureDevice(Category category)
-{
-    setVideoCaptureDevice(static_cast<CaptureCategory>(category));
 }
 #endif //PHONON_NO_VIDEOCAPTURE
 

@@ -154,14 +154,21 @@ class PHONON_EXPORT MediaSource
         /**
         * Creates a MediaSource object for audio capture devices.
         */
-        MediaSource(const Phonon::AudioCaptureDevice& acDevice);
+        MediaSource(const Phonon::AudioCaptureDevice& device);
 #endif
 
 #ifndef PHONON_NO_VIDEOCAPTURE
         /**
         * Creates a MediaSource object for video capture devices.
         */
-        MediaSource(const Phonon::VideoCaptureDevice& vcDevice);
+        MediaSource(const Phonon::VideoCaptureDevice& device);
+#endif
+
+#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
+        /**
+         * Sets the source to the preferred audio capture device for the specified category
+         */
+        MediaSource(CaptureDevice::Type deviceType, CaptureCategory category = NoCaptureCategory);
 #endif
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -297,18 +304,6 @@ class PHONON_EXPORT MediaSource
          * Returns the audio capture device for the media source if applicable.
          */
         AudioCaptureDevice audioCaptureDevice() const;
-
-        /**
-         * Sets the source to the specified audio capture device
-         */
-        void setAudioCaptureDevice(const Phonon::AudioCaptureDevice& acDevice);
-
-        /**
-         * Sets the source to the preferred audio capture device for the specified category
-         */
-        void setAudioCaptureDevice(Phonon::CaptureCategory category);
-
-        PHONON_DEPRECATED void setAudioCaptureDevice(Phonon::Category category);
 #endif
 
 #ifndef PHONON_NO_VIDEOCAPTURE
@@ -316,18 +311,6 @@ class PHONON_EXPORT MediaSource
          * Returns the video capture device for the media source if applicable.
          */
         VideoCaptureDevice videoCaptureDevice() const;
-
-        /**
-         * Sets the source to the specified video capture device
-         */
-        void setVideoCaptureDevice(const Phonon::VideoCaptureDevice& vcDevice);
-
-        /**
-         * Sets the source to the preferred audio capture device for the specified category
-         */
-        void setVideoCaptureDevice(Phonon::CaptureCategory category);
-
-        PHONON_DEPRECATED void setVideoCaptureDevice(Phonon::Category category);
 #endif
 
 /*      post 4.0:
@@ -345,6 +328,17 @@ class PHONON_EXPORT MediaSource
          * \param access How can the device be accessed (driver name - alsa, oss, etc.) and device name
          */
         MediaSource(const DeviceAccess &access);
+
+    private:
+        /**
+         * Sets the source to the specified audio capture device
+         */
+        void setAudioCaptureDevice(const Phonon::AudioCaptureDevice& device);
+
+        /**
+         * Sets the source to the specified video capture device
+         */
+        void setVideoCaptureDevice(const Phonon::VideoCaptureDevice& device);
 };
 
 } // namespace Phonon
