@@ -43,7 +43,19 @@ namespace Phonon
  * Converts an old Category used for capture to the dedicated CaptureCategory
  * Only for internal compat purpouses!
  */
-    PHONON_EXPORT CaptureCategory categoryToCaptureCategory(Category c);
+    inline CaptureCategory categoryToCaptureCategory(Category c)
+    {
+        switch (c) {
+            case NoCategory:
+                return NoCaptureCategory;
+            case CommunicationCategory:
+                return CommunicationCaptureCategory;
+            case AccessibilityCategory:
+                return ControlCaptureCategory;
+            default:
+                return NoCaptureCategory;
+        }
+    }
 } // namespace Phonon
 
 // vim: sw=4 ts=4 tw=80

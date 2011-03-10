@@ -47,20 +47,6 @@ namespace Phonon
         return PHONON_VERSION_STR;
     }
 
-    CaptureCategory categoryToCaptureCategory(Category c)
-    {
-        switch (c) {
-            case NoCategory:
-                return NoCaptureCategory;
-            case CommunicationCategory:
-                return CommunicationCaptureCategory;
-            case AccessibilityCategory:
-                return ControlCaptureCategory;
-            default:
-                return NoCaptureCategory;
-        }
-    }
-
     QString categoryToString(Category c)
     {
         switch(c)
