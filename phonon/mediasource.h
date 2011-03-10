@@ -148,20 +148,20 @@ class PHONON_EXPORT MediaSource
          * has more than one CD drive. It is recommended to use Solid to retrieve the device name in
          * a portable way.
          */
-        MediaSource(Phonon::DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
+        MediaSource(DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
 #ifndef PHONON_NO_AUDIOCAPTURE
         /**
         * Creates a MediaSource object for audio capture devices.
         */
-        MediaSource(const Phonon::AudioCaptureDevice& device);
+        MediaSource(const AudioCaptureDevice& device);
 #endif
 
 #ifndef PHONON_NO_VIDEOCAPTURE
         /**
         * Creates a MediaSource object for video capture devices.
         */
-        MediaSource(const Phonon::VideoCaptureDevice& device);
+        MediaSource(const VideoCaptureDevice& device);
 #endif
 
 #if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
@@ -278,7 +278,7 @@ class PHONON_EXPORT MediaSource
          * Returns the disc type of the MediaSource if type() == Disc; otherwise returns \ref
          * NoDisc.
          */
-        Phonon::DiscType discType() const;
+        DiscType discType() const;
 
         /**
          * Returns the access list for the device of this media source. Valid for capture devices.
@@ -333,12 +333,12 @@ class PHONON_EXPORT MediaSource
         /**
          * Sets the source to the specified audio capture device
          */
-        void setAudioCaptureDevice(const Phonon::AudioCaptureDevice& device);
+        void setAudioCaptureDevice(const AudioCaptureDevice& device);
 
         /**
          * Sets the source to the specified video capture device
          */
-        void setVideoCaptureDevice(const Phonon::VideoCaptureDevice& device);
+        void setVideoCaptureDevice(const VideoCaptureDevice& device);
 };
 
 } // namespace Phonon

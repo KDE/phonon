@@ -84,7 +84,7 @@ MediaSource::MediaSource(const QUrl &url)
     }
 }
 
-MediaSource::MediaSource(Phonon::DiscType dt, const QString &deviceName)
+MediaSource::MediaSource(DiscType dt, const QString &deviceName)
     : d(new MediaSourcePrivate(Disc))
 {
     if (dt == NoDisc) {
@@ -110,7 +110,7 @@ MediaSource::MediaSource(const DeviceAccess &access)
 #endif //PHONON_NO_AUDIOCAPTURE && PHONON_NO_VIDEOCAPTURE
 
 #ifndef PHONON_NO_AUDIOCAPTURE
-MediaSource::MediaSource(const Phonon::AudioCaptureDevice& device)
+MediaSource::MediaSource(const AudioCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     setAudioCaptureDevice(device);
@@ -118,7 +118,7 @@ MediaSource::MediaSource(const Phonon::AudioCaptureDevice& device)
 #endif //PHONON_NO_AUDIOCAPTURE
 
 #ifndef PHONON_NO_VIDEOCAPTURE
-MediaSource::MediaSource(const Phonon::VideoCaptureDevice& device)
+MediaSource::MediaSource(const VideoCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     setVideoCaptureDevice(device);
@@ -250,7 +250,7 @@ QUrl MediaSource::url() const
     return d->url;
 }
 
-Phonon::DiscType MediaSource::discType() const
+DiscType MediaSource::discType() const
 {
     return d->discType;
 }
@@ -284,7 +284,7 @@ AudioCaptureDevice MediaSource::audioCaptureDevice() const
 }
 
 // NOTE this is private
-void MediaSource::setAudioCaptureDevice(const Phonon::AudioCaptureDevice& device)
+void MediaSource::setAudioCaptureDevice(const AudioCaptureDevice& device)
 {
     d->audioCaptureDevice = device;
 
@@ -307,7 +307,7 @@ VideoCaptureDevice MediaSource::videoCaptureDevice() const
 }
 
 // NOTE this is private
-void MediaSource::setVideoCaptureDevice(const Phonon::VideoCaptureDevice& device)
+void MediaSource::setVideoCaptureDevice(const VideoCaptureDevice& device)
 {
     d->videoCaptureDevice = device;
 
