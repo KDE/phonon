@@ -60,15 +60,15 @@ class PHONON_EXPORT MediaController : public QObject
         Q_DECLARE_FLAGS(Features, Feature)
 
         enum NavigationMenu {
-            MenuMain,   /** < Main menu on a DVD for example. */
-            MenuTitle,  /** < Title Menu to access different titles on the media source.
+            MainMenu,   /** < Main menu on a DVD for example. */
+            TitleMenu,  /** < Title Menu to access different titles on the media source.
                               The title menu is usually where one would select
                               the episode of a TV series DVD. It can be equal to
                               the main menu but does not need to be. */
-            MenuRoot,   /** < Root menu, will mostly be equal to main menu. */
-            MenuAudio,  /** < Audio menu for language and subtitle settings etc. */
-            MenuAngle,  /** < Angle menu. */
-            MenuChapter /** < Chapter menu for chapter selection. */
+            RootMenu,   /** < Root menu, will mostly be equal to main menu. */
+            AudioMenu,  /** < Audio menu for language and subtitle settings etc. */
+            AngleMenu,  /** < Angle menu. */
+            ChapterMenu /** < Chapter menu for chapter selection. */
         };
 
         MediaController(MediaObject *parent);
