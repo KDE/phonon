@@ -197,7 +197,7 @@ static void createGenericDevices()
     index = s_deviceIndexCounter++;
     s_captureDeviceIndexes.insert(QLatin1String("source:default"), index);
     s_captureDevices.insert(index, AudioDevice(QLatin1String("source:default"), QObject::tr("PulseAudio Sound Server"), QLatin1String("audio-backend-pulseaudio"), 0));
-    for (int i = 0; i <= s_audioCapCategoriesCount; ++i) {
+    for (int i = 0; i < s_audioCapCategoriesCount; ++i) {
         Phonon::CaptureCategory cat = s_audioCapCategories[i];
         s_captureDevicePriorities[cat].insert(0, index);
     }
@@ -334,7 +334,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             }
         }
         logMessage(QString("Capture Device Priority List:"));
-        for (int i = 0; i <= s_audioCapCategoriesCount; ++i) {
+        for (int i = 0; i < s_audioCapCategoriesCount; ++i) {
             Phonon::CaptureCategory cat = s_audioCapCategories[i];
             if (s_captureDevicePriorities.contains(cat)) {
                 logMessage(QString("  Phonon Category %1").arg(cat));
