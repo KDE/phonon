@@ -31,6 +31,7 @@
 #include "avcapture_p.h"
 #include "factory_p.h"
 #include "globalconfig.h"
+#include "phononnamespace_p.h"
 
 #define PHONON_CLASSNAME AvCapture
 #define PHONON_INTERFACENAME AvCaptureInterface
@@ -103,7 +104,7 @@ void AvCapture::setAudioCaptureDevice(Phonon::CaptureCategory category)
 
 PHONON_DEPRECATED void AvCapture::setAudioCaptureDevice(Phonon::Category category)
 {
-    setAudioCaptureDevice(static_cast<Phonon::CaptureCategory>(category));
+    setAudioCaptureDevice(Phonon::categoryToCaptureCategory(category));
 }
 
 Phonon::VideoCaptureDevice AvCapture::videoCaptureDevice() const
@@ -140,7 +141,7 @@ void AvCapture::setVideoCaptureDevice(Phonon::CaptureCategory category)
 
 void AvCapture::setVideoCaptureDevice(Phonon::Category category)
 {
-    setVideoCaptureDevice(static_cast<Phonon::CaptureCategory>(category));
+    setVideoCaptureDevice(Phonon::categoryToCaptureCategory(category));
 }
 
 bool AvCapturePrivate::aboutToDeleteBackendObject()

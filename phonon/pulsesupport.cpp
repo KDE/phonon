@@ -39,6 +39,8 @@
 
 #include "pulsesupport.h"
 
+#include "phononnamespace_p.h"
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -1037,7 +1039,7 @@ void PulseSupport::setCaptureDevicePriorityForCategory(CaptureCategory category,
 
 void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<int> order)
 {
-    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    CaptureCategory cat = categoryToCaptureCategory(category);
     setCaptureDevicePriorityForCategory(cat, order);
 }
 
