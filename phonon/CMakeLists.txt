@@ -1,4 +1,3 @@
-
 if (PHONON_BUILD_TESTS)
     add_subdirectory(tests)
 endif (PHONON_BUILD_TESTS)
@@ -118,7 +117,7 @@ set_target_properties(phonon PROPERTIES
                              DEFINE_SYMBOL MAKE_PHONON_LIB
                              )
 install(TARGETS phonon ${INSTALL_TARGETS_DEFAULT_ARGS})
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononversion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h)
 
 install(FILES
    phonon_export.h

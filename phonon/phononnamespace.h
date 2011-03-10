@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2005-2008 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -17,31 +17,13 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONONNAMESPACE_H
 #define PHONONNAMESPACE_H
 
 #include "phonon_export.h"
-
-/**
- * Helper macro that can be used like
- * \code
- * #if (PHONON_VERSION >= PHONON_VERSION_CHECK(4, 4, 0))
- * \endcode
- */
-#define PHONON_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
-
-/**
- * PHONON_VERSION is (major << 16) + (minor << 8) + patch.
- */
-#define PHONON_VERSION PHONON_VERSION_CHECK(@PHONON_LIB_MAJOR_VERSION@, @PHONON_LIB_MINOR_VERSION@, @PHONON_LIB_PATCH_VERSION@)
-
-/**
- * PHONON_VERSION_STR is "major.minor.patch". E.g. "4.2.1"
- */
-#define PHONON_VERSION_STR "@PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONON_LIB_PATCH_VERSION@"
+#include "phononversion.h"
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
