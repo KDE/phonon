@@ -147,16 +147,18 @@ void MediaController::setCurrentChapter(int titleNumber)
 QString MediaController::navigationMenuToString(NavigationMenu menu)
 {
     switch (menu) {
-    case RootMenu :
+    case RootMenu:
         return tr("Main Menu");
     case TitleMenu :
         return tr("Title Menu");
-    case AudioMenu :
+    case AudioMenu:
         return tr("Audio Menu");
-    case AngleMenu :
-        return tr("Angle Menu");
-    case ChapterMenu :
+    case SubtitleMenu:
+        return tr("Subtitle Menu");
+    case ChapterMenu:
         return tr("Chapter Menu");
+    case AngleMenu:
+        return tr("Angle Menu");
     }
     return QString();
 }
