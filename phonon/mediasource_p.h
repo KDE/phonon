@@ -69,18 +69,13 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         QPointer<AbstractMediaStream> stream;
         QIODevice *ioDevice;
 
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
+#ifndef PHONON_NO_CAPTURE
         void setCaptureDevice(Capture::DeviceType deviceType, CaptureCategory category);
         void setCaptureDevices(const AudioCaptureDevice &audioDevice, const VideoCaptureDevice &videoDevice);
-#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
 
-#ifndef PHONON_NO_AUDIOCAPTURE
         AudioCaptureDevice audioCaptureDevice;
-#endif
-
-#ifndef PHONON_NO_VIDEOCAPTURE
         VideoCaptureDevice videoCaptureDevice;
-#endif
+#endif // PHONON_NO_CAPTURE
 
         //QList<MediaSource> linkedSources;
         bool autoDelete;

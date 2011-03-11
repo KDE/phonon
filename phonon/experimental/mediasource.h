@@ -46,12 +46,12 @@ class PHONONEXPERIMENTAL_EXPORT MediaSource : public Phonon::MediaSource
          * This constructor is fast thanks to explicit sharing.
          */
         MediaSource(const MediaSource &rhs);
-        
+
         MediaSource(const QList<Phonon::MediaSource> &mediaList);
-        
-#ifndef PHONON_NO_VIDEOCAPTURE
+
+#ifndef PHONON_NO_CAPTURE
         MediaSource(const VideoCaptureDevice &videoDevice);
-#endif // PHONON_NO_VIDEOCAPTURE
+#endif // PHONON_NO_CAPTURE
 
 
         /**
@@ -66,9 +66,9 @@ class PHONONEXPERIMENTAL_EXPORT MediaSource : public Phonon::MediaSource
          */
         bool operator==(const MediaSource &rhs) const;
 
-#ifndef PHONON_NO_VIDEOCAPTURE
+#ifndef PHONON_NO_CAPTURE
         VideoCaptureDevice videoCaptureDevice() const;
-#endif // PHONON_NO_VIDEOCAPTURE
+#endif // PHONON_NO_CAPTURE
 
         QList<Phonon::MediaSource> substreams() const;
 };

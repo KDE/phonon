@@ -102,29 +102,25 @@ MediaSource::MediaSource(const DeviceAccess &access)
     d->deviceAccessList.append(access);
 }
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 MediaSource::MediaSource(const AudioCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     d->setCaptureDevices(device, VideoCaptureDevice());
 }
-#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef PHONON_NO_VIDEOCAPTURE
 MediaSource::MediaSource(const VideoCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     d->setCaptureDevices(AudioCaptureDevice(), device);
 }
-#endif //PHONON_NO_VIDEOCAPTURE
 
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
 MediaSource::MediaSource(Capture::DeviceType deviceType, CaptureCategory category)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     d->setCaptureDevice(deviceType, category);
 }
-#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
+#endif // PHONON_NO_CAPTURE
 
 MediaSource::MediaSource(AbstractMediaStream *stream)
     : d(new MediaSourcePrivate(Stream))
@@ -253,21 +249,17 @@ void MediaSourcePrivate::setStream(AbstractMediaStream *s)
     stream = s;
 }
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 AudioCaptureDevice MediaSource::audioCaptureDevice() const
 {
     return d->audioCaptureDevice;
 }
-#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef PHONON_NO_VIDEOCAPTURE
 VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
     return d->videoCaptureDevice;
 }
-#endif //PHONON_NO_VIDEOCAPTURE
 
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
 void MediaSourcePrivate::setCaptureDevice(Capture::DeviceType deviceType, CaptureCategory category)
 {
     switch (deviceType) {
@@ -301,7 +293,7 @@ void MediaSourcePrivate::setCaptureDevices(const AudioCaptureDevice &audioDevice
 
     type = deviceAccessList.isEmpty() ? MediaSource::Invalid : MediaSource::CaptureDevice;
 }
-#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
+#endif //PHONON_NO_CAPTURE
 
 } // namespace Phonon
 

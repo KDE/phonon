@@ -28,7 +28,7 @@ namespace Phonon
 namespace Experimental
 {
 
-#ifndef PHONON_NO_VIDEOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 {
     QList<Phonon::VideoCaptureDevice> phononList;
@@ -41,7 +41,7 @@ QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 
     return experimentalList;
 }
-#endif
+#endif // PHONON_NO_CAPTURE
 
 } // namespace Experimental
 } // namespace Phonon

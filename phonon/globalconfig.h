@@ -59,27 +59,24 @@ namespace Phonon
         int audioOutputDeviceFor(Category category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> audioOutputDeviceProperties(int index) const;
 
-#ifndef PHONON_NO_VIDEOCAPTURE
+#ifndef PHONON_NO_CAPTURE
         void setVideoCaptureDeviceListFor(CaptureCategory category, QList<int> order);
         QList<int> videoCaptureDeviceListFor(CaptureCategory category, int override = AdvancedDevicesFromSettings) const;
         int videoCaptureDeviceFor(CaptureCategory category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> videoCaptureDeviceProperties(int index) const;
 
-        PHONON_DEPRECATED void setVideoCaptureDeviceListFor(Category category, QList<int> order);
-        PHONON_DEPRECATED QList<int> videoCaptureDeviceListFor(Category category, int override = AdvancedDevicesFromSettings) const;
-        PHONON_DEPRECATED int videoCaptureDeviceFor(Category category, int override = AdvancedDevicesFromSettings) const;
-#endif //PHONON_NO_VIDEOCAPTURE
-
-#ifndef PHONON_NO_AUDIOCAPTURE
         void setAudioCaptureDeviceListFor(CaptureCategory category, QList<int> order);
         QList<int> audioCaptureDeviceListFor(CaptureCategory category, int override = AdvancedDevicesFromSettings) const;
         int audioCaptureDeviceFor(CaptureCategory category, int override = AdvancedDevicesFromSettings) const;
         QHash<QByteArray, QVariant> audioCaptureDeviceProperties(int index) const;
 
+        PHONON_DEPRECATED void setVideoCaptureDeviceListFor(Category category, QList<int> order);
+        PHONON_DEPRECATED QList<int> videoCaptureDeviceListFor(Category category, int override = AdvancedDevicesFromSettings) const;
+        PHONON_DEPRECATED int videoCaptureDeviceFor(Category category, int override = AdvancedDevicesFromSettings) const;
         PHONON_DEPRECATED void setAudioCaptureDeviceListFor(Category category, QList<int> order);
         PHONON_DEPRECATED QList<int> audioCaptureDeviceListFor(Category category, int override = AdvancedDevicesFromSettings) const;
         PHONON_DEPRECATED int audioCaptureDeviceFor(Category category, int override = AdvancedDevicesFromSettings) const;
-#endif //PHONON_NO_AUDIOCAPTURE
+#endif //PHONON_NO_CAPTURE
 
     protected:
         GlobalConfigPrivate *const k_ptr;

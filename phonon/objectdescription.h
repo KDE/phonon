@@ -274,22 +274,18 @@ inline QDebug operator<<(QDebug s, const ObjectDescription<T> &o) //krazy:exclud
  * \ingroup BackendInformation
  */
 typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;
+
+#ifndef PHONON_NO_CAPTURE
 /**
  * \ingroup BackendInformation
  */
-#ifndef PHONON_NO_AUDIOCAPTURE
 typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
-#endif //PHONON_NO_AUDIOCAPTURE
 /**
  * \ingroup BackendInformation
  */
-//typedef ObjectDescription<VideoOutputDeviceType> VideoOutputDevice;
-/**
- * \ingroup BackendInformation
- */
-#ifndef PHONON_NO_VIDEOCAPTURE
 typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
-#endif
+#endif // PHONON_NO_CAPTURE
+
 /**
  * \ingroup BackendInformation
  */
@@ -352,15 +348,12 @@ QT_END_NAMESPACE
 Q_DECLARE_METATYPE(Phonon::AudioOutputDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 Q_DECLARE_METATYPE(Phonon::AudioCaptureDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioCaptureDevice>)
-#endif //PHONON_NO_AUDIOCAPTURE
-
-#ifndef PHONON_NO_VIDEOCAPTURE
 Q_DECLARE_METATYPE(Phonon::VideoCaptureDevice)
 Q_DECLARE_METATYPE(QList<Phonon::VideoCaptureDevice>)
-#endif //PHONON_NO_VIDEOCAPTURE
+#endif //PHONON_NO_CAPTURE
 
 Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
 Q_DECLARE_METATYPE(Phonon::EffectDescription)

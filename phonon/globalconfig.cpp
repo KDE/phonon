@@ -227,7 +227,7 @@ static bool isHiddenAudioOutputDevice(const GlobalConfig *config, int i)
     return (var.isValid() && var.toBool());
 }
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 static bool isHiddenAudioCaptureDevice(const GlobalConfig *config, int i)
 {
     Q_ASSERT(config);
@@ -239,9 +239,7 @@ static bool isHiddenAudioCaptureDevice(const GlobalConfig *config, int i)
     const QVariant var = ad.property("isAdvanced");
     return (var.isValid() && var.toBool());
 }
-#endif
 
-#ifndef PHONON_NO_VIDEOCAPTURE
 static bool isHiddenVideoCaptureDevice(const GlobalConfig *config, int i)
 {
     Q_ASSERT(config);
@@ -253,7 +251,7 @@ static bool isHiddenVideoCaptureDevice(const GlobalConfig *config, int i)
     const QVariant var = vd.property("isAdvanced");
     return (var.isValid() && var.toBool());
 }
-#endif
+#endif // PHONON_NO_CAPTURE
 
 static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType type, Category category, QList<int>newOrder)
 {
@@ -307,6 +305,7 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
     return newList;
 }
 
+#ifndef PHONON_NO_CAPTURE
 static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType type, CaptureCategory category, QList<int>newOrder)
 {
     Q_ASSERT(config);
@@ -316,17 +315,14 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
     int override = GlobalConfig::ShowUnavailableDevices | GlobalConfig::ShowAdvancedDevices;
 
     switch (type) {
-#ifndef PHONON_NO_AUDIOCAPTURE
+
     case AudioCaptureDeviceType:
         currentList = config->audioCaptureDeviceListFor(category, override);
         break;
-#endif
 
-#ifndef PHONON_NO_VIDEOCAPTURE
     case VideoCaptureDeviceType:
         currentList = config->videoCaptureDeviceListFor(category, override);
         break;
-#endif
 
     default: ;
     }
@@ -348,17 +344,13 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
             bool hidden = true;
 
             switch (type) {
-#ifndef PHONON_NO_AUDIOCAPTURE
             case AudioCaptureDeviceType:
                 hidden = isHiddenAudioCaptureDevice(config, currentList.at(found));
                 break;
-#endif
 
-#ifndef PHONON_NO_VIDEOCAPTURE
             case VideoCaptureDeviceType:
                 hidden = isHiddenVideoCaptureDevice(config, currentList.at(found));
                 break;
-#endif
 
             default: ;
             }
@@ -376,6 +368,7 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
 
     return newList;
 }
+#endif // PHONON_NO_CAPTURE
 
 void GlobalConfig::setAudioOutputDeviceListFor(Category category, QList<int> order)
 {
@@ -472,7 +465,7 @@ QHash<QByteArray, QVariant> GlobalConfig::audioOutputDeviceProperties(int index)
 }
 
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 void GlobalConfig::setAudioCaptureDeviceListFor(CaptureCategory category, QList<int> order)
 {
 
@@ -584,10 +577,6 @@ int GlobalConfig::audioCaptureDeviceFor(Category category, int override) const
     return audioCaptureDeviceFor(cat, override);
 }
 
-#endif //PHONON_NO_AUDIOCAPTURE
-
-
-#ifndef PHONON_NO_VIDEOCAPTURE
 void GlobalConfig::setVideoCaptureDeviceListFor(CaptureCategory category, QList<int> order)
 {
     K_D(GlobalConfig);
@@ -679,7 +668,7 @@ int GlobalConfig::videoCaptureDeviceFor(Category category, int override) const
     return videoCaptureDeviceFor(cat, override);
 }
 
-#endif // PHONON_NO_VIDEOCAPTURE
+#endif // PHONON_NO_CAPTURE
 
 QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(ObjectDescriptionType deviceType, int index) const
 {
