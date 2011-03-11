@@ -51,11 +51,6 @@ namespace Phonon
          * Audio output devices. This can be soundcards (with different drivers), soundservers or
          * other virtual outputs like playback on a different computer on the
          * network.
-         *
-         * For Hardware devices the backend should use libkaudiodevicelist
-         * (AudioDevice and AudioDeviceEnumerator) which will list removable
-         * devices even when they are unplugged and provide a unique identifier
-         * that can make backends use the same identifiers.
          */
         AudioOutputDeviceType,
 
@@ -70,11 +65,6 @@ namespace Phonon
          * Audio capture devices. This can be soundcards (with different drivers), soundservers or
          * other virtual inputs like capture on a different computer on the
          * network.
-         *
-         * For Hardware devices the backend should use libkaudiodevicelist
-         * (AudioDevice and AudioDeviceEnumerator) which will list removable
-         * devices even when they are unplugged and provide a unique identifier
-         * that can make backends use the same identifiers.
          */
         AudioCaptureDeviceType,
 

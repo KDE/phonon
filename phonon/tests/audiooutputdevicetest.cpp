@@ -71,8 +71,6 @@ void AudioOutputDeviceTest::sensibleValues()
         QCOMPARE(a.index(), 10000);
         QCOMPARE(a.name(), QString("internal Soundcard"));
         QCOMPARE(a.description(), QString());
-    } else {
-        // TODO check for ALSA devices listed by libaudiodevicelist
     }
 }
 
