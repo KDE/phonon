@@ -2,7 +2,6 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in
               ${CMAKE_CURRENT_SOURCE_DIR}/COPYING-CMAKE-SCRIPTS
               ${CMAKE_CURRENT_SOURCE_DIR}/FindAutomoc4.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/FindPackageHandleStandardArgs.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/FindPhonon.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/FindPhononInternal.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/PhononMacros.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/FindQt4.cmake
