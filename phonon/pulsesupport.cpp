@@ -450,37 +450,21 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     QMap<QString, AudioDevice> *new_devices = NULL;
 
     if (name.startsWith("sink:")) {
-        new_devices = &(u->newOutputDevices);
-        new_prio_map_cats = &(u->newOutputDevicePriorities);
-
-        // Memory corruption?
-        Q_ASSERT(new_devices);
-        Q_ASSERT(new_prio_map_cats);
+        new_devices = &u->newOutputDevices;
+        new_prio_map_cats = &u->newOutputDevicePriorities;
 
         if (s_outputDeviceIndexes.contains(name))
             index = s_outputDeviceIndexes[name];
         else
             index = s_outputDeviceIndexes[name] = s_deviceIndexCounter++;
-
-        // Memory corruption?
-        Q_ASSERT(new_devices);
-        Q_ASSERT(new_prio_map_cats);
     } else if (name.startsWith("source:")) {
-        new_devices = &(u->newCaptureDevices);
-        new_prio_map_capcats = &(u->newCaptureDevicePriorities);
-
-        // Memory corruption?
-        Q_ASSERT(new_devices);
-        Q_ASSERT(new_prio_map_capcats);
+        new_devices = &u->newCaptureDevices;
+        new_prio_map_capcats = &u->newCaptureDevicePriorities;
 
         if (s_captureDeviceIndexes.contains(name))
             index = s_captureDeviceIndexes[name];
         else
             index = s_captureDeviceIndexes[name] = s_deviceIndexCounter++;
-
-        // Memory corruption?
-        Q_ASSERT(new_devices);
-        Q_ASSERT(new_prio_map_capcats);
     } else {
         // This indicates a bug in pulseaudio.
         return;
