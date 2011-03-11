@@ -449,7 +449,12 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     QMap<Phonon::CaptureCategory, QMap<int, int> > *new_prio_map_capcats = NULL; // prio, device
     QMap<QString, AudioDevice> *new_devices = NULL;
 
+    bool isSink = false;
+    bool isSource = false;
+
     if (name.startsWith("sink:")) {
+        isSink = true;
+
         new_devices = &u->newOutputDevices;
         new_prio_map_cats = &u->newOutputDevicePriorities;
 
@@ -458,6 +463,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         else
             index = s_outputDeviceIndexes[name] = s_deviceIndexCounter++;
     } else if (name.startsWith("source:")) {
+        isSource = true;
+
         new_devices = &u->newCaptureDevices;
         new_prio_map_capcats = &u->newCaptureDevicePriorities;
 
@@ -471,8 +478,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     }
 
     Q_ASSERT(new_devices);
-    Q_ASSERT(new_prio_map_cats);
-    Q_ASSERT(new_prio_map_capcats);
+    Q_ASSERT(!isSink || new_prio_map_cats);
+    Q_ASSERT(!isSource || new_prio_map_capcats);
 
     // Add the new device itself.
     new_devices->insert(name, AudioDevice(name, QString::fromUtf8(info->description), QString::fromUtf8(info->icon), info->index));
@@ -484,14 +491,18 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 
         bool conversionSuccess;
 
-        Phonon::Category cat = pulseRoleToPhononCategory(role_prio->role, &conversionSuccess);
-        if (conversionSuccess) {
-            (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
+        if (isSink) {
+            Phonon::Category cat = pulseRoleToPhononCategory(role_prio->role, &conversionSuccess);
+            if (conversionSuccess) {
+                (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
+            }
         }
 
-        Phonon::CaptureCategory capcat = pulseRoleToPhononCaptureCategory(role_prio->role, &conversionSuccess);
-        if (conversionSuccess) {
-            (*new_prio_map_capcats)[capcat].insert(role_prio->priority, index);
+        if (isSource) {
+            Phonon::CaptureCategory capcat = pulseRoleToPhononCaptureCategory(role_prio->role, &conversionSuccess);
+            if (conversionSuccess) {
+                (*new_prio_map_capcats)[capcat].insert(role_prio->priority, index);
+            }
         }
     }
 }
