@@ -63,7 +63,6 @@ PHONON_UNIT_TESTS_FAKE(
     audiodataoutputtest
 )
 target_link_libraries(backendcapabilitiestest ${PHONON_KDECORE_LIBS})
-target_link_libraries(mediaplayer ${PHONON_KIO_LIBS})
 target_link_libraries(backendcapabilitiestest_fake ${PHONON_KDECORE_LIBS})
 #methodtest does not link against libphonon
 phonon_add_executable(methodtest methodtest.cpp ../factory.cpp
