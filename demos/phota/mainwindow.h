@@ -41,11 +41,11 @@ private slots:
     void effectsDialog();
 
 protected:
-    virtual void contextMenuEvent( QContextMenuEvent *e );
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
 private:
-    MediaController *mediaControl;
-    Phonon::VideoWidget *videoWidget;
+    MediaController *m_mediaControl;
+    Phonon::VideoWidget *m_videoWidget;
 };
 
 #endif // MAINWINDOW_H

@@ -22,7 +22,7 @@
 #ifndef MEDIACONTROLLER_H
 #define MEDIACONTROLLER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 namespace Phonon
 {
@@ -36,16 +36,14 @@ class MediaController : public QObject
 public:
     explicit MediaController(QObject *parent = 0);
 
-signals:
-
 public slots:
     void openFile();
     void openURL();
 
 private:
-    Phonon::MediaObject *media;
+    Phonon::MediaObject *m_media;
 
-    void playSource( const Phonon::MediaSource &);
+    void playSource(const Phonon::MediaSource &);
 };
 
 #endif // MEDIACONTROLLER_H

@@ -21,27 +21,23 @@
 
 #include "mediacontroller.h"
 
-#include <QtGui/QFileDialog>
-//#include <Phonon/MediaSource>
-//#include <Phonon/MediaObject>
 #include <phonon/mediasource.h>
 #include <phonon/mediaobject.h>
 
-using namespace Phonon;
+#include <QtGui/QFileDialog>
 
 MediaController::MediaController(QObject *parent) :
     QObject(parent)
 {
-    media = new MediaObject(this);
+    m_media = new Phonon::MediaObject(this);
 }
 
 void MediaController::openFile()
 {
-    QString file = QFileDialog::getOpenFileName( NULL, "Open a new file to play", "" );
-    if( !file.isEmpty() )
-    {
-        MediaSource s(file);
-        playSource( s );
+    QString file = QFileDialog::getOpenFileName(0, tr("Open a new file to play"), "");
+    if (!file.isEmpty()) {
+        Phonon::MediaSource s(file);
+        playSource(s);
     }
 }
 
@@ -50,8 +46,8 @@ void MediaController::openURL()
 
 }
 
-void MediaController::playSource( const MediaSource &s )
+void MediaController::playSource(const Phonon::MediaSource &s)
 {
-    media->setCurrentSource(s);
-    media->play();
+    m_media->setCurrentSource(s);
+    m_media->play();
 }
