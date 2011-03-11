@@ -112,7 +112,6 @@ class AddonInterface
          * 
          * \ingroup backend
          **/
-        
         virtual bool hasInterface(Interface iface) const = 0;
 
         /**
