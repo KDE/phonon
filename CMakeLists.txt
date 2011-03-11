@@ -46,6 +46,7 @@ if(QT_QTDBUS_FOUND)
     list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
 endif(QT_QTDBUS_FOUND)
 
+add_subdirectory(cmake)
 if(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
@@ -59,21 +60,6 @@ if(PHONON_BUILD_DEMOS)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes)
     add_subdirectory(demos)
 endif(PHONON_BUILD_DEMOS)
-
-set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon-buildsystem/)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindAutomoc4.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPackageHandleStandardArgs.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPhonon.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindPhononInternal.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/PhononMacros.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/FindQt4.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacroEnsureVersion.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacroLogFeature.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacroOptionalFindPackage.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MacroPushRequiredVars.cmake
-              ${CMAKE_CURRENT_SOURCE_DIR}/cmake/PhononMacros.cmake
-        DESTINATION ${BUILDSYSTEM_INSTALL_DIR})
 
 if(NOT WIN32) # pkgconfig file
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)

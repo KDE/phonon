@@ -1,0 +1,14 @@
+set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon-buildsystem/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in
+              ${CMAKE_CURRENT_SOURCE_DIR}/FindAutomoc4.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/FindPackageHandleStandardArgs.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/FindPhonon.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/FindPhononInternal.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/PhononMacros.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/FindQt4.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/MacroEnsureVersion.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/MacroLogFeature.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/MacroOptionalFindPackage.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/MacroPushRequiredVars.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/PhononMacros.cmake
+        DESTINATION ${BUILDSYSTEM_INSTALL_DIR})
