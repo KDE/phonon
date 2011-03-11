@@ -198,7 +198,7 @@ static Phonon::Category pulseRoleToPhononCategory(const char *role, bool *succes
 
     // ^^ "animation" and "production" have no mapping
 
-    success = false;
+    *success = false;
     return Phonon::NoCategory;
 }
 
@@ -217,7 +217,7 @@ static Phonon::CaptureCategory pulseRoleToPhononCaptureCategory(const char *role
     if (r == "ally")
         return Phonon::ControlCaptureCategory;
 
-    success = false;
+    *success = false;
     return Phonon::NoCaptureCategory;
 }
 
@@ -447,7 +447,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     int index;
     QMap<Phonon::Category, QMap<int, int> > *new_prio_map_cats = NULL; // prio, device
     QMap<Phonon::CaptureCategory, QMap<int, int> > *new_prio_map_capcats = NULL; // prio, device
-    QMap<QString, AudioDevice> *new_devices;
+    QMap<QString, AudioDevice> *new_devices = NULL;
 
     if (name.startsWith("sink:")) {
         new_devices = &u->newOutputDevices;
@@ -469,6 +469,10 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         // This indicates a bug in pulseaudio.
         return;
     }
+
+    Q_ASSERT(new_devices);
+    Q_ASSERT(new_prio_map_cats);
+    Q_ASSERT(new_prio_map_capcats);
 
     // Add the new device itself.
     new_devices->insert(name, AudioDevice(name, QString::fromUtf8(info->description), QString::fromUtf8(info->icon), info->index));
