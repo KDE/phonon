@@ -449,46 +449,37 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     QMap<Phonon::CaptureCategory, QMap<int, int> > *new_prio_map_capcats = NULL; // prio, device
     QMap<QString, AudioDevice> *new_devices = NULL;
 
-    if (name.startsWith("sink:")) {
-        new_devices = &(u->newOutputDevices);
-        new_prio_map_cats = &(u->newOutputDevicePriorities);
+    bool isSink = false;
+    bool isSource = false;
 
-        // Memory corruption?
-        Q_ASSERT(new_devices);
-        Q_ASSERT(new_prio_map_cats);
+    if (name.startsWith("sink:")) {
+        isSink = true;
+
+        new_devices = &u->newOutputDevices;
+        new_prio_map_cats = &u->newOutputDevicePriorities;
 
         if (s_outputDeviceIndexes.contains(name))
             index = s_outputDeviceIndexes[name];
         else
             index = s_outputDeviceIndexes[name] = s_deviceIndexCounter++;
-
-        // Memory corruption?
-        Q_ASSERT(new_devices);
-        Q_ASSERT(new_prio_map_cats);
     } else if (name.startsWith("source:")) {
-        new_devices = &(u->newCaptureDevices);
-        new_prio_map_capcats = &(u->newCaptureDevicePriorities);
+        isSource = true;
 
-        // Memory corruption?
-        Q_ASSERT(new_devices);
-        Q_ASSERT(new_prio_map_capcats);
+        new_devices = &u->newCaptureDevices;
+        new_prio_map_capcats = &u->newCaptureDevicePriorities;
 
         if (s_captureDeviceIndexes.contains(name))
             index = s_captureDeviceIndexes[name];
         else
             index = s_captureDeviceIndexes[name] = s_deviceIndexCounter++;
-
-        // Memory corruption?
-        Q_ASSERT(new_devices);
-        Q_ASSERT(new_prio_map_capcats);
     } else {
         // This indicates a bug in pulseaudio.
         return;
     }
 
     Q_ASSERT(new_devices);
-    Q_ASSERT(new_prio_map_cats);
-    Q_ASSERT(new_prio_map_capcats);
+    Q_ASSERT(!isSink || new_prio_map_cats);
+    Q_ASSERT(!isSource || new_prio_map_capcats);
 
     // Add the new device itself.
     new_devices->insert(name, AudioDevice(name, QString::fromUtf8(info->description), QString::fromUtf8(info->icon), info->index));
@@ -500,14 +491,18 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
 
         bool conversionSuccess;
 
-        Phonon::Category cat = pulseRoleToPhononCategory(role_prio->role, &conversionSuccess);
-        if (conversionSuccess) {
-            (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
+        if (isSink) {
+            Phonon::Category cat = pulseRoleToPhononCategory(role_prio->role, &conversionSuccess);
+            if (conversionSuccess) {
+                (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
+            }
         }
 
-        Phonon::CaptureCategory capcat = pulseRoleToPhononCaptureCategory(role_prio->role, &conversionSuccess);
-        if (conversionSuccess) {
-            (*new_prio_map_capcats)[capcat].insert(role_prio->priority, index);
+        if (isSource) {
+            Phonon::CaptureCategory capcat = pulseRoleToPhononCaptureCategory(role_prio->role, &conversionSuccess);
+            if (conversionSuccess) {
+                (*new_prio_map_capcats)[capcat].insert(role_prio->priority, index);
+            }
         }
     }
 }
