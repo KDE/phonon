@@ -39,6 +39,8 @@
 
 #include "pulsesupport.h"
 
+#include "phononnamespace_p.h"
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -133,10 +135,8 @@ class PulseUserData
         QMap<Phonon::Category, QMap<int, int> > newOutputDevicePriorities; // prio, device
 
         QMap<QString, AudioDevice> newCaptureDevices;
-        QMap<Phonon::Category, QMap<int, int> > newCaptureDevicePriorities; // prio, device
+        QMap<Phonon::CaptureCategory, QMap<int, int> > newCaptureDevicePriorities; // prio, device
 };
-
-static QMap<QString, Phonon::Category> s_roleCategoryMap;
 
 static bool s_pulseActive = false;
 
@@ -152,9 +152,18 @@ static QMap<int, AudioDevice> s_outputDevices;
 static QMap<Phonon::Category, QMap<int, int> > s_outputDevicePriorities; // prio, device
 static QMap<QString, PulseStream*> s_outputStreams;
 
+static const Phonon::CaptureCategory s_audioCapCategories[] = {
+    Phonon::NoCaptureCategory,
+    Phonon::CommunicationCaptureCategory,
+    Phonon::RecordingCaptureCategory,
+    Phonon::ControlCaptureCategory
+};
+
+static const int s_audioCapCategoriesCount = sizeof(s_audioCapCategories) / sizeof(Phonon::CaptureCategory);
+
 static QMap<QString, int> s_captureDeviceIndexes;
 static QMap<int, AudioDevice> s_captureDevices;
-static QMap<Phonon::Category, QMap<int, int> > s_captureDevicePriorities; // prio, device
+static QMap<Phonon::CaptureCategory, QMap<int, int> > s_captureDevicePriorities; // prio, device
 static QMap<QString, PulseStream*> s_captureStreams;
 
 static PulseStream* findStreamByPulseIndex(QMap<QString, PulseStream*> map, uint32_t index)
@@ -164,6 +173,90 @@ static PulseStream* findStreamByPulseIndex(QMap<QString, PulseStream*> map, uint
     if ((*it)->index() == index)
       return *it;
   return NULL;
+}
+
+static Phonon::Category pulseRoleToPhononCategory(const char *role, bool *success)
+{
+    Q_ASSERT(role);
+    Q_ASSERT(success);
+    *success = true;
+    QByteArray r(role);
+    if (r == "none")
+        return Phonon::NoCategory;
+    if (r == "video")
+        return Phonon::VideoCategory;
+    if (r == "music")
+        return Phonon::MusicCategory;
+    if (r == "game")
+        return Phonon::GameCategory;
+    if (r == "event")
+        return Phonon::NotificationCategory;
+    if (r == "phone")
+        return Phonon::CommunicationCategory;
+    if (r == "ally")
+        return Phonon::AccessibilityCategory;
+
+    // ^^ "animation" and "production" have no mapping
+
+    *success = false;
+    return Phonon::NoCategory;
+}
+
+static Phonon::CaptureCategory pulseRoleToPhononCaptureCategory(const char *role, bool *success)
+{
+    Q_ASSERT(role);
+    Q_ASSERT(success);
+    *success = true;
+    QByteArray r(role);
+    if (r == "none")
+        return Phonon::NoCaptureCategory;
+    if (r == "phone")
+        return Phonon::CommunicationCaptureCategory;
+    if (r == "production")
+        return Phonon::RecordingCaptureCategory;
+    if (r == "ally")
+        return Phonon::ControlCaptureCategory;
+
+    *success = false;
+    return Phonon::NoCaptureCategory;
+}
+
+static const QByteArray phononCategoryToPulseRole(Phonon::Category category)
+{
+    switch (category) {
+    case Phonon::NoCategory:
+        return QByteArray("none");
+    case Phonon::VideoCategory:
+        return QByteArray("video");
+    case Phonon::MusicCategory:
+        return QByteArray("music");
+    case Phonon::GameCategory:
+        return QByteArray("game");
+    case Phonon::NotificationCategory:
+        return QByteArray("event");
+    case Phonon::CommunicationCategory:
+        return QByteArray("phone");
+    case Phonon::AccessibilityCategory:
+        return QByteArray("ally");
+    default:
+        return QByteArray();
+    }
+}
+
+static const QByteArray phononCaptureCategoryToPulseRole(Phonon::CaptureCategory category)
+{
+    switch (category) {
+    case Phonon::NoCaptureCategory:
+        return QByteArray("none");
+    case Phonon::CommunicationCaptureCategory:
+        return QByteArray("phone");
+    case Phonon::RecordingCaptureCategory:
+        return QByteArray("production");
+    case Phonon::ControlCaptureCategory:
+        return QByteArray("ally");
+    default:
+        return QByteArray();
+    }
 }
 
 static void createGenericDevices()
@@ -187,8 +280,8 @@ static void createGenericDevices()
     index = s_deviceIndexCounter++;
     s_captureDeviceIndexes.insert(QLatin1String("source:default"), index);
     s_captureDevices.insert(index, AudioDevice(QLatin1String("source:default"), QObject::tr("PulseAudio Sound Server"), QLatin1String("audio-backend-pulseaudio"), 0));
-    for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
-        Phonon::Category cat = static_cast<Phonon::Category>(i);
+    for (int i = 0; i < s_audioCapCategoriesCount; ++i) {
+        Phonon::CaptureCategory cat = s_audioCapCategories[i];
         s_captureDevicePriorities[cat].insert(0, index);
     }
 }
@@ -324,8 +417,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             }
         }
         logMessage(QString("Capture Device Priority List:"));
-        for (int i = Phonon::NoCategory; i <= Phonon::LastCategory; ++i) {
-            Phonon::Category cat = static_cast<Phonon::Category>(i);
+        for (int i = 0; i < s_audioCapCategoriesCount; ++i) {
+            Phonon::CaptureCategory cat = s_audioCapCategories[i];
             if (s_captureDevicePriorities.contains(cat)) {
                 logMessage(QString("  Phonon Category %1").arg(cat));
                 int count = 0;
@@ -352,10 +445,16 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     // QString wrapper
     QString name(info->name);
     int index;
-    QMap<Phonon::Category, QMap<int, int> > *new_prio_map_cats; // prio, device
-    QMap<QString, AudioDevice> *new_devices;
+    QMap<Phonon::Category, QMap<int, int> > *new_prio_map_cats = NULL; // prio, device
+    QMap<Phonon::CaptureCategory, QMap<int, int> > *new_prio_map_capcats = NULL; // prio, device
+    QMap<QString, AudioDevice> *new_devices = NULL;
+
+    bool isSink = false;
+    bool isSource = false;
 
     if (name.startsWith("sink:")) {
+        isSink = true;
+
         new_devices = &u->newOutputDevices;
         new_prio_map_cats = &u->newOutputDevicePriorities;
 
@@ -364,8 +463,10 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         else
             index = s_outputDeviceIndexes[name] = s_deviceIndexCounter++;
     } else if (name.startsWith("source:")) {
+        isSource = true;
+
         new_devices = &u->newCaptureDevices;
-        new_prio_map_cats = &u->newCaptureDevicePriorities;
+        new_prio_map_capcats = &u->newCaptureDevicePriorities;
 
         if (s_captureDeviceIndexes.contains(name))
             index = s_captureDeviceIndexes[name];
@@ -376,6 +477,10 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         return;
     }
 
+    Q_ASSERT(new_devices);
+    Q_ASSERT(!isSink || new_prio_map_cats);
+    Q_ASSERT(!isSource || new_prio_map_capcats);
+
     // Add the new device itself.
     new_devices->insert(name, AudioDevice(name, QString::fromUtf8(info->description), QString::fromUtf8(info->icon), info->index));
 
@@ -384,10 +489,20 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         pa_ext_device_manager_role_priority_info* role_prio = &info->role_priorities[i];
         Q_ASSERT(role_prio->role);
 
-        if (s_roleCategoryMap.contains(role_prio->role)) {
-            Phonon::Category cat = s_roleCategoryMap[role_prio->role];
+        bool conversionSuccess;
 
-            (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
+        if (isSink) {
+            Phonon::Category cat = pulseRoleToPhononCategory(role_prio->role, &conversionSuccess);
+            if (conversionSuccess) {
+                (*new_prio_map_cats)[cat].insert(role_prio->priority, index);
+            }
+        }
+
+        if (isSource) {
+            Phonon::CaptureCategory capcat = pulseRoleToPhononCaptureCategory(role_prio->role, &conversionSuccess);
+            if (conversionSuccess) {
+                (*new_prio_map_capcats)[capcat].insert(role_prio->priority, index);
+            }
         }
     }
 }
@@ -694,16 +809,6 @@ PulseSupport::PulseSupport()
  : QObject(), mEnabled(false)
 {
 #ifdef HAVE_PULSEAUDIO
-    // Initialise our map (is there a better way to do this?)
-    s_roleCategoryMap[QLatin1String("none")] = Phonon::NoCategory;
-    s_roleCategoryMap[QLatin1String("video")] = Phonon::VideoCategory;
-    s_roleCategoryMap[QLatin1String("music")] = Phonon::MusicCategory;
-    s_roleCategoryMap[QLatin1String("game")] = Phonon::GameCategory;
-    s_roleCategoryMap[QLatin1String("event")] = Phonon::NotificationCategory;
-    s_roleCategoryMap[QLatin1String("phone")] = Phonon::CommunicationCategory;
-    //s_roleCategoryMap[QLatin1String("animation")]; // No Mapping
-    //s_roleCategoryMap[QLatin1String("production")]; // No Mapping
-    s_roleCategoryMap[QLatin1String("a11y")] = Phonon::AccessibilityCategory;
 
     // To allow for easy debugging, give an easy way to disable this pulseaudio check
     QByteArray pulseenv = qgetenv("PHONON_PULSEAUDIO_DISABLE");
@@ -888,28 +993,34 @@ QList<int> PulseSupport::objectIndexesByCategory(ObjectDescriptionType type, Cat
 {
     QList<int> ret;
 
-    if (type != AudioOutputDeviceType && type != AudioCaptureDeviceType)
+    if (type != AudioOutputDeviceType)
         return ret;
 
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(category);
 #else
     if (s_pulseActive) {
-        switch (type) {
+        if (s_outputDevicePriorities.contains(category))
+            ret = s_outputDevicePriorities[category].values();
+    }
+#endif
 
-            case AudioOutputDeviceType:
-                if (s_outputDevicePriorities.contains(category))
-                    ret = s_outputDevicePriorities[category].values();
-                break;
+    return ret;
+}
 
-            case AudioCaptureDeviceType:
-                if (s_captureDevicePriorities.contains(category))
-                    ret = s_captureDevicePriorities[category].values();
-                break;
+QList<int> PulseSupport::objectIndexesByCategory(ObjectDescriptionType type, CaptureCategory category) const
+{
+    QList<int> ret;
 
-            default:
-                break;
-        }
+    if (type != AudioCaptureDeviceType)
+        return ret;
+
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(category);
+#else
+    if (s_pulseActive) {
+        if (s_captureDevicePriorities.contains(category))
+            ret = s_captureDevicePriorities[category].values();
     }
 #endif
 
@@ -917,12 +1028,8 @@ QList<int> PulseSupport::objectIndexesByCategory(ObjectDescriptionType type, Cat
 }
 
 #ifdef HAVE_PULSEAUDIO
-static void setDevicePriority(Category category, QStringList list)
+static void setDevicePriority(QString role, QStringList list)
 {
-    QString role = s_roleCategoryMap.key(category);
-    if (role.isEmpty())
-        return;
-
     logMessage(QString::fromLatin1("Reindexing %1: %2").arg(role).arg(list.join(QLatin1String(", "))));
 
     char **devices;
@@ -945,7 +1052,25 @@ static void setDevicePriority(Category category, QStringList list)
         pa_xfree(devices[i]);
     pa_xfree(devices);
 }
-#endif
+
+static void setDevicePriority(Category category, QStringList list)
+{
+    QString role = phononCategoryToPulseRole(category);
+    if (role.isEmpty())
+        return;
+
+    setDevicePriority(role, list);
+}
+
+static void setDevicePriority(CaptureCategory category, QStringList list)
+{
+    QString role = phononCaptureCategoryToPulseRole(category);
+    if (role.isEmpty())
+        return;
+
+    setDevicePriority(role, list);
+}
+#endif // HAVE_PULSEAUDIO
 
 void PulseSupport::setOutputDevicePriorityForCategory(Category category, QList<int> order)
 {
@@ -985,15 +1110,14 @@ void PulseSupport::setCaptureDevicePriorityForCategory(CaptureCategory category,
 
 void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<int> order)
 {
-    CaptureCategory cat = static_cast<CaptureCategory>(category);
+    CaptureCategory cat = categoryToCaptureCategory(category);
     setCaptureDevicePriorityForCategory(cat, order);
 }
 
 #ifdef HAVE_PULSEAUDIO
-static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString streamUuid, Category category)
+static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString streamUuid, QString role)
 {
     logMessage(QString::fromLatin1("Initialising streamindex %1").arg(streamUuid));
-    QString role = s_roleCategoryMap.key(category);
     if (!role.isEmpty()) {
         logMessage(QString::fromLatin1("Setting role to %1 for streamindex %2").arg(role).arg(streamUuid));
         setenv("PULSE_PROP_media.role", role.toLatin1().constData(), 1);
@@ -1003,6 +1127,19 @@ static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString str
     map[streamUuid] = stream;
     return stream;
 }
+
+static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString streamUuid, Category category)
+{
+    QString role = phononCategoryToPulseRole(category);
+    return register_stream(map, streamUuid, role);
+}
+
+static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString streamUuid, CaptureCategory category)
+{
+    QString role = phononCaptureCategoryToPulseRole(category);
+    return register_stream(map, streamUuid, role);
+}
+
 #endif
 
 PulseStream *PulseSupport::registerOutputStream(QString streamUuid, Category category)
@@ -1013,6 +1150,17 @@ PulseStream *PulseSupport::registerOutputStream(QString streamUuid, Category cat
     return NULL;
 #else
     return register_stream(s_outputStreams, streamUuid, category);
+#endif
+}
+
+PulseStream *PulseSupport::registerCaptureStream(QString streamUuid, CaptureCategory category)
+{
+#ifndef HAVE_PULSEAUDIO
+    Q_UNUSED(streamUuid);
+    Q_UNUSED(category);
+    return NULL;
+#else
+    return register_stream(s_captureStreams, streamUuid, category);
 #endif
 }
 

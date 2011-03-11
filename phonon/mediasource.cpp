@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -80,7 +80,7 @@ MediaSource::MediaSource(const QUrl &url)
     }
 }
 
-MediaSource::MediaSource(Phonon::DiscType dt, const QString &deviceName)
+MediaSource::MediaSource(DiscType dt, const QString &deviceName)
     : d(new MediaSourcePrivate(Disc))
 {
     if (dt == NoDisc) {
@@ -102,24 +102,29 @@ MediaSource::MediaSource(const DeviceAccess &access)
     d->deviceAccessList.append(access);
 }
 
-#if !defined(PHONON_NO_AUDIOCAPTURE) && !defined(PHONON_NO_VIDEOCAPTURE)
-#endif //PHONON_NO_AUDIOCAPTURE && PHONON_NO_VIDEOCAPTURE
-
 #ifndef PHONON_NO_AUDIOCAPTURE
-MediaSource::MediaSource(const Phonon::AudioCaptureDevice& acDevice)
+MediaSource::MediaSource(const AudioCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
-    setAudioCaptureDevice(acDevice);
+    d->setCaptureDevices(device, VideoCaptureDevice());
 }
 #endif //PHONON_NO_AUDIOCAPTURE
 
 #ifndef PHONON_NO_VIDEOCAPTURE
-MediaSource::MediaSource(const Phonon::VideoCaptureDevice& vcDevice)
+MediaSource::MediaSource(const VideoCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
-    setVideoCaptureDevice(vcDevice);
+    d->setCaptureDevices(AudioCaptureDevice(), device);
 }
 #endif //PHONON_NO_VIDEOCAPTURE
+
+#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
+MediaSource::MediaSource(Capture::DeviceType deviceType, CaptureCategory category)
+    : d(new MediaSourcePrivate(CaptureDevice))
+{
+    d->setCaptureDevice(deviceType, category);
+}
+#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
 
 MediaSource::MediaSource(AbstractMediaStream *stream)
     : d(new MediaSourcePrivate(Stream))
@@ -213,12 +218,17 @@ QString MediaSource::fileName() const
     return d->url.toLocalFile();
 }
 
+Mrl MediaSource::mrl() const
+{
+    return Mrl(d->url);
+}
+
 QUrl MediaSource::url() const
 {
     return d->url;
 }
 
-Phonon::DiscType MediaSource::discType() const
+DiscType MediaSource::discType() const
 {
     return d->discType;
 }
@@ -248,31 +258,6 @@ AudioCaptureDevice MediaSource::audioCaptureDevice() const
 {
     return d->audioCaptureDevice;
 }
-
-void MediaSource::setAudioCaptureDevice(const Phonon::AudioCaptureDevice& acDevice)
-{
-    d->audioCaptureDevice = acDevice;
-
-    // Grab the device access list from the properties
-    if (acDevice.propertyNames().contains("deviceAccessList") &&
-            !acDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
-        d->type = MediaSource::CaptureDevice;
-        d->deviceAccessList = acDevice.property("deviceAccessList").value<DeviceAccessList>();
-    } else {
-        // Invalidate the media source
-        d->type = Invalid;
-    }
-}
-
-void MediaSource::setAudioCaptureDevice(CaptureCategory category)
-{
-    setAudioCaptureDevice(AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)));
-}
-
-void MediaSource::setAudioCaptureDevice(Category category)
-{
-    setAudioCaptureDevice(static_cast<CaptureCategory>(category));
-}
 #endif //PHONON_NO_AUDIOCAPTURE
 
 #ifndef PHONON_NO_VIDEOCAPTURE
@@ -280,32 +265,43 @@ VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
     return d->videoCaptureDevice;
 }
+#endif //PHONON_NO_VIDEOCAPTURE
 
-void MediaSource::setVideoCaptureDevice(const Phonon::VideoCaptureDevice& vcDevice)
+#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
+void MediaSourcePrivate::setCaptureDevice(Capture::DeviceType deviceType, CaptureCategory category)
 {
-    d->videoCaptureDevice = vcDevice;
-
-    // Grab the device access list from the properties
-    if (vcDevice.propertyNames().contains("deviceAccessList") &&
-            !vcDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
-        d->type = MediaSource::CaptureDevice;
-        d->deviceAccessList = vcDevice.property("deviceAccessList").value<DeviceAccessList>();
-    } else {
-        // Invalidate the media source
-        d->type = Invalid;
+    switch (deviceType) {
+        case Capture::VideoType: {
+            setCaptureDevices(AudioCaptureDevice(),
+                VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
+            break;
+        }
+        case Capture::AudioType: {
+            setCaptureDevices(
+                AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)), VideoCaptureDevice());
+            break;
+        }
     }
 }
 
-void MediaSource::setVideoCaptureDevice(CaptureCategory category)
+void MediaSourcePrivate::setCaptureDevices(const AudioCaptureDevice &audioDevice, const VideoCaptureDevice &videoDevice)
 {
-    setVideoCaptureDevice(VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
-}
+    audioCaptureDevice = audioDevice;
+    videoCaptureDevice = videoDevice;
 
-void MediaSource::setVideoCaptureDevice(Category category)
-{
-    setVideoCaptureDevice(static_cast<CaptureCategory>(category));
+    if (audioDevice.propertyNames().contains("deviceAccessList") &&
+            !audioDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+        deviceAccessList = audioDevice.property("deviceAccessList").value<DeviceAccessList>();
+    }
+
+    if (videoDevice.propertyNames().contains("deviceAccessList") &&
+            !videoDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
+        deviceAccessList = videoDevice.property("deviceAccessList").value<DeviceAccessList>();
+    }
+
+    type = deviceAccessList.isEmpty() ? MediaSource::Invalid : MediaSource::CaptureDevice;
 }
-#endif //PHONON_NO_VIDEOCAPTURE
+#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
 
 } // namespace Phonon
 

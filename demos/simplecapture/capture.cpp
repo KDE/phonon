@@ -141,16 +141,11 @@ void CaptureWidget::setupCaptureSource()
      * Phonon can easily get you the devices appropriate for a specific category.
      */
     if (m_captureNode == m_media) {
-        Phonon::MediaSource source;
-        source.setVideoCaptureDevice(Phonon::NoCaptureCategory);
+        Phonon::MediaSource source(Phonon::Capture::VideoType, Phonon::NoCaptureCategory);
         m_media->setCurrentSource(source);
     }
     if (m_captureNode == m_avcapture) {
-        m_avcapture->setVideoCaptureDevice(Phonon::NoCaptureCategory);
-    }
-
-    if (m_captureNode == m_avcapture) {
-        m_avcapture->setAudioCaptureDevice(Phonon::NoCaptureCategory);
+        m_avcapture->setCaptureDevices(Phonon::NoCaptureCategory);
     }
 
     // Connect the stateChanged signal from the object used for capture to our handling slot

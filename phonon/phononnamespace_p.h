@@ -23,6 +23,8 @@
 #ifndef PHONONNAMESPACE_P_H
 #define PHONONNAMESPACE_P_H
 
+#include "phononnamespace.h"
+
 #include <QtCore/QDebug>
 
 #if defined(QT_NO_DEBUG)
@@ -33,6 +35,28 @@
 #define pWarning() qDebug() << "WARNING:"
 #define pError() qDebug() << "ERROR:"
 #define pFatal(message) qDebug() << "FATAL ERROR:" << message; ::abort()
+
+namespace Phonon
+{
+/**
+ * \internal
+ * Converts an old Category used for capture to the dedicated CaptureCategory
+ * Only for internal compat purpouses!
+ */
+    inline CaptureCategory categoryToCaptureCategory(Category c)
+    {
+        switch (c) {
+            case NoCategory:
+                return NoCaptureCategory;
+            case CommunicationCategory:
+                return CommunicationCaptureCategory;
+            case AccessibilityCategory:
+                return ControlCaptureCategory;
+            default:
+                return NoCaptureCategory;
+        }
+    }
+} // namespace Phonon
 
 // vim: sw=4 ts=4 tw=80
 #endif // PHONONNAMESPACE_P_H

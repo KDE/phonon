@@ -31,6 +31,7 @@
 #include "avcapture_p.h"
 #include "factory_p.h"
 #include "globalconfig.h"
+#include "phononnamespace_p.h"
 
 #define PHONON_CLASSNAME AvCapture
 #define PHONON_INTERFACENAME AvCaptureInterface
@@ -40,6 +41,12 @@ namespace Phonon
 namespace Experimental
 {
 PHONON_OBJECT_IMPL
+
+AvCapture::AvCapture(Phonon::CaptureCategory category, QObject *parent)
+    : QObject(parent), MediaNode(*new AvCapturePrivate())
+{
+    setCaptureDevices(category);
+}
 
 Phonon::State AvCapture::state() const
 {
@@ -74,6 +81,12 @@ void AvCapture::stop()
     }
 }
 
+void AvCapture::setCaptureDevices(Phonon::CaptureCategory category)
+{
+    setAudioCaptureDevice(category);
+    setVideoCaptureDevice(category);
+}
+
 Phonon::AudioCaptureDevice AvCapture::audioCaptureDevice() const
 {
     K_D(const AvCapture);
@@ -103,7 +116,7 @@ void AvCapture::setAudioCaptureDevice(Phonon::CaptureCategory category)
 
 PHONON_DEPRECATED void AvCapture::setAudioCaptureDevice(Phonon::Category category)
 {
-    setAudioCaptureDevice(static_cast<Phonon::CaptureCategory>(category));
+    setAudioCaptureDevice(Phonon::categoryToCaptureCategory(category));
 }
 
 Phonon::VideoCaptureDevice AvCapture::videoCaptureDevice() const
@@ -140,7 +153,7 @@ void AvCapture::setVideoCaptureDevice(Phonon::CaptureCategory category)
 
 void AvCapture::setVideoCaptureDevice(Phonon::Category category)
 {
-    setVideoCaptureDevice(static_cast<Phonon::CaptureCategory>(category));
+    setVideoCaptureDevice(Phonon::categoryToCaptureCategory(category));
 }
 
 bool AvCapturePrivate::aboutToDeleteBackendObject()

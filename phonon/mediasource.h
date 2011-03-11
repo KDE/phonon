@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -25,7 +25,10 @@
 
 #include "phonon_export.h"
 #include "phononnamespace.h"
+
+#include "mrl.h"
 #include "objectdescription.h"
+
 #include <QtCore/QSharedData>
 #include <QtCore/QString>
 
@@ -145,20 +148,27 @@ class PHONON_EXPORT MediaSource
          * has more than one CD drive. It is recommended to use Solid to retrieve the device name in
          * a portable way.
          */
-        MediaSource(Phonon::DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
+        MediaSource(DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
 #ifndef PHONON_NO_AUDIOCAPTURE
         /**
         * Creates a MediaSource object for audio capture devices.
         */
-        MediaSource(const Phonon::AudioCaptureDevice& acDevice);
+        MediaSource(const AudioCaptureDevice& device);
 #endif
 
 #ifndef PHONON_NO_VIDEOCAPTURE
         /**
         * Creates a MediaSource object for video capture devices.
         */
-        MediaSource(const Phonon::VideoCaptureDevice& vcDevice);
+        MediaSource(const VideoCaptureDevice& device);
+#endif
+
+#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
+        /**
+         * Sets the source to the preferred audio capture device for the specified category
+         */
+        MediaSource(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
 #endif
 
         /**
@@ -244,6 +254,19 @@ class PHONON_EXPORT MediaSource
         QString fileName() const;
 
         /**
+         * Returns the MRL of the MediaSource if type() == URL or type() == LocalFile; otherwise
+         * returns Mrl().
+         * Phonon::Mrl is based on QUrl and adds some additional functionality that
+         * is necessary to ensure proper encoding usage in the Phonon backends.
+         *
+         * Usually you will not have to use this in an application.
+         *
+         * \since 4.5
+         * \ingroup Backend
+         */
+        Mrl mrl() const;
+
+        /**
          * Returns the url of the MediaSource if type() == URL or type() == LocalFile; otherwise
          * returns QUrl().
          */
@@ -253,7 +276,7 @@ class PHONON_EXPORT MediaSource
          * Returns the disc type of the MediaSource if type() == Disc; otherwise returns \ref
          * NoDisc.
          */
-        Phonon::DiscType discType() const;
+        DiscType discType() const;
 
         /**
          * Returns the access list for the device of this media source. Valid for capture devices.
@@ -277,18 +300,6 @@ class PHONON_EXPORT MediaSource
          * Returns the audio capture device for the media source if applicable.
          */
         AudioCaptureDevice audioCaptureDevice() const;
-
-        /**
-         * Sets the source to the specified audio capture device
-         */
-        void setAudioCaptureDevice(const Phonon::AudioCaptureDevice& acDevice);
-
-        /**
-         * Sets the source to the preferred audio capture device for the specified category
-         */
-        void setAudioCaptureDevice(Phonon::CaptureCategory category);
-
-        PHONON_DEPRECATED void setAudioCaptureDevice(Phonon::Category category);
 #endif
 
 #ifndef PHONON_NO_VIDEOCAPTURE
@@ -296,18 +307,6 @@ class PHONON_EXPORT MediaSource
          * Returns the video capture device for the media source if applicable.
          */
         VideoCaptureDevice videoCaptureDevice() const;
-
-        /**
-         * Sets the source to the specified video capture device
-         */
-        void setVideoCaptureDevice(const Phonon::VideoCaptureDevice& vcDevice);
-
-        /**
-         * Sets the source to the preferred audio capture device for the specified category
-         */
-        void setVideoCaptureDevice(Phonon::CaptureCategory category);
-
-        PHONON_DEPRECATED void setVideoCaptureDevice(Phonon::Category category);
 #endif
 
 /*      post 4.0:
