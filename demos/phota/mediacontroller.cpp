@@ -32,6 +32,11 @@ MediaController::MediaController(QObject *parent) :
     m_media = new Phonon::MediaObject(this);
 }
 
+Phonon::MediaObject *MediaController::mediaObject() const
+{
+    return m_media;
+}
+
 void MediaController::openFile()
 {
     QString file = QFileDialog::getOpenFileName(0, tr("Open a new file to play"), "");

@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_videoWidget = new Phonon::VideoWidget();
     setCentralWidget(m_videoWidget);
     m_mediaControl = new MediaController(this);
+    Phonon::createPath(m_mediaControl->mediaObject(), m_videoWidget);
     resize(600, 400);
 }
 

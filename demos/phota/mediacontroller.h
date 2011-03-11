@@ -35,6 +35,8 @@ class MediaController : public QObject
     Q_OBJECT
 public:
     explicit MediaController(QObject *parent = 0);
+    
+    Phonon::MediaObject *mediaObject() const;
 
 public slots:
     void openFile();
