@@ -328,17 +328,6 @@ class PHONON_EXPORT MediaSource
          * \param access How can the device be accessed (driver name - alsa, oss, etc.) and device name
          */
         MediaSource(const DeviceAccess &access);
-
-    private:
-        /**
-         * Sets the source to the specified audio capture device
-         */
-        void setAudioCaptureDevice(const AudioCaptureDevice& device);
-
-        /**
-         * Sets the source to the specified video capture device
-         */
-        void setVideoCaptureDevice(const VideoCaptureDevice& device);
 };
 
 } // namespace Phonon
