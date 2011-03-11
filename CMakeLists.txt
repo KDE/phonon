@@ -46,6 +46,8 @@ if(QT_QTDBUS_FOUND)
     list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
 endif(QT_QTDBUS_FOUND)
 
+set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon-buildsystem/)
+
 add_subdirectory(cmake)
 if(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)

@@ -1,4 +1,3 @@
-set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon-buildsystem/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in
               ${CMAKE_CURRENT_SOURCE_DIR}/COPYING-CMAKE-SCRIPTS
               ${CMAKE_CURRENT_SOURCE_DIR}/FindAutomoc4.cmake
