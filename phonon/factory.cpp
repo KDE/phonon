@@ -149,9 +149,19 @@ bool FactoryPrivate::createBackend()
             }
 #endif
 
-            const QStringList files = dir.entryList(QDir::Files);
-            for (int i = 0; i < files.count(); ++i) {
-                QPluginLoader pluginLoader(libPath + files.at(i));
+#ifdef __GNUC__
+#warning TODO - phonon should really parse cmdline args
+#endif // __GNUC__
+            const QByteArray backendEnv = qgetenv("PHONON_BACKEND");
+            if (!backendEnv.isEmpty()) {
+                pDebug() << "trying to load:" << backendEnv << "as first choice";
+                const int backendIndex = plugins.indexOf(QRegExp(backendEnv + ".*"));
+                if (backendIndex != -1)
+                    plugins.move(backendIndex, 0);
+            }
+
+            foreach (const QString &plugin, plugins) {
+                QPluginLoader pluginLoader(libPath + plugin);
                 if (!pluginLoader.load()) {
                     pDebug() << Q_FUNC_INFO << "  load failed:"
                              << pluginLoader.errorString();
