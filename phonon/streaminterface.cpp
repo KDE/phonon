@@ -50,6 +50,9 @@ StreamInterface::~StreamInterface()
 
 void StreamInterface::connectToSource(const MediaSource &mediaSource)
 {
+#ifdef __GNUC__
+#warning TODO not async
+#endif
     Q_ASSERT(!d->connected);
     d->connected = true;
     d->mediaSource = mediaSource;
@@ -62,6 +65,9 @@ void StreamInterface::connectToSource(const MediaSource &mediaSource)
 
 void StreamInterfacePrivate::disconnectMediaStream()
 {
+#ifdef __GNUC__
+#warning TODO not async
+#endif
     Q_ASSERT(connected);
     connected = false;
 
