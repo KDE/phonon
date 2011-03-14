@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "iodevicestream_p.h"
@@ -65,7 +65,6 @@ void IODeviceStream::reset()
 {
     Q_D(IODeviceStream);
     d->ioDevice->reset();
-    //resetDone();
 }
 
 void IODeviceStream::needData()
@@ -83,7 +82,6 @@ void IODeviceStream::seekStream(qint64 offset)
 {
     Q_D(IODeviceStream);
     d->ioDevice->seek(offset);
-    //seekStreamDone();
 }
 
 } // namespace Phonon
