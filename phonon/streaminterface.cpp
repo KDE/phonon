@@ -50,9 +50,6 @@ StreamInterface::~StreamInterface()
 
 void StreamInterface::connectToSource(const MediaSource &mediaSource)
 {
-#ifdef __GNUC__
-#warning TODO not async
-#endif
     Q_ASSERT(!d->connected);
     d->connected = true;
     d->mediaSource = mediaSource;
@@ -60,14 +57,14 @@ void StreamInterface::connectToSource(const MediaSource &mediaSource)
     Q_ASSERT(d->mediaSource.stream());
     AbstractMediaStreamPrivate *dd = d->mediaSource.stream()->d_func();
     dd->setStreamInterface(this);
-    d->mediaSource.stream()->reset();
+    // Operations above do not access the stream itself, so they do not need to
+    // use invokeMethod.
+    reset();
 }
 
+// Does not need to use invokeMethod as we are are not accessing the stream.
 void StreamInterfacePrivate::disconnectMediaStream()
 {
-#ifdef __GNUC__
-#warning TODO not async
-#endif
     Q_ASSERT(connected);
     connected = false;
 

@@ -39,15 +39,18 @@ class MediaSource;
 /** \class StreamInterface streaminterface.h phonon/StreamInterface
  * \brief Backend interface to handle media streams (AbstractMediaStream).
  *
- * All functions except connect/disconnect translate to invokeMethod calls on the
+ * All functions translate to invokeMethod calls on the
  * AbstractMediaStream's QMetaObject. This means that every function call will
  * actually be executed in the thread context of the AbstractMediaStream (which
- * usually is a thread Phonon also lives in (could however also be another one).
+ * usually is a thread Phonon also lives in, could however also be another one).
  * This protectes the AbstractMediaStream against calls from different threads,
  * such as a callback thread.
+ * This is very important as most IO implementations are by default not
+ * thread-safe.
  *
  * This protection is only established in one direction though, meaning that a
- * backend implementation of this interface must be made thread-safe.
+ * backend implementation of this interface must be made thread-safe at all costs
+ * as it can get called from any thread.
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
