@@ -186,7 +186,7 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
          * seekStream(0);
          * \endcode.
          */
-        virtual void reset() = 0;
+        Q_INVOKABLE virtual void reset() = 0;
 
         /**
          * Reimplement this function to be notified when the backend needs data.
@@ -201,7 +201,7 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
          * object may take a break. This method is important for pushing data to the backend in
          * order to not fill the backend buffer unnecessarily.
          */
-        virtual void enoughData();
+        Q_INVOKABLE virtual void enoughData();
 
         /**
          * Reimplement this function if your stream is seekable.
@@ -211,7 +211,7 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
          *
          * \warning Do not call the parent implementation.
          */
-        virtual void seekStream(qint64 offset);
+        Q_INVOKABLE virtual void seekStream(qint64 offset);
 
         AbstractMediaStream(AbstractMediaStreamPrivate &dd, QObject *parent);
         QScopedPointer<AbstractMediaStreamPrivate> d_ptr;
