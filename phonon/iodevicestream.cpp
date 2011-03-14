@@ -73,12 +73,6 @@ void IODeviceStream::needData()
     quint32 size = 4096;
     Q_D(IODeviceStream);
     const QByteArray data = d->ioDevice->read(size);
-#ifdef __GNUC__
-#warning TODO 4.5 - make sure we do not break anything without this, it is preventing IODs from working when they did not yet emit readyRead()
-#endif
-//    if (data.isEmpty() && !d->ioDevice->atEnd()) {
-//        error(Phonon::NormalError, d->ioDevice->errorString());
-//    }
     writeData(data);
     if (d->ioDevice->atEnd()) {
         endOfData();
