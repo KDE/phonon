@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,9 +15,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_STREAMINTERFACE_H
@@ -38,6 +37,13 @@ class MediaSource;
 
 /** \class StreamInterface streaminterface.h phonon/StreamInterface
  * \brief Backend interface to handle media streams (AbstractMediaStream).
+ *
+ * All functions except connect/disconnect translate to invokeMethod calls on the
+ * AbstractMediaStream's QMetaObject. This means that every function call will
+ * actually be executed in the thread context of the AbstractMediaStream (which
+ * usually is a thread created by Phonon).
+ * This protectes the AbstractMediaStream against calls from different threads,
+ * such as a callback thread.
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
@@ -79,8 +85,9 @@ class PHONON_EXPORT StreamInterface
 
         /**
          * Call this function to tell the AbstractMediaStream that you need more data. The data will
-         * arrive through writeData. Don't rely on writeData getting called from needData, though
-         * some AbstractMediaStream implementations might do so.
+         * arrive through writeData.
+         * writeData() will not be called from needData() due to the thread protection of
+         * the AbstractMediaStream.
          *
          * Depending on the buffering you need you either treat needData as a replacement for a
          * read call like QIODevice::read, or you start calling needData whenever your buffer
