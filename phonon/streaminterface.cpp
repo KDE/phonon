@@ -85,7 +85,7 @@ void StreamInterface::enoughData()
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-        d->mediaSource.stream()->enoughData();
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "enoughData");
     }
 }
 
@@ -93,7 +93,7 @@ void StreamInterface::seekStream(qint64 offset)
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-        d->mediaSource.stream()->seekStream(offset);
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "seekStream", Q_ARG(qint64, offset));
     }
 }
 
@@ -101,7 +101,7 @@ void StreamInterface::reset()
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-        d->mediaSource.stream()->reset();
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "reset");
     }
 }
 
