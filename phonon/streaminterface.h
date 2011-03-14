@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -41,9 +42,12 @@ class MediaSource;
  * All functions except connect/disconnect translate to invokeMethod calls on the
  * AbstractMediaStream's QMetaObject. This means that every function call will
  * actually be executed in the thread context of the AbstractMediaStream (which
- * usually is a thread created by Phonon).
+ * usually is a thread Phonon also lives in (could however also be another one).
  * This protectes the AbstractMediaStream against calls from different threads,
  * such as a callback thread.
+ *
+ * This protection is only established in one direction though, meaning that a
+ * backend implementation of this interface must be made thread-safe.
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
@@ -53,6 +57,7 @@ class PHONON_EXPORT StreamInterface
     friend class AbstractMediaStreamPrivate;
     public:
         virtual ~StreamInterface();
+
         /**
          * Called by the application to send a chunk of (encoded) media data.
          *
@@ -60,16 +65,19 @@ class PHONON_EXPORT StreamInterface
          * memcopy is needed.
          */
         virtual void writeData(const QByteArray &data) = 0;
+
         /**
          * Called when no more media data is available and writeData will not be called anymore.
          */
         virtual void endOfData() = 0;
+
         /**
          * Called at the start of the stream to tell how many bytes will be sent through writeData
          * (if no seeks happen, of course). If this value is negative the stream size cannot be
          * determined (might be a "theoretically infinite" stream - like webradio).
          */
         virtual void setStreamSize(qint64 newSize) = 0;
+
         /**
          * Tells whether the stream is seekable.
          */
