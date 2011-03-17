@@ -106,7 +106,10 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             state(Phonon::LoadingState),
             readyForZeitgeist(false)
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            , errorType(Phonon::NormalError)
+            , errorType(Phonon::NormalError),
+            errorOverride(false),
+            ignoreLoadingToBufferingStateChange(false),
+            ignoreErrorToLoadingStateChange(false)
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
         }
@@ -127,6 +130,9 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             : 8;
         bool readyForZeitgeist;
         ErrorType errorType : 4;
+        bool errorOverride : 1;
+        bool ignoreLoadingToBufferingStateChange : 1;
+        bool ignoreErrorToLoadingStateChange : 1;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
