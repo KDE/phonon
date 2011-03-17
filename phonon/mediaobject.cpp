@@ -511,6 +511,13 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
     QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::ErrorState), Q_ARG(Phonon::State, lastState));
     //emit q->stateChanged(ErrorState, lastState);
 }
+
+void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
+{
+    Q_Q(MediaObject);
+
+    emit q->stateChanged(newstate, oldstate);
+}
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 void MediaObjectPrivate::_k_stateChanged(State newState, State oldState)
@@ -560,6 +567,7 @@ void MediaObjectPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
     //pDebug() << Q_FUNC_INFO;
 
+<<<<<<< HEAD
     // Queue the stateChanged connection to prevent issues with Amarok's engine controller.
     // On error Amarok's engine controller will delete the MediaObject, meaning if
     // the error state was emitted from the same thread it will destroy the backend's
