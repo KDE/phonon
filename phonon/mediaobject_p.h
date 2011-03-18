@@ -29,6 +29,10 @@
 #include "medianodedestructionhandler_p.h"
 #include "mediasource.h"
 #include <QtCore/QQueue>
+#ifdef HAVE_QZEITGEIST
+#include <QtZeitgeist/Log>
+#include <QtZeitgeist/QtZeitgeist>
+#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -112,6 +116,10 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             ignoreErrorToLoadingStateChange(false)
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
+#ifdef HAVE_QZEITGEIST
+            QtZeitgeist::init();
+            log = new QtZeitgeist::Log(qObject());
+#endif
         }
 
         qint64 currentTime;
@@ -136,6 +144,9 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
+#ifdef HAVE_QZEITGEIST
+        QtZeitgeist::Log *log;
+#endif
 };
 }
 

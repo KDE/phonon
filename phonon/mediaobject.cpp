@@ -355,11 +355,6 @@ void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
                                          const QString &subject_mimetype)
 {
 #ifdef HAVE_QZEITGEIST
-    QtZeitgeist::init();
-#ifdef __GNUC__
-#warning TODO log does not get deleted
-#endif
-    QtZeitgeist::Log *log = new QtZeitgeist::Log(qObject());
     QtZeitgeist::DataModel::Subject subject;
     QString url = subject_uri.toString();
     QString path = url.left(url.lastIndexOf(QLatin1Char('/')));
