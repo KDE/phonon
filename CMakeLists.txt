@@ -72,7 +72,6 @@ if (NOT PHONON_MKSPECS_DIR)
     set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR})
 endif (NOT PHONON_MKSPECS_DIR)
 
-# Don't do this, it makes Qt build phonon the next time it's built
-#install(FILES qt_phonon.pri DESTINATION  ${PHONON_MKSPECS_DIR}/modules)
+install(FILES qt_phonon.pri DESTINATION  ${PHONON_MKSPECS_DIR}/modules)
 
 macro_display_feature_log()
