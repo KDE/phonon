@@ -77,6 +77,20 @@ namespace Phonon
      * }
      * \endcode
      *
+     * Some platforms support system-wide tracking of a user's activities. For
+     * instance, the zeitgeist project (http://zeitgeist-project.com) on Linux.
+     *
+     * This integration is opt-in only and can be enabled by setting the
+     * PlaybackTracking property to true:
+     * \code
+     * media->setProperty("PlaybackTracking", true);
+     * \endcode
+     *
+     * This kind of information is normally used to provide a universal history
+     * view to the user, such as what songs were played when, regardless of the
+     * media player. This is in addition to any emails read, IM conversations,
+     * websites viewed, etc.
+     *
      * \ingroup Playback
      * \ingroup Recording
      * \author Matthias Kretz <kretz@kde.org>

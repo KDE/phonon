@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Trever Fischer <tdfischer@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -318,32 +319,6 @@ void MediaObject::clearQueue()
     d->sourceQueue.clear();
 }
 
-bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that) {
-    QList<MediaNode *> visited;
-    return hasZeitgeistableOutput(that, &visited);
-}
-
-bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that, QList<MediaNode*> *visited)
-{
-    visited->append(that);
-    AudioOutput *output = dynamic_cast<AudioOutput *>(that);
-    if (output) {
-        Phonon::Category cat = output->category();
-        if (cat == Phonon::MusicCategory || cat == Phonon::VideoCategory) {
-            pDebug() << "Found zeitgeistable output type.";
-            return true;
-        }
-    }
-    foreach (const Path p, that->outputPaths()) {
-        MediaNode *sink = p.sink();
-        if (!visited->contains(sink)) {
-            return hasZeitgeistableOutput(sink, visited);
-        }
-    }
-    pDebug() << "Did not find zeitgeistable output type.";
-    return false;
-}
-
 void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
                                          const QString &event_manifestation,
                                          const QString &event_actor,
@@ -400,9 +375,7 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
 #ifdef __GNUC__
 #warning TODO properties need documenting and maybe renaming?
 #endif
-    if (readyForZeitgeist &&
-            (q->property("_p_LogPlayback").toBool() &&
-                (q->property("_p_ForceLogPlayback").toBool() || hasZeitgeistableOutput(q)))) {
+    if (readyForZeitgeist && q->property("PlaybackTracking").toBool()) {
         pDebug() << "Current state:" << eventState;
         QString eventInterpretation;
         switch (eventState) {

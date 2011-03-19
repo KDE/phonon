@@ -51,9 +51,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     public:
         virtual QObject *qObject() { return q_func(); }
 
-        bool hasZeitgeistableOutput(MediaNode *that);
-        bool hasZeitgeistableOutput(MediaNode *that, QList<MediaNode *> *visited);
-
         /**
          * Sends the metadata for this media file to the Zeitgeist tracker
          *
