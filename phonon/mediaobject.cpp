@@ -611,7 +611,11 @@ void MediaObjectPrivate::setupBackendObject()
     // MediaObject *while* it is doing something.
     // By queuing the connection the MediaObject can finish whatever it is doing
     // before Amarok starts doing nasty things to us.
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+#else
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),             q, SIGNAL(tick(qint64)));
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),    q, SIGNAL(seekableChanged(bool)));
 #ifndef QT_NO_PHONON_VIDEO
@@ -626,8 +630,6 @@ void MediaObjectPrivate::setupBackendObject()
             q, SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)));
     QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource&)),
         q, SLOT(_k_currentSourceChanged(const MediaSource&)));
-
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)));
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));
