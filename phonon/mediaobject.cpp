@@ -372,9 +372,6 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
 {
 #ifdef HAVE_QZEITGEIST
     Q_Q(MediaObject);
-#ifdef __GNUC__
-#warning TODO properties need documenting and maybe renaming?
-#endif
     if (readyForZeitgeist && q->property("PlaybackTracking").toBool()) {
         pDebug() << "Current state:" << eventState;
         QString eventInterpretation;
