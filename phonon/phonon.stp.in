@@ -1,7 +1,51 @@
+global phonon_sources
+global phonon_sourceNames
+
 probe phonon.node.create = process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("node_create")
 {
+    probestr = sprintf("phonon.node.create(%p)", $arg1);
 }
 
-probe phonon.node.destroy= process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("node_destroy")
+probe phonon.node.destroy = process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("node_destroy")
 {
+    probestr = sprintf("phonon.node.destroy(%p)", $arg1);
+}
+
+probe phonon.media.play = process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("media_play")
+{
+    probestr = sprintf("phonon.media.play(%p)", $arg1);
+    source = phonon_sources[pid(), $arg1];
+    sourceName = phonon_sourceNames[pid(), source];
+}
+
+probe phonon.media.pause = process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("media_pause")
+{
+    probestr = sprintf("phonon.media.pause(%p)", $arg1);
+    source = phonon_sources[pid(), $arg1];
+    sourceName = phonon_sourceNames[pid(), $arg2];
+}
+
+probe phonon.media.stop = process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("media_stop")
+{
+    probestr = sprintf("phonon.media.stop(%p)", $arg1);
+    source = phonon_sources[pid(), $arg1];
+    sourceName = phonon_sourceNames[pid(), source];
+}
+
+probe phonon.media.newSource = process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("media_new_source")
+{
+    probestr = sprintf("phonon.media.newSource(%p)", $arg1);
+    source = $arg2;
+    phonon_sources[pid(), $arg1] = source;
+    sourceName = phonon_sourceNames[pid(), $arg2];
+}
+
+probe process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("source_create")
+{
+    phonon_sourceNames[pid(), $arg1] = user_string($arg2); 
+}
+
+probe phonon.source.create = process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("source_create")
+{
+    probestr = sprintf("phonon.source.create(%p[%s])", $arg1, user_string($arg2));
 }

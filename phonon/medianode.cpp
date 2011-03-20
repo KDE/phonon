@@ -35,7 +35,7 @@ namespace Phonon
     MediaNode::MediaNode(MediaNodePrivate &dd)
         : k_ptr(&dd)
     {
-        TRACE(PHONON_NODE_CREATE());
+        TRACE(PHONON_NODE_CREATE(this));
         k_ptr->q_ptr = this;
     }
 
@@ -56,7 +56,7 @@ bool MediaNode::isValid() const
 
     MediaNode::~MediaNode()
     {
-        TRACE(PHONON_NODE_DESTROY());
+        TRACE(PHONON_NODE_DESTROY(this));
         delete k_ptr;
     }
 

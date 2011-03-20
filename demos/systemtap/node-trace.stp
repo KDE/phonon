@@ -7,11 +7,23 @@ probe begin {
 }
 
 probe phonon.node.create {
-    printf("Node created!\n")
+    printf("%s\n", probestr);
 }
 
-probe phonon.node.destroy{
-    printf("Node destroyed!\n")
+probe phonon.node.destroy {
+    printf("%s\n", probestr);
+}
+
+probe phonon.media.newSource {
+    printf("%s loaded new source %s\n", execname(), sourceName);
+}
+
+probe phonon.media.play {
+    printf("%s is now playing %s\n", execname(), sourceName);
+}
+
+probe phonon.media.stop {
+    printf("%s stopped playing %s\n", execname(), sourceName);
 }
 
 probe end {

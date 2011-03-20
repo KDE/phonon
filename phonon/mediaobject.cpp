@@ -30,6 +30,7 @@
 #include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
 #include "frontendinterface_p.h"
+#include "phonon_trace.h"
 
 #include <QtCore/QStringBuilder>
 #include <QtCore/QStringList>
@@ -109,6 +110,7 @@ static inline bool isPlayable(const MediaSource::Type t)
 void MediaObject::play()
 {
     K_D(MediaObject);
+    TRACE(PHONON_MEDIA_PLAY(this));
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(play());
     }
@@ -117,6 +119,7 @@ void MediaObject::play()
 void MediaObject::pause()
 {
     K_D(MediaObject);
+    TRACE(PHONON_MEDIA_PAUSE(this));
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(pause());
     }
@@ -125,6 +128,7 @@ void MediaObject::pause()
 void MediaObject::stop()
 {
     K_D(MediaObject);
+    TRACE(PHONON_MEDIA_STOP(this));
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(stop());
     }
@@ -133,6 +137,7 @@ void MediaObject::stop()
 void MediaObject::seek(qint64 time)
 {
     K_D(MediaObject);
+    TRACE(PHONON_MEDIA_SEEK(this, time));
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(seek(time));
     }
@@ -238,6 +243,7 @@ MediaSource MediaObject::currentSource() const
 void MediaObject::setCurrentSource(const MediaSource &newSource)
 {
     K_D(MediaObject);
+    TRACE(PHONON_MEDIA_NEW_SOURCE(this, &newSource));
     if (!k_ptr->backendObject()) {
         d->mediaSource = newSource;
         return;
@@ -492,6 +498,7 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
 {
     Q_Q(MediaObject);
+    TRACE(PHONON_MEDIA_STATE_CHANGED(this, newstate, oldstate));
 
     // Zeitgeist ---------------------------------------------------------------
     if (newstate == StoppedState) {

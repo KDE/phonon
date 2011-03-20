@@ -25,6 +25,7 @@
 #include "iodevicestream_p.h"
 #include "abstractmediastream_p.h"
 #include "globalconfig.h"
+#include "phonon_trace.h"
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
@@ -48,6 +49,7 @@ MediaSource::MediaSource()
 MediaSource::MediaSource(const QString &filename)
     : d(new MediaSourcePrivate(LocalFile))
 {
+    TRACE(PHONON_SOURCE_CREATE(this, filename.toUtf8().constData()));
     const QFileInfo fileInfo(filename);
     if (fileInfo.exists()) {
         bool localFs = QAbstractFileEngine::LocalDiskFlag & QFSFileEngine(filename).fileFlags(QAbstractFileEngine::LocalDiskFlag);
@@ -77,6 +79,7 @@ MediaSource::MediaSource(const QString &filename)
 MediaSource::MediaSource(const QUrl &url)
     : d(new MediaSourcePrivate(Url))
 {
+    TRACE(PHONON_SOURCE_CREATE(this, url.toString().toUtf8().constData()));
     if (url.isValid()) {
         d->url = url;
     } else {
