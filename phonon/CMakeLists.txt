@@ -15,6 +15,8 @@ macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sou
 macro_optional_find_package(GLIB2)
 macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
 
+macro_optional_find_package(SystemTap)
+macro_log_feature(SYSTEMTAP_FOUND "SystemTap" "A system instrumentation toolkit" "http://sourceware.org/systemtap/" FALSE "" "Allows advanced inspection of phonon internals while running")
 
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
    add_definitions(-DHAVE_PULSEAUDIO)
@@ -100,6 +102,12 @@ if (QZEITGEIST_FOUND)
     target_link_libraries(phonon ${QZEITGEIST_LIBRARY})
 endif(QZEITGEIST_FOUND)
 
+if (SYSTEMTAP_FOUND)
+    add_definitions(-DHAVE_SYSTEMTAP)
+    systemtap_add_tapset(phonon ${CMAKE_CURRENT_SOURCE_DIR}/phonon_probes.d)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.stp.in ${CMAKE_CURRENT_BINARY_DIR}/phonon.stp)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.stp DESTINATION ${SYSTEMTAP_PROBE_INSTALL_DIR})
+endif(SYSTEMTAP_FOUND)
 
 if (QT_QTDBUS_FOUND)
   target_link_libraries(phonon ${QT_QTDBUS_LIBRARY})

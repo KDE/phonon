@@ -25,6 +25,7 @@
 #include "medianode_p.h"
 #include "medianodedestructionhandler_p.h"
 #include "factory_p.h"
+#include "phonon_trace.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -34,6 +35,7 @@ namespace Phonon
     MediaNode::MediaNode(MediaNodePrivate &dd)
         : k_ptr(&dd)
     {
+        TRACE(PHONON_NODE_CREATE());
         k_ptr->q_ptr = this;
     }
 
@@ -54,6 +56,7 @@ bool MediaNode::isValid() const
 
     MediaNode::~MediaNode()
     {
+        TRACE(PHONON_NODE_DESTROY());
         delete k_ptr;
     }
 

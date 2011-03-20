@@ -1,0 +1,7 @@
+probe phonon.node.create = process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("node_create")
+{
+}
+
+probe phonon.node.destroy= process("@LIB_INSTALL_DIR@/libphonon.so.@PHONON_LIB_VERSION@").mark("node_destroy")
+{
+}
