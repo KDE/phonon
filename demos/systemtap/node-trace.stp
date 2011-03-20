@@ -1,0 +1,19 @@
+/**
+ * A quick systemtap/dtrace script to print messages when MediaNodes are created/destroyed.
+ */
+
+probe begin {
+    printf("Tracing started.\n")
+}
+
+probe phonon.node.create {
+    printf("Node created!\n")
+}
+
+probe phonon.node.destroy{
+    printf("Node destroyed!\n")
+}
+
+probe end {
+    printf("Tracing stopped.\n")
+}
