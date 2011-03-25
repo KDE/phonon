@@ -12,6 +12,8 @@ set(phononexperimental_LIB_SRCS
     globalconfig.cpp
     mediasource.cpp
     objectdescription.cpp
+    packet.cpp
+    packetpool.cpp
     videodataoutput.cpp
     videodataoutput2.cpp
     videowidget.cpp
@@ -43,6 +45,8 @@ install(FILES
     mediasource.h
     objectdescription.h
     snapshotinterface.h
+    packet.h
+    packetpool.h
     phononnamespace.h
     videodataoutput.h
     videodataoutput2.h
