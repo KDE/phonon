@@ -24,20 +24,20 @@ endmacro(_phonon_find_version)
 
 if(PHONON_INCLUDE_DIR AND PHONON_LIBRARY)
     set(PHONON_FIND_QUIETLY TRUE)
+else()
+   find_package(PkgConfig)
+   pkg_check_modules(PC_PHONON phonon)
+   set(PHONON_DEFINITIONS ${PC_PHONON_CFLAGS_OTHER})
+
+   find_library(PHONON_LIBRARY NAMES phonon
+                   HINTS ${PC_PHONON_LIBDIR} ${PC_PHONON_LIBRARY_DIRS}
+                       ${KDE4_LIB_INSTALL_DIR} ${QT_LIBRARY_DIR})
+
+   find_path(PHONON_INCLUDE_DIR NAMES phonon/phonon_export.h
+               HINTS ${PC_PHONON_INCLUDEDIR} ${PC_PHONON_INCLUDE_DIRS}
+                   ${KDE4_INCLUDE_INSTALL_DIR} ${QT_INCLUDE_DIR}
+                   ${INCLUDE_INSTALL_DIR} ${QT_LIBRARY_DIR})
 endif(PHONON_INCLUDE_DIR AND PHONON_LIBRARY)
-
-find_package(PkgConfig)
-pkg_check_modules(PC_PHONON phonon)
-set(PHONON_DEFINITIONS ${PC_PHONON_CFLAGS_OTHER})
-
-find_library(PHONON_LIBRARY NAMES phonon
-                HINTS ${PC_PHONON_LIBDIR} ${PC_PHONON_LIBRARY_DIRS}
-                    ${KDE4_LIB_INSTALL_DIR} ${QT_LIBRARY_DIR})
-
-find_path(PHONON_INCLUDE_DIR NAMES phonon/phonon_export.h
-            HINTS ${PC_PHONON_INCLUDEDIR} ${PC_PHONON_INCLUDE_DIRS}
-                ${KDE4_INCLUDE_INSTALL_DIR} ${QT_INCLUDE_DIR}
-                ${INCLUDE_INSTALL_DIR} ${QT_LIBRARY_DIR})
 
 if (PHONON_INCLUDE_DIR AND PHONON_LIBRARY)
     set(PHONON_LIBS ${PHONON_LIBRARY})
