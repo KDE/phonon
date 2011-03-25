@@ -25,10 +25,13 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(PHONON_INTERNAL TRUE)
 find_package(PhononInternal)
 
-set(PHONON_LIB_MAJOR_VERSION "4")
-set(PHONON_LIB_MINOR_VERSION "4")
-set(PHONON_LIB_PATCH_VERSION "57")
-set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.4.0")
+# The following variables directly influence the library's soname version.
+# It is highly advised to think twice before changing those.
+# If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
+set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
+set(PHONON_LIB_MINOR_VERSION "4") # Only change on binary compatible changes with new interfaces
+set(PHONON_LIB_PATCH_VERSION "57") # Bump whenever you feel like it :P
+set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
 add_definitions(${QT_DEFINITIONS})
