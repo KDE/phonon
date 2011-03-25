@@ -15,12 +15,13 @@ cd abi
 install_prefix="`esc "@CMAKE_INSTALL_PREFIX@"`"
 target_dir_=`pwd`
 target_dir="`esc $target_dir_`\/@PHONON_LIB_VERSION@\/${install_prefix}"
+dest_dir="${target_dir_}/@PHONON_LIB_VERSION@"
 
 cd $pwd_
 
 sed -i "s/$install_prefix/$target_dir/" @DESCRIPTOR_FILE_PATH@
-rm -rf $target_dir_
-make install DESTDIR=$target_dir
+rm -rf $dest_dir
+make install DESTDIR=$dest_dir
 
 # cd ${target_dir_}
 # args=""
