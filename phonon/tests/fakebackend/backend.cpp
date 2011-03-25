@@ -77,6 +77,8 @@ QObject *Backend::createObject(BackendInterface::Class c, QObject *parent, const
         return new Effect(args[0].toInt(), parent);
     case VideoWidgetClass:
         return new VideoWidget(qobject_cast<QWidget *>(parent));
+    default:
+        return NULL;
     }
     return 0;
 }
@@ -148,6 +150,8 @@ QList<int> Backend::objectDescriptionIndexes(ObjectDescriptionType type) const
     case Phonon::EffectType:
         list << 0x7F000001;
         break;
+    default:
+        return list;
     }
     return list;
 }
@@ -257,6 +261,8 @@ QHash<QByteArray, QVariant> Backend::objectDescriptionProperties(ObjectDescripti
             break;
         }
         break;
+    default:
+        ;
     }
     return ret;
 }

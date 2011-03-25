@@ -43,8 +43,10 @@ class PHONONEXPERIMENTAL_EXPORT GlobalConfig : public Phonon::GlobalConfig
 
 #ifndef PHONON_NO_VIDEOCAPTURE
 public:
-    QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
-    int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+    PHONON_DEPRECATED QList<int> videoCaptureDeviceListFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+    PHONON_DEPRECATED int videoCaptureDeviceFor(Phonon::Category category, int override = AdvancedDevicesFromSettings) const;
+    QList<int> videoCaptureDeviceListFor(Phonon::CaptureCategory category, int override = AdvancedDevicesFromSettings) const;
+    int videoCaptureDeviceFor(Phonon::CaptureCategory category, int override = AdvancedDevicesFromSettings) const;
 
 Q_SIGNALS:
     void videoCaptureDeviceConfigChanged();

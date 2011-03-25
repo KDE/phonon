@@ -420,6 +420,9 @@ void MediaObject::emitTick()
                 break;
             case MediaSource::Stream:
                 break;
+            case MediaSource::CaptureDevice:
+                Q_ASSERT(!m_source.deviceAccessList().isEmpty());
+                break;
             }
             emit totalTimeChanged(totalTime());
             QMultiMap<QString, QString> metaData;
