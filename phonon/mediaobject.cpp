@@ -78,7 +78,6 @@ MediaObject::~MediaObject()
 Phonon::State MediaObject::state() const
 {
     K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (d->errorOverride) {
         return d->state;
     }
@@ -88,7 +87,6 @@ Phonon::State MediaObject::state() const
     if (d->ignoreErrorToLoadingStateChange) {
         return LoadingState;
     }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (!d->m_backendObject) {
         return d->state;
     }
@@ -142,11 +140,9 @@ QString MediaObject::errorString() const
 {
     if (state() == Phonon::ErrorState) {
         K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (d->errorOverride) {
             return d->errorString;
         }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
         return INTERFACE_CALL(errorString());
     }
     return QString();
@@ -156,11 +152,9 @@ ErrorType MediaObject::errorType() const
 {
     if (state() == Phonon::ErrorState) {
         K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (d->errorOverride) {
             return d->errorType;
         }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
         return INTERFACE_CALL(errorType());
     }
     return Phonon::NoError;
@@ -604,11 +598,7 @@ void MediaObjectPrivate::setupBackendObject()
     // MediaObject *while* it is doing something.
     // By queuing the connection the MediaObject can finish whatever it is doing
     // before Amarok starts doing nasty things to us.
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-#else
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),             q, SIGNAL(tick(qint64)));
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),    q, SIGNAL(seekableChanged(bool)));
     QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),    q, SIGNAL(hasVideoChanged(bool)));
