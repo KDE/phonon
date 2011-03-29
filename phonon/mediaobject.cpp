@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Trever Fischer <tdfischer@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -77,6 +78,17 @@ MediaObject::~MediaObject()
 Phonon::State MediaObject::state() const
 {
     K_D(const MediaObject);
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+    if (d->errorOverride) {
+        return d->state;
+    }
+    if (d->ignoreLoadingToBufferingStateChange) {
+        return BufferingState;
+    }
+    if (d->ignoreErrorToLoadingStateChange) {
+        return LoadingState;
+    }
+#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (!d->m_backendObject) {
         return d->state;
     }
@@ -130,6 +142,11 @@ QString MediaObject::errorString() const
 {
     if (state() == Phonon::ErrorState) {
         K_D(const MediaObject);
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        if (d->errorOverride) {
+            return d->errorString;
+        }
+#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
         return INTERFACE_CALL(errorString());
     }
     return QString();
@@ -139,6 +156,11 @@ ErrorType MediaObject::errorType() const
 {
     if (state() == Phonon::ErrorState) {
         K_D(const MediaObject);
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        if (d->errorOverride) {
+            return d->errorType;
+        }
+#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
         return INTERFACE_CALL(errorType());
     }
     return Phonon::NoError;
@@ -231,18 +253,6 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
-    } else if (d->mediaSource.type() == MediaSource::Url &&
-               d->mediaSource.url().scheme() != QLatin1String("file") &&
-               !d->mediaSource.url().scheme().isEmpty()) {
-        d->abstractStream = Platform::createMediaStream(newSource.url(), this);
-        if (d->abstractStream) {
-            d->abstractStream->d_func()->setMediaObjectPrivate(d);
-
-            d->mediaSource = MediaSource(d->abstractStream);
-            d->mediaSource.setAutoDelete(true);
-        } else {
-            pWarning() << "Unable to create abstract media stream for URL!";
-        }
     }
 
     INTERFACE_CALL(setSource(d->mediaSource));
@@ -306,32 +316,6 @@ void MediaObject::clearQueue()
     d->sourceQueue.clear();
 }
 
-bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that) {
-    QList<MediaNode *> visited;
-    return hasZeitgeistableOutput(that, &visited);
-}
-
-bool MediaObjectPrivate::hasZeitgeistableOutput(MediaNode *that, QList<MediaNode*> *visited)
-{
-    visited->append(that);
-    AudioOutput *output = dynamic_cast<AudioOutput *>(that);
-    if (output) {
-        Phonon::Category cat = output->category();
-        if (cat == Phonon::MusicCategory || cat == Phonon::VideoCategory) {
-            pDebug() << "Found zeitgeistable output type.";
-            return true;
-        }
-    }
-    foreach (const Path p, that->outputPaths()) {
-        MediaNode *sink = p.sink();
-        if (!visited->contains(sink)) {
-            return hasZeitgeistableOutput(sink, visited);
-        }
-    }
-    pDebug() << "Did not find zeitgeistable output type.";
-    return false;
-}
-
 void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
                                          const QString &event_manifestation,
                                          const QString &event_actor,
@@ -343,11 +327,6 @@ void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
                                          const QString &subject_mimetype)
 {
 #ifdef HAVE_QZEITGEIST
-    QtZeitgeist::init();
-#ifdef __GNUC__
-#warning TODO log does not get deleted
-#endif
-    QtZeitgeist::Log *log = new QtZeitgeist::Log(qObject());
     QtZeitgeist::DataModel::Subject subject;
     QString url = subject_uri.toString();
     QString path = url.left(url.lastIndexOf(QLatin1Char('/')));
@@ -390,12 +369,7 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
 {
 #ifdef HAVE_QZEITGEIST
     Q_Q(MediaObject);
-#ifdef __GNUC__
-#warning TODO properties need documenting and maybe renaming?
-#endif
-    if (readyForZeitgeist &&
-            (q->property("_p_LogPlayback").toBool() &&
-                (q->property("_p_ForceLogPlayback").toBool() || hasZeitgeistableOutput(q)))) {
+    if (readyForZeitgeist && q->property("PlaybackTracking").toBool()) {
         pDebug() << "Current state:" << eventState;
         QString eventInterpretation;
         switch (eventState) {
@@ -501,6 +475,7 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 {
     Q_Q(MediaObject);
     State lastState = q->state();
+    errorOverride = true;
     errorType = type;
     errorString = text;
     state = ErrorState;
@@ -508,13 +483,83 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
     //emit q->stateChanged(ErrorState, lastState);
 }
 
-void MediaObjectPrivate::_k_stateChanged(State newState, State oldState)
+// TODO: this needs serious cleanup...
+void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
 {
-    if (newState == StoppedState) {
+    Q_Q(MediaObject);
+
+    // Zeitgeist ---------------------------------------------------------------
+    if (newstate == StoppedState) {
         readyForZeitgeist = true;
     }
-    pDebug() << "State changed from" << oldState << "to" << newState << "-> sending to zeitgeist.";
-    sendToZeitgeist(newState);
+    pDebug() << "State changed from" << oldstate << "to" << newstate << "-> sending to zeitgeist.";
+    sendToZeitgeist(newstate);
+
+    // AbstractMediaStream fallback stuff --------------------------------------
+    if (errorOverride) {
+        errorOverride = false;
+        if (newstate == ErrorState) {
+            return;
+        }
+        oldstate = ErrorState;
+    }
+
+    if (mediaSource.type() != MediaSource::Url) {
+        // special handling only necessary for URLs because of the fallback
+        emit q->stateChanged(newstate, oldstate);
+        return;
+    }
+
+    // backend MediaObject reached ErrorState, try a KioMediaSource
+    if (newstate == Phonon::ErrorState && !abstractStream) {
+        abstractStream = Platform::createMediaStream(mediaSource.url(), q);
+        if (!abstractStream) {
+            pDebug() << "backend MediaObject reached ErrorState, no KIO fallback available";
+            emit q->stateChanged(newstate, oldstate);
+            return;
+        }
+        pDebug() << "backend MediaObject reached ErrorState, trying Platform::createMediaStream now";
+        ignoreLoadingToBufferingStateChange = false;
+        ignoreErrorToLoadingStateChange = false;
+        switch (oldstate) {
+        case Phonon::BufferingState:
+            // play() has already been called, we need to make sure it is called
+            // on the backend with the KioMediaStream MediaSource now, too
+            ignoreLoadingToBufferingStateChange = true;
+            break;
+        case Phonon::LoadingState:
+            ignoreErrorToLoadingStateChange = true;
+            // no extras
+            break;
+        default:
+            pError() << "backend MediaObject reached ErrorState after " << oldstate
+                << ". It seems a KioMediaStream will not help here, trying anyway.";
+            emit q->stateChanged(Phonon::LoadingState, oldstate);
+            break;
+        }
+        abstractStream->d_func()->setMediaObjectPrivate(this);
+        MediaSource mediaSource(abstractStream);
+        mediaSource.setAutoDelete(true);
+        pINTERFACE_CALL(setSource(mediaSource));
+        if (oldstate == Phonon::BufferingState) {
+            q->play();
+        }
+        return;
+    } else if (ignoreLoadingToBufferingStateChange &&
+            abstractStream &&
+            oldstate == Phonon::LoadingState) {
+        if (newstate != Phonon::BufferingState) {
+            emit q->stateChanged(newstate, Phonon::BufferingState);
+        }
+        return;
+    } else if (ignoreErrorToLoadingStateChange && abstractStream && oldstate == ErrorState) {
+        if (newstate != LoadingState) {
+            emit q->stateChanged(newstate, Phonon::LoadingState);
+        }
+        return;
+    }
+
+    emit q->stateChanged(newstate, oldstate);
 }
 
 void MediaObjectPrivate::_k_aboutToFinish()
@@ -559,7 +604,11 @@ void MediaObjectPrivate::setupBackendObject()
     // MediaObject *while* it is doing something.
     // By queuing the connection the MediaObject can finish whatever it is doing
     // before Amarok starts doing nasty things to us.
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+#else
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),             q, SIGNAL(tick(qint64)));
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),    q, SIGNAL(seekableChanged(bool)));
     QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),    q, SIGNAL(hasVideoChanged(bool)));
@@ -572,8 +621,6 @@ void MediaObjectPrivate::setupBackendObject()
             q, SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)));
     QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource&)),
         q, SLOT(_k_currentSourceChanged(const MediaSource&)));
-
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)));
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));

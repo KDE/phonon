@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2004-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "factory_p.h"
@@ -147,9 +147,19 @@ bool FactoryPrivate::createBackend()
             }
 #endif
 
-            const QStringList files = dir.entryList(QDir::Files);
-            for (int i = 0; i < files.count(); ++i) {
-                QPluginLoader pluginLoader(libPath + files.at(i));
+#ifdef __GNUC__
+#warning TODO - phonon should really parse cmdline args
+#endif // __GNUC__
+            const QByteArray backendEnv = qgetenv("PHONON_BACKEND");
+            if (!backendEnv.isEmpty()) {
+                pDebug() << "trying to load:" << backendEnv << "as first choice";
+                const int backendIndex = plugins.indexOf(QRegExp(backendEnv + ".*"));
+                if (backendIndex != -1)
+                    plugins.move(backendIndex, 0);
+            }
+
+            foreach (const QString &plugin, plugins) {
+                QPluginLoader pluginLoader(libPath + plugin);
                 if (!pluginLoader.load()) {
                     pDebug() << Q_FUNC_INFO << "  load failed:"
                              << pluginLoader.errorString();

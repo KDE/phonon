@@ -54,49 +54,109 @@ class AddonInterface
         };
 
         enum NavigationCommand {
-            availableMenus,
-            MenuMain,
-            MenuTitle,
-            MenuRoot,
-            MenuAudio,
-            MenuAngle,
-            MenuChapter
+            availableMenus, /**< \returns a QList<MediaController::NavigationMenu>
+                                 containing all supported navigation menu types */
+            setMenu         /**< Sets the current menu to the first
+                                 \c MediaController::NavigationMenu in a QList */
         };
 
         enum ChapterCommand {
-            availableChapters,
-            chapter,
-            setChapter
+            availableChapters, /**< \returns an \c int representing the amount of
+                                    available chapters on the media source */
+            chapter,           /**< \returns an \c int representing the current chapter */
+            setChapter         /**< Sets the current chapter to the first \c int in the QList */
         };
 
         enum AngleCommand {
-            availableAngles,
-            angle,
-            setAngle
+            availableAngles, /**< \returns \c int representing the amount of
+                                  available angles on the media source */
+            angle,           /**< \returns an \c int representing the current angle */
+            setAngle         /**< Sets the current angle to the first \c int in the QList */
         };
 
         enum TitleCommand {
-            availableTitles,
-            title,
-            setTitle,
-            autoplayTitles,
-            setAutoplayTitles
+            availableTitles, /**< \returns \c int representing the amount of
+                                  available titles on the media source */
+            title,           /**< \returns \c int representing the current title */
+            setTitle,        /**< Sets the current tittle to the first \c int in the QList */
+            autoplayTitles,  /**< \returns \c bool whether autoplay of titles is on */
+            setAutoplayTitles /**< Sets autoplay to \c true or \c false as
+                                   indicated in the first \c bool in the QList */
         };
 
         enum SubtitleCommand {
-            availableSubtitles,
-            currentSubtitle,
-            setCurrentSubtitle
+            availableSubtitles, /**< \returns \c int representing the amount of
+                                      available subtitles on the media source */
+            currentSubtitle,    /**< \returns \c int representing the current subtitle */
+            setCurrentSubtitle  /**< Sets the current subtitle to the first
+                                     \c int in the QList */
         };
 
         enum AudioChannelCommand {
-            availableAudioChannels,
-            currentAudioChannel,
-            setCurrentAudioChannel
+            availableAudioChannels, /**< \returns \c int representing the amount
+                                          of all available audio channels on the
+                                          media source */
+            currentAudioChannel,    /**< \returns \c int representing the current
+                                          audio channel */
+            setCurrentAudioChannel  /**< Sets the current audio channel to the first
+                                         \c int in the QList */
         };
 
+        /**
+         * Queries whether the backend supports a specific interface.
+         *
+         * \param iface The interface to query support information about
+         * \returns \c true when the backend supports the interface, \c false otherwise
+         * 
+         * \ingroup backend
+         **/
         virtual bool hasInterface(Interface iface) const = 0;
 
+        /**
+         * Calls an interface on the backend.
+         *
+         * \param iface The interface to call.
+         * \param command The command the interface shall execute. This can be
+         * any value of the Command enumeration associated with the command. The
+         * backend casts this appropriately.
+         * \param arguments The arguments for the command. This list can contain
+         * a QVariant supported format + additions specific to Phonon. The
+         * content entirely depends on the command (e.g. a getter may simply use
+         * an empty list).
+         * 
+         * \return \c QVariant, as with the arguments this can be anything ranging
+         * from an empty QVariant to custom types used within Phonon
+         * 
+         * Setting the chapter of a Media could be done like this: 
+         * \code
+         * AddonInterface *iface = d->iface();
+         * iface->interfaceCall(AddonInterface::ChapterInterface,
+         *                      AddonInterface::setChapter,
+         *                      QList<QVariant>() << QVariant(titleNumber));
+         * \endcode
+         * 
+         * Handling such a request in the backend is done as follows:
+         * \code
+         * switch (iface) {
+         * case AddonInterface::ChapterInterface:
+         *     switch (static_cast<AddonInterface::ChapterCommand>(command)) {
+         *     case setChapter:
+         *         setCurrentChapter(arguments.first().toInt());
+         *         return QVariant();
+         *     }
+         * }
+         * \endcode
+         * 
+         * \see Interface
+         * \see NavigationCommand
+         * \see ChapterCommand
+         * \see AngleCommand
+         * \see TitleCommand
+         * \see SubtitleCommand
+         * \see AudioChannelCommand
+         * 
+         * \ingroup backend
+         **/
         virtual QVariant interfaceCall(Interface iface, int command,
                 const QList<QVariant> &arguments = QList<QVariant>()) = 0;
 };

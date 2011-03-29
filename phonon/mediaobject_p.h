@@ -29,6 +29,10 @@
 #include "medianodedestructionhandler_p.h"
 #include "mediasource.h"
 #include <QtCore/QQueue>
+#ifdef HAVE_QZEITGEIST
+#include <QtZeitgeist/Log>
+#include <QtZeitgeist/QtZeitgeist>
+#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -46,9 +50,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     Q_DECLARE_PUBLIC(MediaObject)
     public:
         virtual QObject *qObject() { return q_func(); }
-
-        bool hasZeitgeistableOutput(MediaNode *that);
-        bool hasZeitgeistableOutput(MediaNode *that, QList<MediaNode *> *visited);
 
         /**
          * Sends the metadata for this media file to the Zeitgeist tracker
@@ -101,8 +102,15 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             abstractStream(0),
             state(Phonon::LoadingState),
             readyForZeitgeist(false)
-            , errorType(Phonon::NormalError)
+            , errorType(Phonon::NormalError),
+            errorOverride(false),
+            ignoreLoadingToBufferingStateChange(false),
+            ignoreErrorToLoadingStateChange(false)
         {
+#ifdef HAVE_QZEITGEIST
+            QtZeitgeist::init();
+            log = new QtZeitgeist::Log(qObject());
+#endif
         }
 
         qint64 currentTime;
@@ -115,8 +123,14 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         State state : 8;
         bool readyForZeitgeist;
         ErrorType errorType : 4;
+        bool errorOverride : 1;
+        bool ignoreLoadingToBufferingStateChange : 1;
+        bool ignoreErrorToLoadingStateChange : 1;
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
+#ifdef HAVE_QZEITGEIST
+        QtZeitgeist::Log *log;
+#endif
 };
 }
 

@@ -108,7 +108,7 @@ void AVCaptureTest::testVideoCapture()
 {
     #ifndef PHONON_NO_CAPTURE
     // Write device indices
-    QList<int> acList = m_pgc->videoCaptureDeviceListFor(Phonon::NoCategory);
+    QList<int> acList = m_pgc->videoCaptureDeviceListFor(Phonon::NoCaptureCategory);
     qDebug() << "Device list for video capture" << acList;
 
     // Write device properties

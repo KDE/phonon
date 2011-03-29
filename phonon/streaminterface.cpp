@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -55,9 +55,12 @@ void StreamInterface::connectToSource(const MediaSource &mediaSource)
     Q_ASSERT(d->mediaSource.stream());
     AbstractMediaStreamPrivate *dd = d->mediaSource.stream()->d_func();
     dd->setStreamInterface(this);
-    d->mediaSource.stream()->reset();
+    // Operations above do not access the stream itself, so they do not need to
+    // use invokeMethod.
+    reset();
 }
 
+// Does not need to use invokeMethod as we are are not accessing the stream.
 void StreamInterfacePrivate::disconnectMediaStream()
 {
     Q_ASSERT(connected);
@@ -75,7 +78,7 @@ void StreamInterfacePrivate::disconnectMediaStream()
 void StreamInterface::needData()
 {
     if (d->mediaSource.type() == MediaSource::Stream) {
-        d->mediaSource.stream()->needData();
+        QMetaObject::invokeMethod(d->mediaSource.stream(), "needData", Qt::QueuedConnection);
     }
 }
 
@@ -83,7 +86,7 @@ void StreamInterface::enoughData()
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-        d->mediaSource.stream()->enoughData();
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "enoughData", Qt::QueuedConnection);
     }
 }
 
@@ -91,7 +94,7 @@ void StreamInterface::seekStream(qint64 offset)
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-        d->mediaSource.stream()->seekStream(offset);
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "seekStream", Qt::QueuedConnection, Q_ARG(qint64, offset));
     }
 }
 
@@ -99,7 +102,7 @@ void StreamInterface::reset()
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-        d->mediaSource.stream()->reset();
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "reset", Qt::QueuedConnection);
     }
 }
 

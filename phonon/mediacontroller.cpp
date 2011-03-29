@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2008 Ian Monroe <ian@monroe.nu>
     Copyright (C) 2011 Harald Sitter <sitter@kde.org>
@@ -140,6 +140,44 @@ void MediaController::setCurrentChapter(int titleNumber)
             AddonInterface::setChapter, QList<QVariant>() << QVariant(titleNumber));
 }
 
+// -- Navigation Menu Control -- //
+
+QString MediaController::navigationMenuToString(NavigationMenu menu)
+{
+    switch (menu) {
+    case RootMenu:
+        return tr("Main Menu");
+    case TitleMenu :
+        return tr("Title Menu");
+    case AudioMenu:
+        return tr("Audio Menu");
+    case SubtitleMenu:
+        return tr("Subtitle Menu");
+    case ChapterMenu:
+        return tr("Chapter Menu");
+    case AngleMenu:
+        return tr("Angle Menu");
+    }
+    return QString();
+}
+
+QList<MediaController::NavigationMenu> MediaController::availableMenus() const
+{
+    QList<NavigationMenu> menus;
+    IFACE menus;
+    menus =
+            iface->interfaceCall(AddonInterface::NavigationInterface,
+                                 AddonInterface::availableMenus).value< QList<NavigationMenu> >();
+
+    return menus;
+}
+
+void MediaController::setCurrentMenu(NavigationMenu menu)
+{
+    IFACE;
+    iface->interfaceCall(AddonInterface::NavigationInterface,
+                         AddonInterface::setMenu, QList<QVariant>() << QVariant::fromValue(menu));
+}
 // -- Title Control -- //
 
 int MediaController::availableTitles() const

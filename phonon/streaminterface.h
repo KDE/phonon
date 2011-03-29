@@ -1,12 +1,13 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,9 +16,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_STREAMINTERFACE_H
@@ -37,6 +37,19 @@ class MediaSource;
 /** \class StreamInterface streaminterface.h phonon/StreamInterface
  * \brief Backend interface to handle media streams (AbstractMediaStream).
  *
+ * All functions translate to invokeMethod calls on the
+ * AbstractMediaStream's QMetaObject. This means that every function call will
+ * actually be executed in the thread context of the AbstractMediaStream (which
+ * usually is a thread Phonon also lives in, could however also be another one).
+ * This protectes the AbstractMediaStream against calls from different threads,
+ * such as a callback thread.
+ * This is very important as most IO implementations are by default not
+ * thread-safe.
+ *
+ * This protection is only established in one direction though, meaning that a
+ * backend implementation of this interface must be made thread-safe at all costs
+ * as it can get called from any thread.
+ *
  * \author Matthias Kretz <kretz@kde.org>
  */
 class PHONON_EXPORT StreamInterface
@@ -45,6 +58,7 @@ class PHONON_EXPORT StreamInterface
     friend class AbstractMediaStreamPrivate;
     public:
         virtual ~StreamInterface();
+
         /**
          * Called by the application to send a chunk of (encoded) media data.
          *
@@ -52,16 +66,19 @@ class PHONON_EXPORT StreamInterface
          * memcopy is needed.
          */
         virtual void writeData(const QByteArray &data) = 0;
+
         /**
          * Called when no more media data is available and writeData will not be called anymore.
          */
         virtual void endOfData() = 0;
+
         /**
          * Called at the start of the stream to tell how many bytes will be sent through writeData
          * (if no seeks happen, of course). If this value is negative the stream size cannot be
          * determined (might be a "theoretically infinite" stream - like webradio).
          */
         virtual void setStreamSize(qint64 newSize) = 0;
+
         /**
          * Tells whether the stream is seekable.
          */
@@ -77,8 +94,9 @@ class PHONON_EXPORT StreamInterface
 
         /**
          * Call this function to tell the AbstractMediaStream that you need more data. The data will
-         * arrive through writeData. Don't rely on writeData getting called from needData, though
-         * some AbstractMediaStream implementations might do so.
+         * arrive through writeData.
+         * writeData() will not be called from needData() due to the thread protection of
+         * the AbstractMediaStream.
          *
          * Depending on the buffering you need you either treat needData as a replacement for a
          * read call like QIODevice::read, or you start calling needData whenever your buffer
