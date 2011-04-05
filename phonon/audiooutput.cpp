@@ -102,7 +102,9 @@ void AudioOutputPrivate::init(Phonon::Category c)
 #endif
 
     category = c;
+#ifndef QT_NO_QUUID_STRING
     streamUuid = QUuid::createUuid().toString();
+#endif
 
     createBackendObject();
 
