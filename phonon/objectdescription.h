@@ -346,7 +346,7 @@ typedef QPair<QByteArray, QString> DeviceAccess;
  */
 typedef QList<DeviceAccess> DeviceAccessList;
 
-void PHONON_DEPRECATED PHONON_EXPORT registerMetaTypes();
+void PHONON_EXPORT_DEPRECATED registerMetaTypes();
 
 } //namespace Phonon
 
