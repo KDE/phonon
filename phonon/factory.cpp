@@ -39,6 +39,8 @@
 #ifndef QT_NO_DBUS
 #include <QtDBus/QtDBus>
 #endif
+#include <QtGui/QApplication>
+#include <QtGui/QMessageBox>
 
 QT_BEGIN_NAMESPACE
 
@@ -289,29 +291,15 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
 #ifndef QT_NO_DBUS
 void FactoryPrivate::phononBackendChanged()
 {
-    if (m_backendObject) {
-        for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
-            mediaNodePrivateList.at(i)->deleteBackendObject();
-        }
-        if (objects.size() > 0) {
-            pDebug() << "WARNING: we were asked to change the backend but the application did\n"
-                "not free all references to objects created by the factory. Therefore we can not\n"
-                "change the backend without crashing. Now we have to wait for a restart to make\n"
-                "backendswitching possible.";
-            // in case there were objects deleted give 'em a chance to recreate
-            // them now
-            for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
-                mediaNodePrivateList.at(i)->createBackendObject();
-            }
-            return;
-        }
-        delete m_backendObject;
-        m_backendObject = 0;
-    }
-    createBackend();
-    for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
-        mediaNodePrivateList.at(i)->createBackendObject();
-    }
+#ifdef __GNUC__
+#warning TODO hyperspeed: the message box only ought to be shown once and not for \
+    every backend switch
+#endif
+    QMessageBox::information(qApp->activeWindow(),
+                             tr("Restart Application"),
+                             tr("You changed the backend of the Phonon multimedia system.\n\n"
+                                "To apply this change you will need to"
+                                " restart '%1'.").arg(qAppName()));
     emit backendChanged();
 }
 #endif //QT_NO_DBUS
