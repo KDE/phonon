@@ -16,10 +16,11 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
+#include "phononconfig_p.h"
 #include "phononnamespace_p.h"
 #include "objectdescription.h"
 
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
 
 /*
  * Implementation of adaptor class AudioOutputAdaptor

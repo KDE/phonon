@@ -15,17 +15,19 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
+
 #include "audiooutput.h"
 #include "audiooutput_p.h"
-#include "factory_p.h"
-#include "objectdescription.h"
+
 #include "audiooutputadaptor_p.h"
-#include "globalconfig.h"
 #include "audiooutputinterface.h"
+#include "factory_p.h"
+#include "globalconfig.h"
+#include "objectdescription.h"
+#include "phononconfig_p.h"
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 #include "pulsesupport.h"
@@ -80,7 +82,7 @@ AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
     d->init(category);
 }
 
-AudioOutput::AudioOutput(QObject *parent) 
+AudioOutput::AudioOutput(QObject *parent)
     : AbstractAudioOutput(*new AudioOutputPrivate, parent)
 {
     K_D(AudioOutput);
@@ -90,7 +92,7 @@ AudioOutput::AudioOutput(QObject *parent)
 void AudioOutputPrivate::init(Phonon::Category c)
 {
     Q_Q(AudioOutput);
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
     adaptor = new AudioOutputAdaptor(q);
     static unsigned int number = 0;
     const QString &path = QLatin1String("/AudioOutputs/") + QString::number(number++);
@@ -161,7 +163,7 @@ void AudioOutput::setName(const QString &newName)
         pulse->setOutputName(d->getStreamUuid(), newName);
     else
         setVolume(Platform::loadVolume(newName));
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
     if (d->adaptor) {
         emit d->adaptor->nameChanged(newName);
     }
@@ -361,7 +363,7 @@ void AudioOutputPrivate::_k_revertFallback()
     callSetOutputDevice(this, device);
     Q_Q(AudioOutput);
     emit q->outputDeviceChanged(device);
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
     emit adaptor->outputDeviceIndexChanged(device.index());
 #endif
 }
@@ -475,7 +477,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     deviceBeforeFallback = device.index();
     device = device2;
     emit q->outputDeviceChanged(device2);
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
     emit adaptor->outputDeviceIndexChanged(device.index());
 #endif
     const AudioOutputDevice &device1 = AudioOutputDevice::fromIndex(deviceBeforeFallback);
@@ -539,7 +541,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
 AudioOutputPrivate::~AudioOutputPrivate()
 {
     PulseSupport::getInstance()->clearStreamCache(streamUuid);
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
     if (adaptor) {
         emit adaptor->outputDestroyed();
     }

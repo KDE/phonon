@@ -6,11 +6,13 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 cmake_policy(SET CMP0002 OLD)
 
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
+option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_TESTS "Build the tests" OFF)
-option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
+option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
+
 if (PHONON_NO_CAPTURE)
     # Definitions to disable the compiling of any capture related components
     add_definitions(-DPHONON_NO_VIDEOCAPTURE -DPHONON_NO_AUDIOCAPTURE)
