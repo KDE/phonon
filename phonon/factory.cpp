@@ -29,6 +29,7 @@
 #include "globalstatic_p.h"
 #include "objectdescription.h"
 #include "platformplugin.h"
+#include "phononconfig_p.h"
 #include "phononnamespace_p.h"
 
 #include <QtCore/QCoreApplication>
@@ -36,7 +37,7 @@
 #include <QtCore/QList>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QPointer>
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
 #include <QtDBus/QtDBus>
 #endif
 #include <QtGui/QApplication>
@@ -71,9 +72,9 @@ class FactoryPrivate : public Phonon::Factory::Sender
         /**
          * This is called via DBUS when the user changes the Phonon Backend.
          */
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
         void phononBackendChanged();
-#endif //QT_NO_DBUS
+#endif //PHONON_NO_DBUS
 
         /**
          * unregisters the backend object
@@ -212,7 +213,7 @@ FactoryPrivate::FactoryPrivate()
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
     // as the whole backend might still be alive.
     qAddPostRoutine(globalFactory.destroy);
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
     QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.Phonon.Factory"),
         QLatin1String("phononBackendChanged"), this, SLOT(phononBackendChanged()));
 #endif
@@ -288,7 +289,7 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
     }
 }
 
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
 void FactoryPrivate::phononBackendChanged()
 {
 #ifdef __GNUC__
@@ -302,7 +303,7 @@ void FactoryPrivate::phononBackendChanged()
                                 " restart '%1'.").arg(qAppName()));
     emit backendChanged();
 }
-#endif //QT_NO_DBUS
+#endif //PHONON_NO_DBUS
 
 //X void Factory::freeSoundcardDevices()
 //X {
@@ -358,7 +359,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     if (m_noPlatformPlugin) {
         return 0;
     }
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
     if (!QCoreApplication::instance() || QCoreApplication::applicationName().isEmpty()) {
         pWarning() << "Phonon needs QCoreApplication::applicationName to be set to export audio output names through the DBUS interface";
     }

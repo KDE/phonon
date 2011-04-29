@@ -10,9 +10,11 @@
 #ifndef AUDIOOUTPUTADAPTOR_P_H
 #define AUDIOOUTPUTADAPTOR_P_H
 
+#include "phononconfig_p.h"
+
 #include <QtCore/QObject>
 
-#ifndef QT_NO_DBUS
+#ifndef PHONON_NO_DBUS
 #include <QtDBus/QtDBus>
 
 QT_BEGIN_HEADER
@@ -104,6 +106,6 @@ Q_SIGNALS: // SIGNALS
 QT_END_NAMESPACE
 QT_END_HEADER
 
-#endif // QT_NO_DBUS
+#endif // PHONON_NO_DBUS
 
 #endif // AUDIOOUTPUTADAPTOR_P_H
