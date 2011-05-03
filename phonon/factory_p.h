@@ -128,6 +128,13 @@ namespace Factory
     PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
 
     /**
+     * Create a new backend object for AvCapture
+     *
+     * \return a pointer to the AvCapture the backend provides.
+     */
+    QObject *createAvCapture(QObject *parent = 0);
+
+    /**
      * \return a pointer to the backend interface.
      */
     PHONON_EXPORT QObject *backend(bool createWhenNull = true);
