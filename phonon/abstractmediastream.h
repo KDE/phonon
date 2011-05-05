@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -193,6 +194,32 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
          *
          * When this function is called you should try to call writeData or endOfData before
          * returning.
+         * You can call writeData and endOfData from within this function or
+         * at a later time. The backends have a thread safety requirement, so
+         * they will wait for a writeData "callback" even if needData returned
+         * already.
+         *
+         * \note The quicker you call writeData and return the better, as the
+         * backend is then able to take action against slow streaming (increase
+         * buffer size, request more bytes etc.).
+         *
+         * \param bytes amount of bytes requested. If you don't get enough bytes
+         * in one read, simply write what you got, should the backend require more
+         * it will simply issue a follow up call to needData.
+         */
+        Q_INVOKABLE virtual void needData(qint64 bytes);
+
+        /**
+         * Overload of needData(quint64 bytes).
+         *
+         * This function is a left over, needData(quint64 bytes) is much prefered
+         * as it allows for higher scalability. Hence you should overload both
+         * needData functions and in needData() only call the primary function
+         * with a sane default value (e.g. 4096).
+         *
+         * \warning If you call needData(bytes) in your implementation of this
+         * function you must overlaod needData(bytes) too, as the standard
+         * implementation calls needData().
          */
         Q_INVOKABLE virtual void needData() = 0;
 
