@@ -1,6 +1,5 @@
-/*
+/*  This file is part of the KDE project
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
-    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -78,14 +77,6 @@ void StreamInterfacePrivate::disconnectMediaStream()
     q->setStreamSeekable(false);
 }
 
-void StreamInterface::needData(qint64 bytes)
-{
-    if (d->mediaSource.type() == MediaSource::Stream) {
-        QMetaObject::invokeMethod(d->mediaSource.stream(), "needData",
-                                  Qt::QueuedConnection, Q_ARG(qint64, bytes));
-    }
-}
-
 void StreamInterface::needData()
 {
     if (d->mediaSource.type() == MediaSource::Stream) {
@@ -105,8 +96,7 @@ void StreamInterface::seekStream(qint64 offset)
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-         QMetaObject::invokeMethod(d->mediaSource.stream(), "seekStream",
-                                   Qt::QueuedConnection, Q_ARG(qint64, offset));
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "seekStream", Qt::QueuedConnection, Q_ARG(qint64, offset));
     }
 }
 

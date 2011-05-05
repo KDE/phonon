@@ -103,13 +103,6 @@ class PHONON_EXPORT StreamInterface
          * Depending on the buffering you need you either treat needData as a replacement for a
          * read call like QIODevice::read, or you start calling needData whenever your buffer
          * reaches a certain lower threshold.
-         *
-         * \param bytes amount of bytes to request, not necessarily what you'll get
-         */
-        void needData(qint64 bytes);
-
-        /**
-         * Overload.
          */
         void needData();
 

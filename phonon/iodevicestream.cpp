@@ -67,19 +67,15 @@ void IODeviceStream::reset()
     d->ioDevice->reset();
 }
 
-void IODeviceStream::needData(qint64 bytes)
+void IODeviceStream::needData()
 {
+    quint32 size = 4096;
     Q_D(IODeviceStream);
-    const QByteArray data = d->ioDevice->read(bytes);
+    const QByteArray data = d->ioDevice->read(size);
     writeData(data);
     if (d->ioDevice->atEnd()) {
         endOfData();
     }
-}
-
-void IODeviceStream::needData()
-{
-    needData(4096);
 }
 
 void IODeviceStream::seekStream(qint64 offset)
