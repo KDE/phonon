@@ -206,8 +206,6 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
          * \param bytes amount of bytes requested. If you don't get enough bytes
          * in one read, simply write what you got, should the backend require more
          * it will simply issue a follow up call to needData.
-         *
-         * \since 4.6.0
          */
         Q_INVOKABLE virtual void needData(qint64 bytes);
 

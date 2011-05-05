@@ -105,8 +105,6 @@ class PHONON_EXPORT StreamInterface
          * reaches a certain lower threshold.
          *
          * \param bytes amount of bytes to request, not necessarily what you'll get
-         *
-         * \since 4.6.0
          */
         void needData(qint64 bytes);
 
