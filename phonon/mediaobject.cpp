@@ -258,7 +258,9 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
+    d->sendToZeitgeist(StoppedState);
     INTERFACE_CALL(setSource(d->mediaSource));
+    d->sendToZeitgeist();
 }
 
 void MediaObject::clear()
@@ -545,7 +547,9 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
         abstractStream->d_func()->setMediaObjectPrivate(this);
         MediaSource mediaSource(abstractStream);
         mediaSource.setAutoDelete(true);
+        sendToZeitgeist(StoppedState);
         pINTERFACE_CALL(setSource(mediaSource));
+        sendToZeitgeist();
         if (oldstate == Phonon::BufferingState) {
             q->play();
         }
@@ -688,7 +692,9 @@ void MediaObjectPrivate::setupBackendObject()
             mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
         }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        sendToZeitgeist(StoppedState);
         pINTERFACE_CALL(setSource(mediaSource));
+        sendToZeitgeist();
     }
 }
 
