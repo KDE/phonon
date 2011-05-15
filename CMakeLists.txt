@@ -76,9 +76,7 @@ if(NOT WIN32) # pkgconfig file
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
 
-if (NOT PHONON_MKSPECS_DIR)
-    set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR})
-endif (NOT PHONON_MKSPECS_DIR)
+set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR} CACHE PATH "The directory where Phonon mkspecs will be installed to.")
 
 install(FILES qt_phonon.pri DESTINATION  ${PHONON_MKSPECS_DIR}/modules)
 
