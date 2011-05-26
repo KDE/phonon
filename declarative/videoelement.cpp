@@ -19,32 +19,15 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
-#include <QtDeclarative/qdeclarative.h>
-
-#include "audiooutputelement.h"
 #include "videoelement.h"
 
-QT_BEGIN_NAMESPACE
+namespace Phonon {
+namespace Declarative {
 
-namespace Phonon
+VideoElement::VideoElement(QDeclarativeItem *parent) :
+    QDeclarativeItem(parent)
 {
+}
 
-class DeclarativePlugin : public QDeclarativeExtensionPlugin
-{
-public:
-    virtual void registerTypes(const char *uri)
-    {
-        Q_ASSERT(QLatin1String(uri) == QLatin1String("Phonon"));
-
-        // TODO: version could really be cmake magic?
-        qmlRegisterType<Phonon::Declarative::AudioOutputElement>(uri, 1, 0, "AudioOutput");
-        qmlRegisterType<Phonon::Declarative::VideoElement>(uri, 1, 0, "Video");
-    }
-};
-
+} // namespace Declarative
 } // namespace Phonon
-
-QT_END_NAMESPACE
-
-Q_EXPORT_PLUGIN2(PhononDeclarativePlugin, QT_PREPEND_NAMESPACE(Phonon::DeclarativePlugin));
