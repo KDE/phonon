@@ -33,7 +33,8 @@ namespace Declarative {
 AudioOutputElement::AudioOutputElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
     m_mediaObject(0),
-    m_audioOutput(0)
+    m_audioOutput(0),
+    m_state(StoppedState)
 {
 }
 
@@ -54,6 +55,16 @@ void AudioOutputElement::setSource(const QUrl &url)
     emit sourceChanged();
 }
 
+bool AudioOutputElement::isPlaying() const
+{
+    return m_state & PlayingState;
+}
+
+bool AudioOutputElement::isStopped() const
+{
+    return m_state & StoppedState;
+}
+
 void AudioOutputElement::play()
 {
     SECURE;
@@ -66,6 +77,16 @@ void AudioOutputElement::stop()
     m_mediaObject->stop();
 }
 
+void AudioOutputElement::handleStateChange(Phonon::State newState, Phonon::State oldState)
+{
+    if (newState == oldState && newState == m_state)
+        return; // Simply reject this case altogether - darn you backends!!!
+
+    m_state = newState;
+    emitStateChanges(oldState, false);
+    emitStateChanges(newState, false);
+}
+
 void AudioOutputElement::init()
 {
     Q_ASSERT(!m_mediaObject && !m_audioOutput);
@@ -73,7 +94,22 @@ void AudioOutputElement::init()
     m_mediaObject->setCurrentSource(MediaSource(m_source));
 #warning todo: category
     m_audioOutput = new AudioOutput(this);
+
+//    connect(m_mediaObject, SIGNAL(finished()))
+    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+            this, SLOT(handleStateChange(Phonon::State)));
+
     createPath(m_mediaObject, m_audioOutput);
+}
+
+void AudioOutputElement::emitStateChanges(Phonon::State state, bool newState)
+{
+    switch(state) {
+    case StoppedState:
+        emit stoppedChanged(newState);
+    case PlayingState:
+        emit playingChanged(newState);
+    }
 }
 
 } // namespace Declarative

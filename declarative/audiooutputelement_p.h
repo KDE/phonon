@@ -24,6 +24,8 @@
 
 #include <QtDeclarative/QDeclarativeItem>
 
+#include <phonon/phononnamespace.h>
+
 namespace Phonon {
 
 class MediaObject;
@@ -35,6 +37,12 @@ class AudioOutputElement : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+
+#warning writing those is fishy as it is not exactly clear what happens when you \
+    set play to false, does it pause? or stop? or error? or explode?!!!
+    Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
+    Q_PROPERTY(bool stopped READ isStopped NOTIFY stoppedChanged)
+
 public:
     AudioOutputElement(QDeclarativeItem *parent = 0);
     ~AudioOutputElement();
@@ -42,20 +50,30 @@ public:
     QUrl source() const;
     void setSource(const QUrl &url);
 
+    bool isPlaying() const;
+    bool isStopped() const;
+
 signals:
     void sourceChanged();
+    void playingChanged(bool playing);
+    void stoppedChanged(bool stopped);
 
 public slots:
     void play();
     void stop();
 
+private slots:
+    void handleStateChange(Phonon::State newState, Phonon::State oldState);
+
 private:
     void init();
+    void emitStateChanges(Phonon::State state, bool newState);
 
     // TODO: can go to a possible base class
     MediaObject *m_mediaObject;
 
     AudioOutput *m_audioOutput;
+    State m_state;
 
     QUrl m_source;
 };
