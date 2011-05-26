@@ -22,7 +22,7 @@
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 #include <QtDeclarative/qdeclarative.h>
 
-#include "audiooutputelement_p.h"
+#include "audiooutputelement.h"
 
 QT_BEGIN_NAMESPACE
 

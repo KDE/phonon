@@ -19,7 +19,7 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "audiooutputelement_p.h"
+#include "audiooutputelement.h"
 
 #include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
