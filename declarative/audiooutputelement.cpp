@@ -21,12 +21,59 @@
 
 #include "audiooutputelement_p.h"
 
+#include <phonon/audiooutput.h>
+#include <phonon/mediaobject.h>
+#include <phonon/mediasource.h>
+
 namespace Phonon {
 namespace Declarative {
 
+#define SECURE if(!m_mediaObject && !m_audioOutput) init()
+
 AudioOutputElement::AudioOutputElement(QDeclarativeItem *parent) :
-    QDeclarativeItem(parent)
+    QDeclarativeItem(parent),
+    m_mediaObject(0),
+    m_audioOutput(0)
 {
+}
+
+AudioOutputElement::~AudioOutputElement()
+{
+}
+
+QUrl AudioOutputElement::source() const
+{
+    return m_source;
+}
+
+void AudioOutputElement::setSource(const QUrl &url)
+{
+    m_source = url;
+    if (m_mediaObject)
+        m_mediaObject->setCurrentSource(MediaSource(url));
+    emit sourceChanged();
+}
+
+void AudioOutputElement::play()
+{
+    SECURE;
+    m_mediaObject->play();
+}
+
+void AudioOutputElement::stop()
+{
+    SECURE;
+    m_mediaObject->stop();
+}
+
+void AudioOutputElement::init()
+{
+    Q_ASSERT(!m_mediaObject && !m_audioOutput);
+    m_mediaObject = new MediaObject(this);
+    m_mediaObject->setCurrentSource(MediaSource(m_source));
+#warning todo: category
+    m_audioOutput = new AudioOutput(this);
+    createPath(m_mediaObject, m_audioOutput);
 }
 
 } // namespace Declarative

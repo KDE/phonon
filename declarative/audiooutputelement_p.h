@@ -25,18 +25,39 @@
 #include <QtDeclarative/QDeclarativeItem>
 
 namespace Phonon {
+
+class MediaObject;
+class AudioOutput;
+
 namespace Declarative {
 
 class AudioOutputElement : public QDeclarativeItem
 {
     Q_OBJECT
+    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
 public:
     AudioOutputElement(QDeclarativeItem *parent = 0);
+    ~AudioOutputElement();
+
+    QUrl source() const;
+    void setSource(const QUrl &url);
 
 Q_SIGNALS:
+    void sourceChanged();
 
 public Q_SLOTS:
+    void play();
+    void stop();
 
+private:
+    void init();
+
+    // TODO: can go to a possible base class
+    MediaObject *m_mediaObject;
+
+    AudioOutput *m_audioOutput;
+
+    QUrl m_source;
 };
 
 } // namespace Declarative

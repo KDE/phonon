@@ -22,6 +22,8 @@
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 #include <QtDeclarative/qdeclarative.h>
 
+#include "audiooutputelement_p.h"
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -32,7 +34,10 @@ class DeclarativePlugin : public QDeclarativeExtensionPlugin
 public:
     virtual void registerTypes(const char *uri)
     {
-        Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.phonon"));
+        Q_ASSERT(QLatin1String(uri) == QLatin1String("Phonon"));
+
+        // TODO: version could really be cmake magic?
+        qmlRegisterType<Phonon::Declarative::AudioOutputElement>(uri, 1, 0, "AudioOutput");
     }
 };
 

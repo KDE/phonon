@@ -5,12 +5,14 @@ set(declarative_SRCS
     plugin.cpp
 )
 
-phonon_add_declarative_plugin(PhononDeclarativePlugin ${declarative_SRCS})
+phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})
 
-target_link_libraries(PhononDeclarativePlugin
+target_link_libraries(phononqmlplugin
     ${PHONON_LIBS}
     ${QT_QTDECLARATIVE_LIBRARY}
     phonon
 )
 
-# TODO: install (also remember the caching!)
+# TODO: (also remember the caching!)
+
+install(TARGETS phononqmlplugin DESTINATION ${QT_IMPORTS_DIR}/Phonon)
