@@ -8,6 +8,12 @@ Text {
     AudioOutput {
         id: audioOutput
         source: "sound.wav"
+
+        onPlayingChanged: {
+            if (!playing) {
+                stop()
+            }
+        }
     }
 
     MouseArea {
