@@ -34,7 +34,8 @@ AudioOutputElement::AudioOutputElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
     m_mediaObject(0),
     m_audioOutput(0),
-    m_state(StoppedState)
+    m_state(StoppedState),
+    m_finished(false)
 {
 }
 
@@ -50,6 +51,7 @@ QUrl AudioOutputElement::source() const
 void AudioOutputElement::setSource(const QUrl &url)
 {
     m_source = url;
+    m_finished = false;
     if (m_mediaObject)
         m_mediaObject->setCurrentSource(MediaSource(url));
     emit sourceChanged();
@@ -68,13 +70,20 @@ bool AudioOutputElement::isStopped() const
 void AudioOutputElement::play()
 {
     SECURE;
+    m_finished = false;
     m_mediaObject->play();
 }
 
 void AudioOutputElement::stop()
 {
     SECURE;
+    m_finished = false;
     m_mediaObject->stop();
+}
+
+void AudioOutputElement::handleFinished()
+{
+    m_finished = true;
 }
 
 void AudioOutputElement::handleStateChange(Phonon::State newState, Phonon::State oldState)
@@ -85,6 +94,12 @@ void AudioOutputElement::handleStateChange(Phonon::State newState, Phonon::State
     m_state = newState;
     emitStateChanges(oldState);
     emitStateChanges(newState);
+
+    // The defined behaviour is that the backend is in paused after playing is
+    // finished. Completely pointless and I'd rather not have people care about it.
+#warning this is ubergross as there is plenty of other states we could switch to ... when will me statemachine appear :(
+    if (m_finished && oldState == PlayingState)
+        m_mediaObject->stop();
 }
 
 void AudioOutputElement::init()
@@ -98,6 +113,8 @@ void AudioOutputElement::init()
 //    connect(m_mediaObject, SIGNAL(finished()))
     connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
             this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
+    connect(m_mediaObject, SIGNAL(finished()),
+            this, SLOT(handleFinished()));
 
     createPath(m_mediaObject, m_audioOutput);
 }

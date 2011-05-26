@@ -63,6 +63,7 @@ public slots:
     void stop();
 
 private slots:
+    void handleFinished();
     void handleStateChange(Phonon::State newState, Phonon::State oldState);
 
 private:
@@ -76,6 +77,8 @@ private:
     State m_state;
 
     QUrl m_source;
+
+    bool m_finished;
 };
 
 } // namespace Declarative
