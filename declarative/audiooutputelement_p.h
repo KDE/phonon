@@ -55,8 +55,8 @@ public:
 
 signals:
     void sourceChanged();
-    void playingChanged(bool playing);
-    void stoppedChanged(bool stopped);
+    void playingChanged();
+    void stoppedChanged();
 
 public slots:
     void play();
@@ -67,7 +67,7 @@ private slots:
 
 private:
     void init();
-    void emitStateChanges(Phonon::State state, bool newState);
+    void emitStateChanges(Phonon::State state);
 
     // TODO: can go to a possible base class
     MediaObject *m_mediaObject;

@@ -83,8 +83,8 @@ void AudioOutputElement::handleStateChange(Phonon::State newState, Phonon::State
         return; // Simply reject this case altogether - darn you backends!!!
 
     m_state = newState;
-    emitStateChanges(oldState, false);
-    emitStateChanges(newState, false);
+    emitStateChanges(oldState);
+    emitStateChanges(newState);
 }
 
 void AudioOutputElement::init()
@@ -102,13 +102,13 @@ void AudioOutputElement::init()
     createPath(m_mediaObject, m_audioOutput);
 }
 
-void AudioOutputElement::emitStateChanges(Phonon::State state, bool newState)
+void AudioOutputElement::emitStateChanges(Phonon::State state)
 {
     switch(state) {
     case StoppedState:
-        emit stoppedChanged(newState);
+        emit stoppedChanged();
     case PlayingState:
-        emit playingChanged(newState);
+        emit playingChanged();
     }
 }
 
