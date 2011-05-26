@@ -107,8 +107,10 @@ void AudioOutputElement::emitStateChanges(Phonon::State state)
     switch(state) {
     case StoppedState:
         emit stoppedChanged();
+        break;
     case PlayingState:
         emit playingChanged();
+        break;
     }
 }
 
