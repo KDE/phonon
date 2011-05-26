@@ -32,6 +32,7 @@ class VideoElement : public QDeclarativeItem
     Q_OBJECT
 public:
     VideoElement(QDeclarativeItem *parent = 0);
+    ~VideoElement();
 
 signals:
 

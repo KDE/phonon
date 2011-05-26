@@ -29,5 +29,9 @@ VideoElement::VideoElement(QDeclarativeItem *parent) :
 {
 }
 
+VideoElement::~VideoElement()
+{
+}
+
 } // namespace Declarative
 } // namespace Phonon
