@@ -23,6 +23,11 @@ macro(phonon_add_executable _target)
    automoc4_add_executable(${_target} ${_global_add_executable_param} ${_srcs})
 endmacro(phonon_add_executable _target)
 
+macro(phonon_add_declarative_plugin _target)
+    set(_srcs ${ARGN})
+    automoc4_add_library(${_target} MODULE ${_global_add_executable_param} ${_srcs})
+endmacro(phonon_add_declarative_plugin _target)
+
 macro(phonon_add_designer_plugin _target _qrc_file)
     set(_srcs ${ARGN})
     qt4_add_resources(_srcs ${_qrc_file})
