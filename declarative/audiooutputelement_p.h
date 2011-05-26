@@ -42,10 +42,10 @@ public:
     QUrl source() const;
     void setSource(const QUrl &url);
 
-Q_SIGNALS:
+signals:
     void sourceChanged();
 
-public Q_SLOTS:
+public slots:
     void play();
     void stop();
 
