@@ -10,4 +10,6 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in
               ${CMAKE_CURRENT_SOURCE_DIR}/MacroOptionalFindPackage.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/MacroPushRequiredVars.cmake
               ${CMAKE_CURRENT_SOURCE_DIR}/PhononMacros.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/Qt4ConfigDependentSettings.cmake
+              ${CMAKE_CURRENT_SOURCE_DIR}/Qt4Macros.cmake
         DESTINATION ${BUILDSYSTEM_INSTALL_DIR})
