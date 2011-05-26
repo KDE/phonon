@@ -97,7 +97,7 @@ void AudioOutputElement::init()
 
 //    connect(m_mediaObject, SIGNAL(finished()))
     connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
-            this, SLOT(handleStateChange(Phonon::State)));
+            this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
 
     createPath(m_mediaObject, m_audioOutput);
 }
