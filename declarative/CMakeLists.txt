@@ -1,6 +1,7 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/../) # For phonon/ includes.
 
 set(declarative_SRCS
+    audiooutputelement.cpp
     plugin.cpp
 )
 
