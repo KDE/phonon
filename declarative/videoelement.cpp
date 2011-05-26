@@ -24,13 +24,20 @@
 namespace Phonon {
 namespace Declarative {
 
-VideoElement::VideoElement(QDeclarativeItem *parent) :
-    QDeclarativeItem(parent)
+VideoElement::VideoElement(QObject *parent) :
+    AbstractMediaElement(parent)
 {
 }
 
 VideoElement::~VideoElement()
 {
+}
+
+void VideoElement::init()
+{
+    Q_ASSERT(!m_mediaObject);
+
+    initElement();
 }
 
 } // namespace Declarative

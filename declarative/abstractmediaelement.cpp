@@ -19,36 +19,45 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIDEOELEMENT_H
-#define VIDEOELEMENT_H
-
 #include "abstractmediaelement.h"
-#include <QtDeclarative/QDeclarativeParserStatus>
+
+#include <phonon/mediaobject.h>
 
 namespace Phonon {
 namespace Declarative {
 
-class VideoElement : public AbstractMediaElement, public QDeclarativeParserStatus
+AbstractMediaElement::AbstractMediaElement(QObject *parent) :
+    QObject(parent),
+    m_mediaObject(0),
+    m_finished(false)
 {
-    Q_OBJECT
-    Q_INTERFACES(QDeclarativeParserStatus)
-public:
-    VideoElement(QObject *parent = 0);
-    ~VideoElement();
+}
 
-    void classBegin() {};
-    void componentComplete() {};
+AbstractMediaElement::~AbstractMediaElement()
+{
+}
 
-signals:
+QUrl AbstractMediaElement::source() const
+{
+    return m_source;
+}
 
-public slots:
+void AbstractMediaElement::setSource(const QUrl &url)
+{
+    m_source = url;
+    m_finished = false;
+    if (m_mediaObject)
+        m_mediaObject->setCurrentSource(MediaSource(url));
+    emit sourceChanged();
+}
 
-private:
-    void init();
+void AbstractMediaElement::initElement()
+{
+    Q_ASSERT(!m_mediaObject);
+    m_mediaObject = new MediaObject(this);
+    m_mediaObject->setCurrentSource(MediaSource(m_source));
+}
 
-};
 
 } // namespace Declarative
 } // namespace Phonon
-
-#endif // VIDEOELEMENT_H

@@ -30,31 +30,15 @@ namespace Declarative {
 
 #define SECURE if(!m_mediaObject && !m_audioOutput) init()
 
-AudioOutputElement::AudioOutputElement(QDeclarativeItem *parent) :
-    QDeclarativeItem(parent),
-    m_mediaObject(0),
+AudioOutputElement::AudioOutputElement(QObject *parent) :
+    AbstractMediaElement(parent),
     m_audioOutput(0),
-    m_state(StoppedState),
-    m_finished(false)
+    m_state(StoppedState)
 {
 }
 
 AudioOutputElement::~AudioOutputElement()
 {
-}
-
-QUrl AudioOutputElement::source() const
-{
-    return m_source;
-}
-
-void AudioOutputElement::setSource(const QUrl &url)
-{
-    m_source = url;
-    m_finished = false;
-    if (m_mediaObject)
-        m_mediaObject->setCurrentSource(MediaSource(url));
-    emit sourceChanged();
 }
 
 bool AudioOutputElement::isPlaying() const
@@ -105,8 +89,9 @@ void AudioOutputElement::handleStateChange(Phonon::State newState, Phonon::State
 void AudioOutputElement::init()
 {
     Q_ASSERT(!m_mediaObject && !m_audioOutput);
-    m_mediaObject = new MediaObject(this);
-    m_mediaObject->setCurrentSource(MediaSource(m_source));
+
+    initElement();
+
 #warning todo: category
     m_audioOutput = new AudioOutput(this);
 
