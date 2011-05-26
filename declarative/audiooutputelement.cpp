@@ -110,7 +110,6 @@ void AudioOutputElement::init()
 #warning todo: category
     m_audioOutput = new AudioOutput(this);
 
-//    connect(m_mediaObject, SIGNAL(finished()))
     connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
             this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
     connect(m_mediaObject, SIGNAL(finished()),
