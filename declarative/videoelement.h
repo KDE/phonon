@@ -28,12 +28,12 @@
 namespace Phonon {
 namespace Declarative {
 
-class VideoElement : public AbstractMediaElement, public QDeclarativeParserStatus
+class VideoElement : public QDeclarativeItem, public AbstractMediaElement
 {
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
 public:
-    VideoElement(QObject *parent = 0);
+    VideoElement(QDeclarativeItem *parent = 0);
     ~VideoElement();
 
     void classBegin() {};

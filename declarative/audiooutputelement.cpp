@@ -31,7 +31,9 @@ namespace Declarative {
 #define SECURE if(!m_mediaObject && !m_audioOutput) init()
 
 AudioOutputElement::AudioOutputElement(QObject *parent) :
-    AbstractMediaElement(parent),
+    QObject(parent),
+    AbstractMediaElement(),
+    QDeclarativeParserStatus(),
     m_audioOutput(0),
     m_state(StoppedState)
 {
@@ -90,7 +92,7 @@ void AudioOutputElement::init()
 {
     Q_ASSERT(!m_mediaObject && !m_audioOutput);
 
-    initElement();
+    initElement(this);
 
 #warning todo: category
     m_audioOutput = new AudioOutput(this);

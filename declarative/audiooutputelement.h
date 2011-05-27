@@ -33,9 +33,10 @@ class AudioOutput;
 
 namespace Declarative {
 
-class AudioOutputElement : public AbstractMediaElement, public QDeclarativeParserStatus
+class AudioOutputElement : public QObject, public AbstractMediaElement,  public QDeclarativeParserStatus
 {
     Q_OBJECT
+    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
 #warning writing those is fishy as it is not exactly clear what happens when you \
     set play to false, does it pause? or stop? or error? or explode?!!!
     Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
@@ -52,6 +53,7 @@ public:
     bool isStopped() const;
 
 signals:
+    void sourceChanged();
     void playingChanged();
     void stoppedChanged();
 

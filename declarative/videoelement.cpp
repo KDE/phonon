@@ -24,8 +24,9 @@
 namespace Phonon {
 namespace Declarative {
 
-VideoElement::VideoElement(QObject *parent) :
-    AbstractMediaElement(parent)
+VideoElement::VideoElement(QDeclarativeItem *parent) :
+    QDeclarativeItem(parent),
+    AbstractMediaElement()
 {
 }
 

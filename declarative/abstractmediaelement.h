@@ -23,6 +23,7 @@
 #define ABSTRACTMEDIAELEMENT_H
 
 #include <QtCore/QUrl>
+#include <QtGui/QGraphicsObject>
 
 namespace Phonon {
 
@@ -30,25 +31,23 @@ class MediaObject;
 
 namespace Declarative {
 
-class AbstractMediaElement : public QObject
+class AbstractMediaElement
 {
-    Q_OBJECT
-    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
 public:
-    AbstractMediaElement(QObject *parent = 0);
-    ~AbstractMediaElement();
+    AbstractMediaElement();
+    virtual ~AbstractMediaElement();
 
     QUrl source() const;
     void setSource(const QUrl &url);
 
-signals:
-    void sourceChanged();
+    // Signals
+    virtual void sourceChanged() = 0;
 
 protected:
     /**
      * Initializes the abstract element.
      */
-    void initElement();
+    void initElement(QObject *parent);
 
     /**
      * Should init class specific Phonon objects.

@@ -26,8 +26,7 @@
 namespace Phonon {
 namespace Declarative {
 
-AbstractMediaElement::AbstractMediaElement(QObject *parent) :
-    QObject(parent),
+AbstractMediaElement::AbstractMediaElement() :
     m_mediaObject(0),
     m_finished(false)
 {
