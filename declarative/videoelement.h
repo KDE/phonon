@@ -22,15 +22,26 @@
 #ifndef VIDEOELEMENT_H
 #define VIDEOELEMENT_H
 
+#include <QtCore/QMutex>
+#include <QtDeclarative/QDeclarativeItem>
+
+#include <phonon/experimental/videoframe2.h>
+
 #include "abstractmediaelement.h"
-#include <QtDeclarative/QDeclarativeParserStatus>
 
 namespace Phonon {
+
+namespace Experimental
+{
+class VideoDataOutput2;
+}
+
 namespace Declarative {
 
 class VideoElement : public QDeclarativeItem, public AbstractMediaElement
 {
     Q_OBJECT
+    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_INTERFACES(QDeclarativeParserStatus)
 public:
     VideoElement(QDeclarativeItem *parent = 0);
@@ -39,13 +50,29 @@ public:
     void classBegin() {};
     void componentComplete() {};
 
+    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+
+    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+
 signals:
+    void sourceChanged();
 
 public slots:
+    void play();
+    void stop();
+
+private slots:
+    void setFrame(const Phonon::Experimental::VideoFrame2 &frame);
 
 private:
     void init();
 
+    Experimental::VideoDataOutput2 *m_videoDataOutput;
+    Experimental::VideoFrame2  m_frame;
+
+    QMutex m_mutex;
+    QRectF m_rect;
+    QSize m_frameSize;
 };
 
 } // namespace Declarative
