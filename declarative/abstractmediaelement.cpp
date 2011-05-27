@@ -50,10 +50,10 @@ void AbstractMediaElement::setSource(const QUrl &url)
     emit sourceChanged();
 }
 
-void AbstractMediaElement::initElement()
+void AbstractMediaElement::initElement(QObject *parent)
 {
     Q_ASSERT(!m_mediaObject);
-    m_mediaObject = new MediaObject(this);
+    m_mediaObject = new MediaObject(parent);
     m_mediaObject->setCurrentSource(MediaSource(m_source));
 }
 
