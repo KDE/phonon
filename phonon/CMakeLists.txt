@@ -113,7 +113,7 @@ set_target_properties(phonon PROPERTIES
                              SOVERSION ${PHONON_LIB_SOVERSION}
                              DEFINE_SYMBOL MAKE_PHONON_LIB
                              )
-install(TARGETS phonon ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS phonon EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
 

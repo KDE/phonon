@@ -76,6 +76,19 @@ if(NOT WIN32) # pkgconfig file
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake @ONLY)
+
+set(PROJECT_VERSION_MAJOR ${PHONON_LIB_MAJOR_VERSION})
+set(PROJECT_VERSION_MINOR ${PHONON_LIB_MINOR_VERSION})
+set(PROJECT_VERSION_PATCH ${PHONON_LIB_PATCH_VERSION})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/BasicFindPackageVersion.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake" @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake
+        DESTINATION ${LIB_INSTALL_DIR}/cmake/phonon )
+
+install(EXPORT PhononLibs DESTINATION ${LIB_INSTALL_DIR}/cmake/phonon/ NAMESPACE Phonon:: FILE PhononTargets.cmake )
+
+
 set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR} CACHE PATH "The directory where Phonon mkspecs will be installed to.")
 
 install(FILES qt_phonon.pri DESTINATION  ${PHONON_MKSPECS_DIR}/modules)
