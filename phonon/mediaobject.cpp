@@ -609,6 +609,7 @@ void MediaObjectPrivate::setupBackendObject()
     // of whatever it is doing, an API consumer works with an undefined state.
     // This causes major headaches. If we must enforce implicit execution stop via
     // signals, they ought to be done in private slots.
+
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
@@ -616,14 +617,15 @@ void MediaObjectPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
 #endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
-                     q, SIGNAL(tick(qint64)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),
-                     q, SIGNAL(seekableChanged(bool)), Qt::QueuedConnection);
 #ifndef QT_NO_PHONON_VIDEO
     QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),
                      q, SIGNAL(hasVideoChanged(bool)), Qt::QueuedConnection);
 #endif //QT_NO_PHONON_VIDEO
+
+    QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
+                     q, SIGNAL(tick(qint64)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),
+                     q, SIGNAL(seekableChanged(bool)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(bufferStatus(int)),
                      q, SIGNAL(bufferStatus(int)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(finished()),
