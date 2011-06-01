@@ -610,6 +610,8 @@ void MediaObjectPrivate::setupBackendObject()
     // This causes major headaches. If we must enforce implicit execution stop via
     // signals, they ought to be done in private slots.
 
+    qRegisterMetaType<MediaSource>("MediaSource");
+
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
