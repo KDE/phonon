@@ -60,6 +60,7 @@ if(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
 endif(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
 add_subdirectory(phonon)
 add_subdirectory(includes)
+
 if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
     #Allows find_package(Phonon) to not die in the demos
@@ -72,6 +73,20 @@ if(PHONON_BUILD_DEMOS)
 endif(PHONON_BUILD_DEMOS)
 
 if(NOT WIN32) # pkgconfig file
+
+    # helper macro to make the install paths absolute for pkgconfig
+    macro(MAKE_ABS_INSTALL_PATH _absVar _path)
+        if (IS_ABSOLUTE "${_path}")
+            set(${_absVar} "${_path}")
+        else()
+            set(${_absVar} "${CMAKE_INSTALL_PREFIX}/${_path}")
+        endif()
+    endmacro(MAKE_ABS_INSTALL_PATH)
+
+    make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
+    make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
+    make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
+  
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
