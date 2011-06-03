@@ -26,7 +26,7 @@
 
 namespace Phonon {
 
-class PHONON_EXPORT StreamInterface2 : public StreamInterface
+class PHONON_EXPORT StreamInterface2 : public virtual StreamInterface
 {
 public:
     virtual ~StreamInterface2();
