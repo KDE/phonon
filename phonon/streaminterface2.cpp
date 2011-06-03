@@ -27,4 +27,8 @@ StreamInterface2::StreamInterface2()
 {
 }
 
+StreamInterface2::~StreamInterface2()
+{
+}
+
 } // namespace Phonon

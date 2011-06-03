@@ -29,8 +29,17 @@ namespace Phonon {
 class PHONON_EXPORT StreamInterface2 : public StreamInterface
 {
 public:
+    virtual ~StreamInterface2();
+
+    virtual void resetDone() = 0;
+
+#warning todo: add explicit funcs for start/stop
+
+protected:
     StreamInterface2();
 };
+
+Q_DECLARE_INTERFACE(Phonon::StreamInterface2, "StreamInterface2.phonon.kde.org")
 
 } // namespace Phonon
 
