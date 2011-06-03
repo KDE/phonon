@@ -23,8 +23,18 @@
 
 namespace Phonon {
 
-AbstractMediaStream2::AbstractMediaStream2()
+AbstractMediaStream2::AbstractMediaStream2(QObject *parent) :
+    AbstractMediaStream(parent)
 {
+}
+
+AbstractMediaStream2::~AbstractMediaStream2()
+{
+}
+
+void AbstractMediaStream2::needData(qint64 size)
+{
+    Q_ASSERT(0);
 }
 
 } // namespace Phonon

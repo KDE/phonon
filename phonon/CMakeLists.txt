@@ -39,6 +39,7 @@ set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
    abstractaudiooutput_p.cpp
    abstractmediastream.cpp
+   abstractmediastream2.cpp
    abstractvideooutput.cpp
    abstractvideooutput_p.cpp
    audiodataoutput.cpp

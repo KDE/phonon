@@ -35,14 +35,14 @@ public:
 protected:
     explicit AbstractMediaStream2(QObject *parent = 0);
 
-    Q_INVOKABLE virtual void needData(qint64 size);
+    Q_INVOKABLE virtual void needData(qint64 size) = 0;
 
     void resetDone();
 
 #warning todo: add start/stop explicitly
 
 private:
-
+    void needData() {};
 };
 
 } // namespace Phonon
