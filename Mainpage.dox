@@ -16,7 +16,7 @@ almost certainly the right choice for you.  It provides an API that any Qt
 developer will be comfortable with, and uses the native multimedia frameworks
 on Windows and MacOS.  On UNIX systems, where there is no one standard
 multimedia system, it offers <a href="http://www.gstreamer.net/">GStreamer</a>
-and <a href="http://xinehq.de/">Xine</a> backends, and more (such as 
+and <a href="http://xinehq.de/">Xine</a> backends, and more (such as
 <a href="http://www.videolan.org/">VLC</a>) are available from third parties.
 
 However, Phonon is not aimed at professional audio applications (in the style of
@@ -55,18 +55,18 @@ If you want to get involved with Phonon backend development please subscribe to
 <a href="https://mail.kde.org/mailman/listinfo/phonon-backends">phonon-backends@kde.org</a>.
 
 If you want to contribute, make comments or useful suggestions you can also
-write to the 
+write to the
 <a href="mailto:kde-multimedia@kde.org">KDE Multimedia mailinglist</a>.
-You can join the mailinglist using the 
+You can join the mailinglist using the
 <a href="https://mail.kde.org/mailman/listinfo/kde-multimedia">webinterface</a>
-or take a look at the 
+or take a look at the
 <a href="http://lists.kde.org/?l=kde-multimedia">archives</a>
 
 If you want more immediate help, try the \#phonon IRC channel on Freenode.
 
 */
 
-// DOXYGEN_VERSION=4.4.3
+// DOXYGEN_VERSION=4.5.55
 // DOXYGEN_NAME=Phonon
 // DOXYGEN_ENABLE=YES
 // DOXYGEN_SET_INPUT = @topdir@/phonon/phonon @topdir@/phonon/Mainpage.dox

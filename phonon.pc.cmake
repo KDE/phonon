@@ -1,8 +1,8 @@
 prefix=@CMAKE_INSTALL_PREFIX@
 exec_prefix=@EXEC_INSTALL_PREFIX@
-libdir=@LIB_INSTALL_DIR@
-includedir=@INCLUDE_INSTALL_DIR@
-buildsystemdir=@BUILDSYSTEM_INSTALL_DIR@
+libdir=@ABS_LIB_INSTALL_DIR@
+includedir=@ABS_INCLUDE_INSTALL_DIR@
+buildsystemdir=@ABS_BUILDSYSTEM_INSTALL_DIR@
 
 Name: Phonon
 Description: Phonon library needed to build applications
