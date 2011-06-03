@@ -65,6 +65,7 @@ set(phonon_LIB_SRCS
    pulsesupport.cpp
    seekslider.cpp
    streaminterface.cpp
+   streaminterface2.cpp
    swiftslider.cpp
    volumefadereffect.cpp
    volumeslider.cpp
@@ -121,6 +122,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_
 install(FILES
    abstractaudiooutput.h
    abstractmediastream.h
+   abstractmediastream2.h
    abstractvideooutput.h
    addoninterface.h
    audiodataoutput.h
@@ -149,6 +151,7 @@ install(FILES
    pulsesupport.h
    seekslider.h
    streaminterface.h
+   streaminterface2.h
    videoplayer.h
    videowidget.h
    videowidgetinterface.h
