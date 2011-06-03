@@ -35,7 +35,7 @@ public:
 protected:
     explicit AbstractMediaStream2(QObject *parent = 0);
 
-    virtual void needData(qint64 size);
+    Q_INVOKABLE virtual void needData(qint64 size);
 
     void resetDone();
 
