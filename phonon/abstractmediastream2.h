@@ -29,7 +29,7 @@ namespace Phonon {
 
 class AbstractMediaStream2Private;
 
-class AbstractMediaStream2 : public AbstractMediaStream
+class PHONON_EXPORT AbstractMediaStream2 : public AbstractMediaStream
 {
     Q_OBJECT
 public:

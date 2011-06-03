@@ -26,7 +26,7 @@
 
 namespace Phonon {
 
-class StreamInterface2 : public StreamInterface
+class PHONON_EXPORT StreamInterface2 : public StreamInterface
 {
 public:
     StreamInterface2();
