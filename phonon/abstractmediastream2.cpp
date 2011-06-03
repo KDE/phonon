@@ -32,7 +32,7 @@ AbstractMediaStream2::~AbstractMediaStream2()
 {
 }
 
-void AbstractMediaStream2::needData(qint64 size)
+void AbstractMediaStream2::resetDone()
 {
     Q_ASSERT(0);
 }
