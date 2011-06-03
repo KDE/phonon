@@ -23,8 +23,11 @@
 #define PHONON_ABSTRACTMEDIASTREAM2_H
 
 #include "abstractmediastream.h"
+#include "phonondefs.h"
 
 namespace Phonon {
+
+class AbstractMediaStream2Private;
 
 class AbstractMediaStream2 : public AbstractMediaStream
 {
@@ -34,6 +37,7 @@ public:
 
 protected:
     explicit AbstractMediaStream2(QObject *parent = 0);
+    AbstractMediaStream2(AbstractMediaStream2Private &dd, QObject *parent);
 
     Q_INVOKABLE virtual void needData(qint64 size) = 0;
 
@@ -41,7 +45,13 @@ protected:
 
 #warning todo: add start/stop explicitly
 
+
+#warning
+    QScopedPointer<AbstractMediaStream2Private> k_ptr;
+
 private:
+    K_DECLARE_PRIVATE(AbstractMediaStream2)
+
     void needData() {}
 };
 
