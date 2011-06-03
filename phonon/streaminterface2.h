@@ -33,6 +33,18 @@ public:
 
     virtual void resetDone() = 0;
 
+    void needData(qint64 size);
+
+    /**
+     * Overload for StreamInterface, StreamInterface2 implementations should only
+     * use needData(qint64), as this function implements a rather undynamic
+     * size request.
+     */
+    inline void needData()
+    {
+        needData(4096);
+    }
+
 #warning todo: add explicit funcs for start/stop
 
 protected:

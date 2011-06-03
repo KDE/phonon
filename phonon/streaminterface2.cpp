@@ -31,4 +31,9 @@ StreamInterface2::~StreamInterface2()
 {
 }
 
+void StreamInterface2::needData(qint64 size)
+{
+    Q_ASSERT(0);
+}
+
 } // namespace Phonon
