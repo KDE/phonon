@@ -42,7 +42,7 @@ protected:
 #warning todo: add start/stop explicitly
 
 private:
-    void needData() {};
+    void needData() {}
 };
 
 } // namespace Phonon
