@@ -51,8 +51,8 @@ protected:
     StreamInterface2();
 };
 
-Q_DECLARE_INTERFACE(Phonon::StreamInterface2, "StreamInterface2.phonon.kde.org")
-
 } // namespace Phonon
+
+Q_DECLARE_INTERFACE(Phonon::StreamInterface2, "StreamInterface2.phonon.kde.org")
 
 #endif // PHONON_STREAMINTERFACE2_H
