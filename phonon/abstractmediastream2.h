@@ -22,12 +22,27 @@
 #ifndef PHONON_ABSTRACTMEDIASTREAM2_H
 #define PHONON_ABSTRACTMEDIASTREAM2_H
 
+#include "abstractmediastream.h"
+
 namespace Phonon {
 
 class AbstractMediaStream2 : public AbstractMediaStream
 {
+    Q_OBJECT
 public:
-    AbstractMediaStream2();
+    ~AbstractMediaStream2();
+
+protected:
+    explicit AbstractMediaStream2(QObject *parent = 0);
+
+    virtual void needData(qint64 size);
+
+    void resetDone();
+
+#warning todo: add start/stop explicitly
+
+private:
+
 };
 
 } // namespace Phonon
