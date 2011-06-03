@@ -30,7 +30,7 @@ class AbstractMediaStream2 : public AbstractMediaStream
 {
     Q_OBJECT
 public:
-    ~AbstractMediaStream2();
+    virtual ~AbstractMediaStream2();
 
 protected:
     explicit AbstractMediaStream2(QObject *parent = 0);
