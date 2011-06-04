@@ -51,6 +51,8 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     public:
         virtual QObject *qObject() { return q_func(); }
 
+        QString stateName(Phonon::State state) const;
+
         /**
          * Sends the metadata for this media file to the Zeitgeist tracker
          *

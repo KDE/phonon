@@ -557,12 +557,12 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
     if (newstate == StoppedState) {
         readyForZeitgeist = true;
     }
-    pDebug() << "State changed from" << oldstate << "to" << newstate << "-> sending to zeitgeist.";
+    pDebug() << "State changed from" << stateName(oldstate) << "to" << stateName(newstate) << "-> sending to zeitgeist.";
     sendToZeitgeist(newstate);
 
 #ifdef QT_DEBUG
     if (!validateStateTransition(newstate, oldstate)) {
-        qDebug() << "Invalid state transition:" << oldstate << "->" << newstate;
+        qDebug() << "Invalid state transition:" << stateName(oldstate) << "->" << stateName(newstate);
         Q_ASSERT_X(0, __FILE__, "Invalid state transition");
     }
 #endif
@@ -801,6 +801,22 @@ MediaObject *createPlayer(Phonon::Category category, const MediaSource &source)
         mo->setCurrentSource(source);
     }
     return mo;
+}
+
+QString MediaObjectPrivate::stateName(Phonon::State state) const
+{
+    switch (state) {
+        case Phonon::PlayingState:
+            return "Playing";
+        case Phonon::PausedState:
+            return "Paused";
+        case Phonon::StoppedState:
+            return "Stopped";
+        case Phonon::LoadingState:
+            return "Loading";
+        case Phonon::BufferingState:
+            return "Buffering";
+    }
 }
 
 } //namespace Phonon
