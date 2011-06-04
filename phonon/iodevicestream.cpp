@@ -60,7 +60,6 @@ IODeviceStream::IODeviceStream(QIODevice *ioDevice, QObject *parent)
 IODeviceStream::~IODeviceStream()
 {
 }
-
 void IODeviceStream::reset()
 {
     Q_D(IODeviceStream);
