@@ -31,6 +31,7 @@
 #include "abstractmediastream_p.h"
 #include "frontendinterface_p.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QStringBuilder>
 #include <QtCore/QStringList>
 #include <QtCore/QDateTime>
@@ -488,6 +489,65 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
+bool MediaObjectPrivate::validateStateTransition(Phonon::State newstate, Phonon::State oldstate)
+{
+    switch (oldstate) {
+        case Phonon::StoppedState:
+            switch (newstate) {
+                case Phonon::LoadingState:
+                case Phonon::PlayingState:
+                    return true;
+                default:
+                    return false;
+            }
+            break;
+        case Phonon::LoadingState:
+            switch (newstate) {
+                case Phonon::ErrorState:
+                case Phonon::StoppedState:
+                    return true;
+                default:
+                    return false;
+            }
+            break;
+        case Phonon::ErrorState:
+            switch (newstate) {
+                case Phonon::LoadingState:
+                    return true;
+                default:
+                    return false;
+            }
+            break;
+        case Phonon::PlayingState:
+            switch (newstate) {
+                case Phonon::PausedState:
+                case Phonon::BufferingState:
+                    return true;
+                default:
+                    return false;
+            }
+            break;
+        case Phonon::PausedState:
+            switch (newstate) {
+                case Phonon::PlayingState:
+                case Phonon::BufferingState:
+                    return true;
+                default:
+                    return false;
+            }
+            break;
+        case Phonon::BufferingState:
+            switch (newstate) {
+                case Phonon::PlayingState:
+                case Phonon::PausedState:
+                    return true;
+                default:
+                    return false;
+            }
+    }
+    return false;
+}
+
 // TODO: this needs serious cleanup...
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
 {
@@ -499,6 +559,13 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
     }
     pDebug() << "State changed from" << oldstate << "to" << newstate << "-> sending to zeitgeist.";
     sendToZeitgeist(newstate);
+
+#ifdef QT_DEBUG
+    if (!validateStateTransition(newstate, oldstate)) {
+        qDebug() << "Invalid state transition:" << oldstate << "->" << newstate;
+        Q_ASSERT_X(0, __FILE__, "Invalid state transition");
+    }
+#endif
 
     // AbstractMediaStream fallback stuff --------------------------------------
     if (errorOverride) {

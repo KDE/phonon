@@ -82,6 +82,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         virtual bool aboutToDeleteBackendObject();
         virtual void createBackendObject();
         virtual void phononObjectDestroyed(MediaNodePrivate *);
+        bool validateStateTransition(Phonon::State, Phonon::State);
         PHONON_EXPORT void setupBackendObject();
 
         void _k_resumePlay();
