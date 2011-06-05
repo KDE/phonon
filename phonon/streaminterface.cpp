@@ -80,7 +80,8 @@ void StreamInterfacePrivate::disconnectMediaStream()
 void StreamInterface::needData()
 {
     if (d->mediaSource.type() == MediaSource::Stream) {
-        QMetaObject::invokeMethod(d->mediaSource.stream(), "needData", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(d->mediaSource.stream(), "needData",
+                                  Qt::QueuedConnection);
     }
 }
 
@@ -88,7 +89,8 @@ void StreamInterface::enoughData()
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-         QMetaObject::invokeMethod(d->mediaSource.stream(), "enoughData", Qt::QueuedConnection);
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "enoughData",
+                                   Qt::QueuedConnection);
     }
 }
 
@@ -96,7 +98,8 @@ void StreamInterface::seekStream(qint64 offset)
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-         QMetaObject::invokeMethod(d->mediaSource.stream(), "seekStream", Qt::QueuedConnection, Q_ARG(qint64, offset));
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "seekStream",
+                                   Qt::QueuedConnection, Q_ARG(qint64, offset));
     }
 }
 
@@ -104,7 +107,8 @@ void StreamInterface::reset()
 {
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
-         QMetaObject::invokeMethod(d->mediaSource.stream(), "reset", Qt::QueuedConnection);
+         QMetaObject::invokeMethod(d->mediaSource.stream(), "reset",
+                                   Qt::QueuedConnection);
     }
 }
 
