@@ -59,14 +59,20 @@ void StreamInterface2::needData(qint64 size)
 
 void StreamInterface2::start()
 {
-#warning impl
-    Q_ASSERT(0);
+    K_D(StreamInterface2);
+    if (d->mediaSource.type() == MediaSource::Stream) {
+        QMetaObject::invokeMethod(d->mediaSource.stream(), "start",
+                                  Qt::QueuedConnection);
+    }
 }
 
 void StreamInterface2::stop()
 {
-#warning impl
-    Q_ASSERT(0);
+    K_D(StreamInterface2);
+    if (d->mediaSource.type() == MediaSource::Stream) {
+        QMetaObject::invokeMethod(d->mediaSource.stream(), "stop",
+                                  Qt::QueuedConnection);
+    }
 }
 
 } // namespace Phonon
