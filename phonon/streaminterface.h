@@ -24,6 +24,7 @@
 #define PHONON_STREAMINTERFACE_H
 
 #include "phonon_export.h"
+#include "phonondefs.h"
 #include <QtCore/QObject>
 
 QT_BEGIN_HEADER
@@ -126,8 +127,11 @@ class PHONON_EXPORT StreamInterface
 
     protected:
         StreamInterface();
+        StreamInterfacePrivate *const k_ptr;
 
-        StreamInterfacePrivate *const d;
+    private:
+        K_DECLARE_PRIVATE(StreamInterface)
+        PHONON_DEPRECATED StreamInterfacePrivate *const d;
 };
 } // namespace Phonon
 

@@ -33,8 +33,12 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
-StreamInterface::StreamInterface()
-    : d(new StreamInterfacePrivate)
+StreamInterface::StreamInterface() :
+    d(new StreamInterfacePrivate(this)),
+    k_ptr(d)
+{
+}
+
 {
     d->q = this;
 }
