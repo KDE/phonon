@@ -57,7 +57,6 @@ class MediaSource;
  */
 class PHONON_EXPORT StreamInterface
 {
-    friend class StreamInterfacePrivate;
     friend class AbstractMediaStreamPrivate;
     public:
         virtual ~StreamInterface();
