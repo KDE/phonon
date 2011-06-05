@@ -75,17 +75,16 @@ bool BackendCapabilities::isMimeTypeAvailable(const QString &mimeType)
 QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()
 {
     QList<AudioOutputDevice> ret;
-#ifndef QT_NO_PHONON_SETTINGSGROUP
     const QList<int> deviceIndexes = GlobalConfig().audioOutputDeviceListFor(Phonon::NoCategory, GlobalConfig::ShowAdvancedDevices);
     for (int i = 0; i < deviceIndexes.count(); ++i) {
         ret.append(AudioOutputDevice::fromIndex(deviceIndexes.at(i)));
     }
-#endif //QT_NO_PHONON_SETTINGSGROUP
+
     return ret;
 }
 
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
 {
     QList<AudioCaptureDevice> ret;
@@ -95,9 +94,7 @@ QList<AudioCaptureDevice> BackendCapabilities::availableAudioCaptureDevices()
     }
     return ret;
 }
-#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef PHONON_NO_VIDEOCAPTURE
 QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 {
     QList<VideoCaptureDevice> ret;
@@ -107,9 +104,7 @@ QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
     }
     return ret;
 }
-#endif //PHONON_NO_VIDEOCAPTURE
 
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
 QList<VideoCaptureDevice> BackendCapabilities::availableAVCaptureDevices()
 {
     QList<VideoCaptureDevice> ret;
@@ -121,9 +116,8 @@ QList<VideoCaptureDevice> BackendCapabilities::availableAVCaptureDevices()
     }
     return ret;
 }
-#endif // NOT PHONON_NO_VIDEOCAPTURE AND NOT PHONON_NO_AUDIOCAPTURE
+#endif //PHONON_NO_CAPTURE
 
-#ifndef QT_NO_PHONON_EFFECT
 QList<EffectDescription> BackendCapabilities::availableAudioEffects()
 {
     BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
@@ -136,7 +130,6 @@ QList<EffectDescription> BackendCapabilities::availableAudioEffects()
     }
     return ret;
 }
-#endif //QT_NO_PHONON_EFFECT
 
 } // namespace Phonon
 

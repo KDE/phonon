@@ -150,28 +150,23 @@ class PHONON_EXPORT MediaSource
          */
         MediaSource(DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
         /**
         * Creates a MediaSource object for audio capture devices.
         */
         MediaSource(const AudioCaptureDevice& device);
-#endif
 
-#ifndef PHONON_NO_VIDEOCAPTURE
         /**
         * Creates a MediaSource object for video capture devices.
         */
         MediaSource(const VideoCaptureDevice& device);
-#endif
 
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
         /**
          * Sets the source to the preferred audio capture device for the specified category
          */
         MediaSource(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
-#endif
+#endif // PHONON_NO_CAPTURE
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
          * Creates a MediaSource object for a data stream.
          *
@@ -196,7 +191,6 @@ class PHONON_EXPORT MediaSource
          * \see setAutoDelete
          */
         MediaSource(QIODevice *ioDevice); //krazy:exclude=explicit
-#endif
 
         /**
          * Destroys the MediaSource object.
@@ -291,27 +285,23 @@ class PHONON_EXPORT MediaSource
          */
         QString deviceName() const;
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         /**
          * Returns the media stream of the MediaSource if type() == Stream; otherwise returns 0.
          * QIODevices are handled as streams, too.
          */
         AbstractMediaStream *stream() const;
-#endif
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
         /**
          * Returns the audio capture device for the media source if applicable.
          */
         AudioCaptureDevice audioCaptureDevice() const;
-#endif
 
-#ifndef PHONON_NO_VIDEOCAPTURE
         /**
          * Returns the video capture device for the media source if applicable.
          */
         VideoCaptureDevice videoCaptureDevice() const;
-#endif
+#endif // PHONON_NO_CAPTURE
 
 /*      post 4.0:
         MediaSource(const QList<MediaSource> &mediaList);

@@ -22,11 +22,7 @@
 #ifndef PHONON_EXPERIMENTAL_AVCAPTURE_H
 #define PHONON_EXPERIMENTAL_AVCAPTURE_H
 
-#if defined(PHONON_NO_VIDEOCAPTURE) || defined(PHONON_NO_AUDIOCAPTURE)
-#define NO_PHONON_AVCAPTURE
-#endif
-
-#ifndef NO_PHONON_AVCAPTURE
+#ifndef PHONON_NO_CAPTURE
 
 #include "export.h"
 #include "../medianode.h"
@@ -186,6 +182,6 @@ namespace Experimental
 } // namespace Experimental
 } // namespace Phonon
 
-#endif // NO_PHONON_AVCAPTURE
+#endif // PHONON_NO_CAPTURE
 
 #endif // PHONON_EXPERIMENTAL_AVCAPTURE_H

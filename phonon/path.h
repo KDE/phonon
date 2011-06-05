@@ -99,7 +99,6 @@ class PHONON_EXPORT Path
         bool isValid() const;
         //MediaStreamTypes mediaStreamTypes() const;
 
-#ifndef QT_NO_PHONON_EFFECT
         /**
          * Creates and inserts an effect into the path.
          *
@@ -174,7 +173,6 @@ class PHONON_EXPORT Path
          * \see removeEffect
          */
         QList<Effect *> effects() const;
-#endif //QT_NO_PHONON_EFFECT
 
         /**
          * Tries to change the MediaNodes the path is connected to.

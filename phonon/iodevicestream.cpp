@@ -25,8 +25,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
 namespace Phonon
 {
 
@@ -85,8 +83,6 @@ void IODeviceStream::seekStream(qint64 offset)
 }
 
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE
 

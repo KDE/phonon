@@ -90,9 +90,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         void _k_aboutToFinish();
         void _k_currentSourceChanged(const MediaSource &);
         PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         void streamError(Phonon::ErrorType, const QString &);
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
         MediaObjectPrivate()
             : currentTime(0),
@@ -101,17 +99,13 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             errorString(),
             prefinishMark(0),
             transitionTime(0), // gapless playback
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             abstractStream(0),
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             state(Phonon::LoadingState),
             readyForZeitgeist(false)
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             , errorType(Phonon::NormalError),
             errorOverride(false),
             ignoreLoadingToBufferingStateChange(false),
             ignoreErrorToLoadingStateChange(false)
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
 #ifdef HAVE_QZEITGEIST
             QtZeitgeist::init();
@@ -125,20 +119,13 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         QString errorString;
         qint32 prefinishMark;
         qint32 transitionTime;
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         AbstractMediaStream *abstractStream;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        State state
-#ifdef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            ;
-#else
-            : 8;
+        State state : 8;
         bool readyForZeitgeist;
         ErrorType errorType : 4;
         bool errorOverride : 1;
         bool ignoreLoadingToBufferingStateChange : 1;
         bool ignoreErrorToLoadingStateChange : 1;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
 #ifdef HAVE_QZEITGEIST

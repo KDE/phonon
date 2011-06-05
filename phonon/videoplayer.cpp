@@ -30,8 +30,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_VIDEOPLAYER
-
 namespace Phonon
 {
 
@@ -205,8 +203,6 @@ bool VideoPlayer::event(QEvent *e) {
 }
 
 } // namespaces
-
-#endif //QT_NO_PHONON_VIDEOPLAYER
 
 QT_END_NAMESPACE
 

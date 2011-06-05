@@ -26,8 +26,6 @@
 #include "mediaobject_p.h"
 #include "streaminterface_p.h"
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -191,7 +189,5 @@ void AbstractMediaStreamPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 QT_END_NAMESPACE
 
 #include "moc_abstractmediastream.cpp"
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 // vim: sw=4 sts=4 et tw=100
