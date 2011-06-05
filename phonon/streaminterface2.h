@@ -47,7 +47,11 @@ public:
         needData(4096);
     }
 
-#warning todo: add explicit funcs for start/stop
+    void start();
+    virtual void startDone() = 0;
+
+    void stop();
+    virtual void stopDone() = 0;
 
 protected:
     StreamInterface2();
