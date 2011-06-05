@@ -76,11 +76,11 @@ namespace Phonon
         case Phonon::NoCategory:
             break;
         case Phonon::CommunicationCategory:
-            return QCoreApplication::translate("Phonon::", "CaptureCommunication");
+            return QCoreApplication::translate("Phonon::", "Communication");
         case Phonon::RecordingCaptureCategory:
-            return QCoreApplication::translate("Phonon::", "CaptureRecording");
+            return QCoreApplication::translate("Phonon::", "Recording");
         case Phonon::ControlCaptureCategory:
-            return QCoreApplication::translate("Phonon::", "CaptureControl");
+            return QCoreApplication::translate("Phonon::", "Control");
         }
         return QString();
     }
