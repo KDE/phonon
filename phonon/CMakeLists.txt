@@ -5,7 +5,7 @@ endif (PHONON_BUILD_TESTS)
 
 add_subdirectory(experimental)
 
-set(PULSEAUDIO_MINIMUM_VERSION "0.9.15")
+set(PULSEAUDIO_FIND_VERSION "0.9.15")
 macro_optional_find_package(PulseAudio)
 if (PULSEAUDIO_FOUND)
     # PULSEAUDIO_DEVICE_MANAGER feature check could be moved to FindPulseAudio.cmake, hint hint. -- Rex
