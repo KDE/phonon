@@ -17,18 +17,20 @@ macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseau
 
 
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
+   set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?" FORCE) # this one must be forced into the cache so it exists also in the toplevel CMakeLists.txt
    add_definitions(-DHAVE_PULSEAUDIO)
    include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
    if (PULSEAUDIO_DEVICE_MANAGER)
       add_definitions(-DHAVE_PULSEAUDIO_DEVICE_MANAGER)
    endif(PULSEAUDIO_DEVICE_MANAGER)
 else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
+   set(PHONON_PULSESUPPORT FALSE CACHE BOOL "Has Phonon pulseaudio support ?" FORCE) # this one must be forced into the cache so it exists also in the toplevel CMakeLists.txt
    set(PULSEAUDIO_INCLUDE_DIR "")
    set(PULSEAUDIO_LIBRARY "")
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-macro_optional_find_package(QZeitgeist)
+macro_optional_find_package(QZeitgeist NO_MODULE )
 macro_log_feature(QZEITGEIST_FOUND "QtZeitgeist" "Qt bindings for Zeitgeist" "http://gitorious.org/kde-zeitgeist/libqzeitgeist/" FALSE)
 if (QZEITGEIST_FOUND)
     add_definitions(-DHAVE_QZEITGEIST)
@@ -93,7 +95,7 @@ add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
 target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
-target_link_libraries(phonon ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
+    target_link_libraries(phonon ${GLIB2_LIBRARIES} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
 if (QZEITGEIST_FOUND)
@@ -112,7 +114,16 @@ set_target_properties(phonon PROPERTIES
                              VERSION ${PHONON_LIB_VERSION}
                              SOVERSION ${PHONON_LIB_SOVERSION}
                              DEFINE_SYMBOL MAKE_PHONON_LIB
+                             LINK_INTERFACE_LIBRARIES ""
                              )
+# LINK_INTERFACE_LIBRARIES: By default don't add any linked libraries to the "exported"
+# link interfaces, so that executables linking against this library
+# will not automatically add implicit dependencies to their link list.
+# This reduces inter-package dependencies and makes it easier to remove
+# dependencies of shared libraries without breaking binary compatibility.
+
+
+
 install(TARGETS phonon EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)

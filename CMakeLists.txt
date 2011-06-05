@@ -25,15 +25,14 @@ endif (PHONON_BUILD_TESTS)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set(PHONON_INTERNAL TRUE)
-find_package(PhononInternal)
+include(cmake/FindPhononInternal.cmake)
 
 # The following variables directly influence the library's soname version.
 # It is highly advised to think twice before changing those.
 # If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
 set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
 set(PHONON_LIB_MINOR_VERSION "5") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "55") # Bump whenever you feel like it :P
+set(PHONON_LIB_PATCH_VERSION "56") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
@@ -52,12 +51,12 @@ if(QT_QTDBUS_FOUND)
     list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
 endif(QT_QTDBUS_FOUND)
 
-set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon-buildsystem/)
+set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon/buildsystem/)
 
 add_subdirectory(cmake)
-if(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
+if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
-endif(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
+endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
 add_subdirectory(phonon)
 add_subdirectory(includes)
 
@@ -91,17 +90,21 @@ if(NOT WIN32) # pkgconfig file
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake @ONLY)
+set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/phonon )
 
-set(PROJECT_VERSION_MAJOR ${PHONON_LIB_MAJOR_VERSION})
-set(PROJECT_VERSION_MINOR ${PHONON_LIB_MINOR_VERSION})
-set(PROJECT_VERSION_PATCH ${PHONON_LIB_PATCH_VERSION})
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/BasicFindPackageVersion.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake" @ONLY)
+# figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
+# runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
+# This relative path will be configured into the PhononConfig.cmake
+file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake @ONLY)
+
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake
-        DESTINATION ${LIB_INSTALL_DIR}/cmake/phonon )
+        DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
 
-install(EXPORT PhononLibs DESTINATION ${LIB_INSTALL_DIR}/cmake/phonon/ NAMESPACE Phonon:: FILE PhononTargets.cmake )
+install(EXPORT PhononLibs DESTINATION ${CMAKECONFIG_INSTALL_DIR} NAMESPACE Phonon:: FILE PhononTargets.cmake )
 
 
 set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR} CACHE PATH "The directory where Phonon mkspecs will be installed to.")
