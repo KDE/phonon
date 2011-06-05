@@ -39,6 +39,9 @@ StreamInterface::StreamInterface() :
 {
 }
 
+StreamInterface::StreamInterface(StreamInterfacePrivate &dd) :
+    d(&dd),
+    k_ptr(d)
 {
     d->q = this;
 }

@@ -127,6 +127,8 @@ class PHONON_EXPORT StreamInterface
 
     protected:
         StreamInterface();
+        StreamInterface(StreamInterfacePrivate &dd);
+
         StreamInterfacePrivate *const k_ptr;
 
     private:
