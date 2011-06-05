@@ -810,18 +810,20 @@ QString MediaObjectPrivate::stateName(Phonon::State state) const
 {
     switch (state) {
         case Phonon::LoadingState:
-            return "Loading";
+            return QLatin1String("Loading");
         case Phonon::StoppedState:
-            return "Stopped";
+            return QLatin1String("Stopped");
         case Phonon::PlayingState:
-            return "Playing";
+            return QLatin1String("Playing");
         case Phonon::BufferingState:
-            return "Buffering";
+            return QLatin1String("Buffering");
         case Phonon::PausedState:
-            return "Paused";
+            return QLatin1String("Paused");
         case Phonon::ErrorState:
-            return "Error";
+            return QLatin1String("Error");
     }
+    Q_ASSERT_X(0, __FILE__, "Unkown State");
+    return QLatin1String("");
 }
 
 } //namespace Phonon
