@@ -37,7 +37,7 @@ class MediaSource;
 /** \class StreamInterface streaminterface.h phonon/StreamInterface
  * \brief Backend interface to handle media streams (AbstractMediaStream).
  *
- * All functions translate to invokeMethod calls on the
+ * All functions relay their calls to the AbstractMediaStream using invokeMethod on the
  * AbstractMediaStream's QMetaObject. This means that every function call will
  * actually be executed in the thread context of the AbstractMediaStream (which
  * usually is a thread Phonon also lives in, could however also be another one).
