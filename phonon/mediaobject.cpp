@@ -522,6 +522,7 @@ bool MediaObjectPrivate::validateStateTransition(Phonon::State newstate, Phonon:
             switch (newstate) {
                 case Phonon::PausedState:
                 case Phonon::BufferingState:
+                case Phonon::ErrorState;
                     return true;
                 default:
                     return false;
@@ -531,6 +532,7 @@ bool MediaObjectPrivate::validateStateTransition(Phonon::State newstate, Phonon:
             switch (newstate) {
                 case Phonon::PlayingState:
                 case Phonon::BufferingState:
+                case Phonon::ErrorState;
                     return true;
                 default:
                     return false;
@@ -540,6 +542,7 @@ bool MediaObjectPrivate::validateStateTransition(Phonon::State newstate, Phonon:
             switch (newstate) {
                 case Phonon::PlayingState:
                 case Phonon::PausedState:
+                case Phonon::ErrorState;
                     return true;
                 default:
                     return false;
