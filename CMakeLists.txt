@@ -6,11 +6,13 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 cmake_policy(SET CMP0002 OLD)
 
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
+option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_TESTS "Build the tests" OFF)
-option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
+option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
+
 if (PHONON_NO_CAPTURE)
     # Definitions to disable the compiling of any capture related components
     add_definitions(-DPHONON_NO_CAPTURE)
@@ -31,7 +33,7 @@ find_package(PhononInternal)
 # If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
 set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
 set(PHONON_LIB_MINOR_VERSION "5") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "0") # Bump whenever you feel like it :P
+set(PHONON_LIB_PATCH_VERSION "55") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
@@ -58,6 +60,7 @@ if(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
 endif(${QT_QTDESIGNER_FOUND} AND PHONON_BUILD_DESIGNER_PLUGIN)
 add_subdirectory(phonon)
 add_subdirectory(includes)
+
 if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
     #Allows find_package(Phonon) to not die in the demos
@@ -70,13 +73,38 @@ if(PHONON_BUILD_DEMOS)
 endif(PHONON_BUILD_DEMOS)
 
 if(NOT WIN32) # pkgconfig file
+
+    # helper macro to make the install paths absolute for pkgconfig
+    macro(MAKE_ABS_INSTALL_PATH _absVar _path)
+        if (IS_ABSOLUTE "${_path}")
+            set(${_absVar} "${_path}")
+        else()
+            set(${_absVar} "${CMAKE_INSTALL_PREFIX}/${_path}")
+        endif()
+    endmacro(MAKE_ABS_INSTALL_PATH)
+
+    make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
+    make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
+    make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
+  
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
 
-if (NOT PHONON_MKSPECS_DIR)
-    set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR})
-endif (NOT PHONON_MKSPECS_DIR)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake @ONLY)
+
+set(PROJECT_VERSION_MAJOR ${PHONON_LIB_MAJOR_VERSION})
+set(PROJECT_VERSION_MINOR ${PHONON_LIB_MINOR_VERSION})
+set(PROJECT_VERSION_PATCH ${PHONON_LIB_PATCH_VERSION})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/BasicFindPackageVersion.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake" @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake
+        DESTINATION ${LIB_INSTALL_DIR}/cmake/phonon )
+
+install(EXPORT PhononLibs DESTINATION ${LIB_INSTALL_DIR}/cmake/phonon/ NAMESPACE Phonon:: FILE PhononTargets.cmake )
+
+
+set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR} CACHE PATH "The directory where Phonon mkspecs will be installed to.")
 
 install(FILES qt_phonon.pri DESTINATION  ${PHONON_MKSPECS_DIR}/modules)
 

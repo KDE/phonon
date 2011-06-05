@@ -17,4 +17,8 @@ target_link_libraries(phononwidgets
     phonon
 )
 
-install(TARGETS phononwidgets DESTINATION ${QT_PLUGINS_DIR}/designer)
+
+set(PHONON_QT_PLUGIN_INSTALL_DIR ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to.")
+
+
+install(TARGETS phononwidgets DESTINATION ${PHONON_QT_PLUGIN_INSTALL_DIR})

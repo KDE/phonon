@@ -77,11 +77,11 @@ if (PULSEAUDIO_FOUND)
    )
 endif (PULSEAUDIO_FOUND)
 
-if (QT_QTDBUS_FOUND)
+if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
    list(APPEND phonon_LIB_SRCS
       audiooutputadaptor.cpp
    )
-endif (QT_QTDBUS_FOUND)
+endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 
 add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
 
@@ -95,10 +95,9 @@ if (QZEITGEIST_FOUND)
     target_link_libraries(phonon ${QZEITGEIST_LIBRARY})
 endif(QZEITGEIST_FOUND)
 
-
-if (QT_QTDBUS_FOUND)
+if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
   target_link_libraries(phonon ${QT_QTDBUS_LIBRARY})
-endif (QT_QTDBUS_FOUND)
+endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 if (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
   # We need to explicitly link libm to phonon in Solaris
   target_link_libraries(phonon m)
@@ -109,7 +108,8 @@ set_target_properties(phonon PROPERTIES
                              SOVERSION ${PHONON_LIB_SOVERSION}
                              DEFINE_SYMBOL MAKE_PHONON_LIB
                              )
-install(TARGETS phonon ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS phonon EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
 
 install(FILES
@@ -152,4 +152,7 @@ install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
-install(FILES org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
+if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
+    install(FILES org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
+endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
+
