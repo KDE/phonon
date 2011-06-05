@@ -26,6 +26,8 @@
 
 namespace Phonon {
 
+class StreamInterface2Private;
+
 class PHONON_EXPORT StreamInterface2 : public virtual StreamInterface
 {
 public:
@@ -49,6 +51,9 @@ public:
 
 protected:
     StreamInterface2();
+
+private:
+    K_DECLARE_PRIVATE(StreamInterface2)
 };
 
 } // namespace Phonon
