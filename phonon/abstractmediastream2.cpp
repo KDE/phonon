@@ -40,6 +40,19 @@ AbstractMediaStream2::~AbstractMediaStream2()
 
 void AbstractMediaStream2::resetDone()
 {
+#warning impl
+    Q_ASSERT(0);
+}
+
+void AbstractMediaStream2::startDone()
+{
+#warning impl
+    Q_ASSERT(0);
+}
+
+void AbstractMediaStream2::stopDone()
+{
+#warning impl
     Q_ASSERT(0);
 }
 

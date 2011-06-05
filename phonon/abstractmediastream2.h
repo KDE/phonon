@@ -43,10 +43,12 @@ protected:
 
     void resetDone();
 
-#warning todo: add start/stop explicitly
+    Q_INVOKABLE virtual void start() { startDone(); }
+    void startDone();
 
+    Q_INVOKABLE inline virtual void stop() { stopDone(); }
+    void stopDone();
 
-#warning
     QScopedPointer<AbstractMediaStream2Private> k_ptr;
 
 private:

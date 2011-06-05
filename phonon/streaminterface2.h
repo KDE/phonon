@@ -33,6 +33,12 @@ class PHONON_EXPORT StreamInterface2 : public virtual StreamInterface
 public:
     virtual ~StreamInterface2();
 
+    void start();
+    virtual void startDone() = 0;
+
+    void stop();
+    virtual void stopDone() = 0;
+
     virtual void resetDone() = 0;
 
     void needData(qint64 size);
@@ -46,12 +52,6 @@ public:
     {
         needData(4096);
     }
-
-    void start();
-    virtual void startDone() = 0;
-
-    void stop();
-    virtual void stopDone() = 0;
 
 protected:
     StreamInterface2();

@@ -60,11 +60,13 @@ void StreamInterface2::needData(qint64 size)
 void StreamInterface2::start()
 {
 #warning impl
+    Q_ASSERT(0);
 }
 
 void StreamInterface2::stop()
 {
 #warning impl
+    Q_ASSERT(0);
 }
 
 } // namespace Phonon
