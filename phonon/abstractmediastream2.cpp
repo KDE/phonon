@@ -20,13 +20,9 @@
 */
 
 #include "abstractmediastream2.h"
-#include "abstractmediastream_p.h"
+#include "abstractmediastream2_p.h"
 
 namespace Phonon {
-
-class AbstractMediaStream2Private : public AbstractMediaStreamPrivate
-{
-};
 
 AbstractMediaStream2::AbstractMediaStream2(QObject *parent) :
     AbstractMediaStream(*(new AbstractMediaStream2Private), parent)
