@@ -44,6 +44,7 @@ set(phonon_LIB_SRCS
    audiodataoutput.cpp
    audiooutput.cpp
    audiooutputinterface.cpp
+   avcapture.cpp
    backendcapabilities.cpp
    effect.cpp
    effectparameter.cpp
@@ -121,6 +122,8 @@ install(FILES
    audiodataoutputinterface.h
    audiooutput.h
    audiooutputinterface.h
+   avcapture.h
+   avcaptureinterface.h
    backendcapabilities.h
    backendinterface.h
    effect.h

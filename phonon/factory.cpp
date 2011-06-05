@@ -332,6 +332,7 @@ FACTORY_IMPL(VolumeFaderEffect)
 FACTORY_IMPL(AudioOutput)
 FACTORY_IMPL(VideoWidget)
 FACTORY_IMPL(AudioDataOutput)
+FACTORY_IMPL(AvCapture)
 
 #undef FACTORY_IMPL
 
