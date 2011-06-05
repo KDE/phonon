@@ -32,8 +32,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_EFFECT
-
 namespace Phonon
 {
 class EffectPrivate : public MediaNodePrivate
@@ -54,8 +52,6 @@ class EffectPrivate : public MediaNodePrivate
 } //namespace Phonon
 
 QT_END_NAMESPACE
-
-#endif //QT_NO_PHONON_EFFECT
 
 #endif // EFFECT_P_H
 // vim: sw=4 ts=4 tw=80

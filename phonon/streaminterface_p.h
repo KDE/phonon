@@ -28,8 +28,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
 namespace Phonon
 {
 class StreamInterfacePrivate
@@ -50,8 +48,6 @@ class StreamInterfacePrivate
 };
 
 } // namespace Phonon
-
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE
 

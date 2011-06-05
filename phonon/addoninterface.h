@@ -32,8 +32,6 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-
 namespace Phonon
 {
 /** \class AddonInterface addoninterface.h phonon/AddonInterface
@@ -166,8 +164,6 @@ class AddonInterface
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::AddonInterface, "AddonInterface0.2.phonon.kde.org")
-
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 QT_END_NAMESPACE
 QT_END_HEADER

@@ -212,7 +212,11 @@ class BackendInterface
             /**
              * Request to return a %VideoWidget object.
              */
-            VideoWidgetClass
+            VideoWidgetClass,
+            /**
+             * Request to return a %AvCapture object.
+             */
+            AvCaptureClass
         };
 
         /**

@@ -54,15 +54,11 @@ MediaSource::MediaSource(const QString &filename)
         if (localFs && !filename.startsWith(QLatin1String(":/")) && !filename.startsWith(QLatin1String("qrc://"))) {
             d->url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
         } else {
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             // it's a Qt resource -> use QFile
             d->type = Stream;
             d->ioDevice = new QFile(filename);
             d->setStream(new IODeviceStream(d->ioDevice, d->ioDevice));
             d->url =  QUrl::fromLocalFile(fileInfo.absoluteFilePath());
-#else
-            d->type = Invalid;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         }
     } else {
         d->url = filename;
@@ -106,31 +102,26 @@ MediaSource::MediaSource(const DeviceAccess &access)
     d->deviceAccessList.append(access);
 }
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 MediaSource::MediaSource(const AudioCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     d->setCaptureDevices(device, VideoCaptureDevice());
 }
-#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef PHONON_NO_VIDEOCAPTURE
 MediaSource::MediaSource(const VideoCaptureDevice& device)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     d->setCaptureDevices(AudioCaptureDevice(), device);
 }
-#endif //PHONON_NO_VIDEOCAPTURE
 
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
 MediaSource::MediaSource(Capture::DeviceType deviceType, CaptureCategory category)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
     d->setCaptureDevice(deviceType, category);
 }
-#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
+#endif // PHONON_NO_CAPTURE
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 MediaSource::MediaSource(AbstractMediaStream *stream)
     : d(new MediaSourcePrivate(Stream))
 {
@@ -151,7 +142,6 @@ MediaSource::MediaSource(QIODevice *ioDevice)
         d->type = Invalid;
     }
 }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 /* post 4.0
 MediaSource::MediaSource(const QList<MediaSource> &mediaList)
@@ -175,7 +165,6 @@ MediaSource::~MediaSource()
 
 MediaSourcePrivate::~MediaSourcePrivate()
 {
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (autoDelete) {
         //here we use deleteLater because this object
         //might be destroyed from another thread
@@ -184,7 +173,6 @@ MediaSourcePrivate::~MediaSourcePrivate()
         if (ioDevice)
             ioDevice->deleteLater();
     }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 }
 
 MediaSource::MediaSource(const MediaSource &rhs)
@@ -215,11 +203,9 @@ bool MediaSource::autoDelete() const
 
 MediaSource::Type MediaSource::type() const
 {
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (d->type == Stream && d->stream == 0) {
         return Invalid;
     }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
     return d->type;
 }
 
@@ -253,7 +239,6 @@ QString MediaSource::deviceName() const
     return d->deviceName;
 }
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 AbstractMediaStream *MediaSource::stream() const
 {
     return d->stream;
@@ -263,23 +248,18 @@ void MediaSourcePrivate::setStream(AbstractMediaStream *s)
 {
     stream = s;
 }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-#ifndef PHONON_NO_AUDIOCAPTURE
+#ifndef PHONON_NO_CAPTURE
 AudioCaptureDevice MediaSource::audioCaptureDevice() const
 {
     return d->audioCaptureDevice;
 }
-#endif //PHONON_NO_AUDIOCAPTURE
 
-#ifndef PHONON_NO_VIDEOCAPTURE
 VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
     return d->videoCaptureDevice;
 }
-#endif //PHONON_NO_VIDEOCAPTURE
 
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
 void MediaSourcePrivate::setCaptureDevice(Capture::DeviceType deviceType, CaptureCategory category)
 {
     switch (deviceType) {
@@ -313,7 +293,7 @@ void MediaSourcePrivate::setCaptureDevices(const AudioCaptureDevice &audioDevice
 
     type = deviceAccessList.isEmpty() ? MediaSource::Invalid : MediaSource::CaptureDevice;
 }
-#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
+#endif //PHONON_NO_CAPTURE
 
 } // namespace Phonon
 

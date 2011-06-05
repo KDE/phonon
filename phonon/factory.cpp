@@ -57,12 +57,10 @@ class FactoryPrivate : public Phonon::Factory::Sender
         FactoryPrivate();
         ~FactoryPrivate();
         bool createBackend();
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
         PlatformPlugin *platformPlugin();
 
         PlatformPlugin *m_platformPlugin;
         bool m_noPlatformPlugin;
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
         QPointer<QObject> m_backendObject;
 
         QList<QObject *> objects;
@@ -116,12 +114,12 @@ bool FactoryPrivate::createBackend()
 {
 #ifndef QT_NO_LIBRARY
     Q_ASSERT(m_backendObject == 0);
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+
     PlatformPlugin *f = globalFactory->platformPlugin();
     if (f) {
         m_backendObject = f->createBackend();
     }
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
+
     if (!m_backendObject) {
         ensureLibraryPathSet();
 
@@ -203,10 +201,8 @@ bool FactoryPrivate::createBackend()
 
 FactoryPrivate::FactoryPrivate()
     :
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     m_platformPlugin(0),
     m_noPlatformPlugin(false),
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
     m_backendObject(0)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
@@ -229,9 +225,7 @@ FactoryPrivate::~FactoryPrivate()
         qDeleteAll(objects);
     }
     delete m_backendObject;
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     delete m_platformPlugin;
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
 }
 
 void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
@@ -264,14 +258,11 @@ Factory::Sender *Factory::sender()
 
 bool Factory::isMimeTypeAvailable(const QString &mimeType)
 {
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
     if (f) {
         return f->isMimeTypeAvailable(mimeType);
     }
-#else
-    Q_UNUSED(mimeType);
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
+
     return true; // the MIME type might be supported, let BackendCapabilities find out
 }
 
@@ -336,21 +327,15 @@ QObject *Factory::create ## classname(int arg1, QObject *parent) \
 }
 
 FACTORY_IMPL(MediaObject)
-#ifndef QT_NO_PHONON_EFFECT
 FACTORY_IMPL_1ARG(Effect)
-#endif //QT_NO_PHONON_EFFECT
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(VolumeFaderEffect)
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 FACTORY_IMPL(AudioOutput)
-#ifndef QT_NO_PHONON_VIDEO
 FACTORY_IMPL(VideoWidget)
-#endif //QT_NO_PHONON_VIDEO
 FACTORY_IMPL(AudioDataOutput)
+FACTORY_IMPL(AvCapture)
 
 #undef FACTORY_IMPL
 
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
 PlatformPlugin *FactoryPrivate::platformPlugin()
 {
     if (m_platformPlugin) {
@@ -438,7 +423,6 @@ PlatformPlugin *Factory::platformPlugin()
 {
     return globalFactory->platformPlugin();
 }
-#endif // QT_NO_PHONON_PLATFORMPLUGIN
 
 QObject *Factory::backend(bool createWhenNull)
 {

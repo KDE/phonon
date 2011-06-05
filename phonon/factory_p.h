@@ -100,17 +100,13 @@ namespace Factory
      *
      * \return a pointer to the Effect the backend provides.
      */
-#ifndef QT_NO_PHONON_EFFECT
     QObject *createEffect(int effectId, QObject *parent = 0);
-#endif //QT_NO_PHONON_EFFECT
     /**
      * Create a new backend object for a VolumeFaderEffect.
      *
      * \return a pointer to the VolumeFaderEffect the backend provides.
      */
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
     QObject *createVolumeFaderEffect(QObject *parent = 0);
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
     /**
      * Create a new backend object for a AudioOutput.
      *
@@ -122,9 +118,7 @@ namespace Factory
      *
      * \return a pointer to the VideoWidget the backend provides.
      */
-#ifndef QT_NO_PHONON_VIDEO
     QObject *createVideoWidget(QObject *parent = 0);
-#endif //QT_NO_PHONON_VIDEO
 
     /**
     * Create a new backend object for a AudioDataOutput.
@@ -132,6 +126,13 @@ namespace Factory
     * \return a pointer to the AudioDataOutput the backend provides.
     */
     PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
+
+    /**
+     * Create a new backend object for AvCapture
+     *
+     * \return a pointer to the AvCapture the backend provides.
+     */
+    QObject *createAvCapture(QObject *parent = 0);
 
     /**
      * \return a pointer to the backend interface.

@@ -46,10 +46,7 @@ class PathPrivate : public QSharedData, private MediaNodeDestructionHandler
     friend class Path;
     public:
         PathPrivate()
-            : sourceNode(0), sinkNode(0)
-#ifndef QT_NO_PHONON_EFFECT
-            , effectsParent(0)
-#endif //QT_NO_PHONON_EFFECT
+            : sourceNode(0), sinkNode(0), effectsParent(0)
         {
         }
 
@@ -61,15 +58,11 @@ class PathPrivate : public QSharedData, private MediaNodeDestructionHandler
     protected:
         void phononObjectDestroyed(MediaNodePrivate *);
 
-#ifndef QT_NO_PHONON_EFFECT
         QObject *effectsParent; // used as parent for Effects created in insertEffect
         QList<Effect *> effects;
-#endif
     private:
         bool executeTransaction( const QList<QObjectPair> &disconnections, const QList<QObjectPair> &connections);
-#ifndef QT_NO_PHONON_EFFECT
         bool removeEffect(Effect *effect);
-#endif
 };
 
 } // namespace Phonon

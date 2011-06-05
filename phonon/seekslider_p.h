@@ -36,8 +36,6 @@
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_SEEKSLIDER
-
 namespace Phonon
 {
 class MediaObject;
@@ -49,10 +47,8 @@ class SeekSliderPrivate
             : layout(QBoxLayout::LeftToRight, parent),
             slider(Qt::Horizontal, parent),
             iconLabel(parent),
-            ticking(false)
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-            ,icon(Platform::icon(QLatin1String("player-time"), parent->style()))
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
+            ticking(false),
+            icon(Platform::icon(QLatin1String("player-time"), parent->style()))
         {
             const int e = parent->style()->pixelMetric(QStyle::PM_ButtonIconSize);
             iconSize = QSize(e, e);
@@ -92,8 +88,6 @@ class SeekSliderPrivate
         QSize iconSize;
 };
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_SEEKSLIDER
 
 QT_END_NAMESPACE
 

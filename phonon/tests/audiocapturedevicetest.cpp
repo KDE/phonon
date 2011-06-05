@@ -71,8 +71,6 @@ void AudioCaptureDeviceTest::sensibleValues()
         QCOMPARE(a.index(), 20000);
         QCOMPARE(a.name(), QString("Soundcard"));
         QCOMPARE(a.description(), QString("first description"));
-    } else {
-        // TODO check for ALSA devices listed by libaudiodevicelist
     }
 }
 

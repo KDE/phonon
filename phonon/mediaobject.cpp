@@ -78,7 +78,6 @@ MediaObject::~MediaObject()
 Phonon::State MediaObject::state() const
 {
     K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (d->errorOverride) {
         return d->state;
     }
@@ -88,7 +87,6 @@ Phonon::State MediaObject::state() const
     if (d->ignoreErrorToLoadingStateChange) {
         return LoadingState;
     }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (!d->m_backendObject) {
         return d->state;
     }
@@ -142,11 +140,9 @@ QString MediaObject::errorString() const
 {
     if (state() == Phonon::ErrorState) {
         K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (d->errorOverride) {
             return d->errorString;
         }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
         return INTERFACE_CALL(errorString());
     }
     return QString();
@@ -156,11 +152,9 @@ ErrorType MediaObject::errorType() const
 {
     if (state() == Phonon::ErrorState) {
         K_D(const MediaObject);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (d->errorOverride) {
             return d->errorType;
         }
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
         return INTERFACE_CALL(errorType());
     }
     return Phonon::NoError;
@@ -249,14 +243,11 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
             // for setting a new URL
 
     d->mediaSource = newSource;
-
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     d->abstractStream = 0; // abstractStream auto-deletes
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
     }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     INTERFACE_CALL(setSource(d->mediaSource));
 }
@@ -474,7 +465,6 @@ bool MediaObjectPrivate::aboutToDeleteBackendObject()
     return true;
 }
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text)
 {
     Q_Q(MediaObject);
@@ -486,7 +476,6 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
     QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::ErrorState), Q_ARG(Phonon::State, lastState));
     //emit q->stateChanged(ErrorState, lastState);
 }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 // TODO: this needs serious cleanup...
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
@@ -572,9 +561,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
     Q_Q(MediaObject);
     pDebug() << Q_FUNC_INFO;
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     abstractStream = 0; // abstractStream auto-deletes
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     if (sourceQueue.isEmpty()) {
         emit q->aboutToFinish();
@@ -612,18 +599,12 @@ void MediaObjectPrivate::setupBackendObject()
 
     qRegisterMetaType<MediaSource>("MediaSource");
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-#else
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
-#ifndef QT_NO_PHONON_VIDEO
     QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),
                      q, SIGNAL(hasVideoChanged(bool)), Qt::QueuedConnection);
-#endif //QT_NO_PHONON_VIDEO
-
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
                      q, SIGNAL(tick(qint64)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),
@@ -672,21 +653,17 @@ void MediaObjectPrivate::setupBackendObject()
         state = backendState;
     }
 
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
     for (int i = 0 ; i < interfaceList.count(); ++i) {
         interfaceList.at(i)->_backendObjectChanged();
     }
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
     // set up attributes
     if (isPlayable(mediaSource.type())) {
         readyForZeitgeist = false;
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (mediaSource.type() == MediaSource::Stream) {
             Q_ASSERT(mediaSource.stream());
             mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
         }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         pINTERFACE_CALL(setSource(mediaSource));
     }
 }

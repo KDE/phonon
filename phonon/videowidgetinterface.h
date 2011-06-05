@@ -28,8 +28,6 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_VIDEO
-
 namespace Phonon
 {
 class VideoWidgetInterface
@@ -69,8 +67,6 @@ namespace Phonon { typedef VideoWidgetInterface VideoWidgetInterfaceLatest; }
 
 Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface44, "VideoWidgetInterface44.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface, "VideoWidgetInterface3.phonon.kde.org")
-
-#endif //QT_NO_PHONON_VIDEO
 
 QT_END_NAMESPACE
 QT_END_HEADER

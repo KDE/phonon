@@ -5,7 +5,7 @@ endif (PHONON_BUILD_TESTS)
 
 add_subdirectory(experimental)
 
-set(PULSEAUDIO_MINIMUM_VERSION "0.9.15")
+set(PULSEAUDIO_FIND_VERSION "0.9.15")
 macro_optional_find_package(PulseAudio)
 if (PULSEAUDIO_FOUND)
     # PULSEAUDIO_DEVICE_MANAGER feature check could be moved to FindPulseAudio.cmake, hint hint. -- Rex
@@ -46,6 +46,7 @@ set(phonon_LIB_SRCS
    audiodataoutput.cpp
    audiooutput.cpp
    audiooutputinterface.cpp
+   avcapture.cpp
    backendcapabilities.cpp
    effect.cpp
    effectparameter.cpp
@@ -84,11 +85,6 @@ if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
       audiooutputadaptor.cpp
    )
 endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-
-option(PHONON_NO_PLATFORMPLUGIN "Do not use any platform plugin")
-if (PHONON_NO_PLATFORMPLUGIN)
-    add_definitions(-DQT_NO_PHONON_PLATFORMPLUGIN)
-endif (PHONON_NO_PLATFORMPLUGIN)
 
 add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
 
@@ -137,6 +133,8 @@ install(FILES
    audiodataoutputinterface.h
    audiooutput.h
    audiooutputinterface.h
+   avcapture.h
+   avcaptureinterface.h
    backendcapabilities.h
    backendinterface.h
    effect.h

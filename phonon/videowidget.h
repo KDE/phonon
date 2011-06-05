@@ -32,8 +32,6 @@ QT_BEGIN_NAMESPACE
 
 class QString;
 
-#ifndef QT_NO_PHONON_VIDEO
-
 namespace Phonon
 {
 class AbstractVideoOutput;
@@ -210,8 +208,6 @@ class AbstractVideoOutput;
     };
 
 } //namespace Phonon
-
-#endif //QT_NO_PHONON_VIDEO
 
 QT_END_NAMESPACE
 QT_END_HEADER

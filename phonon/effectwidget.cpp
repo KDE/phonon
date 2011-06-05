@@ -53,8 +53,6 @@ static const int TICKINTERVAL = 4;
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_PHONON_EFFECTWIDGET
-
 namespace Phonon
 {
 
@@ -248,9 +246,6 @@ void EffectWidgetPrivate::_k_setSliderParameter(int value)
 
 
 } // namespace Phonon
-
-
-#endif // QT_NO_PHONON_EFFECTWIDGET
 
 QT_END_NAMESPACE
 
