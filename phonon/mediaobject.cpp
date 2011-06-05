@@ -806,16 +806,18 @@ MediaObject *createPlayer(Phonon::Category category, const MediaSource &source)
 QString MediaObjectPrivate::stateName(Phonon::State state) const
 {
     switch (state) {
-        case Phonon::PlayingState:
-            return "Playing";
-        case Phonon::PausedState:
-            return "Paused";
-        case Phonon::StoppedState:
-            return "Stopped";
         case Phonon::LoadingState:
             return "Loading";
+        case Phonon::StoppedState:
+            return "Stopped";
+        case Phonon::PlayingState:
+            return "Playing";
         case Phonon::BufferingState:
             return "Buffering";
+        case Phonon::PausedState:
+            return "Paused";
+        case Phonon::ErrorState:
+            return "Error";
     }
 }
 
