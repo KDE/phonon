@@ -20,10 +20,13 @@
 */
 
 #include "streaminterface.h"
+
 #include "streaminterface_p.h"
-#include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
 #include "mediasource_p.h"
+
+#include "abstractmediastream.h"
+#include "phonondefs_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -33,20 +36,22 @@ namespace Phonon
 {
 
 StreamInterface::StreamInterface() :
-    d(new StreamInterfacePrivate(this)),
-    k_ptr(d)
+    k_ptr(new StreamInterfacePrivate(this)),
+    d(k_ptr)
 {
 }
 
 StreamInterface::StreamInterface(StreamInterfacePrivate &dd) :
-    d(&dd),
-    k_ptr(d)
+    k_ptr(&dd),
+    d(k_ptr)
 {
+    K_D(StreamInterface);
     d->q = this;
 }
 
 StreamInterface::~StreamInterface()
 {
+    K_D(StreamInterface);
     if (d->connected) {
         AbstractMediaStreamPrivate *dd = d->mediaSource.stream()->d_func();
         dd->setStreamInterface(0);
@@ -56,6 +61,7 @@ StreamInterface::~StreamInterface()
 
 void StreamInterface::connectToSource(const MediaSource &mediaSource)
 {
+    K_D(StreamInterface);
     Q_ASSERT(!d->connected);
     d->connected = true;
     d->mediaSource = mediaSource;
@@ -85,6 +91,7 @@ void StreamInterfacePrivate::disconnectMediaStream()
 
 void StreamInterface::needData()
 {
+    K_D(StreamInterface);
     if (d->mediaSource.type() == MediaSource::Stream) {
         QMetaObject::invokeMethod(d->mediaSource.stream(), "needData",
                                   Qt::QueuedConnection);
@@ -93,6 +100,7 @@ void StreamInterface::needData()
 
 void StreamInterface::enoughData()
 {
+    K_D(StreamInterface);
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
          QMetaObject::invokeMethod(d->mediaSource.stream(), "enoughData",
@@ -102,6 +110,7 @@ void StreamInterface::enoughData()
 
 void StreamInterface::seekStream(qint64 offset)
 {
+    K_D(StreamInterface);
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
          QMetaObject::invokeMethod(d->mediaSource.stream(), "seekStream",
@@ -111,6 +120,7 @@ void StreamInterface::seekStream(qint64 offset)
 
 void StreamInterface::reset()
 {
+    K_D(StreamInterface);
     Q_ASSERT(d->connected);
     if (d->mediaSource.type() == MediaSource::Stream) {
          QMetaObject::invokeMethod(d->mediaSource.stream(), "reset",
