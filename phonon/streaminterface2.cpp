@@ -20,10 +20,27 @@
 */
 
 #include "streaminterface2.h"
+#include "streaminterface_p.h"
+
+#include "abstractmediastream2.h"
+#include "phonondefs_p.h"
 
 namespace Phonon {
 
-StreamInterface2::StreamInterface2()
+class StreamInterface2Private : public StreamInterfacePrivate
+{
+    friend class StreamInterface2;
+public:
+    inline StreamInterface2Private(StreamInterface2 *q_) :
+        StreamInterfacePrivate(q_)
+    {
+    }
+
+    inline ~StreamInterface2Private() {}
+};
+
+StreamInterface2::StreamInterface2() :
+    StreamInterface(*(new StreamInterface2Private(this)))
 {
 }
 
