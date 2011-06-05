@@ -50,11 +50,16 @@ if (PULSEAUDIO_INCLUDE_DIR AND PULSEAUDIO_LIBRARY)
    include(MacroEnsureVersion)
 
    # get PulseAudio's version from its version.h, and compare it with our minimum version
-   file(STRINGS "${PULSEAUDIO_INCLUDE_DIR}/pulse/version.h" pulse_version_h
-        REGEX ".*pa_get_headers_version\\(\\).*"
-        )
-   string(REGEX REPLACE ".*pa_get_headers_version\\(\\)\ \\(\"([0-9]+\\.[0-9]+\\.[0-9]+)\"\\).*" "\\1"
-                         PULSEAUDIO_VERSION "${pulse_version_h}")
+   file(STRINGS "${PULSEAUDIO_INCLUDE_DIR}/pulse/version.h" pulse_version_h REGEX ".*define.+PA_MAJOR.+")
+   string(REGEX REPLACE ".*define.+PA_M[A-Z]+.+([0-9]+).*" "\\1" PULSEAUDIO_MAJOR "${pulse_version_h}")
+
+   file(STRINGS "${PULSEAUDIO_INCLUDE_DIR}/pulse/version.h" pulse_version_h REGEX ".*define.+PA_MINOR.+")
+   string(REGEX REPLACE ".*define.+PA_M[A-Z]+.+([0-9]+).*" "\\1" PULSEAUDIO_MINOR "${pulse_version_h}")
+
+   file(STRINGS "${PULSEAUDIO_INCLUDE_DIR}/pulse/version.h" pulse_version_h REGEX ".*define.+PA_MICRO.+")
+   string(REGEX REPLACE ".*define.+PA_M[A-Z]+.+([0-9]+).*" "\\1" PULSEAUDIO_MICRO "${pulse_version_h}")
+
+   set(PULSEAUDIO_VERSION "${PULSEAUDIO_MAJOR}.${PULSEAUDIO_MINOR}.${PULSEAUDIO_MICRO}")
    macro_ensure_version("${PULSEAUDIO_MINIMUM_VERSION}" "${PULSEAUDIO_VERSION}" PULSEAUDIO_FOUND)
 else (PULSEAUDIO_INCLUDE_DIR AND PULSEAUDIO_LIBRARY)
    set(PULSEAUDIO_FOUND FALSE)
