@@ -492,61 +492,67 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 bool MediaObjectPrivate::validateStateTransition(Phonon::State newstate, Phonon::State oldstate)
 {
     switch (oldstate) {
-        case Phonon::StoppedState:
-            switch (newstate) {
-                case Phonon::LoadingState:
-                case Phonon::PlayingState:
-                    return true;
-                default:
-                    return false;
-            }
-            break;
+    case Phonon::StoppedState:
+        switch (newstate) {
         case Phonon::LoadingState:
-            switch (newstate) {
-                case Phonon::ErrorState:
-                case Phonon::StoppedState:
-                    return true;
-                default:
-                    return false;
-            }
-            break;
-        case Phonon::ErrorState:
-            switch (newstate) {
-                case Phonon::LoadingState:
-                    return true;
-                default:
-                    return false;
-            }
-            break;
         case Phonon::PlayingState:
-            switch (newstate) {
-                case Phonon::PausedState:
-                case Phonon::BufferingState:
-                case Phonon::ErrorState:
-                    return true;
-                default:
-                    return false;
-            }
-            break;
+            return true;
+        default:
+            return false;
+        }
+        break;
+    case Phonon::LoadingState:
+        switch (newstate) {
+        case Phonon::ErrorState:
+        case Phonon::StoppedState:
+            return true;
+        default:
+            return false;
+        }
+        break;
+    case Phonon::ErrorState:
+        switch (newstate) {
+        case Phonon::LoadingState:
+            return true;
+        default:
+            return false;
+        }
+        break;
+    case Phonon::PlayingState:
+        switch (newstate) {
         case Phonon::PausedState:
-            switch (newstate) {
-                case Phonon::PlayingState:
-                case Phonon::BufferingState:
-                case Phonon::ErrorState:
-                    return true;
-                default:
-                    return false;
-            }
-            break;
         case Phonon::BufferingState:
-            switch (newstate) {
-                case Phonon::PlayingState:
-                case Phonon::PausedState:
-                case Phonon::ErrorState:
-                    return true;
-                default:
-                    return false;
-            }
+        case Phonon::ErrorState:
+        case Phonon::StoppedState:
+            return true;
+        default:
+            return false;
+        }
+        break;
+    case Phonon::PausedState:
+        switch (newstate) {
+        case Phonon::PlayingState:
+        case Phonon::BufferingState:
+        case Phonon::ErrorState:
+        case Phonon::StoppedState:
+            return true;
+        default:
+            return false;
+        }
+        break;
+    case Phonon::BufferingState:
+        switch (newstate) {
+        case Phonon::PlayingState:
+        case Phonon::PausedState:
+        case Phonon::ErrorState:
+#ifdef __GNUC__
+#warning TODO: buffering state needs fixing, should not transit to stop
+#endif // __GNUC__
+        case Phonon::StoppedState:
+            return true;
+        default:
+            return false;
+        }
     }
     return false;
 }
