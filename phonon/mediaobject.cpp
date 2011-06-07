@@ -496,6 +496,7 @@ bool MediaObjectPrivate::validateStateTransition(Phonon::State newstate, Phonon:
         switch (newstate) {
         case Phonon::LoadingState:
         case Phonon::PlayingState:
+        case Phonon::PausedState:
             return true;
         default:
             return false;
