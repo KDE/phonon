@@ -60,13 +60,13 @@ if (PULSEAUDIO_INCLUDE_DIR AND NOT PULSEAUDIO_VERSION)
    # Use the separate major, minor, micro defines as these are more reliable than the combined string
    # which may change if/when the minor or micro bits are dropped...
    file(STRINGS "${PULSEAUDIO_INCLUDE_DIR}/pulse/version.h" pulse_version_h REGEX ".*define.+PA_MAJOR.+")
-   string(REGEX REPLACE ".*define.+PA_M[A-Z]+.+([0-9]+).*" "\\1" PULSEAUDIO_MAJOR "${pulse_version_h}")
+   string(REGEX REPLACE ".*define.+PA_M[A-Z]+[^0-9]+([0-9]+).*" "\\1" PULSEAUDIO_MAJOR "${pulse_version_h}")
 
    file(STRINGS "${PULSEAUDIO_INCLUDE_DIR}/pulse/version.h" pulse_version_h REGEX ".*define.+PA_MINOR.+")
-   string(REGEX REPLACE ".*define.+PA_M[A-Z]+.+([0-9]+).*" "\\1" PULSEAUDIO_MINOR "${pulse_version_h}")
+   string(REGEX REPLACE ".*define.+PA_M[A-Z]+[^0-9]+([0-9]+).*" "\\1" PULSEAUDIO_MINOR "${pulse_version_h}")
 
    file(STRINGS "${PULSEAUDIO_INCLUDE_DIR}/pulse/version.h" pulse_version_h REGEX ".*define.+PA_MICRO.+")
-   string(REGEX REPLACE ".*define.+PA_M[A-Z]+.+([0-9]+).*" "\\1" PULSEAUDIO_MICRO "${pulse_version_h}")
+   string(REGEX REPLACE ".*define.+PA_M[A-Z]+[^0-9]+([0-9]+).*" "\\1" PULSEAUDIO_MICRO "${pulse_version_h}")
 
    set(PULSEAUDIO_VERSION "${PULSEAUDIO_MAJOR}.${PULSEAUDIO_MINOR}.${PULSEAUDIO_MICRO}" CACHE STRING "Version number of PulseAudio" FORCE)
 endif (PULSEAUDIO_INCLUDE_DIR AND NOT PULSEAUDIO_VERSION)
