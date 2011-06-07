@@ -107,7 +107,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             abstractStream(0),
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            state(Phonon::LoadingState),
+            state(Phonon::StoppedState),
             readyForZeitgeist(false)
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             , errorType(Phonon::NormalError),
