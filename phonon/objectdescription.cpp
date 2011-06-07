@@ -124,6 +124,7 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
             return new ObjectDescriptionData(0); // invalid
     }
 
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     // prefer to get the ObjectDescriptionData from the platform plugin
     PlatformPlugin *platformPlugin = Factory::platformPlugin();
     if (platformPlugin) {
@@ -133,6 +134,7 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
             return new ObjectDescriptionData(index, properties);
         }
     }
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
     BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
     if (iface) {

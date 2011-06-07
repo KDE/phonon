@@ -37,6 +37,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VOLUMESLIDER
+
 namespace Phonon
 {
 class VolumeSliderPrivate
@@ -92,6 +94,8 @@ class VolumeSliderPrivate
         bool ignoreVolumeChangeObserve;
 };
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_VOLUMESLIDER
 
 QT_END_NAMESPACE
 

@@ -15,7 +15,7 @@ option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and 
 
 if (PHONON_NO_CAPTURE)
     # Definitions to disable the compiling of any capture related components
-    add_definitions(-DPHONON_NO_CAPTURE)
+    add_definitions(-DPHONON_NO_VIDEOCAPTURE -DPHONON_NO_AUDIOCAPTURE)
 endif (PHONON_NO_CAPTURE)
 
 if (PHONON_BUILD_TESTS)

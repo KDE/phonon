@@ -36,40 +36,52 @@ namespace Phonon
 
 void Platform::saveVolume(const QString &outputName, qreal volume)
 {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = Factory::platformPlugin();
     if (f) {
         f->saveVolume(outputName, volume);
     }
+#else
+    Q_UNUSED(outputName);
+    Q_UNUSED(volume);
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 }
 
 qreal Platform::loadVolume(const QString &outputName)
 {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     const PlatformPlugin *f = Factory::platformPlugin();
     if (f) {
         return f->loadVolume(outputName);
     }
-
+#else
+    Q_UNUSED(outputName);
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     return 1.0;
 }
 
 AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *parent)
 {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = Factory::platformPlugin();
     if (f) {
         return f->createMediaStream(url, parent);
     }
-
+#else
+    Q_UNUSED(url);
+    Q_UNUSED(parent);
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     return 0;
 }
 
 QIcon Platform::icon(const QString &name, QStyle *style)
 {
     QIcon ret;
-
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     if (const PlatformPlugin *f = Factory::platformPlugin()) {
         ret = f->icon(name);
     }
-
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     if (ret.isNull()) {
         if (!style) {
             style = QApplication::style();
@@ -88,19 +100,28 @@ void Platform::notification(const char *notificationName, const QString &text,
         const QStringList &actions, QObject *receiver,
         const char *actionSlot)
 {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     const PlatformPlugin *f = Factory::platformPlugin();
     if (f) {
         f->notification(notificationName, text, actions, receiver, actionSlot);
     }
+#else
+    Q_UNUSED(notificationName);
+    Q_UNUSED(text);
+    Q_UNUSED(actions);
+    Q_UNUSED(receiver);
+    Q_UNUSED(actionSlot);
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 }
 
 QString Platform::applicationName()
 {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     const PlatformPlugin *f = Factory::platformPlugin();
     if (f) {
         return f->applicationName();
     }
-
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     QString ret = QCoreApplication::applicationName();
     if (ret.isEmpty())
         ret = QCoreApplication::applicationFilePath();
@@ -109,11 +130,12 @@ QString Platform::applicationName()
 
 QList<QPair<QByteArray, QString> > Platform::deviceAccessListFor(const Phonon::AudioOutputDevice &deviceDesc)
 {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     const PlatformPlugin *f = Factory::platformPlugin();
     if (f) {
         return f->deviceAccessListFor(deviceDesc);
     }
-
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
     return QList<QPair<QByteArray, QString> >();
 }
 

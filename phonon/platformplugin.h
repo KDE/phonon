@@ -32,6 +32,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
+
 class QUrl;
 class QObject;
 class QIcon;
@@ -105,23 +107,27 @@ class PlatformPlugin
          */
         virtual DeviceAccessList deviceAccessListFor(const AudioOutputDevice &) const { return DeviceAccessList(); }
 
-#ifndef PHONON_NO_CAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
         /**
          * Returns a list of (driver, handle) pairs for the given AudioCaptureDevice description.
          * Implementation is optional.
          */
         virtual DeviceAccessList deviceAccessListFor(const AudioCaptureDevice &) const { return DeviceAccessList(); }
+#endif // PHONON_NO_AUDIOCAPTURE
 
+#ifndef PHONON_NO_VIDEOCAPTURE
         /**
          * Returns a list of (driver, handle) pairs for the given VideoCaptureDevice description.
          * Implementation is optional.
          */
         virtual DeviceAccessList deviceAccessListFor(const VideoCaptureDevice &) const { return DeviceAccessList(); }
-#endif // PHONON_NO_CAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 };
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::PlatformPlugin, "3PlatformPlugin.phonon.kde.org")
+
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
 
 QT_END_NAMESPACE
 QT_END_HEADER

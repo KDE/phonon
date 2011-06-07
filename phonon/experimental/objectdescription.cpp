@@ -29,7 +29,7 @@ namespace Phonon
 namespace Experimental
 {
 
-#ifndef PHONON_NO_CAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 
 VideoCaptureDevice phononVcdToExperimentalVcd(const Phonon::VideoCaptureDevice &vcd)
 {
@@ -53,7 +53,7 @@ Phonon::VideoCaptureDevice phononExperimentalVcdToVcd(const Phonon::Experimental
     return Phonon::VideoCaptureDevice(vcd.index(), properties);
 }
 
-#endif // PHONON_NO_CAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
 } // Experimental namespace
 } // Phonon namespace

@@ -311,6 +311,7 @@ void AudioOutputPrivate::setupBackendObject()
         // set up attributes
         pINTERFACE_CALL(setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
 
+#ifndef QT_NO_PHONON_SETTINGSGROUP
         // if the output device is not available and the device was not explicitly set
         // There is no need to set the output device initially if PA is used as
         // we know it will not work (stream doesn't exist yet) and that this will be
@@ -333,6 +334,7 @@ void AudioOutputPrivate::setupBackendObject()
             callSetOutputDevice(this, none);
             handleAutomaticDeviceChange(none, FallbackChange);
         }
+#endif //QT_NO_PHONON_SETTINGSGROUP
     }
 }
 
@@ -371,6 +373,8 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
     if (PulseSupport::getInstance()->isActive())
         return;
 
+#ifndef QT_NO_PHONON_SETTINGSGROUP
+
     pDebug() << Q_FUNC_INFO;
     // outputDeviceIndex identifies a failing device
     // fall back in the preference list of output devices
@@ -386,7 +390,7 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
             }
         }
     }
-
+#endif //QT_NO_PHONON_SETTINGSGROUP
     // if we get here there is no working output device. Tell the backend.
     const AudioOutputDevice none;
     callSetOutputDevice(this, none);
@@ -398,6 +402,7 @@ void AudioOutputPrivate::_k_deviceListChanged()
     if (PulseSupport::getInstance()->isActive())
         return;
 
+#ifndef QT_NO_PHONON_SETTINGSGROUP
     pDebug() << Q_FUNC_INFO;
     // Check to see if we have an override and do not change to a higher priority device if the overridden device is still present.
     if (outputDeviceOverridden && device.property("available").toBool()) {
@@ -428,6 +433,7 @@ void AudioOutputPrivate::_k_deviceListChanged()
             break; // found one with higher preference that works
         }
     }
+#endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
 void AudioOutputPrivate::_k_deviceChanged(int deviceIndex)
@@ -478,31 +484,34 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     switch (type) {
     case FallbackChange:
         if (g_lastFallback.first != device1.index() || g_lastFallback.second != device2.index()) {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
             const QString &text = //device2.isValid() ?
                 AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
                         "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name()) /*:
                 AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
                         "No other device available.</html>").arg(device1.name())*/;
             Platform::notification("AudioDeviceFallback", text);
-
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
             g_lastFallback.first = device1.index();
             g_lastFallback.second = device2.index();
         }
         break;
     case HigherPreferenceChange:
         {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
         const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
                 "which just became available and has higher preference.</html>").arg(device2.name());
         Platform::notification("AudioDeviceFallback", text,
                 QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
                 q, SLOT(_k_revertFallback()));
-
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
         g_lastFallback.first = 0;
         g_lastFallback.second = 0;
         }
         break;
     case SoundSystemChange:
         {
+#ifndef QT_NO_PHONON_PLATFORMPLUGIN
         // If device1 is not "valid" this indicates that the preferences used to select
         // a device was perhaps not available when this object was created (although
         // I can't quite work out how that would be....)
@@ -520,7 +529,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
                 Platform::notification("AudioDeviceFallback", text);
             }
         }
-
+#endif //QT_NO_PHONON_PLATFORMPLUGIN
         //outputDeviceOverridden = true;
         g_lastFallback.first = 0;
         g_lastFallback.second = 0;

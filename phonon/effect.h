@@ -32,6 +32,8 @@
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_EFFECT
+
 class QString;
 template<class T> class QList;
 
@@ -106,6 +108,8 @@ namespace Phonon
             Effect(EffectPrivate &dd, QObject *parent);
     };
 } //namespace Phonon
+
+#endif // QT_NO_EFFECT
 
 QT_END_NAMESPACE
 QT_END_HEADER

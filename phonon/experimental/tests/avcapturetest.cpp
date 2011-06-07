@@ -106,7 +106,7 @@ void AVCaptureTest::testAudioCapture()
 
 void AVCaptureTest::testVideoCapture()
 {
-    #ifndef PHONON_NO_CAPTURE
+    #ifndef PHONON_NO_VIDEOCAPTURE
     // Write device indices
     QList<int> acList = m_pgc->videoCaptureDeviceListFor(Phonon::NoCaptureCategory);
     qDebug() << "Device list for video capture" << acList;
@@ -123,7 +123,7 @@ void AVCaptureTest::testVideoCapture()
     }
     #else
     qDebug() << "Video capture is disabled";
-    #endif // PHONON_NO_CAPTURE
+    #endif
 }
 
 void AVCaptureTest::testDeviceLists()

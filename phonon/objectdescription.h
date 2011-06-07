@@ -51,6 +51,11 @@ namespace Phonon
          * Audio output devices. This can be soundcards (with different drivers), soundservers or
          * other virtual outputs like playback on a different computer on the
          * network.
+         *
+         * For Hardware devices the backend should use libkaudiodevicelist
+         * (AudioDevice and AudioDeviceEnumerator) which will list removable
+         * devices even when they are unplugged and provide a unique identifier
+         * that can make backends use the same identifiers.
          */
         AudioOutputDeviceType,
 
@@ -65,6 +70,11 @@ namespace Phonon
          * Audio capture devices. This can be soundcards (with different drivers), soundservers or
          * other virtual inputs like capture on a different computer on the
          * network.
+         *
+         * For Hardware devices the backend should use libkaudiodevicelist
+         * (AudioDevice and AudioDeviceEnumerator) which will list removable
+         * devices even when they are unplugged and provide a unique identifier
+         * that can make backends use the same identifiers.
          */
         AudioCaptureDeviceType,
 
@@ -264,22 +274,28 @@ inline QDebug operator<<(QDebug s, const ObjectDescription<T> &o) //krazy:exclud
  * \ingroup BackendInformation
  */
 typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;
-
-#ifndef PHONON_NO_CAPTURE
 /**
  * \ingroup BackendInformation
  */
+#ifndef PHONON_NO_AUDIOCAPTURE
 typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
+#endif //PHONON_NO_AUDIOCAPTURE
 /**
  * \ingroup BackendInformation
  */
+//typedef ObjectDescription<VideoOutputDeviceType> VideoOutputDevice;
+/**
+ * \ingroup BackendInformation
+ */
+#ifndef PHONON_NO_VIDEOCAPTURE
 typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
-#endif // PHONON_NO_CAPTURE
-
+#endif
 /**
  * \ingroup BackendInformation
  */
+#ifndef QT_NO_PHONON_EFFECT
 typedef ObjectDescription<EffectType> EffectDescription;
+#endif //QT_NO_PHONON_EFFECT
 
 /**
  * \ingroup BackendInformation
@@ -297,9 +313,10 @@ typedef ObjectDescription<EffectType> EffectDescription;
  * \ingroup BackendInformation
  */
 //typedef ObjectDescription<VisualizationType> VisualizationDescription;
-
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
 typedef ObjectDescription<AudioChannelType> AudioChannelDescription;
 typedef ObjectDescription<SubtitleType> SubtitleDescription;
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 /**
  * \short Information about how to access a device
@@ -338,20 +355,28 @@ QT_END_NAMESPACE
 Q_DECLARE_METATYPE(Phonon::AudioOutputDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)
 
-#ifndef PHONON_NO_CAPTURE
+#ifndef PHONON_NO_AUDIOCAPTURE
 Q_DECLARE_METATYPE(Phonon::AudioCaptureDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioCaptureDevice>)
+#endif //PHONON_NO_AUDIOCAPTURE
+
+#ifndef PHONON_NO_VIDEOCAPTURE
 Q_DECLARE_METATYPE(Phonon::VideoCaptureDevice)
 Q_DECLARE_METATYPE(QList<Phonon::VideoCaptureDevice>)
-#endif //PHONON_NO_CAPTURE
+#endif //PHONON_NO_VIDEOCAPTURE
 
+#ifndef QT_NO_PHONON_EFFECT
 Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
 Q_DECLARE_METATYPE(Phonon::EffectDescription)
+#endif //QT_NO_PHONON_EFFECT
 
+
+#ifndef QT_NO_PHONON_MEDIACONTROLLER
 Q_DECLARE_METATYPE(Phonon::AudioChannelDescription)
 Q_DECLARE_METATYPE(Phonon::SubtitleDescription)
 Q_DECLARE_METATYPE(QList<Phonon::AudioChannelDescription>)
 Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
+#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 Q_DECLARE_METATYPE(Phonon::DeviceAccess)
 Q_DECLARE_METATYPE(Phonon::DeviceAccessList)

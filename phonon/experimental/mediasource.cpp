@@ -45,13 +45,13 @@ MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
     }
 }
 
-#ifndef PHONON_NO_CAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 MediaSource::MediaSource(const VideoCaptureDevice &videoDevice)
     : Phonon::MediaSource(*new MediaSourcePrivate(VideoCaptureDeviceSource))
 {
     Q_UNUSED(videoDevice);
 }
-#endif // PHONON_NO_CAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
 MediaSource &MediaSource::operator=(const MediaSource &rhs)
 {
@@ -64,12 +64,12 @@ bool MediaSource::operator==(const MediaSource &rhs) const
     return d == rhs.d;
 }
 
-#ifndef PHONON_NO_CAPTURE
+#ifndef PHONON_NO_VIDEOCAPTURE
 VideoCaptureDevice MediaSource::videoCaptureDevice() const
 {
     return phononVcdToExperimentalVcd(Phonon::MediaSource::videoCaptureDevice());
 }
-#endif // PHONON_NO_CAPTURE
+#endif // PHONON_NO_VIDEOCAPTURE
 
 QList<Phonon::MediaSource> MediaSource::substreams() const
 {

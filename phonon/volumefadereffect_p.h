@@ -28,6 +28,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
+
 namespace Phonon
 {
 class VolumeFaderEffectPrivate : public EffectPrivate
@@ -47,6 +49,8 @@ class VolumeFaderEffectPrivate : public EffectPrivate
         VolumeFaderEffect::FadeCurve fadeCurve;
 };
 }
+
+#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 
 QT_END_NAMESPACE
 

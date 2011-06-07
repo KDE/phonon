@@ -29,6 +29,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_NO_PHONON_VOLUMESLIDER
+
 namespace Phonon
 {
 VolumeSlider::VolumeSlider(QWidget *parent)
@@ -258,6 +260,8 @@ void VolumeSlider::setSingleStep(int milliseconds)
 }
 
 } // namespace Phonon
+
+#endif //QT_NO_PHONON_VOLUMESLIDER
 
 QT_END_NAMESPACE
 
