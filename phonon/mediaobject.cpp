@@ -489,6 +489,16 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
+void MediaObjectPrivate::_k_validateStateChange(Phonon::State newstate, Phonon::State oldstate)
+{
+    if (!validateStateTransition(newstate, oldstate)) {
+        qDebug() << "Invalid state transition:" << stateName(oldstate) << "->" << stateName(newstate);
+        Q_ASSERT_X(0, __FILE__, "Invalid state transition");
+    } else {
+        qDebug() << "Valid state transition:" << stateName(oldstate) << "->" << stateName(newstate);
+    }
+}
+
 bool MediaObjectPrivate::validateStateTransition(Phonon::State newstate, Phonon::State oldstate)
 {
     switch (oldstate) {
@@ -571,10 +581,6 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
     sendToZeitgeist(newstate);
 
 #ifdef QT_DEBUG
-    if (!validateStateTransition(newstate, oldstate)) {
-        qDebug() << "Invalid state transition:" << stateName(oldstate) << "->" << stateName(newstate);
-        Q_ASSERT_X(0, __FILE__, "Invalid state transition");
-    }
 #endif
 
     // AbstractMediaStream fallback stuff --------------------------------------
@@ -688,6 +694,8 @@ void MediaObjectPrivate::setupBackendObject()
     // signals, they ought to be done in private slots.
 
     qRegisterMetaType<MediaSource>("MediaSource");
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+                     q, SLOT(_k_validateStateChange(Phonon::State, Phonon::State)), Qt::DirectConnection);
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
