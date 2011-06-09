@@ -638,10 +638,10 @@ void MediaObjectPrivate::setupBackendObject()
                      q, SIGNAL(prefinishMarkReached(qint32)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
                      q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(const QMultiMap<QString, QString> &)),
-                     q, SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource&)),
-                     q, SLOT(_k_currentSourceChanged(const MediaSource&)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString, QString>)),
+                     q, SLOT(_k_metaDataChanged(QMultiMap<QString, QString>)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(MediaSource)),
+                     q, SLOT(_k_currentSourceChanged(MediaSource)), Qt::QueuedConnection);
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));
