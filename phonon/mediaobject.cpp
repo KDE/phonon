@@ -611,6 +611,7 @@ void MediaObjectPrivate::setupBackendObject()
     // signals, they ought to be done in private slots.
 
     qRegisterMetaType<MediaSource>("MediaSource");
+    qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
