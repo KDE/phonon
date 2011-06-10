@@ -611,6 +611,7 @@ void MediaObjectPrivate::setupBackendObject()
     // signals, they ought to be done in private slots.
 
     qRegisterMetaType<MediaSource>("MediaSource");
+    qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
@@ -638,10 +639,10 @@ void MediaObjectPrivate::setupBackendObject()
                      q, SIGNAL(prefinishMarkReached(qint32)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
                      q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(const QMultiMap<QString, QString> &)),
-                     q, SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource&)),
-                     q, SLOT(_k_currentSourceChanged(const MediaSource&)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString, QString>)),
+                     q, SLOT(_k_metaDataChanged(QMultiMap<QString, QString>)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(MediaSource)),
+                     q, SLOT(_k_currentSourceChanged(MediaSource)), Qt::QueuedConnection);
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));
