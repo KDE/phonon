@@ -51,7 +51,67 @@ if(QT_QTDBUS_FOUND)
     list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
 endif(QT_QTDBUS_FOUND)
 
+
+# helper macro to make the install paths absolute
+macro(MAKE_ABS_INSTALL_PATH _absVar _path)
+    if (IS_ABSOLUTE "${_path}")
+        set(${_absVar} "${_path}")
+    else()
+        set(${_absVar} "${CMAKE_INSTALL_PREFIX}/${_path}")
+    endif()
+endmacro(MAKE_ABS_INSTALL_PATH)
+
+
 set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon/buildsystem/)
+
+
+# Provide a cmake option, which, if set, force the Qt stuff to be installed into the
+# system Qt directories, which may be outside CMAKE_INSTALL_PREFIX.
+# By default always install inside CMAKE_INSTALL_PREFIX.
+option(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT "Install Qt designer plugins and mkspecs into the system Qt install directory or not"
+       FALSE)
+
+if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
+    # in this case, the values have to be FORCED into the cache
+    set(PHONON_QT_MKSPECS_INSTALL_DIR  ${QT_MKSPECS_DIR}/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to." FORCE )
+    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to." FORCE )
+else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
+    # in this case, the values can be adjusted by the user e.g. via cmake-gui, so no FORCE
+    set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt4/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to." )
+    set(PHONON_QT_PLUGIN_INSTALL_DIR   lib/qt4/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
+endif(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
+
+
+# Check whether the mkspecs file will be installed into the system Qt dir, and warn if not:
+make_abs_install_path(absMkspecsDir "${PHONON_QT_MKSPECS_INSTALL_DIR}")
+
+if(NOT "${absMkspecsDir}" STREQUAL "${QT_MKSPECS_DIR}/modules")
+    message(STATUS "PHONON_QT_MKSPECS_INSTALL_DIR is set to ${absMkspecsDir}.
+      The Qt mkspecs file for Phonon will not be installed into the Qt system installation directory,
+      which is ${QT_MKSPECS_DIR}/modules .
+      This means the qt_phonon.pri file will not be found by default.
+      You can:
+       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
+       * set PHONON_QT_MKSPECS_INSTALL_DIR manually to the system Qt location
+       * at runtime, with Qt >= 4.8, set the QMAKEPATH environment variable")
+endif(NOT "${absMkspecsDir}" STREQUAL "${QT_MKSPECS_DIR}/modules")
+
+
+# Check whether the designer plugins will be installed into the system Qt dir, and warn if not:
+make_abs_install_path(absPluginDir "${PHONON_QT_PLUGIN_INSTALL_DIR}")
+
+if(NOT "${absPluginDir}" STREQUAL "${QT_PLUGINS_DIR}/designer")
+    message(STATUS "PHONON_QT_PLUGIN_INSTALL_DIR is set to ${absPluginDir}.
+      The Qt designer plugins for Phonon will not be installed into the Qt system installation directory,
+      which is ${QT_PLUGINS_DIR}/designer .
+      This means the designer plugins file will not be found by default.
+      You can:
+       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
+       * set PHONON_QT_PLUGINS_INSTALL_DIR manually to the system Qt location
+       * at runtime, set the QT_PLUGIN_PATH environment variable")
+endif(NOT "${absPluginDir}" STREQUAL "${QT_PLUGINS_DIR}/designer")
+
+
 
 add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
@@ -72,15 +132,6 @@ if(PHONON_BUILD_DEMOS)
 endif(PHONON_BUILD_DEMOS)
 
 if(NOT WIN32) # pkgconfig file
-
-    # helper macro to make the install paths absolute for pkgconfig
-    macro(MAKE_ABS_INSTALL_PATH _absVar _path)
-        if (IS_ABSOLUTE "${_path}")
-            set(${_absVar} "${_path}")
-        else()
-            set(${_absVar} "${CMAKE_INSTALL_PREFIX}/${_path}")
-        endif()
-    endmacro(MAKE_ABS_INSTALL_PATH)
 
     make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
     make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
@@ -107,9 +158,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake ${CMAKE_CURRENT_BIN
 install(EXPORT PhononLibs DESTINATION ${CMAKECONFIG_INSTALL_DIR} NAMESPACE Phonon:: FILE PhononTargets.cmake )
 
 
-set(PHONON_MKSPECS_DIR ${QT_MKSPECS_DIR} CACHE PATH "The directory where Phonon mkspecs will be installed to.")
-
-install(FILES qt_phonon.pri DESTINATION  ${PHONON_MKSPECS_DIR}/modules)
+install(FILES qt_phonon.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR} )
 
 # This generates a nice library descriptor to use with [1]. It also spits out
 # a script that makes installing various versions for an ABI check a lot easier.
