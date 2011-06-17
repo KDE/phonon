@@ -109,7 +109,7 @@ void MediaElement::handleStateChange(Phonon::State newState, Phonon::State oldSt
         m_mediaObject->stop();
 }
 
-void MediaElement::init()
+void MediaElement::init(MediaObject *mediaObject)
 {
     if (m_mediaObject)
         return;
@@ -126,7 +126,7 @@ void MediaElement::init()
     foreach (QGraphicsItem *item, childItems()) {
         AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
         if (obj)
-            obj->init();
+            obj->init(m_mediaObject);
     }
 }
 

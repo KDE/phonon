@@ -23,12 +23,15 @@
 #define ABSTRACTINITABLE_H
 
 namespace Phonon {
+
+class MediaObject;
+
 namespace Declarative {
 
 class AbstractInitAble
 {
 public:
-    virtual void init() = 0;
+    virtual void init(MediaObject *mediaObject = 0) = 0;
 
 protected:
     AbstractInitAble() {}

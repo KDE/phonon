@@ -45,7 +45,7 @@ public:
     qreal volume() const;
     void setVolume(qreal newVolume);
 
-    virtual void init();
+    virtual void init(MediaObject *mediaObject);
 
 signals:
     void volumeChanged();

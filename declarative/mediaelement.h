@@ -50,7 +50,7 @@ public:
     QUrl source() const;
     void setSource(const QUrl &url);
 
-    void init();
+    virtual void init(MediaObject *mediaObject = 0);
 
     MediaObject *mediaObject() const { return m_mediaObject; }
 

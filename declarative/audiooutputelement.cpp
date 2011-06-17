@@ -57,16 +57,13 @@ void AudioOutputElement::setVolume(qreal newVolume)
         m_audioOutput->setVolume(newVolume);
 }
 
-void AudioOutputElement::init()
+void AudioOutputElement::init(MediaObject *mediaObject)
 {
+    Q_ASSERT(mediaObject);
     if (m_audioOutput)
         return;
 
-    MediaElement *mediaElement = qobject_cast<MediaElement *>(parentItem());
-    Q_ASSERT(mediaElement);
-
-    m_mediaObject = mediaElement->mediaObject();
-    Q_ASSERT(m_mediaObject);
+    m_mediaObject = mediaObject;
 
 #warning todo: category
     m_audioOutput = new AudioOutput(this);
