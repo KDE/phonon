@@ -22,11 +22,14 @@ Rectangle {
                     stop()
                     icon.source = "media-playback-start.png"
                 } else {
+                    audioOutput.volume = -10
                     icon.source = "media-playback-stop.png"
                 }
             }
 
             AudioOutput {
+                id: audioOutput
+                volume: -10
             }
         }
 

@@ -37,11 +37,18 @@ namespace Declarative {
 class AudioOutputElement : public QDeclarativeItem, public AbstractInitAble
 {
     Q_OBJECT
+    Q_PROPERTY(qreal volume READ volume WRITE setVolume NOTIFY volumeChanged)
 public:
     AudioOutputElement(QDeclarativeItem *parent = 0);
     ~AudioOutputElement();
 
+    qreal volume() const;
+    void setVolume(qreal newVolume);
+
     virtual void init();
+
+signals:
+    void volumeChanged();
 
 private:
     AudioOutput *m_audioOutput;

@@ -42,6 +42,21 @@ AudioOutputElement::~AudioOutputElement()
 {
 }
 
+qreal AudioOutputElement::volume() const
+{
+    if (!m_audioOutput)
+        return 0;
+    return m_audioOutput->volume();
+}
+
+void AudioOutputElement::setVolume(qreal newVolume)
+{
+    if (!m_audioOutput)
+        m_pendingProperties.insert("volume", newVolume);
+    else
+        m_audioOutput->setVolume(newVolume);
+}
+
 void AudioOutputElement::init()
 {
     if (m_audioOutput)
@@ -57,6 +72,9 @@ void AudioOutputElement::init()
     m_audioOutput = new AudioOutput(this);
 
     createPath(m_mediaObject, m_audioOutput);
+
+    connect(m_audioOutput, SIGNAL(volumeChanged(qreal)),
+            this, SIGNAL(volumeChanged()));
 }
 
 } // namespace Declarative
