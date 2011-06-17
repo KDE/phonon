@@ -22,10 +22,8 @@
 #ifndef AUDIOOUTPUTELEMENT_H
 #define AUDIOOUTPUTELEMENT_H
 
-#include "abstractmediaelement.h"
-#include <QtDeclarative/QDeclarativeParserStatus>
-
-#include <phonon/phononnamespace.h>
+#include "mediaelement.h"
+#include <QtDeclarative/QDeclarativeItem>
 
 namespace Phonon {
 
@@ -33,44 +31,21 @@ class AudioOutput;
 
 namespace Declarative {
 
-class AudioOutputElement : public QObject, public AbstractMediaElement,  public QDeclarativeParserStatus
+class AudioOutputElement : public QDeclarativeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-#warning writing those is fishy as it is not exactly clear what happens when you \
-    set play to false, does it pause? or stop? or error? or explode?!!!
-    Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
-    Q_PROPERTY(bool stopped READ isStopped NOTIFY stoppedChanged)
-    Q_INTERFACES(QDeclarativeParserStatus)
 public:
-    AudioOutputElement(QObject *parent = 0);
+    AudioOutputElement(QDeclarativeItem *parent = 0);
     ~AudioOutputElement();
 
     void classBegin() {};
     void componentComplete() {};
 
-    bool isPlaying() const;
-    bool isStopped() const;
-
-signals:
-    void sourceChanged();
-    void playingChanged();
-    void stoppedChanged();
-
-public slots:
-    void play();
-    void stop();
-
-private slots:
-    void handleFinished();
-    void handleStateChange(Phonon::State newState, Phonon::State oldState);
-
 private:
     virtual void init();
-    void emitStateChanges(Phonon::State state);
 
     AudioOutput *m_audioOutput;
-    State m_state;
+    MediaObject *m_mediaObject;
 
     bool m_finished;
 };

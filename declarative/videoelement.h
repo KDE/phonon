@@ -38,7 +38,7 @@ class VideoDataOutput2;
 
 namespace Declarative {
 
-class VideoElement : public QDeclarativeItem, public AbstractMediaElement
+class VideoElement : public QDeclarativeItem, public MediaElement
 {
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)

@@ -37,7 +37,7 @@ namespace Declarative {
 
 VideoElement::VideoElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
-    AbstractMediaElement()
+    MediaElement()
 {
     setFlag(ItemHasNoContents, false);
 }

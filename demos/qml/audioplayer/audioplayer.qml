@@ -13,8 +13,8 @@ Rectangle {
         height: 32;
         source: "media-playback-start.png"
 
-        AudioOutput {
-            id: audioOutput
+        Media {
+            id: mediaElement
             source: "sound.wav"
 
             onPlayingChanged: {
@@ -25,15 +25,18 @@ Rectangle {
                     icon.source = "media-playback-stop.png"
                 }
             }
+
+            AudioOutput {
+            }
         }
 
         MouseArea {
             anchors.fill: parent
             onPressed: {
-                if (audioOutput.playing)
-                    audioOutput.stop()
+                if (mediaElement.playing)
+                    mediaElement.stop()
                 else
-                    audioOutput.play()
+                    mediaElement.play()
             }
         }
     }

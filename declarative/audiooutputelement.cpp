@@ -30,12 +30,9 @@ namespace Declarative {
 
 #define SECURE if(!m_mediaObject && !m_audioOutput) init()
 
-AudioOutputElement::AudioOutputElement(QObject *parent) :
-    QObject(parent),
-    AbstractMediaElement(),
-    QDeclarativeParserStatus(),
-    m_audioOutput(0),
-    m_state(StoppedState)
+AudioOutputElement::AudioOutputElement(QDeclarativeItem *parent) :
+    QDeclarativeItem(parent),
+    m_audioOutput(0)
 {
 }
 
@@ -43,78 +40,22 @@ AudioOutputElement::~AudioOutputElement()
 {
 }
 
-bool AudioOutputElement::isPlaying() const
-{
-    return m_state & PlayingState;
-}
-
-bool AudioOutputElement::isStopped() const
-{
-    return m_state & StoppedState;
-}
-
-void AudioOutputElement::play()
-{
-    SECURE;
-    m_finished = false;
-    m_mediaObject->play();
-}
-
-void AudioOutputElement::stop()
-{
-    SECURE;
-    m_finished = false;
-    m_mediaObject->stop();
-}
-
-void AudioOutputElement::handleFinished()
-{
-    m_finished = true;
-}
-
-void AudioOutputElement::handleStateChange(Phonon::State newState, Phonon::State oldState)
-{
-    if (newState == oldState && newState == m_state)
-        return; // Simply reject this case altogether - darn you backends!!!
-
-    m_state = newState;
-    emitStateChanges(oldState);
-    emitStateChanges(newState);
-
-    // The defined behaviour is that the backend is in paused after playing is
-    // finished. Completely pointless and I'd rather not have people care about it.
-#warning this is ubergross as there is plenty of other states we could switch to ... when will me statemachine appear :(
-    if (m_finished && oldState == PlayingState)
-        m_mediaObject->stop();
-}
-
 void AudioOutputElement::init()
 {
-    Q_ASSERT(!m_mediaObject && !m_audioOutput);
+    if (m_audioOutput)
+        return;
 
-    initElement(this);
+    MediaElement *mediaElement = qobject_cast<MediaElement *>(parentItem());
+    Q_ASSERT(mediaElement);
+
+    mediaElement->init();
+    m_mediaObject = mediaElement->mediaObject();
+    Q_ASSERT(m_mediaObject);
 
 #warning todo: category
     m_audioOutput = new AudioOutput(this);
 
-    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
-            this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
-    connect(m_mediaObject, SIGNAL(finished()),
-            this, SLOT(handleFinished()));
-
     createPath(m_mediaObject, m_audioOutput);
-}
-
-void AudioOutputElement::emitStateChanges(Phonon::State state)
-{
-    switch(state) {
-    case StoppedState:
-        emit stoppedChanged();
-        break;
-    case PlayingState:
-        emit playingChanged();
-        break;
-    }
 }
 
 } // namespace Declarative

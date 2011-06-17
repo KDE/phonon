@@ -23,7 +23,9 @@
 #define ABSTRACTMEDIAELEMENT_H
 
 #include <QtCore/QUrl>
-#include <QtGui/QGraphicsObject>
+#include <QtDeclarative/QDeclarativeItem>
+
+#include <phonon/phononnamespace.h>
 
 namespace Phonon {
 
@@ -31,35 +33,50 @@ class MediaObject;
 
 namespace Declarative {
 
-class AbstractMediaElement
+class MediaElement : public QDeclarativeItem
 {
+    Q_OBJECT
+    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+#warning writing those is fishy as it is not exactly clear what happens when you \
+    set play to false, does it pause? or stop? or error? or explode?!!!
+    Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
+    Q_PROPERTY(bool stopped READ isStopped NOTIFY stoppedChanged)
 public:
-    AbstractMediaElement();
-    virtual ~AbstractMediaElement();
+    MediaElement(QDeclarativeItem *parent = 0);
+    virtual ~MediaElement();
 
     QUrl source() const;
     void setSource(const QUrl &url);
 
-    // Signals
-    virtual void sourceChanged() = 0;
+    void init();
+
+    MediaObject *mediaObject() const { return m_mediaObject; }
+
+    bool isPlaying() const;
+    bool isStopped() const;
+
+signals:
+    void sourceChanged();
+    void playingChanged();
+    void stoppedChanged();
+
+public slots:
+    void play();
+    void stop();
+
+private slots:
+    void handleFinished();
+    void handleStateChange(Phonon::State newState, Phonon::State oldState);
 
 protected:
-    /**
-     * Initializes the abstract element.
-     */
-    void initElement(QObject *parent);
-
-    /**
-     * Should init class specific Phonon objects.
-     * \note you *must* call initElement in this function
-     */
-    virtual void init() = 0;
-
     MediaObject *m_mediaObject;
+    State m_state;
 
     bool m_finished;
 
 private:
+    void emitStateChanges(Phonon::State state);
+
     QUrl m_source;
 };
 
