@@ -71,7 +71,6 @@ private slots:
     void handleStateChange(Phonon::State newState, Phonon::State oldState);
 
 protected:
-    MediaObject *m_mediaObject;
     State m_state;
 
     bool m_finished;

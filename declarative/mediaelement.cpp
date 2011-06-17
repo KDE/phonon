@@ -28,7 +28,6 @@ namespace Declarative {
 
 MediaElement::MediaElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
-    m_mediaObject(0),
     m_state(StoppedState),
     m_finished(false)
 {

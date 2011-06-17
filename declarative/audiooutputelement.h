@@ -56,7 +56,6 @@ private:
     QHash<QByteArray, QVariant> m_pendingProperties;
 
     AudioOutput *m_audioOutput;
-    MediaObject *m_mediaObject;
 };
 
 } // namespace Declarative

@@ -54,8 +54,6 @@ private slots:
     void setFrame(const Phonon::Experimental::VideoFrame2 &frame);
 
 private:
-    MediaObject *m_mediaObject;
-
     Experimental::VideoDataOutput2 *m_videoDataOutput;
     Experimental::VideoFrame2  m_frame;
 

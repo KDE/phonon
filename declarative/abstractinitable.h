@@ -34,8 +34,10 @@ public:
     virtual void init(MediaObject *mediaObject = 0) = 0;
 
 protected:
-    AbstractInitAble() {}
+    AbstractInitAble() : m_mediaObject(0) {}
     virtual ~AbstractInitAble() {}
+
+    MediaObject *m_mediaObject;
 };
 
 } // namespace Declarative
