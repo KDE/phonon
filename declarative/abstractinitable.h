@@ -22,6 +22,9 @@
 #ifndef ABSTRACTINITABLE_H
 #define ABSTRACTINITABLE_H
 
+namespace Phonon {
+namespace Declarative {
+
 class AbstractInitAble
 {
 public:
@@ -31,5 +34,8 @@ protected:
     AbstractInitAble() {}
     virtual ~AbstractInitAble() {}
 };
+
+} // namespace Declarative
+} // namespace Phonon
 
 #endif // ABSTRACTINITABLE_H
