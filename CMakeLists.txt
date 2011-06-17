@@ -69,18 +69,35 @@ set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon/buildsystem/)
 # Provide a cmake option, which, if set, force the Qt stuff to be installed into the
 # system Qt directories, which may be outside CMAKE_INSTALL_PREFIX.
 # By default always install inside CMAKE_INSTALL_PREFIX.
-option(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT "Install Qt designer plugins and mkspecs into the system Qt install directory or not"
+option(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT "Install Qt designer plugins, QML plugins and mkspecs into the system Qt install directory or not"
        FALSE)
 
 if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     # in this case, the values have to be FORCED into the cache
-    set(PHONON_QT_MKSPECS_INSTALL_DIR  ${QT_MKSPECS_DIR}/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to." FORCE )
-    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to." FORCE )
+    set(PHONON_QT_IMPORTS_INSTALL_DIR ${QT_IMPORTS_DIR} CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to." FORCE)
+    set(PHONON_QT_MKSPECS_INSTALL_DIR  ${QT_MKSPECS_DIR}/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to." FORCE)
+    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to." FORCE)
 else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     # in this case, the values can be adjusted by the user e.g. via cmake-gui, so no FORCE
-    set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt4/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to." )
-    set(PHONON_QT_PLUGIN_INSTALL_DIR   lib/qt4/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
+    set(PHONON_QT_IMPORTS_INSTALL_DIR lib/qt4/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
+    set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt4/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
+    set(PHONON_QT_PLUGIN_INSTALL_DIR   lib/qt4/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to.")
 endif(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
+
+
+# Check whether the QML plugins will be installed into the system Qt dir, and warn if not:
+make_abs_install_path(absImportsDir "${PHONON_QT_IMPORTS_INSTALL_DIR}")
+
+if(NOT "${absImportsDir}" STREQUAL "${QT_IMPORTS_DIR}")
+    message(STATUS "PHONON_QT_IMPORTS_DIR is set to ${absImportsDir}.
+      The QML plugins for Phonon will not be installed into the Qt system installation directory,
+      which is ${QT_IMPORTS_DIR} .
+      This means the QML plugins file will not be found by default.
+      You can:
+       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
+       * set PHONON_QT_IMPORTS_INSTALL_DIR manually to the system Qt location
+       * at runtime, set the QML_IMPORT_PATH environment variable")
+endif(NOT "${absImportsDir}" STREQUAL "${QT_IMPORTS_DIR}")
 
 
 # Check whether the mkspecs file will be installed into the system Qt dir, and warn if not:
@@ -118,9 +135,9 @@ add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
-if(${QT_QTDECLARATIVE_FOUND} AND PHONON_BUILD_DECLARATIVE_PLUGIN)
+if(QT_QTDECLARATIVE_FOUND AND PHONON_BUILD_DECLARATIVE_PLUGIN)
     add_subdirectory(declarative)
-endif(${QT_QTDECLARATIVE_FOUND} AND PHONON_BUILD_DECLARATIVE_PLUGIN)
+endif(QT_QTDECLARATIVE_FOUND AND PHONON_BUILD_DECLARATIVE_PLUGIN)
 add_subdirectory(phonon)
 add_subdirectory(includes)
 
@@ -140,7 +157,7 @@ if(NOT WIN32) # pkgconfig file
     make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
     make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
     make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
-  
+
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
