@@ -17,5 +17,4 @@ target_link_libraries(phononwidgets
     phonon
 )
 
-
 install(TARGETS phononwidgets DESTINATION ${PHONON_QT_PLUGIN_INSTALL_DIR})

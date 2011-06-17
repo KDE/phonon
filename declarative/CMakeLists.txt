@@ -16,6 +16,4 @@ target_link_libraries(phononqmlplugin
     phononexperimental
 )
 
-# TODO: (also remember the caching!)
-
 install(TARGETS phononqmlplugin DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
