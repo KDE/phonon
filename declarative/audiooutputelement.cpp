@@ -80,7 +80,6 @@ void AudioOutputElement::processPendingProperties()
     QHashIterator<QByteArray, QVariant> it(m_pendingProperties);
     while (it.hasNext()) {
         it.next();
-        qDebug() << it.key().constData() << it.value().toDouble();
         m_audioOutput->setProperty(it.key().constData(), it.value());
     }
     m_pendingProperties.clear();
