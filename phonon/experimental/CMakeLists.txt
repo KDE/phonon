@@ -27,8 +27,9 @@ set_target_properties(phononexperimental PROPERTIES
                                          VERSION ${PHONON_LIB_VERSION}
                                          SOVERSION ${PHONON_LIB_SOVERSION}
                                          DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
+                                         LINK_INTERFACE_LIBRARIES ""
                                          )
-install(TARGETS phononexperimental ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS phononexperimental EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install headers ###############
 install(FILES

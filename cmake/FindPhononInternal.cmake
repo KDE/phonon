@@ -12,8 +12,6 @@
 
 get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
-set(CMAKE_COLOR_MAKEFILE ON)
-
 
 # Imported from KDE4Defaults.cmake
 # Keep this portion copy'n'pastable for updatability.
@@ -32,118 +30,15 @@ set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
 
 #-------------------------------------------------------------------------------
 
-
-# Find Phonon
-
-if (NOT PHONON_INTERNAL)
-
-macro(_phonon_find_version)
-   if (APPLE AND EXISTS "${PHONON_INCLUDE_DIR}/Headers/phononnamespace.h")
-      set(_phonon_namespace_header_file "${PHONON_INCLUDE_DIR}/Headers/phononnamespace.h")
-      set(_phonon_pulsesupport_header_file "${PHONON_INCLUDE_DIR}/Headers/pulsesupport.h")
-   else ()
-      set(_phonon_namespace_header_file "${PHONON_INCLUDE_DIR}/phonon/phononnamespace.h")
-      set(_phonon_pulsesupport_header_file "${PHONON_INCLUDE_DIR}/phonon/pulsesupport.h")
-   endif (APPLE AND EXISTS "${PHONON_INCLUDE_DIR}/Headers/phononnamespace.h")
-
-   file(READ ${_phonon_namespace_header_file} _phonon_header LIMIT 5000 OFFSET 1000)
-   string(REGEX MATCH "define PHONON_VERSION_STR \"(4\\.[0-9]+\\.[0-9a-z]+)\"" _phonon_version_match "${_phonon_header}")
-   set(PHONON_VERSION "${CMAKE_MATCH_1}")
-   message(STATUS "Phonon Version: ${PHONON_VERSION}")
-endmacro(_phonon_find_version)
-
-if(PHONON_FOUND)
-   # Already found, nothing more to do except figuring out the version
-   _phonon_find_version()
-else(PHONON_FOUND)
-   if(PHONON_INCLUDE_DIR AND PHONON_LIBRARY)
-      set(PHONON_FIND_QUIETLY TRUE)
-   endif(PHONON_INCLUDE_DIR AND PHONON_LIBRARY)
-
-   # As discussed on kde-buildsystem: first look at CMAKE_PREFIX_PATH, then at the suggested PATHS (kde4 install dir)
-   find_library(PHONON_LIBRARY NAMES phonon PATHS ${KDE4_LIB_INSTALL_DIR} ${QT_LIBRARY_DIR} NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH)
-   # then at the default system locations (CMAKE_SYSTEM_PREFIX_PATH, i.e. /usr etc.)
-   find_library(PHONON_LIBRARY NAMES phonon)
-
-   find_library(PHONON_LIBRARY_EXPERIMENTAL NAMES phononexperimental PATHS ${KDE4_LIB_INSTALL_DIR} ${QT_LIBRARY_DIR} NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH)
-   find_library(PHONON_LIBRARY_EXPERIMENTAL phononexperimental)
-
-   find_path(PHONON_INCLUDE_DIR NAMES phonon/phonon_export.h PATHS ${KDE4_INCLUDE_INSTALL_DIR} ${QT_INCLUDE_DIR} ${INCLUDE_INSTALL_DIR} ${QT_LIBRARY_DIR} NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH)
-   find_path(PHONON_INCLUDE_DIR NAMES phonon/phonon_export.h)
-
-   find_path(PHONON_INCLUDE_DIR_EXPERIMENTAL NAMES phonon/experimental/export.h PATHS ${KDE4_INCLUDE_INSTALL_DIR} ${QT_INCLUDE_DIR} ${INCLUDE_INSTALL_DIR} ${QT_LIBRARY_DIR} NO_SYSTEM_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH)
-   find_path(PHONON_INCLUDE_DIR_EXPERIMENTAL NAMES phonon/experimental/export.h)
-
-   if(PHONON_INCLUDE_DIR AND PHONON_LIBRARY)
-      set(PHONON_LIBS ${phonon_LIB_DEPENDS} ${PHONON_LIBRARY})
-      set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR}/KDE ${PHONON_INCLUDE_DIR})
-      set(PHONON_FOUND TRUE)
-      _phonon_find_version()
-      find_path(PHONON_PULSESUPPORT NAMES phonon/pulsesupport.h PATHS ${PHONON_INCLUDES})
-
-      if(PHONON_PULSESUPPORT)
-         # Check if the method enable() is available in pulsesupport.h
-         file(READ ${_phonon_pulsesupport_header_file} _pulsesupport_header)
-         string(REGEX MATCH "void enable" _phonon_pulse_match "${_pulsesupport_header}")
-         set(PHONON_PULSESUPPORT "${_phonon_pulse_match}")
-      endif(PHONON_PULSESUPPORT)
-
-      if(PHONON_INCLUDE_DIR_EXPERIMENTAL AND PHONON_LIBRARY_EXPERIMENTAL)
-         set(PHONON_LIBS ${PHONON_LIBS} ${PHONON_LIBRARY_EXPERIMENTAL})
-         set(PHONON_INCLUDES ${PHONON_INCLUDES} ${PHONON_INCLUDE_DIR_EXPERIMENTAL})
-         set(PHONON_FOUND_EXPERIMENTAL TRUE)
-         message(STATUS "Found Phonon Experimental: ${PHONON_LIBRARY_EXPERIMENTAL}")
-      endif(PHONON_INCLUDE_DIR_EXPERIMENTAL AND PHONON_LIBRARY_EXPERIMENTAL)
-
-   else(PHONON_INCLUDE_DIR AND PHONON_LIBRARY)
-      set(PHONON_FOUND FALSE)
-   endif(PHONON_INCLUDE_DIR AND PHONON_LIBRARY)
-
-   if(PHONON_FOUND)
-      if(NOT PHONON_FIND_QUIETLY)
-         message(STATUS "Found Phonon: ${PHONON_LIBRARY}")
-         message(STATUS "Found Phonon Includes: ${PHONON_INCLUDES}")
-         if(PHONON_PULSESUPPORT)
-            message(STATUS "Found Phonon PulseAudio Support: Yes")
-         else(PHONON_PULSESUPPORT)
-            message(STATUS "Found Phonon PulseAudio Support: No")
-         endif(PHONON_PULSESUPPORT)
-      endif(NOT PHONON_FIND_QUIETLY)
-   else(PHONON_FOUND)
-      if(Phonon_FIND_REQUIRED)
-         if(NOT PHONON_INCLUDE_DIR)
-            message(STATUS "Phonon includes NOT found!")
-         endif(NOT PHONON_INCLUDE_DIR)
-         if(NOT PHONON_LIBRARY)
-            message(STATUS "Phonon library NOT found!")
-         endif(NOT PHONON_LIBRARY)
-         message(FATAL_ERROR "Phonon library or includes NOT found!")
-      else(Phonon_FIND_REQUIRED)
-         message(STATUS "Unable to find Phonon")
-      endif(Phonon_FIND_REQUIRED)
-   endif(PHONON_FOUND)
-
-   mark_as_advanced(
-        PHONON_INCLUDE_DIR
-        PHONON_INCLUDE_DIR_EXPERIMENTAL
-        PHONON_LIBRARY
-        PHONON_LIBRARY_EXPERIMENTAL
-        PHONON_INCLUDES
-   )
-endif(PHONON_FOUND)
-
-endif (NOT PHONON_INTERNAL)
-
-
 # Include Additional Magic
 
-include(PhononMacros)
+include(${phonon_cmake_module_dir}/PhononMacros.cmake)
 
-include(MacroLogFeature)
-include(MacroOptionalFindPackage)
+include(${phonon_cmake_module_dir}/MacroLogFeature.cmake)
+include(${phonon_cmake_module_dir}/MacroOptionalFindPackage.cmake)
 
 include(CheckCXXCompilerFlag)
-include(MacroEnsureVersion)
+include(${phonon_cmake_module_dir}/MacroEnsureVersion.cmake)
 
 
 # Check Requirements
@@ -185,30 +80,17 @@ endif (NOT _automoc4_version_ok)
 
 # Set Installation Directories
 
-macro(_SET_FANCY _var _value _comment)
-    if (NOT DEFINED ${_var})
-        set(${_var} "${_value}")
-    else (NOT DEFINED ${_var})
-        set(${_var} "${${_var}}" CACHE PATH "${_comment}")
-    endif (NOT DEFINED ${_var})
-endmacro(_SET_FANCY)
-
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
 
-if (WIN32)
-    _set_fancy(EXEC_INSTALL_PREFIX     "."                                         "Base directory for executables and libraries")
-else (WIN32)
-    _set_fancy(EXEC_INSTALL_PREFIX     "${CMAKE_INSTALL_PREFIX}"                   "Base directory for executables and libraries")
-endif (WIN32)
-_set_fancy(SHARE_INSTALL_PREFIX        "${EXEC_INSTALL_PREFIX}/share"              "Base directory for files which go to share/")
-_set_fancy(INCLUDE_INSTALL_DIR         "${EXEC_INSTALL_PREFIX}/include"            "The subdirectory to the header prefix")
-_set_fancy(BIN_INSTALL_DIR             "${EXEC_INSTALL_PREFIX}/bin"                "The install dir for executables (default ${EXEC_INSTALL_PREFIX}/bin)")
-_set_fancy(LIB_INSTALL_DIR             "${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX}"   "The subdirectory relative to the install prefix where libraries will be installed (default is ${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX})")
-_set_fancy(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/kde4"                   "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
-_set_fancy(ICON_INSTALL_DIR            "${SHARE_INSTALL_PREFIX}/icons"             "The icon install dir (default ${SHARE_INSTALL_PREFIX}/share/icons/)")
-_set_fancy(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde4/services"     "The install dir for service (desktop, protocol, ...) files")
-_set_fancy(DBUS_INTERFACES_INSTALL_DIR "${SHARE_INSTALL_PREFIX}/dbus-1/interfaces" "The dbus interfaces install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/interfaces)")
-_set_fancy(DBUS_SERVICES_INSTALL_DIR   "${SHARE_INSTALL_PREFIX}/dbus-1/services"   "The dbus services install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/services)")
+set(SHARE_INSTALL_PREFIX        "share")  #              CACHE PATH "Base directory for files which go to share/")
+set(INCLUDE_INSTALL_DIR         "include" ) #           CACHE PATH "The subdirectory to the header prefix")
+set(BIN_INSTALL_DIR             "bin"     ) #         CACHE PATH "The install dir for executables (default ${EXEC_INSTALL_PREFIX}/bin)")
+set(LIB_INSTALL_DIR             "lib${LIB_SUFFIX}" ) #  CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed (default is ${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX})")
+set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/kde4"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
+set(ICON_INSTALL_DIR            "${SHARE_INSTALL_PREFIX}/icons"             CACHE PATH "The icon install dir (default ${SHARE_INSTALL_PREFIX}/share/icons/)")
+set(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde4/services"     CACHE PATH "The install dir for service (desktop, protocol, ...) files")
+set(DBUS_INTERFACES_INSTALL_DIR "${SHARE_INSTALL_PREFIX}/dbus-1/interfaces" CACHE PATH "The dbus interfaces install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/interfaces)")
+set(DBUS_SERVICES_INSTALL_DIR   "${SHARE_INSTALL_PREFIX}/dbus-1/services"   CACHE PATH "The dbus services install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/services)")
 
 set(INSTALL_TARGETS_DEFAULT_ARGS RUNTIME DESTINATION "${BIN_INSTALL_DIR}"
                                  LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
@@ -338,11 +220,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols -Wl,--disable-auto-import")
       set (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--export-all-symbols -Wl,--disable-auto-import")
 
-      # we always link against the release version of QT with mingw
-      # (even for debug builds). So we need to define QT_NO_DEBUG
-      # or else QPluginLoader rejects plugins because it thinks
-      # they're built against the wrong QT.
-      add_definitions(-DQT_NO_DEBUG)
    endif (MINGW)
 
    check_cxx_compiler_flag(-fPIE HAVE_FPIE_SUPPORT)

@@ -1,0 +1,38 @@
+# config file for phonon library
+
+# known at buildtime
+set(PHONON_VERSION "@PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONON_LIB_PATCH_VERSION@")
+
+get_filename_component(currentDir ${CMAKE_CURRENT_LIST_FILE} PATH) # get the directory where I myself am
+get_filename_component(rootDir ${currentDir}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix
+
+set(PHONON_PULSESUPPORT @PHONON_PULSESUPPORT@)
+set(PHONON_FOUND_EXPERIMENTAL TRUE) # this is currently always built
+
+# install locations
+set(PHONON_INCLUDE_DIR "${rootDir}/@INCLUDE_INSTALL_DIR@")
+
+set(PHONON_LIBRARY_DIR "${rootDir}/@LIB_INSTALL_DIR@")
+set(PHONON_BUILDSYSTEM_DIR "${rootDir}/@BUILDSYSTEM_INSTALL_DIR@")
+
+include(${currentDir}/PhononTargets.cmake )
+
+set(PHONON_LIBRARY Phonon::phonon)
+set(PHONON_EXPERIMENTAL_LIBRARY Phonon::phononexperimental)
+set(PHONON_LIBRARIES ${PHONON_LIBRARY} ${PHONON_EXPERIMENTAL_LIBRARY})
+# The following one is only for compatiblity
+set(PHONON_LIBS ${PHONON_LIBRARIES} )
+
+set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR} ${PHONON_INCLUDE_DIR}/KDE )
+
+include(${PHONON_BUILDSYSTEM_DIR}/FindPhononInternal.cmake )
+
+
+#    set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR}/KDE ${PHONON_INCLUDE_DIR})
+
+#    if(PHONON_INCLUDE_DIR_EXPERIMENTAL AND PHONON_LIBRARY_EXPERIMENTAL)
+#        set(PHONON_LIBS ${PHONON_LIBS} ${PHONON_LIBRARY_EXPERIMENTAL})
+#        set(PHONON_INCLUDES ${PHONON_INCLUDES} ${PHONON_INCLUDE_DIR_EXPERIMENTAL})
+#        set(PHONON_FOUND_EXPERIMENTAL TRUE)
+#        message(STATUS "Found Phonon Experimental: ${PHONON_LIBRARY_EXPERIMENTAL}")
+#    endif(PHONON_INCLUDE_DIR_EXPERIMENTAL AND PHONON_LIBRARY_EXPERIMENTAL)

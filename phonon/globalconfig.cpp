@@ -541,41 +541,41 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(CaptureCategory category, int
                     | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
                     );
         }
-    }
+    } else {
+        BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
-        // the platform plugin lists the audio devices for the platform
-        // this list already is in default order (as defined by the platform plugin)
-        defaultList += platformPlugin->objectDescriptionIndexes(AudioCaptureDeviceType);
-        if (hide) {
-            QMutableListIterator<int> it(defaultList);
-            while (it.hasNext()) {
-                AudioCaptureDevice objDesc = AudioCaptureDevice::fromIndex(it.next());
-                const QVariant var = objDesc.property("isAdvanced");
-                if (var.isValid() && var.toBool()) {
-                    it.remove();
+        if (PlatformPlugin *platformPlugin = Factory::platformPlugin()) {
+            // the platform plugin lists the audio devices for the platform
+            // this list already is in default order (as defined by the platform plugin)
+            defaultList += platformPlugin->objectDescriptionIndexes(AudioCaptureDeviceType);
+            if (hide) {
+                QMutableListIterator<int> it(defaultList);
+                while (it.hasNext()) {
+                    AudioCaptureDevice objDesc = AudioCaptureDevice::fromIndex(it.next());
+                    const QVariant var = objDesc.property("isAdvanced");
+                    if (var.isValid() && var.toBool()) {
+                        it.remove();
+                    }
                 }
             }
         }
-    }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
-    // lookup the available devices directly from the backend
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
-
-    if (backendIface) {
-        // this list already is in default order (as defined by the backend)
-        QList<int> list = backendIface->objectDescriptionIndexes(AudioCaptureDeviceType);
-        if (hide || !defaultList.isEmpty() || (override & HideUnavailableDevices)) {
-            filter(AudioCaptureDeviceType, backendIface, &list,
-                    (hide ? FilterAdvancedDevices : 0)
-                    // the platform plugin maybe already provided the hardware devices?
-                    | (defaultList.isEmpty() ? 0 : FilterHardwareDevices)
-                    | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
-                    );
+        // lookup the available devices directly from the backend
+        if (backendIface) {
+            // this list already is in default order (as defined by the backend)
+            QList<int> list = backendIface->objectDescriptionIndexes(AudioCaptureDeviceType);
+            if (hide || !defaultList.isEmpty() || (override & HideUnavailableDevices)) {
+                filter(AudioCaptureDeviceType, backendIface, &list,
+                        (hide ? FilterAdvancedDevices : 0)
+                        // the platform plugin maybe already provided the hardware devices?
+                        | (defaultList.isEmpty() ? 0 : FilterHardwareDevices)
+                        | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
+                        );
+            }
+            defaultList += list;
         }
-        defaultList += list;
     }
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP

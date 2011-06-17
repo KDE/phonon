@@ -603,33 +603,46 @@ void MediaObjectPrivate::setupBackendObject()
 {
     Q_Q(MediaObject);
     Q_ASSERT(m_backendObject);
-    //pDebug() << Q_FUNC_INFO;
 
-    // Queue the stateChanged connection to prevent issues with Amarok's engine controller.
-    // On error Amarok's engine controller will delete the MediaObject, meaning if
-    // the error state was emitted from the same thread it will destroy the backend's
-    // MediaObject *while* it is doing something.
-    // By queuing the connection the MediaObject can finish whatever it is doing
-    // before Amarok starts doing nasty things to us.
+    // Queue *everything* there is. That way the backend always is in a defined state.
+    // If the signals were not queued, and the backend emitted something mid-execution
+    // of whatever it is doing, an API consumer works with an undefined state.
+    // This causes major headaches. If we must enforce implicit execution stop via
+    // signals, they ought to be done in private slots.
+
+    qRegisterMetaType<MediaSource>("MediaSource");
+    qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
+
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+                     q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
 #else
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+                     q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
 #endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    QObject::connect(m_backendObject, SIGNAL(tick(qint64)),             q, SIGNAL(tick(qint64)));
-    QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),    q, SIGNAL(seekableChanged(bool)));
 #ifndef QT_NO_PHONON_VIDEO
-    QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),    q, SIGNAL(hasVideoChanged(bool)));
+    QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),
+                     q, SIGNAL(hasVideoChanged(bool)), Qt::QueuedConnection);
 #endif //QT_NO_PHONON_VIDEO
-    QObject::connect(m_backendObject, SIGNAL(bufferStatus(int)),        q, SIGNAL(bufferStatus(int)));
-    QObject::connect(m_backendObject, SIGNAL(finished()),               q, SIGNAL(finished()), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(aboutToFinish()),          q, SLOT(_k_aboutToFinish()));
-    QObject::connect(m_backendObject, SIGNAL(prefinishMarkReached(qint32)), q, SIGNAL(prefinishMarkReached(qint32)));
-    QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)), q, SIGNAL(totalTimeChanged(qint64)));
-    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(const QMultiMap<QString, QString> &)),
-            q, SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)));
-    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource&)),
-        q, SLOT(_k_currentSourceChanged(const MediaSource&)));
+
+    QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
+                     q, SIGNAL(tick(qint64)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),
+                     q, SIGNAL(seekableChanged(bool)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(bufferStatus(int)),
+                     q, SIGNAL(bufferStatus(int)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(finished()),
+                     q, SIGNAL(finished()), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(aboutToFinish()),
+                     q, SLOT(_k_aboutToFinish()), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(prefinishMarkReached(qint32)),
+                     q, SIGNAL(prefinishMarkReached(qint32)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
+                     q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString, QString>)),
+                     q, SLOT(_k_metaDataChanged(QMultiMap<QString, QString>)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(MediaSource)),
+                     q, SLOT(_k_currentSourceChanged(MediaSource)), Qt::QueuedConnection);
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));
