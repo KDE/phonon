@@ -25,6 +25,8 @@
 #include <phonon/mediaobject.h>
 #include <phonon/mediasource.h>
 
+#include "mediaelement.h"
+
 namespace Phonon {
 namespace Declarative {
 
@@ -48,7 +50,6 @@ void AudioOutputElement::init()
     MediaElement *mediaElement = qobject_cast<MediaElement *>(parentItem());
     Q_ASSERT(mediaElement);
 
-    mediaElement->init();
     m_mediaObject = mediaElement->mediaObject();
     Q_ASSERT(m_mediaObject);
 

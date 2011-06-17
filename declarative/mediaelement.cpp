@@ -121,6 +121,13 @@ void MediaElement::init()
             this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
     connect(m_mediaObject, SIGNAL(finished()),
             this, SLOT(handleFinished()));
+
+    // Init children
+    foreach (QGraphicsItem *item, childItems()) {
+        AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
+        if (obj)
+            obj->init();
+    }
 }
 
 

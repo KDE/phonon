@@ -19,36 +19,17 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AUDIOOUTPUTELEMENT_H
-#define AUDIOOUTPUTELEMENT_H
+#ifndef ABSTRACTINITABLE_H
+#define ABSTRACTINITABLE_H
 
-#include <QtDeclarative/QDeclarativeItem>
-
-#include <phonon/mediaobject.h>
-
-#include "abstractinitable.h"
-
-namespace Phonon {
-
-class AudioOutput;
-
-namespace Declarative {
-
-class AudioOutputElement : public QDeclarativeItem, public AbstractInitAble
+class AbstractInitAble
 {
-    Q_OBJECT
 public:
-    AudioOutputElement(QDeclarativeItem *parent = 0);
-    ~AudioOutputElement();
+    virtual void init() = 0;
 
-    virtual void init();
-
-private:
-    AudioOutput *m_audioOutput;
-    MediaObject *m_mediaObject;
+protected:
+    AbstractInitAble() {}
+    virtual ~AbstractInitAble() {}
 };
 
-} // namespace Declarative
-} // namespace Phonon
-
-#endif // AUDIOOUTPUTELEMENT_H
+#endif // ABSTRACTINITABLE_H

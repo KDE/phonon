@@ -27,13 +27,15 @@
 
 #include <phonon/phononnamespace.h>
 
+#include "abstractinitable.h"
+
 namespace Phonon {
 
 class MediaObject;
 
 namespace Declarative {
 
-class MediaElement : public QDeclarativeItem
+class MediaElement : public QDeclarativeItem, AbstractInitAble
 {
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
