@@ -10,6 +10,10 @@ Rectangle {
         id: media
         source: "video.ogv"
 
+        AudioOutput {
+            id: audio
+        }
+
         Video {
             id: video
             width: 320
