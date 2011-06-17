@@ -6,21 +6,15 @@ Rectangle {
     height: 240
     color: "black"
 
-    Video {
-        id: video
+    Media {
+        id: media
         source: "video.ogv"
-        width: 320
-        height: 240
 
-
-//        onPlayingChanged: {
-//            if (!playing) {
-//                stop()
-//                icon.source = "media-playback-start.png"
-//            } else {
-//                icon.source = "media-playback-stop.png"
-//            }
-//        }
+        Video {
+            id: video
+            width: 320
+            height: 240
+        }
     }
 
     Image {
@@ -33,10 +27,10 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onPressed: {
-                if (video.playing)
-                    video.stop()
+                if (media.playing)
+                    media.stop()
                 else
-                    video.play()
+                    media.play()
                 icon.visible = false
             }
         }

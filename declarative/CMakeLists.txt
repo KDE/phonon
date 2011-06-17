@@ -4,7 +4,7 @@ set(declarative_SRCS
     mediaelement.cpp
     audiooutputelement.cpp
     plugin.cpp
-    #videoelement.cpp
+    videoelement.cpp
 )
 
 phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})

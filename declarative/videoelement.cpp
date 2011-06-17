@@ -36,8 +36,7 @@ namespace Phonon {
 namespace Declarative {
 
 VideoElement::VideoElement(QDeclarativeItem *parent) :
-    QDeclarativeItem(parent),
-    MediaElement()
+    QDeclarativeItem(parent)
 {
     setFlag(ItemHasNoContents, false);
 }
@@ -134,31 +133,16 @@ void VideoElement::setFrame(const Phonon::Experimental::VideoFrame2 &frame)
 //    m_videoDataOutput->start();
 //}
 
-void VideoElement::play()
+void VideoElement::init(MediaObject *mediaObject)
 {
-    SECURE;
-    m_finished = false;
-    m_mediaObject->play();
-}
+    Q_ASSERT(mediaObject);
+    if (m_videoDataOutput)
+        return;
 
-void VideoElement::stop()
-{
-    SECURE;
-    m_finished = false;
-    m_mediaObject->stop();
-}
-
-void VideoElement::init()
-{
-    Q_ASSERT(!m_mediaObject);
-
-    initElement(this);
+    m_mediaObject = mediaObject;
 
     m_videoDataOutput = new VideoDataOutput2(this);
     createPath(m_mediaObject, m_videoDataOutput);
-
-    AudioOutput *ao = new AudioOutput(this);
-    createPath(m_mediaObject, ao);
 
     connect(m_videoDataOutput, SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
             SLOT(setFrame(Phonon::Experimental::VideoFrame2)));

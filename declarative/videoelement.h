@@ -27,7 +27,7 @@
 
 #include <phonon/experimental/videoframe2.h>
 
-#include "abstractmediaelement.h"
+#include "abstractinitable.h"
 
 namespace Phonon {
 
@@ -38,34 +38,23 @@ class VideoDataOutput2;
 
 namespace Declarative {
 
-class VideoElement : public QDeclarativeItem, public MediaElement
+class VideoElement : public QDeclarativeItem, public AbstractInitAble
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_INTERFACES(QDeclarativeParserStatus)
 public:
     VideoElement(QDeclarativeItem *parent = 0);
     ~VideoElement();
 
-    void classBegin() {};
-    void componentComplete() {};
-
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
-
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 
-signals:
-    void sourceChanged();
-
-public slots:
-    void play();
-    void stop();
+    virtual void init(MediaObject *mediaObject);
 
 private slots:
     void setFrame(const Phonon::Experimental::VideoFrame2 &frame);
 
 private:
-    void init();
+    MediaObject *m_mediaObject;
 
     Experimental::VideoDataOutput2 *m_videoDataOutput;
     Experimental::VideoFrame2  m_frame;
