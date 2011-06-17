@@ -70,11 +70,23 @@ void AudioOutputElement::init()
 
 #warning todo: category
     m_audioOutput = new AudioOutput(this);
-
     createPath(m_mediaObject, m_audioOutput);
 
     connect(m_audioOutput, SIGNAL(volumeChanged(qreal)),
             this, SIGNAL(volumeChanged()));
+
+    processPendingProperties();
+}
+
+void AudioOutputElement::processPendingProperties()
+{
+    QHashIterator<QByteArray, QVariant> it(m_pendingProperties);
+    while (it.hasNext()) {
+        it.next();
+        qDebug() << it.key().constData() << it.value().toDouble();
+        m_audioOutput->setProperty(it.key().constData(), it.value());
+    }
+    m_pendingProperties.clear();
 }
 
 } // namespace Declarative
