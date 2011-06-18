@@ -61,6 +61,21 @@ bool MediaElement::isStopped() const
     return m_state & StoppedState;
 }
 
+qreal MediaElement::totalTime() const
+{
+    return m_mediaObject->totalTime();
+}
+
+qreal MediaElement::time() const
+{
+    return m_mediaObject->currentTime();
+}
+
+void MediaElement::seek(qreal time)
+{
+    m_mediaObject->seek(time);
+}
+
 void MediaElement::play()
 {
     init();
@@ -114,12 +129,18 @@ void MediaElement::init(MediaObject *mediaObject)
         return;
 
     m_mediaObject = new MediaObject(this);
+    m_mediaObject->setTickInterval(100);
     m_mediaObject->setCurrentSource(MediaSource(m_source));
 
     connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
             this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
     connect(m_mediaObject, SIGNAL(finished()),
             this, SLOT(handleFinished()));
+
+    connect(m_mediaObject, SIGNAL(totalTimeChanged(qint64)),
+            this, SIGNAL(totalTimeChanged()));
+    connect(m_mediaObject, SIGNAL(tick(qint64)),
+            this, SIGNAL(timeChanged()));
 
     // Init children
     foreach (QGraphicsItem *item, childItems()) {

@@ -43,6 +43,8 @@ class MediaElement : public QDeclarativeItem, AbstractInitAble
     set play to false, does it pause? or stop? or error? or explode?!!!
     Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
     Q_PROPERTY(bool stopped READ isStopped NOTIFY stoppedChanged)
+    Q_PROPERTY(qreal totalTime READ totalTime NOTIFY totalTimeChanged)
+    Q_PROPERTY(qreal time READ time WRITE seek NOTIFY timeChanged)
 public:
     MediaElement(QDeclarativeItem *parent = 0);
     virtual ~MediaElement();
@@ -57,10 +59,16 @@ public:
     bool isPlaying() const;
     bool isStopped() const;
 
+    qreal totalTime() const;
+    qreal time() const;
+    void seek(qreal time);
+
 signals:
     void sourceChanged();
     void playingChanged();
     void stoppedChanged();
+    void totalTimeChanged();
+    void timeChanged();
 
 public slots:
     void play();
