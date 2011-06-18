@@ -6,6 +6,27 @@ Rectangle {
     height: 240
     color: "black"
 
+    Timer {
+        id: movementTimer
+        running: true
+        interval: 2000
+        onTriggered:{
+            console.debug("triggered")
+            controls.state = "inactive"
+        }
+    }
+
+    MouseArea
+    {
+        anchors.fill: parent
+        hoverEnabled: true
+        onMousePositionChanged: {
+            console.debug("moved!!!s")
+            movementTimer.restart()
+            controls.state = "active"
+        }
+    }
+
     Media {
         id: media
         source: "video.ogv"
@@ -38,6 +59,17 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         source: "controls-background.png"
         opacity: 0.788235294118
+
+        states: [
+            State {
+                name: "active"
+                PropertyChanges { target: controls; visible: true }
+            },
+            State {
+                name: "inactive"
+                PropertyChanges { target: controls; visible: false }
+            }
+        ]
 
         Row {
             anchors.top: parent.top
@@ -130,8 +162,6 @@ Rectangle {
                 // conficting information
                 if (!progressMouseArea.drag.active)
                     progressHandle.x = value * progressMouseArea.drag.maximumX / max;
-                console.debug("value: " + value)
-                console.debug("x: " + progressHandle.x )
             }
 
             anchors.bottom: parent.bottom
@@ -159,7 +189,6 @@ Rectangle {
 
                     onReleased: {
                         media.time = progressSlider.max * progressHandle.x / drag.maximumX;
-
                     }
                 }
             }
