@@ -10,6 +10,13 @@ Rectangle {
         id: media
         source: "video.ogv"
 
+        onStateChanged: {
+            if (playing)
+                playPause.state = "playing"
+            else
+                playPause.state = "paused"
+        }
+
         AudioOutput {
             id: audio
         }
