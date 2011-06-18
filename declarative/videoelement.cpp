@@ -45,8 +45,8 @@ VideoElement::~VideoElement()
 
 void VideoElement::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << boundingRect();
+//    qDebug() << Q_FUNC_INFO;
+//    qDebug() << boundingRect();
     static quint64 c = 0;
     static bool paintedOnce = false;
     static bool gotSize = false;
@@ -64,8 +64,8 @@ void VideoElement::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         gotSize = true;
         m_frameSize = QSize(frame.width, frame.height);
 //        setTargetRect();
-        qDebug() << frame.width;
-        qDebug() << frame.height;
+//        qDebug() << frame.width;
+//        qDebug() << frame.height;
     }
 
 //    if (frame.format != VideoFrame2::Format_Invalid &&
@@ -86,9 +86,9 @@ void VideoElement::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         painter->drawImage(m_rect, frame.qImage());
         c++;
     } else if (frame.format == VideoFrame2::Format_Invalid) {
-        qDebug() << c++ << ": INVALID";
+//        qDebug() << c++ << ": INVALID";
     } else if (frame.qImage().isNull()) {
-        qDebug() << c++ << ": NULL";
+//        qDebug() << c++ << ": NULL";
     }
 //    qDebug() << "P" << c;
     paintedOnce = true;
