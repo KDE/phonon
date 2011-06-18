@@ -19,6 +19,7 @@ Rectangle {
 
         AudioOutput {
             id: audio
+            onVolumeChanged: { volumeSlider.value = volume * 100.0 }
         }
 
         Video {
@@ -68,6 +69,48 @@ Rectangle {
                         PropertyChanges { target: playPause; source: "pause-button.png" }
                     }
                 ]
+            }
+        }
+
+        Image {
+            id: volumeSlider
+            width: 136
+            height: 19
+
+            property real value
+            onValueChanged: {
+                // Ignore value changes whiles drag is in progress as to avoid
+                // conficting information
+                if (!volumeMouseArea.drag.active)
+                    volumeHandle.x = volumeMouseArea.drag.maximumX * value / 100.0;
+            }
+
+            anchors.top: parent.top
+            anchors.topMargin: 20
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            source: "volume-bar.png"
+
+            Image {
+                id: volumeHandle
+                width: 27
+                height: 28
+                anchors.top: parent.top
+                anchors.topMargin: -5
+                source: "volume-slider.png"
+
+                MouseArea {
+                    id: volumeMouseArea
+                    anchors.fill: parent
+                    drag.target: volumeHandle
+                    drag.axis: Drag.XAxis
+                    drag.minimumX: 0
+                    drag.maximumX: volumeSlider.width - volumeHandle.width
+                    onPositionChanged: {
+                        volumeSlider.value = drag.target.x * 100.0 / drag.maximumX
+                        audio.volume = volumeSlider.value / 100.0
+                    }
+                }
             }
         }
             }
