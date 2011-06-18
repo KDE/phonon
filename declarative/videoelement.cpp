@@ -28,8 +28,6 @@
 #include <phonon/mediaobject.h>
 #include <phonon/experimental/videodataoutput2.h>
 
-#define SECURE if(!m_mediaObject && !m_videoDataOutput) init()
-
 using namespace Phonon::Experimental;
 
 namespace Phonon {
