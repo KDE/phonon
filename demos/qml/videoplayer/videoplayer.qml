@@ -17,6 +17,9 @@ Rectangle {
                 playPause.state = "paused"
         }
 
+        onTotalTimeChanged: { progressSlider.max = totalTime }
+        onTimeChanged: { progressSlider.value = time }
+
         AudioOutput {
             id: audio
             onVolumeChanged: { volumeSlider.value = volume * 100.0 }
@@ -113,6 +116,52 @@ Rectangle {
                 }
             }
         }
+
+        Image {
+            id: progressSlider
+            width: 749
+            height: 19
+
+            property real value
+            property real max
+
+            onValueChanged: {
+                // Ignore value changes whiles drag is in progress as to avoid
+                // conficting information
+                if (!progressMouseArea.drag.active)
+                    progressHandle.x = value * progressMouseArea.drag.maximumX / max;
+                console.debug("value: " + value)
+                console.debug("x: " + progressHandle.x )
+            }
+
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "progress-bar.png"
+
+            Image {
+                id: progressHandle
+                width: 27
+                height: 28
+                anchors.top: parent.top
+                anchors.topMargin: -5
+                source: "volume-slider.png"
+
+                property real cachedPos
+
+                MouseArea {
+                    id: progressMouseArea
+                    anchors.fill: parent
+                    drag.target: progressHandle
+                    drag.axis: Drag.XAxis
+                    drag.minimumX: 0
+                    drag.maximumX: progressSlider.width - progressHandle.width
+
+                    onReleased: {
+                        media.time = progressSlider.max * progressHandle.x / drag.maximumX;
+
+                    }
+                }
             }
         }
     }
