@@ -22,20 +22,47 @@ Rectangle {
     }
 
     Image {
-        id: icon
-        anchors.centerIn: parent
-        width: 32;
-        height: 32;
-        source: "media-playback-start.png"
+        id: controls
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "controls-background.png"
+        opacity: 0.788235294118
 
-        MouseArea {
-            anchors.fill: parent
-            onPressed: {
-                if (media.playing)
-                    media.stop()
-                else
-                    media.play()
-                icon.visible = false
+        Row {
+            anchors.top: parent.top
+            anchors.horizontalCenter: controls.horizontalCenter
+            anchors.topMargin: 10
+
+            Image {
+                id: playPause
+
+                source: "play-button.png"
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (playPause.state == 'playing') {
+                            media.stop()
+                            playPause.state = 'paused'
+                        } else {
+                            media.play()
+                            playPause.state = 'playing'
+                        }
+                    }
+                }
+
+                states: [
+                    State {
+                        name: "paused"
+                        PropertyChanges { target: playPause; source: "play-button.png" }
+                    },
+                    State {
+                        name: "playing"
+                        PropertyChanges { target: playPause; source: "pause-button.png" }
+                    }
+                ]
+            }
+        }
             }
         }
     }
