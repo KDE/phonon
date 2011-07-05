@@ -1,9 +1,9 @@
 import Qt 4.7
-import Phonon 0.1
+import Phonon 1.0
 
 Rectangle {
-    width: 320
-    height: 240
+    width: 1024
+    height: 768
     color: "black"
 
     Timer {

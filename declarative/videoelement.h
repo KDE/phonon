@@ -22,9 +22,9 @@
 #ifndef VIDEOELEMENT_H
 #define VIDEOELEMENT_H
 
-#include <QtCore/QMutex>
-#include <QtDeclarative/QDeclarativeItem>
+#include <QtDeclarative/QDeclarativeParserStatus>
 
+#include <phonon/videographicsobject.h>
 #include <phonon/experimental/videoframe2.h>
 
 #include "abstractinitable.h"
@@ -38,28 +38,24 @@ class VideoDataOutput2;
 
 namespace Declarative {
 
-class VideoElement : public QDeclarativeItem, public AbstractInitAble
+class VideoElement : public VideoGraphicsObject, public QDeclarativeParserStatus, public AbstractInitAble
 {
     Q_OBJECT
+    Q_INTERFACES(QDeclarativeParserStatus)
 public:
-    VideoElement(QDeclarativeItem *parent = 0);
+    VideoElement(QGraphicsItem *parent = 0);
     ~VideoElement();
 
-    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
-    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    void classBegin() {}
+    void componentComplete() {}
 
     virtual void init(MediaObject *mediaObject);
 
 private slots:
-    void setFrame(const Phonon::Experimental::VideoFrame2 &frame);
+    void onFrameReady(Phonon::Experimental::VideoFrame2 frame);
 
 private:
     Experimental::VideoDataOutput2 *m_videoDataOutput;
-    Experimental::VideoFrame2  m_frame;
-
-    QMutex m_mutex;
-    QRectF m_rect;
-    QSize m_frameSize;
 };
 
 } // namespace Declarative

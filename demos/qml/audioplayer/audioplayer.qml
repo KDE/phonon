@@ -1,9 +1,9 @@
 import Qt 4.7
-import Phonon 0.1
+import Phonon 1.0
 
 Rectangle {
     width: 64
-    height:  64
+    height: 64
     color: "black"
 
     Image {

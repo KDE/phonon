@@ -37,9 +37,8 @@ VideoGraphicsObject::~VideoGraphicsObject()
 
 void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-//    qDebug() << Q_FUNC_INFO;
-//    qDebug() << boundingRect();
-    static quint64 c = 0;
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << boundingRect();
     static bool paintedOnce = false;
     static bool gotSize = false;
 
@@ -55,56 +54,36 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
             !gotSize) {
         gotSize = true;
         m_frameSize = QSize(frame.width, frame.height);
-//        setTargetRect();
-//        qDebug() << frame.width;
-//        qDebug() << frame.height;
+        setTargetRect();
     }
 
-//    if (frame.format != VideoFrame2::Format_Invalid &&
-//            !frame.qImage().isNull() && // Validity does not always mean the frame has sensible dimensions...
-//            (m_rect.width() != frame.width ||
-//             m_rect.height() != frame.height)) {
-//        emit prepareGeometryChange();
-//        m_rect = QRectF(0,0,frame.width, frame.height);
-////        setTargetRect();
-//        qDebug() << frame.width;
-//        qDebug() << frame.height;
-//    }
 
     if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
         painter->fillRect(m_rect, Qt::black);
-        c++;
     } else if (!frame.qImage().isNull()){
         painter->drawImage(m_rect, frame.qImage());
-        c++;
-    } else if (frame.format == VideoFrame::Format_Invalid) {
-//        qDebug() << c++ << ": INVALID";
-    } else if (frame.qImage().isNull()) {
-//        qDebug() << c++ << ": NULL";
     }
-//    qDebug() << "P" << c;
     paintedOnce = true;
 }
 
 void VideoGraphicsObject::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    m_rect=newGeometry;
+    m_rect = newGeometry;
 }
 
-//void VideoGraphicsObject::setTargetRect()
-//{
-//    emit prepareGeometryChange();
+void VideoGraphicsObject::setTargetRect()
+{
+    emit prepareGeometryChange();
 
-//    // keerp aspect
-//    QSizeF size = m_frameSize;
-//    size.scale(m_targetSize, Qt::KeepAspectRatio);
+    // keerp aspect
+    QSizeF size = m_frameSize;
+    size.scale(m_targetSize, Qt::KeepAspectRatio);
 
-//    QRectF newRect = QRectF(0, 0, size.width(), size.height());
-////    newRect.moveCenter(QRectF(newRect.topLeft(), m_targetSize).center());
+    QRectF newRect = QRectF(0, 0, size.width(), size.height());
+//    newRect.moveCenter(QRectF(newRect.topLeft(), m_targetSize).center());
 
-//    m_rect = newRect;
-//}
-
+    m_rect = newRect;
+}
 
 void VideoGraphicsObject::setFrame(const VideoFrame &frame)
 {
@@ -114,13 +93,5 @@ void VideoGraphicsObject::setFrame(const VideoFrame &frame)
 
     update();
 }
-
-//void VideoElement::setTargetSize(const QSize &size)
-//{
-//    m_videoDataOutput->stop();
-//    m_targetSize = size;
-//    setTargetRect();
-//    m_videoDataOutput->start();
-//}
 
 } // namespace Phonon

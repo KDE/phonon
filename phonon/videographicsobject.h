@@ -141,17 +141,21 @@ struct VideoFrame {
     }
 };
 
-class VideoGraphicsObject : public QGraphicsObject
+class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject
 {
     Q_OBJECT
 public:
     explicit VideoGraphicsObject(QGraphicsItem *parent = 0);
     virtual ~VideoGraphicsObject();
 
+    virtual QRectF boundingRect() const { return QRectF(0, 0, 320, 240); return m_rect; }
+
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 
-private slots:
+    void setTargetRect();
+
+protected slots:
     void setFrame(const VideoFrame &frame);
 
 private:
@@ -160,6 +164,7 @@ private:
     QMutex m_mutex;
     QRectF m_rect;
     QSize m_frameSize;
+    QSizeF m_targetSize;
 };
 
 } // namespace Phonon
