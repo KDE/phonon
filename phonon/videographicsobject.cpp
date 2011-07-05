@@ -28,6 +28,7 @@ namespace Phonon {
 VideoGraphicsObject::VideoGraphicsObject(QGraphicsItem *parent) :
     QGraphicsObject(parent)
 {
+    setFlag(ItemHasNoContents, false);
 }
 
 VideoGraphicsObject::~VideoGraphicsObject()
@@ -113,5 +114,13 @@ void VideoGraphicsObject::setFrame(const VideoFrame &frame)
 
     update();
 }
+
+//void VideoElement::setTargetSize(const QSize &size)
+//{
+//    m_videoDataOutput->stop();
+//    m_targetSize = size;
+//    setTargetRect();
+//    m_videoDataOutput->start();
+//}
 
 } // namespace Phonon
