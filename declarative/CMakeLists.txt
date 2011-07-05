@@ -17,3 +17,4 @@ target_link_libraries(phononqmlplugin
 )
 
 install(TARGETS phononqmlplugin DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
+install(FILES qmldir DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
