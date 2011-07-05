@@ -62,6 +62,7 @@ set(phonon_LIB_SRCS
    swiftslider.cpp
    volumefadereffect.cpp
    volumeslider.cpp
+   videographicsobject.cpp
    videoplayer.cpp
    videowidget.cpp
    )
@@ -152,6 +153,7 @@ install(FILES
    pulsesupport.h
    seekslider.h
    streaminterface.h
+   videographicsobject.h
    videoplayer.h
    videowidget.h
    videowidgetinterface.h
