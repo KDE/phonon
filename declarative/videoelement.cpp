@@ -58,18 +58,19 @@ void VideoElement::onFrameReady(Phonon::Experimental::VideoFrame2 frame)
 
 void VideoElement::init(MediaObject *mediaObject)
 {
+#warning inheritance bad -> inits all the phonon without being used
     Q_ASSERT(mediaObject);
-    if (m_videoDataOutput)
-        return;
+//    if (m_videoGraphicsObj)
+//        return;
 
     m_mediaObject = mediaObject;
 
-    m_videoDataOutput = new VideoDataOutput2(this);
-    createPath(m_mediaObject, m_videoDataOutput);
+//    m_videoDataOutput = new VideoDataOutput2(this);
+    createPath(m_mediaObject, this);
 
-    connect(m_videoDataOutput, SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
-            SLOT(onFrameReady(Phonon::Experimental::VideoFrame2)));
-    m_videoDataOutput->start();
+//    connect(m_videoDataOutput, SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
+//            SLOT(onFrameReady(Phonon::Experimental::VideoFrame2)));
+//    m_videoDataOutput->start();
 
 //    connect(this, SIGNAL(), vgo, SLOT(setTargetSize(QSize)));
 }

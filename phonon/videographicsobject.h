@@ -141,8 +141,11 @@ struct VideoFrame {
     }
 };
 
-class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject
+class VideoGraphicsObjectPrivate;
+
+class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject, public MediaNode
 {
+    K_DECLARE_PRIVATE(VideoGraphicsObject)
     Q_OBJECT
     friend class VideoGraphicsObjectInterface;
 public:
@@ -166,8 +169,6 @@ private:
     QRectF m_rect;
     QSize m_frameSize;
     QSizeF m_targetSize;
-
-    QObject *m_backendObject;
 };
 
 class VideoGraphicsObjectInterface

@@ -24,24 +24,39 @@
 #include <QtGui/QPainter>
 
 #include "factory_p.h"
+#include "medianode_p.h"
 #include "phonondefs_p.h"
 
 namespace Phonon {
 
+class VideoGraphicsObjectPrivate : public MediaNodePrivate
+{
+    Q_DECLARE_PUBLIC(VideoGraphicsObject)
+public:
+    virtual QObject *qObject() { return q_func(); }
+protected:
+    bool aboutToDeleteBackendObject() {}
+    void createBackendObject()
+    {
+        Q_Q(VideoGraphicsObject);
+        if (m_backendObject)
+            return;
+        m_backendObject = Factory::createVideoGraphicsObject(q);
+        if (m_backendObject) {
+            VideoGraphicsObjectInterface *iface = reinterpret_cast<VideoGraphicsObjectInterface*>(m_backendObject);
+            iface->setVideoGraphicsObject(q);
+        }
+    }
+};
+
 VideoGraphicsObject::VideoGraphicsObject(QGraphicsItem *parent) :
     QGraphicsObject(parent),
-    m_backendObject(0)
+    MediaNode(*new VideoGraphicsObjectPrivate)
 {
     setFlag(ItemHasNoContents, false);
 
-
-    if (m_backendObject)
-        return;
-    m_backendObject = Factory::createVideoGraphicsObject(this);
-    if (m_backendObject) {
-        VideoGraphicsObjectInterface *iface = reinterpret_cast<VideoGraphicsObjectInterface*>(m_backendObject);
-        iface->setVideoGraphicsObject(this);
-    }
+    K_D(VideoGraphicsObject);
+    d->createBackendObject();
 }
 
 VideoGraphicsObject::~VideoGraphicsObject()
