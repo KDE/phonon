@@ -135,7 +135,7 @@ struct VideoFrame {
     {
         if (format == Format_RGB888) {
             return QImage(reinterpret_cast<const uchar *>(data0.constData()),
-                    width, height, QImage::Format_RGB888);
+                          width, height, QImage::Format_RGB888);
         }
         return QImage();
     }
@@ -144,6 +144,7 @@ struct VideoFrame {
 class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject
 {
     Q_OBJECT
+    friend class VideoGraphicsObjectInterface;
 public:
     explicit VideoGraphicsObject(QGraphicsItem *parent = 0);
     virtual ~VideoGraphicsObject();
@@ -165,10 +166,22 @@ private:
     QRectF m_rect;
     QSize m_frameSize;
     QSizeF m_targetSize;
+
+    QObject *m_backendObject;
+};
+
+class VideoGraphicsObjectInterface
+{
+public:
+    virtual ~VideoGraphicsObjectInterface() {}
+
+    virtual VideoGraphicsObject *videoGraphicsObject() = 0;
+    virtual void setVideoGraphicsObject(VideoGraphicsObject *object) = 0;
 };
 
 } // namespace Phonon
 
+Q_DECLARE_INTERFACE(Phonon::VideoGraphicsObjectInterface, "VideoGraphicsObjectInterface.phonon.kde.org")
 Q_DECLARE_METATYPE(Phonon::VideoFrame)
 
 #endif // PHONON_VIDEOGRAPHICSITEM_H

@@ -23,12 +23,25 @@
 
 #include <QtGui/QPainter>
 
+#include "factory_p.h"
+#include "phonondefs_p.h"
+
 namespace Phonon {
 
 VideoGraphicsObject::VideoGraphicsObject(QGraphicsItem *parent) :
-    QGraphicsObject(parent)
+    QGraphicsObject(parent),
+    m_backendObject(0)
 {
     setFlag(ItemHasNoContents, false);
+
+
+    if (m_backendObject)
+        return;
+    m_backendObject = Factory::createVideoGraphicsObject(this);
+    if (m_backendObject) {
+        VideoGraphicsObjectInterface *iface = reinterpret_cast<VideoGraphicsObjectInterface*>(m_backendObject);
+        iface->setVideoGraphicsObject(this);
+    }
 }
 
 VideoGraphicsObject::~VideoGraphicsObject()
