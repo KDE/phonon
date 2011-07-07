@@ -38,14 +38,13 @@ protected:
     bool aboutToDeleteBackendObject() {}
     void createBackendObject()
     {
-        Q_Q(VideoGraphicsObject);
         if (m_backendObject)
             return;
+
+        Q_Q(VideoGraphicsObject);
         m_backendObject = Factory::createVideoGraphicsObject(q);
-        if (m_backendObject) {
-            VideoGraphicsObjectInterface *iface = reinterpret_cast<VideoGraphicsObjectInterface*>(m_backendObject);
-            iface->setVideoGraphicsObject(q);
-        }
+        if (m_backendObject)
+            Iface<VideoGraphicsObjectInterface>::cast(this)->setVideoGraphicsObject(q);
     }
 };
 
