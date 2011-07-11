@@ -133,11 +133,16 @@ struct VideoFrame {
 
     inline QImage qImage() const
     {
-        if (format == Format_RGB888) {
+        switch(format) {
+        case Format_RGB32:
+            return QImage(reinterpret_cast<const uchar *>(data0.constData()),
+                          width, height, QImage::Format_RGB32);
+        case Format_RGB888:
             return QImage(reinterpret_cast<const uchar *>(data0.constData()),
                           width, height, QImage::Format_RGB888);
+        default:
+            return QImage();
         }
-        return QImage();
     }
 };
 
@@ -147,7 +152,6 @@ class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject, public MediaNo
 {
     K_DECLARE_PRIVATE(VideoGraphicsObject)
     Q_OBJECT
-    friend class VideoGraphicsObjectInterface;
 public:
     explicit VideoGraphicsObject(QGraphicsItem *parent = 0);
     virtual ~VideoGraphicsObject();
@@ -159,7 +163,7 @@ public:
 
     void setTargetRect();
 
-protected slots:
+public slots:
     void setFrame(const VideoFrame &frame);
 
 private:
