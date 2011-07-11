@@ -22,36 +22,36 @@
 #ifndef VIDEOELEMENT_H
 #define VIDEOELEMENT_H
 
-#include <QtDeclarative/QDeclarativeParserStatus>
+#include <QtDeclarative/QDeclarativeItem>
 
-#include <phonon/videographicsobject.h>
 #include <phonon/experimental/videoframe2.h>
 
 #include "abstractinitable.h"
 
 namespace Phonon {
 
-namespace Experimental
-{
-class VideoDataOutput2;
-}
+class VideoGraphicsObject;
 
 namespace Declarative {
 
-class VideoElement : public VideoGraphicsObject, public QDeclarativeParserStatus, public AbstractInitAble
+class VideoElement : public QDeclarativeItem,
+                     public AbstractInitAble
 {
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
 public:
-    VideoElement(QGraphicsItem *parent = 0);
+    VideoElement(QDeclarativeItem *parent = 0);
     ~VideoElement();
+
+    void classBegin();
+    void componentComplete() {}
 
     virtual void init(MediaObject *mediaObject);
 
-    void classBegin() {}
-    void componentComplete() {}
-
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+
+private:
+    VideoGraphicsObject *m_graphicsObject;
 };
 
 } // namespace Declarative

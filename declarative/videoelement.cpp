@@ -25,6 +25,8 @@
 
 #include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
+#include <phonon/videographicsobject.h>
+
 #include <phonon/experimental/videodataoutput2.h>
 
 using namespace Phonon::Experimental;
@@ -34,8 +36,9 @@ namespace Declarative {
 
 #warning there might be awful problems when not deriving from qdeclarativeitem!!! (virtual inheritance?)
 
-VideoElement::VideoElement(QGraphicsItem *parent) :
-    VideoGraphicsObject(parent)
+VideoElement::VideoElement(QDeclarativeItem *parent) :
+    QDeclarativeItem(parent),
+    m_graphicsObject(0)
 {
 }
 
@@ -43,6 +46,10 @@ VideoElement::~VideoElement()
 {
 }
 
+void VideoElement::classBegin()
+{
+    m_graphicsObject = new VideoGraphicsObject(this);
+}
 
 void VideoElement::init(MediaObject *mediaObject)
 {
@@ -50,15 +57,13 @@ void VideoElement::init(MediaObject *mediaObject)
     Q_ASSERT(mediaObject);
 
     m_mediaObject = mediaObject;
-    createPath(m_mediaObject, this);
+    createPath(m_mediaObject, m_graphicsObject);
 }
 
 void VideoElement::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-//    qDebug() << Q_FUNC_INFO;
-//    qDebug() << newGeometry;
-//    K_D(VideoGraphicsObject);
-//    d->rect = newGeometry;
+    m_graphicsObject->setGeometry(newGeometry);
+    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 } // namespace Declarative
