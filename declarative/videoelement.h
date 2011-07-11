@@ -46,10 +46,12 @@ public:
     VideoElement(QGraphicsItem *parent = 0);
     ~VideoElement();
 
+    virtual void init(MediaObject *mediaObject);
+
     void classBegin() {}
     void componentComplete() {}
 
-    virtual void init(MediaObject *mediaObject);
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 };
 
 } // namespace Declarative

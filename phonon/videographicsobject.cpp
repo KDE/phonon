@@ -76,8 +76,8 @@ VideoGraphicsObject::~VideoGraphicsObject()
 void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     K_D(VideoGraphicsObject);
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << boundingRect();
+//    qDebug() << Q_FUNC_INFO;
+//    qDebug() << boundingRect();
 
     static bool paintedOnce = false;
     static bool gotSize = false;
@@ -107,11 +107,6 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     paintedOnce = true;
 }
 
-void VideoGraphicsObject::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
-{
-    K_D(VideoGraphicsObject);
-    d->rect = newGeometry;
-}
 
 void VideoGraphicsObject::setTargetRect()
 {
@@ -119,10 +114,14 @@ void VideoGraphicsObject::setTargetRect()
     emit prepareGeometryChange();
 
     // keep aspect
-    QSizeF size = d->frameSize;
-    size.scale(d->targetSize, Qt::KeepAspectRatio);
+    QSizeF frameSize = d->frameSize;
+    frameSize.scale(d->targetSize, Qt::KeepAspectRatio);
 
-    QRectF newRect = QRectF(0, 0, size.width(), size.height());
+    float xPosition = (frameSize.width() -1)/2.0;
+    float yPosition = (frameSize.height()-1)/2.0;
+
+    QRectF newRect = QRectF(xPosition, yPosition,
+                            frameSize.width(), frameSize.height());
 //    newRect.moveCenter(QRectF(newRect.topLeft(), m_targetSize).center());
 
     d->rect = newRect;

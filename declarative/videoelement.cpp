@@ -43,6 +43,7 @@ VideoElement::~VideoElement()
 {
 }
 
+
 void VideoElement::init(MediaObject *mediaObject)
 {
 #warning inheritance bad -> inits all the phonon without being used
@@ -50,6 +51,14 @@ void VideoElement::init(MediaObject *mediaObject)
 
     m_mediaObject = mediaObject;
     createPath(m_mediaObject, this);
+}
+
+void VideoElement::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+//    qDebug() << Q_FUNC_INFO;
+//    qDebug() << newGeometry;
+//    K_D(VideoGraphicsObject);
+//    d->rect = newGeometry;
 }
 
 } // namespace Declarative

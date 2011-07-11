@@ -160,7 +160,6 @@ public:
     virtual QRectF boundingRect() const { return QRectF(0, 0, 320, 240); }
 
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
-    virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 
     void setTargetRect();
 
