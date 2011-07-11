@@ -88,8 +88,6 @@ QRectF VideoGraphicsObject::boundingRect() const
 void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     K_D(VideoGraphicsObject);
-//    qDebug() << Q_FUNC_INFO;
-//    qDebug() << boundingRect();
 
     static bool paintedOnce = false;
     static bool gotSize = false;
