@@ -37,7 +37,7 @@ class VideoGraphicsObjectPrivate : public MediaNodePrivate
 public:
     virtual QObject *qObject() { return q_func(); }
 
-    QRectF rect;
+    QRectF geometry;
     QSize frameSize;
     QSizeF targetSize;
 
@@ -97,9 +97,9 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     }
 
     if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
-        painter->fillRect(d->rect, Qt::black);
+        painter->fillRect(d->geometry, Qt::black);
     } else if (!frame.qImage().isNull()){
-        painter->drawImage(d->rect, frame.qImage());
+        painter->drawImage(d->geometry, frame.qImage());
     }
 
     INTERFACE_CALL(unlock());
@@ -107,6 +107,11 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     paintedOnce = true;
 }
 
+void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
+{
+    K_D(VideoGraphicsObject);
+    d->geometry = newGeometry;
+}
 
 void VideoGraphicsObject::setTargetRect()
 {
@@ -124,7 +129,7 @@ void VideoGraphicsObject::setTargetRect()
                             frameSize.width(), frameSize.height());
 //    newRect.moveCenter(QRectF(newRect.topLeft(), m_targetSize).center());
 
-    d->rect = newRect;
+    d->geometry = newRect;
 }
 
 void VideoGraphicsObject::frameReady()

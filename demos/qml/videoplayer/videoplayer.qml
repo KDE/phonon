@@ -47,8 +47,8 @@ Rectangle {
 
         Video {
             id: video
-            width: 320
-            height: 240
+//            width: 320
+//            height: 240
         }
     }
 
