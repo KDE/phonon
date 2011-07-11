@@ -164,8 +164,8 @@ public:
 
     void setTargetRect();
 
-public slots:
-    void setFrame(const VideoFrame &frame);
+private slots:
+    void frameReady();
 };
 
 class VideoGraphicsObjectInterface
@@ -175,6 +175,15 @@ public:
 
     virtual VideoGraphicsObject *videoGraphicsObject() = 0;
     virtual void setVideoGraphicsObject(VideoGraphicsObject *object) = 0;
+
+    virtual void lock() = 0;
+    virtual bool tryLock() = 0;
+    virtual void unlock() = 0;
+
+    virtual const VideoFrame *frame() const = 0;
+
+    // Signals
+    virtual void frameReady() = 0;
 };
 
 } // namespace Phonon

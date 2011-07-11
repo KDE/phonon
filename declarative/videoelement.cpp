@@ -43,36 +43,13 @@ VideoElement::~VideoElement()
 {
 }
 
-void VideoElement::onFrameReady(Phonon::Experimental::VideoFrame2 frame)
-{
-    VideoFrame f;
-    f.aspectRatio = frame.aspectRatio;
-    f.data0 = frame.data0;
-    f.data1 = frame.data1;
-    f.data2 = frame.data2;
-    f.format = (VideoFrame::Format)(int)frame.format;
-    f.height = frame.height;
-    f.width = frame.width;
-    setFrame(f);
-}
-
 void VideoElement::init(MediaObject *mediaObject)
 {
 #warning inheritance bad -> inits all the phonon without being used
     Q_ASSERT(mediaObject);
-//    if (m_videoGraphicsObj)
-//        return;
 
     m_mediaObject = mediaObject;
-
-//    m_videoDataOutput = new VideoDataOutput2(this);
     createPath(m_mediaObject, this);
-
-//    connect(m_videoDataOutput, SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
-//            SLOT(onFrameReady(Phonon::Experimental::VideoFrame2)));
-//    m_videoDataOutput->start();
-
-//    connect(this, SIGNAL(), vgo, SLOT(setTargetSize(QSize)));
 }
 
 } // namespace Declarative

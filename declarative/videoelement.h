@@ -50,12 +50,6 @@ public:
     void componentComplete() {}
 
     virtual void init(MediaObject *mediaObject);
-
-private slots:
-    void onFrameReady(Phonon::Experimental::VideoFrame2 frame);
-
-private:
-    Experimental::VideoDataOutput2 *m_videoDataOutput;
 };
 
 } // namespace Declarative

@@ -27,6 +27,8 @@
 #include "medianode_p.h"
 #include "phonondefs_p.h"
 
+#define PHONON_INTERFACENAME VideoGraphicsObjectInterface
+
 namespace Phonon {
 
 class VideoGraphicsObjectPrivate : public MediaNodePrivate
@@ -35,9 +37,6 @@ class VideoGraphicsObjectPrivate : public MediaNodePrivate
 public:
     virtual QObject *qObject() { return q_func(); }
 
-    VideoFrame  frame;
-
-    QMutex mutex;
     QRectF rect;
     QSize frameSize;
     QSizeF targetSize;
@@ -51,8 +50,12 @@ protected:
 
         Q_Q(VideoGraphicsObject);
         m_backendObject = Factory::createVideoGraphicsObject(q);
-        if (m_backendObject)
-            Iface<VideoGraphicsObjectInterface>::cast(this)->setVideoGraphicsObject(q);
+        if (m_backendObject) {
+            pINTERFACE_CALL(setVideoGraphicsObject(q));
+            QObject::connect(m_backendObject, SIGNAL(frameReady()),
+                             q, SLOT(frameReady()),
+                             Qt::QueuedConnection);
+        }
     }
 };
 
@@ -78,10 +81,9 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     static bool paintedOnce = false;
     static bool gotSize = false;
 
-    VideoFrame frame;
-    d->mutex.lock();
-    frame = d->frame;
-    d->mutex.unlock();
+    INTERFACE_CALL(lock());
+
+    VideoFrame frame = *INTERFACE_CALL(frame());
 
     // NOTE: it would be most useful if we had a signal to notify about dimension changes...
     // NOTE: it would be even better if a frame contained a QRectF
@@ -93,12 +95,17 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
         setTargetRect();
     }
 
-
     if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
+        qDebug()  << "invalid";
         painter->fillRect(d->rect, Qt::black);
     } else if (!frame.qImage().isNull()){
+        qDebug() << "!null";
         painter->drawImage(d->rect, frame.qImage());
     }
+    qDebug() << "done drawing";
+
+    INTERFACE_CALL(unlock());
+
     paintedOnce = true;
 }
 
@@ -113,7 +120,7 @@ void VideoGraphicsObject::setTargetRect()
     K_D(VideoGraphicsObject);
     emit prepareGeometryChange();
 
-    // keerp aspect
+    // keep aspect
     QSizeF size = d->frameSize;
     size.scale(d->targetSize, Qt::KeepAspectRatio);
 
@@ -123,14 +130,9 @@ void VideoGraphicsObject::setTargetRect()
     d->rect = newRect;
 }
 
-void VideoGraphicsObject::setFrame(const VideoFrame &frame)
+void VideoGraphicsObject::frameReady()
 {
-    K_D(VideoGraphicsObject);
-
-    d->mutex.lock();
-    d->frame = frame;
-    d->mutex.unlock();
-
+    qDebug() << "ooooooooooooooooooo";
     update();
 }
 
