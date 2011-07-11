@@ -34,6 +34,14 @@ class VideoGraphicsObjectPrivate : public MediaNodePrivate
     Q_DECLARE_PUBLIC(VideoGraphicsObject)
 public:
     virtual QObject *qObject() { return q_func(); }
+
+    VideoFrame  frame;
+
+    QMutex mutex;
+    QRectF rect;
+    QSize frameSize;
+    QSizeF targetSize;
+
 protected:
     bool aboutToDeleteBackendObject() {}
     void createBackendObject()
@@ -64,15 +72,16 @@ VideoGraphicsObject::~VideoGraphicsObject()
 
 void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    K_D(VideoGraphicsObject);
     qDebug() << Q_FUNC_INFO;
     qDebug() << boundingRect();
     static bool paintedOnce = false;
     static bool gotSize = false;
 
     VideoFrame frame;
-    m_mutex.lock();
-    frame = m_frame;
-    m_mutex.unlock();
+    d->mutex.lock();
+    frame = d->frame;
+    d->mutex.unlock();
 
     // NOTE: it would be most useful if we had a signal to notify about dimension changes...
     // NOTE: it would be even better if a frame contained a QRectF
@@ -80,43 +89,47 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
             !frame.qImage().isNull() &&
             !gotSize) {
         gotSize = true;
-        m_frameSize = QSize(frame.width, frame.height);
+        d->frameSize = QSize(frame.width, frame.height);
         setTargetRect();
     }
 
 
     if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
-        painter->fillRect(m_rect, Qt::black);
+        painter->fillRect(d->rect, Qt::black);
     } else if (!frame.qImage().isNull()){
-        painter->drawImage(m_rect, frame.qImage());
+        painter->drawImage(d->rect, frame.qImage());
     }
     paintedOnce = true;
 }
 
 void VideoGraphicsObject::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    m_rect = newGeometry;
+    K_D(VideoGraphicsObject);
+    d->rect = newGeometry;
 }
 
 void VideoGraphicsObject::setTargetRect()
 {
+    K_D(VideoGraphicsObject);
     emit prepareGeometryChange();
 
     // keerp aspect
-    QSizeF size = m_frameSize;
-    size.scale(m_targetSize, Qt::KeepAspectRatio);
+    QSizeF size = d->frameSize;
+    size.scale(d->targetSize, Qt::KeepAspectRatio);
 
     QRectF newRect = QRectF(0, 0, size.width(), size.height());
 //    newRect.moveCenter(QRectF(newRect.topLeft(), m_targetSize).center());
 
-    m_rect = newRect;
+    d->rect = newRect;
 }
 
 void VideoGraphicsObject::setFrame(const VideoFrame &frame)
 {
-    m_mutex.lock();
-    m_frame = frame;
-    m_mutex.unlock();
+    K_D(VideoGraphicsObject);
+
+    d->mutex.lock();
+    d->frame = frame;
+    d->mutex.unlock();
 
     update();
 }

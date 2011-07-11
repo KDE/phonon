@@ -156,7 +156,8 @@ public:
     explicit VideoGraphicsObject(QGraphicsItem *parent = 0);
     virtual ~VideoGraphicsObject();
 
-    virtual QRectF boundingRect() const { return QRectF(0, 0, 320, 240); return m_rect; }
+#warning omg
+    virtual QRectF boundingRect() const { return QRectF(0, 0, 320, 240); }
 
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
     virtual void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
@@ -165,14 +166,6 @@ public:
 
 public slots:
     void setFrame(const VideoFrame &frame);
-
-private:
-    VideoFrame  m_frame;
-
-    QMutex m_mutex;
-    QRectF m_rect;
-    QSize m_frameSize;
-    QSizeF m_targetSize;
 };
 
 class VideoGraphicsObjectInterface
