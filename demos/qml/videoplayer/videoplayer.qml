@@ -21,7 +21,6 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onMousePositionChanged: {
-            console.debug("moved!!!s")
             movementTimer.restart()
             controls.state = "active"
         }

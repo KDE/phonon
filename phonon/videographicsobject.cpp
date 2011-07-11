@@ -78,6 +78,7 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     K_D(VideoGraphicsObject);
     qDebug() << Q_FUNC_INFO;
     qDebug() << boundingRect();
+
     static bool paintedOnce = false;
     static bool gotSize = false;
 
@@ -96,13 +97,10 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     }
 
     if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
-        qDebug()  << "invalid";
         painter->fillRect(d->rect, Qt::black);
     } else if (!frame.qImage().isNull()){
-        qDebug() << "!null";
         painter->drawImage(d->rect, frame.qImage());
     }
-    qDebug() << "done drawing";
 
     INTERFACE_CALL(unlock());
 
@@ -132,7 +130,6 @@ void VideoGraphicsObject::setTargetRect()
 
 void VideoGraphicsObject::frameReady()
 {
-    qDebug() << "ooooooooooooooooooo";
     update();
 }
 
