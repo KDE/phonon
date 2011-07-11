@@ -107,9 +107,9 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     }
 
     if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
-        painter->fillRect(d->geometry, Qt::black);
+        painter->fillRect(d->boundingRect, Qt::black);
     } else if (!frame.qImage().isNull()){
-        painter->drawImage(d->geometry, frame.qImage());
+        painter->drawImage(d->boundingRect, frame.qImage());
     }
 
     INTERFACE_CALL(unlock());
@@ -121,25 +121,22 @@ void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
 {
     K_D(VideoGraphicsObject);
     d->geometry = newGeometry;
+    setTargetRect();
 }
 
 void VideoGraphicsObject::setTargetRect()
 {
     K_D(VideoGraphicsObject);
+
     emit prepareGeometryChange();
 
     // keep aspect
     QSizeF frameSize = d->frameSize;
-    frameSize.scale(d->targetSize, Qt::KeepAspectRatio);
+    frameSize.scale(d->geometry.size(), Qt::KeepAspectRatio);
 
-    float xPosition = (frameSize.width() -1)/2.0;
-    float yPosition = (frameSize.height()-1)/2.0;
-
-    QRectF newRect = QRectF(xPosition, yPosition,
-                            frameSize.width(), frameSize.height());
-//    newRect.moveCenter(QRectF(newRect.topLeft(), m_targetSize).center());
-
-    d->geometry = newRect;
+    d->boundingRect = QRectF(0, 0,
+                             frameSize.width(), frameSize.height());
+    d->boundingRect.moveCenter(d->geometry.center());
 }
 
 void VideoGraphicsObject::frameReady()
