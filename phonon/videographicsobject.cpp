@@ -35,11 +35,17 @@ class VideoGraphicsObjectPrivate : public MediaNodePrivate
 {
     Q_DECLARE_PUBLIC(VideoGraphicsObject)
 public:
+    VideoGraphicsObjectPrivate() :
+        geometry(0, 0, 320, 240),
+        boundingRect(0, 0, 0, 0),
+        frameSize(0, 0)
+    {}
+
     virtual QObject *qObject() { return q_func(); }
 
     QRectF geometry;
+    QRectF boundingRect;
     QSize frameSize;
-    QSizeF targetSize;
 
 protected:
     bool aboutToDeleteBackendObject() {}
