@@ -70,10 +70,24 @@ Rectangle {
             }
         ]
 
+        Image {
+            source: "fullscreen-button.png"
+
+            anchors.top: parent.top
+            anchors.topMargin: 15
+            anchors.left: parent.left
+            anchors.leftMargin: 15
+        }
+
         Row {
             anchors.top: parent.top
             anchors.horizontalCenter: controls.horizontalCenter
-            anchors.topMargin: 10
+            anchors.topMargin: 15
+            spacing: 30
+
+            Image {
+                source: "backward-button.png"
+            }
 
             Image {
                 id: playPause
@@ -103,6 +117,10 @@ Rectangle {
                         PropertyChanges { target: playPause; source: "pause-button.png" }
                     }
                 ]
+            }
+
+            Image {
+                source: "forward-button.png"
             }
         }
 
@@ -163,8 +181,8 @@ Rectangle {
                     progressHandle.x = value * progressMouseArea.drag.maximumX / max;
             }
 
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
+            anchors.bottom: timeIndicator.top
+            anchors.bottomMargin: 5
             anchors.horizontalCenter: parent.horizontalCenter
             source: "progress-bar.png"
 
@@ -190,6 +208,30 @@ Rectangle {
                         media.time = progressSlider.max * progressHandle.x / drag.maximumX;
                     }
                 }
+            }
+        }
+
+        Item {
+            id: timeIndicator
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+            anchors.right: progressSlider.right
+            anchors.rightMargin: 5
+            anchors.left: progressSlider.left
+            anchors.leftMargin: 5
+
+            Text {
+                anchors.left: parent.left
+                text: "1.10.5"
+                color: "white"
+                font.bold: true
+            }
+
+            Text {
+                anchors.right: parent.right
+                text: "-0.4.5"
+                color: "white"
+                font.bold: true
             }
         }
     }
