@@ -146,7 +146,8 @@ void VideoGraphicsObject::setTargetRect()
 
 void VideoGraphicsObject::frameReady()
 {
-    update();
+    K_D(const VideoGraphicsObject);
+    update(d->boundingRect);
 }
 
 } // namespace Phonon
