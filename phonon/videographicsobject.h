@@ -161,6 +161,9 @@ public:
 
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
+    void setGeometry(const QRectF &newGeometry);
+
+#warning what todo with this?! private?
     void setTargetRect();
 
 private slots:
