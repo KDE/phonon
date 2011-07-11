@@ -2,8 +2,9 @@ import Qt 4.7
 import Phonon 1.0
 
 Rectangle {
-    width: 1024
-    height: 768
+    id: player
+    width: 800
+    height: 480
     color: "black"
 
     Timer {
@@ -47,8 +48,8 @@ Rectangle {
 
         Video {
             id: video
-//            width: 320
-//            height: 240
+            width: player.width
+            height: player.height
         }
     }
 
