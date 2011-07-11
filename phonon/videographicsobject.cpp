@@ -79,6 +79,12 @@ VideoGraphicsObject::~VideoGraphicsObject()
 {
 }
 
+QRectF VideoGraphicsObject::boundingRect() const
+{
+    K_D(const VideoGraphicsObject);
+    return d->boundingRect;
+}
+
 void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     K_D(VideoGraphicsObject);

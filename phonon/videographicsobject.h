@@ -157,7 +157,7 @@ public:
     virtual ~VideoGraphicsObject();
 
 #warning omg
-    virtual QRectF boundingRect() const { return QRectF(0, 0, 320, 240); }
+    virtual QRectF boundingRect() const;
 
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
