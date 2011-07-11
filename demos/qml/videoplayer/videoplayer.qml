@@ -12,7 +12,6 @@ Rectangle {
         running: true
         interval: 2000
         onTriggered:{
-            console.debug("triggered")
             controls.state = "inactive"
         }
     }
