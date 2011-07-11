@@ -48,7 +48,9 @@ public:
 
     virtual void init(MediaObject *mediaObject);
 
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+protected:
+    virtual void geometryChanged(const QRectF &newGeometry,
+                                 const QRectF &oldGeometry);
 
 private:
     VideoGraphicsObject *m_graphicsObject;
