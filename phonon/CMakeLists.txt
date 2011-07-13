@@ -1,10 +1,3 @@
-
-if (PHONON_BUILD_TESTS)
-    add_subdirectory(tests)
-endif (PHONON_BUILD_TESTS)
-
-add_subdirectory(experimental)
-
 set(PULSEAUDIO_FIND_VERSION "0.9.15")
 macro_optional_find_package(PulseAudio)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
