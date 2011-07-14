@@ -23,6 +23,8 @@
 
 #include <QtGui/QPainter>
 
+#include <QtOpenGL>
+
 #include "factory_p.h"
 #include "medianode_p.h"
 #include "phonondefs_p.h"
@@ -42,6 +44,8 @@ public:
     {}
 
     virtual QObject *qObject() { return q_func(); }
+
+    void paintGl(QPainter *painter, QRectF rect, VideoFrame *frame);
 
     QRectF geometry;
     QRectF boundingRect;
@@ -109,12 +113,23 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
         painter->fillRect(d->boundingRect, Qt::black);
     } else if (!frame.qImage().isNull()){
-        painter->drawImage(d->boundingRect, frame.qImage());
+        if (QGLContext::currentContext())
+            d->paintGl(painter, d->boundingRect, &frame);
+        else
+            painter->drawImage(d->boundingRect, frame.qImage());
     }
 
     INTERFACE_CALL(unlock());
 
     paintedOnce = true;
+}
+
+void VideoGraphicsObjectPrivate::paintGl(QPainter *painter, QRectF target, VideoFrame *frame)
+{
+    Q_Q(VideoGraphicsObject);
+    QGLContext *ctx = const_cast<QGLContext *>(QGLContext::currentContext());
+    GLuint texture = ctx->bindTexture(frame->qImage());
+    ctx->drawTexture(target, texture);
 }
 
 void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
