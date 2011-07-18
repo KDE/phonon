@@ -139,7 +139,7 @@ public:
      * \param type Type of the description (e.g. file)
      */
     void add(void *obj,
-             local_id_t index, const QString &name, const QString &type)
+             local_id_t index, const QString &name, const QString &type = QString())
     {
         Q_ASSERT(obj);
         Q_ASSERT(m_localIds.find(obj) != m_localIds.end());
