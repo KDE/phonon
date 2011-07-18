@@ -160,10 +160,10 @@ public:
                 if (it.value().property("name") == name &&
                         it.value().property("type") == type) {
                     id = it.value().index();
-                } else {
-                    id = nextFreeIndex();
                 }
             }
+	    if (id == 0)
+	        id = nextFreeIndex();
         }
         D descriptor = D(id, properties);
 
