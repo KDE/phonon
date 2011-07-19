@@ -89,7 +89,9 @@ QRectF VideoGraphicsObject::boundingRect() const
     return d->boundingRect;
 }
 
-void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void VideoGraphicsObject::paint(QPainter *painter,
+                                const QStyleOptionGraphicsItem *option,
+                                QWidget *widget)
 {
     K_D(VideoGraphicsObject);
 
@@ -105,6 +107,7 @@ void VideoGraphicsObject::paint(QPainter *painter, const QStyleOptionGraphicsIte
     if (frame.format != VideoFrame::Format_Invalid &&
             !frame.qImage().isNull() &&
             !gotSize) {
+        // TODO: do scaling ourselfs?
         gotSize = true;
         d->frameSize = QSize(frame.width, frame.height);
         setTargetRect();
