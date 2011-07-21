@@ -39,16 +39,8 @@ Rectangle {
 
     focus: true
     Keys.onPressed: {
-        if (event.key == Qt.Key_Space) {
-            // TODO: de-duplicate with playPause
-            if (playPause.state == 'playing') {
-                media.pause()
-                playPause.state = 'paused'
-            } else {
-                media.play()
-                playPause.state = 'playing'
-            }
-        }
+        if (event.key == Qt.Key_Space)
+            media.togglePlay()
     }
 
     Media {
@@ -58,6 +50,17 @@ Rectangle {
         property string timeString
         property string remainingTimeString
         property string totalTimeString
+
+        function togglePlay() {
+            // TODO: de-duplicate with playPause
+            if (playPause.state == 'playing') {
+                media.pause()
+                playPause.state = 'paused'
+            } else {
+                media.play()
+                playPause.state = 'playing'
+            }
+        }
 
         function padIntString(number) {
             var str = '' + number;
@@ -116,6 +119,11 @@ Rectangle {
             id: video
             width: player.width
             height: player.height
+
+            MouseArea {
+                anchors.fill: parent
+                onDoubleClicked: video.fullScreen = !video.fullScreen
+            }
         }
     }
 
@@ -170,15 +178,7 @@ Rectangle {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        if (playPause.state == 'playing') {
-                            media.pause()
-                            playPause.state = 'paused'
-                        } else {
-                            media.play()
-                            playPause.state = 'playing'
-                        }
-                    }
+                    onClicked: media.togglePlay()
                 }
 
                 states: [
