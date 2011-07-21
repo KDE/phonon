@@ -13,7 +13,6 @@ target_link_libraries(phononqmlplugin
     ${PHONON_LIBS}
     ${QT_QTDECLARATIVE_LIBRARY}
     phonon
-    phononexperimental
 )
 
 install(TARGETS phononqmlplugin DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
