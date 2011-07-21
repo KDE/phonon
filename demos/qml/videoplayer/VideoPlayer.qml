@@ -130,6 +130,13 @@ Rectangle {
             anchors.topMargin: 15
             anchors.left: parent.left
             anchors.leftMargin: 15
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    video.fullScreen = !video.fullScreen
+                }
+            }
         }
 
         Row {
@@ -150,8 +157,6 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        var d = new Date()
-                        console.debug(d.getHours())
                         if (playPause.state == 'playing') {
                             media.pause()
                             playPause.state = 'paused'

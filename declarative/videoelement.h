@@ -39,6 +39,7 @@ class VideoElement : public QDeclarativeItem,
 {
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
+    Q_PROPERTY(bool fullScreen READ isFullScreen WRITE setFullScreen)
 public:
     VideoElement(QDeclarativeItem *parent = 0);
     ~VideoElement();
@@ -48,6 +49,10 @@ public:
 
     virtual void init(MediaObject *mediaObject);
 
+    bool isFullScreen() const;
+    void setFullScreen(bool fullScreen);
+
+#warning make properties?
     Q_INVOKABLE void hideCursor();
     Q_INVOKABLE void unhideCursor();
 
@@ -57,6 +62,8 @@ protected:
 
 private:
     VideoGraphicsObject *m_graphicsObject;
+
+    bool m_isFullScreen;
 };
 
 } // namespace Declarative

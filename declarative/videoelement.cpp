@@ -21,6 +21,7 @@
 
 #include "videoelement.h"
 
+#include <QtGui/QApplication>
 #include <QtGui/QPainter>
 
 #include <phonon/audiooutput.h>
@@ -38,7 +39,8 @@ namespace Declarative {
 
 VideoElement::VideoElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
-    m_graphicsObject(0)
+    m_graphicsObject(0),
+    m_isFullScreen(false)
 {
 }
 
@@ -58,6 +60,22 @@ void VideoElement::init(MediaObject *mediaObject)
 
     m_mediaObject = mediaObject;
     createPath(m_mediaObject, m_graphicsObject);
+}
+
+bool VideoElement::isFullScreen() const
+{
+    return m_isFullScreen;
+}
+
+void VideoElement::setFullScreen(bool fullScreen)
+{
+    if (fullScreen) {
+        m_isFullScreen = true;
+        qApp->activeWindow()->showFullScreen();
+    } else {
+        m_isFullScreen = false;
+        qApp->activeWindow()->showNormal();
+    }
 }
 
 void VideoElement::hideCursor()
