@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -43,7 +43,7 @@ QT_BEGIN_NAMESPACE
 // the following inlines are correct - exclude per line doesn't work for multiline-macros so exclude
 // the whole file for inline checks
 //krazy:excludeall=inline
-#define K_DECLARE_PRIVATE(Class) \
+#define P_DECLARE_PRIVATE(Class) \
     inline Class##Private* k_func() { return reinterpret_cast<Class##Private *>(k_ptr); } \
     inline const Class##Private* k_func() const { return reinterpret_cast<const Class##Private *>(k_ptr); } \
     friend class Class##Private;

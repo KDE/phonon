@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -62,7 +62,7 @@ EffectWidget::EffectWidget(Effect *effect, QWidget *parent)
     : QWidget(parent),
     k_ptr(new EffectWidgetPrivate(effect))
 {
-    K_D(EffectWidget);
+    P_D(EffectWidget);
     d->q_ptr = this;
     d->autogenerateUi();
 }
@@ -77,7 +77,7 @@ EffectWidget::EffectWidget(EffectWidgetPrivate &dd, QWidget *parent)
     : QWidget(parent)
     , k_ptr(&dd)
 {
-    K_D(EffectWidget);
+    P_D(EffectWidget);
     d->q_ptr = this;
     d->autogenerateUi();
 }

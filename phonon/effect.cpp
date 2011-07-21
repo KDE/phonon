@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -40,7 +40,7 @@ Effect::~Effect()
 Effect::Effect(const EffectDescription &description, QObject *parent)
     : QObject(parent), MediaNode(*new EffectPrivate)
 {
-    K_D(Effect);
+    P_D(Effect);
     d->description = description;
     d->createBackendObject();
 }
@@ -63,19 +63,19 @@ void EffectPrivate::createBackendObject()
 
 //X Effect::Type Effect::type() const
 //X {
-//X     K_D(const Effect);
+//X     P_D(const Effect);
 //X     return d->type;
 //X }
-//X 
+//X
 EffectDescription Effect::description() const
 {
-    K_D(const Effect);
+    P_D(const Effect);
     return d->description;
 }
 
 QList<EffectParameter> Effect::parameters() const
 {
-    K_D(const Effect);
+    P_D(const Effect);
     // there should be an iface object, but better be safe for those backend
     // switching corner-cases: when the backend switches the new backend might
     // not support this effect -> no iface object
@@ -87,7 +87,7 @@ QList<EffectParameter> Effect::parameters() const
 
 QVariant Effect::parameterValue(const EffectParameter &param) const
 {
-    K_D(const Effect);
+    P_D(const Effect);
     if (!d->m_backendObject) {
         return d->parameterValues[param];
     }
@@ -96,7 +96,7 @@ QVariant Effect::parameterValue(const EffectParameter &param) const
 
 void Effect::setParameterValue(const EffectParameter &param, const QVariant &newValue)
 {
-    K_D(Effect);
+    P_D(Effect);
     d->parameterValues[param] = newValue;
     if (d->backendObject()) {
         INTERFACE_CALL(setParameterValue(param, newValue));
