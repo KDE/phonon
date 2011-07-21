@@ -26,8 +26,15 @@ Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QtGlobal>
 #include <QtCore/QList>
 #include <QtCore/QObject>
+
 #include "path.h"
 #include "phonon_export.h"
+
+#warning include phonondefs_p breaks because the header uses medianodeprivate
+#define P_DECLARE_PUBLIC(Class) \
+    inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
+    inline const Class* q_func() const { return static_cast<const Class *>(q_ptr); } \
+    friend class Class;
 
 QT_BEGIN_NAMESPACE
 
@@ -40,7 +47,8 @@ namespace Phonon
 
     class PHONON_EXPORT MediaNodePrivate
     {
-        Q_DECLARE_PUBLIC(MediaNode)
+        P_DECLARE_PUBLIC(MediaNode)
+#undef P_DECLARE_PUBLIC
 
         friend class AudioOutputPrivate;
         friend class FactoryPrivate;
@@ -81,7 +89,7 @@ namespace Phonon
         * Creates the Iface object belonging to this class. For most cases the
         * implementation is
         * \code
-        * P_Q(ClassName);
+        * Q_Q(ClassName);
         * m_iface = Factory::createClassName(this);
         * return m_iface;
         * \endcode
