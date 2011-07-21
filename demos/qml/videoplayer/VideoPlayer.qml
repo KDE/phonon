@@ -7,6 +7,15 @@ Rectangle {
     height: 480
     color: "black"
 
+    function play(path) {
+        media.source = path
+        media.play()
+    }
+
+    function stop() {
+        media.stop()
+    }
+
     Timer {
         id: movementTimer
         running: true
