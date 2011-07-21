@@ -30,6 +30,39 @@ Rectangle {
         id: media
         source: "video.ogv"
 
+        property string timeString
+        property string remainingTimeString
+        property string totalTimeString
+
+        function padIntString(number) {
+            var str = '' + number;
+            if (str.length < 2)
+                str = '0' + str;
+            return str;
+        }
+
+        function parseTime(ms) {
+            // Do not display hour unless there is anything to show.
+            // Always show minutes and seconds though.
+            // Rationale: plenty of videos are <1h but >1m
+            var showHour = true
+            if (totalTime < 360000)
+                showHour = false
+
+            var s = Math.floor(ms / 1000)
+            var m = Math.floor( s / 60)
+            if (showHour)
+                var h = Math.floor(m / 60)
+
+            var time = '';
+            time = padIntString(s % 60)
+            time = padIntString(m % 60) + ':' + time
+            if (showHour)
+                // Do not pad hour as it looks ugly, also hour can exceed 24 anyway.
+                time = h + ':' + time
+            return time
+        }
+
         onStateChanged: {
             if (playing)
                 playPause.state = "playing"
@@ -37,8 +70,17 @@ Rectangle {
                 playPause.state = "paused"
         }
 
-        onTotalTimeChanged: { progressSlider.max = totalTime }
-        onTimeChanged: { progressSlider.value = time }
+        onTotalTimeChanged: {
+            progressSlider.max = totalTime
+            totalTimeString = parseTime(totalTime)
+
+        }
+
+        onTimeChanged: {
+            progressSlider.value = time
+            timeString = parseTime(time)
+            remainingTimeString = "-" + parseTime(totalTime - time)
+        }
 
         AudioOutput {
             id: audio
@@ -97,6 +139,8 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
+                        var d = new Date()
+                        console.debug(d.getHours())
                         if (playPause.state == 'playing') {
                             media.pause()
                             playPause.state = 'paused'
@@ -222,14 +266,14 @@ Rectangle {
 
             Text {
                 anchors.left: parent.left
-                text: "1.10.5"
+                text: media.timeString
                 color: "white"
                 font.bold: true
             }
 
             Text {
                 anchors.right: parent.right
-                text: "-0.4.5"
+                text: media.remainingTimeString
                 color: "white"
                 font.bold: true
             }
