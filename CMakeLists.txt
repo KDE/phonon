@@ -29,6 +29,9 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(cmake/FindPhononInternal.cmake)
 
+find_package(OpenGL)
+macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
+
 # The following variables directly influence the library's soname version.
 # It is highly advised to think twice before changing those.
 # If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
