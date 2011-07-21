@@ -96,7 +96,7 @@ bool AbstractVideoDataOutputPrivate::aboutToDeleteBackendObject()
 
 void AbstractVideoDataOutputPrivate::setupBackendObject()
 {
-    Q_Q(AbstractVideoDataOutput);
+    P_Q(AbstractVideoDataOutput);
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
     if (isRunning) {
@@ -111,7 +111,7 @@ void AbstractVideoDataOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    //Q_Q(AbstractVideoDataOutput);
+    //P_Q(AbstractVideoDataOutput);
     m_backendObject = Factory::createVideoDataOutput(0);
     if (m_backendObject) {
         setupBackendObject();

@@ -373,7 +373,7 @@ void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
 void MediaObjectPrivate::sendToZeitgeist(State eventState)
 {
 #ifdef HAVE_QZEITGEIST
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     if (readyForZeitgeist && q->property("PlaybackTracking").toBool()) {
         pDebug() << "Current state:" << eventState;
         QString eventInterpretation;
@@ -458,7 +458,7 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
 
 void MediaObjectPrivate::sendToZeitgeist()
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     sendToZeitgeist(q->state());
 }
 
@@ -479,7 +479,7 @@ bool MediaObjectPrivate::aboutToDeleteBackendObject()
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text)
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     State lastState = q->state();
     errorOverride = true;
     errorType = type;
@@ -493,7 +493,7 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 // TODO: this needs serious cleanup...
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
 
     // Zeitgeist ---------------------------------------------------------------
     if (newstate == StoppedState) {
@@ -573,7 +573,7 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
 
 void MediaObjectPrivate::_k_aboutToFinish()
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     pDebug() << Q_FUNC_INFO;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -594,7 +594,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
 
 void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     pDebug() << Q_FUNC_INFO;
 
     if (!sourceQueue.isEmpty() && sourceQueue.head() == source)
@@ -605,7 +605,7 @@ void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
 
 void MediaObjectPrivate::setupBackendObject()
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     Q_ASSERT(m_backendObject);
 
     // Queue *everything* there is. That way the backend always is in a defined state.

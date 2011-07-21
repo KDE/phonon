@@ -48,7 +48,7 @@ bool AudioDataOutputPrivate::aboutToDeleteBackendObject()
 
 void AudioDataOutputPrivate::setupBackendObject()
 {
-    Q_Q(AudioDataOutput);
+    P_Q(AudioDataOutput);
     Q_ASSERT(m_backendObject);
     AbstractAudioOutputPrivate::setupBackendObject();
 

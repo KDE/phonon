@@ -165,7 +165,7 @@ bool AvCapturePrivate::aboutToDeleteBackendObject()
 
 void AvCapturePrivate::setupBackendObject()
 {
-    Q_Q(AvCapture);
+    P_Q(AvCapture);
     Q_ASSERT(m_backendObject);
 
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);

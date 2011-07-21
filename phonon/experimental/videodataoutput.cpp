@@ -44,7 +44,7 @@ void VideoDataOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    Q_Q(VideoDataOutput);
+    P_Q(VideoDataOutput);
     m_backendObject = Factory::createVideoDataOutput(q);
     if (m_backendObject) {
         setupBackendObject();
@@ -63,7 +63,7 @@ bool VideoDataOutputPrivate::aboutToDeleteBackendObject()
 
 void VideoDataOutputPrivate::setupBackendObject()
 {
-    Q_Q(VideoDataOutput);
+    P_Q(VideoDataOutput);
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
 

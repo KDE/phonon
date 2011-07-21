@@ -61,7 +61,7 @@ VideoWidget::VideoWidget(VideoWidgetPrivate &dd, QWidget *parent)
 
 void VideoWidgetPrivate::init()
 {
-    Q_Q(VideoWidget);
+    P_Q(VideoWidget);
     changeFlags = q->windowFlags() & (Qt::SubWindow | Qt::Window);
 }
 
@@ -74,7 +74,7 @@ void VideoWidgetPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    Q_Q(VideoWidget);
+    P_Q(VideoWidget);
     m_backendObject = Factory::createVideoWidget(q);
     if (m_backendObject) {
         setupBackendObject();
@@ -163,7 +163,7 @@ bool VideoWidgetPrivate::aboutToDeleteBackendObject()
 
 void VideoWidgetPrivate::setupBackendObject()
 {
-    Q_Q(VideoWidget);
+    P_Q(VideoWidget);
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
     pDebug() << "calling setAspectRatio on the backend " << aspectRatio;

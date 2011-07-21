@@ -91,7 +91,7 @@ AudioOutput::AudioOutput(QObject *parent)
 
 void AudioOutputPrivate::init(Phonon::Category c)
 {
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
 #ifndef PHONON_NO_DBUS
     adaptor = new AudioOutputAdaptor(q);
     static unsigned int number = 0;
@@ -134,7 +134,7 @@ void AudioOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     m_backendObject = Factory::createAudioOutput(q);
     // (cg) Is it possible that PulseAudio initialisation means that the device here is not valid?
     // User reports seem to suggest this possibility but I can't see how :s.
@@ -300,7 +300,7 @@ bool AudioOutputPrivate::aboutToDeleteBackendObject()
 
 void AudioOutputPrivate::setupBackendObject()
 {
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     Q_ASSERT(m_backendObject);
     AbstractAudioOutputPrivate::setupBackendObject();
 
@@ -342,7 +342,7 @@ void AudioOutputPrivate::_k_volumeChanged(qreal newVolume)
 {
     volume = pow(newVolume, LOUDNESS_TO_VOLTAGE_EXPONENT);
     if (!muted) {
-        Q_Q(AudioOutput);
+        P_Q(AudioOutput);
         emit q->volumeChanged(volume);
     }
 }
@@ -350,7 +350,7 @@ void AudioOutputPrivate::_k_volumeChanged(qreal newVolume)
 void AudioOutputPrivate::_k_mutedChanged(bool newMuted)
 {
     muted = newMuted;
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     emit q->mutedChanged(newMuted);
 }
 
@@ -361,7 +361,7 @@ void AudioOutputPrivate::_k_revertFallback()
     }
     device = AudioOutputDevice::fromIndex(deviceBeforeFallback);
     callSetOutputDevice(this, device);
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     emit q->outputDeviceChanged(device);
 #ifndef PHONON_NO_DBUS
     emit adaptor->outputDeviceIndexChanged(device.index());
@@ -473,7 +473,7 @@ static struct
 
 void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &device2, DeviceChangeType type)
 {
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     deviceBeforeFallback = device.index();
     device = device2;
     emit q->outputDeviceChanged(device2);

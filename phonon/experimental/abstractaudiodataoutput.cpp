@@ -87,7 +87,7 @@ void AbstractAudioDataOutput::stop()
 
 void AbstractAudioDataOutputPrivate::setupBackendObject()
 {
-    Q_Q(AbstractAudioDataOutput);
+    P_Q(AbstractAudioDataOutput);
     Q_ASSERT(m_backendObject);
     //AbstractAudioOutputPrivate::setupBackendObject();
     if (isRunning) {
@@ -102,7 +102,7 @@ void AbstractAudioDataOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    //Q_Q(AbstractAudioDataOutput);
+    //P_Q(AbstractAudioDataOutput);
     m_backendObject = Factory::createAudioDataOutput(0);
     if (m_backendObject) {
         setupBackendObject();

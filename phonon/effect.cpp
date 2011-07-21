@@ -54,7 +54,7 @@ void EffectPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    Q_Q(Effect);
+    P_Q(Effect);
     m_backendObject = Factory::createEffect(description.index(), q);
     if (m_backendObject) {
         setupBackendObject();

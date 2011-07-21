@@ -177,7 +177,7 @@ void VolumeSliderPrivate::_k_buttonClicked()
 void VolumeSliderPrivate::_k_mutedChanged(bool muted)
 {
 #ifndef QT_NO_TOOLTIP
-    Q_Q(VolumeSlider);
+    P_Q(VolumeSlider);
 #endif
     if (muted) {
 #ifndef QT_NO_TOOLTIP
@@ -195,7 +195,7 @@ void VolumeSliderPrivate::_k_mutedChanged(bool muted)
 void VolumeSliderPrivate::_k_sliderChanged(int value)
 {
 #ifndef QT_NO_TOOLTIP
-    Q_Q(VolumeSlider);
+    P_Q(VolumeSlider);
 #endif
 
     if (output) {

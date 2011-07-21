@@ -94,7 +94,7 @@ EffectWidgetPrivate::EffectWidgetPrivate(Effect *e)
 
 void EffectWidgetPrivate::autogenerateUi()
 {
-    Q_Q(EffectWidget);
+    P_Q(EffectWidget);
     QVBoxLayout *mainLayout = new QVBoxLayout(q);
     mainLayout->setMargin(0);
     const QList<Phonon::EffectParameter> parameters = effect->parameters();
@@ -208,7 +208,7 @@ void EffectWidgetPrivate::autogenerateUi()
 
 void EffectWidgetPrivate::_k_setToggleParameter(bool checked)
 {
-    Q_Q(EffectWidget);
+    P_Q(EffectWidget);
     if (parameterForObject.contains(q->sender())) {
         effect->setParameterValue(parameterForObject[q->sender()], checked);
     }
@@ -216,7 +216,7 @@ void EffectWidgetPrivate::_k_setToggleParameter(bool checked)
 
 void EffectWidgetPrivate::_k_setIntParameter(int value)
 {
-    Q_Q(EffectWidget);
+    P_Q(EffectWidget);
     if (parameterForObject.contains(q->sender())) {
         effect->setParameterValue(parameterForObject[q->sender()], value);
     }
@@ -224,7 +224,7 @@ void EffectWidgetPrivate::_k_setIntParameter(int value)
 
 void EffectWidgetPrivate::_k_setDoubleParameter(double value)
 {
-    Q_Q(EffectWidget);
+    P_Q(EffectWidget);
     if (parameterForObject.contains(q->sender())) {
         effect->setParameterValue(parameterForObject[q->sender()], value);
     }
@@ -232,7 +232,7 @@ void EffectWidgetPrivate::_k_setDoubleParameter(double value)
 
 void EffectWidgetPrivate::_k_setStringParameter(const QString &value)
 {
-    Q_Q(EffectWidget);
+    P_Q(EffectWidget);
     if (parameterForObject.contains(q->sender())) {
         effect->setParameterValue(parameterForObject[q->sender()], value);
     }
@@ -240,7 +240,7 @@ void EffectWidgetPrivate::_k_setStringParameter(const QString &value)
 
 void EffectWidgetPrivate::_k_setSliderParameter(int value)
 {
-    Q_Q(EffectWidget);
+    P_Q(EffectWidget);
     if (parameterForObject.contains(q->sender())) {
         effect->setParameterValue(parameterForObject[q->sender()], double(value) / double(SLIDER_RANGE));
     }

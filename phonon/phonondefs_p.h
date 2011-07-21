@@ -103,7 +103,7 @@ void PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)::createBackendObject() \
 { \
     if (m_backendObject) \
         return; \
-    Q_Q(PHONON_CLASSNAME); \
+    P_Q(PHONON_CLASSNAME); \
     m_backendObject = Factory::PHONON_CONCAT_HELPER(create, PHONON_CLASSNAME)(q); \
     if (m_backendObject) { \
         setupBackendObject(); \
@@ -119,7 +119,7 @@ void PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)::createBackendObject() \
 { \
     if (m_backendObject) \
         return; \
-    Q_Q(PHONON_CLASSNAME); \
+    P_Q(PHONON_CLASSNAME); \
     m_backendObject = Factory::PHONON_CONCAT_HELPER(create, PHONON_CLASSNAME)(q); \
     if (m_backendObject) { \
         setupBackendObject(); \
