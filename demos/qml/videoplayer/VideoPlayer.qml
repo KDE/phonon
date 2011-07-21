@@ -37,6 +37,20 @@ Rectangle {
         }
     }
 
+    focus: true
+    Keys.onPressed: {
+        if (event.key == Qt.Key_Space) {
+            // TODO: de-duplicate with playPause
+            if (playPause.state == 'playing') {
+                media.pause()
+                playPause.state = 'paused'
+            } else {
+                media.play()
+                playPause.state = 'playing'
+            }
+        }
+    }
+
     Media {
         id: media
         source: "video.ogv"
