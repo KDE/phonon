@@ -98,7 +98,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         if (playPause.state == 'playing') {
-                            media.stop()
+                            media.pause()
                             playPause.state = 'paused'
                         } else {
                             media.play()

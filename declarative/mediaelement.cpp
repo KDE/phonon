@@ -56,6 +56,11 @@ bool MediaElement::isPlaying() const
     return m_state & PlayingState;
 }
 
+bool MediaElement::isPaused() const
+{
+    return m_state & PausedState;
+}
+
 bool MediaElement::isStopped() const
 {
     return m_state & StoppedState;
@@ -83,6 +88,13 @@ void MediaElement::play()
     m_mediaObject->play();
 }
 
+void MediaElement::pause()
+{
+    init();
+    m_finished = false;
+    m_mediaObject->pause();
+}
+
 void MediaElement::stop()
 {
     init();
@@ -103,6 +115,9 @@ void MediaElement::emitStateChanges(Phonon::State state)
         break;
     case PlayingState:
         emit playingChanged();
+        break;
+    case PausedState:
+        emit pausedChanged();
         break;
     }
 }
