@@ -31,6 +31,7 @@ MediaElement::MediaElement(QDeclarativeItem *parent) :
     m_state(StoppedState),
     m_finished(false)
 {
+#warning the whole lazy init stuff is getting a bit fugly
 }
 
 MediaElement::~MediaElement()
@@ -68,11 +69,15 @@ bool MediaElement::isStopped() const
 
 qreal MediaElement::totalTime() const
 {
+    if (!m_mediaObject)
+        return 0;
     return m_mediaObject->totalTime();
 }
 
 qreal MediaElement::time() const
 {
+    if (!m_mediaObject)
+        return 0;
     return m_mediaObject->currentTime();
 }
 
