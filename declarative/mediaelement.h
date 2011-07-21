@@ -68,6 +68,7 @@ public:
 signals:
     void sourceChanged();
 
+    void stateChanged();
     void playingChanged();
     void pausedChanged();
     void stoppedChanged();
