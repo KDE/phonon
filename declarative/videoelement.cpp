@@ -60,6 +60,16 @@ void VideoElement::init(MediaObject *mediaObject)
     createPath(m_mediaObject, m_graphicsObject);
 }
 
+void VideoElement::hideCursor()
+{
+    setCursor(QCursor(Qt::BlankCursor));
+}
+
+void VideoElement::unhideCursor()
+{
+    setCursor(QCursor());
+}
+
 void VideoElement::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     m_graphicsObject->setGeometry(newGeometry);

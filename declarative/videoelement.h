@@ -48,6 +48,9 @@ public:
 
     virtual void init(MediaObject *mediaObject);
 
+    Q_INVOKABLE void hideCursor();
+    Q_INVOKABLE void unhideCursor();
+
 protected:
     virtual void geometryChanged(const QRectF &newGeometry,
                                  const QRectF &oldGeometry);
