@@ -84,7 +84,7 @@ Rectangle {
             // Always show minutes and seconds though.
             // Rationale: plenty of videos are <1h but >1m
             var showHour = true
-            if (totalTime < 360000)
+            if (totalTime < 3600000)
                 showHour = false
 
             var s = Math.floor(ms / 1000)
