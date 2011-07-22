@@ -25,7 +25,7 @@ Rectangle {
         interval: 2000
         onTriggered:{
             video.hideCursor()
-            controls.state = "inactive"
+            controls.showControls = false
         }
     }
 
@@ -36,7 +36,7 @@ Rectangle {
         onMousePositionChanged: {
             movementTimer.restart()
             video.unhideCursor()
-            controls.state = "active"
+            controls.showControls = true
         }
     }
 
@@ -144,16 +144,32 @@ Rectangle {
         source: "controls-background.png"
         opacity: 0.788235294118
 
-        states: [
-            State {
-                name: "active"
-                PropertyChanges { target: controls; visible: true }
-            },
-            State {
-                name: "inactive"
-                PropertyChanges { target: controls; visible: false }
+        property bool showControls: true
+
+        states: State {
+            name: "hide"; when: controls.showControls == false
+            PropertyChanges {
+                target: controls;
+//                anchors.bottomMargin: -controls.height;
+                opacity: 0
             }
-        ]
+        }
+
+
+        transitions: Transition {
+            from: ""
+            to: "hide"
+            reversible: true
+            SequentialAnimation {
+                PropertyAnimation {
+                    target: controls;
+//                    properties: "anchors.bottomMargin";
+                    properties: "opacity"
+                    easing.type: Easing.InOutExpo;
+                    duration: 500
+                }
+            }
+        }
 
         Image {
             source: "fullscreen-button.png"
