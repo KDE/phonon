@@ -8,6 +8,7 @@ Rectangle {
     color: "black"
 
     function play(path) {
+        focus = true
         media.source = path
         media.play()
     }
