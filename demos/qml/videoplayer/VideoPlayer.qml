@@ -7,6 +7,8 @@ Rectangle {
     height: 480
     color: "black"
 
+    property bool wasVisibleOnce: false
+
     function play(path) {
         focus = true
         media.source = path
@@ -42,6 +44,13 @@ Rectangle {
     Keys.onPressed: {
         if (event.key == Qt.Key_Space)
             media.togglePlay()
+    }
+
+    onVisibleChanged: {
+        if (wasVisibleOnce && !visible)
+            video.fullScreen = false
+        if (!wasVisibleOnce && visible )
+            wasVisibleOnce = true
     }
 
     Media {
