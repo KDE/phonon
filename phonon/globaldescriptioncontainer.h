@@ -33,6 +33,29 @@ namespace Phonon
 
 class MediaController;
 
+/**
+ * \internal
+ *
+ * A container for object descriptions.
+ * The primary use of this container is to turn ObjectDescriptions with unique
+ * id scope smaller than backend into globally unique ones.
+ *
+ * For example a MediaController enhances a MediaObject, you may have multiple
+ * MediaObjects and thus MediaControllers in one application. The interface
+ * to query all subtitles is only available on the backend class itself though,
+ * so the index/id of the descriptions handed to a Phonon API user must be
+ * unique with global scope.
+ * This is where the GlobalDescriptionContainer comes in. It allows arbitrary
+ * objects to register (using object address) with the container (which is a
+ * singleton).
+ * The object hands its locally unique ObjectDescriptions to the container, which
+ * turns it into a globally unqiue description and maps the global id to the
+ * local id.
+ *
+ * That way it is possible to easily map local to global description objects.
+ *
+ * \author Harald Sitter <sitter@kde.org>
+ */
 template <typename D>
 class GlobalDescriptionContainer
 {
@@ -56,9 +79,7 @@ public:
         return self;
     }
 
-    virtual ~GlobalDescriptionContainer()
-    {
-    }
+    virtual ~GlobalDescriptionContainer() {}
 
     /**
      * \returns a list of all global unique IDs of all stored ObjectDescriptions
@@ -90,7 +111,7 @@ public:
      * Registers a new object within the container.
      * This essentially creates a new empty ID map.
      *
-     * \param obj The object
+     * \param obj The reference object
      */
     void register_(void *obj)
     {
@@ -264,6 +285,5 @@ typedef GlobalDescriptionContainer<AudioChannelDescription> GlobalAudioChannels;
 typedef GlobalDescriptionContainer<SubtitleDescription> GlobalSubtitles;
 
 } // Namespace Phonon
-
 
 #endif // PHONON_GLOBALDESCRIPTIONCONTAINER_H
