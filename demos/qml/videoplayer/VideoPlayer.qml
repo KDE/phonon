@@ -279,8 +279,15 @@ Rectangle {
                 value: media.time
             }
 
-            onValueChanged: {
-                console.debug(value)
+            WheelArea {
+                anchors.fill: parent
+                horizontalMinimumValue: parent.minimumValue
+                horizontalMaximumValue: parent.maximumValue
+                property double step: (parent.maximumValue - parent.minimumValue)/100
+
+                onHorizontalWheelMoved: {
+                    media.time += horizontalDelta/4*step
+                }
             }
         }
 
