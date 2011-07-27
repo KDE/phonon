@@ -199,44 +199,44 @@ Rectangle {
             }
         }
 
-        Image {
+        Slider {
             id: volumeSlider
             width: 136
             height: 19
-
-            property real value
-            onValueChanged: {
-                // Ignore value changes whiles drag is in progress as to avoid
-                // conficting information
-                if (!volumeMouseArea.drag.active)
-                    volumeHandle.x = volumeMouseArea.drag.maximumX * value / 100.0;
-            }
-
             anchors.top: parent.top
             anchors.topMargin: 20
             anchors.right: parent.right
             anchors.rightMargin: 20
-            source: "volume-bar.png"
+            updateValueWhileDragging: true
+            groove: Image { source: "volume-bar.png" }
+            handle: Image { source: "volume-slider.png" }
 
-            Image {
-                id: volumeHandle
-                width: 27
-                height: 28
-                anchors.top: parent.top
-                anchors.topMargin: -5
-                source: "volume-slider.png"
+            value: audio.volume
+            minimumValue: 0
+            maximumValue: 100
 
-                MouseArea {
-                    id: volumeMouseArea
-                    anchors.fill: parent
-                    drag.target: volumeHandle
-                    drag.axis: Drag.XAxis
-                    drag.minimumX: 0
-                    drag.maximumX: volumeSlider.width - volumeHandle.width
-                    onPositionChanged: {
-                        volumeSlider.value = drag.target.x * 100.0 / drag.maximumX
-                        audio.volume = volumeSlider.value / 100.0
-                    }
+            Binding {
+                when: volumeSlider.pressed
+                target: audio
+                property: "volume"
+                value: volumeSlider.value * 0.01
+            }
+
+            Binding {
+                when: !volumeSlider.pressed
+                target: parent
+                property: "value"
+                value: Math.round(100 * audio.volume)
+            }
+
+            WheelArea {
+                anchors.fill: parent
+                horizontalMinimumValue: parent.minimumValue
+                horizontalMaximumValue: parent.maximumValue
+                property double step: (parent.maximumValue - parent.minimumValue)/100
+
+                onHorizontalWheelMoved: {
+                    audio.volume += ((horizontalDelta/4*step) * 0.01)
                 }
             }
         }
