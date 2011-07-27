@@ -132,6 +132,7 @@ install(FILES
    effectparameter.h
    effectwidget.h
    globalconfig.h
+   globaldescriptioncontainer.h
    mediacontroller.h
    medianode.h
    mediaobject.h

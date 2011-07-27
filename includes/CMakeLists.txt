@@ -24,6 +24,7 @@ install( FILES
     phonon/EffectParameter
     phonon/EffectWidget
     phonon/Global
+    phonon/GlobalDescriptionContainer
     phonon/MediaController
     phonon/MediaNode
     phonon/MediaObject
