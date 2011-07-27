@@ -250,17 +250,8 @@ Rectangle {
             anchors.bottomMargin: 5
             anchors.horizontalCenter: parent.horizontalCenter
             updateValueWhileDragging: true
-            groove:  Image {
-//                width: 749
-//                height: 19
-                source: "progress-bar.png"
-            }
-            handle: Image {
-//                width: 27
-//                height: 28
-//                anchors.top: parent.top
-                source: "volume-slider.png"
-            }
+            groove: Image { source: "progress-bar.png" }
+            handle: Image { source: "volume-slider.png" }
 
             minimumValue: 0
             maximumValue: media.totalTime
