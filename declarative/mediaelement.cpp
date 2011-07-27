@@ -49,8 +49,10 @@ void MediaElement::classBegin()
     connect(m_mediaObject, SIGNAL(finished()),
             this, SLOT(handleFinished()));
 
+    connect(m_mediaObject, SIGNAL(hasVideoChanged(bool)),
+            this, SIGNAL(hasVideoChanged()));
     connect(m_mediaObject, SIGNAL(seekableChanged(bool)),
-            this, SLOT(seekableChanged()));
+            this, SIGNAL(seekableChanged()));
     connect(m_mediaObject, SIGNAL(totalTimeChanged(qint64)),
             this, SIGNAL(totalTimeChanged()));
     connect(m_mediaObject, SIGNAL(tick(qint64)),
@@ -188,7 +190,6 @@ void MediaElement::handleStateChange(Phonon::State newState, Phonon::State oldSt
 void MediaElement::init(MediaObject *mediaObject)
 {
 }
-
 
 } // namespace Declarative
 } // namespace Phonon
