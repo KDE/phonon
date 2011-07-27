@@ -28,17 +28,28 @@ Rectangle {
             video.cursorVisible = false
             controls.showControls = false
         }
+
+        function reset() {
+            restart()
+            video.cursorVisible = true
+            controls.showControls = true
+        }
+
+        function undo() {
+            stop()
+            video.cursorVisible = true
+            controls.showControls = true
+        }
+
     }
 
     MouseArea
     {
         anchors.fill: parent
         hoverEnabled: true
-        onMousePositionChanged: {
-            movementTimer.restart()
-            video.cursorVisible = true
-            controls.showControls = true
-        }
+        onMousePositionChanged: movementTimer.reset()
+        onEntered: movementTimer.start()
+        onExited: movementTimer.undo()
     }
 
     focus: true
