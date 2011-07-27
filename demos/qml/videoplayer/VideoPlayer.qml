@@ -67,7 +67,6 @@ Rectangle {
 
     Media {
         id: media
-        source: "video.ogv"
 
         property string timeString: parseTime(time)
         property string remainingTimeString: "-" + parseTime(totalTime - time)
@@ -108,7 +107,6 @@ Rectangle {
 
         AudioOutput {
             id: audio
-            onVolumeChanged: { volumeSlider.value = volume * 100.0 }
         }
 
         Video {
@@ -139,7 +137,6 @@ Rectangle {
                 opacity: 0
             }
         }
-
 
         transitions: Transition {
             from: ""
@@ -177,9 +174,7 @@ Rectangle {
             anchors.topMargin: 15
             spacing: 30
 
-            Image {
-                source: "backward-button.png"
-            }
+            Image { source: "backward-button.png" }
 
             Image {
                 id: playPause
@@ -205,9 +200,7 @@ Rectangle {
                 ]
             }
 
-            Image {
-                source: "forward-button.png"
-            }
+            Image { source: "forward-button.png" }
         }
 
         Slider {
