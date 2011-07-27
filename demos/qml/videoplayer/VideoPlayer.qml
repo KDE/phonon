@@ -266,7 +266,7 @@ Rectangle {
             maximumValue: media.totalTime
 
             Binding {
-                when: progressSlider.pressed || progressSlider.activeFocus
+                when: progressSlider.pressed
                 target: media
                 property: "time"
                 value: progressSlider.value
