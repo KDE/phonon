@@ -1,4 +1,5 @@
 import Qt 4.7
+import QtDesktop 0.1
 import Phonon 1.0
 
 Rectangle {
@@ -57,19 +58,12 @@ Rectangle {
         id: media
         source: "video.ogv"
 
-        property string timeString
-        property string remainingTimeString
-        property string totalTimeString
+        property string timeString: parseTime(time)
+        property string remainingTimeString: "-" + parseTime(totalTime - time)
+        property string totalTimeString: parseTime(totalTime)
 
         function togglePlay() {
-            // TODO: de-duplicate with playPause
-            if (playPause.state == 'playing') {
-                media.pause()
-                playPause.state = 'paused'
-            } else {
-                media.play()
-                playPause.state = 'playing'
-            }
+            (media.playing) ? media.pause() : media.play()
         }
 
         function padIntString(number) {
@@ -99,25 +93,6 @@ Rectangle {
                 // Do not pad hour as it looks ugly, also hour can exceed 24 anyway.
                 time = h + ':' + time
             return time
-        }
-
-        onStateChanged: {
-            if (playing)
-                playPause.state = "playing"
-            else
-                playPause.state = "paused"
-        }
-
-        onTotalTimeChanged: {
-            progressSlider.max = totalTime
-            totalTimeString = parseTime(totalTime)
-
-        }
-
-        onTimeChanged: {
-            progressSlider.value = time
-            timeString = parseTime(time)
-            remainingTimeString = "-" + parseTime(totalTime - time)
         }
 
         AudioOutput {
@@ -150,7 +125,6 @@ Rectangle {
             name: "hide"; when: controls.showControls == false
             PropertyChanges {
                 target: controls;
-//                anchors.bottomMargin: -controls.height;
                 opacity: 0
             }
         }
@@ -163,7 +137,6 @@ Rectangle {
             SequentialAnimation {
                 PropertyAnimation {
                     target: controls;
-//                    properties: "anchors.bottomMargin";
                     properties: "opacity"
                     easing.type: Easing.InOutExpo;
                     duration: 500
@@ -209,10 +182,12 @@ Rectangle {
 
                 states: [
                     State {
+                        when: !media.playing
                         name: "paused"
                         PropertyChanges { target: playPause; source: "play-button.png" }
                     },
                     State {
+                        when: media.playing
                         name: "playing"
                         PropertyChanges { target: playPause; source: "pause-button.png" }
                     }
@@ -266,48 +241,46 @@ Rectangle {
             }
         }
 
-        Image {
+        Slider {
             id: progressSlider
+            enabled: media.seekable
             width: 749
             height: 19
-
-            property real value
-            property real max
-
-            onValueChanged: {
-                // Ignore value changes whiles drag is in progress as to avoid
-                // conficting information
-                if (!progressMouseArea.drag.active)
-                    progressHandle.x = value * progressMouseArea.drag.maximumX / max;
-            }
-
             anchors.bottom: timeIndicator.top
             anchors.bottomMargin: 5
             anchors.horizontalCenter: parent.horizontalCenter
-            source: "progress-bar.png"
-
-            Image {
-                id: progressHandle
-                width: 27
-                height: 28
-                anchors.top: parent.top
-                anchors.topMargin: -5
+            updateValueWhileDragging: true
+            groove:  Image {
+//                width: 749
+//                height: 19
+                source: "progress-bar.png"
+            }
+            handle: Image {
+//                width: 27
+//                height: 28
+//                anchors.top: parent.top
                 source: "volume-slider.png"
+            }
 
-                property real cachedPos
+            minimumValue: 0
+            maximumValue: media.totalTime
 
-                MouseArea {
-                    id: progressMouseArea
-                    anchors.fill: parent
-                    drag.target: progressHandle
-                    drag.axis: Drag.XAxis
-                    drag.minimumX: 0
-                    drag.maximumX: progressSlider.width - progressHandle.width
+            Binding {
+                when: progressSlider.pressed || progressSlider.activeFocus
+                target: media
+                property: "time"
+                value: progressSlider.value
+            }
 
-                    onReleased: {
-                        media.time = progressSlider.max * progressHandle.x / drag.maximumX;
-                    }
-                }
+            Binding {
+                when: !progressSlider.pressed
+                target: parent
+                property: "value"
+                value: media.time
+            }
+
+            onValueChanged: {
+                console.debug(value)
             }
         }
 
