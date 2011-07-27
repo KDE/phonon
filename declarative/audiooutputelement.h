@@ -37,10 +37,18 @@ namespace Declarative {
 class AudioOutputElement : public QDeclarativeItem, public AbstractInitAble
 {
     Q_OBJECT
+    Q_PROPERTY(bool muted READ isMuted WRITE setMuted NOTIFY mutedChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(qreal volume READ volume WRITE setVolume NOTIFY volumeChanged)
 public:
     AudioOutputElement(QDeclarativeItem *parent = 0);
     ~AudioOutputElement();
+
+    bool isMuted() const;
+    void setMuted(bool muted);
+
+    QString name() const;
+    void setName(const QString &name);
 
     qreal volume() const;
     void setVolume(qreal newVolume);
@@ -48,6 +56,8 @@ public:
     virtual void init(MediaObject *mediaObject);
 
 signals:
+    void mutedChanged();
+    void nameChanged();
     void volumeChanged();
 
 private:

@@ -30,8 +30,6 @@
 namespace Phonon {
 namespace Declarative {
 
-#define SECURE if(!m_mediaObject && !m_audioOutput) init()
-
 AudioOutputElement::AudioOutputElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
     m_audioOutput(0)
@@ -40,6 +38,28 @@ AudioOutputElement::AudioOutputElement(QDeclarativeItem *parent) :
 
 AudioOutputElement::~AudioOutputElement()
 {
+}
+
+bool AudioOutputElement::isMuted() const
+{
+    return m_audioOutput->isMuted();
+}
+
+void AudioOutputElement::setMuted(bool muted)
+{
+    m_audioOutput->setMuted(muted);
+    emit mutedChanged();
+}
+
+QString AudioOutputElement::name() const
+{
+    return m_audioOutput->name();
+}
+
+void AudioOutputElement::setName(const QString &name)
+{
+    m_audioOutput->setName(name);
+    emit nameChanged();
 }
 
 qreal AudioOutputElement::volume() const
@@ -71,6 +91,8 @@ void AudioOutputElement::init(MediaObject *mediaObject)
 
     connect(m_audioOutput, SIGNAL(volumeChanged(qreal)),
             this, SIGNAL(volumeChanged()));
+    connect(m_audioOutput, SIGNAL(mutedChanged(bool)),
+            this, SIGNAL(mutedChanged()));
 
     processPendingProperties();
 }
