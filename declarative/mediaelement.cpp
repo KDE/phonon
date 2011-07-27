@@ -49,6 +49,8 @@ void MediaElement::classBegin()
     connect(m_mediaObject, SIGNAL(finished()),
             this, SLOT(handleFinished()));
 
+    connect(m_mediaObject, SIGNAL(seekableChanged(bool)),
+            this, SLOT(seekableChanged()));
     connect(m_mediaObject, SIGNAL(totalTimeChanged(qint64)),
             this, SIGNAL(totalTimeChanged()));
     connect(m_mediaObject, SIGNAL(tick(qint64)),
@@ -91,6 +93,26 @@ bool MediaElement::isPaused() const
 bool MediaElement::isStopped() const
 {
     return m_state & StoppedState;
+}
+
+bool MediaElement::hasVideo() const
+{
+    return m_mediaObject->hasVideo();
+}
+
+bool MediaElement::isSeekable() const
+{
+    return m_mediaObject->isSeekable();
+}
+
+qint32 MediaElement::tickInterval() const
+{
+    return m_mediaObject->tickInterval();
+}
+
+void MediaElement::setTickInterval(qint32 interval)
+{
+    m_mediaObject->setTickInterval(interval);
 }
 
 qreal MediaElement::totalTime() const

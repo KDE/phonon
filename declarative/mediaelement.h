@@ -40,11 +40,12 @@ class MediaElement : public QDeclarativeItem, AbstractInitAble
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-#warning writing those is fishy as it is not exactly clear what happens when you \
-    set play to false, does it pause? or stop? or error? or explode?!!!
     Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
     Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged)
     Q_PROPERTY(bool stopped READ isStopped NOTIFY stoppedChanged)
+    Q_PROPERTY(bool video READ hasVideo NOTIFY hasVideoChanged)
+    Q_PROPERTY(bool seekable READ isSeekable NOTIFY seekableChanged)
+    Q_PROPERTY(qint32 tickInterval READ tickInterval WRITE setTickInterval)
     Q_PROPERTY(qreal totalTime READ totalTime NOTIFY totalTimeChanged)
     Q_PROPERTY(qreal time READ time WRITE seek NOTIFY timeChanged)
 public:
@@ -65,6 +66,10 @@ public:
     bool isPaused() const;
     bool isStopped() const;
 
+    bool hasVideo() const;
+    bool isSeekable() const;
+    qint32 tickInterval() const;
+    void setTickInterval(qint32 interval);
     qreal totalTime() const;
     qreal time() const;
     void seek(qreal time);
@@ -77,6 +82,8 @@ signals:
     void pausedChanged();
     void stoppedChanged();
 
+    void hasVideoChanged();
+    void seekableChanged();
     void totalTimeChanged();
     void timeChanged();
 
