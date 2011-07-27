@@ -38,6 +38,33 @@ MediaElement::~MediaElement()
 {
 }
 
+void MediaElement::classBegin()
+{
+    m_mediaObject = new MediaObject(this);
+    m_mediaObject->setTickInterval(100);
+    m_mediaObject->setCurrentSource(MediaSource(m_source));
+
+    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+            this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
+    connect(m_mediaObject, SIGNAL(finished()),
+            this, SLOT(handleFinished()));
+
+    connect(m_mediaObject, SIGNAL(totalTimeChanged(qint64)),
+            this, SIGNAL(totalTimeChanged()));
+    connect(m_mediaObject, SIGNAL(tick(qint64)),
+            this, SIGNAL(timeChanged()));
+}
+
+void MediaElement::componentComplete()
+{
+    // Init children
+    foreach (QGraphicsItem *item, childItems()) {
+        AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
+        if (obj)
+            obj->init(m_mediaObject);
+    }
+}
+
 QUrl MediaElement::source() const
 {
     return m_source;
@@ -47,8 +74,7 @@ void MediaElement::setSource(const QUrl &url)
 {
     m_source = url;
     m_finished = false;
-    if (m_mediaObject)
-        m_mediaObject->setCurrentSource(MediaSource(url));
+    m_mediaObject->setCurrentSource(MediaSource(url));
     emit sourceChanged();
 }
 
@@ -69,15 +95,11 @@ bool MediaElement::isStopped() const
 
 qreal MediaElement::totalTime() const
 {
-    if (!m_mediaObject)
-        return 0;
     return m_mediaObject->totalTime();
 }
 
 qreal MediaElement::time() const
 {
-    if (!m_mediaObject)
-        return 0;
     return m_mediaObject->currentTime();
 }
 
@@ -88,21 +110,18 @@ void MediaElement::seek(qreal time)
 
 void MediaElement::play()
 {
-    init();
     m_finished = false;
     m_mediaObject->play();
 }
 
 void MediaElement::pause()
 {
-    init();
     m_finished = false;
     m_mediaObject->pause();
 }
 
 void MediaElement::stop()
 {
-    init();
     m_finished = false;
     m_mediaObject->stop();
 }
@@ -146,29 +165,6 @@ void MediaElement::handleStateChange(Phonon::State newState, Phonon::State oldSt
 
 void MediaElement::init(MediaObject *mediaObject)
 {
-    if (m_mediaObject)
-        return;
-
-    m_mediaObject = new MediaObject(this);
-    m_mediaObject->setTickInterval(100);
-    m_mediaObject->setCurrentSource(MediaSource(m_source));
-
-    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-            this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
-    connect(m_mediaObject, SIGNAL(finished()),
-            this, SLOT(handleFinished()));
-
-    connect(m_mediaObject, SIGNAL(totalTimeChanged(qint64)),
-            this, SIGNAL(totalTimeChanged()));
-    connect(m_mediaObject, SIGNAL(tick(qint64)),
-            this, SIGNAL(timeChanged()));
-
-    // Init children
-    foreach (QGraphicsItem *item, childItems()) {
-        AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
-        if (obj)
-            obj->init(m_mediaObject);
-    }
 }
 
 

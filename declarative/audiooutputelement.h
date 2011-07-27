@@ -44,6 +44,8 @@ public:
     AudioOutputElement(QDeclarativeItem *parent = 0);
     ~AudioOutputElement();
 
+    void classBegin();
+
     bool isMuted() const;
     void setMuted(bool muted);
 
@@ -61,10 +63,6 @@ signals:
     void volumeChanged();
 
 private:
-    void processPendingProperties();
-
-    QHash<QByteArray, QVariant> m_pendingProperties;
-
     AudioOutput *m_audioOutput;
 };
 

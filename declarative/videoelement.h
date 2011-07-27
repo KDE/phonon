@@ -45,7 +45,6 @@ public:
     ~VideoElement();
 
     void classBegin();
-    void componentComplete() {}
 
     virtual void init(MediaObject *mediaObject);
 

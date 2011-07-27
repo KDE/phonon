@@ -40,6 +40,15 @@ AudioOutputElement::~AudioOutputElement()
 {
 }
 
+void AudioOutputElement::classBegin()
+{
+    m_audioOutput = new AudioOutput(this);
+    connect(m_audioOutput, SIGNAL(volumeChanged(qreal)),
+            this, SIGNAL(volumeChanged()));
+    connect(m_audioOutput, SIGNAL(mutedChanged(bool)),
+            this, SIGNAL(mutedChanged()));
+}
+
 bool AudioOutputElement::isMuted() const
 {
     return m_audioOutput->isMuted();
@@ -48,7 +57,6 @@ bool AudioOutputElement::isMuted() const
 void AudioOutputElement::setMuted(bool muted)
 {
     m_audioOutput->setMuted(muted);
-    emit mutedChanged();
 }
 
 QString AudioOutputElement::name() const
@@ -64,47 +72,20 @@ void AudioOutputElement::setName(const QString &name)
 
 qreal AudioOutputElement::volume() const
 {
-    if (!m_audioOutput)
-        return 0;
     return m_audioOutput->volume();
 }
 
 void AudioOutputElement::setVolume(qreal newVolume)
 {
-    if (!m_audioOutput)
-        m_pendingProperties.insert("volume", newVolume);
-    else
-        m_audioOutput->setVolume(newVolume);
+    m_audioOutput->setVolume(newVolume);
 }
 
 void AudioOutputElement::init(MediaObject *mediaObject)
 {
     Q_ASSERT(mediaObject);
-    if (m_audioOutput)
-        return;
 
     m_mediaObject = mediaObject;
-
-#warning todo: category
-    m_audioOutput = new AudioOutput(this);
     createPath(m_mediaObject, m_audioOutput);
-
-    connect(m_audioOutput, SIGNAL(volumeChanged(qreal)),
-            this, SIGNAL(volumeChanged()));
-    connect(m_audioOutput, SIGNAL(mutedChanged(bool)),
-            this, SIGNAL(mutedChanged()));
-
-    processPendingProperties();
-}
-
-void AudioOutputElement::processPendingProperties()
-{
-    QHashIterator<QByteArray, QVariant> it(m_pendingProperties);
-    while (it.hasNext()) {
-        it.next();
-        m_audioOutput->setProperty(it.key().constData(), it.value());
-    }
-    m_pendingProperties.clear();
 }
 
 } // namespace Declarative

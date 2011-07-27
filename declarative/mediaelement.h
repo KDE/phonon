@@ -38,6 +38,7 @@ namespace Declarative {
 class MediaElement : public QDeclarativeItem, AbstractInitAble
 {
     Q_OBJECT
+    Q_INTERFACES(QDeclarativeParserStatus)
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
 #warning writing those is fishy as it is not exactly clear what happens when you \
     set play to false, does it pause? or stop? or error? or explode?!!!
@@ -49,6 +50,9 @@ class MediaElement : public QDeclarativeItem, AbstractInitAble
 public:
     MediaElement(QDeclarativeItem *parent = 0);
     virtual ~MediaElement();
+
+    void classBegin();
+    void componentComplete();
 
     QUrl source() const;
     void setSource(const QUrl &url);
