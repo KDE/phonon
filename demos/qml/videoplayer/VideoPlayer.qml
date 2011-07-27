@@ -253,6 +253,7 @@ Rectangle {
             groove: Image { source: "progress-bar.png" }
             handle: Image { source: "volume-slider.png" }
 
+            value: media.time
             minimumValue: 0
             maximumValue: media.totalTime
 
