@@ -52,9 +52,26 @@ class PHONON_EXPORT MediaController : public QObject
     Q_FLAGS(Features)
     public:
         enum Feature {
+            /**
+             * In the VOB (DVD) format, it is possible to give several video streams
+             * of the same scene, each of which displays the scene from a different
+             * angle. The DVD viewer can then change between these angles.
+             */
             Angles = 1,
+            /**
+             * In the VOB format, chapters are points in a single video stream
+             * that can be played and seeked to separately.
+             */
             Chapters = 2,
+            /**
+             * In the VOB format, navigations are menus to quickly navigate
+             * to content.
+             */
             Navigations = 3,
+            /**
+             * On a CD, a title is a separate sound track. On DVD, a title is a
+             * separate VOB file (i.e. usually a different video entity).
+             */
             Titles = 4
         };
         Q_DECLARE_FLAGS(Features, Feature)
