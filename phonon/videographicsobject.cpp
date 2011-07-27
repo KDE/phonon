@@ -43,6 +43,9 @@ public:
         frameSize(0, 0),
         // GL
         context(0),
+        // GLSL
+        m_program(0),
+        // ARGB FP
         programId(0)
     {
         if (qgetenv("PHONON_PAINT") == QByteArray("directgl")) {
@@ -70,9 +73,12 @@ public:
 
     virtual QObject *qObject() { return q_func(); }
 
-    void updateColors(int brightness, int contrast, int hue, int saturation);
+    void initGlslGl();
+    void paintGlslGl(QPainter *painter, QRectF target, VideoFrame *frame);
+
     void initDirectGl();
-    void paintDirectGl(QPainter *painter, QRectF rect, VideoFrame *frame);
+    void paintDirectGl(QPainter *painter, QRectF target, VideoFrame *frame);
+
     void paintGl(QPainter *painter, QRectF rect, VideoFrame *frame);
 
     QRectF geometry;
@@ -81,10 +87,14 @@ public:
 
     // GL
     QGLContext *context;
-    GLuint programId;
-
     int m_textureCount;
     GLuint m_textureIds[3];
+
+    // GLSL
+    QGLShaderProgram *m_program;
+
+    // ARGB FP
+    GLuint programId;
 
     // Function pointers filled using getProcAddress()
     typedef void (APIENTRY *_glProgramStringARB) (GLenum, GLenum, GLsizei, const GLvoid *);
@@ -163,7 +173,9 @@ void VideoGraphicsObject::paint(QPainter *painter,
         painter->fillRect(d->boundingRect, Qt::black);
     } else if (!frame.qImage().isNull()){
         QByteArray paintEnv = qgetenv("PHONON_PAINT");
-        if (QGLContext::currentContext() && paintEnv == QByteArray("directgl")) {
+        if (QGLContext::currentContext() && paintEnv == QByteArray("glsl"))
+            d->paintGlslGl(painter, d->boundingRect, &frame);
+        else if (QGLContext::currentContext() && paintEnv == QByteArray("directgl")) {
             d->paintDirectGl(painter, d->boundingRect, &frame);
         } else if (QGLContext::currentContext() && paintEnv == QByteArray("gl")) {
             d->paintGl(painter, d->boundingRect, &frame);
@@ -177,6 +189,166 @@ void VideoGraphicsObject::paint(QPainter *painter,
     paintedOnce = true;
 }
 
+void VideoGraphicsObjectPrivate::initGlslGl()
+{
+    if (context) {
+#warning factor into own function
+        context = const_cast<QGLContext *>(QGLContext::currentContext());
+        context->makeCurrent();
+        return;
+    }
+
+    context = const_cast<QGLContext *>(QGLContext::currentContext());
+    context->makeCurrent();
+
+    if (!m_program) {
+        Q_Q(VideoGraphicsObject);
+        m_program = new QGLShaderProgram(context, q);
+    }
+
+    const char *vertexProgram =
+            "attribute highp vec4 targetVertex;\n"
+            "attribute highp vec2 textureCoordinates;\n"
+            "uniform highp mat4 positionMatrix;\n"
+            "varying highp vec2 textureCoord;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_Position = positionMatrix * targetVertex;\n"
+            "    textureCoord = textureCoordinates;\n"
+            "}\n";
+
+    const char *program =
+            "uniform sampler2D textureSampler;\n"
+            "varying highp vec2 textureCoord;\n"
+            "void main(void)\n"
+            "{\n"
+            "    gl_FragColor = vec4(texture2D(textureSampler, textureCoord.st).bgr, 1.0);\n"
+            "}\n";
+
+    m_textureCount = 1;
+
+    if (!m_program->addShaderFromSourceCode(QGLShader::Vertex, vertexProgram))
+        qFatal("couldnt add vertex shader");
+    else if (!m_program->addShaderFromSourceCode(QGLShader::Fragment, program))
+        qFatal("couldnt add fragment shader");
+    else if (!m_program->link())
+        qFatal("couldnt link shader");
+
+    glGenTextures(m_textureCount, m_textureIds);
+}
+
+void VideoGraphicsObjectPrivate::paintGlslGl(QPainter *painter,
+                                             QRectF target,
+                                             VideoFrame *frame)
+{
+    initGlslGl();
+
+    //////////////////////////////////////////////////////////////
+
+    // Need to reenable those after native painting has begun, otherwise we might
+    // not be able to paint anything.
+    bool stencilTestEnabled = glIsEnabled(GL_STENCIL_TEST);
+    bool scissorTestEnabled = glIsEnabled(GL_SCISSOR_TEST);
+
+    painter->beginNativePainting();
+
+    if (stencilTestEnabled)
+        glEnable(GL_STENCIL_TEST);
+    if (scissorTestEnabled)
+        glEnable(GL_SCISSOR_TEST);
+
+    //////////////////////////////////////////////////////////////
+#warning factor into own function
+
+#warning multitexture support for yuv
+    glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 GL_RGBA,
+                 frame->width, frame->height,
+                 0,
+                 GL_RGBA,
+                 GL_UNSIGNED_BYTE,
+             #warning data needs changing for sane access!!
+                 frame->data0);
+    // Scale appropriately so we can change to target geometry without
+    // much hassle.
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    //////////////////////////////////////////////////////////////
+
+    // As seen on the telly
+#warning DUPLICATED CODE
+
+    const float textureCoordinates[] = {
+        0, 1, // bottom left
+        1, 1, // bottom right
+        0, 0, // top left
+        1, 0, // top right
+    };
+
+    const GLfloat targetVertex[] =
+    {
+        GLfloat(target.left()), GLfloat(target.bottom()),
+        GLfloat(target.right()), GLfloat(target.bottom()),
+        GLfloat(target.left()) , GLfloat(target.top()),
+        GLfloat(target.right()), GLfloat(target.top())
+    };
+    //
+
+    const int width = QGLContext::currentContext()->device()->width();
+    const int height = QGLContext::currentContext()->device()->height();
+
+    const QTransform transform = painter->deviceTransform();
+
+    const GLfloat wfactor = 2.0 / width;
+    const GLfloat hfactor = -2.0 / height;
+
+    const GLfloat positionMatrix[4][4] = {
+        {
+            GLfloat(wfactor * transform.m11() - transform.m13()),
+            GLfloat(hfactor * transform.m12() + transform.m13()),
+            0.0,
+            GLfloat(transform.m13())
+        }, {
+            GLfloat(wfactor * transform.m21() - transform.m23()),
+            GLfloat(hfactor * transform.m22() + transform.m23()),
+            0.0,
+            GLfloat(transform.m23())
+        }, {
+            0.0,
+            0.0,
+            -1.0,
+            0.0
+        }, {
+            GLfloat(wfactor * transform.dx() - transform.m33()),
+            GLfloat(hfactor * transform.dy() + transform.m33()),
+            0.0,
+            GLfloat(transform.m33())
+        }
+    };
+
+    m_program->bind();
+
+    m_program->enableAttributeArray("targetVertex");
+    m_program->enableAttributeArray("textureCoordinates");
+    m_program->setAttributeArray("targetVertex", targetVertex, 2);
+    m_program->setAttributeArray("textureCoordinates", textureCoordinates, 2);
+
+    m_program->setUniformValue("positionMatrix", positionMatrix);
+
+#warning no idea how to do yuv with glsl :S
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
+    m_program->setUniformValue("texRgb", 0);
+
+    glDrawArrays(GL_QUAD_STRIP, 0, 4);
+
+    m_program->release();
+    painter->endNativePainting();
+}
+
 void VideoGraphicsObjectPrivate::initDirectGl()
 {
     if (context) {
@@ -187,7 +359,6 @@ void VideoGraphicsObjectPrivate::initDirectGl()
     }
 
     context = const_cast<QGLContext *>(QGLContext::currentContext());
-
     context->makeCurrent();
 
 #warning should be moved to macro or something
