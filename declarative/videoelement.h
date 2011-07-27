@@ -39,7 +39,8 @@ class VideoElement : public QDeclarativeItem,
 {
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
-    Q_PROPERTY(bool fullScreen READ isFullScreen WRITE setFullScreen)
+    Q_PROPERTY(bool cursorVisible READ isCursorVisible WRITE setCursorVisible NOTIFY cursorVisibilityChanged)
+    Q_PROPERTY(bool fullScreen READ isFullScreen WRITE setFullScreen NOTIFY fullScreenChanged)
 public:
     VideoElement(QDeclarativeItem *parent = 0);
     ~VideoElement();
@@ -48,12 +49,15 @@ public:
 
     virtual void init(MediaObject *mediaObject);
 
+    bool isCursorVisible() const;
+    void setCursorVisible(bool visible);
+
     bool isFullScreen() const;
     void setFullScreen(bool fullScreen);
 
-#warning make properties?
-    Q_INVOKABLE void hideCursor();
-    Q_INVOKABLE void unhideCursor();
+signals:
+    void cursorVisibilityChanged();
+    void fullScreenChanged();
 
 protected:
     virtual void geometryChanged(const QRectF &newGeometry,

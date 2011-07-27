@@ -62,6 +62,16 @@ void VideoElement::init(MediaObject *mediaObject)
     createPath(m_mediaObject, m_graphicsObject);
 }
 
+bool VideoElement::isCursorVisible() const
+{
+    return cursor().shape() == Qt::BlankCursor ? true : false;
+}
+
+void VideoElement::setCursorVisible(bool visible)
+{
+    setCursor(visible ? QCursor() : QCursor(Qt::BlankCursor));
+}
+
 bool VideoElement::isFullScreen() const
 {
     return m_isFullScreen;
@@ -76,16 +86,6 @@ void VideoElement::setFullScreen(bool fullScreen)
         m_isFullScreen = false;
         qApp->activeWindow()->showNormal();
     }
-}
-
-void VideoElement::hideCursor()
-{
-    setCursor(QCursor(Qt::BlankCursor));
-}
-
-void VideoElement::unhideCursor()
-{
-    setCursor(QCursor());
 }
 
 void VideoElement::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)

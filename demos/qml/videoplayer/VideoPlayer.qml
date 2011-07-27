@@ -24,7 +24,7 @@ Rectangle {
         running: true
         interval: 2000
         onTriggered:{
-            video.hideCursor()
+            video.cursorVisible = false
             controls.showControls = false
         }
     }
@@ -35,7 +35,7 @@ Rectangle {
         hoverEnabled: true
         onMousePositionChanged: {
             movementTimer.restart()
-            video.unhideCursor()
+            video.cursorVisible = true
             controls.showControls = true
         }
     }
