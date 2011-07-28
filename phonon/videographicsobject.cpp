@@ -44,7 +44,7 @@ protected:
     virtual ~VideoGraphicsPainter() {}
 };
 
-class GlPainter : public VideoGraphicsObject
+class GlPainter : public VideoGraphicsPainter
 {
 protected:
     GlPainter() :
