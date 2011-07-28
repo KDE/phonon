@@ -102,6 +102,13 @@ struct VideoFrame {
     Format format;
 
     /**
+     * Bytestream of data.
+     * Only used for GL paintaing to avoid memcopies. The pointer actually
+     * points to memory held in the backend.
+     */
+    const char *data;
+
+    /**
      * RGB8, YUY2 or Y-plane
      *
      * If format is Format_RGB888 then the data contains each pixel as three

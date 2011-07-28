@@ -148,7 +148,7 @@ public:
                      GL_RGBA,
                      GL_UNSIGNED_BYTE,
                  #warning data needs changing for sane access!!
-                     frame->data0);
+                     frame->data);
         // Scale appropriately so we can change to target geometry without
         // much hassle.
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -329,7 +329,7 @@ public:
                      GL_RGBA,
                      GL_UNSIGNED_BYTE,
                  #warning data needs changing for sane access!!
-                     frame->data0);
+                     frame->data);
         // Scale appropriately so we can change to target geometry without
         // much hassle.
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
