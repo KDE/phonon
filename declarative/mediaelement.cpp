@@ -29,7 +29,8 @@ namespace Declarative {
 MediaElement::MediaElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
     m_state(StoppedState),
-    m_finished(false)
+    m_finished(false),
+    m_metaData(0)
 {
 #warning the whole lazy init stuff is getting a bit fugly
 }
@@ -67,6 +68,10 @@ void MediaElement::componentComplete()
         if (obj)
             obj->init(m_mediaObject);
     }
+}
+
+void MediaElement::init(MediaObject *mediaObject)
+{
 }
 
 QUrl MediaElement::source() const
@@ -132,6 +137,13 @@ void MediaElement::seek(qreal time)
     m_mediaObject->seek(time);
 }
 
+MetaData *MediaElement::metaData()
+{
+    if (!m_metaData)
+        m_metaData = new MetaData(m_mediaObject, this);
+    return m_metaData;
+}
+
 void MediaElement::play()
 {
     m_finished = false;
@@ -185,10 +197,6 @@ void MediaElement::handleStateChange(Phonon::State newState, Phonon::State oldSt
 #warning this is ubergross as there is plenty of other states we could switch to ... when will me statemachine appear :(
     if (m_finished && oldState == PlayingState)
         m_mediaObject->stop();
-}
-
-void MediaElement::init(MediaObject *mediaObject)
-{
 }
 
 } // namespace Declarative
