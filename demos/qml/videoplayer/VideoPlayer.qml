@@ -113,9 +113,24 @@ Rectangle {
             width: player.width
             height: player.height
 
+            ContextMenu {
+                id: videoContext
+                MenuItem { text: "Bling"; enabled: false }
+                MenuItem {
+                    text: "Meta Data"
+                    onSelected: player.state = 'metaDataDisplay'
+                }
+            }
+
             MouseArea {
                 anchors.fill: parent
                 onDoubleClicked: video.fullScreen = !video.fullScreen
+            }
+
+            MouseArea {
+                anchors.fill:  parent
+                acceptedButtons: Qt.RightButton
+                onPressed: videoContext.showPopup(mouseX, mouseY)
             }
         }
     }
@@ -293,4 +308,32 @@ Rectangle {
             }
         }
     }
+
+    Rectangle {
+        id: metaData
+        x: 300
+        y: 140
+        width: 200
+        height: 200
+        color: "#ffffff"
+        visible: false
+
+        Column {
+            anchors.fill: parent
+            spacing: 16
+
+            Text { text: "Artist: " + media.metaData.artist; font.pixelSize: 12 }
+            Text { text: "Title: " + media.metaData.title; font.pixelSize: 12 }
+            Text { text: "Album: " + media.metaData.album; font.pixelSize: 12 }
+        }
+
+        Button {
+            text: "Roger!"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            onClicked: player.state = ''
+        }
+    }
+
+    states: State { name: "metaDataDisplay"; PropertyChanges { target: metaData; visible: true } }
 }
