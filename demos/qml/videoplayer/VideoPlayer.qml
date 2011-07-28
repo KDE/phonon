@@ -4,9 +4,6 @@ import Phonon 1.0
 
 Rectangle {
     id: player
-    width: 800
-    height: 480
-    color: "black"
 
     property bool wasVisibleOnce: false
 
@@ -20,15 +17,11 @@ Rectangle {
         media.stop()
     }
 
-    Timer {
-        id: movementTimer
-        running: true
-        interval: 2000
-        onTriggered:{
-            video.cursorVisible = false
-            controls.showControls = false
-        }
+    width: 800
+    height: 480
+    color: "black"
 
+    Timer {
         function reset() {
             restart()
             video.cursorVisible = true
@@ -41,10 +34,16 @@ Rectangle {
             controls.showControls = true
         }
 
+        id: movementTimer
+        running: true
+        interval: 2000
+        onTriggered:{
+            video.cursorVisible = false
+            controls.showControls = false
+        }
     }
 
-    MouseArea
-    {
+    MouseArea {
         anchors.fill: parent
         hoverEnabled: true
         onMousePositionChanged: movementTimer.reset()
@@ -123,55 +122,26 @@ Rectangle {
 
     Image {
         id: controls
+
+        property bool showControls: true
+
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         source: "controls-background.png"
         opacity: 0.788235294118
 
-        property bool showControls: true
-
-        states: State {
-            name: "hide"; when: controls.showControls == false
-            PropertyChanges {
-                target: controls;
-                opacity: 0
-            }
-        }
-
-        transitions: Transition {
-            from: ""
-            to: "hide"
-            reversible: true
-            SequentialAnimation {
-                PropertyAnimation {
-                    target: controls;
-                    properties: "opacity"
-                    easing.type: Easing.InOutExpo;
-                    duration: 500
-                }
-            }
-        }
-
         Image {
+            anchors { top: parent.top; topMargin: 15; left: parent.left; leftMargin: 15 }
             source: "fullscreen-button.png"
-
-            anchors.top: parent.top
-            anchors.topMargin: 15
-            anchors.left: parent.left
-            anchors.leftMargin: 15
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: {
-                    video.fullScreen = !video.fullScreen
-                }
+                onClicked: video.fullScreen = !video.fullScreen
             }
         }
 
         Row {
-            anchors.top: parent.top
-            anchors.horizontalCenter: controls.horizontalCenter
-            anchors.topMargin: 15
+            anchors { top: parent.top; topMargin: 15; horizontalCenter: controls.horizontalCenter }
             spacing: 30
 
             Image { source: "backward-button.png" }
@@ -205,12 +175,10 @@ Rectangle {
 
         Slider {
             id: volumeSlider
+
             width: 136
             height: 19
-            anchors.top: parent.top
-            anchors.topMargin: 20
-            anchors.right: parent.right
-            anchors.rightMargin: 20
+            anchors { top: parent.top; topMargin: 20; right: parent.right; rightMargin: 20 }
             updateValueWhileDragging: true
             groove: Image { source: "volume-bar.png" }
             handle: Image { source: "volume-slider.png" }
@@ -239,20 +207,17 @@ Rectangle {
                 horizontalMaximumValue: parent.maximumValue
                 property double step: (parent.maximumValue - parent.minimumValue)/100
 
-                onHorizontalWheelMoved: {
-                    audio.volume += ((horizontalDelta/4*step) * 0.01)
-                }
+                onHorizontalWheelMoved: audio.volume += ((horizontalDelta/4*step) * 0.01)
             }
         }
 
         Slider {
             id: progressSlider
+
             enabled: media.seekable
             width: 749
             height: 19
-            anchors.bottom: timeIndicator.top
-            anchors.bottomMargin: 5
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors { bottom: timeIndicator.top; bottomMargin: 5; horizontalCenter: parent.horizontalCenter }
             updateValueWhileDragging: true
             groove: Image { source: "progress-bar.png" }
             handle: Image { source: "volume-slider.png" }
@@ -281,20 +246,18 @@ Rectangle {
                 horizontalMaximumValue: parent.maximumValue
                 property double step: (parent.maximumValue - parent.minimumValue)/100
 
-                onHorizontalWheelMoved: {
-                    media.time += horizontalDelta/4*step
-                }
+                onHorizontalWheelMoved: media.time += horizontalDelta/4*step
             }
         }
 
         Item {
             id: timeIndicator
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
-            anchors.right: progressSlider.right
-            anchors.rightMargin: 5
-            anchors.left: progressSlider.left
-            anchors.leftMargin: 5
+
+            anchors {
+                left: progressSlider.left; leftMargin: 5
+                right: progressSlider.right; rightMargin: 5
+                bottom: parent.bottom; bottomMargin: 20
+            }
 
             Text {
                 anchors.left: parent.left
@@ -308,6 +271,28 @@ Rectangle {
                 text: media.remainingTimeString
                 color: "white"
                 font.bold: true
+            }
+        }
+
+        states: State {
+            name: "hide"; when: controls.showControls == false
+            PropertyChanges {
+                target: controls;
+                opacity: 0
+            }
+        }
+
+        transitions: Transition {
+            from: ""
+            to: "hide"
+            reversible: true
+            SequentialAnimation {
+                PropertyAnimation {
+                    target: controls;
+                    properties: "opacity"
+                    easing.type: Easing.InOutExpo;
+                    duration: 500
+                }
             }
         }
     }
