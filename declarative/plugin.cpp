@@ -41,6 +41,7 @@ public:
         // TODO: version could really be cmake magic?
         qmlRegisterType<Phonon::Declarative::AudioOutputElement>(uri, 1, 0, "AudioOutput");
         qmlRegisterType<Phonon::Declarative::MediaElement>(uri, 1, 0, "Media");
+        qmlRegisterType<Phonon::Declarative::MetaData>();
         qmlRegisterType<Phonon::Declarative::VideoElement>(uri, 1, 0, "Video");
     }
 };
