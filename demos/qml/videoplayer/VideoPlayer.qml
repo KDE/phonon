@@ -20,6 +20,7 @@ Rectangle {
     width: 800
     height: 480
     color: "black"
+    focus: true
 
     Timer {
         function reset() {
@@ -51,7 +52,6 @@ Rectangle {
         onExited: movementTimer.undo()
     }
 
-    focus: true
     Keys.onPressed: {
         if (event.key == Qt.Key_Space)
             media.togglePlay()
@@ -60,7 +60,7 @@ Rectangle {
     onVisibleChanged: {
         if (wasVisibleOnce && !visible)
             video.fullScreen = false
-        if (!wasVisibleOnce && visible )
+        if (!wasVisibleOnce && visible)
             wasVisibleOnce = true
     }
 
@@ -276,10 +276,7 @@ Rectangle {
 
         states: State {
             name: "hide"; when: controls.showControls == false
-            PropertyChanges {
-                target: controls;
-                opacity: 0
-            }
+            PropertyChanges { target: controls; opacity: 0 }
         }
 
         transitions: Transition {
