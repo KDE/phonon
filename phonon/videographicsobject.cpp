@@ -398,8 +398,8 @@ public:
     VideoGraphicsObjectPrivate() :
         geometry(0, 0, 320, 240),
         boundingRect(0, 0, 0, 0),
-        frameSize(0, 0)
-    {}
+        frameSize(0, 0),
+        graphicsPainter(0)
 
     virtual ~VideoGraphicsObjectPrivate()
     {}
@@ -411,6 +411,8 @@ public:
     QRectF geometry;
     QRectF boundingRect;
     QSize frameSize;
+
+    VideoGraphicsPainter *graphicsPainter;
 
 protected:
     bool aboutToDeleteBackendObject() {}
@@ -478,10 +480,14 @@ void VideoGraphicsObject::paint(QPainter *painter,
         painter->fillRect(d->boundingRect, Qt::black);
     } else if (!frame.qImage().isNull()){
         QByteArray paintEnv = qgetenv("PHONON_PAINT");
-        if (QGLContext::currentContext() && paintEnv == QByteArray("glsl"))
-            GlslPainter().paint(painter, d->boundingRect, &frame);
-        else if (QGLContext::currentContext() && paintEnv == QByteArray("glarb")) {
-            GlArbPainter().paint(painter, d->boundingRect, &frame);
+        if (QGLContext::currentContext() && paintEnv == QByteArray("glsl")) {
+            if (!d->graphicsPainter)
+                d->graphicsPainter = new GlslPainter;
+            d->graphicsPainter->paint(painter, d->boundingRect, &frame);
+        } else if (QGLContext::currentContext() && paintEnv == QByteArray("glarb")) {
+            if (!d->graphicsPainter)
+                d->graphicsPainter = new GlArbPainter;
+            d->graphicsPainter->paint(painter, d->boundingRect, &frame);
         } else if (QGLContext::currentContext() && paintEnv == QByteArray("gl")) {
             d->paintGl(painter, d->boundingRect, &frame);
         } else {
