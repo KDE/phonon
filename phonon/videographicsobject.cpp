@@ -35,6 +35,7 @@ namespace Phonon {
 
 class VideoGraphicsPainter
 {
+public:
     virtual void init() = 0;
     virtual void paint(QPainter *painter, QRectF target, VideoFrame *frame) = 0;
 
