@@ -400,6 +400,7 @@ public:
         boundingRect(0, 0, 0, 0),
         frameSize(0, 0),
         graphicsPainter(0)
+    {}
 
     virtual ~VideoGraphicsObjectPrivate()
     {}
