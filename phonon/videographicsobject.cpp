@@ -53,7 +53,13 @@ protected:
     GlPainter() :
         m_context(0)
     {}
-    virtual ~GlPainter() {}
+    virtual ~GlPainter()
+    {
+        if (m_context) {
+            m_context->makeCurrent();
+            glDeleteTextures(m_textureCount, m_textureIds);
+        }
+    }
 
     QGLContext *m_context;
     int m_textureCount;
@@ -247,11 +253,8 @@ public:
     GlArbPainter() {}
     ~GlArbPainter()
     {
-        QGLContext *context = const_cast<QGLContext *>(QGLContext::currentContext());
-        if (context) {
-            context->makeCurrent();
-
-            glDeleteTextures(m_textureCount, m_textureIds);
+        if (m_context) {
+            m_context->makeCurrent();
             glDeleteProgramsARB(1, &programId);
         }
     }
@@ -404,7 +407,10 @@ public:
     {}
 
     virtual ~VideoGraphicsObjectPrivate()
-    {}
+    {
+        if (graphicsPainter)
+            delete graphicsPainter;
+    }
 
     virtual QObject *qObject() { return q_func(); }
 
