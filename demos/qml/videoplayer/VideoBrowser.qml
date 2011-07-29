@@ -17,6 +17,7 @@ Rectangle {
 
         source: "titlebar.sci";
         width: parent.width;
+        anchors.top: parent.top
         height: 52
 
         Item {
@@ -103,24 +104,44 @@ Rectangle {
 
                 Media {
                     id: media
-                    source: filePath
+                    source: (shouldPreview()) ? filePath : ""
+
+                    function shouldPreview() {
+                        if (foldermodel.isFolder(index))
+                            return false;
+                        var path = filePath + '' // Apparently filePath is no String.
+                        var suffix = path.substring(path.lastIndexOf(".")+1)
+                        if (suffix === "avi" ||
+                                suffix === "mkv" ||
+                                suffix === "mp4" ||
+                                suffix === "webm" ||
+                                suffix === "ogv" ||
+                                suffix === "wmv" ||
+                                suffix === "mov")
+                            return true;
+                        return false;
+                    }
 
                     onStateChanged: {
+                        if (!shouldPreview())
+                            return;
 //                        if (paused)
 //                            play()
                         if (stopped)
                             play()
                     }
 
-                    Video {
-                        width: 48; height: 48
-                    }
-
                     onVisibleChanged: {
+                        if (!shouldPreview())
+                            return;
                         if (!visible)
                             pause()
                         else
                             play()
+                    }
+
+                    Video {
+                        width: 48; height: 48
                     }
                 }
 
@@ -147,6 +168,7 @@ Rectangle {
         anchors.top: titleBar.bottom
         anchors.bottom: parent.bottom
         width: parent.width
+        cacheBuffer: 520
 
         model: foldermodel
         delegate: filedelegate
