@@ -148,9 +148,9 @@ public:
             glEnable(GL_SCISSOR_TEST);
 
         //////////////////////////////////////////////////////////////
-    #warning factor into own function
+#warning factor into own function
 
-    #warning multitexture support for yuv
+#warning multitexture support for yuv
         glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
         glTexImage2D(GL_TEXTURE_2D,
                      0,
@@ -159,7 +159,7 @@ public:
                      0,
                      GL_RGBA,
                      GL_UNSIGNED_BYTE,
-                 #warning data needs changing for sane access!!
+             #warning data needs changing for sane access!!
                      frame->data);
         // Scale appropriately so we can change to target geometry without
         // much hassle.
@@ -169,7 +169,7 @@ public:
         //////////////////////////////////////////////////////////////
 
         // As seen on the telly
-    #warning DUPLICATED CODE
+#warning DUPLICATED CODE
 
         const float textureCoordinates[] = {
             0, 1, // bottom left
@@ -228,7 +228,7 @@ public:
 
         m_program->setUniformValue("positionMatrix", positionMatrix);
 
-    #warning no idea how to do yuv with glsl :S
+#warning no idea how to do yuv with glsl :S
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
         m_program->setUniformValue("texRgb", 0);
@@ -274,7 +274,7 @@ public:
         glGenProgramsARB = (_glGenProgramsARB) m_context->getProcAddress(
                     QLatin1String("glGenProgramsARB"));
 
-    #warning should be moved to macro or something
+#warning should be moved to macro or something
         const char *program =
                 "!!ARBfp1.0\n"
                 "TEMP rgb;\n"
@@ -285,7 +285,7 @@ public:
                 "MOV rgb.w,                    { 0.0, 0.0, 0.0, 1.0 }.w;\n"
                 "END";
 
-    #warning > for yuv, needs fixing
+#warning > for yuv, needs fixing
         m_textureCount = 1;
 
         glGenProgramsARB(1, &programId);
@@ -324,9 +324,9 @@ public:
             glEnable(GL_SCISSOR_TEST);
 
         //////////////////////////////////////////////////////////////
-    #warning factor into own function
+#warning factor into own function
 
-    #warning multitexture support for yuv
+#warning multitexture support for yuv
         glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
         glTexImage2D(GL_TEXTURE_2D,
                      0,
@@ -335,7 +335,7 @@ public:
                      0,
                      GL_RGBA,
                      GL_UNSIGNED_BYTE,
-                 #warning data needs changing for sane access!!
+             #warning data needs changing for sane access!!
                      frame->data);
         // Scale appropriately so we can change to target geometry without
         // much hassle.
@@ -364,7 +364,7 @@ public:
         glEnable(GL_FRAGMENT_PROGRAM_ARB);
         glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, programId);
 
-    #warning for YUV we'll need to add the other 2 textures accordingly
+#warning for YUV we'll need to add the other 2 textures accordingly
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
 
