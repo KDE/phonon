@@ -105,6 +105,7 @@ Rectangle {
                 Media {
                     id: media
                     source: (shouldPreview()) ? filePath : ""
+                    visible: shouldPreview()
 
                     function shouldPreview() {
                         if (foldermodel.isFolder(index))
