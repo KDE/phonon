@@ -142,11 +142,13 @@ struct VideoFrame {
     {
         switch(format) {
         case Format_RGB32:
-            return QImage(reinterpret_cast<const uchar *>(data0.constData()),
-                          width, height, QImage::Format_RGB32);
-        case Format_RGB888:
-            return QImage(reinterpret_cast<const uchar *>(data0.constData()),
-                          width, height, QImage::Format_RGB888);
+            if (data0.isNull()) {
+                return QImage(reinterpret_cast<const uchar *>(data),
+                              width, height, QImage::Format_RGB32);
+            } else {
+                return QImage(reinterpret_cast<const uchar *>(data0.constData()),
+                              width, height, QImage::Format_RGB32);
+            }
         default:
             return QImage();
         }
