@@ -92,14 +92,7 @@ public:
 
     void init()
     {
-        if (m_context) {
-    #warning factor into own function
-            m_context = const_cast<QGLContext *>(QGLContext::currentContext());
-            m_context->makeCurrent();
-            return;
-        }
-
-        m_context = const_cast<QGLContext *>(QGLContext::currentContext());
+        Q_ASSERT(m_context);
         m_context->makeCurrent();
 
         if (!m_program)
@@ -269,14 +262,7 @@ public:
 
     void init()
     {
-        if (m_context) {
-    #warning factor into own function
-            m_context = const_cast<QGLContext *>(QGLContext::currentContext());
-            m_context->makeCurrent();
-            return;
-        }
-
-        m_context = const_cast<QGLContext *>(QGLContext::currentContext());
+        Q_ASSERT(m_context);
         m_context->makeCurrent();
 
         glProgramStringARB = (_glProgramStringARB) m_context->getProcAddress(
@@ -412,6 +398,8 @@ private:
     _glGenProgramsARB glGenProgramsARB;
 };
 
+// --------------------------------- OBJECT --------------------------------- //
+
 class VideoGraphicsObjectPrivate : public MediaNodePrivate
 {
     Q_DECLARE_PUBLIC(VideoGraphicsObject)
@@ -428,6 +416,7 @@ public:
 
     virtual QObject *qObject() { return q_func(); }
 
+    VideoGraphicsPainter *createPainter();
     void paintGl(QPainter *painter, QRectF rect, VideoFrame *frame);
 
     QRectF geometry;
@@ -474,6 +463,36 @@ QRectF VideoGraphicsObject::boundingRect() const
     return d->boundingRect;
 }
 
+VideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter()
+{
+    VideoGraphicsPainter *painter = 0;
+    if(QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext())) {
+        glContext->makeCurrent();
+
+        GlPainter *glPainter = 0;
+        const QByteArray glExtensions(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)));
+        if (QGLShaderProgram::hasOpenGLShaderPrograms(glContext)
+                && glExtensions.contains("ARB_shader_objects")) {
+            // Use GLSL.
+            glPainter = new GlslPainter;
+        } else if (glExtensions.contains("ARB_fragment_program")) {
+            // Use GLARB painter.
+            glPainter = new GlArbPainter;
+        }
+#warning a qpainter glpaint would be good.
+
+        glPainter->setContext(glContext);
+        painter = glPainter;
+    }
+
+    if (!painter)
+        // If all fails, just use QPainter's builtin functions.
+        painter = new QPainterPainter;
+
+    painter->init();
+    return painter;
+}
+
 void VideoGraphicsObject::paint(QPainter *painter,
                                 const QStyleOptionGraphicsItem *option,
                                 QWidget *widget)
@@ -500,21 +519,10 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
     if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
         painter->fillRect(d->boundingRect, Qt::black);
-    } else if (!frame.qImage().isNull()){
-        QByteArray paintEnv = qgetenv("PHONON_PAINT");
-        if (QGLContext::currentContext() && paintEnv == QByteArray("glsl")) {
-            if (!d->graphicsPainter)
-                d->graphicsPainter = new GlslPainter;
-            d->graphicsPainter->paint(painter, d->boundingRect, &frame);
-        } else if (QGLContext::currentContext() && paintEnv == QByteArray("glarb")) {
-            if (!d->graphicsPainter)
-                d->graphicsPainter = new GlArbPainter;
-            d->graphicsPainter->paint(painter, d->boundingRect, &frame);
-        } else if (QGLContext::currentContext() && paintEnv == QByteArray("gl")) {
-            d->paintGl(painter, d->boundingRect, &frame);
-        } else {
-            painter->drawImage(d->boundingRect, frame.qImage());
-        }
+    } else {
+        if (!d->graphicsPainter)
+            d->graphicsPainter = d->createPainter();
+        d->graphicsPainter->paint(painter, d->boundingRect, &frame);
     }
 
     INTERFACE_CALL(unlock());
