@@ -46,6 +46,9 @@ protected:
 
 class GlPainter : public VideoGraphicsPainter
 {
+public:
+    void setContext(QGLContext *context) { m_context = context; }
+
 protected:
     GlPainter() :
         m_context(0)
