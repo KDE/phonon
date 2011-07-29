@@ -10,6 +10,128 @@ Rectangle {
 
     SystemPalette { id: palette }
 
+
+    FolderListModel {
+        id: foldermodel
+        folder: "/home/me/Videos"
+    }
+
+    Component {
+        id: filedelegate
+
+        Item {
+            id: fileDelegateItem
+            height: 52
+            width: browser.width
+
+            function exec() {
+                if (foldermodel.isFolder(index))
+                    foldermodel.folder = filePath;
+                else
+                    master.play(filePath);
+            }
+
+            Rectangle {
+                id: highlight; visible: false
+                anchors.fill: parent
+                color: palette.highlight
+                gradient: Gradient {
+                    GradientStop { id: t1; position: 0.0; color: palette.highlight }
+                    GradientStop { id: t2; position: 1.0; color: Qt.lighter(palette.highlight) }
+                }
+            }
+
+            Row {
+                spacing: 5
+
+                Image {
+                    width: 48; height: 48;
+                    source: (foldermodel.isFolder(index)) ? "folder-grey.png" : ""
+                }
+
+                Media {
+                    id: media
+                    source: (shouldPreview()) ? filePath : ""
+                    visible: shouldPreview()
+
+                    function shouldPreview() {
+                        if (foldermodel.isFolder(index))
+                            return false;
+                        var path = filePath + '' // Apparently filePath is no String.
+                        var suffix = path.substring(path.lastIndexOf(".")+1)
+                        if (suffix === "avi" ||
+                                suffix === "mkv" ||
+                                suffix === "mp4" ||
+                                suffix === "webm" ||
+                                suffix === "ogv" ||
+                                suffix === "wmv" ||
+                                suffix === "mov")
+                            return true;
+                        return false;
+                    }
+
+                    onStateChanged: {
+                        if (!shouldPreview())
+                            return;
+//                        if (paused)
+//                            play()
+                        if (stopped)
+                            play()
+                    }
+
+                    onVisibleChanged: {
+                        if (!shouldPreview())
+                            return;
+                        if (!visible)
+                            pause()
+                        else
+                            play()
+                    }
+
+                    Video {
+                        width: 48; height: 48
+                    }
+                }
+
+                Text {
+                    id: nameText
+
+                    text: fileName
+                    font.pixelSize: 32
+                    color: palette.windowText
+                    elide: Text.ElideLeft; horizontalAlignment: Text.AlignRight; verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                onClicked: exec()
+            }
+            states: [
+                State {
+                    name: "pressed"
+                    when: mouseArea.pressed
+                    PropertyChanges { target: highlight; visible: true }
+                    PropertyChanges { target: nameText; color: palette.highlightedText }
+                }
+            ]
+        }
+    }
+
+    ListView {
+        id: view
+
+        anchors.top: titleBar.bottom
+        anchors.bottom: parent.bottom
+        width: parent.width
+        cacheBuffer: 520
+
+        model: foldermodel
+        delegate: filedelegate
+    }
+
+
     BorderImage {
         id: titleBar
 
@@ -74,104 +196,4 @@ Rectangle {
         }
     }
 
-    FolderListModel {
-        id: foldermodel
-        folder: "/home/me/Videos"
-    }
-
-    Component {
-        id: filedelegate
-
-        Item {
-            id: fileDelegateItem
-            height: 52
-            width: browser.width
-
-            function exec() {
-                if (foldermodel.isFolder(index))
-                    foldermodel.folder = filePath;
-                else
-                    master.play(filePath);
-            }
-
-            Row {
-                spacing: 5
-
-                Image {
-                    width: 48; height: 48;
-                    source: (foldermodel.isFolder(index)) ? "folder-grey.png" : ""
-                }
-
-                Media {
-                    id: media
-                    source: (shouldPreview()) ? filePath : ""
-                    visible: shouldPreview()
-
-                    function shouldPreview() {
-                        if (foldermodel.isFolder(index))
-                            return false;
-                        var path = filePath + '' // Apparently filePath is no String.
-                        var suffix = path.substring(path.lastIndexOf(".")+1)
-                        if (suffix === "avi" ||
-                                suffix === "mkv" ||
-                                suffix === "mp4" ||
-                                suffix === "webm" ||
-                                suffix === "ogv" ||
-                                suffix === "wmv" ||
-                                suffix === "mov")
-                            return true;
-                        return false;
-                    }
-
-                    onStateChanged: {
-                        if (!shouldPreview())
-                            return;
-//                        if (paused)
-//                            play()
-                        if (stopped)
-                            play()
-                    }
-
-                    onVisibleChanged: {
-                        if (!shouldPreview())
-                            return;
-                        if (!visible)
-                            pause()
-                        else
-                            play()
-                    }
-
-                    Video {
-                        width: 48; height: 48
-                    }
-                }
-
-                Text {
-                    id: nameText
-
-                    text: fileName
-                    font.pixelSize: 32
-                    color: palette.windowText
-                }
-            }
-
-            MouseArea {
-                id: mouseRegion
-                anchors.fill: parent
-                onClicked: exec()
-            }
-        }
-    }
-
-    ListView {
-        id: view
-
-        anchors.top: titleBar.bottom
-        anchors.bottom: parent.bottom
-        width: parent.width
-        cacheBuffer: 520
-
-        model: foldermodel
-        delegate: filedelegate
-    }
 }
