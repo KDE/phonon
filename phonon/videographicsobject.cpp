@@ -131,10 +131,6 @@ public:
 
     void paint(QPainter *painter, QRectF target, VideoFrame *frame)
     {
-        init();
-
-        //////////////////////////////////////////////////////////////
-
         // Need to reenable those after native painting has begun, otherwise we might
         // not be able to paint anything.
         bool stencilTestEnabled = glIsEnabled(GL_STENCIL_TEST);
@@ -307,10 +303,6 @@ public:
 
     void paint(QPainter *painter, QRectF target, VideoFrame *frame)
     {
-        init();
-
-        //////////////////////////////////////////////////////////////
-
         // Need to reenable those after native painting has begun, otherwise we might
         // not be able to paint anything.
         bool stencilTestEnabled = glIsEnabled(GL_STENCIL_TEST);
