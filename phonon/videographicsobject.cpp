@@ -58,6 +58,7 @@ protected:
 
 };
 
+// --------------------------------- Painter --------------------------------- //
 class QPainterPainter : public VideoGraphicsPainter
 {
 public:
@@ -70,6 +71,8 @@ public:
         painter->drawImage(target, frame->qImage());
     }
 };
+
+// ---------------------------------- GLSL ---------------------------------- //
 
 class GlslPainter : public GlPainter
 {
@@ -243,6 +246,8 @@ public:
 private:
     QGLShaderProgram *m_program;
 };
+
+// ---------------------------------- ARB ----------------------------------- //
 
 class GlArbPainter : public GlPainter
 {
