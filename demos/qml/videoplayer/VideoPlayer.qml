@@ -198,7 +198,7 @@ Rectangle {
             groove: Image { source: "volume-bar.png" }
             handle: Image { source: "volume-slider.png" }
 
-            value: audio.volume
+            value: Math.round(100 * audio.volume)
             minimumValue: 0
             maximumValue: 100
 
@@ -218,11 +218,11 @@ Rectangle {
 
             WheelArea {
                 anchors.fill: parent
-                horizontalMinimumValue: parent.minimumValue
-                horizontalMaximumValue: parent.maximumValue
+                verticalMinimumValue: parent.minimumValue
+                verticalMaximumValue: parent.maximumValue
                 property double step: (parent.maximumValue - parent.minimumValue)/100
 
-                onHorizontalWheelMoved: audio.volume += ((horizontalDelta/4*step) * 0.01)
+                onVerticalWheelMoved: audio.volume += ((verticalDelta/4*step) * 0.01)
             }
         }
 
@@ -257,11 +257,11 @@ Rectangle {
 
             WheelArea {
                 anchors.fill: parent
-                horizontalMinimumValue: parent.minimumValue
-                horizontalMaximumValue: parent.maximumValue
+                verticalMinimumValue: parent.minimumValue
+                verticalMaximumValue: parent.maximumValue
                 property double step: (parent.maximumValue - parent.minimumValue)/100
 
-                onHorizontalWheelMoved: media.time += horizontalDelta/4*step
+                onVerticalWheelMoved: media.time += (verticalDelta/4*step)
             }
         }
 
