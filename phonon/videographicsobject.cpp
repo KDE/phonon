@@ -58,6 +58,19 @@ protected:
 
 };
 
+class QPainterPainter : public VideoGraphicsPainter
+{
+public:
+    QPainterPainter() {}
+    ~QPainterPainter() {}
+
+    void init() {}
+    void paint(QPainter *painter, QRectF target, VideoFrame *frame)
+    {
+        painter->drawImage(target, frame->qImage());
+    }
+};
+
 class GlslPainter : public GlPainter
 {
 public:
