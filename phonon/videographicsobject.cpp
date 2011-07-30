@@ -38,10 +38,10 @@ class VideoGraphicsPainter
 public:
     virtual void init() = 0;
     virtual void paint(QPainter *painter, QRectF target, VideoFrame *frame) = 0;
+    virtual ~VideoGraphicsPainter() {}
 
 protected:
     VideoGraphicsPainter() {}
-    virtual ~VideoGraphicsPainter() {}
 };
 
 class GlPainter : public VideoGraphicsPainter
@@ -49,10 +49,6 @@ class GlPainter : public VideoGraphicsPainter
 public:
     void setContext(QGLContext *context) { m_context = context; }
 
-protected:
-    GlPainter() :
-        m_context(0)
-    {}
     virtual ~GlPainter()
     {
         if (m_context) {
@@ -60,6 +56,11 @@ protected:
             glDeleteTextures(m_textureCount, m_textureIds);
         }
     }
+
+protected:
+    GlPainter() :
+        m_context(0)
+    {}
 
     QGLContext *m_context;
     int m_textureCount;
@@ -72,7 +73,7 @@ class QPainterPainter : public VideoGraphicsPainter
 {
 public:
     QPainterPainter() {}
-    ~QPainterPainter() {}
+    virtual ~QPainterPainter() {}
 
     void init() {}
     void paint(QPainter *painter, QRectF target, VideoFrame *frame)
@@ -90,7 +91,7 @@ public:
         m_program(0)
     {}
 
-    ~GlslPainter()
+    virtual ~GlslPainter()
     {
         if (m_program)
             m_program->deleteLater();
@@ -251,7 +252,7 @@ class GlArbPainter : public GlPainter
 {
 public:
     GlArbPainter() {}
-    ~GlArbPainter()
+    virtual ~GlArbPainter()
     {
         if (m_context) {
             m_context->makeCurrent();
