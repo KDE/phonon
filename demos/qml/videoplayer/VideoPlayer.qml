@@ -112,6 +112,7 @@ Rectangle {
             id: video
             width: player.width
             height: player.height
+            opacity: 0
 
             ContextMenu {
                 id: videoContext
@@ -131,6 +132,29 @@ Rectangle {
                 anchors.fill:  parent
                 acceptedButtons: Qt.RightButton
                 onPressed: videoContext.showPopup(mouseX, mouseY)
+            }
+
+            states: [
+                State {
+                    name: "playing"
+                    // Must not change state on pause.
+                    when: media.playing || media.paused
+                    PropertyChanges { target: video; opacity: 1 }
+                }
+            ]
+
+            transitions: Transition {
+                from: ""
+                to: "playing"
+                reversible: true
+                SequentialAnimation {
+                    PropertyAnimation {
+                        target: video;
+                        properties: "opacity"
+                        easing.type: Easing.InOutExpo;
+                        duration: 2000
+                    }
+                }
             }
         }
     }
