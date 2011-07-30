@@ -37,7 +37,8 @@ class VideoGraphicsPainter
 {
 public:
     virtual void init() = 0;
-    virtual void paint(QPainter *painter, QRectF target, VideoFrame *frame) = 0;
+    virtual void paint(QPainter *painter, QRectF target, const VideoFrame *frame) = 0;
+
     virtual ~VideoGraphicsPainter() {}
 
 protected:
@@ -76,7 +77,7 @@ public:
     virtual ~QPainterPainter() {}
 
     void init() {}
-    void paint(QPainter *painter, QRectF target, VideoFrame *frame)
+    void paint(QPainter *painter, QRectF target, const VideoFrame *frame)
     {
         painter->drawImage(target, frame->qImage());
     }
@@ -136,7 +137,7 @@ public:
         glGenTextures(m_textureCount, m_textureIds);
     }
 
-    void paint(QPainter *painter, QRectF target, VideoFrame *frame)
+    void paint(QPainter *painter, QRectF target, const VideoFrame *frame)
     {
         // Need to reenable those after native painting has begun, otherwise we might
         // not be able to paint anything.
@@ -305,7 +306,7 @@ public:
         glGenTextures(m_textureCount, m_textureIds);
     }
 
-    void paint(QPainter *painter, QRectF target, VideoFrame *frame)
+    void paint(QPainter *painter, QRectF target, const VideoFrame *frame)
     {
         // Need to reenable those after native painting has begun, otherwise we might
         // not be able to paint anything.
@@ -503,25 +504,25 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
     INTERFACE_CALL(lock());
 
-    VideoFrame frame = *INTERFACE_CALL(frame());
+    const VideoFrame *frame = INTERFACE_CALL(frame());
 
     // NOTE: it would be most useful if we had a signal to notify about dimension changes...
     // NOTE: it would be even better if a frame contained a QRectF
-    if (frame.format != VideoFrame::Format_Invalid &&
-            !frame.qImage().isNull() &&
+    if (frame->format != VideoFrame::Format_Invalid &&
+            !frame->qImage().isNull() &&
             !gotSize) {
         // TODO: do scaling ourselfs?
         gotSize = true;
-        d->frameSize = QSize(frame.width, frame.height);
+        d->frameSize = QSize(frame->width, frame->height);
         setTargetRect();
     }
 
-    if (frame.format == VideoFrame::Format_Invalid && !paintedOnce) {
+    if (frame->format == VideoFrame::Format_Invalid && !paintedOnce) {
         painter->fillRect(d->boundingRect, Qt::black);
     } else {
         if (!d->graphicsPainter)
             d->graphicsPainter = d->createPainter();
-        d->graphicsPainter->paint(painter, d->boundingRect, &frame);
+        d->graphicsPainter->paint(painter, d->boundingRect, frame);
     }
 
     INTERFACE_CALL(unlock());
