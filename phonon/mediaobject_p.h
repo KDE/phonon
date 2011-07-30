@@ -115,7 +115,14 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         {
 #ifdef HAVE_QZEITGEIST
             QtZeitgeist::init();
-            log = new QtZeitgeist::Log(qObject());
+            log = new QtZeitgeist::Log();
+#endif
+        }
+
+        ~MediaObjectPrivate()
+        {
+#ifdef HAVE_QZEITGEIST
+            delete log;
 #endif
         }
 
