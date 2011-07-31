@@ -25,6 +25,7 @@
 #include "audiooutputelement.h"
 #include "mediaelement.h"
 #include "videoelement.h"
+#include "volumefadereffectelement.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -43,6 +44,7 @@ public:
         qmlRegisterType<Phonon::Declarative::MediaElement>(uri, 1, 0, "Media");
         qmlRegisterType<Phonon::Declarative::MetaData>();
         qmlRegisterType<Phonon::Declarative::VideoElement>(uri, 1, 0, "Video");
+        qmlRegisterType<Phonon::Declarative::VolumeFaderEffectElement>(uri, 1, 0, "VolumeFader");
     }
 };
 
