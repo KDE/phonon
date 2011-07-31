@@ -27,37 +27,13 @@
 
 #include "abstractvideographicspainter.h"
 #include "factory_p.h"
+#include "glpainter.h"
 #include "medianode_p.h"
 #include "phonondefs_p.h"
 
 #define PHONON_INTERFACENAME VideoGraphicsObjectInterface
 
 namespace Phonon {
-
-class GlPainter : public AbstractVideoGraphicsPainter
-{
-public:
-    void setContext(QGLContext *context) { m_context = context; }
-
-    virtual ~GlPainter()
-    {
-        if (m_context) {
-            m_context->makeCurrent();
-            m_context = 0;
-            glDeleteTextures(m_textureCount, m_textureIds);
-        }
-    }
-
-protected:
-    GlPainter() :
-        m_context(0)
-    {}
-
-    QGLContext *m_context;
-    int m_textureCount;
-    GLuint m_textureIds[3];
-
-};
 
 // --------------------------------- Painter --------------------------------- //
 class QPainterPainter : public AbstractVideoGraphicsPainter

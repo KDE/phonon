@@ -57,8 +57,9 @@ set(phonon_LIB_SRCS
    swiftslider.cpp
    volumefadereffect.cpp
    volumeslider.cpp
-   graphicsview/videographicsobject.cpp
    graphicsview/abstractvideographicspainter.h
+   graphicsview/glpainter.h
+   graphicsview/videographicsobject.cpp
    videoplayer.cpp
    videowidget.cpp
    )
