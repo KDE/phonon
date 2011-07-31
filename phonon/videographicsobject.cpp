@@ -308,6 +308,9 @@ public:
 
     void paint(QPainter *painter, QRectF target, const VideoFrame *frame)
     {
+        Q_ASSERT(m_context);
+        m_context->makeCurrent();
+
         // Need to reenable those after native painting has begun, otherwise we might
         // not be able to paint anything.
         bool stencilTestEnabled = glIsEnabled(GL_STENCIL_TEST);
