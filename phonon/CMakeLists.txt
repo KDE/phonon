@@ -59,6 +59,7 @@ set(phonon_LIB_SRCS
    volumeslider.cpp
    graphicsview/abstractvideographicspainter.h
    graphicsview/glpainter.h
+   graphicsview/glslpainter.cpp
    graphicsview/videoframe.h
    graphicsview/videographicsobject.cpp
    videoplayer.cpp

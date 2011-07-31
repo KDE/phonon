@@ -19,25 +19,28 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_ABSTRACTVIDEOGRAPHICSPAINTER_H
-#define PHONON_ABSTRACTVIDEOGRAPHICSPAINTER_H
+#ifndef PHONON_GLSLPAINTER_H
+#define PHONON_GLSLPAINTER_H
+
+#include "glpainter.h"
+
+class QGLShaderProgram;
 
 namespace Phonon {
 
-class VideoFrame;
-
-class AbstractVideoGraphicsPainter
+class GlslPainter : public GlPainter
 {
 public:
-    virtual void init() = 0;
-    virtual void paint(QPainter *painter, QRectF target, const VideoFrame *frame) = 0;
+    GlslPainter();
+    virtual ~GlslPainter();
 
-    virtual ~AbstractVideoGraphicsPainter() {}
+    void init();
+    void paint(QPainter *painter, QRectF target, const VideoFrame *frame);
 
-protected:
-    AbstractVideoGraphicsPainter() {}
+private:
+    QGLShaderProgram *m_program;
 };
 
 } // namespace Phonon
 
-#endif // PHONON_ABSTRACTVIDEOGRAPHICSPAINTER_H
+#endif // PHONON_GLSLPAINTER_H
