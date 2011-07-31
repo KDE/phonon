@@ -30,6 +30,7 @@
 #include "glpainter.h"
 #include "medianode_p.h"
 #include "phonondefs_p.h"
+#include "videoframe.h"
 
 #define PHONON_INTERFACENAME VideoGraphicsObjectInterface
 

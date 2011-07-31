@@ -29,47 +29,7 @@
 
 namespace Phonon {
 
-struct VideoFrame {
-    enum Format {
-        // TODO: really reference qimg formats?
-        Format_Invalid = QImage::Format_Invalid,
-        Format_RGB888 = QImage::Format_RGB888,
-        Format_RGB32 = QImage::Format_RGB32,
-        Format_YCbCr420 = 0x10000,
-        Format_YV12 = Format_YCbCr420,
-        Format_YCbCr422 = 0x10001,
-        Format_YUY2 = Format_YCbCr422
-    };
-
-    int width;
-    int height;
-    double aspectRatio;
-
-    inline int aspectCorrectedWidth() const { return qRound(aspectRatio * height); }
-    inline int aspectCorrectedHeight() const { return qRound(width / aspectRatio); }
-
-    Format format;
-
-    QByteArray planes[3];
-    int planeCount;
-    const char *data;
-
-    inline QImage qImage() const
-    {
-        // QImage can only handled packed formats.
-        if (planeCount != 1)
-            return QImage();
-
-        switch(format) {
-        case Format_RGB32:
-            return QImage(reinterpret_cast<const uchar *>(planes[0].constData()),
-                          width, height, QImage::Format_RGB32);
-        default:
-            return QImage();
-        }
-    }
-};
-
+class VideoFrame;
 class VideoGraphicsObjectPrivate;
 
 class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject, public MediaNode
@@ -115,6 +75,5 @@ public:
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::VideoGraphicsObjectInterface, "VideoGraphicsObjectInterface.phonon.kde.org")
-Q_DECLARE_METATYPE(Phonon::VideoFrame)
 
 #endif // PHONON_VIDEOGRAPHICSITEM_H
