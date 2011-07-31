@@ -22,10 +22,9 @@
 #ifndef PHONON_VIDEOGRAPHICSITEM_H
 #define PHONON_VIDEOGRAPHICSITEM_H
 
-#include <QtCore/QMutex>
-#include <QtGui/QGraphicsItem>
+#include <QtGui/QGraphicsObject>
 
-#include "mediaobject.h"
+#include "medianode.h"
 
 namespace Phonon {
 
@@ -40,15 +39,10 @@ public:
     explicit VideoGraphicsObject(QGraphicsItem *parent = 0);
     virtual ~VideoGraphicsObject();
 
-#warning omg
     virtual QRectF boundingRect() const;
-
-    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
-
     void setGeometry(const QRectF &newGeometry);
 
-#warning what todo with this?! private?
-    void setTargetRect();
+    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
 private slots:
     void frameReady();

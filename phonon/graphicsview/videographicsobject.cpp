@@ -75,6 +75,8 @@ public:
     AbstractVideoGraphicsPainter *createPainter();
     void paintGl(QPainter *painter, QRectF rect, VideoFrame *frame);
 
+    void setTargetRect();
+
     QRectF geometry;
     QRectF boundingRect;
     QSize frameSize;
@@ -173,7 +175,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
         // TODO: do scaling ourselfs?
         gotSize = true;
         d->frameSize = QSize(frame->width, frame->height);
-        setTargetRect();
+        d->setTargetRect();
     }
 
     if (frame->format == VideoFrame::Format_Invalid && !paintedOnce) {
@@ -201,21 +203,20 @@ void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
 {
     K_D(VideoGraphicsObject);
     d->geometry = newGeometry;
-    setTargetRect();
+    d->setTargetRect();
 }
 
-void VideoGraphicsObject::setTargetRect()
+void VideoGraphicsObjectPrivate::setTargetRect()
 {
-    K_D(VideoGraphicsObject);
-
-    emit prepareGeometryChange();
+    Q_Q(VideoGraphicsObject);
+    emit q->prepareGeometryChange();
 
     // keep aspect
-    QSizeF frameSize = d->frameSize;
-    frameSize.scale(d->geometry.size(), Qt::KeepAspectRatio);
+    QSizeF frameSize = frameSize;
+    frameSize.scale(geometry.size(), Qt::KeepAspectRatio);
 
-    d->boundingRect = QRectF(0, 0, frameSize.width(), frameSize.height());
-    d->boundingRect.moveCenter(d->geometry.center());
+    boundingRect = QRectF(0, 0, frameSize.width(), frameSize.height());
+    boundingRect.moveCenter(geometry.center());
 }
 
 void VideoGraphicsObject::frameReady()
