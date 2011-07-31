@@ -470,12 +470,15 @@ VideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter()
         glContext->makeCurrent();
 
         GlPainter *glPainter = 0;
+        const QByteArray paintEnv(qgetenv("PHONON_PAINT")); // Used to override
         const QByteArray glExtensions(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)));
         if (QGLShaderProgram::hasOpenGLShaderPrograms(glContext)
-                && glExtensions.contains("ARB_shader_objects")) {
+                && glExtensions.contains("ARB_shader_objects")
+                && (paintEnv == QByteArray("glsl") || paintEnv == QByteArray(""))) {
             // Use GLSL.
             glPainter = new GlslPainter;
-        } else if (glExtensions.contains("ARB_fragment_program")) {
+        } else if (glExtensions.contains("ARB_fragment_program")
+                   && (paintEnv == QByteArray("arb") || paintEnv == QByteArray(""))) {
             // Use GLARB painter.
             glPainter = new GlArbPainter;
         }
