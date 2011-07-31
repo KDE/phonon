@@ -252,7 +252,7 @@ private:
 class GlArbPainter : public GlPainter
 {
 public:
-    GlArbPainter() {}
+    GlArbPainter() : m_useMultitexture(false), m_maxTextureUnits(0) {}
     virtual ~GlArbPainter()
     {
         if (m_context) {
@@ -274,6 +274,13 @@ public:
                     QLatin1String("glDeleteProgramsARB"));
         glGenProgramsARB = (_glGenProgramsARB) m_context->getProcAddress(
                     QLatin1String("glGenProgramsARB"));
+
+        glActiveTextureARB = (_glActiveTextureARB) m_context->getProcAddress(
+                    QLatin1String("glActiveTextureARB"));
+        glMultiTexCoord2fARB = (_glMultiTexCoord2fARB) m_context->getProcAddress(
+                    QLatin1String("glMultiTexCoord2fARB"));
+        if (glActiveTextureARB && glMultiTexCoord2fARB)
+            glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &m_maxTextureUnits);
 
 #warning should be moved to macro or something
         const char *program =
@@ -396,6 +403,16 @@ private:
     _glBindProgramARB glBindProgramARB;
     _glDeleteProgramsARB glDeleteProgramsARB;
     _glGenProgramsARB glGenProgramsARB;
+
+    // Multitexture
+    typedef void (APIENTRY *_glActiveTextureARB) (GLenum);
+    typedef void (APIENTRY *_glMultiTexCoord2fARB) (GLenum, GLfloat, GLfloat);
+
+    _glActiveTextureARB glActiveTextureARB;
+    _glMultiTexCoord2fARB glMultiTexCoord2fARB;
+
+    bool m_useMultitexture;
+    int m_maxTextureUnits;
 };
 
 // --------------------------------- OBJECT --------------------------------- //
