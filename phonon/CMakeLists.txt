@@ -58,6 +58,7 @@ set(phonon_LIB_SRCS
    volumefadereffect.cpp
    volumeslider.cpp
    graphicsview/videographicsobject.cpp
+   graphicsview/abstractvideographicspainter.h
    videoplayer.cpp
    videowidget.cpp
    )

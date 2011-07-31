@@ -25,6 +25,7 @@
 
 #include <QtOpenGL>
 
+#include "abstractvideographicspainter.h"
 #include "factory_p.h"
 #include "medianode_p.h"
 #include "phonondefs_p.h"
@@ -33,19 +34,7 @@
 
 namespace Phonon {
 
-class VideoGraphicsPainter
-{
-public:
-    virtual void init() = 0;
-    virtual void paint(QPainter *painter, QRectF target, const VideoFrame *frame) = 0;
-
-    virtual ~VideoGraphicsPainter() {}
-
-protected:
-    VideoGraphicsPainter() {}
-};
-
-class GlPainter : public VideoGraphicsPainter
+class GlPainter : public AbstractVideoGraphicsPainter
 {
 public:
     void setContext(QGLContext *context) { m_context = context; }
@@ -71,7 +60,7 @@ protected:
 };
 
 // --------------------------------- Painter --------------------------------- //
-class QPainterPainter : public VideoGraphicsPainter
+class QPainterPainter : public AbstractVideoGraphicsPainter
 {
 public:
     QPainterPainter() {}
@@ -437,14 +426,14 @@ public:
 
     virtual QObject *qObject() { return q_func(); }
 
-    VideoGraphicsPainter *createPainter();
+    AbstractVideoGraphicsPainter *createPainter();
     void paintGl(QPainter *painter, QRectF rect, VideoFrame *frame);
 
     QRectF geometry;
     QRectF boundingRect;
     QSize frameSize;
 
-    VideoGraphicsPainter *graphicsPainter;
+    AbstractVideoGraphicsPainter *graphicsPainter;
 
 protected:
     bool aboutToDeleteBackendObject() {}
@@ -484,9 +473,9 @@ QRectF VideoGraphicsObject::boundingRect() const
     return d->boundingRect;
 }
 
-VideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter()
+AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter()
 {
-    VideoGraphicsPainter *painter = 0;
+    AbstractVideoGraphicsPainter *painter = 0;
     if(QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext())) {
         glContext->makeCurrent();
 
