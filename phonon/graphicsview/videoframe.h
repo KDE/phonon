@@ -69,6 +69,4 @@ struct VideoFrame {
 
 } // namespace Phonon
 
-Q_DECLARE_METATYPE(Phonon::VideoFrame)
-
 #endif // PHONON_VIDEOFRAME_H
