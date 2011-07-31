@@ -22,8 +22,8 @@
 #include "videographicsobject.h"
 
 #include <QtGui/QPainter>
-
-#include <QtOpenGL>
+#warning
+#include <QtOpenGL/QGLShaderProgram>
 
 #include "abstractvideographicspainter.h"
 #include "factory_p.h"
