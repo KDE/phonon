@@ -157,6 +157,7 @@ install(FILES
    pulsesupport.h
    seekslider.h
    streaminterface.h
+   graphicsview/videoframe.h
    graphicsview/videographicsobject.h
    videoplayer.h
    videowidget.h
