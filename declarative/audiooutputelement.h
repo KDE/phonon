@@ -40,6 +40,7 @@ class AudioOutputElement : public QDeclarativeItem, public AbstractInitAble
     Q_PROPERTY(bool muted READ isMuted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(qreal volume READ volume WRITE setVolume NOTIFY volumeChanged)
+    friend class VolumeFaderEffectElement;
 public:
     AudioOutputElement(QDeclarativeItem *parent = 0);
     ~AudioOutputElement();
@@ -64,6 +65,7 @@ signals:
 
 private:
     AudioOutput *m_audioOutput;
+    Path m_path;
 };
 
 } // namespace Declarative

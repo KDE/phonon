@@ -85,7 +85,16 @@ void AudioOutputElement::init(MediaObject *mediaObject)
     Q_ASSERT(mediaObject);
 
     m_mediaObject = mediaObject;
-    createPath(m_mediaObject, m_audioOutput);
+#warning should go to base supposedly
+    m_path = createPath(m_mediaObject, m_audioOutput);
+
+#warning not the best of approaches?
+    // Init children
+    foreach (QGraphicsItem *item, childItems()) {
+        AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
+        if (obj)
+            obj->init(m_mediaObject);
+    }
 }
 
 } // namespace Declarative
