@@ -54,6 +54,7 @@ public:
     {
         if (m_context) {
             m_context->makeCurrent();
+            m_context = 0;
             glDeleteTextures(m_textureCount, m_textureIds);
         }
     }
