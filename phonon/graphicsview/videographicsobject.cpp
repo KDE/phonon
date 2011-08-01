@@ -61,7 +61,9 @@ public:
         geometry(0, 0, 320, 240),
         boundingRect(0, 0, 0, 0),
         frameSize(0, 0),
-        graphicsPainter(0)
+        graphicsPainter(0),
+        paintedOnce(false),
+        gotSize(false)
     {}
 
     virtual ~VideoGraphicsObjectPrivate()
@@ -82,6 +84,9 @@ public:
     QSize frameSize;
 
     AbstractVideoGraphicsPainter *graphicsPainter;
+
+    bool paintedOnce;
+    bool gotSize;
 
 protected:
     bool aboutToDeleteBackendObject() {}
@@ -161,9 +166,6 @@ void VideoGraphicsObject::paint(QPainter *painter,
 {
     K_D(VideoGraphicsObject);
 
-    static bool paintedOnce = false;
-    static bool gotSize = false;
-
     INTERFACE_CALL(lock());
 
     const VideoFrame *frame = INTERFACE_CALL(frame());
@@ -171,14 +173,14 @@ void VideoGraphicsObject::paint(QPainter *painter,
     // NOTE: it would be most useful if we had a signal to notify about dimension changes...
     // NOTE: it would be even better if a frame contained a QRectF
     if (frame->format != VideoFrame::Format_Invalid &&
-            !gotSize) {
+            !d->gotSize) {
         // TODO: do scaling ourselfs?
-        gotSize = true;
+        d->gotSize = true;
         d->frameSize = QSize(frame->width, frame->height);
         d->setTargetRect();
     }
 
-    if (frame->format == VideoFrame::Format_Invalid || !paintedOnce) {
+    if (frame->format == VideoFrame::Format_Invalid || !d->paintedOnce) {
         painter->fillRect(d->boundingRect, Qt::black);
     } else {
         if (!d->graphicsPainter)
@@ -189,7 +191,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
     INTERFACE_CALL(unlock());
 
-    paintedOnce = true;
+    d->paintedOnce = true;
 }
 
 void VideoGraphicsObjectPrivate::paintGl(QPainter *painter, QRectF target, VideoFrame *frame)
