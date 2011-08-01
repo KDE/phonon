@@ -47,9 +47,8 @@ struct VideoFrame {
 
     Format format;
 
-    QByteArray planes[3];
+    QByteArray plane[3];
     int planeCount;
-    const char *data;
 
     inline QImage qImage() const
     {
@@ -59,7 +58,7 @@ struct VideoFrame {
 
         switch(format) {
         case Format_RGB32:
-            return QImage(reinterpret_cast<const uchar *>(planes[0].constData()),
+            return QImage(reinterpret_cast<const uchar *>(plane[0].constData()),
                           width, height, QImage::Format_RGB32);
         default:
             return QImage();

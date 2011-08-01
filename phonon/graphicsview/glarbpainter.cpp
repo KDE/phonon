@@ -121,7 +121,7 @@ void GlArbPainter::paint(QPainter *painter, QRectF target, const VideoFrame *fra
                  GL_RGBA,
                  GL_UNSIGNED_BYTE,
          #warning data needs changing for sane access!!
-                 frame->data);
+                 frame->plane[0].constData());
     // Scale appropriately so we can change to target geometry without
     // much hassle.
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
