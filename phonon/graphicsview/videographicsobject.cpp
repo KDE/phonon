@@ -72,7 +72,7 @@ public:
 
     virtual QObject *qObject() { return q_func(); }
 
-    AbstractVideoGraphicsPainter *createPainter();
+    AbstractVideoGraphicsPainter *createPainter(const VideoFrame *frame);
     void paintGl(QPainter *painter, QRectF rect, VideoFrame *frame);
 
     void setTargetRect();
@@ -121,7 +121,7 @@ QRectF VideoGraphicsObject::boundingRect() const
     return d->boundingRect;
 }
 
-AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter()
+AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter(const VideoFrame *frame)
 {
     AbstractVideoGraphicsPainter *painter = 0;
     if(QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext())) {
@@ -150,6 +150,7 @@ AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter()
         // If all fails, just use QPainter's builtin functions.
         painter = new QPainterPainter;
 
+    painter->setFrame(frame);
     painter->init();
     return painter;
 }
@@ -182,7 +183,8 @@ void VideoGraphicsObject::paint(QPainter *painter,
         painter->fillRect(d->boundingRect, Qt::black);
     } else {
         if (!d->graphicsPainter)
-            d->graphicsPainter = d->createPainter();
+            d->graphicsPainter = d->createPainter(frame);
+        d->graphicsPainter->setFrame(frame);
         d->graphicsPainter->paint(painter, d->boundingRect, frame);
     }
 

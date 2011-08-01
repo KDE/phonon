@@ -29,6 +29,8 @@ class VideoFrame;
 class AbstractVideoGraphicsPainter
 {
 public:
+    void setFrame(const VideoFrame *frame) { m_frame = frame; }
+
     virtual void init() = 0;
     virtual void paint(QPainter *painter, QRectF target, const VideoFrame *frame) = 0;
 
@@ -36,6 +38,8 @@ public:
 
 protected:
     AbstractVideoGraphicsPainter() {}
+
+    const VideoFrame *m_frame;
 };
 
 } // namespace Phonon
