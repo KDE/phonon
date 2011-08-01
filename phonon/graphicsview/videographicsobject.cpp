@@ -136,7 +136,7 @@ AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter()
             // Use GLSL.
             glPainter = new GlslPainter;
         } else if (glExtensions.contains("ARB_fragment_program")
-                   && (paintEnv == QByteArray("arb") || paintEnv == QByteArray(""))) {
+                   && (paintEnv == QByteArray("glarb") || paintEnv == QByteArray(""))) {
             // Use GLARB painter.
             glPainter = new GlArbPainter;
         }
