@@ -84,6 +84,116 @@ namespace Phonon
         }
         return QString();
     }
+
+    QDebug operator <<(QDebug dbg, const Phonon::DiscType &type)
+    {
+        switch (type) {
+        case NoDisc:
+            dbg.nospace() << "Phonon::NoDisc";
+            break;
+        case Cd:
+            dbg.nospace() << "Phonon::Cd";
+            break;
+        case Dvd:
+            dbg.nospace() << "Phonon::Dvd";
+            break;
+        case Vcd:
+            dbg.nospace() << "Phonon::Vcd";
+            break;
+        }
+        return dbg.maybeSpace();
+    }
+
+    QDebug operator <<(QDebug dbg, const Phonon::MetaData &metaData)
+    {
+        switch (metaData) {
+        case ArtistMetaData:
+            dbg.nospace() << "Phonon::ArtistMetaData";
+            break;
+        case AlbumMetaData:
+            dbg.nospace() << "Phonon::AlbumMetaData";
+            break;
+        case TitleMetaData:
+            dbg.nospace() << "Phonon::TitleMetaData";
+            break;
+        case DateMetaData:
+            dbg.nospace() << "Phonon::DateMetaData";
+            break;
+        case GenreMetaData:
+            dbg.nospace() << "Phonon::GenreMetaData";
+            break;
+        case TracknumberMetaData:
+            dbg.nospace() << "Phonon::TracknumberMetaData";
+            break;
+        case DescriptionMetaData:
+            dbg.nospace() << "Phonon::DescriptionMetaData";
+            break;
+        case MusicBrainzDiscIdMetaData:
+            dbg.nospace() << "Phonon::MusicBrainzDiscIdMetaData";
+            break;
+        }
+        return dbg.maybeSpace();
+    }
+
+    QDebug operator <<(QDebug dbg, const Phonon::State &state)
+    {
+        switch (state) {
+        case LoadingState:
+            dbg.nospace() << "Phonon::LoadingState";
+            break;
+        case StoppedState:
+            dbg.nospace() << "Phonon::StoppedState";
+            break;
+        case PlayingState:
+            dbg.nospace() << "Phonon::PlayingState";
+            break;
+        case BufferingState:
+            dbg.nospace() << "Phonon::BufferingState";
+            break;
+        case PausedState:
+            dbg.nospace() << "Phonon::PausedState";
+            break;
+        case ErrorState:
+            dbg.nospace() << "Phonon::ErrorState";
+            break;
+        }
+        return dbg.maybeSpace();
+    }
+
+    QDebug operator <<(QDebug dbg, const Phonon::Category &category)
+    {
+        dbg.nospace() << categoryToString(category);
+        return dbg.maybeSpace();
+    }
+
+    QDebug operator <<(QDebug dbg, const Phonon::Capture::DeviceType &type)
+    {
+        switch (type) {
+        case Capture::AudioType:
+            dbg.nospace() << "Phonon::Capture::AudioType";
+            break;
+        case Capture::VideoType:
+            dbg.nospace() << "Phonon::Capture::VideoType";
+            break;
+        }
+        return dbg.maybeSpace();
+    }
+
+    QDebug operator <<(QDebug dbg, const Phonon::ErrorType &errorType)
+    {
+        switch (errorType) {
+        case NoError:
+            dbg.nospace() << "Phonon::NoError";
+            break;
+        case NormalError:
+            dbg.nospace() << "Phonon::NormalError";
+            break;
+        case FatalError:
+            dbg.nospace() << "Phonon::FatalError";
+            break;
+        }
+        return dbg.maybeSpace();
+    }
 }
 
 static int registerPhononMetaTypes()
