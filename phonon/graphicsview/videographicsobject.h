@@ -45,7 +45,9 @@ public:
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
 private slots:
+#warning booh
     void frameReady();
+    void reset();
 };
 
 class VideoGraphicsObjectInterface
@@ -64,6 +66,7 @@ public:
 
     // Signals
     virtual void frameReady() = 0;
+    virtual void reset() = 0;
 };
 
 } // namespace Phonon

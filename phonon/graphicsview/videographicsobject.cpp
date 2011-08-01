@@ -102,6 +102,9 @@ protected:
             QObject::connect(m_backendObject, SIGNAL(frameReady()),
                              q, SLOT(frameReady()),
                              Qt::QueuedConnection);
+            QObject::connect(m_backendObject, SIGNAL(reset()),
+                             q, SLOT(reset()),
+                             Qt::QueuedConnection);
         }
     }
 };
@@ -226,6 +229,17 @@ void VideoGraphicsObject::frameReady()
 {
     K_D(const VideoGraphicsObject);
     update(d->boundingRect);
+}
+
+void VideoGraphicsObject::reset()
+{
+    K_D(VideoGraphicsObject);
+    d->paintedOnce = false;
+    d->gotSize = false;
+    if (d->graphicsPainter) {
+        delete d->graphicsPainter;
+        d->graphicsPainter = 0;
+    }
 }
 
 } // namespace Phonon
