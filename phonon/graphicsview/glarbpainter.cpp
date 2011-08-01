@@ -25,6 +25,18 @@
 
 namespace Phonon {
 
+static  const char *s_phonon_rgb32Shader =
+"!!ARBfp1.0\n"
+"TEMP rgb;\n"
+"TEX rgb.xyz, fragment.texcoord[0], texture[0], 2D;\n"
+"DP4 result.color.x, rgb.zyxw, { 1.0, 0.0, 0.0, 0.0 }  ;\n"
+"DP4 result.color.y, rgb.zyxw, { 0.0, 1.0, 0.0, 0.0 }  ;\n"
+"DP4 result.color.z, rgb.zyxw, { 0.0, 0.0, 1.0, 0.0 }  ;\n"
+"MOV rgb.w,                    { 0.0, 0.0, 0.0, 1.0 }.w;\n"
+"END";
+
+static  const char *s_phonon_yv12Shader = 0;
+
 GlArbPainter::GlArbPainter() :
     m_useMultitexture(false),
     m_maxTextureUnits(0)
@@ -61,18 +73,17 @@ void GlArbPainter::init()
         glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &m_maxTextureUnits);
 
 #warning should be moved to macro or something
-    const char *program =
-            "!!ARBfp1.0\n"
-            "TEMP rgb;\n"
-            "TEX rgb.xyz, fragment.texcoord[0], texture[0], 2D;\n"
-            "DP4 result.color.x, rgb.zyxw, { 1.0, 0.0, 0.0, 0.0 }  ;\n"
-            "DP4 result.color.y, rgb.zyxw, { 0.0, 1.0, 0.0, 0.0 }  ;\n"
-            "DP4 result.color.z, rgb.zyxw, { 0.0, 0.0, 1.0, 0.0 }  ;\n"
-            "MOV rgb.w,                    { 0.0, 0.0, 0.0, 1.0 }.w;\n"
-            "END";
 
-#warning > for yuv, needs fixing
-    m_textureCount = 1;
+    const char *program = 0;
+    switch (m_frame->format) {
+    case VideoFrame::Format_RGB32:
+        program = s_phonon_rgb32Shader;
+        break;
+    case VideoFrame::Format_YV12:
+        program = s_phonon_yv12Shader;
+        break;
+    }
+    m_textureCount = m_frame->planeCount;
 
     glGenProgramsARB(1, &programId);
 
