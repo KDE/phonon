@@ -178,7 +178,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
         d->setTargetRect();
     }
 
-    if (frame->format == VideoFrame::Format_Invalid && !paintedOnce) {
+    if (frame->format == VideoFrame::Format_Invalid || !paintedOnce) {
         painter->fillRect(d->boundingRect, Qt::black);
     } else {
         if (!d->graphicsPainter)
