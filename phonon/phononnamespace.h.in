@@ -316,37 +316,6 @@ namespace Phonon
 
 QT_END_NAMESPACE
 
-//X class kdbgstream;
-//X #include <kdebug.h>
-//X /**
-//X  * Implements needed operator to use Phonon::State with kDebug
-//X  */
-//X inline PHONON_EXPORT kdbgstream &operator<<(kdbgstream  & stream, const Phonon::State state)
-//X {
-//X     switch(state)
-//X     {
-//X     case Phonon::ErrorState:
-//X         stream << "ErrorState";
-//X         break;
-//X     case Phonon::LoadingState:
-//X         stream << "LoadingState";
-//X         break;
-//X     case Phonon::StoppedState:
-//X         stream << "StoppedState";
-//X         break;
-//X     case Phonon::PlayingState:
-//X         stream << "PlayingState";
-//X         break;
-//X     case Phonon::BufferingState:
-//X         stream << "BufferingState";
-//X         break;
-//X     case Phonon::PausedState:
-//X         stream << "PausedState";
-//X         break;
-//X     }
-//X     return stream;
-//X }
-
 #include <QtCore/QMetaType>
 
 Q_DECLARE_METATYPE(Phonon::State)
