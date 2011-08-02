@@ -1,4 +1,6 @@
-add_subdirectory(tests)
+if (PHONON_BUILD_TESTS)
+    add_subdirectory(tests)
+endif (PHONON_BUILD_TESTS)
 
 ########### libphononexperimental ###############
 set(phononexperimental_LIB_SRCS
