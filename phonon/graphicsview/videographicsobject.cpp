@@ -218,10 +218,10 @@ void VideoGraphicsObjectPrivate::setTargetRect()
     emit q->prepareGeometryChange();
 
     // keep aspect
-    QSizeF frameSize = frameSize;
-    frameSize.scale(geometry.size(), Qt::KeepAspectRatio);
+    QSizeF scaledFrameSize = frameSize;
+    scaledFrameSize.scale(geometry.size(), Qt::KeepAspectRatio);
 
-    boundingRect = QRectF(0, 0, frameSize.width(), frameSize.height());
+    boundingRect = QRectF(0, 0, scaledFrameSize.width(), scaledFrameSize.height());
     boundingRect.moveCenter(geometry.center());
 }
 
