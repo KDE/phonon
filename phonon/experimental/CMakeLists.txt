@@ -1,5 +1,3 @@
-add_subdirectory(tests)
-
 ########### libphononexperimental ###############
 set(phononexperimental_LIB_SRCS
     abstractaudiodataoutput.cpp
