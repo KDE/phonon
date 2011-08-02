@@ -28,7 +28,6 @@
 
 #ifdef HAVE_PULSEAUDIO
 #include "pulsestream_p.h"
-#include <glib.h>
 #include <pulse/pulseaudio.h>
 #include <pulse/xmalloc.h>
 #include <pulse/glib-mainloop.h>
