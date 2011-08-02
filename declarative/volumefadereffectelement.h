@@ -4,10 +4,9 @@
 #include <QtDeclarative/QDeclarativeItem>
 
 #include "abstractinitable.h"
+#include "volumefadereffect.h"
 
 namespace Phonon {
-
-class VolumeFaderEffect;
 
 namespace Declarative {
 
@@ -15,16 +14,31 @@ class VolumeFaderEffectElement : public QDeclarativeItem,
                                  public AbstractInitAble
 {
     Q_OBJECT
+    Q_PROPERTY(float volume READ volume WRITE setVolume)
+    Q_PROPERTY(double volumeDecibel READ volumeDecibel WRITE setVolumeDecibel)
+    Q_PROPERTY(Phonon::VolumeFaderEffect::FadeCurve fadeCurve READ fadeCurve WRITE setFadeCurve)
+    Q_ENUMS(Phonon::VolumeFaderEffect::FadeCurve)
 public:
     explicit VolumeFaderEffectElement(QDeclarativeItem *parent = 0);
     ~VolumeFaderEffectElement();
 
     void classBegin();
-
     virtual void init(MediaObject *mediaObject);
 
+    float volume() const;
+    void setVolume(float volume);
+
+    double volumeDecibel() const;
+    void setVolumeDecibel(double volumeDecibel);
+
+    Phonon::VolumeFaderEffect::FadeCurve fadeCurve() const;
+    void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve fadeCurve);
+
 public slots:
+    void fadeIn(int time);
     void fadeOut(int time);
+
+    void fadeTo(float volume, int time);
 
 private:
     VolumeFaderEffect *m_effect;
