@@ -1,11 +1,12 @@
-add_subdirectory(experimental)
+if (PHONON_BUILD_EXPERIMENTAL)
+    add_subdirectory(experimental)
+endif (PHONON_BUILD_EXPERIMENTAL)
 
 set(PULSEAUDIO_FIND_VERSION "0.9.15")
 macro_optional_find_package(PulseAudio)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
 macro_optional_find_package(GLIB2)
 macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
-
 
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?" FORCE) # this one must be forced into the cache so it exists also in the toplevel CMakeLists.txt

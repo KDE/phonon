@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 # CMP0002: we have multiple targets with the same name for the unit tests
 cmake_policy(SET CMP0002 OLD)
 
+option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
@@ -137,7 +138,7 @@ if(NOT WIN32) # pkgconfig file
     make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
     make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
     make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
-  
+
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
