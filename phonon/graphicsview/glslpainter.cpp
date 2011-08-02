@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2011 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -26,6 +27,30 @@
 #include "videoframe.h"
 
 namespace Phonon {
+
+static const char *s_phonon_rgb32Shader =
+"uniform sampler2D textureSampler;\n"
+"varying highp vec2 textureCoord;\n"
+"void main(void)\n"
+"{\n"
+"    gl_FragColor = vec4(texture2D(textureSampler, textureCoord.st).bgr, 1.0);\n"
+"}\n";
+
+static const char *s_phonon_yv12Shader =
+"uniform sampler2D texY;\n"
+"uniform sampler2D texU;\n"
+"uniform sampler2D texV;\n"
+"uniform mediump mat4 colorMatrix;\n"
+"varying highp vec2 textureCoord;\n"
+"void main(void)\n"
+"{\n"
+"    highp vec4 color = vec4(\n"
+"           texture2D(texY, textureCoord.st).r,\n"
+"           texture2D(texU, textureCoord.st).r,\n"
+"           texture2D(texV, textureCoord.st).r,\n"
+"           1.0);\n"
+"    gl_FragColor = colorMatrix * color;\n"
+"}\n";
 
 GlslPainter::GlslPainter() :
     m_program(0)
@@ -56,13 +81,21 @@ void GlslPainter::init()
             "    textureCoord = textureCoordinates;\n"
             "}\n";
 
-    const char *program =
-            "uniform sampler2D textureSampler;\n"
-            "varying highp vec2 textureCoord;\n"
-            "void main(void)\n"
-            "{\n"
-            "    gl_FragColor = vec4(texture2D(textureSampler, textureCoord.st).bgr, 1.0);\n"
-            "}\n";
+    const char *program = 0;
+    switch (m_frame->format) {
+    case VideoFrame::Format_RGB32://////////////////////////////////////// RGB32
+        initRgb32();
+        program = s_phonon_rgb32Shader;
+        break;
+    case VideoFrame::Format_YV12: ///////////////////////////////////////// YV12
+        initYv12();
+        program = s_phonon_yv12Shader;
+        break;
+    default: /////////////////////////////////////////////////////////// Default
+        Q_ASSERT(false);
+    }
+    Q_ASSERT(program);
+    initColorMatrix();
 
     m_textureCount = 1;
 
@@ -91,24 +124,7 @@ void GlslPainter::paint(QPainter *painter, QRectF target, const VideoFrame *fram
         glEnable(GL_SCISSOR_TEST);
 
     //////////////////////////////////////////////////////////////
-#warning factor into own function
-
-#warning multitexture support for yuv
-    glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 GL_RGBA,
-                 frame->width, frame->height,
-                 0,
-                 GL_RGBA,
-                 GL_UNSIGNED_BYTE,
-         #warning data needs changing for sane access!!
-                 frame->plane[0].data());
-    // Scale appropriately so we can change to target geometry without
-    // much hassle.
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
+    initTextures();
     //////////////////////////////////////////////////////////////
 
     // As seen on the telly
@@ -168,15 +184,29 @@ void GlslPainter::paint(QPainter *painter, QRectF target, const VideoFrame *fram
     m_program->enableAttributeArray("textureCoordinates");
     m_program->setAttributeArray("targetVertex", targetVertex, 2);
     m_program->setAttributeArray("textureCoordinates", textureCoordinates, 2);
-
     m_program->setUniformValue("positionMatrix", positionMatrix);
 
-#warning no idea how to do yuv with glsl :S
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
-    m_program->setUniformValue("texRgb", 0);
+    if (m_textureCount == 3) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m_textureIds[1]);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, m_textureIds[2]);
+        glActiveTexture(GL_TEXTURE0);
 
-    glDrawArrays(GL_QUAD_STRIP, 0, 4);
+        m_program->setUniformValue("texY", 0);
+        m_program->setUniformValue("texU", 1);
+        m_program->setUniformValue("texV", 2);
+    } else {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
+
+        m_program->setUniformValue("texRgb", 0);
+    }
+    m_program->setUniformValue("colorMatrix", m_colorMatrix);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     m_program->release();
     painter->endNativePainting();
