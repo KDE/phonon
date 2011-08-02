@@ -46,8 +46,8 @@ static const char *s_phonon_yv12Shader =
 "{\n"
 "    highp vec4 color = vec4(\n"
 "           texture2D(texY, textureCoord.st).r,\n"
+"           texture2D(texV, textureCoord.st).r,\n" // !!!! mind the swp
 "           texture2D(texU, textureCoord.st).r,\n"
-"           texture2D(texV, textureCoord.st).r,\n"
 "           1.0);\n"
 "    gl_FragColor = colorMatrix * color;\n"
 "}\n";
@@ -96,8 +96,6 @@ void GlslPainter::init()
     }
     Q_ASSERT(program);
     initColorMatrix();
-
-    m_textureCount = 1;
 
     if (!m_program->addShaderFromSourceCode(QGLShader::Vertex, vertexProgram))
         qFatal("couldnt add vertex shader");
