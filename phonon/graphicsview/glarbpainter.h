@@ -22,6 +22,8 @@
 #ifndef PHONON_GLARBPAINTER_H
 #define PHONON_GLARBPAINTER_H
 
+#include <QtGui/QMatrix4x4>
+
 #include "glpainter.h"
 
 namespace Phonon {
@@ -39,15 +41,18 @@ private:
     GLuint programId;
 
     // Function pointers filled using getProcAddress()
-    typedef void (APIENTRY *_glProgramStringARB) (GLenum, GLenum, GLsizei, const GLvoid *);
+    typedef void (APIENTRY *_glProgramStringARB) (GLenum, GLenum, GLsizei, const GLbyte *);
     typedef void (APIENTRY *_glBindProgramARB) (GLenum, GLuint);
     typedef void (APIENTRY *_glDeleteProgramsARB) (GLsizei, const GLuint *);
     typedef void (APIENTRY *_glGenProgramsARB) (GLsizei, GLuint *);
+    typedef void (APIENTRY *_glProgramLocalParameter4fARB) (
+            GLenum, GLuint, GLfloat, GLfloat, GLfloat, GLfloat);
 
     _glProgramStringARB glProgramStringARB;
     _glBindProgramARB glBindProgramARB;
     _glDeleteProgramsARB glDeleteProgramsARB;
     _glGenProgramsARB glGenProgramsARB;
+    _glProgramLocalParameter4fARB glProgramLocalParameter4fARB;
 
     // Multitexture
     typedef void (APIENTRY *_glActiveTextureARB) (GLenum);

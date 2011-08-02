@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2011 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -21,11 +22,14 @@
 
 #include "glarbpainter.h"
 
+#include <QtCore/QDebug>
+#include <QtOpenGL>
+
 #include "videoframe.h"
 
 namespace Phonon {
 
-static  const char *s_phonon_rgb32Shader =
+static const char *s_phonon_rgb32Shader =
 "!!ARBfp1.0\n"
 "TEMP rgb;\n"
 "TEX rgb.xyz, fragment.texcoord[0], texture[0], 2D;\n"
@@ -35,8 +39,21 @@ static  const char *s_phonon_rgb32Shader =
 "MOV rgb.w,                    { 0.0, 0.0, 0.0, 1.0 }.w;\n"
 "END";
 
-static  const char *s_phonon_yv12Shader = 0;
+static const char *s_phonon_yv12Shader =
+"!!ARBfp1.0\n"
+"PARAM matrix[4] = { program.local[0..2],"
+"{ 0.0, 0.0, 0.0, 1.0 } };\n"
+"TEMP yuv;\n"
+"TEX yuv.x, fragment.texcoord[0], texture[0], 2D;\n"
+"TEX yuv.z, fragment.texcoord[0], texture[1], 2D;\n"
+"TEX yuv.y, fragment.texcoord[0], texture[2], 2D;\n"
+"MOV yuv.w, matrix[3].w;\n"
+"DP4 result.color.x, yuv, matrix[0];\n"
+"DP4 result.color.y, yuv, matrix[1];\n"
+"DP4 result.color.z, yuv, matrix[2];\n"
+"END";
 
+// TODO: NPOT check
 GlArbPainter::GlArbPainter() :
     m_useMultitexture(false),
     m_maxTextureUnits(0)
@@ -64,6 +81,8 @@ void GlArbPainter::init()
                 QLatin1String("glDeleteProgramsARB"));
     glGenProgramsARB = (_glGenProgramsARB) m_context->getProcAddress(
                 QLatin1String("glGenProgramsARB"));
+    glProgramLocalParameter4fARB = (_glProgramLocalParameter4fARB) m_context->getProcAddress(
+                QLatin1String("glProgramLocalParameter4fARB"));
 
     glActiveTextureARB = (_glActiveTextureARB) m_context->getProcAddress(
                 QLatin1String("glActiveTextureARB"));
@@ -74,16 +93,24 @@ void GlArbPainter::init()
 
 #warning should be moved to macro or something
 
+    Q_ASSERT(m_frame->format != VideoFrame::Format_Invalid);
+    Q_ASSERT(!m_frame->plane[0].isNull());
+
     const char *program = 0;
     switch (m_frame->format) {
-    case VideoFrame::Format_RGB32:
+    case VideoFrame::Format_RGB32://////////////////////////////////////// RGB32
+        initRgb32();
         program = s_phonon_rgb32Shader;
         break;
-    case VideoFrame::Format_YV12:
+    case VideoFrame::Format_YV12: ///////////////////////////////////////// YV12
+        initYv12();
         program = s_phonon_yv12Shader;
         break;
+    default: /////////////////////////////////////////////////////////// Default
+        Q_ASSERT(false);
     }
-    m_textureCount = m_frame->planeCount;
+    Q_ASSERT(program);
+    initColorMatrix();
 
     glGenProgramsARB(1, &programId);
 
@@ -94,10 +121,16 @@ void GlArbPainter::init()
     glProgramStringARB(GL_FRAGMENT_PROGRAM_ARB,
                        GL_PROGRAM_FORMAT_ASCII_ARB,
                        qstrlen(program),
-                       reinterpret_cast<const GLvoid *>(program));
+                       reinterpret_cast<const GLbyte *>(program));
 
-    if (glGetError() != GL_NO_ERROR)
+    if (glGetError() != GL_NO_ERROR) {
+        GLint position;
+        glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &position);
+
+        const char *msg = (const char *)glGetString(GL_PROGRAM_ERROR_STRING_ARB);
+        qDebug() << "erorr: " << position << msg;
         qFatal("got GL error at program making");
+    }
 
     glGenTextures(m_textureCount, m_textureIds);
 }
@@ -120,24 +153,7 @@ void GlArbPainter::paint(QPainter *painter, QRectF target, const VideoFrame *fra
         glEnable(GL_SCISSOR_TEST);
 
     //////////////////////////////////////////////////////////////
-#warning factor into own function
-
-#warning multitexture support for yuv
-    glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 GL_RGBA,
-                 frame->width, frame->height,
-                 0,
-                 GL_RGBA,
-                 GL_UNSIGNED_BYTE,
-         #warning data needs changing for sane access!!
-                 frame->plane[0].constData());
-    // Scale appropriately so we can change to target geometry without
-    // much hassle.
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
+    initTextures();
     //////////////////////////////////////////////////////////////
 
     // Target coordinates of the source rectangle, needs to be same aspect ratio,
@@ -160,9 +176,39 @@ void GlArbPainter::paint(QPainter *painter, QRectF target, const VideoFrame *fra
     glEnable(GL_FRAGMENT_PROGRAM_ARB);
     glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, programId);
 
+    glProgramLocalParameter4fARB(
+            GL_FRAGMENT_PROGRAM_ARB,
+            0,
+            m_colorMatrix(0, 0),
+            m_colorMatrix(0, 1),
+            m_colorMatrix(0, 2),
+            m_colorMatrix(0, 3));
+    glProgramLocalParameter4fARB(
+            GL_FRAGMENT_PROGRAM_ARB,
+            1,
+            m_colorMatrix(1, 0),
+            m_colorMatrix(1, 1),
+            m_colorMatrix(1, 2),
+            m_colorMatrix(1, 3));
+    glProgramLocalParameter4fARB(
+            GL_FRAGMENT_PROGRAM_ARB,
+            2,
+            m_colorMatrix(2, 0),
+            m_colorMatrix(2, 1),
+            m_colorMatrix(2, 2),
+            m_colorMatrix(2, 3));
+
 #warning for YUV we'll need to add the other 2 textures accordingly
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
+
+    if (m_textureCount == 3) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m_textureIds[1]);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, m_textureIds[2]);
+        glActiveTexture(GL_TEXTURE0);
+    }
 
     glVertexPointer(2, GL_FLOAT, 0, targetVertex);
     glTexCoordPointer(2, GL_FLOAT, 0, textureCoordinates);
