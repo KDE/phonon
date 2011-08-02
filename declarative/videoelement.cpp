@@ -26,7 +26,7 @@
 
 #include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
-#include <phonon/videographicsobject.h>
+#include <phonon/graphicsview/videographicsobject.h>
 
 #include <phonon/experimental/videodataoutput2.h>
 
