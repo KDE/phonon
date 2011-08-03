@@ -1,0 +1,23 @@
+# Config file for davros library
+# It defines the following variables
+#  DAVROS_INCLUDES    - include directories for Davros
+#  DAVROS_LIBRARY_DIR - library directories for Davros (normally not used!)
+#  DAVROS_LIBS        - library to link against
+
+# Known at buildtime
+set(DAVROS_VERSION "@DAVROS_LIB_VERSION@")
+
+get_filename_component(currentDir ${CMAKE_CURRENT_LIST_FILE} PATH) # get the directory where I myself am
+get_filename_component(rootDir ${currentDir}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix
+
+# Install locations
+set(DAVROS_INCLUDE_DIR "${rootDir}/include")
+set(DAVROS_LIBRARY_DIR "${rootDir}/lib${LIB_SUFFIX}")
+set(DAVROS_BUILDSYSTEM_DIR "${rootDir}/@BUILDSYSTEM_INSTALL_DIR@")
+
+include(${currentDir}/DavrosTargets.cmake)
+
+set(DAVROS_LIBS davros)
+set(DAVROS_INCLUDES ${DAVROS_INCLUDE_DIR})
+
+include(${DAVROS_BUILDSYSTEM_DIR}/FindDavrosInternal.cmake)
