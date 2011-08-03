@@ -86,6 +86,7 @@ void VideoElement::setFullScreen(bool fullScreen)
         m_isFullScreen = false;
         qApp->activeWindow()->showNormal();
     }
+    emit fullScreenChanged();
 }
 
 void VideoElement::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
