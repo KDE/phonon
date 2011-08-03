@@ -83,7 +83,12 @@ void MediaElement::setSource(const QUrl &url)
 {
     m_source = url;
     m_finished = false;
-    m_mediaObject->setCurrentSource(MediaSource(url));
+#warning bloody workaround
+    qDebug() << url.scheme();
+    if (url.scheme() == QLatin1String("dvd"))
+        m_mediaObject->setCurrentSource(MediaSource(Phonon::Dvd));
+    else
+        m_mediaObject->setCurrentSource(MediaSource(url));
     emit sourceChanged();
 }
 
