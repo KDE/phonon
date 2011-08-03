@@ -58,8 +58,8 @@ GlslPainter::GlslPainter() :
 
 GlslPainter::~GlslPainter()
 {
-    if (m_program)
-        m_program->deleteLater();
+//    if (m_program)
+//        m_program->deleteLater();
 }
 
 void GlslPainter::init()
@@ -92,6 +92,7 @@ void GlslPainter::init()
         program = s_phonon_yv12Shader;
         break;
     default: /////////////////////////////////////////////////////////// Default
+        qDebug() << "format: " << m_frame->format;
         Q_ASSERT(false);
     }
     Q_ASSERT(program);

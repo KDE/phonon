@@ -62,10 +62,10 @@ GlArbPainter::GlArbPainter() :
 
 GlArbPainter::~GlArbPainter()
 {
-    if (m_context) {
-        m_context->makeCurrent();
-        glDeleteProgramsARB(1, &programId);
-    }
+//    if (m_context) {
+//        m_context->makeCurrent();
+//        glDeleteProgramsARB(1, &programId);
+//    }
 }
 
 void GlArbPainter::init()
