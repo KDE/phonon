@@ -60,8 +60,6 @@
  */
 #define DAVROS_DEPRECATED warning() << "DEPRECATED:" << __PRETTY_FUNCTION__ << endl;
 
-/// Performance logging
-#define DAVROS_PERF_LOG( msg ) { Davros::perfLog( msg, __PRETTY_FUNCTION__ ); }
 
 /**
  * @namespace Davros
