@@ -30,6 +30,7 @@
 # include <unistd.h>
 #endif
 
+static QMap<QString, void *> globalObjectsTable;
 
 class NoDebugStream: public QIODevice
 {
@@ -56,9 +57,15 @@ IndentPrivate::IndentPrivate(QObject* parent, const QString & area)
 
 IndentPrivate* IndentPrivate::instance(const QString & area)
 {
-    QObject* qOApp = reinterpret_cast<QObject*>(qApp);
-    QObject* obj = qOApp ? qOApp->findChild<QObject*>( area + QLatin1String("DavrosIndentObject")) : 0;
-    return (obj ? static_cast<IndentPrivate *>( obj ) : new IndentPrivate( qApp, area ));
+    IndentPrivate *obj;
+    QString objectName = area + QLatin1String("DavrosIndentObject");
+    if (globalObjectsTable.find(objectName) == globalObjectsTable.end()) {
+        obj = new IndentPrivate(qApp, area);
+        globalObjectsTable.insert(objectName, reinterpret_cast<void *>(obj));
+	return obj;
+    }
+    obj = reinterpret_cast<IndentPrivate *>(globalObjectsTable[objectName]);
+    return obj;
 }
 
 ContextPrivate::ContextPrivate(QObject* parent, const QString & area)
@@ -74,9 +81,15 @@ ContextPrivate::ContextPrivate(QObject* parent, const QString & area)
 
 ContextPrivate* ContextPrivate::instance(const QString & area)
 {
-    QObject* qOApp = reinterpret_cast<QObject*>(qApp);
-    QObject* obj = qOApp ? qOApp->findChild<QObject*>( area + QLatin1String("DavrosContextObject")) : 0;
-    return (obj ? static_cast<ContextPrivate *>( obj ) : new ContextPrivate( qApp, area ));
+    ContextPrivate *obj;
+    QString objectName = area + QLatin1String("DavrosContextObject");
+    if (globalObjectsTable.find(objectName) == globalObjectsTable.end()) {
+        obj = new ContextPrivate(qApp, area);
+        globalObjectsTable.insert(objectName, reinterpret_cast<void *>(obj));
+	return obj;
+    }
+    obj = reinterpret_cast<ContextPrivate *>(globalObjectsTable[objectName]);
+    return obj;
 }
 
 static QString toString( Davros::DebugLevel level )

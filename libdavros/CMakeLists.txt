@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 find_package(Qt4 COMPONENTS QtCore REQUIRED)
 include(${QT_USE_FILE})
 
-set(DAVROS_LIB_MAJOR_VERSION "1") # Only change on binary incompatible changes
+set(DAVROS_LIB_MAJOR_VERSION "0") # Only change on binary incompatible changes
 set(DAVROS_LIB_MINOR_VERSION "0") # Only change on binary compatible changes with new interfaces
 set(DAVROS_LIB_PATCH_VERSION "0") # Bump whenever you feel like it
 set(DAVROS_LIB_VERSION "${DAVROS_LIB_MAJOR_VERSION}.${DAVROS_LIB_MINOR_VERSION}.${DAVROS_LIB_PATCH_VERSION}")
