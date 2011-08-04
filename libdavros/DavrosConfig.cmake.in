@@ -2,7 +2,7 @@
 # It defines the following variables
 #  DAVROS_INCLUDES    - include directories for Davros
 #  DAVROS_LIBRARY_DIR - library directories for Davros (normally not used!)
-#  DAVROS_LIBS        - library to link against
+#  DAVROS_LIBRARY     - library to link against
 
 # Known at buildtime
 set(DAVROS_VERSION "@DAVROS_LIB_VERSION@")
@@ -17,7 +17,7 @@ set(DAVROS_BUILDSYSTEM_DIR "${rootDir}/@BUILDSYSTEM_INSTALL_DIR@")
 
 include(${currentDir}/DavrosTargets.cmake)
 
-set(DAVROS_LIBS davros)
+set(DAVROS_LIBRARY davros)
 set(DAVROS_INCLUDES ${DAVROS_INCLUDE_DIR})
 
 include(${DAVROS_BUILDSYSTEM_DIR}/FindDavrosInternal.cmake)
