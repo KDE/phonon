@@ -7,7 +7,7 @@ get_filename_component(currentDir ${CMAKE_CURRENT_LIST_FILE} PATH) # get the dir
 get_filename_component(rootDir ${currentDir}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix
 
 set(PHONON_PULSESUPPORT @PHONON_PULSESUPPORT@)
-set(PHONON_FOUND_EXPERIMENTAL TRUE) # this is currently always built
+set(PHONON_FOUND_EXPERIMENTAL @PHONON_BUILD_EXPERIMENTAL@)
 
 # install locations
 set(PHONON_INCLUDE_DIR "${rootDir}/@INCLUDE_INSTALL_DIR@")
@@ -18,10 +18,12 @@ set(PHONON_BUILDSYSTEM_DIR "${rootDir}/@BUILDSYSTEM_INSTALL_DIR@")
 include(${currentDir}/PhononTargets.cmake )
 
 set(PHONON_LIBRARY Phonon::phonon)
-set(PHONON_EXPERIMENTAL_LIBRARY Phonon::phononexperimental)
+if(PHONON_FOUND_EXPERIMENTAL)
+    set(PHONON_EXPERIMENTAL_LIBRARY Phonon::phononexperimental)
+endif(PHONON_FOUND_EXPERIMENTAL)
 set(PHONON_LIBRARIES ${PHONON_LIBRARY} ${PHONON_EXPERIMENTAL_LIBRARY})
 # The following one is only for compatiblity
-set(PHONON_LIBS ${PHONON_LIBRARIES} )
+set(PHONON_LIBS ${PHONON_LIBRARIES})
 
 set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR} ${PHONON_INCLUDE_DIR}/KDE )
 

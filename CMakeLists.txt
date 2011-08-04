@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 # CMP0002: we have multiple targets with the same name for the unit tests
 cmake_policy(SET CMP0002 OLD)
 
+option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" ON)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
