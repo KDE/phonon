@@ -30,7 +30,15 @@
 # include <unistd.h>
 #endif
 
-static QMap<QString, void *> globalObjectsTable;
+// Avoids the "static initialization order fiasco" problem
+// See http://www.parashift.com/c++-faq-lite/ctors.html#faq-10.14
+typedef QMap<QString, void *> GlobalContextTable;
+
+static GlobalContextTable& globalObjectsTable()
+{
+    static GlobalContextTable* instance = new GlobalContextTable;
+    return *instance;
+}
 
 class NoDebugStream: public QIODevice
 {
@@ -59,12 +67,12 @@ IndentPrivate* IndentPrivate::instance(const QString & area)
 {
     IndentPrivate *obj;
     QString objectName = area + QLatin1String("DavrosIndentObject");
-    if (globalObjectsTable.find(objectName) == globalObjectsTable.end()) {
+    if (globalObjectsTable().find(objectName) == globalObjectsTable().end()) {
         obj = new IndentPrivate(qApp, area);
-        globalObjectsTable.insert(objectName, reinterpret_cast<void *>(obj));
+        globalObjectsTable().insert(objectName, reinterpret_cast<void *>(obj));
 	return obj;
     }
-    obj = reinterpret_cast<IndentPrivate *>(globalObjectsTable[objectName]);
+    obj = reinterpret_cast<IndentPrivate *>(globalObjectsTable()[objectName]);
     return obj;
 }
 
@@ -83,12 +91,12 @@ ContextPrivate* ContextPrivate::instance(const QString & area)
 {
     ContextPrivate *obj;
     QString objectName = area + QLatin1String("DavrosContextObject");
-    if (globalObjectsTable.find(objectName) == globalObjectsTable.end()) {
+    if (globalObjectsTable().find(objectName) == globalObjectsTable().end()) {
         obj = new ContextPrivate(qApp, area);
-        globalObjectsTable.insert(objectName, reinterpret_cast<void *>(obj));
+        globalObjectsTable().insert(objectName, reinterpret_cast<void *>(obj));
 	return obj;
     }
-    obj = reinterpret_cast<ContextPrivate *>(globalObjectsTable[objectName]);
+    obj = reinterpret_cast<ContextPrivate *>(globalObjectsTable()[objectName]);
     return obj;
 }
 
