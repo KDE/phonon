@@ -19,8 +19,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DABROS_H
-#define DABROS_H
+#ifndef DAVROS_H
+#define DAVROS_H
 
 // We always want debug output available at runtime
 #undef QT_NO_DEBUG_OUTPUT
@@ -39,7 +39,7 @@
 #endif
 
 #ifndef DAVROS_DEBUG_AREA
-# define DAVROS_DEBUG_AREA QLatin1String("(Unknow)")
+# define DAVROS_DEBUG_AREA QLatin1String("(Unknown)")
 #endif
 
 /// Standard function announcer
