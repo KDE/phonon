@@ -173,19 +173,23 @@ static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, cons
     }
 
     QList<int> deviceList;
-
-    QString categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(category));
-    if (!backendConfig->hasKey(categoryKey)) {
-        // no list in config for the given category
-        categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(NoCategory));
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        deviceList = pulse->objectIndexesByCategory(type, category);
+    } else {
+        QString categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(category));
         if (!backendConfig->hasKey(categoryKey)) {
-            // no list in config for NoCategory
-            return defaultList;
+            // no list in config for the given category
+            categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(NoCategory));
+            if (!backendConfig->hasKey(categoryKey)) {
+                // no list in config for NoCategory
+                return defaultList;
+            }
         }
-    }
 
-    //Now the list from d->config
-    deviceList = backendConfig->value(categoryKey, QList<int>());
+        //Now the list from d->config
+        deviceList = backendConfig->value(categoryKey, QList<int>());
+    }
 
     //if there are devices in d->config that the backend doesn't report, remove them from the list
     QMutableListIterator<int> i(deviceList);
