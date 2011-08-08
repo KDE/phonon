@@ -194,7 +194,7 @@ static Phonon::Category pulseRoleToPhononCategory(const char *role, bool *succes
         return Phonon::NotificationCategory;
     if (r == "phone")
         return Phonon::CommunicationCategory;
-    if (r == "ally")
+    if (r == "a11y")
         return Phonon::AccessibilityCategory;
 
     // ^^ "animation" and "production" have no mapping
@@ -215,7 +215,7 @@ static Phonon::CaptureCategory pulseRoleToPhononCaptureCategory(const char *role
         return Phonon::CommunicationCaptureCategory;
     if (r == "production")
         return Phonon::RecordingCaptureCategory;
-    if (r == "ally")
+    if (r == "a11y")
         return Phonon::ControlCaptureCategory;
 
     *success = false;
@@ -238,7 +238,7 @@ static const QByteArray phononCategoryToPulseRole(Phonon::Category category)
     case Phonon::CommunicationCategory:
         return QByteArray("phone");
     case Phonon::AccessibilityCategory:
-        return QByteArray("ally");
+        return QByteArray("a11y");
     default:
         return QByteArray();
     }
@@ -254,7 +254,7 @@ static const QByteArray phononCaptureCategoryToPulseRole(Phonon::CaptureCategory
     case Phonon::RecordingCaptureCategory:
         return QByteArray("production");
     case Phonon::ControlCaptureCategory:
-        return QByteArray("ally");
+        return QByteArray("a11y");
     default:
         return QByteArray();
     }
