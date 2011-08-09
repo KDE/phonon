@@ -24,6 +24,7 @@
 
 #include "audiooutputelement.h"
 #include "mediaelement.h"
+#include "subtitleelement.h"
 #include "videoelement.h"
 #include "volumefadereffectelement.h"
 
@@ -43,6 +44,7 @@ public:
         qmlRegisterType<Phonon::Declarative::AudioOutputElement>(uri, 1, 0, "AudioOutput");
         qmlRegisterType<Phonon::Declarative::MediaElement>(uri, 1, 0, "Media");
         qmlRegisterType<Phonon::Declarative::MetaData>();
+        qmlRegisterType<Phonon::Declarative::SubtitleElement>(uri, 1, 0, "Subtitle");
         qmlRegisterType<Phonon::Declarative::VideoElement>(uri, 1, 0, "Video");
         qmlRegisterType<Phonon::Declarative::VolumeFaderEffectElement>(uri, 1, 0, "VolumeFader");
     }

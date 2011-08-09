@@ -4,6 +4,7 @@ set(declarative_SRCS
     mediaelement.cpp
     audiooutputelement.cpp
     plugin.cpp
+    subtitleelement.cpp
     volumefadereffectelement.cpp
     videoelement.cpp
 )
