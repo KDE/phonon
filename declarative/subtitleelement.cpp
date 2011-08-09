@@ -32,7 +32,7 @@
 namespace Phonon {
 namespace Declarative {
 
-#define PROTECTOR(returnType) if (!m_mediaController) return returnType()
+#define PROTECT(returnType) P_D_PROTECT(m_mediaController, returnType)
 
 SubtitleElement::SubtitleElement(QObject *parent) :
     QObject(parent),
@@ -62,7 +62,7 @@ void SubtitleElement::init(MediaObject *mediaObject)
 
 QStringList SubtitleElement::availableSubtitles() const
 {
-    PROTECTOR(QStringList);
+    PROTECT(QStringList);
     QList<SubtitleDescription> descriptors = m_mediaController->availableSubtitles();
     QStringList list;
     foreach (const SubtitleDescription &descriptor, descriptors) {
@@ -73,13 +73,13 @@ QStringList SubtitleElement::availableSubtitles() const
 
 QString SubtitleElement::subtitle() const
 {
-    PROTECTOR(QString);
+    PROTECT(QString);
     return m_mediaController->currentSubtitle().name();
 }
 
 void SubtitleElement::setSubtitle(const QString &subtitle)
 {
-    PROTECTOR(void);
+    PROTECT(void);
     qDebug() << "trying to set" << subtitle;
     QList<SubtitleDescription> descriptors = m_mediaController->availableSubtitles();
     foreach (const SubtitleDescription &descriptor, descriptors) {

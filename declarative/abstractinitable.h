@@ -30,6 +30,9 @@ class MediaObject;
 
 namespace Declarative {
 
+#define P_D_PROTECT(member, ret) if (!member) return ret()
+#define P_D_PROTECT_VALUE(member, ret) if (!member) return ret
+
 class AbstractInitAble
 {
 public:
