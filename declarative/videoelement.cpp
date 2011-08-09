@@ -60,6 +60,13 @@ void VideoElement::init(MediaObject *mediaObject)
 
     m_mediaObject = mediaObject;
     createPath(m_mediaObject, m_graphicsObject);
+
+    // Init children
+    foreach (QObject *item, children()) {
+        AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
+        if (obj)
+            obj->init(m_mediaObject);
+    }
 }
 
 bool VideoElement::isCursorVisible() const
