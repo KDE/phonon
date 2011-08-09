@@ -62,16 +62,12 @@ void MediaElement::classBegin()
 
 void MediaElement::componentComplete()
 {
-    // Init children
-    foreach (QGraphicsItem *item, childItems()) {
-        AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
-        if (obj)
-            obj->init(m_mediaObject);
-    }
+    initChildren(this);
 }
 
 void MediaElement::init(MediaObject *mediaObject)
 {
+    qWarning("A Media item may not be used within a Media Item.");
 }
 
 QUrl MediaElement::source() const
