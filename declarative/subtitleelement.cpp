@@ -22,6 +22,7 @@
 #include "subtitleelement.h"
 
 #include <QtCore/QStringList>
+#include <QtDeclarative/QDeclarativeInfo>
 
 #include "phonon/mediacontroller.h"
 
@@ -38,8 +39,8 @@ SubtitleElement::SubtitleElement(QObject *parent) :
     AbstractInitAble()
 {
     if (!isParentValid())
-        qWarning("A subtile item may only be used as child of a Media or "
-                 "Video element.\nSubtitle item will not initialize successfully.");
+        qmlInfo(this) << "A subtile item may only be used as child of a Media or "
+                      << "Video element.\nSubtitle item will not initialize successfully.";
 }
 
 void SubtitleElement::init(MediaObject *mediaObject)
@@ -47,9 +48,11 @@ void SubtitleElement::init(MediaObject *mediaObject)
 #warning inheritance bad -> inits all the phonon without being used
     Q_ASSERT(mediaObject);
 
-    if (!isParentValid())
-        qWarning("A subtile item may only be used as child of a Media or "
-                 "Video element\nSubtitle item can not be initialized.");
+    if (!isParentValid()) {
+        qmlInfo(this) << "A subtile item may only be used as child of a Media or "
+                      << "Video element\nSubtitle item can not be initialized.";
+        return;
+    }
 
 #warning the mediacontroller should be moved into the mediaelement and only accessed
     m_mediaController = new MediaController(mediaObject);
@@ -100,7 +103,6 @@ bool SubtitleElement::isParentValid() const
     }
     return true;
 }
-
 
 } // namespace Declarative
 } // namespace Phonon
