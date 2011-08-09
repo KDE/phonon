@@ -52,6 +52,11 @@ signals:
     void subtitleChanged();
 
 private:
+    /**
+     * \returns true when the parent is valid, false otherwise
+     */
+    bool isParentValid() const;
+
     MediaController *m_mediaController;
 };
 
