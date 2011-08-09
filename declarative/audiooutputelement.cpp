@@ -90,7 +90,7 @@ void AudioOutputElement::init(MediaObject *mediaObject)
 
 #warning not the best of approaches?
     // Init children
-    foreach (QGraphicsItem *item, childItems()) {
+    foreach (QObject *item, children()) {
         AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
         if (obj)
             obj->init(m_mediaObject);
