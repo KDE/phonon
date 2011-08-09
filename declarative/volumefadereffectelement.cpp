@@ -79,5 +79,15 @@ void VolumeFaderEffectElement::fadeTo(float volume, int time)
     m_effect->fadeTo(volume, time);
 }
 
+bool VolumeFaderEffectElement::isParentValid() const
+{
+    if (!parent() ||
+            (!qobject_cast<AudioOutputElement *>(parent()) &&
+             !qobject_cast<MediaElement *>(parent()))) {
+        return false;
+    }
+    return true;
+}
+
 } // namespace Declarative
 } // namespace Phonon

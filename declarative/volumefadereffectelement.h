@@ -10,7 +10,7 @@ namespace Phonon {
 
 namespace Declarative {
 
-class VolumeFaderEffectElement : public QDeclarativeItem,
+class VolumeFaderEffectElement : public QObject,
                                  public AbstractInitAble
 {
     Q_OBJECT
@@ -19,10 +19,9 @@ class VolumeFaderEffectElement : public QDeclarativeItem,
     Q_PROPERTY(Phonon::VolumeFaderEffect::FadeCurve fadeCurve READ fadeCurve WRITE setFadeCurve)
     Q_ENUMS(Phonon::VolumeFaderEffect::FadeCurve)
 public:
-    explicit VolumeFaderEffectElement(QDeclarativeItem *parent = 0);
+    explicit VolumeFaderEffectElement(QObject *parent = 0);
     ~VolumeFaderEffectElement();
 
-    void classBegin();
     virtual void init(MediaObject *mediaObject);
 
     float volume() const;
@@ -41,6 +40,8 @@ public slots:
     void fadeTo(float volume, int time);
 
 private:
+    bool isParentValid() const;
+
     VolumeFaderEffect *m_effect;
 };
 
