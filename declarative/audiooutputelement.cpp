@@ -88,13 +88,7 @@ void AudioOutputElement::init(MediaObject *mediaObject)
 #warning should go to base supposedly
     m_path = createPath(m_mediaObject, m_audioOutput);
 
-#warning not the best of approaches?
-    // Init children
-    foreach (QObject *item, children()) {
-        AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(item);
-        if (obj)
-            obj->init(m_mediaObject);
-    }
+    initChildren(this);
 }
 
 } // namespace Declarative
