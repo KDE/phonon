@@ -22,6 +22,8 @@
 #ifndef ABSTRACTINITABLE_H
 #define ABSTRACTINITABLE_H
 
+#include <QtCore/QObject>
+
 namespace Phonon {
 
 class MediaObject;
@@ -36,6 +38,15 @@ public:
 protected:
     AbstractInitAble() : m_mediaObject(0) {}
     virtual ~AbstractInitAble() {}
+
+    inline void initChildren(QObject *that) const
+    {
+        foreach (QObject *qobject, that->children()) {
+            AbstractInitAble *obj = dynamic_cast<AbstractInitAble *>(qobject);
+            if (obj)
+                obj->init(m_mediaObject);
+        }
+    }
 
     MediaObject *m_mediaObject;
 };
