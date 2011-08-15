@@ -116,9 +116,17 @@ bool FactoryPrivate::createBackend()
 {
 #ifndef QT_NO_LIBRARY
     Q_ASSERT(m_backendObject == 0);
+
+    // If the user defines a backend with PHONON_BACKEND this overrides the
+    // platform plugin (because we cannot influence its lookup priority) and
+    // consequently will try to find/load the defined backend manually.
+    const QByteArray backendEnv = qgetenv("PHONON_BACKEND");
+
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
-    if (f) {
+    if (f && backendEnv.isEmpty()) {
+        // TODO: it would be very groovy if we could add a param, so that the
+        // platform could also try to load the defined backend as preferred choice.
         m_backendObject = f->createBackend();
     }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
@@ -152,10 +160,6 @@ bool FactoryPrivate::createBackend()
             }
 #endif
 
-#ifdef __GNUC__
-#warning TODO - phonon should really parse cmdline args
-#endif // __GNUC__
-            const QByteArray backendEnv = qgetenv("PHONON_BACKEND");
             if (!backendEnv.isEmpty()) {
                 pDebug() << "trying to load:" << backendEnv << "as first choice";
                 const int backendIndex = plugins.indexOf(QRegExp(backendEnv + ".*"));
