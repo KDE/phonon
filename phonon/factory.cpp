@@ -190,6 +190,13 @@ bool FactoryPrivate::createBackend()
         }
     }
 
+    pDebug() << Q_FUNC_INFO
+             << "Phonon backend"
+             << m_backendObject->property("backendName").toString()
+             << "version"
+             << m_backendObject->property("backendVersion").toString()
+             << "loaded";
+
     connect(m_backendObject, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
             SLOT(objectDescriptionChanged(ObjectDescriptionType)));
 
