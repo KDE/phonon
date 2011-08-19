@@ -93,6 +93,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         void _k_currentSourceChanged(const MediaSource &);
         void _k_validateStateChange(Phonon::State, Phonon::State);
         PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
+        bool validateStateTransition(Phonon::State newstate, Phonon::State oldstate);
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         void streamError(Phonon::ErrorType, const QString &);
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
