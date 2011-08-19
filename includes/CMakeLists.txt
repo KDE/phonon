@@ -24,6 +24,7 @@ install( FILES
     phonon/EffectParameter
     phonon/EffectWidget
     phonon/Global
+    phonon/GlobalDescriptionContainer
     phonon/MediaController
     phonon/MediaNode
     phonon/MediaObject
@@ -92,13 +93,15 @@ install( FILES
   old/Phonon/VolumeSlider
 DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon COMPONENT Devel)
 
-install(FILES
-  old/Phonon/Experimental/AbstractVideoDataOutput
-  old/Phonon/Experimental/AudioDataOutput
-  old/Phonon/Experimental/SnapshotInterface
-  old/Phonon/Experimental/VideoDataOutput
-  old/Phonon/Experimental/VideoDataOutputInterface
-  old/Phonon/Experimental/VideoFrame
-  old/Phonon/Experimental/VideoFrame2
-  old/Phonon/Experimental/Visualization
-DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon/Experimental COMPONENT Devel)
+if (PHONON_BUILD_EXPERIMENTAL)
+    install(FILES
+        old/Phonon/Experimental/AbstractVideoDataOutput
+        old/Phonon/Experimental/AudioDataOutput
+        old/Phonon/Experimental/SnapshotInterface
+        old/Phonon/Experimental/VideoDataOutput
+        old/Phonon/Experimental/VideoDataOutputInterface
+        old/Phonon/Experimental/VideoFrame
+        old/Phonon/Experimental/VideoFrame2
+        old/Phonon/Experimental/Visualization
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon/Experimental COMPONENT Devel)
+endif (PHONON_BUILD_EXPERIMENTAL)

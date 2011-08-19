@@ -84,7 +84,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         virtual bool aboutToDeleteBackendObject();
         virtual void createBackendObject();
         virtual void phononObjectDestroyed(MediaNodePrivate *);
-        bool validateStateTransition(Phonon::State, Phonon::State);
         PHONON_EXPORT void setupBackendObject();
 
         void _k_resumePlay();
@@ -119,7 +118,14 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         {
 #ifdef HAVE_QZEITGEIST
             QtZeitgeist::init();
-            log = new QtZeitgeist::Log(qObject());
+            log = new QtZeitgeist::Log();
+#endif
+        }
+
+        ~MediaObjectPrivate()
+        {
+#ifdef HAVE_QZEITGEIST
+            delete log;
 #endif
         }
 

@@ -1,6 +1,5 @@
 # This is a very basic file for the new style find_package() search mode,
-# i.e. Config-mode. It is used by MACRO_WRITE_BASIC_CMAKE_VERSION_FILE() from 
-# MacroWriteBasicCMakeVersionFile.cmake.
+# i.e. Config-mode.
 # In this mode find_package() searches for a <package>Config.cmake 
 # file and an associated <package>Version.cmake file, which it loads to check 
 # the version number.
@@ -11,13 +10,9 @@
 # if the current version is >= requested version.
 # If this is not good enough for your project, you need to write your own
 # improved <package>Version.cmake file.
-# This file requires the following three variables to be set:
-#   PROJECT_VERSION_MAJOR
-#   PROJECT_VERSION_MINOR
-#   PROJECT_VERSION_PATCH
 
 
-set(PACKAGE_VERSION @PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@)
+set(PACKAGE_VERSION @PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONON_LIB_PATCH_VERSION@)
 
 if("${PACKAGE_VERSION}" VERSION_LESS "${PACKAGE_FIND_VERSION}" )
    set(PACKAGE_VERSION_COMPATIBLE FALSE)

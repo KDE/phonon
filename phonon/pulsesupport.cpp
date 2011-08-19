@@ -28,11 +28,12 @@
 
 #ifdef HAVE_PULSEAUDIO
 #include "pulsestream_p.h"
-#include <glib.h>
 #include <pulse/pulseaudio.h>
 #include <pulse/xmalloc.h>
 #include <pulse/glib-mainloop.h>
-#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
+
+#define HAVE_PULSEAUDIO_DEVICE_MANAGER PA_CHECK_VERSION(0,9,21)
+#if HAVE_PULSEAUDIO_DEVICE_MANAGER
 #  include <pulse/ext-device-manager.h>
 #endif
 #endif // HAVE_PULSEAUDIO
@@ -193,7 +194,7 @@ static Phonon::Category pulseRoleToPhononCategory(const char *role, bool *succes
         return Phonon::NotificationCategory;
     if (r == "phone")
         return Phonon::CommunicationCategory;
-    if (r == "ally")
+    if (r == "a11y")
         return Phonon::AccessibilityCategory;
 
     // ^^ "animation" and "production" have no mapping
@@ -214,7 +215,7 @@ static Phonon::CaptureCategory pulseRoleToPhononCaptureCategory(const char *role
         return Phonon::CommunicationCaptureCategory;
     if (r == "production")
         return Phonon::RecordingCaptureCategory;
-    if (r == "ally")
+    if (r == "a11y")
         return Phonon::ControlCaptureCategory;
 
     *success = false;
@@ -237,7 +238,7 @@ static const QByteArray phononCategoryToPulseRole(Phonon::Category category)
     case Phonon::CommunicationCategory:
         return QByteArray("phone");
     case Phonon::AccessibilityCategory:
-        return QByteArray("ally");
+        return QByteArray("a11y");
     default:
         return QByteArray();
     }
@@ -253,7 +254,7 @@ static const QByteArray phononCaptureCategoryToPulseRole(Phonon::CaptureCategory
     case Phonon::RecordingCaptureCategory:
         return QByteArray("production");
     case Phonon::ControlCaptureCategory:
-        return QByteArray("ally");
+        return QByteArray("a11y");
     default:
         return QByteArray();
     }
@@ -286,7 +287,7 @@ static void createGenericDevices()
     }
 }
 
-#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
+#if HAVE_PULSEAUDIO_DEVICE_MANAGER
 static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manager_info *info, int eol, void *userdata) {
     Q_ASSERT(c);
     Q_ASSERT(userdata);
@@ -715,7 +716,7 @@ static void context_state_callback(pa_context *c, void *)
             pa_operation_unref(o);
         }
 
-#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
+#if HAVE_PULSEAUDIO_DEVICE_MANAGER
         // 2a. Attempt to initialise Device Manager info (except during probe)
         if (s_context == c) {
             pa_ext_device_manager_set_subscribe_cb(c, ext_device_manager_subscribe_cb, NULL);
@@ -1039,7 +1040,7 @@ static void setDevicePriority(QString role, QStringList list)
     }
     devices[list.size()] = NULL;
 
-#ifdef HAVE_PULSEAUDIO_DEVICE_MANAGER
+#if HAVE_PULSEAUDIO_DEVICE_MANAGER
     pa_operation *o;
     if (!(o = pa_ext_device_manager_reorder_devices_for_role(s_context, role.toUtf8().constData(), (const char**)devices, NULL, NULL)))
         logMessage(QString::fromLatin1("pa_ext_device_manager_reorder_devices_for_role() failed"));

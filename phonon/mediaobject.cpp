@@ -31,7 +31,6 @@
 #include "abstractmediastream_p.h"
 #include "frontendinterface_p.h"
 
-#include <QtCore/QDebug>
 #include <QtCore/QStringBuilder>
 #include <QtCore/QStringList>
 #include <QtCore/QDateTime>
@@ -259,7 +258,9 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
+    d->sendToZeitgeist(StoppedState);
     INTERFACE_CALL(setSource(d->mediaSource));
+    d->sendToZeitgeist();
 }
 
 void MediaObject::clear()
@@ -580,9 +581,6 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
     pDebug() << "State changed from" << stateName(oldstate) << "to" << stateName(newstate) << "-> sending to zeitgeist.";
     sendToZeitgeist(newstate);
 
-#ifdef QT_DEBUG
-#endif
-
     // AbstractMediaStream fallback stuff --------------------------------------
     if (errorOverride) {
         errorOverride = false;
@@ -628,7 +626,9 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
         abstractStream->d_func()->setMediaObjectPrivate(this);
         MediaSource mediaSource(abstractStream);
         mediaSource.setAutoDelete(true);
+        sendToZeitgeist(StoppedState);
         pINTERFACE_CALL(setSource(mediaSource));
+        sendToZeitgeist();
         if (oldstate == Phonon::BufferingState) {
             q->play();
         }
@@ -696,6 +696,7 @@ void MediaObjectPrivate::setupBackendObject()
     qRegisterMetaType<MediaSource>("MediaSource");
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SLOT(_k_validateStateChange(Phonon::State, Phonon::State)), Qt::DirectConnection);
+    qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
@@ -723,10 +724,10 @@ void MediaObjectPrivate::setupBackendObject()
                      q, SIGNAL(prefinishMarkReached(qint32)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
                      q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(const QMultiMap<QString, QString> &)),
-                     q, SLOT(_k_metaDataChanged(const QMultiMap<QString, QString> &)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(const MediaSource&)),
-                     q, SLOT(_k_currentSourceChanged(const MediaSource&)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString, QString>)),
+                     q, SLOT(_k_metaDataChanged(QMultiMap<QString, QString>)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(MediaSource)),
+                     q, SLOT(_k_currentSourceChanged(MediaSource)), Qt::QueuedConnection);
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));
@@ -772,7 +773,9 @@ void MediaObjectPrivate::setupBackendObject()
             mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
         }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        sendToZeitgeist(StoppedState);
         pINTERFACE_CALL(setSource(mediaSource));
+        sendToZeitgeist();
     }
 }
 

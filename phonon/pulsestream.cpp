@@ -21,6 +21,7 @@
 */
 
 #include "pulsestream_p.h"
+#include <QtCore/qmath.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -81,7 +82,7 @@ void PulseStream::setVolume(const pa_cvolume *volume)
         // AudioOutput expects the "backend" to supply values that have been
         // adjusted for Stephens' law, so we need to fudge them accordingly
         // so that the %ages match up in KMix/the application's own slider.
-        emit volumeChanged(pow(vol, VOLTAGE_TO_LOUDNESS_EXPONENT));
+        emit volumeChanged(qPow(vol, VOLTAGE_TO_LOUDNESS_EXPONENT));
     }
 }
 
