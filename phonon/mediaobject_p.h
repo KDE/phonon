@@ -30,8 +30,8 @@
 #include "mediasource.h"
 #include <QtCore/QQueue>
 #ifdef HAVE_QZEITGEIST
-#include <QtZeitgeist/Log>
-#include <QtZeitgeist/QtZeitgeist>
+#include <QZeitgeist/Log>
+#include <QZeitgeist/QZeitgeist>
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -114,8 +114,8 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
 #ifdef HAVE_QZEITGEIST
-            QtZeitgeist::init();
-            log = new QtZeitgeist::Log();
+            QZeitgeist::init();
+            log = new QZeitgeist::Log();
 #endif
         }
 
@@ -149,7 +149,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
 #ifdef HAVE_QZEITGEIST
-        QtZeitgeist::Log *log;
+        QZeitgeist::Log *log;
 #endif
 };
 }

@@ -38,11 +38,11 @@
 #include <QtCore/QUrl>
 
 #ifdef HAVE_QZEITGEIST
-#include <QtZeitgeist/DataModel/Event>
-#include <QtZeitgeist/Interpretation>
-#include <QtZeitgeist/Log>
-#include <QtZeitgeist/Manifestation>
-#include <QtZeitgeist/QtZeitgeist>
+#include <QZeitgeist/DataModel/Event>
+#include <QZeitgeist/Interpretation>
+#include <QZeitgeist/Log>
+#include <QZeitgeist/Manifestation>
+#include <QZeitgeist/QZeitgeist>
 #endif
 
 #include "phononnamespace_p.h"
@@ -332,7 +332,7 @@ void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
                                          const QString &subject_mimetype)
 {
 #ifdef HAVE_QZEITGEIST
-    QtZeitgeist::DataModel::Subject subject;
+    QZeitgeist::DataModel::Subject subject;
     QString url = subject_uri.toString();
     QString path = url.left(url.lastIndexOf(QLatin1Char('/')));
     subject.setUri(url);
@@ -342,20 +342,20 @@ void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
     subject.setOrigin(path);
     subject.setMimeType(subject_mimetype);
 
-    QtZeitgeist::DataModel::SubjectList subjects;
+    QZeitgeist::DataModel::SubjectList subjects;
     subjects << subject;
 
-    QtZeitgeist::DataModel::Event event;
+    QZeitgeist::DataModel::Event event;
     event.setTimestamp(subject_timestamp);
     event.setInterpretation(event_interpretation);
     event.setManifestation(event_manifestation);
     event.setActor(event_actor);
     event.setSubjects(subjects);
 
-    QtZeitgeist::DataModel::EventList events;
+    QZeitgeist::DataModel::EventList events;
     events << event;
 
-    QDBusPendingReply<QtZeitgeist::DataModel::EventIdList> reply =
+    QDBusPendingReply<QZeitgeist::DataModel::EventIdList> reply =
         log->insertEvents(events);
 #else
     Q_UNUSED(event_interpretation)
@@ -379,11 +379,11 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
         QString eventInterpretation;
         switch (eventState) {
         case PlayingState:
-            eventInterpretation = QtZeitgeist::Interpretation::Event::ZGAccessEvent;
+            eventInterpretation = QZeitgeist::Interpretation::Event::ZGAccessEvent;
             break;
         case ErrorState:
         case StoppedState:
-            eventInterpretation = QtZeitgeist::Interpretation::Event::ZGLeaveEvent;
+            eventInterpretation = QZeitgeist::Interpretation::Event::ZGLeaveEvent;
             break;
         //These states are not signifigant events.
         case LoadingState:
@@ -411,10 +411,10 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
         QString mime;
         QString subjectInterpretation;
         if (q->hasVideo()) {
-            subjectInterpretation = QtZeitgeist::Interpretation::Subject::NFOVideo;
+            subjectInterpretation = QZeitgeist::Interpretation::Subject::NFOVideo;
             mime = "video/raw";
         } else {
-            subjectInterpretation = QtZeitgeist::Interpretation::Subject::NFOAudio;
+            subjectInterpretation = QZeitgeist::Interpretation::Subject::NFOAudio;
             mime = "audio/raw";
         }
         pDebug() << "Zeitgeist mime type:" << mime;
@@ -427,20 +427,20 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
         case MediaSource::Invalid:
             return;
         case MediaSource::Url:
-            subjectType = QtZeitgeist::Manifestation::Subject::NFORemoteDataObject;
+            subjectType = QZeitgeist::Manifestation::Subject::NFORemoteDataObject;
             break;
         case MediaSource::CaptureDevice:
         case MediaSource::Disc:
         case MediaSource::Stream:
-            subjectType = QtZeitgeist::Manifestation::Subject::NFOMediaStream;
+            subjectType = QZeitgeist::Manifestation::Subject::NFOMediaStream;
             break;
         case MediaSource::LocalFile:
-            subjectType = QtZeitgeist::Manifestation::Subject::NFOFileDataObject;
+            subjectType = QZeitgeist::Manifestation::Subject::NFOFileDataObject;
             break;
         }
 
         sendToZeitgeist(eventInterpretation,
-                        QtZeitgeist::Manifestation::Event::ZGUserActivity,
+                        QZeitgeist::Manifestation::Event::ZGUserActivity,
                         QLatin1Literal("app://" ) % Platform::applicationName() % QLatin1Literal(".desktop"),
                         QDateTime::currentDateTime(),
                         mediaSource.url(),
