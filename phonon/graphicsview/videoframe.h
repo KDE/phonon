@@ -40,10 +40,6 @@ struct VideoFrame {
 
     int width;
     int height;
-    double aspectRatio;
-
-    inline int aspectCorrectedWidth() const { return qRound(aspectRatio * height); }
-    inline int aspectCorrectedHeight() const { return qRound(width / aspectRatio); }
 
     Format format;
 
