@@ -52,7 +52,7 @@ struct VideoFrame {
 
     inline QImage qImage() const
     {
-        // QImage can only handled packed formats.
+        // QImage can only handle packed formats.
         if (planeCount != 1)
             return QImage();
 
