@@ -32,7 +32,7 @@ public:
     void setFrame(const VideoFrame *frame) { m_frame = frame; }
 
     virtual void init() = 0;
-    virtual void paint(QPainter *painter, QRectF target, const VideoFrame *frame) = 0;
+    virtual void paint(QPainter *painter, QRectF target) = 0;
 
     virtual ~AbstractVideoGraphicsPainter() {}
 

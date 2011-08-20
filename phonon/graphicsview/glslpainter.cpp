@@ -108,7 +108,7 @@ void GlslPainter::init()
     glGenTextures(m_textureCount, m_textureIds);
 }
 
-void GlslPainter::paint(QPainter *painter, QRectF target, const VideoFrame *frame)
+void GlslPainter::paint(QPainter *painter, QRectF target)
 {
     // Need to reenable those after native painting has begun, otherwise we might
     // not be able to paint anything.

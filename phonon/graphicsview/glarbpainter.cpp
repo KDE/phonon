@@ -135,7 +135,7 @@ void GlArbPainter::init()
     glGenTextures(m_textureCount, m_textureIds);
 }
 
-void GlArbPainter::paint(QPainter *painter, QRectF target, const VideoFrame *frame)
+void GlArbPainter::paint(QPainter *painter, QRectF target)
 {
     Q_ASSERT(m_context);
     m_context->makeCurrent();

@@ -35,7 +35,7 @@ public:
     virtual ~GlArbPainter();
 
     void init();
-    void paint(QPainter *painter, QRectF target, const VideoFrame *frame);
+    void paint(QPainter *painter, QRectF target);
 
 private:
     GLuint programId;

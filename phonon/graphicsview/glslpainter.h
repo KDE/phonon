@@ -35,7 +35,7 @@ public:
     virtual ~GlslPainter();
 
     void init();
-    void paint(QPainter *painter, QRectF target, const VideoFrame *frame);
+    void paint(QPainter *painter, QRectF target);
 
 private:
     QGLShaderProgram *m_program;

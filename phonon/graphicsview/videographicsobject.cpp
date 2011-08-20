@@ -45,9 +45,9 @@ public:
     virtual ~QPainterPainter() {}
 
     void init() {}
-    void paint(QPainter *painter, QRectF target, const VideoFrame *frame)
+    void paint(QPainter *painter, QRectF target)
     {
-        painter->drawImage(target, frame->qImage());
+        painter->drawImage(target, m_frame->qImage());
     }
 };
 
@@ -189,7 +189,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
         if (!d->graphicsPainter)
             d->graphicsPainter = d->createPainter(frame);
         d->graphicsPainter->setFrame(frame);
-        d->graphicsPainter->paint(painter, d->boundingRect, frame);
+        d->graphicsPainter->paint(painter, d->boundingRect);
     }
 
     INTERFACE_CALL(unlock());
