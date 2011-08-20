@@ -132,7 +132,7 @@ QRectF VideoGraphicsObject::boundingRect() const
 AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter(const VideoFrame *frame)
 {
     AbstractVideoGraphicsPainter *painter = 0;
-    if(QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext())) {
+    if (QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext())) {
         glContext->makeCurrent();
 
         GlPainter *glPainter = 0;
