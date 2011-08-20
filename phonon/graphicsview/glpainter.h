@@ -46,6 +46,7 @@ class GlPainter : public AbstractVideoGraphicsPainter
     } GlTextureSize;
 
 public:
+    /// \param context the QGLContext to use for this painter.
     void setContext(QGLContext *context) { m_context = context; }
 
     virtual ~GlPainter()
@@ -60,6 +61,9 @@ public:
 #warning could go into cpp
 
 #define s(_d, p_n, p_d)  _d  * p_n / p_d
+    /**
+     * Initialize for an RGB32/RGBA frame.
+     */
     void initRgb32()
     {
         Q_ASSERT(m_frame->planeCount == 1);
@@ -74,6 +78,9 @@ public:
         m_texSize[0].height = s(m_frame->height, 1, 1);
     }
 
+    /**
+     * Initialize for an YV12 frame.
+     */
     void initYv12()
     {
         Q_ASSERT(m_frame->planeCount == 3);
@@ -94,6 +101,9 @@ public:
     }
 #undef s
 
+    /**
+     * Initalize the color matrix to be used for YUV->RGB color conversion.
+     */
     void initColorMatrix()
     {
         m_colorMatrix = QMatrix4x4(1.0, 0.0, 0.0, 0.0,
@@ -119,6 +129,10 @@ public:
         }
     }
 
+    /**
+     * Initialize all textures (amount of texture is dependent on what count was
+     * decided in the specific init functions.
+     */
     void initTextures()
     {
         for (int i = 0; i < m_textureCount; ++i) {
