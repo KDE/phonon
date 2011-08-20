@@ -77,7 +77,7 @@ public:
     AbstractVideoGraphicsPainter *createPainter(const VideoFrame *frame);
     void paintGl(QPainter *painter, QRectF rect, VideoFrame *frame);
 
-    void setTargetRect();
+    void updateBoundingRect();
 
     QRectF geometry;
     QRectF boundingRect;
@@ -180,7 +180,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
         // TODO: do scaling ourselfs?
         d->gotSize = true;
         d->frameSize = QSize(frame->width, frame->height);
-        d->setTargetRect();
+        d->updateBoundingRect();
     }
 
     if (frame->format == VideoFrame::Format_Invalid || !d->paintedOnce) {
@@ -209,10 +209,10 @@ void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
 {
     K_D(VideoGraphicsObject);
     d->geometry = newGeometry;
-    d->setTargetRect();
+    d->updateBoundingRect();
 }
 
-void VideoGraphicsObjectPrivate::setTargetRect()
+void VideoGraphicsObjectPrivate::updateBoundingRect()
 {
     Q_Q(VideoGraphicsObject);
     emit q->prepareGeometryChange();
