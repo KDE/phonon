@@ -26,6 +26,16 @@
 
 namespace Phonon {
 
+/**
+ * This class presents a simple video frame within Phonon.
+ * It has all the main characteristics of a frame. It has height, width and a
+ * chroma format.
+ * The chroma format also decides on how many picture planes one frame may have.
+ * For example a YV12 frame will have 3 planes, one for Y one for U and one for V.
+ * An RGB32 frame on the other hand only has one plane (as RGB is a packed format).
+ *
+ * \author Harald Sitter <sitter@kde.org
+ */
 struct VideoFrame {
     enum Format {
         // TODO: really reference qimg formats?
@@ -38,14 +48,29 @@ struct VideoFrame {
         Format_YUY2 = Format_YCbCr422
     };
 
+    /// The width.
     int width;
+
+    /// The height.
     int height;
 
+    /// The format.
     Format format;
 
-    QByteArray plane[3];
+    /// The amont of picture planes.
     int planeCount;
 
+    /// The picture planes.
+    QByteArray plane[3];
+
+    /**
+     * Convenience method to create a QImage from a frame.
+     * This only works for RGB888 and RGB32. Consequently a frame must be valid
+     * and have exactly one plane for this to work properly.
+     *
+     * \returns a valid qimage if everything went ok, an invalid QImage if the frame
+     * is not compatible with a QImage format.
+     */
     inline QImage qImage() const
     {
         // QImage can only handle packed formats.
@@ -53,6 +78,9 @@ struct VideoFrame {
             return QImage();
 
         switch(format) {
+        case Format_RGB888:
+            return QImage(reinterpret_cast<const uchar *>(plane[0].constData()),
+                          width, height, QImage::Format_RGB888);
         case Format_RGB32:
             return QImage(reinterpret_cast<const uchar *>(plane[0].constData()),
                           width, height, QImage::Format_RGB32);
