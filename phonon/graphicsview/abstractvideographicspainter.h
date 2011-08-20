@@ -26,19 +26,61 @@ namespace Phonon {
 
 class VideoFrame;
 
+/**
+ * This class provides a well defined interface to video graphics painter
+ * implementations.
+ *
+ * A video graphics painter is a class that draws onto an arbitrary target
+ * rectangle within a QGraphicsScene by whatever means it has (e.g. OpenGL ARB,
+ * GLSL or simply QPainter).
+ *
+ * \author Harald Sitter <sitter@kde.org>
+ */
 class AbstractVideoGraphicsPainter
 {
 public:
+    /**
+     * Set a new frame on the painter.
+     * This function should be called before any other function is used. The
+     * frame can either stay valid throughout the life time of the object (in
+     * which case you only need to call it once) or you need to set the most
+     * current frame each paint cycle.
+     * At any rate there must be a valid frame set before calling anything.
+     *
+     * Mind that you will need to drop the painter and reinitialize a new one
+     * once the frame changed in format, size, and the like.
+     *
+     * \param frame is the video frame that the painter is supposed to paint later on.
+     */
     void setFrame(const VideoFrame *frame) { m_frame = frame; }
 
+    /**
+     * Implementations of init can prepare the painter for painting. For example
+     * an OpenGL painter may setup the GLContext and prepare the textures.
+     * Mind that init will usually be irreversible, so once a painter was
+     * initialized for a specific frame only the data of this frame may change.
+     *
+     * \see setFrame
+     */
     virtual void init() = 0;
+
+    /**
+     * The actual paint logic is implemented in this function.
+     *
+     * \param painter the QPainter obtained from the paint call on a QGraphicsItem.
+     * \param target the rectangle to draw in, this will usually be the rectangle calculated for
+     * a given aspect ratio.
+     */
     virtual void paint(QPainter *painter, QRectF target) = 0;
 
+    /// Destructor.
     virtual ~AbstractVideoGraphicsPainter() {}
 
 protected:
+    /// Constructor.
     AbstractVideoGraphicsPainter() {}
 
+    /// The frame an implementatin is supposed to work with.
     const VideoFrame *m_frame;
 };
 

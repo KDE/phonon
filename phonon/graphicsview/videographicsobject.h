@@ -31,17 +31,67 @@ namespace Phonon {
 class VideoFrame;
 class VideoGraphicsObjectPrivate;
 
+/**
+ * This class is a video representation implementation for QGraphicsViews/Scenes.
+ *
+ * It manually obtaines raw frame data from the Phonon backends using the
+ * VideoGraphicsObjectInterface and draws them using an implemntation of
+ * AbstractVideoGraphicsPainter.
+ *
+ * The VideoGraphicsObject can be used like any other QGraphicsItem, simply add
+ * it to a scene and be done with it.
+ * You should however keep in mind that due to the amount of work involved in
+ * redrawing an area of screen ~25 times per second that some things possible with
+ * other VideoGraphicsItems are not possible with a Phonon VideoGraphicsObject.
+ * Also not every painter can deliver all the functionality required for more complex
+ * things.
+ *
+ * For ultimate performance and user experience you should use a Phonon
+ * VideoGraphicsObject only in a QGraphicsView with OpenGL viewport. Please take
+ * a look at the QGraphicsView documentation for information on how to set an
+ * OpenGL viewport.
+ *
+ * As the QGraphicsView system does not provide implicit size hints you can
+ * explicitly request a target geometry for the VideoGraphicsObject using
+ * setGeometry().
+ *
+ * \code
+ * QGraphicsView view;
+ * QGraphicsScene scene;
+ * view.setScene(&scene);
+ *
+ * Phonon::MediaObject mo;
+ * Phonon::VideoGraphicsObject vgo;
+ * Phonon::createPath(&mo, &vgo);
+ * vgo.setGeometry(QRectF(0,0,320,240));
+ * scene.addItem(&vgo);
+ * mo.setCurrentSource(Phonon::MediaSource("~/video.ogv"));
+ * mo.play();
+ *
+ * view.show();
+ * \endcode
+ *
+ * \author Harald Sitter <sitter@kde.org>
+ */
 class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject, public MediaNode
 {
     K_DECLARE_PRIVATE(VideoGraphicsObject)
     Q_OBJECT
 public:
+    /// Constructor. \param parent the parent of the object.
     explicit VideoGraphicsObject(QGraphicsItem *parent = 0);
+
+    /// Destructor.
     virtual ~VideoGraphicsObject();
 
+    /// \returns the rectangle in which the object will paint, either equal
+    /// or smaller than the set .
     virtual QRectF boundingRect() const;
+
+    /// \param newGeometry the geometry this object should at most occupy.
     void setGeometry(const QRectF &newGeometry);
 
+    // !reimpl
     void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
 private slots:
@@ -53,19 +103,40 @@ private slots:
 class VideoGraphicsObjectInterface
 {
 public:
+    /// Destructor.
     virtual ~VideoGraphicsObjectInterface() {}
 
+    /// \returns frontend VideoGraphicsObject.
     virtual VideoGraphicsObject *videoGraphicsObject() = 0;
+
+    /// \param object frontend VideoGraphicsObject to set.
     virtual void setVideoGraphicsObject(VideoGraphicsObject *object) = 0;
 
+    /// Lock video frame.
     virtual void lock() = 0;
+
+    /**
+     * Try to lock video frame.
+     * \returns whether locking was successful.
+     */
     virtual bool tryLock() = 0;
+
+    /// Unlock video frame.
     virtual void unlock() = 0;
 
+    /**
+     * Access the most current video frame.
+     * Please mind that an internal mutex must be locked/unlocked accordingly.
+     * \returns the current frame (held in the interface implementation)
+     */
     virtual const VideoFrame *frame() const = 0;
 
     // Signals
+
+    /// Signal to be emitted when a new frame is ready for painting.
     virtual void frameReady() = 0;
+
+    /// Signal to be emitted when the frontend object should reset (Painters for instance).
     virtual void reset() = 0;
 };
 
