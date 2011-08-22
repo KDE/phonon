@@ -100,48 +100,6 @@ private slots:
     void reset();
 };
 
-class VideoGraphicsObjectInterface
-{
-public:
-    /// Destructor.
-    virtual ~VideoGraphicsObjectInterface() {}
-
-    /// \returns frontend VideoGraphicsObject.
-    virtual VideoGraphicsObject *videoGraphicsObject() = 0;
-
-    /// \param object frontend VideoGraphicsObject to set.
-    virtual void setVideoGraphicsObject(VideoGraphicsObject *object) = 0;
-
-    /// Lock video frame.
-    virtual void lock() = 0;
-
-    /**
-     * Try to lock video frame.
-     * \returns whether locking was successful.
-     */
-    virtual bool tryLock() = 0;
-
-    /// Unlock video frame.
-    virtual void unlock() = 0;
-
-    /**
-     * Access the most current video frame.
-     * Please mind that an internal mutex must be locked/unlocked accordingly.
-     * \returns the current frame (held in the interface implementation)
-     */
-    virtual const VideoFrame *frame() const = 0;
-
-    // Signals
-
-    /// Signal to be emitted when a new frame is ready for painting.
-    virtual void frameReady() = 0;
-
-    /// Signal to be emitted when the frontend object should reset (Painters for instance).
-    virtual void reset() = 0;
-};
-
 } // namespace Phonon
-
-Q_DECLARE_INTERFACE(Phonon::VideoGraphicsObjectInterface, "VideoGraphicsObjectInterface.phonon.kde.org")
 
 #endif // PHONON_VIDEOGRAPHICSOBJECT_H

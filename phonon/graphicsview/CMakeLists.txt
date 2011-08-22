@@ -1,0 +1,21 @@
+set(phonon_VGO_SRCS
+    graphicsview/glarbpainter.cpp
+    graphicsview/glslpainter.cpp
+    graphicsview/videographicsobject.cpp
+
+    # Work around QtCreator not displaying random headers.
+    graphicsview/abstractvideographicspainter.h
+    graphicsview/glpainter.h
+    graphicsview/videoframe.h
+    graphicsview/videographicsobjectinterface.h
+
+    PARENT_SCOPE
+)
+
+set(phonon_VGO_HDRS
+    graphicsview/videoframe.h
+    graphicsview/videographicsobject.h
+    graphicsview/videographicsobjectinterface.h
+
+    PARENT_SCOPE
+)

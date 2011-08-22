@@ -1,3 +1,5 @@
+add_subdirectory(graphicsview)
+
 if (PHONON_BUILD_EXPERIMENTAL)
     add_subdirectory(experimental)
 endif (PHONON_BUILD_EXPERIMENTAL)
@@ -58,14 +60,9 @@ set(phonon_LIB_SRCS
    swiftslider.cpp
    volumefadereffect.cpp
    volumeslider.cpp
-   graphicsview/abstractvideographicspainter.h
-   graphicsview/glpainter.h
-   graphicsview/glarbpainter.cpp
-   graphicsview/glslpainter.cpp
-   graphicsview/videoframe.h
-   graphicsview/videographicsobject.cpp
    videoplayer.cpp
    videowidget.cpp
+   ${phonon_VGO_SRCS}
    )
 
 if (PULSEAUDIO_FOUND)
@@ -158,14 +155,13 @@ install(FILES
    pulsesupport.h
    seekslider.h
    streaminterface.h
-   graphicsview/videoframe.h
-   graphicsview/videographicsobject.h
    videoplayer.h
    videowidget.h
    videowidgetinterface.h
    volumefadereffect.h
    volumefaderinterface.h
    volumeslider.h
+   ${phonon_VGO_HDRS}
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 

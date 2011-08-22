@@ -32,6 +32,7 @@
 #include "medianode_p.h"
 #include "phonondefs_p.h"
 #include "videoframe.h"
+#include "videographicsobjectinterface.h"
 
 #define PHONON_INTERFACENAME VideoGraphicsObjectInterface
 
