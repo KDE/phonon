@@ -47,15 +47,15 @@ namespace Declarative {
  * \see Phonon::VideoGraphicsObject
  * \author Harald Sitter <sitter@kde.org>
  */
-class VideoElement : public QDeclarativeItem, public AbstractInitAble
+class VideoOutputElement : public QDeclarativeItem, public AbstractInitAble
 {
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
     Q_PROPERTY(bool cursorVisible READ isCursorVisible WRITE setCursorVisible NOTIFY cursorVisibilityChanged)
     Q_PROPERTY(bool fullScreen READ isFullScreen WRITE setFullScreen NOTIFY fullScreenChanged)
 public:
-    VideoElement(QDeclarativeItem *parent = 0);
-    ~VideoElement();
+    VideoOutputElement(QDeclarativeItem *parent = 0);
+    ~VideoOutputElement();
 
     /// \reimp
     void classBegin();

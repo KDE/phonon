@@ -27,7 +27,7 @@
 #include "phonon/mediacontroller.h"
 
 #include "mediaelement.h"
-#include "videoelement.h"
+#include "videooutputelement.h"
 
 namespace Phonon {
 namespace Declarative {
@@ -97,7 +97,7 @@ void SubtitleElement::setSubtitle(const QString &subtitle)
 bool SubtitleElement::isParentValid() const
 {
     if (!parent() ||
-            (!qobject_cast<VideoElement *>(parent()) &&
+            (!qobject_cast<VideoOutputElement *>(parent()) &&
              !qobject_cast<MediaElement *>(parent()))) {
         return false;
     }

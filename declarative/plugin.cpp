@@ -27,7 +27,7 @@
 #include "mediaelement.h"
 #include "metadata.h"
 #include "subtitleelement.h"
-#include "videoelement.h"
+#include "videooutputelement.h"
 #include "volumefadereffectelement.h"
 
 namespace Phonon
@@ -44,7 +44,9 @@ void Plugin::registerTypes(const char *uri)
     qmlRegisterType<Phonon::Declarative::MediaElement>(uri, 1, 0, "Media");
     qmlRegisterType<Phonon::Declarative::MetaData>();
     qmlRegisterType<Phonon::Declarative::SubtitleElement>(uri, 1, 0, "Subtitle");
-    qmlRegisterType<Phonon::Declarative::VideoElement>(uri, 1, 0, "Video");
+#warning compat type
+    qmlRegisterType<Phonon::Declarative::VideoOutputElement>(uri, 1, 0, "Video");
+    qmlRegisterType<Phonon::Declarative::VideoOutputElement>(uri, 1, 0, "VideoOutput");
     qmlRegisterType<Phonon::Declarative::VolumeFaderEffectElement>(uri, 1, 0, "VolumeFader");
 }
 

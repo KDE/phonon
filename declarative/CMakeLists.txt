@@ -7,7 +7,7 @@ set(declarative_SRCS
     plugin.cpp
     subtitleelement.cpp
     volumefadereffectelement.cpp
-    videoelement.cpp
+    videooutputelement.cpp
 
     abstractinitable.h
     qmldir

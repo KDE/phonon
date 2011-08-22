@@ -19,7 +19,7 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "videoelement.h"
+#include "videooutputelement.h"
 
 #include <QtGui/QApplication>
 #include <QtGui/QPainter>
@@ -31,23 +31,23 @@
 namespace Phonon {
 namespace Declarative {
 
-VideoElement::VideoElement(QDeclarativeItem *parent) :
+VideoOutputElement::VideoOutputElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
     m_graphicsObject(0),
     m_isFullScreen(false)
 {
 }
 
-VideoElement::~VideoElement()
+VideoOutputElement::~VideoOutputElement()
 {
 }
 
-void VideoElement::classBegin()
+void VideoOutputElement::classBegin()
 {
     m_graphicsObject = new VideoGraphicsObject(this);
 }
 
-void VideoElement::init(MediaObject *mediaObject)
+void VideoOutputElement::init(MediaObject *mediaObject)
 {
 #warning inheritance bad -> inits all the phonon without being used
     Q_ASSERT(mediaObject);
@@ -58,22 +58,22 @@ void VideoElement::init(MediaObject *mediaObject)
     initChildren(this);
 }
 
-bool VideoElement::isCursorVisible() const
+bool VideoOutputElement::isCursorVisible() const
 {
     return cursor().shape() == Qt::BlankCursor ? true : false;
 }
 
-void VideoElement::setCursorVisible(bool visible)
+void VideoOutputElement::setCursorVisible(bool visible)
 {
     setCursor(visible ? QCursor() : QCursor(Qt::BlankCursor));
 }
 
-bool VideoElement::isFullScreen() const
+bool VideoOutputElement::isFullScreen() const
 {
     return m_isFullScreen;
 }
 
-void VideoElement::setFullScreen(bool fullScreen)
+void VideoOutputElement::setFullScreen(bool fullScreen)
 {
     if (fullScreen) {
         m_isFullScreen = true;
@@ -85,7 +85,7 @@ void VideoElement::setFullScreen(bool fullScreen)
     emit fullScreenChanged();
 }
 
-void VideoElement::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void VideoOutputElement::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     m_graphicsObject->setGeometry(newGeometry);
     QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
