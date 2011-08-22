@@ -7,6 +7,8 @@ set(declarative_SRCS
     subtitleelement.cpp
     volumefadereffectelement.cpp
     videoelement.cpp
+
+    abstractinitable.h
 )
 
 phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})
