@@ -19,7 +19,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtDeclarative/QDeclarativeExtensionPlugin>
+#include "plugin.h"
+
 #include <QtDeclarative/qdeclarative.h>
 
 #include "audiooutputelement.h"
@@ -28,30 +29,25 @@
 #include "videoelement.h"
 #include "volumefadereffectelement.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
-
-class DeclarativePlugin : public QDeclarativeExtensionPlugin
+namespace Declarative
 {
-public:
-    virtual void registerTypes(const char *uri)
-    {
-        Q_ASSERT(QLatin1String(uri) == QLatin1String("Phonon"));
 
-        // TODO: version could really be cmake magic?
-        qmlRegisterType<Phonon::Declarative::AudioOutputElement>(uri, 1, 0, "AudioOutput");
-        qmlRegisterType<Phonon::Declarative::MediaElement>(uri, 1, 0, "Media");
-        qmlRegisterType<Phonon::Declarative::MetaData>();
-        qmlRegisterType<Phonon::Declarative::SubtitleElement>(uri, 1, 0, "Subtitle");
-        qmlRegisterType<Phonon::Declarative::VideoElement>(uri, 1, 0, "Video");
-        qmlRegisterType<Phonon::Declarative::VolumeFaderEffectElement>(uri, 1, 0, "VolumeFader");
-    }
-};
+void Plugin::registerTypes(const char *uri)
+{
+    Q_ASSERT(QLatin1String(uri) == QLatin1String("Phonon"));
 
+    // TODO: version could really be cmake magic?
+    qmlRegisterType<Phonon::Declarative::AudioOutputElement>(uri, 1, 0, "AudioOutput");
+    qmlRegisterType<Phonon::Declarative::MediaElement>(uri, 1, 0, "Media");
+    qmlRegisterType<Phonon::Declarative::MetaData>();
+    qmlRegisterType<Phonon::Declarative::SubtitleElement>(uri, 1, 0, "Subtitle");
+    qmlRegisterType<Phonon::Declarative::VideoElement>(uri, 1, 0, "Video");
+    qmlRegisterType<Phonon::Declarative::VolumeFaderEffectElement>(uri, 1, 0, "VolumeFader");
+}
+
+} // namespace Declarative
 } // namespace Phonon
 
-QT_END_NAMESPACE
-
-Q_EXPORT_PLUGIN2(PhononDeclarativePlugin, QT_PREPEND_NAMESPACE(Phonon::DeclarativePlugin));
+Q_EXPORT_PLUGIN2(PhononDeclarativePlugin, QT_PREPEND_NAMESPACE(Phonon::Declarative::Plugin));

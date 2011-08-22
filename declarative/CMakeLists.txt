@@ -9,6 +9,7 @@ set(declarative_SRCS
     videoelement.cpp
 
     abstractinitable.h
+    qmldir
 )
 
 phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})
