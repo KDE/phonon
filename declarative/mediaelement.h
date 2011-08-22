@@ -25,60 +25,14 @@
 #include <QtCore/QUrl>
 #include <QtDeclarative/QDeclarativeItem>
 
-#include <phonon/mediaobject.h>
 #include <phonon/phononnamespace.h>
 
 #include "abstractinitable.h"
 
 namespace Phonon {
-
-class MediaObject;
-
 namespace Declarative {
 
-/**
- * Macro to help with creating a property getter using the Phonon::MetaData enum.
- */
-#define P_PROPERTY_GETTER(__cName) \
-    public: QStringList __cName() const { return m_mediaObject->metaData(Phonon::__cName##MetaData ); } private:
-
-class MetaData : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QStringList artist READ Artist NOTIFY metaDataChanged)
-    Q_PROPERTY(QStringList album READ Album NOTIFY metaDataChanged)
-    Q_PROPERTY(QStringList title READ Title NOTIFY metaDataChanged)
-    Q_PROPERTY(QStringList date READ Date NOTIFY metaDataChanged)
-    Q_PROPERTY(QStringList genre READ Genre NOTIFY metaDataChanged)
-    Q_PROPERTY(QStringList trackNumber READ Tracknumber NOTIFY metaDataChanged)
-    Q_PROPERTY(QStringList description READ Description NOTIFY metaDataChanged)
-    Q_PROPERTY(QStringList musicBrainzDiscId READ MusicBrainzDiscId NOTIFY metaDataChanged)
-    P_PROPERTY_GETTER(Artist)
-    P_PROPERTY_GETTER(Album)
-    P_PROPERTY_GETTER(Title)
-    P_PROPERTY_GETTER(Date)
-    P_PROPERTY_GETTER(Genre)
-    P_PROPERTY_GETTER(Tracknumber)
-    P_PROPERTY_GETTER(Description)
-    P_PROPERTY_GETTER(MusicBrainzDiscId)
-public:
-    MetaData(MediaObject *mediaObject, QObject *parent = 0) :
-      QObject(parent),
-      m_mediaObject(mediaObject)
-    {
-        connect(m_mediaObject, SIGNAL(metaDataChanged()),
-                this, SIGNAL(metaDataChanged()));
-    }
-    ~MetaData() {}
-
-signals:
-    void metaDataChanged();
-
-private:
-    MediaObject *m_mediaObject;
-};
-
-#undef P_PROPERTY_GETTER
+class MetaData;
 
 class MediaElement : public QDeclarativeItem, AbstractInitAble
 {
@@ -162,7 +116,5 @@ private:
 
 } // namespace Declarative
 } // namespace Phonon
-
-QML_DECLARE_TYPE(Phonon::Declarative::MetaData)
 
 #endif // ABSTRACTMEDIAELEMENT_H

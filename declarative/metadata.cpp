@@ -19,36 +19,22 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "plugin.h"
-
-#include <QtDeclarative/qdeclarative.h>
-
-#include "audiooutputelement.h"
-#include "mediaelement.h"
 #include "metadata.h"
-#include "subtitleelement.h"
-#include "videoelement.h"
-#include "volumefadereffectelement.h"
 
-namespace Phonon
-{
-namespace Declarative
-{
+namespace Phonon {
+namespace Declarative {
 
-void Plugin::registerTypes(const char *uri)
+MetaData::MetaData(MediaObject *mediaObject, QObject *parent) :
+    QObject(parent),
+    m_mediaObject(mediaObject)
 {
-    Q_ASSERT(QLatin1String(uri) == QLatin1String("Phonon"));
+    connect(m_mediaObject, SIGNAL(metaDataChanged()),
+            this, SIGNAL(metaDataChanged()));
+}
 
-    // TODO: version could really be cmake magic?
-    qmlRegisterType<Phonon::Declarative::AudioOutputElement>(uri, 1, 0, "AudioOutput");
-    qmlRegisterType<Phonon::Declarative::MediaElement>(uri, 1, 0, "Media");
-    qmlRegisterType<Phonon::Declarative::MetaData>();
-    qmlRegisterType<Phonon::Declarative::SubtitleElement>(uri, 1, 0, "Subtitle");
-    qmlRegisterType<Phonon::Declarative::VideoElement>(uri, 1, 0, "Video");
-    qmlRegisterType<Phonon::Declarative::VolumeFaderEffectElement>(uri, 1, 0, "VolumeFader");
+MetaData::~MetaData()
+{
 }
 
 } // namespace Declarative
 } // namespace Phonon
-
-Q_EXPORT_PLUGIN2(PhononDeclarativePlugin, QT_PREPEND_NAMESPACE(Phonon::Declarative::Plugin));

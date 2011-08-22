@@ -23,6 +23,8 @@
 
 #include <phonon/mediaobject.h>
 
+#include "metadata.h"
+
 namespace Phonon {
 namespace Declarative {
 
