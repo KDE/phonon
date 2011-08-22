@@ -1,5 +1,7 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/../) # For phonon/ includes.
 
+add_subdirectory(qml)
+
 set(declarative_SRCS
     audiooutputelement.cpp
     mediaelement.cpp
@@ -9,8 +11,9 @@ set(declarative_SRCS
     volumefadereffectelement.cpp
     videooutputelement.cpp
 
+    # Work around bug in QtCreator not showing important things
     abstractinitable.h
-    qmldir
+    ${phonon_QMLS}
 )
 
 phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})
@@ -22,4 +25,4 @@ target_link_libraries(phononqmlplugin
 )
 
 install(TARGETS phononqmlplugin DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
-install(FILES qmldir DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
+install(FILES ${phonon_QMLS} DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
