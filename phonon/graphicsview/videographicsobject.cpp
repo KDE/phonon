@@ -131,11 +131,14 @@ QRectF VideoGraphicsObject::boundingRect() const
 AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter(const VideoFrame *frame)
 {
     AbstractVideoGraphicsPainter *painter = 0;
-    if (QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext())) {
+
+    const QByteArray paintEnv(qgetenv("PHONON_PAINT")); // Used to override
+
+    if (paintEnv == !QByteArray("qpainter") &&
+            QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext())) {
         glContext->makeCurrent();
 
         GlPainter *glPainter = 0;
-        const QByteArray paintEnv(qgetenv("PHONON_PAINT")); // Used to override
         const QByteArray glExtensions(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)));
         if (QGLShaderProgram::hasOpenGLShaderPrograms(glContext)
                 && glExtensions.contains("ARB_shader_objects")
