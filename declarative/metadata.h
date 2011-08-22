@@ -36,6 +36,26 @@ namespace Declarative {
 #define P_PROPERTY_GETTER(__cName) \
     public: QStringList __cName() const { return m_mediaObject->metaData(Phonon::__cName##MetaData ); } private:
 
+/**
+ * Meta data container for Qt Quick.
+ *
+ * Since meta data are rather difficult to access properly from within QML this
+ * container allows simplified access to all the metadata of a MediaObject.
+ * The container cannot be created from within QML but only obtained from
+ * a MediaElement. The container internally does nothing more than access the
+ * metadata getters of an associated MediaObject (this is precisely the reason
+ * that one can only get an instance from a MediaElement - otherwise it would
+ * not have a MediaObject to access).
+ *
+ * A MetaData instance stays valid for exactly the same time as the MediaElement
+ * from which it was obtained. Throughout this time frame you do not need to
+ * request a new MetaData instance, as the MediaElement will always only return
+ * one instance. This consequently also means that you can directly access the
+ * metadata object from the MediaElement without storing it as the overhead is
+ * almost not existing.
+ *
+ * \author Harald Sitter <sitter@kde.org>
+ */
 class MetaData : public QObject
 {
     Q_OBJECT
@@ -60,9 +80,11 @@ public:
     ~MetaData();
 
 signals:
+    /// emitted when any meta data changed.
     void metaDataChanged();
 
 private:
+    /// The MediaObject that is used for internal query of metadata
     MediaObject *m_mediaObject;
 };
 
