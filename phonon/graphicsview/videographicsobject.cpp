@@ -173,8 +173,6 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
     const VideoFrame *frame = INTERFACE_CALL(frame());
 
-    // NOTE: it would be most useful if we had a signal to notify about dimension changes...
-    // NOTE: it would be even better if a frame contained a QRectF
     if (frame->format != VideoFrame::Format_Invalid &&
             !d->gotSize) {
         // TODO: do scaling ourselfs?
