@@ -28,14 +28,8 @@
 #include <phonon/mediaobject.h>
 #include <phonon/graphicsview/videographicsobject.h>
 
-#include <phonon/experimental/videodataoutput2.h>
-
-using namespace Phonon::Experimental;
-
 namespace Phonon {
 namespace Declarative {
-
-#warning there might be awful problems when not deriving from qdeclarativeitem!!! (virtual inheritance?)
 
 VideoElement::VideoElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
