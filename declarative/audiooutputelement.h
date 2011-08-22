@@ -24,8 +24,6 @@
 
 #include <QtDeclarative/QDeclarativeItem>
 
-#include "phonon/path.h"
-
 #include "abstractinitable.h"
 
 namespace Phonon {
@@ -92,9 +90,6 @@ signals:
 private:
     /// Phonon::AudioOutput exposed by the instance of the AudioOutputElement
     AudioOutput *m_audioOutput;
-
-    /// The Phonon::Path between Phonon::MediaObject and m_audioOutput
-    Path m_path;
 };
 
 } // namespace Declarative

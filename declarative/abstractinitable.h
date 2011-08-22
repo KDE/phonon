@@ -24,6 +24,8 @@
 
 #include <QtCore/QObject>
 
+#include "phonon/path.h"
+
 namespace Phonon {
 
 class MediaObject;
@@ -130,7 +132,11 @@ protected:
         }
     }
 
+    /// The Phonon::MediaObject that forms the root of the media graph this initable belongs to
     MediaObject *m_mediaObject;
+
+    /// The Phonon::Path between Phonon::MediaObject and m_audioOutput
+    Path m_path;
 };
 
 } // namespace Declarative
