@@ -19,8 +19,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_VIDEOGRAPHICSITEM_H
-#define PHONON_VIDEOGRAPHICSITEM_H
+#ifndef PHONON_VIDEOGRAPHICSOBJECT_H
+#define PHONON_VIDEOGRAPHICSOBJECT_H
 
 #include <QtGui/QGraphicsObject>
 
@@ -144,4 +144,4 @@ public:
 
 Q_DECLARE_INTERFACE(Phonon::VideoGraphicsObjectInterface, "VideoGraphicsObjectInterface.phonon.kde.org")
 
-#endif // PHONON_VIDEOGRAPHICSITEM_H
+#endif // PHONON_VIDEOGRAPHICSOBJECT_H
