@@ -132,10 +132,11 @@ AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter(const Vi
 {
     AbstractVideoGraphicsPainter *painter = 0;
 
-    const QByteArray paintEnv(qgetenv("PHONON_PAINT")); // Used to override
+    // Used to override automatic painter selection.
+    const QByteArray paintEnv(qgetenv("PHONON_PAINT"));
+    QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext());
 
-    if (paintEnv == !QByteArray("qpainter") &&
-            QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext())) {
+    if (paintEnv != QByteArray("qpainter") && glContext) {
         glContext->makeCurrent();
 
         GlPainter *glPainter = 0;
