@@ -19,32 +19,52 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AUDIOOUTPUTELEMENT_H
-#define AUDIOOUTPUTELEMENT_H
+#ifndef PHONON_DECLARATIVE_AUDIOOUTPUTELEMENT_H
+#define PHONON_DECLARATIVE_AUDIOOUTPUTELEMENT_H
 
 #include <QtDeclarative/QDeclarativeItem>
 
-#include <phonon/mediaobject.h>
+#include "phonon/path.h"
 
 #include "abstractinitable.h"
 
 namespace Phonon {
 
 class AudioOutput;
+class MediaObject;
 
 namespace Declarative {
 
+/**
+ * This is the Qt Quick Element encasing a Phonon::AudioOutput.
+ * For general information regarding capabilities please see the documentation
+ * of Phonon::AudioOutput.
+ *
+ * Like every Phonon Qt Quick class this class provides semi-lazy initalization
+ * as provided described by the AbstractInitAble class.
+ *
+ * This element cannot be decorated by another output. If you still try to do
+ * so the output will simply attach to the MediaObject this AudioOutputElement
+ * was attached to.
+ *
+ * \see Phonon::AudioOutput
+ * \author Harald Sitter <sitter@kde.org>
+ */
 class AudioOutputElement : public QDeclarativeItem, public AbstractInitAble
 {
     Q_OBJECT
+    /// \see Phonon::AudioOutput::muted
     Q_PROPERTY(bool muted READ isMuted WRITE setMuted NOTIFY mutedChanged)
+    /// \see Phonon::AudioOutput::name
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    /// \see Phonon::AudioOutput::volume
     Q_PROPERTY(qreal volume READ volume WRITE setVolume NOTIFY volumeChanged)
     friend class VolumeFaderEffectElement;
 public:
     AudioOutputElement(QDeclarativeItem *parent = 0);
     ~AudioOutputElement();
 
+    // !reimpl
     void classBegin();
 
     bool isMuted() const;
@@ -56,19 +76,28 @@ public:
     qreal volume() const;
     void setVolume(qreal newVolume);
 
+    // !reimpl
     virtual void init(MediaObject *mediaObject);
 
 signals:
+    /// emitted when the value of muted changed
     void mutedChanged();
+
+    /// emitted when the value of name changed
     void nameChanged();
+
+    /// emitted when the value of volume changed
     void volumeChanged();
 
 private:
+    /// Phonon::AudioOutput exposed by the instance of the AudioOutputElement
     AudioOutput *m_audioOutput;
+
+    /// The Phonon::Path between Phonon::MediaObject and m_audioOutput
     Path m_path;
 };
 
 } // namespace Declarative
 } // namespace Phonon
 
-#endif // AUDIOOUTPUTELEMENT_H
+#endif // PHONON_DECLARATIVE_AUDIOOUTPUTELEMENT_H
