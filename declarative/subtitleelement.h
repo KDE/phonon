@@ -32,31 +32,54 @@ class MediaController;
 
 namespace Declarative {
 
+/**
+ * This is the Qt Quick Element encasing a Phonon::MediaController.
+ * For general information regarding capabilities please see the documentation
+ * of Phonon::MediaController, but mind that this class is limited to subtitle
+ * related actions.
+ *
+ * Like every Phonon Qt Quick class this class provides semi-lazy initalization
+ * as provided described by the AbstractInitAble class.
+ *
+ * \see Phonon::MediaController
+ * \author Harald Sitter <sitter@kde.org>
+ */
 class SubtitleElement : public QObject, public AbstractInitAble
 {
     Q_OBJECT
     Q_PROPERTY(QStringList availableSubtitles READ availableSubtitles NOTIFY availableSubtitlesChanged)
     Q_PROPERTY(QString subtitle READ subtitle WRITE setSubtitle NOTIFY subtitleChanged)
 public:
-    explicit SubtitleElement(QObject *parent = 0);
+    SubtitleElement(QObject *parent = 0);
 
+    /// \reimp
     virtual void init(MediaObject *mediaObject);
 
+    /// \see Phonon::MediaController::availableSubtitles
     QStringList availableSubtitles() const;
 
+    /// \see Phonon::MediaController::currentSubtitle
     QString subtitle() const;
+
+    /// \see Phonon::MediaController::setCurrentSubtitle
     void setSubtitle(const QString &subtitle);
 
 signals:
+    /// \see Phonon::MediaController::availableSubtitilesChanged
     void availableSubtitlesChanged();
+
+    /// emitted when the current subtitle was changed
     void subtitleChanged();
 
 private:
     /**
-     * \returns true when the parent is valid, false otherwise
+     * Checks whether the parent item is valid for this element.
+     * \returns \c true when parent is either an VideoOutputElement or a
+     * MediaElement, \c false otherwise.
      */
     bool isParentValid() const;
 
+    /// The Phonon::MediaController contained by this element.
     MediaController *m_mediaController;
 };
 
