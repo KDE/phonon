@@ -75,7 +75,6 @@ public:
     virtual QObject *qObject() { return q_func(); }
 
     AbstractVideoGraphicsPainter *createPainter(const VideoFrame *frame);
-    void paintGl(QPainter *painter, QRectF rect, VideoFrame *frame);
 
     void updateBoundingRect();
 
@@ -173,8 +172,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
     const VideoFrame *frame = INTERFACE_CALL(frame());
 
-    if (frame->format != VideoFrame::Format_Invalid &&
-            !d->gotSize) {
+    if (frame->format != VideoFrame::Format_Invalid && !d->gotSize) {
         // TODO: do scaling ourselfs?
         d->gotSize = true;
         d->frameSize = QSize(frame->width, frame->height);
@@ -183,6 +181,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
     if (frame->format == VideoFrame::Format_Invalid || !d->paintedOnce) {
         painter->fillRect(d->boundingRect, Qt::black);
+        d->paintedOnce = true;
     } else {
         if (!d->graphicsPainter)
             d->graphicsPainter = d->createPainter(frame);
@@ -191,16 +190,6 @@ void VideoGraphicsObject::paint(QPainter *painter,
     }
 
     INTERFACE_CALL(unlock());
-
-    d->paintedOnce = true;
-}
-
-void VideoGraphicsObjectPrivate::paintGl(QPainter *painter, QRectF target, VideoFrame *frame)
-{
-    Q_Q(VideoGraphicsObject);
-    QGLContext *ctx = const_cast<QGLContext *>(QGLContext::currentContext());
-    GLuint texture = ctx->bindTexture(frame->qImage(),GL_TEXTURE_2D, QGLContext::NoBindOption);
-    ctx->drawTexture(target, texture);
 }
 
 void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
