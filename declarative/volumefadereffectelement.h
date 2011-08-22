@@ -31,18 +31,32 @@ namespace Phonon {
 
 namespace Declarative {
 
-class VolumeFaderEffectElement : public QObject,
-                                 public AbstractInitAble
+/**
+ * This is the Qt Quick Element encasing a Phonon::VolumeFaderEffect.
+ * For general information regarding capabilities please see the documentation
+ * of Phonon::VolumeFaderEffect.
+ *
+ * Like every Phonon Qt Quick class this class provides semi-lazy initalization
+ * as provided described by the AbstractInitAble class.
+ *
+ * \see Phonon::VolumeFaderEffect
+ * \author Harald Sitter <sitter@kde.org>
+ */
+class VolumeFaderEffectElement : public QObject, public AbstractInitAble
 {
     Q_OBJECT
+    /// \see Phonon::VolumeFaderEffect::volume
     Q_PROPERTY(float volume READ volume WRITE setVolume)
+    /// \see Phonon::VolumeFaderEffect::volumeDecibel
     Q_PROPERTY(double volumeDecibel READ volumeDecibel WRITE setVolumeDecibel)
+    /// \see Phonon::VolumeFaderEffect::fadeCurve
     Q_PROPERTY(Phonon::VolumeFaderEffect::FadeCurve fadeCurve READ fadeCurve WRITE setFadeCurve)
     Q_ENUMS(Phonon::VolumeFaderEffect::FadeCurve)
 public:
-    explicit VolumeFaderEffectElement(QObject *parent = 0);
+    VolumeFaderEffectElement(QObject *parent = 0);
     ~VolumeFaderEffectElement();
 
+    /// \reimp
     virtual void init(MediaObject *mediaObject);
 
     float volume() const;
@@ -55,14 +69,24 @@ public:
     void setFadeCurve(Phonon::VolumeFaderEffect::FadeCurve fadeCurve);
 
 public slots:
+    /// \see Phonon::VolumeFaderEffect::fadeIn
     void fadeIn(int time);
+
+    /// \see Phonon::VolumeFaderEffect::fadeOut
     void fadeOut(int time);
 
+    /// \see Phonon::VolumeFaderEffect::fadeTo
     void fadeTo(float volume, int time);
 
 private:
+    /**
+     * Checks whether the parent item is valid for this element.
+     * \returns \c true when parent is either an AudioOutputElement or a
+     * MediaElement, \c false otherwise.
+     */
     bool isParentValid() const;
 
+    /// The Phonon::VolumeFaderEffect contained by this element.
     VolumeFaderEffect *m_effect;
 };
 
