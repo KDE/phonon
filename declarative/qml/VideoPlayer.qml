@@ -23,8 +23,8 @@ import QtQuick 1.0
 import Phonon 1.0
 
 Media {
-    alias volume: audioOutput.volume
-    alias muted: audioOutput.muted
+    property alias volume: audioOutput.volume
+    property alias muted: audioOutput.muted
 
     AudioOutput { id: audioOutput }
     VideoOutput { anchors.fill: parent }
