@@ -49,6 +49,17 @@ void AudioOutputElement::classBegin()
             this, SIGNAL(mutedChanged()));
 }
 
+void AudioOutputElement::init(MediaObject *mediaObject)
+{
+    Q_ASSERT(mediaObject);
+
+    m_mediaObject = mediaObject;
+#warning should go to base supposedly
+    m_path = createPath(m_mediaObject, m_audioOutput);
+
+    initChildren(this);
+}
+
 bool AudioOutputElement::isMuted() const
 {
     return m_audioOutput->isMuted();
@@ -78,17 +89,6 @@ qreal AudioOutputElement::volume() const
 void AudioOutputElement::setVolume(qreal newVolume)
 {
     m_audioOutput->setVolume(newVolume);
-}
-
-void AudioOutputElement::init(MediaObject *mediaObject)
-{
-    Q_ASSERT(mediaObject);
-
-    m_mediaObject = mediaObject;
-#warning should go to base supposedly
-    m_path = createPath(m_mediaObject, m_audioOutput);
-
-    initChildren(this);
 }
 
 } // namespace Declarative

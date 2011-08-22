@@ -64,8 +64,11 @@ public:
     AudioOutputElement(QDeclarativeItem *parent = 0);
     ~AudioOutputElement();
 
-    // !reimpl
+    /// \reimp
     void classBegin();
+
+    /// \reimp
+    virtual void init(MediaObject *mediaObject);
 
     bool isMuted() const;
     void setMuted(bool muted);
@@ -75,9 +78,6 @@ public:
 
     qreal volume() const;
     void setVolume(qreal newVolume);
-
-    // !reimpl
-    virtual void init(MediaObject *mediaObject);
 
 signals:
     /// emitted when the value of muted changed
