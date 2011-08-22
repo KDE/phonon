@@ -70,6 +70,11 @@ Rectangle {
                         return false;
                     }
 
+                    onSourceChanged: {
+                        if (source != "")
+                            play()
+                    }
+
                     onStateChanged: {
                         if (!shouldPreview())
                             return;
