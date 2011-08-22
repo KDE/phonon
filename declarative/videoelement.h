@@ -19,12 +19,10 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef VIDEOELEMENT_H
-#define VIDEOELEMENT_H
+#ifndef PHONON_DECLARATIVE_VIDEOELEMENT_H
+#define PHONON_DECLARATIVE_VIDEOELEMENT_H
 
 #include <QtDeclarative/QDeclarativeItem>
-
-#include <phonon/experimental/videoframe2.h>
 
 #include "abstractinitable.h"
 
@@ -34,8 +32,22 @@ class VideoGraphicsObject;
 
 namespace Declarative {
 
-class VideoElement : public QDeclarativeItem,
-                     public AbstractInitAble
+/**
+ * This is the Qt Quick Element encasing a Phonon::VideoGraphicsObject.
+ * For general information regarding capabilities please see the documentation
+ * of Phonon::VideoGraphicsObject.
+ *
+ * Like every Phonon Qt Quick class this class provides semi-lazy initalization
+ * as provided described by the AbstractInitAble class.
+ *
+ * This element cannot be decorated by another output. If you still try to do
+ * so the output will simply attach to the MediaObject this VideoOutputElement
+ * was attached to.
+ *
+ * \see Phonon::VideoGraphicsObject
+ * \author Harald Sitter <sitter@kde.org>
+ */
+class VideoElement : public QDeclarativeItem, public AbstractInitAble
 {
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
@@ -45,8 +57,10 @@ public:
     VideoElement(QDeclarativeItem *parent = 0);
     ~VideoElement();
 
+    /// \reimp
     void classBegin();
 
+    /// \reimp
     virtual void init(MediaObject *mediaObject);
 
     bool isCursorVisible() const;
@@ -60,16 +74,20 @@ signals:
     void fullScreenChanged();
 
 protected:
+    /// Forwards geometry changes to the internal VideoGraphicsObject.
+    /// \reimp
     virtual void geometryChanged(const QRectF &newGeometry,
                                  const QRectF &oldGeometry);
 
 private:
+    /// The contained VideoGraphicsObject (it is a childitem of this item actually).
     VideoGraphicsObject *m_graphicsObject;
 
+    /// Whether the element is in fullscreen.
     bool m_isFullScreen;
 };
 
 } // namespace Declarative
 } // namespace Phonon
 
-#endif // VIDEOELEMENT_H
+#endif // PHONON_DECLARATIVE_VIDEOELEMENT_H
