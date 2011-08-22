@@ -47,8 +47,8 @@ namespace Phonon
  *     Media {
  *         anchors.fill: parent
  *         source: "~/coolvideo.webm"
- *         Audio { volume: 100 }
- *         Video { anchors.fill: parent }
+ *         AudioOutput { volume: 100 }
+ *         VideoOutput { anchors.fill: parent }
  *     }
  * }
  * \endcode
