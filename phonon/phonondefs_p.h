@@ -25,26 +25,7 @@
 
 #include <QtCore/QMetaType>
 #include "medianode_p.h"
-
-/**
- * Declares and defines helpers to access a public class.
- */
-#define P_DECLARE_PUBLIC(Class) \
-    inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
-    inline const Class* q_func() const { return static_cast<const Class *>(q_ptr); } \
-    friend class Class;
-
-/**
- * Get pointer to private class instance.
- * \see K_DECLARE_PRIVATE
- */
-#define P_D(Class) Class##Private *const d = k_func()
-
-/**
- * Get pointer to public class instance.
- * \see P_DECLARE_PUBLIC
- */
-#define P_Q(Class) Class *const q = q_func()
+#include "phononpimpl_p.h"
 
 #define PHONON_CONCAT_HELPER_INTERNAL(x, y) x ## y
 #define PHONON_CONCAT_HELPER(x, y) PHONON_CONCAT_HELPER_INTERNAL(x, y)

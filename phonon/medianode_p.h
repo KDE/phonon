@@ -28,13 +28,8 @@ Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QObject>
 
 #include "path.h"
+#include "phononpimpl_p.h"
 #include "phonon_export.h"
-
-#warning include phonondefs_p breaks because the header uses medianodeprivate
-#define P_DECLARE_PUBLIC(Class) \
-    inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
-    inline const Class* q_func() const { return static_cast<const Class *>(q_ptr); } \
-    friend class Class;
 
 QT_BEGIN_NAMESPACE
 
@@ -48,7 +43,6 @@ namespace Phonon
     class PHONON_EXPORT MediaNodePrivate
     {
         P_DECLARE_PUBLIC(MediaNode)
-#undef P_DECLARE_PUBLIC
 
         friend class AudioOutputPrivate;
         friend class FactoryPrivate;
