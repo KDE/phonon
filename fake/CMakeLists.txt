@@ -1,8 +1,10 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/../) # For phonon/ includes.
 
 set(phonon_fake_SRCS
+    audiooutput.cpp
     backend.cpp
     mediaobject.cpp
+    pipeline.cpp
 )
 
 automoc4_add_library(phonon_fake MODULE ${phonon_fake_SRCS})

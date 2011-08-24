@@ -23,6 +23,7 @@
 
 #include <QtCore/QStringList>
 
+#include "audiooutput.h"
 #include "mediaobject.h"
 
 namespace Phonon {
@@ -41,7 +42,8 @@ QObject *Backend::createObject(Class c, QObject *parent, const QList<QVariant> &
     case MediaObjectClass:
         return new MediaObject(parent);
 //    case VolumeFaderEffectClass:
-//    case AudioOutputClass:
+    case AudioOutputClass:
+        return new AudioOutput(parent);
 //    case AudioDataOutputClass:
 //    case VisualizationClass:
 //    case VideoDataOutputClass:
