@@ -59,7 +59,7 @@ PHONON_OBJECT_IMPL
 
 MediaObject::~MediaObject()
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     if (d->m_backendObject) {
         switch (state()) {
         case PlayingState:
@@ -77,7 +77,7 @@ MediaObject::~MediaObject()
 
 Phonon::State MediaObject::state() const
 {
-    K_D(const MediaObject);
+    P_D(const MediaObject);
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (d->errorOverride) {
         return d->state;
@@ -108,7 +108,7 @@ static inline bool isPlayable(const MediaSource::Type t)
 
 void MediaObject::play()
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(play());
     }
@@ -116,7 +116,7 @@ void MediaObject::play()
 
 void MediaObject::pause()
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(pause());
     }
@@ -124,7 +124,7 @@ void MediaObject::pause()
 
 void MediaObject::stop()
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(stop());
     }
@@ -132,7 +132,7 @@ void MediaObject::stop()
 
 void MediaObject::seek(qint64 time)
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(seek(time));
     }
@@ -141,7 +141,7 @@ void MediaObject::seek(qint64 time)
 QString MediaObject::errorString() const
 {
     if (state() == Phonon::ErrorState) {
-        K_D(const MediaObject);
+        P_D(const MediaObject);
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (d->errorOverride) {
             return d->errorString;
@@ -155,7 +155,7 @@ QString MediaObject::errorString() const
 ErrorType MediaObject::errorType() const
 {
     if (state() == Phonon::ErrorState) {
-        K_D(const MediaObject);
+        P_D(const MediaObject);
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (d->errorOverride) {
             return d->errorType;
@@ -191,13 +191,13 @@ QStringList MediaObject::metaData(Phonon::MetaData f) const
 
 QStringList MediaObject::metaData(const QString &key) const
 {
-    K_D(const MediaObject);
+    P_D(const MediaObject);
     return d->metaData.values(key);
 }
 
 QMultiMap<QString, QString> MediaObject::metaData() const
 {
-    K_D(const MediaObject);
+    P_D(const MediaObject);
     return d->metaData;
 }
 
@@ -209,7 +209,7 @@ PHONON_INTERFACE_SETTER(setTransitionTime, transitionTime, qint32)
 
 qint64 MediaObject::totalTime() const
 {
-    K_D(const MediaObject);
+    P_D(const MediaObject);
     if (!d->m_backendObject) {
         return -1;
     }
@@ -218,7 +218,7 @@ qint64 MediaObject::totalTime() const
 
 qint64 MediaObject::remainingTime() const
 {
-    K_D(const MediaObject);
+    P_D(const MediaObject);
     if (!d->m_backendObject) {
         return -1;
     }
@@ -231,13 +231,13 @@ qint64 MediaObject::remainingTime() const
 
 MediaSource MediaObject::currentSource() const
 {
-    K_D(const MediaObject);
+    P_D(const MediaObject);
     return d->mediaSource;
 }
 
 void MediaObject::setCurrentSource(const MediaSource &newSource)
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     if (!k_ptr->backendObject()) {
         d->mediaSource = newSource;
         return;
@@ -265,34 +265,34 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
 
 void MediaObject::clear()
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     d->sourceQueue.clear();
     setCurrentSource(MediaSource());
 }
 
 QList<MediaSource> MediaObject::queue() const
 {
-    K_D(const MediaObject);
+    P_D(const MediaObject);
     return d->sourceQueue;
 }
 
 void MediaObject::setQueue(const QList<MediaSource> &sources)
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     d->sourceQueue.clear();
     enqueue(sources);
 }
 
 void MediaObject::setQueue(const QList<QUrl> &urls)
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     d->sourceQueue.clear();
     enqueue(urls);
 }
 
 void MediaObject::enqueue(const MediaSource &source)
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     if (!isPlayable(d->mediaSource.type())) {
         // the current source is nothing valid so this source needs to become the current one
         setCurrentSource(source);
@@ -317,7 +317,7 @@ void MediaObject::enqueue(const QList<QUrl> &urls)
 
 void MediaObject::clearQueue()
 {
-    K_D(MediaObject);
+    P_D(MediaObject);
     d->sourceQueue.clear();
 }
 
@@ -373,7 +373,7 @@ void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
 void MediaObjectPrivate::sendToZeitgeist(State eventState)
 {
 #ifdef HAVE_QZEITGEIST
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     if (readyForZeitgeist && q->property("PlaybackTracking").toBool()) {
         pDebug() << "Current state:" << eventState;
         QString eventInterpretation;
@@ -458,7 +458,7 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
 
 void MediaObjectPrivate::sendToZeitgeist()
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     sendToZeitgeist(q->state());
 }
 
@@ -479,7 +479,7 @@ bool MediaObjectPrivate::aboutToDeleteBackendObject()
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text)
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     State lastState = q->state();
     errorOverride = true;
     errorType = type;
@@ -493,7 +493,7 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 // TODO: this needs serious cleanup...
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
 
     // Zeitgeist ---------------------------------------------------------------
     if (newstate == StoppedState) {
@@ -573,7 +573,7 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
 
 void MediaObjectPrivate::_k_aboutToFinish()
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     pDebug() << Q_FUNC_INFO;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -594,7 +594,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
 
 void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     pDebug() << Q_FUNC_INFO;
 
     if (!sourceQueue.isEmpty() && sourceQueue.head() == source)
@@ -605,7 +605,7 @@ void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
 
 void MediaObjectPrivate::setupBackendObject()
 {
-    Q_Q(MediaObject);
+    P_Q(MediaObject);
     Q_ASSERT(m_backendObject);
 
     // Queue *everything* there is. That way the backend always is in a defined state.

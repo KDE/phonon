@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -39,7 +39,7 @@ SeekSlider::SeekSlider(QWidget *parent)
     : QWidget(parent)
     , k_ptr(new SeekSliderPrivate(this))
 {
-    K_D(SeekSlider);
+    P_D(SeekSlider);
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_seek(int)));
 }
 
@@ -47,7 +47,7 @@ SeekSlider::SeekSlider(MediaObject *mo, QWidget *parent)
     : QWidget(parent)
     , k_ptr(new SeekSliderPrivate(this))
 {
-    K_D(SeekSlider);
+    P_D(SeekSlider);
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_seek(int)));
     setMediaObject(mo);
 }
@@ -65,7 +65,7 @@ SeekSlider::~SeekSlider()
 
 void SeekSlider::setMediaObject(MediaObject *media)
 {
-    K_D(SeekSlider);
+    P_D(SeekSlider);
     if (d->media) {
         disconnect(d->media, 0, this, 0);
     }
@@ -89,7 +89,7 @@ void SeekSlider::setMediaObject(MediaObject *media)
 
 MediaObject *SeekSlider::mediaObject() const
 {
-    K_D(const SeekSlider);
+    P_D(const SeekSlider);
     return d->media;
 }
 
@@ -215,13 +215,13 @@ void SeekSlider::setSingleStep(int milliseconds)
 
 bool SeekSlider::isIconVisible() const
 {
-    K_D(const SeekSlider);
+    P_D(const SeekSlider);
     return d->iconLabel.isVisible();
 }
 
 void SeekSlider::setIconVisible(bool vis)
 {
-    K_D(SeekSlider);
+    P_D(SeekSlider);
     d->iconLabel.setVisible(vis);
 }
 
@@ -232,7 +232,7 @@ Qt::Orientation SeekSlider::orientation() const
 
 void SeekSlider::setOrientation(Qt::Orientation o)
 {
-    K_D(SeekSlider);
+    P_D(SeekSlider);
     Qt::Alignment align = (o == Qt::Horizontal ? Qt::AlignVCenter : Qt::AlignHCenter);
     d->layout.setAlignment(&d->iconLabel, align);
     d->layout.setAlignment(&d->slider, align);
@@ -247,7 +247,7 @@ QSize SeekSlider::iconSize() const
 
 void SeekSlider::setIconSize(const QSize &iconSize)
 {
-    K_D(SeekSlider);
+    P_D(SeekSlider);
     d->iconSize = iconSize;
     d->iconLabel.setPixmap(d->icon.pixmap(d->iconSize, d->slider.isEnabled() ? QIcon::Normal : QIcon::Disabled));
 }

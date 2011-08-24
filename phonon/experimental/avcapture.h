@@ -66,7 +66,7 @@ namespace Experimental
     class PHONONEXPERIMENTAL_EXPORT AvCapture : public QObject, public Phonon::MediaNode
     {
         Q_OBJECT
-        K_DECLARE_PRIVATE(AvCapture)
+        P_DECLARE_PRIVATE(AvCapture)
         PHONON_OBJECT(AvCapture)
         Q_PROPERTY(Phonon::AudioCaptureDevice audioCaptureDevice READ audioCaptureDevice WRITE setAudioCaptureDevice)
         Q_PROPERTY(Phonon::VideoCaptureDevice videoCaptureDevice READ videoCaptureDevice WRITE setVideoCaptureDevice)

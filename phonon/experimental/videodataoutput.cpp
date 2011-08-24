@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -36,7 +36,7 @@ VideoDataOutput::VideoDataOutput(QObject *parent)
     : QObject(parent)
     , AbstractVideoOutput(*new VideoDataOutputPrivate)
 {
-    K_D(VideoDataOutput);
+    P_D(VideoDataOutput);
     d->createBackendObject();
 }
 
@@ -44,7 +44,7 @@ void VideoDataOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    Q_Q(VideoDataOutput);
+    P_Q(VideoDataOutput);
     m_backendObject = Factory::createVideoDataOutput(q);
     if (m_backendObject) {
         setupBackendObject();
@@ -63,7 +63,7 @@ bool VideoDataOutputPrivate::aboutToDeleteBackendObject()
 
 void VideoDataOutputPrivate::setupBackendObject()
 {
-    Q_Q(VideoDataOutput);
+    P_Q(VideoDataOutput);
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
 
@@ -77,7 +77,7 @@ void VideoDataOutputPrivate::setupBackendObject()
 
 bool VideoDataOutput::isRunning() const
 {
-     //K_D(const VideoDataOutput);
+     //P_D(const VideoDataOutput);
      //return d->m_backendObject->isRunning();
      return false;
 }

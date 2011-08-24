@@ -1,5 +1,5 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,34 +17,29 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
-#ifndef PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
-#define PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
 
-#include "abstractvideodataoutput.h"
-#include "../abstractvideooutput_p.h"
-#include <QtCore/QSet>
+#ifndef PHONONPIMPL_P_H
+#define PHONONPIMPL_P_H
 
-namespace Phonon
-{
-namespace Experimental
-{
+/**
+ * Declares and defines helpers to access a public class.
+ */
+#define P_DECLARE_PUBLIC(Class) \
+    inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
+    inline const Class* q_func() const { return static_cast<const Class *>(q_ptr); } \
+    friend class Class;
 
-class AbstractVideoDataOutputPrivate : public Phonon::AbstractVideoOutputPrivate
-{
-    P_DECLARE_PUBLIC(AbstractVideoDataOutput)
-    protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
-        void setupBackendObject();
+/**
+ * Get pointer to private class instance.
+ * \see P_DECLARE_PRIVATE
+ */
+#define P_D(Class) Class##Private *const d = k_func()
 
-    private:
-        bool isRunning;
-        QSet<VideoFrame2::Format> allowedFormats;
-};
+/**
+ * Get pointer to public class instance.
+ * \see P_DECLARE_PUBLIC
+ */
+#define P_Q(Class) Class *const q = q_func()
 
-} // namespace Experimental
-} // namespace Phonon
-
-#endif // PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
+#endif // PHONONPIMPL_P_H
