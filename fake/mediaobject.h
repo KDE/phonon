@@ -23,54 +23,14 @@
 #define PHONON_FAKE_MEDIAOBJECT_H
 
 #include <QtCore/QObject>
-#include <QtCore/QTimer>
 
 #include <phonon/mediaobjectinterface.h>
 #include <phonon/mediasource.h>
 
+#include "pipeline.h"
+
 namespace Phonon {
 namespace Fake {
-
-class Pipeline : public QTimer
-{
-    Q_OBJECT
-public:
-    Pipeline() { reset(); }
-    ~Pipeline() {}
-
-    qint64 time() const { return m_time; }
-
-    void start()
-    {
-        connect(this, SIGNAL(timeout()), SLOT(onTimeout()));
-        QTimer::start();
-    }
-
-    void pause() { disconnect(this); }
-
-    void stop()
-    {
-        pause();
-        QTimer::stop();
-        reset();
-    }
-
-    void reset() { m_time = 0; }
-
-    void seek(qint64 msec) { m_time = msec; }
-
-signals:
-    void tick(qint64 time);
-
-private slots:
-    void onTimeout()
-    {
-        m_time += interval();
-    }
-
-private:
-    qint64 m_time;
-};
 
 class MediaObject : public QObject, public MediaObjectInterface
 {
