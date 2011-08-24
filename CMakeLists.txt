@@ -19,14 +19,6 @@ if (PHONON_NO_CAPTURE)
     add_definitions(-DPHONON_NO_VIDEOCAPTURE -DPHONON_NO_AUDIOCAPTURE)
 endif (PHONON_NO_CAPTURE)
 
-if (PHONON_BUILD_TESTS)
-    message(STATUS "Building tests.")
-    enable_testing()
-    #Lets the tests find the headers
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})
-    add_subdirectory(tests)
-endif (PHONON_BUILD_TESTS)
-
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(cmake/FindPhononInternal.cmake)
@@ -121,19 +113,28 @@ add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
+add_subdirectory(fake)
 add_subdirectory(phonon)
 add_subdirectory(includes)
 
 if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
-    #Allows find_package(Phonon) to not die in the demos
+    # Allows find_package(Phonon) to not die in the demos
     set(PHONON_BUILDSYSTEM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
     set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR})
     set(PHONON_LIBRARY phonon)
-    #Lets the demos find the headers
+    # Lets the demos find the headers
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})
     add_subdirectory(demos)
 endif(PHONON_BUILD_DEMOS)
+
+if (PHONON_BUILD_TESTS)
+    message(STATUS "Building tests.")
+    enable_testing()
+    # Lets the tests find the headers
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})
+    add_subdirectory(tests)
+endif (PHONON_BUILD_TESTS)
 
 if(NOT WIN32) # pkgconfig file
 
