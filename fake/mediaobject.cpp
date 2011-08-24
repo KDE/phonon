@@ -45,6 +45,7 @@ void MediaObject::setSource(const MediaSource &source)
 
 void MediaObject::setNextSource(const MediaSource &source)
 {
+#warning nothing done with it
     m_nextSource = source;
 }
 
