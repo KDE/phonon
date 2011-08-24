@@ -27,8 +27,9 @@
 #ifndef NO_PHONON_AVCAPTURE
 
 #include "avcapture.h"
-#include "avcaptureinterface.h"
 #include "avcapture_p.h"
+
+#include "avcaptureinterface.h"
 #include "factory_p.h"
 #include "globalconfig.h"
 #include "phononnamespace_p.h"

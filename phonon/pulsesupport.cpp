@@ -20,6 +20,8 @@
 
 */
 
+#include "pulsesupport.h"
+
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
@@ -38,8 +40,6 @@
 #endif
 #endif // HAVE_PULSEAUDIO
 
-#include "pulsesupport.h"
-
 #include "phononnamespace_p.h"
 
 QT_BEGIN_NAMESPACE
@@ -48,7 +48,7 @@ namespace Phonon
 {
 
 QMutex probeMutex;
-static PulseSupport* s_instance = NULL;
+static PulseSupport *s_instance = NULL;
 
 #ifdef HAVE_PULSEAUDIO
 /***
@@ -382,7 +382,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             }
         }
 
-        // Just copy accross the new priority lists as we know they are valid
+        // Just copy across the new priority lists as we know they are valid
         if (s_outputDevicePriorities != u->newOutputDevicePriorities) {
             output_changed = true;
             s_outputDevicePriorities = u->newOutputDevicePriorities;
@@ -393,7 +393,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         }
 
         if (s_instance) {
-            // This wont be emitted durring the connection probe phase
+            // This wont be emitted during the connection probe phase
             // which is intensional
             if (output_changed)
                 s_instance->emitObjectDescriptionChanged(AudioOutputDeviceType);
@@ -453,7 +453,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     bool isSink = false;
     bool isSource = false;
 
-    if (name.startsWith("sink:")) {
+    if (name.startsWith(QLatin1String("sink:"))) {
         isSink = true;
 
         new_devices = &u->newOutputDevices;
@@ -463,7 +463,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             index = s_outputDeviceIndexes[name];
         else
             index = s_outputDeviceIndexes[name] = s_deviceIndexCounter++;
-    } else if (name.startsWith("source:")) {
+    } else if (name.startsWith(QLatin1String("source:"))) {
         isSource = true;
 
         new_devices = &u->newCaptureDevices;
@@ -770,13 +770,13 @@ static void context_state_callback(pa_context *c, void *)
 #endif // HAVE_PULSEAUDIO
 
 
-PulseSupport* PulseSupport::getInstance()
+PulseSupport *PulseSupport::getInstance()
 {
     if (NULL == s_instance) {
         /*
          * In order to prevent the instance being used from multiple threads
          * prior to it being contructed fully, we need to ensure we obtain a
-         * lock prior to creating it. After we aquire the lock, check to see
+         * lock prior to creating it. After we acquire the lock, check to see
          * if the object is created again before proceeding.
          */
         probeMutex.lock();

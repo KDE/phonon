@@ -21,8 +21,9 @@
 */
 
 #include "videowidget.h"
-#include "snapshotinterface.h"
 #include "videowidget_p.h"
+
+#include "snapshotinterface.h"
 
 namespace Phonon
 {
