@@ -27,6 +27,9 @@
 #include "addoninterface.h"
 #include <QtCore/QList>
 #include <QtCore/QVariant>
+#include <QtCore/QTextCodec>
+#include <QtGui/QApplication>
+#include <QtGui/QFont>
 #include "frontendinterface_p.h"
 
 QT_BEGIN_NAMESPACE
@@ -51,6 +54,7 @@ MediaController::MediaController(MediaObject *mp)
 {
     d->q = this;
     d->_backendObjectChanged();
+    setSubtitleAutodetect(true);
 }
 
 void MediaControllerPrivate::backendObjectChanged(QObject *m_backendObject)
@@ -234,6 +238,55 @@ AudioChannelDescription MediaController::currentAudioChannel() const
     IFACE AudioChannelDescription();
     return iface->interfaceCall(AddonInterface::AudioChannelInterface,
         AddonInterface::currentAudioChannel).value<AudioChannelDescription>();
+}
+
+bool MediaController::subtitleAutodetect() const
+{
+    IFACE true;
+    return iface->interfaceCall(AddonInterface::SubtitleInterface,
+        AddonInterface::subtitleAutodetect).toBool();
+}
+
+void MediaController::setSubtitleAutodetect(bool enable)
+{
+    IFACE;
+    iface->interfaceCall(AddonInterface::SubtitleInterface,
+        AddonInterface::setSubtitleAutodetect, QList<QVariant>() << QVariant(enable));
+}
+
+QTextCodec * MediaController::subtitleEncoding() const
+{
+    IFACE NULL;
+    QString name = iface->interfaceCall(AddonInterface::SubtitleInterface,
+        AddonInterface::subtitleEncoding).toString();
+    return QTextCodec::codecForName(name.toLocal8Bit());
+}
+
+// We require a QTextCodec to use correct character-sets corresponding
+// to the "IANA character-sets encoding file". Also QVariant does not support
+// QTextCodec.
+void MediaController::setSubtitleEncoding(const QTextCodec *codec)
+{
+    IFACE;
+    if (! codec)
+        return;
+    QString name = codec->name();
+    iface->interfaceCall(AddonInterface::SubtitleInterface,
+        AddonInterface::setSubtitleEncoding, QList<QVariant>() << QVariant(name));
+}
+
+void MediaController::setSubtitleFont(const QFont &font)
+{
+    IFACE;
+    iface->interfaceCall(AddonInterface::SubtitleInterface,
+        AddonInterface::setSubtitleFont, QList<QVariant>() << QVariant(font));
+}
+
+QFont MediaController::subtitleFont() const
+{
+    IFACE QFont();
+    return iface->interfaceCall(AddonInterface::SubtitleInterface,
+        AddonInterface::subtitleFont).value<QFont>();
 }
 
 SubtitleDescription MediaController::currentSubtitle() const
