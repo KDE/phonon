@@ -155,6 +155,10 @@ class PHONON_EXPORT MediaController : public QObject
          */
         SubtitleDescription currentSubtitle() const;
 
+        bool subtitleAutodetect() const;
+        QTextCodec * subtitleEncoding() const;
+        QFont subtitleFont() const;
+
         /**
          * Returns the audio streams that can be selected by the user. The
          * strings can directly be used in the user interface.
@@ -205,6 +209,9 @@ class PHONON_EXPORT MediaController : public QObject
          * \see currentSubtitle()
          */
         void setCurrentSubtitle(const Phonon::SubtitleDescription &stream);
+        void setSubtitleAutodetect(bool enable);
+        void setSubtitleEncoding(const QTextCodec *codec);
+        void setSubtitleFont(const QFont &font);
 
     public Q_SLOTS:
         void setCurrentAngle(int angleNumber);

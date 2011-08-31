@@ -90,8 +90,17 @@ class AddonInterface
             availableSubtitles, /**< \returns \c int representing the amount of
                                       available subtitles on the media source */
             currentSubtitle,    /**< \returns \c int representing the current subtitle */
-            setCurrentSubtitle  /**< Sets the current subtitle to the first
+            setCurrentSubtitle, /**< Sets the current subtitle to the first
                                      \c int in the QList */
+            subtitleAutodetect, /**< \returns \c bool representing if subtitles
+                                      autodetection is enabled */
+            setSubtitleAutodetect, /**< Sets/Unsets subtitles autodetection */
+            subtitleEncoding, /**< \returns a QString representing the current encoding
+			           used to render subtitles */
+            setSubtitleEncoding, /** Sets the current encoding used to render subtitles */
+            subtitleFont, /**< \returns a QFont representing the current font used
+                              to render subtitles */
+            setSubtitleFont /**< Sets the current font used to render subtitles */
         };
 
         enum AudioChannelCommand {
