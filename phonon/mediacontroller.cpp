@@ -28,7 +28,6 @@
 #include <QtCore/QList>
 #include <QtCore/QVariant>
 #include <QtCore/QTextCodec>
-#include <QtGui/QApplication>
 #include <QtGui/QFont>
 #include "frontendinterface_p.h"
 
