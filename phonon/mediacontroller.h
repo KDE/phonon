@@ -156,7 +156,7 @@ class PHONON_EXPORT MediaController : public QObject
         SubtitleDescription currentSubtitle() const;
 
         bool subtitleAutodetect() const;
-        QTextCodec * subtitleEncoding() const;
+        QString subtitleEncoding() const;
         QFont subtitleFont() const;
 
         /**
@@ -210,7 +210,7 @@ class PHONON_EXPORT MediaController : public QObject
          */
         void setCurrentSubtitle(const Phonon::SubtitleDescription &stream);
         void setSubtitleAutodetect(bool enable);
-        void setSubtitleEncoding(const QTextCodec *codec);
+        void setSubtitleEncoding(const QString &encoding);
         void setSubtitleFont(const QFont &font);
 
     public Q_SLOTS:
