@@ -253,25 +253,20 @@ void MediaController::setSubtitleAutodetect(bool enable)
         AddonInterface::setSubtitleAutodetect, QList<QVariant>() << QVariant(enable));
 }
 
-QTextCodec * MediaController::subtitleEncoding() const
+QString MediaController::subtitleEncoding() const
 {
-    IFACE NULL;
-    QString name = iface->interfaceCall(AddonInterface::SubtitleInterface,
+    IFACE QString();
+    return iface->interfaceCall(AddonInterface::SubtitleInterface,
         AddonInterface::subtitleEncoding).toString();
-    return QTextCodec::codecForName(name.toLocal8Bit());
 }
 
-// We require a QTextCodec to use correct character-sets corresponding
-// to the "IANA character-sets encoding file". Also QVariant does not support
-// QTextCodec.
-void MediaController::setSubtitleEncoding(const QTextCodec *codec)
+void MediaController::setSubtitleEncoding(const QString &encoding)
 {
     IFACE;
-    if (! codec)
+    if (!QTextCodec::availableCodecs().contains(encoding.toLocal8Bit()))
         return;
-    QString name = codec->name();
     iface->interfaceCall(AddonInterface::SubtitleInterface,
-        AddonInterface::setSubtitleEncoding, QList<QVariant>() << QVariant(name));
+        AddonInterface::setSubtitleEncoding, QList<QVariant>() << QVariant(encoding));
 }
 
 void MediaController::setSubtitleFont(const QFont &font)
