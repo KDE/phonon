@@ -155,8 +155,27 @@ class PHONON_EXPORT MediaController : public QObject
          */
         SubtitleDescription currentSubtitle() const;
 
+        /**
+         * Returns a state meaning if subtitles are autodetected
+         * each time the current source changes.
+         *
+         * \see setSubtitleAutodetect
+         */
         bool subtitleAutodetect() const;
+
+        /**
+         * Returns the encoding used to render subtitles
+         *
+         * \see setSubtitleEncoding
+         */
         QString subtitleEncoding() const;
+
+        /**
+         * Returns the font used to render subtitles
+         *
+         * \see setSubtitleFont
+         * \see QApplication::setFont
+         */
         QFont subtitleFont() const;
 
         /**
@@ -209,8 +228,40 @@ class PHONON_EXPORT MediaController : public QObject
          * \see currentSubtitle()
          */
         void setCurrentSubtitle(const Phonon::SubtitleDescription &stream);
+
+        /**
+         * Sets/Unsets subtitles autodetection.
+         *
+         * A subtitle is autoselected when it exists a subtitle
+         * matching the same name as the media, in the same directory.
+         * All standard types of subtitles are supported: sub, srt, smi, ssa,
+         * ass and asc.
+         * By default autodetection is on when a MediaObject is connected
+         * to a MediaController.
+         *
+         * \see subtitleAutodetect
+         */
         void setSubtitleAutodetect(bool enable);
+
+        /**
+         * Selects the current encoding used to render subtitles.
+         *
+         * The encoding name must respect the
+         * @link http://www.iana.org/assignments/character-sets
+         * Link text IANA character-sets encoding file @endlink
+         * If no encoding is explicitly set, it defaults to UTF-8.
+         *
+         * \see subtitleEncoding
+         */
         void setSubtitleEncoding(const QString &encoding);
+
+        /**
+         * Selects the current font used to render subtitles.
+         *
+         * If no font is explicitly set, it defaults to the application's font
+         *
+         * \see subtitleFont
+         */
         void setSubtitleFont(const QFont &font);
 
     public Q_SLOTS:
