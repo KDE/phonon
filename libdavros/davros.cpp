@@ -82,7 +82,7 @@ ContextPrivate::ContextPrivate(QObject* parent, const QString & area)
 {
     setObjectName( area + QLatin1String("DavrosContextObject"));
     debugColorsEnabled = true;
-    debugLevel = Davros::DEBUG_NONE;
+    debugLevel = Davros::DEBUG_WARN;
     colorIndex = 0;
 }
 
