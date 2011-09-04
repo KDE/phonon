@@ -20,6 +20,7 @@
 */
 
 #include <QtCore/QtGlobal>
+#include <QtCore/QThread>
 #if QT_VERSION >= 0x040700
 # include <QtCore/QElapsedTimer>
 #else
@@ -64,6 +65,8 @@ struct BlockPrivate
 Block::Block(const char *label, const QString & area)
     : d(new BlockPrivate(label, area))
 {
+    static int count = 1;
+
     if(!debugEnabled(area)) {
         return;
     }
@@ -72,18 +75,25 @@ Block::Block(const char *label, const QString & area)
 #else
     d->startTime = QTime::currentTime();
 #endif
+    ContextPrivate *ctx = ContextPrivate::instance(area);
+    ctx->mutex.lock();
+    ctx->colorIndex = (ctx->colorIndex + 1) % 5;
+    ctx->mutex.unlock();
 
-    ContextPrivate::instance(area)->mutex.lock();
-    ContextPrivate::instance(area)->colorIndex = (ContextPrivate::instance(area)->colorIndex + 1) % 5;
-    ContextPrivate::instance(area)->mutex.unlock();
+    if (QThread::currentThread()->objectName().isEmpty()) {
+        ctx->mutex.lock();
+        int id = count++;
+        ctx->mutex.unlock();
+        QThread::currentThread()->setObjectName("Thread " + QString::number(id));
+    }
 
     dbgstream(DEBUG_INFO, area)
         << qPrintable( colorize( QLatin1String( "BEGIN:" ), d->color, area) )
-        << label;
+        << label << qPrintable(colorize( "[" + QThread::currentThread()->objectName() + "]", d->color, area));
 
-    ContextPrivate::instance(area)->mutex.lock();
+    ctx->mutex.lock();
     IndentPrivate::instance(area)->m_string += QLatin1String("  ");
-    ContextPrivate::instance(area)->mutex.unlock();
+    ctx->mutex.unlock();
 }
 
 Block::~Block()
@@ -105,12 +115,12 @@ Block::~Block()
     if( duration < 5.0 ) {
         dbgstream(DEBUG_INFO, d->area)
             << qPrintable(colorize(QLatin1String( "END__:" ), d->color, d->area))
-            << d->label
+            << d->label << qPrintable(colorize("[" + QThread::currentThread()->objectName() + "]", d->color, d->area))
             << qPrintable(colorize(QString( "[Took: %3s]").arg(QString::number(duration, 'g', 2)), d->color, d->area));
     } else {
         dbgstream(DEBUG_INFO, d->area)
             << qPrintable(colorize(QString("END__:"), d->color, d->area))
-            << d->label
+            << d->label << qPrintable(colorize("[" + QThread::currentThread()->objectName() + "]", d->color, d->area))
             << qPrintable(reverseColorize(QString("[DELAY Took (quite long) %3s]")
                                           .arg(QString::number(duration, 'g', 2)), toColor(DEBUG_WARN), d->area));
     }
