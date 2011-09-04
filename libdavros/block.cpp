@@ -45,9 +45,11 @@ struct BlockPrivate
     BlockPrivate(const char *label_, const QString & area_)
       : label(label_)
       , area(area_)
-      , color(ContextPrivate::instance(area_)->colorIndex)
+      , color(0)
     {
-
+        ContextPrivate::instance(area)->mutex.lock();
+        color = ContextPrivate::instance(area_)->colorIndex;
+        ContextPrivate::instance(area)->mutex.unlock();
     }
 #if QT_VERSION >= 0x040700
     QElapsedTimer startTime;
