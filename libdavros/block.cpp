@@ -47,9 +47,9 @@ struct BlockPrivate
       , area(area_)
       , color(0)
     {
-        ContextPrivate::instance(area)->mutex.lock();
+        ContextPrivate::instance(area_)->mutex.lock();
         color = ContextPrivate::instance(area_)->colorIndex;
-        ContextPrivate::instance(area)->mutex.unlock();
+        ContextPrivate::instance(area_)->mutex.unlock();
     }
 #if QT_VERSION >= 0x040700
     QElapsedTimer startTime;
