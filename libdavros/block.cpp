@@ -91,9 +91,7 @@ Block::Block(const char *label, const QString & area)
         << qPrintable( colorize( QLatin1String( "BEGIN:" ), d->color, area) )
         << label << qPrintable(colorize( "[" + QThread::currentThread()->objectName() + "]", d->color, area));
 
-    ctx->mutex.lock();
-    IndentPrivate::instance(area)->m_string += QLatin1String("  ");
-    ctx->mutex.unlock();
+    IndentPrivate::instance(area)->data.localData()->append(QLatin1String("  "));
 }
 
 Block::~Block()
@@ -106,10 +104,7 @@ Block::~Block()
 #else
     const double duration = (double)d->startTime.msecsTo( QTime::currentTime() ) / 1000.0;
 #endif
-
-    ContextPrivate::instance(d->area)->mutex.lock();
-    IndentPrivate::instance(d->area)->m_string.truncate(IndentPrivate::instance(d->area)->m_string.length() - 2);
-    ContextPrivate::instance(d->area)->mutex.unlock();
+    IndentPrivate::instance(d->area)->data.localData()->truncate(IndentPrivate::instance(d->area)->data.localData()->length() - 2);
 
     // Print timing information, and a special message (DELAY) if the method took longer than 5s
     if( duration < 5.0 ) {

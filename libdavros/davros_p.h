@@ -22,6 +22,7 @@
 #include "davros.h"
 
 #include <QtCore/QString>
+#include <QtCore/QThreadStorage>
 
 class IndentPrivate
     : public QObject
@@ -32,7 +33,7 @@ private:
 public:
     static IndentPrivate* instance(const QString & area);
 
-    QString m_string;
+    QThreadStorage<QString *> data;
 };
 
 class ContextPrivate

@@ -60,6 +60,7 @@ IndentPrivate::IndentPrivate(QObject* parent, const QString & area)
     : QObject(parent)
 {
     setObjectName( area + QLatin1String("DavrosIndentObject"));
+    data.setLocalData(0);
 }
 
 
@@ -70,9 +71,11 @@ IndentPrivate* IndentPrivate::instance(const QString & area)
     if (globalObjectsTable().find(objectName) == globalObjectsTable().end()) {
         obj = new IndentPrivate(qApp, area);
         globalObjectsTable().insert(objectName, reinterpret_cast<void *>(obj));
-	return obj;
     }
     obj = reinterpret_cast<IndentPrivate *>(globalObjectsTable()[objectName]);
+    if (! obj->data.hasLocalData()) {
+        obj->data.setLocalData(new QString(""));
+    }
     return obj;
 }
 
@@ -120,7 +123,7 @@ namespace Davros
 
 QString indent(const QString & area)
 {
-    return IndentPrivate::instance(area)->m_string;
+    return *IndentPrivate::instance(area)->data.localData();
 }
 
 bool debugEnabled(const QString & area)
@@ -150,14 +153,10 @@ void setMinimumDebugLevel(DebugLevel level, const QString & area)
 
 QDebug dbgstream( DebugLevel level, const QString & area)
 {
-  if ( level < minimumDebugLevel(area) )
+    if ( level < minimumDebugLevel(area) )
         return nullDebug();
 
-    ContextPrivate::instance(area)->mutex.lock();
-    const QString currentIndent = IndentPrivate::instance(area)->m_string;
-    ContextPrivate::instance(area)->mutex.unlock();
-
-    QString text = QString("%1%2").arg( area ).arg( currentIndent );
+    QString text = QString("%1%2").arg( area ).arg( *IndentPrivate::instance(area)->data.localData() );
     if ( level > DEBUG_INFO )
       text.append( ' ' + reverseColorize( toString(level), toColor( level ), area ) );
 
