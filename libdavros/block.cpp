@@ -68,16 +68,15 @@ Block::Block(const char *label, const QString & area)
     : d(new BlockPrivate(label, area))
 {
     static int count = 1;
+    ContextPrivate *ctx = ContextPrivate::instance(area);
 
-    if(!debugEnabled(area)) {
+    if(QtDebugMsg < ctx->debugLevel)
         return;
-    }
 #if QT_VERSION >= 0x040700
     d->startTime.start();
 #else
     d->startTime = QTime::currentTime();
 #endif
-    ContextPrivate *ctx = ContextPrivate::instance(area);
 
     if (QThread::currentThread()->objectName().isEmpty()) {
         ctx->mutex.lock();
@@ -86,7 +85,7 @@ Block::Block(const char *label, const QString & area)
         QThread::currentThread()->setObjectName("Thread " + QString::number(id));
     }
 
-    debugStream(DEBUG_INFO, area)
+    debugStream(QtDebugMsg, area)
         << qPrintable( colorize( QLatin1String( "BEGIN:" ), d->color, area) )
         << label << qPrintable(colorize( "[" + QThread::currentThread()->objectName() + "]", d->color, area));
 
@@ -95,9 +94,8 @@ Block::Block(const char *label, const QString & area)
 
 Block::~Block()
 {
-    if( !debugEnabled(d->area)) {
+    if(QtDebugMsg < ContextPrivate::instance(d->area)->debugLevel)
         return;
-    }
 #if QT_VERSION >= 0x040700
     const double duration = d->startTime.elapsed() / 1000.0;
 #else
@@ -107,16 +105,16 @@ Block::~Block()
 
     // Print timing information, and a special message (DELAY) if the method took longer than 5s
     if( duration < 5.0 ) {
-        debugStream(DEBUG_INFO, d->area)
+        debugStream(QtDebugMsg, d->area)
             << qPrintable(colorize(QLatin1String( "END__:" ), d->color, d->area))
             << d->label << qPrintable(colorize("[" + QThread::currentThread()->objectName() + "]", d->color, d->area))
             << qPrintable(colorize(QString( "[Took: %3s]").arg(QString::number(duration, 'g', 2)), d->color, d->area));
     } else {
-        debugStream(DEBUG_INFO, d->area)
+        debugStream(QtDebugMsg, d->area)
             << qPrintable(colorize(QString("END__:"), d->color, d->area))
             << d->label << qPrintable(colorize("[" + QThread::currentThread()->objectName() + "]", d->color, d->area))
             << qPrintable(reverseColorize(QString("[DELAY Took (quite long) %3s]")
-                                          .arg(QString::number(duration, 'g', 2)), toColor(DEBUG_WARN), d->area));
+                                          .arg(QString::number(duration, 'g', 2)), toColor(QtWarningMsg), d->area));
     }
     delete d;
 }

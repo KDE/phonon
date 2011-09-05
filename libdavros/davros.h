@@ -27,6 +27,7 @@
 #undef KDE_NO_DEBUG_OUTPUT
 
 #include <QtCore/QDebug>
+#include <QtCore/QtGlobal>
 
 
 // Platform specific macros
@@ -102,27 +103,17 @@
 namespace Davros
 {
 
-enum DebugLevel {
-    DEBUG_INFO  = 0,
-    DEBUG_WARN  = 1,
-    DEBUG_ERROR = 2,
-    DEBUG_FATAL = 3,
-    DEBUG_NONE = 4
-};
-
 /**
  * @internal
  * Returns a debug stream that may or may not output anything.
  */
-QDebug debugStream(DebugLevel level = DEBUG_INFO, const QString & area = DAVROS_DEBUG_AREA);
+QDebug debugStream(QtMsgType level, const QString & area = DAVROS_DEBUG_AREA);
 
 /**
  * @internal
  * Returns a string representing the current indentation used for nested blocks
  */
 QString indent(const QString & area = DAVROS_DEBUG_AREA);
-
-bool debugEnabled(const QString & area = DAVROS_DEBUG_AREA);
 
 /**
  * Returns a boolean indicating if outputs are colorized
@@ -139,7 +130,7 @@ bool debugColorEnabled(const QString & area = DAVROS_DEBUG_AREA);
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  * \see setMinimumDebugLevel
  */
-DebugLevel minimumDebugLevel(const QString & area = DAVROS_DEBUG_AREA);
+QtMsgType minimumDebugLevel(const QString & area = DAVROS_DEBUG_AREA);
 
 /**
  * Sets/Unsets colorized outputs
@@ -160,7 +151,7 @@ void setColoredDebug( bool enable, const QString & area = DAVROS_DEBUG_AREA);
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  * \see minimumDebugLevel
  */
-void setMinimumDebugLevel( DebugLevel level, const QString & area = DAVROS_DEBUG_AREA);
+void setMinimumDebugLevel(QtMsgType level, const QString & area = DAVROS_DEBUG_AREA);
 
 /**
  * Returns a debug stream. You can use it to print debug
@@ -168,7 +159,7 @@ void setMinimumDebugLevel( DebugLevel level, const QString & area = DAVROS_DEBUG
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  */
 static inline QDebug debug(const QString & area = DAVROS_DEBUG_AREA)
-{ return debugStream(DEBUG_INFO, area); }
+{ return debugStream(QtDebugMsg, area); }
 
 /**
  * Returns a warning stream. You can use it to print warning
@@ -176,7 +167,7 @@ static inline QDebug debug(const QString & area = DAVROS_DEBUG_AREA)
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  */
 static inline QDebug warning(const QString & area = DAVROS_DEBUG_AREA)
-{ return debugStream(DEBUG_WARN, area); }
+{ return debugStream(QtWarningMsg, area); }
 
 /**
  * Returns an error stream. You can use it to print error
@@ -184,7 +175,7 @@ static inline QDebug warning(const QString & area = DAVROS_DEBUG_AREA)
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  */
 static inline QDebug error(const QString & area = DAVROS_DEBUG_AREA)
-{ return debugStream(DEBUG_ERROR, area); }
+{ return debugStream(QtCriticalMsg, area); }
 
 /**
  * Returns a fatal error stream. You can use it to print fatal error
@@ -192,7 +183,7 @@ static inline QDebug error(const QString & area = DAVROS_DEBUG_AREA)
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  */
 static inline QDebug fatal(const QString & area = DAVROS_DEBUG_AREA)
-{ return debugStream(DEBUG_FATAL, area ); }
+{ return debugStream(QtFatalMsg, area ); }
 
 }
 

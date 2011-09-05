@@ -85,7 +85,7 @@ ContextPrivate::ContextPrivate(QObject* parent, const QString & area)
 {
     setObjectName( area + QLatin1String("DavrosContextObject"));
     debugColorsEnabled = true;
-    debugLevel = Davros::DEBUG_WARN;
+    debugLevel = QtWarningMsg;
     colorIndex = 0;
 }
 
@@ -103,15 +103,14 @@ ContextPrivate* ContextPrivate::instance(const QString & area)
     return obj;
 }
 
-static QString toString( Davros::DebugLevel level )
+static QString toString(QtMsgType level)
 {
-    switch( level )
-    {
-    case Davros::DEBUG_WARN:
+    switch(level) {
+        case QtWarningMsg:
             return "[WARNING]";
-    case Davros::DEBUG_ERROR:
+        case QtCriticalMsg:
             return "[ERROR__]";
-    case Davros::DEBUG_FATAL:
+        case QtFatalMsg:
             return "[FATAL__]";
         default:
             return QString();
@@ -126,17 +125,12 @@ QString indent(const QString & area)
     return *IndentPrivate::instance(area)->data.localData();
 }
 
-bool debugEnabled(const QString & area)
-{
-    return ContextPrivate::instance(area)->debugLevel < DEBUG_NONE;
-}
-
 bool debugColorEnabled(const QString & area)
 {
     return ContextPrivate::instance(area)->debugColorsEnabled;
 }
 
-DebugLevel minimumDebugLevel(const QString & area)
+QtMsgType minimumDebugLevel(const QString & area)
 {
     return ContextPrivate::instance(area)->debugLevel;
 }
@@ -146,18 +140,18 @@ void setColoredDebug(bool enable, const QString & area)
     ContextPrivate::instance(area)->debugColorsEnabled = enable;
 }
 
-void setMinimumDebugLevel(DebugLevel level, const QString & area)
+void setMinimumDebugLevel(QtMsgType level, const QString & area)
 {
     ContextPrivate::instance(area)->debugLevel = level;
 }
 
-QDebug debugStream( DebugLevel level, const QString & area)
+QDebug debugStream(QtMsgType level, const QString & area)
 {
     if ( level < minimumDebugLevel(area) )
         return nullDebug();
 
     QString text = QString("%1%2").arg( area ).arg( *IndentPrivate::instance(area)->data.localData() );
-    if ( level > DEBUG_INFO )
+    if ( level > QtDebugMsg )
       text.append( ' ' + reverseColorize( toString(level), toColor( level ), area ) );
 
     return QDebug( QtDebugMsg ) << qPrintable( text );

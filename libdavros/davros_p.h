@@ -48,7 +48,7 @@ public:
 
     QMutex mutex;
     bool debugColorsEnabled;
-    Davros::DebugLevel debugLevel;
+    QtMsgType debugLevel;
     int colorIndex;
 };
 
@@ -59,13 +59,13 @@ static inline QString reverseColorize( const QString &text, int color, const QSt
     return QString( "\x1b[07;3%1m%2\x1b[00;39m" ).arg( QString::number(color), text );
 }
 
-static inline int toColor( Davros::DebugLevel level )
+static inline int toColor(QtMsgType level)
 {
     switch( level ) {
-    case Davros::DEBUG_WARN:
+        case QtWarningMsg:
             return 3; // red
-    case Davros::DEBUG_ERROR:
-    case Davros::DEBUG_FATAL:
+        case QtCriticalMsg:
+        case QtFatalMsg:
             return 1; // yellow
         default:
             return 0; // default: black
