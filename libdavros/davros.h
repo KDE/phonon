@@ -66,24 +66,37 @@
  * @short kdebug with indentation functionality and convenience macros
  *
  * Usage:
- *
+ * <code>
  *     #define DAVROS_DEBUG_AREA "Blah"
  *     #include <davros/davros.h>
+ *     #include <davros/block.h>
  *
  *     void function()
  *     {
- *        Davros::Block myBlock( __PRETTY_FUNCTION__ );
- *
- *        Davros::debug() << "output1" << endl;
- *        Davros::debug() << "output2" << endl;
+ *         DAVROS_BLOCK;
+ *         Davros::debug() << "debug1";
+ *         Davros::debug() << "debug2";
+ *         nested_function();
  *     }
+ *
+ *     void nested_function()
+ *     {
+ *         DAVROS_BLOCK;
+ *         Davros::debug() << "debug3";
+ *         Davros::debug() << "debug4";
+ *     }
+ * </code>
  *
  * Will output:
  *
- * app: BEGIN: void function()
- * app:   [Blah] output1
- * app:   [Blah] output2
- * app: END: void function(): Took 0.1s
+ * Blah BEGIN: void function() [Thread 1]
+ * Blah  [Thread 1] debug1
+ * Blah  [Thread 1] debug2
+ * Blah  BEGIN: void nested_function() [Thread 1]
+ * Blah    [Thread 1] debug3
+ * Blah    [Thread 1] debug4
+ * Blah  END__: void nested_function() [Thread 1]
+ * Blah END__: void function(): [Thread 1] Took 0.1s
  *
  * @see Block
  */
@@ -98,29 +111,89 @@ enum DebugLevel {
     DEBUG_NONE = 4
 };
 
-QDebug dbgstream( DebugLevel level = DEBUG_INFO, const QString & area = DAVROS_DEBUG_AREA);
-bool debugEnabled(const QString & area = DAVROS_DEBUG_AREA);
-bool debugColorEnabled(const QString & area = DAVROS_DEBUG_AREA);
-DebugLevel minimumDebugLevel(const QString & area = DAVROS_DEBUG_AREA);
-void setColoredDebug( bool enable, const QString & area = DAVROS_DEBUG_AREA);
-void setMinimumDebugLevel( DebugLevel level, const QString & area = DAVROS_DEBUG_AREA);
-QString indent(const QString & area = DAVROS_DEBUG_AREA);
-
-inline QDebug dbgstreamwrapper( DebugLevel level , const QString & area) { return dbgstream( level , area ); }
-
-inline QDebug debug(const QString & area = DAVROS_DEBUG_AREA)   { return dbgstreamwrapper(DEBUG_INFO, area); }
-inline QDebug warning(const QString & area = DAVROS_DEBUG_AREA) { return dbgstreamwrapper(DEBUG_WARN, area); }
-inline QDebug error(const QString & area = DAVROS_DEBUG_AREA)   { return dbgstreamwrapper(DEBUG_ERROR, area); }
-inline QDebug fatal(const QString & area = DAVROS_DEBUG_AREA)   { return dbgstreamwrapper( DEBUG_FATAL, area ); }
-
+/**
+ * @internal
+ * Returns a debug stream that may or may not output anything.
+ */
+QDebug dbgstream(DebugLevel level = DEBUG_INFO, const QString & area = DAVROS_DEBUG_AREA);
 
 /**
- * @class Debug::List
- * @short You can pass anything to this and it will output it as a list
- *
- *     debug() << (Debug::List() << anInt << aString << aQStringList << aDouble) << endl;
+ * @internal
+ * Returns a string representing the current indentation used for nested blocks
  */
-typedef QList<QVariant> List;
+QString indent(const QString & area = DAVROS_DEBUG_AREA);
+
+bool debugEnabled(const QString & area = DAVROS_DEBUG_AREA);
+
+/**
+ * Returns a boolean indicating if outputs are colorized
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ * \see setColoredDebug
+ */
+bool debugColorEnabled(const QString & area = DAVROS_DEBUG_AREA);
+
+/**
+ * Returns the current debugging level
+ *
+ * All kind of messages with a level greater or equal to this minimul level
+ * Will be displayed.
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ * \see setMinimumDebugLevel
+ */
+DebugLevel minimumDebugLevel(const QString & area = DAVROS_DEBUG_AREA);
+
+/**
+ * Sets/Unsets colorized outputs
+ * @param enable a boolean used to enable/disable colors
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ * \see debugColorEnabled
+ */
+void setColoredDebug( bool enable, const QString & area = DAVROS_DEBUG_AREA);
+
+/**
+ * Sets the current debugging level
+ *
+ * All kind of messages with a level greater or equal to this minimul level
+ * Will be displayed.
+ * By default, all warnings, errors or fatals are logged and the debugging
+ * level is DEBUG_WARN.
+ * @param level the debugging level to use
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ * \see minimumDebugLevel
+ */
+void setMinimumDebugLevel( DebugLevel level, const QString & area = DAVROS_DEBUG_AREA);
+
+/**
+ * Returns a debug stream. You can use it to print debug
+ * information.
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ */
+static inline QDebug debug(const QString & area = DAVROS_DEBUG_AREA)
+{ return dbgstream(DEBUG_INFO, area); }
+
+/**
+ * Returns a warning stream. You can use it to print warning
+ * information.
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ */
+static inline QDebug warning(const QString & area = DAVROS_DEBUG_AREA)
+{ return dbgstream(DEBUG_WARN, area); }
+
+/**
+ * Returns an error stream. You can use it to print error
+ * information.
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ */
+static inline QDebug error(const QString & area = DAVROS_DEBUG_AREA)
+{ return dbgstream(DEBUG_ERROR, area); }
+
+/**
+ * Returns a fatal error stream. You can use it to print fatal error
+ * information.
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ */
+static inline QDebug fatal(const QString & area = DAVROS_DEBUG_AREA)
+{ return dbgstream(DEBUG_FATAL, area ); }
 
 }
 
