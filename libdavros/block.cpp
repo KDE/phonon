@@ -48,9 +48,11 @@ struct BlockPrivate
       , area(area_)
       , color(0)
     {
-        ContextPrivate::instance(area_)->mutex.lock();
-        color = ContextPrivate::instance(area_)->colorIndex;
-        ContextPrivate::instance(area_)->mutex.unlock();
+        ContextPrivate *ctx = ContextPrivate::instance(area_);
+        ctx->mutex.lock();
+        color = ctx->colorIndex;
+        ctx->colorIndex = (ctx->colorIndex + 1) % 5;
+        ctx->mutex.unlock();
     }
 #if QT_VERSION >= 0x040700
     QElapsedTimer startTime;
@@ -76,9 +78,6 @@ Block::Block(const char *label, const QString & area)
     d->startTime = QTime::currentTime();
 #endif
     ContextPrivate *ctx = ContextPrivate::instance(area);
-    ctx->mutex.lock();
-    ctx->colorIndex = (ctx->colorIndex + 1) % 5;
-    ctx->mutex.unlock();
 
     if (QThread::currentThread()->objectName().isEmpty()) {
         ctx->mutex.lock();
