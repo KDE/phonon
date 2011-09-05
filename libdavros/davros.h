@@ -115,7 +115,7 @@ enum DebugLevel {
  * @internal
  * Returns a debug stream that may or may not output anything.
  */
-QDebug dbgstream(DebugLevel level = DEBUG_INFO, const QString & area = DAVROS_DEBUG_AREA);
+QDebug debugStream(DebugLevel level = DEBUG_INFO, const QString & area = DAVROS_DEBUG_AREA);
 
 /**
  * @internal
@@ -169,7 +169,7 @@ void setMinimumDebugLevel( DebugLevel level, const QString & area = DAVROS_DEBUG
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  */
 static inline QDebug debug(const QString & area = DAVROS_DEBUG_AREA)
-{ return dbgstream(DEBUG_INFO, area); }
+{ return debugStream(DEBUG_INFO, area); }
 
 /**
  * Returns a warning stream. You can use it to print warning
@@ -177,7 +177,7 @@ static inline QDebug debug(const QString & area = DAVROS_DEBUG_AREA)
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  */
 static inline QDebug warning(const QString & area = DAVROS_DEBUG_AREA)
-{ return dbgstream(DEBUG_WARN, area); }
+{ return debugStream(DEBUG_WARN, area); }
 
 /**
  * Returns an error stream. You can use it to print error
@@ -185,7 +185,7 @@ static inline QDebug warning(const QString & area = DAVROS_DEBUG_AREA)
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  */
 static inline QDebug error(const QString & area = DAVROS_DEBUG_AREA)
-{ return dbgstream(DEBUG_ERROR, area); }
+{ return debugStream(DEBUG_ERROR, area); }
 
 /**
  * Returns a fatal error stream. You can use it to print fatal error
@@ -193,7 +193,7 @@ static inline QDebug error(const QString & area = DAVROS_DEBUG_AREA)
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
  */
 static inline QDebug fatal(const QString & area = DAVROS_DEBUG_AREA)
-{ return dbgstream(DEBUG_FATAL, area ); }
+{ return debugStream(DEBUG_FATAL, area ); }
 
 }
 

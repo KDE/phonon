@@ -86,7 +86,7 @@ Block::Block(const char *label, const QString & area)
         QThread::currentThread()->setObjectName("Thread " + QString::number(id));
     }
 
-    dbgstream(DEBUG_INFO, area)
+    debugStream(DEBUG_INFO, area)
         << qPrintable( colorize( QLatin1String( "BEGIN:" ), d->color, area) )
         << label << qPrintable(colorize( "[" + QThread::currentThread()->objectName() + "]", d->color, area));
 
@@ -107,12 +107,12 @@ Block::~Block()
 
     // Print timing information, and a special message (DELAY) if the method took longer than 5s
     if( duration < 5.0 ) {
-        dbgstream(DEBUG_INFO, d->area)
+        debugStream(DEBUG_INFO, d->area)
             << qPrintable(colorize(QLatin1String( "END__:" ), d->color, d->area))
             << d->label << qPrintable(colorize("[" + QThread::currentThread()->objectName() + "]", d->color, d->area))
             << qPrintable(colorize(QString( "[Took: %3s]").arg(QString::number(duration, 'g', 2)), d->color, d->area));
     } else {
-        dbgstream(DEBUG_INFO, d->area)
+        debugStream(DEBUG_INFO, d->area)
             << qPrintable(colorize(QString("END__:"), d->color, d->area))
             << d->label << qPrintable(colorize("[" + QThread::currentThread()->objectName() + "]", d->color, d->area))
             << qPrintable(reverseColorize(QString("[DELAY Took (quite long) %3s]")

@@ -151,7 +151,7 @@ void setMinimumDebugLevel(DebugLevel level, const QString & area)
     ContextPrivate::instance(area)->debugLevel = level;
 }
 
-QDebug dbgstream( DebugLevel level, const QString & area)
+QDebug debugStream( DebugLevel level, const QString & area)
 {
     if ( level < minimumDebugLevel(area) )
         return nullDebug();
