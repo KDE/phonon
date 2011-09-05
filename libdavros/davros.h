@@ -27,7 +27,6 @@
 #undef KDE_NO_DEBUG_OUTPUT
 
 #include <QtCore/QDebug>
-#include <QtCore/QMutex>
 
 
 // Platform specific macros

@@ -21,6 +21,7 @@
 
 #include "davros.h"
 
+#include <QtCore/QMutex>
 #include <QtCore/QString>
 #include <QtCore/QThreadStorage>
 
