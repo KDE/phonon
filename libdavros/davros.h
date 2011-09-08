@@ -66,7 +66,7 @@
  * @short kdebug with indentation functionality and convenience macros
  *
  * Usage:
- * <code>
+ * @code
  *     #define DAVROS_DEBUG_AREA "Blah"
  *     #include <davros/davros.h>
  *     #include <davros/block.h>
@@ -85,7 +85,7 @@
  *         Davros::debug() << "debug3";
  *         Davros::debug() << "debug4";
  *     }
- * </code>
+ * @endcode
  *
  * Will output:
  *
