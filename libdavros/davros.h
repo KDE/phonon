@@ -103,6 +103,12 @@
 namespace Davros
 {
 
+enum LoggingType
+{
+    Interleaved = 0,
+    Sequential  = 1
+};
+
 /**
  * @internal
  * Returns a debug stream that may or may not output anything.
@@ -133,6 +139,14 @@ bool debugColorEnabled(const QString & area = DAVROS_DEBUG_AREA);
 QtMsgType minimumDebugLevel(const QString & area = DAVROS_DEBUG_AREA);
 
 /**
+ * Returns the current logging type
+ *
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ * \see setLoggingType
+ */
+LoggingType loggingType(const QString & area = DAVROS_DEBUG_AREA);
+
+/**
  * Sets/Unsets colorized outputs
  * @param enable a boolean used to enable/disable colors
  * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
@@ -152,6 +166,15 @@ void setColoredDebug( bool enable, const QString & area = DAVROS_DEBUG_AREA);
  * \see minimumDebugLevel
  */
 void setMinimumDebugLevel(QtMsgType level, const QString & area = DAVROS_DEBUG_AREA);
+
+/**
+ * Sets the current logging type
+ *
+ * @param type the type describing how messages will be displayed
+ * @param area an id to identify the output, DAVROS_DEBUG_AREA for default
+ * \see loggingType
+ */
+void setLoggingType(LoggingType type, const QString & area = DAVROS_DEBUG_AREA);
 
 /**
  * Returns a debug stream. You can use it to print debug

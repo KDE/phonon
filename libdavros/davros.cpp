@@ -51,6 +51,26 @@ public:
     qint64 writeData(const char *, qint64 len) { return len; }
 } devnull;
 
+
+class LoggerDebugStream: public QIODevice
+{
+public:
+    LoggerDebugStream(const QString & area_) : area(area_) { open(WriteOnly); }
+    bool isSequential() const { return false; }
+    qint64 readData(char *, qint64) { return 0; /* eof */ }
+    qint64 readLineData(char *, qint64) { return 0; /* eof */ }
+    qint64 writeData(const char *data, qint64 len);
+private:
+    QString area;
+};
+
+qint64 LoggerDebugStream::writeData(const char *data, qint64 len)
+{
+    ContextPrivate::instance(area)->logs.localData()->append(data);
+    ContextPrivate::instance(area)->logs.localData()->append("\n");
+    return len;
+}
+
 static inline QDebug nullDebug()
 {
     return QDebug(&devnull);
@@ -87,6 +107,7 @@ ContextPrivate::ContextPrivate(QObject* parent, const QString & area)
     debugColorsEnabled = true;
     debugLevel = QtWarningMsg;
     colorIndex = 0;
+    loggingType = Davros::Interleaved;
 }
 
 
@@ -97,9 +118,12 @@ ContextPrivate* ContextPrivate::instance(const QString & area)
     if (globalObjectsTable().find(objectName) == globalObjectsTable().end()) {
         obj = new ContextPrivate(qApp, area);
         globalObjectsTable().insert(objectName, reinterpret_cast<void *>(obj));
-	return obj;
     }
     obj = reinterpret_cast<ContextPrivate *>(globalObjectsTable()[objectName]);
+    if (! obj->logs.hasLocalData())
+        obj->logs.setLocalData(new QString(""));
+    if (! obj->nested.hasLocalData())
+        obj->nested.setLocalData(new int(-1));
     return obj;
 }
 
@@ -153,8 +177,18 @@ QDebug debugStream(QtMsgType level, const QString & area)
     QString text = QString("%1%2").arg( area ).arg( *IndentPrivate::instance(area)->data.localData() );
     if ( level > QtDebugMsg )
       text.append( ' ' + reverseColorize( toString(level), toColor( level ), area ) );
+    QDebug debug = loggingType(area) == Interleaved ? QDebug(QtDebugMsg) : QDebug(new LoggerDebugStream(area));
+    return debug << qPrintable(text);
+}
 
-    return QDebug( QtDebugMsg ) << qPrintable( text );
+LoggingType loggingType(const QString & area)
+{
+    return ContextPrivate::instance(area)->loggingType;
+}
+
+void setLoggingType(LoggingType type, const QString & area)
+{
+    ContextPrivate::instance(area)->loggingType = type;
 }
 
 }

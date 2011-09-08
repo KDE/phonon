@@ -19,6 +19,7 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
 #include <QtCore/QtGlobal>
 #include <QtCore/QThread>
 #if QT_VERSION >= 0x040700
@@ -54,6 +55,7 @@ struct BlockPrivate
         ctx->colorIndex = (ctx->colorIndex + 1) % 5;
         ctx->mutex.unlock();
     }
+    QMutex mutex_logger;
 #if QT_VERSION >= 0x040700
     QElapsedTimer startTime;
 #else
@@ -90,12 +92,14 @@ Block::Block(const char *label, const QString & area)
         << label << qPrintable(colorize( "[" + QThread::currentThread()->objectName() + "]", d->color, area));
 
     IndentPrivate::instance(area)->data.localData()->append(QLatin1String("  "));
+    (*ctx->nested.localData())++;
 }
 
 Block::~Block()
 {
     if(QtDebugMsg < ContextPrivate::instance(d->area)->debugLevel)
         return;
+    ContextPrivate *ctx = ContextPrivate::instance(d->area);
 #if QT_VERSION >= 0x040700
     const double duration = d->startTime.elapsed() / 1000.0;
 #else
@@ -116,6 +120,13 @@ Block::~Block()
             << qPrintable(reverseColorize(QString("[DELAY Took (quite long) %3s]")
                                           .arg(QString::number(duration, 'g', 2)), toColor(QtWarningMsg), d->area));
     }
+    if (ctx->loggingType == Sequential && (*ctx->nested.localData()) == 0) {
+        d->mutex_logger.lock();
+	std::cerr << qPrintable((*ctx->logs.localData()));
+	ctx->logs.localData()->clear();
+        d->mutex_logger.unlock();
+    }
+    (*ctx->nested.localData())--;
     delete d;
 }
 

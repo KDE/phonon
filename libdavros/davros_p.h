@@ -50,6 +50,9 @@ public:
     bool debugColorsEnabled;
     QtMsgType debugLevel;
     int colorIndex;
+    Davros::LoggingType loggingType;
+    QThreadStorage<QString *> logs;
+    QThreadStorage<int *> nested;
 };
 
 static inline QString reverseColorize( const QString &text, int color, const QString & area)
