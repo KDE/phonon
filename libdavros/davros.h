@@ -89,6 +89,7 @@
  *
  * Will output:
  *
+ * @verbatim
  * Blah BEGIN: void function() [Thread 1]
  * Blah  [Thread 1] debug1
  * Blah  [Thread 1] debug2
@@ -97,6 +98,7 @@
  * Blah    [Thread 1] debug4
  * Blah  END__: void nested_function() [Thread 1]
  * Blah END__: void function(): [Thread 1] Took 0.1s
+ * @endverbatim
  *
  * @see Block
  */
