@@ -18,6 +18,19 @@
   <defs
      id="defs4">
     <marker
+       inkscape:stockid="DotL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="DotL"
+       style="overflow:visible">
+      <path
+         id="path4308"
+         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none"
+         transform="scale(0.8) translate(7.4, 1)" />
+    </marker>
+    <marker
        inkscape:stockid="Arrow1Mstart"
        orient="auto"
        refY="0"
@@ -59,6 +72,34 @@
          transform="matrix(0.8,0,0,0.8,10,0)"
          inkscape:connector-curvature="0" />
     </marker>
+    <marker
+       inkscape:stockid="DotL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="DotL-3"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4308-8"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none;marker-end:none"
+         transform="matrix(0.8,0,0,0.8,5.92,0.8)" />
+    </marker>
+    <marker
+       inkscape:stockid="DotL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="DotL-9"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4308-7"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none;marker-end:none"
+         transform="matrix(0.8,0,0,0.8,5.92,0.8)" />
+    </marker>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -67,15 +108,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="81.609933"
-     inkscape:cy="528.67777"
+     inkscape:zoom="0.45337466"
+     inkscape:cx="716.21766"
+     inkscape:cy="618.96192"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1024"
-     inkscape:window-height="679"
-     inkscape:window-x="-3"
+     inkscape:window-height="675"
+     inkscape:window-x="-2"
      inkscape:window-y="-3"
      inkscape:window-maximized="1"
      fit-margin-top="0"
@@ -90,7 +131,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -331,7 +372,7 @@
        inkscape:connection-end="#g3759-4-7-0-3"
        inkscape:connection-end-point="d4" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow1Mstart);marker-end:none;marker-mid:none"
+       style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow1Mstart);marker-mid:none;marker-end:none"
        d="m 564.22266,215.87507 100.1261,92.97423"
        id="path5728"
        inkscape:connector-type="polyline"
@@ -433,5 +474,232 @@
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g3759-4-7-0-9"
        inkscape:connection-end-point="d4" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Coolvetica;-inkscape-font-specification:Coolvetica"
+       x="910.86426"
+       y="173.58328"
+       id="text3290"
+       sodipodi:linespacing="125%"
+       transform="translate(-259.71313,-164.42353)"><tspan
+         sodipodi:role="line"
+         id="tspan3292"></tspan></text>
+    <g
+       id="g4844"
+       transform="translate(-77.552718,6.0825661)">
+      <g
+         transform="matrix(0.58800606,0,0,0.58800606,-238.31038,31.630035)"
+         id="g3402">
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-9"
+           y="18.378254"
+           x="-85.978943"
+           style="font-size:19.78959465px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="18.378254"
+             x="-85.978943"
+             sodipodi:role="line"
+             id="tspan3078-9-7">seekableChanged()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-9-8"
+           y="69.467422"
+           x="-85.119568"
+           style="font-size:19.78959465px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="69.467422"
+             x="-85.119568"
+             sodipodi:role="line"
+             id="tspan3078-9-7-2">hasVideoChanged()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-6-1"
+           y="-33.247974"
+           x="-136.29144"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="-33.247974"
+             x="-136.29144"
+             sodipodi:role="line"
+             id="tspan3078-9-2-2">currentSourceChanged()</tspan></text>
+      </g>
+      <rect
+         transform="translate(-259.71313,-164.42353)"
+         y="149.25302"
+         x="-199.20404"
+         height="101.88298"
+         width="276.75674"
+         id="rect3410"
+         style="fill:none;stroke:#dbba00;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+    </g>
+    <g
+       id="g4223"
+       transform="translate(60.825661,80.594001)">
+      <g
+         transform="translate(161.188,39.53668)"
+         id="g3378">
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-6"
+           y="-45.012714"
+           x="898.44934"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="-45.012714"
+             x="898.44934"
+             sodipodi:role="line"
+             id="tspan3078-9-2">currentSourceChanged()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0"
+           y="298.6517"
+           x="937.08215"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="298.6517"
+             x="937.08215"
+             sodipodi:role="line"
+             id="tspan3078">metaDataChanged()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1"
+           y="230.31927"
+           x="948.76184"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="230.31927"
+             x="948.76184"
+             sodipodi:role="line"
+             id="tspan3078-9">seekableChanged()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-9-8-5"
+           y="161.44963"
+           x="949.62115"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="161.44963"
+             x="949.62115"
+             sodipodi:role="line"
+             id="tspan3078-9-7-2-3">hasVideoChanged()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-9-8-5-4"
+           y="102.81438"
+           x="979.34784"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="102.81438"
+             x="979.34784"
+             sodipodi:role="line"
+             id="tspan3078-9-7-2-3-9">bufferStatus()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-6-0"
+           y="29.481932"
+           x="983.05878"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="29.481932"
+             x="983.05878"
+             sodipodi:role="line"
+             id="tspan3078-9-2-7">aboutToFinish()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-6-0-3-1"
+           y="367.38461"
+           x="940.91028"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="367.38461"
+             x="940.91028"
+             sodipodi:role="line"
+             id="tspan3078-9-2-7-1-9">totalTimeChanged()</tspan></text>
+      </g>
+      <rect
+         y="-136.2697"
+         x="836.87451"
+         height="574.80249"
+         width="447.06857"
+         id="rect3410-3"
+         style="fill:none;stroke:#dbba00;stroke-width:2.99999976;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3755-5-6-5-0-1-6-0-3"
+         y="-71.028214"
+         x="1071.822"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+           y="-71.028214"
+           x="1071.822"
+           sodipodi:role="line"
+           id="tspan3078-9-2-7-1">prefinishMarkReached()</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#DotL)"
+       d="m 1158.7288,404.7208 -144.4609,-7.60321"
+       id="path4241"
+       inkscape:connector-curvature="0"
+       transform="translate(-259.71313,-164.42353)" />
+    <g
+       id="g4799">
+      <g
+         transform="translate(24.330264,63.866944)"
+         id="g3394">
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5"
+           y="317.73022"
+           x="157.78058"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="317.73022"
+             x="157.78058"
+             id="tspan3757-3-4-7"
+             sodipodi:role="line">tick()</tspan></text>
+        <text
+           sodipodi:linespacing="125%"
+           id="text3755-5-6-5-0-1-9-8-5-4-01"
+           y="287.28531"
+           x="118.2884"
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Die Nasty;-inkscape-font-specification:Die Nasty"
+           xml:space="preserve"><tspan
+             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Domestic Manners;-inkscape-font-specification:Domestic Manners"
+             y="287.28531"
+             x="118.2884"
+             sodipodi:role="line"
+             id="tspan3241">finished()</tspan></text>
+      </g>
+      <rect
+         style="fill:none;stroke:#dbba00;stroke-width:2.99999952;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect3410-3-1"
+         width="316.29343"
+         height="152.06415"
+         x="-51.385231"
+         y="290.47845" />
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#DotL)"
+       d="m 245.39635,398.30445 80.40758,10.56511"
+       id="path4241-0"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#DotL)"
+       d="M -258.91038,22.807494 -154.12059,11.804222"
+       id="path4241-9"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
