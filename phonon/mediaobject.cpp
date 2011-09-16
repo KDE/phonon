@@ -490,6 +490,36 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
+void MediaObjectPrivate::_k_validateFinished()
+{
+    Q_Q(MediaObject);
+    if (q->state() != Phonon::PlayingState)
+        Q_ASSERT_X(0, __FILE__, "Playback finished when we weren't playing!");
+}
+
+void MediaObjectPrivate::_k_validateSourceChange()
+{
+    Q_Q(MediaObject);
+    if (q->state() != Phonon::StoppedState && q->state() != Phonon::PlayingState && q->state() != Phonon::PausedState && q->state() != Phonon::BufferingState) {
+        Q_ASSERT_X(0, __FILE__, "Source got changed outside a valid state");
+    }
+}
+
+void MediaObjectPrivate::_k_validateBufferStatus()
+{
+    Q_Q(MediaObject);
+    if (q->state() != Phonon::PlayingState && q->state() != Phonon::PausedState && q->state() != Phonon::BufferingState) {
+        Q_ASSERT_X(0, __FILE__, "Buffer status changed when we weren't supposed to be buffering");
+    }
+}
+
+void MediaObjectPrivate::_k_validateTick(qint64 pos)
+{
+    Q_Q(MediaObject);
+    if (q->state() != Phonon::PlayingState)
+        Q_ASSERT_X(0, __FILE__, "Recieved tick outside of accepted states");
+}
+
 void MediaObjectPrivate::_k_validateStateChange(Phonon::State newstate, Phonon::State oldstate)
 {
     if (!validateStateTransition(newstate, oldstate)) {
@@ -697,6 +727,12 @@ void MediaObjectPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SLOT(_k_validateStateChange(Phonon::State, Phonon::State)), Qt::DirectConnection);
     qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
+    QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
+                     q, SLOT(_k_validateTick()));
+    QObject::connect(m_backendObject, SIGNAL(finished()),
+                     q, SLOT(_k_validateFinished()));
+    QObject::connect(m_backendObject, SIGNAL(bufferStatus()),
+                     q, SLOT(_k_validateBufferStatus()));
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
