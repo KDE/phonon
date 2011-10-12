@@ -27,6 +27,10 @@ if(NOT PULSEAUDIO_FIND_VERSION)
   set(PULSEAUDIO_FIND_VERSION "0.9.9")
 endif(NOT PULSEAUDIO_FIND_VERSION)
 
+# Newer PA's ship a PackageConfig.cmake file, so lets try and use it.
+macro_optional_find_package(PulseAudio ${PULSEAUDIO_FIND_VERSION} QUIET NO_MODULE)
+if (NOT PULSEAUDIO_FOUND)
+
 if (NOT WIN32)
    include(FindPkgConfig)
    pkg_check_modules(PC_PULSEAUDIO QUIET libpulse>=${PULSEAUDIO_FIND_VERSION})
@@ -98,3 +102,5 @@ else (PULSEAUDIO_FOUND)
 endif (PULSEAUDIO_FOUND)
 
 mark_as_advanced(PULSEAUDIO_INCLUDE_DIR PULSEAUDIO_LIBRARY PULSEAUDIO_MAINLOOP_LIBRARY)
+
+endif (NOT PULSEAUDIO_FOUND)
