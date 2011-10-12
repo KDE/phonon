@@ -5,8 +5,7 @@ endif (PHONON_BUILD_TESTS)
 
 add_subdirectory(experimental)
 
-set(PULSEAUDIO_FIND_VERSION "0.9.15")
-macro_optional_find_package(PulseAudio)
+macro_optional_find_package(PulseAudio 0.9.15)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
 macro_optional_find_package(GLIB2)
 macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
