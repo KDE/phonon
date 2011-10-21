@@ -116,7 +116,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
 #ifdef HAVE_QZEITGEIST
-            QZeitgeist::init();
             log = new QZeitgeist::Log();
 #endif
         }
