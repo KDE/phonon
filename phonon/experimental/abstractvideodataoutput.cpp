@@ -6,8 +6,8 @@
     published by the Free Software Foundation; either version 2 of
     the License or (at your option) version 3 or any later version
     accepted by the membership of KDE e.V. (or its successor approved
-    by the membership of KDE e.V.), Nokia Corporation (or its successors, 
-    if any) and the KDE Free Qt Foundation, which shall act as a proxy 
+    by the membership of KDE e.V.), Nokia Corporation (or its successors,
+    if any) and the KDE Free Qt Foundation, which shall act as a proxy
     defined in Section 14 of version 3 of the license.
 
     This program is distributed in the hope that it will be useful,
@@ -32,7 +32,7 @@ namespace Experimental
 AbstractVideoDataOutput::AbstractVideoDataOutput()
     : AbstractVideoOutput(*new AbstractVideoDataOutputPrivate)
 {
-    K_D(AbstractVideoDataOutput);
+    P_D(AbstractVideoDataOutput);
     d->isRunning = false;
     d->allowedFormats << VideoFrame2::Format_RGB888;
 }
@@ -49,25 +49,25 @@ AbstractVideoDataOutput::~AbstractVideoDataOutput()
 
 QSet<VideoFrame2::Format> AbstractVideoDataOutput::allowedFormats() const
 {
-    K_D(const AbstractVideoDataOutput);
+    P_D(const AbstractVideoDataOutput);
     return d->allowedFormats;
 }
 
 void AbstractVideoDataOutput::setAllowedFormats(const QSet<VideoFrame2::Format> &allowedFormats)
 {
-    K_D(AbstractVideoDataOutput);
+    P_D(AbstractVideoDataOutput);
     d->allowedFormats = allowedFormats;
 }
 
 bool AbstractVideoDataOutput::isRunning() const
 {
-    K_D(const AbstractVideoDataOutput);
+    P_D(const AbstractVideoDataOutput);
     return d->isRunning;
 }
 
 void AbstractVideoDataOutput::setRunning(bool running)
 {
-    K_D(AbstractVideoDataOutput);
+    P_D(AbstractVideoDataOutput);
     d->isRunning = running;
     Iface<VideoDataOutputInterface> iface(d);
     if (iface) {
@@ -96,7 +96,7 @@ bool AbstractVideoDataOutputPrivate::aboutToDeleteBackendObject()
 
 void AbstractVideoDataOutputPrivate::setupBackendObject()
 {
-    Q_Q(AbstractVideoDataOutput);
+    P_Q(AbstractVideoDataOutput);
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
     if (isRunning) {
@@ -111,7 +111,7 @@ void AbstractVideoDataOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    //Q_Q(AbstractVideoDataOutput);
+    //P_Q(AbstractVideoDataOutput);
     m_backendObject = Factory::createVideoDataOutput(0);
     if (m_backendObject) {
         setupBackendObject();

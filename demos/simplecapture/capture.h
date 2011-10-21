@@ -24,42 +24,28 @@
 
 #include <QtGui/QWidget>
 #include <phonon/Global>
-#include <phonon/Path>
 
 class QPushButton;
-class QRadioButton;
 
 namespace Phonon {
     class AudioOutput;
-    class MediaNode;
     class MediaObject;
     class VideoWidget;
-
-    namespace Experimental {
-        class AvCapture;
-    }
 }
 
 /**
  * @brief Simple audio-video capture widget
  *
- * Can capture video using a media object, or audio-video using an
- * AvCapture object. Does not save the video, currently.
+ * Can capture video using a media object.
  *
- * The code is larger because both methods for capture are shown. Using
- * a single media object, you can't capture audio and video at the same time.
- *
- * AvCapture is essentialy two media objects, one for audio and one for video.
- *
- * In your application you only need to choose which method suits best and
- * ignore the other one. With media object it is similar to playing normal
- * media, and with AvCapture it is a little more intuitive.
+ * Using just a single media object, you can't capture audio and video 
+ * at the same time, if the desired device knows only audio or only video.
  *
  * @note Phonon capture is still not stabilised, don't be surprised if audio
- * capture fails to work. The functionality also depends greatly on the backend.
+ * capture fails to work. The functionality also depends on the backend.
  *
  * @see Phonon::MediaObject
- * @see Phonon::Experimental::AvCapture
+ * @see Phonon::MediaSource
  */
 class CaptureWidget : public QWidget
 {
@@ -90,56 +76,12 @@ private slots:
      */
     void playPause();
 
-    /**
-     * @brief Stops the capture
-     */
-    void stop();
-
-    /**
-     * @brief Switch to MediaObject capture method
-     *
-     * Stops the capture, switches to the media object method and remakes
-     * the media node connections
-     *
-     * @see setupCaptureSource
-     */
-    void enableMOCapture(bool enable);
-
-    /**
-     * @brief Switch to AvCapture capture method
-     *
-     * Stops the capture, switches to the avcapture method and remakes
-     * the media node connections
-     *
-     * @see setupCaptureSource
-     */
-    void enableAvCapture(bool enable);
-
-private:
-    /**
-     * Destroys any existing media paths, creates new ones depeding on the
-     * capture method. Sets up the appropriate capture devices, obtained
-     * from Phonon. Finally, it connects the state changed signal from
-     * Phonon to our slot.
-     *
-     * @see Phonon::Path
-     * @see Phonon::MediaObject
-     * @see Phonon::Experimental::AvCapture
-     */
-    void setupCaptureSource();
-
 private:
     Phonon::AudioOutput *m_audioOutput;
     Phonon::VideoWidget *m_videoWidget;
-    Phonon::MediaNode *m_captureNode;               // Determines which capture method is used
     Phonon::MediaObject *m_media;                   // Media object for capture
-    Phonon::Experimental::AvCapture *m_avcapture;   // AvCapture for capture
-    Phonon::Path m_audioPath;                       // Path for audio
-    Phonon::Path m_videoPath;                       // Path for video
     QPushButton *m_playButton;
     QPushButton *m_stopButton;
-    QRadioButton *m_moButton;
-    QRadioButton *m_avcapButton;
 };
 
 #endif // CAPTURE_H

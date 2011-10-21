@@ -41,20 +41,12 @@ VideoDataOutput2::VideoDataOutput2(QObject *parent)
 
 void VideoDataOutput2::frameReady(const VideoFrame2 &frame)
 {
-    if (QThread::currentThread() == thread()) {
-        emit frameReadySignal(frame);
-    } else {
-        QMetaObject::invokeMethod(this, "frameReadySignal", Qt::BlockingQueuedConnection, Q_ARG(Phonon::Experimental::VideoFrame2, frame));
-    }
+    QMetaObject::invokeMethod(this, "frameReadySignal", Qt::QueuedConnection, Q_ARG(Phonon::Experimental::VideoFrame2, frame));
 }
 
 void VideoDataOutput2::endOfMedia()
 {
-    if (QThread::currentThread() == thread()) {
-        emit endOfMediaSignal();
-    } else {
-        QMetaObject::invokeMethod(this, "endOfMediaSignal", Qt::BlockingQueuedConnection);
-    }
+    QMetaObject::invokeMethod(this, "endOfMediaSignal", Qt::QueuedConnection);
 }
 
 void VideoDataOutput2Private::createBackendObject()

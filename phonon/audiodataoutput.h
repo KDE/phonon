@@ -52,7 +52,7 @@ namespace Phonon
     class PHONON_EXPORT AudioDataOutput : public AbstractAudioOutput
     {
         Q_OBJECT
-        K_DECLARE_PRIVATE(AudioDataOutput)
+        P_DECLARE_PRIVATE(AudioDataOutput)
         Q_ENUMS(Channel)
         Q_PROPERTY(int dataSize READ dataSize WRITE setDataSize)
         PHONON_HEIR(AudioDataOutput)

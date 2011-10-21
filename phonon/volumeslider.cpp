@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -37,7 +37,7 @@ VolumeSlider::VolumeSlider(QWidget *parent)
     : QWidget(parent),
     k_ptr(new VolumeSliderPrivate(this))
 {
-    K_D(VolumeSlider);
+    P_D(VolumeSlider);
 #ifndef QT_NO_TOOLTIP
     setToolTip(tr("Volume: %1%").arg(100));
 #endif
@@ -55,7 +55,7 @@ VolumeSlider::VolumeSlider(AudioOutput *output, QWidget *parent)
     : QWidget(parent),
     k_ptr(new VolumeSliderPrivate(this))
 {
-    K_D(VolumeSlider);
+    P_D(VolumeSlider);
 #ifndef QT_NO_TOOLTIP
     setToolTip(tr("Volume: %1%").arg(100));
 #endif
@@ -126,7 +126,7 @@ Qt::Orientation VolumeSlider::orientation() const
 
 void VolumeSlider::setOrientation(Qt::Orientation o)
 {
-    K_D(VolumeSlider);
+    P_D(VolumeSlider);
     Qt::Alignment align = (o == Qt::Horizontal ? Qt::AlignVCenter : Qt::AlignHCenter);
     d->layout.setAlignment(&d->muteButton, align);
     d->layout.setAlignment(&d->slider, align);
@@ -136,13 +136,13 @@ void VolumeSlider::setOrientation(Qt::Orientation o)
 
 AudioOutput *VolumeSlider::audioOutput() const
 {
-    K_D(const VolumeSlider);
+    P_D(const VolumeSlider);
     return d->output;
 }
 
 void VolumeSlider::setAudioOutput(AudioOutput *output)
 {
-    K_D(VolumeSlider);
+    P_D(VolumeSlider);
     if (d->output) {
         disconnect(d->output, 0, this, 0);
     }
@@ -177,7 +177,7 @@ void VolumeSliderPrivate::_k_buttonClicked()
 void VolumeSliderPrivate::_k_mutedChanged(bool muted)
 {
 #ifndef QT_NO_TOOLTIP
-    Q_Q(VolumeSlider);
+    P_Q(VolumeSlider);
 #endif
     if (muted) {
 #ifndef QT_NO_TOOLTIP
@@ -195,7 +195,7 @@ void VolumeSliderPrivate::_k_mutedChanged(bool muted)
 void VolumeSliderPrivate::_k_sliderChanged(int value)
 {
 #ifndef QT_NO_TOOLTIP
-    Q_Q(VolumeSlider);
+    P_Q(VolumeSlider);
 #endif
 
     if (output) {

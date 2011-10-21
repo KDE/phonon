@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -43,7 +43,7 @@ VideoWidget::VideoWidget(QWidget *parent)
     : QWidget(parent)
     , Phonon::AbstractVideoOutput(*new VideoWidgetPrivate(this))
 {
-    K_D(VideoWidget);
+    P_D(VideoWidget);
     d->init();
     d->createBackendObject();
     setMouseTracking(true);
@@ -55,13 +55,13 @@ VideoWidget::VideoWidget(VideoWidgetPrivate &dd, QWidget *parent)
     : QWidget(parent),
     Phonon::AbstractVideoOutput(dd)
 {
-    K_D(VideoWidget);
+    P_D(VideoWidget);
     d->init();
 }
 
 void VideoWidgetPrivate::init()
 {
-    Q_Q(VideoWidget);
+    P_Q(VideoWidget);
     changeFlags = q->windowFlags() & (Qt::SubWindow | Qt::Window);
 }
 
@@ -74,7 +74,7 @@ void VideoWidgetPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    Q_Q(VideoWidget);
+    P_Q(VideoWidget);
     m_backendObject = Factory::createVideoWidget(q);
     if (m_backendObject) {
         setupBackendObject();
@@ -103,7 +103,7 @@ PHONON_INTERFACE_SETTER(setSaturation, saturation, qreal)
 
 
 QImage VideoWidget::snapshot() const {
-    K_D(const VideoWidget);
+    P_D(const VideoWidget);
     ConstIface<IFACES4> iface(d);
     if(iface) return iface->snapshot();
     return QImage(); // TODO not implemented in VideoInterface
@@ -113,7 +113,7 @@ QImage VideoWidget::snapshot() const {
 void VideoWidget::setFullScreen(bool newFullScreen)
 {
     pDebug() << Q_FUNC_INFO << newFullScreen;
-    K_D(VideoWidget);
+    P_D(VideoWidget);
     // TODO: disable screensaver? or should we leave that responsibility to the
     // application?
     Qt::WindowFlags flags = windowFlags();
@@ -163,7 +163,7 @@ bool VideoWidgetPrivate::aboutToDeleteBackendObject()
 
 void VideoWidgetPrivate::setupBackendObject()
 {
-    Q_Q(VideoWidget);
+    P_Q(VideoWidget);
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
     pDebug() << "calling setAspectRatio on the backend " << aspectRatio;

@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -27,8 +27,9 @@
 #ifndef NO_PHONON_AVCAPTURE
 
 #include "avcapture.h"
-#include "avcaptureinterface.h"
 #include "avcapture_p.h"
+
+#include "avcaptureinterface.h"
 #include "factory_p.h"
 #include "globalconfig.h"
 #include "phononnamespace_p.h"
@@ -50,7 +51,7 @@ AvCapture::AvCapture(Phonon::CaptureCategory category, QObject *parent)
 
 Phonon::State AvCapture::state() const
 {
-    K_D(const AvCapture);
+    P_D(const AvCapture);
     if (d->m_backendObject) {
         return INTERFACE_CALL(state());
     }
@@ -59,7 +60,7 @@ Phonon::State AvCapture::state() const
 
 void AvCapture::start()
 {
-    K_D(AvCapture);
+    P_D(AvCapture);
     if (d->backendObject()) {
         INTERFACE_CALL(start());
     }
@@ -67,7 +68,7 @@ void AvCapture::start()
 
 void AvCapture::pause()
 {
-    K_D(AvCapture);
+    P_D(AvCapture);
     if (d->backendObject()) {
         INTERFACE_CALL(pause());
     }
@@ -75,7 +76,7 @@ void AvCapture::pause()
 
 void AvCapture::stop()
 {
-    K_D(AvCapture);
+    P_D(AvCapture);
     if (d->backendObject()) {
         INTERFACE_CALL(stop());
     }
@@ -89,7 +90,7 @@ void AvCapture::setCaptureDevices(Phonon::CaptureCategory category)
 
 Phonon::AudioCaptureDevice AvCapture::audioCaptureDevice() const
 {
-    K_D(const AvCapture);
+    P_D(const AvCapture);
     if (d->m_backendObject) {
         return INTERFACE_CALL(audioCaptureDevice());
     }
@@ -98,7 +99,7 @@ Phonon::AudioCaptureDevice AvCapture::audioCaptureDevice() const
 
 void AvCapture::setAudioCaptureDevice(const Phonon::AudioCaptureDevice &audioCaptureDevice)
 {
-    K_D(AvCapture);
+    P_D(AvCapture);
     d->audioCaptureDevice = audioCaptureDevice;
     if (d->m_backendObject) {
         INTERFACE_CALL(setAudioCaptureDevice(d->audioCaptureDevice));
@@ -107,7 +108,7 @@ void AvCapture::setAudioCaptureDevice(const Phonon::AudioCaptureDevice &audioCap
 
 void AvCapture::setAudioCaptureDevice(Phonon::CaptureCategory category)
 {
-    K_D(AvCapture);
+    P_D(AvCapture);
     d->audioCaptureDevice = AudioCaptureDevice::fromIndex(Phonon::GlobalConfig().audioCaptureDeviceFor(category));
     if (d->m_backendObject) {
         INTERFACE_CALL(setAudioCaptureDevice(d->audioCaptureDevice));
@@ -121,7 +122,7 @@ PHONON_DEPRECATED void AvCapture::setAudioCaptureDevice(Phonon::Category categor
 
 Phonon::VideoCaptureDevice AvCapture::videoCaptureDevice() const
 {
-    K_D(const AvCapture);
+    P_D(const AvCapture);
     if (d->m_backendObject) {
         return INTERFACE_CALL(videoCaptureDevice());
     }
@@ -135,7 +136,7 @@ void AvCapture::setVideoCaptureDevice(const Phonon::Experimental::VideoCaptureDe
 
 void AvCapture::setVideoCaptureDevice(const Phonon::VideoCaptureDevice &videoCaptureDevice)
 {
-    K_D(AvCapture);
+    P_D(AvCapture);
     d->videoCaptureDevice = videoCaptureDevice;
     if (d->m_backendObject) {
         INTERFACE_CALL(setVideoCaptureDevice(d->videoCaptureDevice));
@@ -144,7 +145,7 @@ void AvCapture::setVideoCaptureDevice(const Phonon::VideoCaptureDevice &videoCap
 
 void AvCapture::setVideoCaptureDevice(Phonon::CaptureCategory category)
 {
-    K_D(AvCapture);
+    P_D(AvCapture);
     d->videoCaptureDevice = Phonon::VideoCaptureDevice::fromIndex(Phonon::GlobalConfig().videoCaptureDeviceFor(category));
     if (d->m_backendObject) {
         INTERFACE_CALL(setVideoCaptureDevice(d->videoCaptureDevice));
@@ -165,7 +166,7 @@ bool AvCapturePrivate::aboutToDeleteBackendObject()
 
 void AvCapturePrivate::setupBackendObject()
 {
-    Q_Q(AvCapture);
+    P_Q(AvCapture);
     Q_ASSERT(m_backendObject);
 
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);

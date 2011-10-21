@@ -23,16 +23,18 @@
 #ifndef MEDIAOBJECT_P_H
 #define MEDIAOBJECT_P_H
 
-#include "mediaobject.h"
-#include "medianode_p.h"
 #include <QtCore/QString>
-#include "medianodedestructionhandler_p.h"
-#include "mediasource.h"
 #include <QtCore/QQueue>
 #ifdef HAVE_QZEITGEIST
 #include <QZeitgeist/Log>
 #include <QZeitgeist/QZeitgeist>
 #endif
+
+#include "medianode_p.h"
+#include "medianodedestructionhandler_p.h"
+#include "mediaobject.h"
+#include "mediasource.h"
+#include "phonondefs_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -47,7 +49,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     friend class KioFallbackImpl;
     friend class AbstractMediaStream;
     friend class AbstractMediaStreamPrivate;
-    Q_DECLARE_PUBLIC(MediaObject)
+    P_DECLARE_PUBLIC(MediaObject)
     public:
         virtual QObject *qObject() { return q_func(); }
 
