@@ -68,6 +68,9 @@ class FactoryPrivate : public Phonon::Factory::Sender
         QList<QObject *> objects;
         QList<MediaNodePrivate *> mediaNodePrivateList;
 
+        /// Whether the 'backend changed, please restart' message was shown.
+        bool m_backendChangedNotified;
+
     private Q_SLOTS:
         /**
          * This is called via DBUS when the user changes the Phonon Backend.
@@ -215,10 +218,11 @@ bool FactoryPrivate::createBackend()
 FactoryPrivate::FactoryPrivate()
     :
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    m_platformPlugin(0),
-    m_noPlatformPlugin(false),
+      m_platformPlugin(0),
+      m_noPlatformPlugin(false),
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
-    m_backendObject(0)
+      m_backendObject(0),
+      m_backendChangedNotified(false)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
@@ -303,16 +307,16 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
 #ifndef PHONON_NO_DBUS
 void FactoryPrivate::phononBackendChanged()
 {
-#ifdef __GNUC__
-#warning TODO hyperspeed: the message box only ought to be shown once and not for \
-    every backend switch
-#endif
+    if (m_backendChangedNotified)
+        return;
+
     QMessageBox::information(qApp->activeWindow(),
                              tr("Restart Application"),
                              tr("You changed the backend of the Phonon multimedia system.\n\n"
                                 "To apply this change you will need to"
                                 " restart '%1'.").arg(qAppName()));
     emit backendChanged();
+    m_backendChangedNotified = true;
 }
 #endif //PHONON_NO_DBUS
 
