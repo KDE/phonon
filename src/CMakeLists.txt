@@ -1,4 +1,5 @@
 if (PHONON_BUILD_EXPERIMENTAL)
+    add_definitions(-DPHONON_EXPERIMENTAL)
     add_subdirectory(experimental)
 endif (PHONON_BUILD_EXPERIMENTAL)
 
@@ -25,22 +26,36 @@ if (QZEITGEIST_FOUND)
     include_directories(${QZEITGEIST_INCLUDE_DIR})
 endif(QZEITGEIST_FOUND)
 
+include_directories(audio effect input video widgets)
 set(phonon_LIB_SRCS
-   abstractaudiooutput.cpp
-   abstractaudiooutput_p.cpp
-   abstractmediastream.cpp
-   abstractvideooutput.cpp
-   abstractvideooutput_p.cpp
-   audiodataoutput.cpp
-   audiooutput.cpp
-   audiooutputinterface.cpp
+   audio/abstractaudiooutput.cpp
+   audio/abstractaudiooutput_p.cpp
+   audio/audiodataoutput.cpp
+   audio/audiooutput.cpp
+   audio/audiooutputinterface.cpp
+   audio/pulsesupport.cpp
+
+   effects/effect.cpp
+   effects/effectparameter.cpp
+   effects/volumefadereffect.cpp
+
+   input/abstractmediastream.cpp
+   input/iodevicestream.cpp
+   input/streaminterface.cpp
+
+   video/abstractvideooutput.cpp
+   video/abstractvideooutput_p.cpp
+
+   widgets/effectwidget.cpp
+   widgets/seekslider.cpp
+   widgets/swiftslider.cpp
+   widgets/volumeslider.cpp
+   widgets/videoplayer.cpp
+   widgets/videowidget.cpp
+
    backendcapabilities.cpp
-   effect.cpp
-   effectparameter.cpp
-   effectwidget.cpp
    factory.cpp
    globalconfig.cpp
-   iodevicestream.cpp
    mediacontroller.cpp
    mediaobject.cpp
    medianode.cpp
@@ -51,25 +66,17 @@ set(phonon_LIB_SRCS
    path.cpp
    phononnamespace.cpp
    platform.cpp
-   pulsesupport.cpp
-   seekslider.cpp
-   streaminterface.cpp
-   swiftslider.cpp
-   volumefadereffect.cpp
-   volumeslider.cpp
-   videoplayer.cpp
-   videowidget.cpp
-   )
+)
 
 if (PULSEAUDIO_FOUND)
    list(APPEND phonon_LIB_SRCS
-      pulsestream.cpp
+      audio/pulsestream.cpp
    )
 endif (PULSEAUDIO_FOUND)
 
 if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
    list(APPEND phonon_LIB_SRCS
-      audiooutputadaptor.cpp
+      audio/audiooutputadaptor.cpp
    )
 endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 
@@ -117,20 +124,34 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_B
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
 
 install(FILES
-   abstractaudiooutput.h
-   abstractmediastream.h
-   abstractvideooutput.h
+   audio/abstractaudiooutput.h
+   audio/audiodataoutput.h
+   audio/audiodataoutputinterface.h
+   audio/audiooutput.h
+   audio/audiooutputinterface.h
+   audio/pulsesupport.h
+
+   effects/effect.h
+   effects/effectinterface.h
+   effects/effectparameter.h
+   effects/volumefadereffect.h
+   effects/volumefaderinterface.h
+
+   input/abstractmediastream.h
+   input/streaminterface.h
+
+   video/abstractvideooutput.h
+
+   widgets/effectwidget.h
+   widgets/seekslider.h
+   widgets/videoplayer.h
+   widgets/videowidget.h
+   widgets/videowidgetinterface.h
+   widgets/volumeslider.h
+
    addoninterface.h
-   audiodataoutput.h
-   audiodataoutputinterface.h
-   audiooutput.h
-   audiooutputinterface.h
    backendcapabilities.h
    backendinterface.h
-   effect.h
-   effectinterface.h
-   effectparameter.h
-   effectwidget.h
    globalconfig.h
    globaldescriptioncontainer.h
    mediacontroller.h
@@ -145,19 +166,11 @@ install(FILES
    phonon_export.h
    phonondefs.h
    platformplugin.h
-   pulsesupport.h
-   seekslider.h
-   streaminterface.h
-   videoplayer.h
-   videowidget.h
-   videowidgetinterface.h
-   volumefadereffect.h
-   volumefaderinterface.h
-   volumeslider.h
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
-   DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
+   DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel
+)
 
 if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-    install(FILES org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
+    install(FILES audio/org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
 endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 
