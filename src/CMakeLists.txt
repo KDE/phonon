@@ -120,8 +120,9 @@ set_target_properties(phonon PROPERTIES
 
 
 install(TARGETS phonon EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
+# We write these to a strange place so the demos can find them properly
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononconfig_p.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h)
 
 install(FILES
    audio/abstractaudiooutput.h
@@ -166,7 +167,7 @@ install(FILES
    phonon_export.h
    phonondefs.h
    platformplugin.h
-   ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
+   ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel
 )
 

@@ -131,7 +131,7 @@ if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
     #Allows find_package(Phonon) to not die in the demos
     set(PHONON_BUILDSYSTEM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-    set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+    set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/includes/)
     set(PHONON_LIBRARY phonon)
     #Lets the demos find the headers
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})
