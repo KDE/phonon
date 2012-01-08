@@ -27,6 +27,9 @@ if (QZEITGEIST_FOUND)
 endif(QZEITGEIST_FOUND)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} audio effects input video widgets)
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon)
+
 set(phonon_LIB_SRCS
    audio/abstractaudiooutput.cpp
    audio/abstractaudiooutput_p.cpp
