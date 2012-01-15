@@ -32,7 +32,7 @@ namespace Phonon
 
 class IODeviceStreamPrivate : public AbstractMediaStreamPrivate
 {
-    Q_DECLARE_PUBLIC(IODeviceStream)
+    P_DECLARE_PUBLIC(IODeviceStream)
     protected:
         IODeviceStreamPrivate(QIODevice *_ioDevice)
             : ioDevice(_ioDevice)

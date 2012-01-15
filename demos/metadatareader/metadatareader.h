@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Jakub Spiewak <jmspiewak@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,34 +17,44 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
-#ifndef PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
-#define PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
 
-#include "abstractvideodataoutput.h"
-#include "../abstractvideooutput_p.h"
-#include <QtCore/QSet>
+#ifndef METADATAREADER_H
+#define METADATAREADER_H
+
+
+#include <QtCore/QObject>
+#include <QtCore/QTextStream>
+#include <phononnamespace.h>
 
 namespace Phonon
 {
-namespace Experimental
-{
+    class MediaObject;
+}
 
-class AbstractVideoDataOutputPrivate : public Phonon::AbstractVideoOutputPrivate
-{
-    P_DECLARE_PUBLIC(AbstractVideoDataOutput)
-    protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
-        void setupBackendObject();
 
-    private:
-        bool isRunning;
-        QSet<VideoFrame2::Format> allowedFormats;
+class MetaDataReader: public QObject
+{
+    Q_OBJECT
+
+public:
+    MetaDataReader(QString&, QTextStream&);
+    ~MetaDataReader();
+
+
+private slots:
+    void printMetaData();
+    void checkForError(Phonon::State, Phonon::State);
+
+
+signals:
+    void quit();
+
+
+private:
+    Phonon::MediaObject *mediaObj;
+    QTextStream &textStream;
 };
 
-} // namespace Experimental
-} // namespace Phonon
 
-#endif // PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
+#endif //METADATAREADER_H

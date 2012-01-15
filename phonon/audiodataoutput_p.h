@@ -34,7 +34,7 @@ namespace Phonon
 
 class AudioDataOutputPrivate : public AbstractAudioOutputPrivate
 {
-    Q_DECLARE_PUBLIC(AudioDataOutput)
+    P_DECLARE_PUBLIC(AudioDataOutput)
     PHONON_PRIVATECLASS
     protected:
         AudioDataOutputPrivate()

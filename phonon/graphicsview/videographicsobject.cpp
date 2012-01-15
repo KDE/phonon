@@ -115,7 +115,7 @@ VideoGraphicsObject::VideoGraphicsObject(QGraphicsItem *parent) :
 {
     setFlag(ItemHasNoContents, false);
 
-    K_D(VideoGraphicsObject);
+    P_D(VideoGraphicsObject);
     d->createBackendObject();
 }
 
@@ -125,7 +125,7 @@ VideoGraphicsObject::~VideoGraphicsObject()
 
 QRectF VideoGraphicsObject::boundingRect() const
 {
-    K_D(const VideoGraphicsObject);
+    P_D(const VideoGraphicsObject);
     return d->boundingRect;
 }
 
@@ -171,7 +171,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
                                 const QStyleOptionGraphicsItem *option,
                                 QWidget *widget)
 {
-    K_D(VideoGraphicsObject);
+    P_D(VideoGraphicsObject);
 
     INTERFACE_CALL(lock());
 
@@ -199,7 +199,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
 void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
 {
-    K_D(VideoGraphicsObject);
+    P_D(VideoGraphicsObject);
     d->geometry = newGeometry;
     d->updateBoundingRect();
 }
@@ -219,13 +219,13 @@ void VideoGraphicsObjectPrivate::updateBoundingRect()
 
 void VideoGraphicsObject::frameReady()
 {
-    K_D(const VideoGraphicsObject);
+    P_D(const VideoGraphicsObject);
     update(d->boundingRect);
 }
 
 void VideoGraphicsObject::reset()
 {
-    K_D(VideoGraphicsObject);
+    P_D(VideoGraphicsObject);
     d->paintedOnce = false;
     d->gotSize = false;
     if (d->graphicsPainter) {

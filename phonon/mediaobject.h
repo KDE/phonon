@@ -99,7 +99,7 @@ namespace Phonon
     {
         friend class FrontendInterfacePrivate;
         Q_OBJECT
-        K_DECLARE_PRIVATE(MediaObject)
+        P_DECLARE_PRIVATE(MediaObject)
         PHONON_OBJECT(MediaObject)
         /**
          * \brief Defines the time between media sources.

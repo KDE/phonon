@@ -22,6 +22,7 @@
 
 #include <QtGui/QFileDialog>
 #include <QtGui/QHBoxLayout>
+#include <QtGui/QMessageBox>
 #include <QtGui/QPushButton>
 #include <QtGui/QVBoxLayout>
 
@@ -137,6 +138,7 @@ void Player::mediaStateChanged(Phonon::State newState, Phonon::State oldState)
         m_playPause->setText(tr("Play"));
         break;
     case Phonon::ErrorState:
+        QMessageBox::critical(this, tr("Error"), tr("Error while playing media: ") + m_media->errorString());
         break;
     }
 }

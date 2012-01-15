@@ -252,7 +252,7 @@ public:
         Q_ASSERT(obj);
         Q_ASSERT(m_localIds.find(obj) != m_localIds.end());
         if (m_localIds[obj].find(key) == m_localIds[obj].end())
-            qWarning() << "WARNING:" << __PRETTY_FUNCTION__
+            qWarning() << "WARNING:" << Q_FUNC_INFO
                        << ": supplied global ID is unknown for the object ("
                        << obj << ")";
         return m_localIds[obj].value(key, 0);

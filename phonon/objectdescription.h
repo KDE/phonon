@@ -269,7 +269,7 @@ QDebug operator<<(QDebug dbg, const ObjectDescription<T> &d)
 {
     dbg.nospace() << "\n{\n";
     dbg.nospace() << "  index: " << d.index() << "\n";
-    foreach (const QByteArray &propertyName, d.propertyNames()) {
+    Q_FOREACH (const QByteArray &propertyName, d.propertyNames()) {
         dbg.nospace() << "  " << propertyName << ": " <<
                          d.property(propertyName).toString() << "\n";
     }

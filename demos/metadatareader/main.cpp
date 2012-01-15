@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2008 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2011 Jakub Spiewak <jmspiewak@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,34 +17,35 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
-#ifndef PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
-#define PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
 
-#include "abstractvideodataoutput.h"
-#include "../abstractvideooutput_p.h"
-#include <QtCore/QSet>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QStringList>
+#include <QtCore/QTextStream>
 
-namespace Phonon
+#include <stdio.h>
+
+#include "metadatareader.h"
+
+
+int main(int argc, char **argv)
 {
-namespace Experimental
-{
+    QCoreApplication app(argc, argv);
+    app.setApplicationName("MetaDataReader");
 
-class AbstractVideoDataOutputPrivate : public Phonon::AbstractVideoOutputPrivate
-{
-    P_DECLARE_PUBLIC(AbstractVideoDataOutput)
-    protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
-        void setupBackendObject();
+    QTextStream consoleOut(stdout, QIODevice::WriteOnly);
 
-    private:
-        bool isRunning;
-        QSet<VideoFrame2::Format> allowedFormats;
-};
+    QStringList args = app.arguments();
+    if (args.size() > 1)
+    {
+        MetaDataReader mdr(args[1], consoleOut);
+        app.connect(&mdr, SIGNAL(quit()), SLOT(quit()));
 
-} // namespace Experimental
-} // namespace Phonon
-
-#endif // PHONON_X_ABSTRACTVIDEODATAOUTPUT_P_H
+        return app.exec();
+    }
+    else
+    {
+        consoleOut << "Usage: metadatareader <media file>" << endl;
+        return 0;
+    }
+}

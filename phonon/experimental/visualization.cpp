@@ -6,7 +6,7 @@
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,7 +15,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -40,7 +40,7 @@ Visualization::~Visualization()
 
 VisualizationDescription Visualization::visualization() const
 {
-    K_D(const Visualization);
+    P_D(const Visualization);
     if (!d->m_backendObject) {
         return d->description;
     }
@@ -51,7 +51,7 @@ VisualizationDescription Visualization::visualization() const
 
 void Visualization::setVisualization(const VisualizationDescription &newVisualization)
 {
-    K_D(Visualization);
+    P_D(Visualization);
     d->description = newVisualization;
     if (k_ptr->backendObject()) {
         BACKEND_CALL1("setVisualization", int, newVisualization.index());
@@ -61,7 +61,7 @@ void Visualization::setVisualization(const VisualizationDescription &newVisualiz
 /*
 bool Visualization::hasParameterWidget() const
 {
-    K_D(const Visualization);
+    P_D(const Visualization);
     if (d->m_backendObject)
     {
         bool ret;
@@ -73,7 +73,7 @@ bool Visualization::hasParameterWidget() const
 
 QWidget *Visualization::createParameterWidget(QWidget *parent)
 {
-    K_D(Visualization);
+    P_D(Visualization);
     if (k_ptr->backendObject())
     {
         QWidget *ret;

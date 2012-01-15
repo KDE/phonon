@@ -4,8 +4,7 @@ if (PHONON_BUILD_EXPERIMENTAL)
     add_subdirectory(experimental)
 endif (PHONON_BUILD_EXPERIMENTAL)
 
-set(PULSEAUDIO_FIND_VERSION "0.9.15")
-macro_optional_find_package(PulseAudio)
+macro_optional_find_package(PulseAudio 0.9.15)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
 macro_optional_find_package(GLIB2)
 macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
@@ -21,12 +20,14 @@ else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-macro_optional_find_package(QZeitgeist NO_MODULE )
-macro_log_feature(QZEITGEIST_FOUND "QtZeitgeist" "Qt bindings for Zeitgeist" "http://gitorious.org/kde-zeitgeist/libqzeitgeist/" FALSE)
+macro_optional_find_package(QZeitgeist 0.8)
+macro_log_feature(QZEITGEIST_FOUND "QZeitgeist" "Qt bindings for Zeitgeist" "http://projects.kde.org/kdesupport/libqzeitgeist/" FALSE "0.8")
 if (QZEITGEIST_FOUND)
     add_definitions(-DHAVE_QZEITGEIST)
     include_directories(${QZEITGEIST_INCLUDE_DIR})
 endif(QZEITGEIST_FOUND)
+
+include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
 set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
@@ -82,7 +83,7 @@ if (PHONON_NO_PLATFORMPLUGIN)
     add_definitions(-DQT_NO_PHONON_PLATFORMPLUGIN)
 endif (PHONON_NO_PLATFORMPLUGIN)
 
-add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
+add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
 target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
@@ -120,8 +121,11 @@ set_target_properties(phonon PROPERTIES
 
 
 install(TARGETS phonon EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
+# We write these to a strange place so the demos can find them properly
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
+# Required for demos/cmake/FindPhonon.cmake
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h)
 
 install(FILES
    abstractaudiooutput.h

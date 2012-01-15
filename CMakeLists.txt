@@ -9,7 +9,8 @@ option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" ON)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
-option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
+option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
+option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 message("-- !!!!! Tests have been removed and need to be redone !!!!!")
 #option(PHONON_BUILD_TESTS "Build the tests" OFF)
 
@@ -26,6 +27,7 @@ if (PHONON_BUILD_TESTS)
     enable_testing()
 endif (PHONON_BUILD_TESTS)
 
+set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(cmake/FindPhononInternal.cmake)
@@ -37,8 +39,8 @@ macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 # It is highly advised to think twice before changing those.
 # If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
 set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
-set(PHONON_LIB_MINOR_VERSION "5") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "56") # Bump whenever you feel like it :P
+set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes with new interfaces
+set(PHONON_LIB_PATCH_VERSION "55") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
@@ -140,9 +142,15 @@ add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
+
 if(QT_QTDECLARATIVE_FOUND AND PHONON_BUILD_DECLARATIVE_PLUGIN)
     add_subdirectory(declarative)
 endif(QT_QTDECLARATIVE_FOUND AND PHONON_BUILD_DECLARATIVE_PLUGIN)
+
+if(PHONON_BUILD_DOC)
+    add_subdirectory(doc)
+endif(PHONON_BUILD_DOC)
+
 add_subdirectory(phonon)
 add_subdirectory(includes)
 
@@ -150,7 +158,7 @@ if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
     #Allows find_package(Phonon) to not die in the demos
     set(PHONON_BUILDSYSTEM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-    set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+    set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/includes/)
     set(PHONON_LIBRARY phonon)
     #Lets the demos find the headers
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})

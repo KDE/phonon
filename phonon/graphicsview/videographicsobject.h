@@ -75,7 +75,7 @@ class VideoGraphicsObjectPrivate;
  */
 class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject, public MediaNode
 {
-    K_DECLARE_PRIVATE(VideoGraphicsObject)
+    P_DECLARE_PRIVATE(VideoGraphicsObject)
     Q_OBJECT
 public:
     /// Constructor. \param parent the parent of the object.
