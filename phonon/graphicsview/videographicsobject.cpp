@@ -95,7 +95,7 @@ protected:
         if (m_backendObject)
             return;
 
-        Q_Q(VideoGraphicsObject);
+        P_Q(VideoGraphicsObject);
         m_backendObject = Factory::createVideoGraphicsObject(q);
         if (m_backendObject) {
             QObject::connect(m_backendObject, SIGNAL(frameReady()),
@@ -205,7 +205,7 @@ void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
 
 void VideoGraphicsObjectPrivate::updateBoundingRect()
 {
-    Q_Q(VideoGraphicsObject);
+    P_Q(VideoGraphicsObject);
     emit q->prepareGeometryChange();
 
     // keep aspect
