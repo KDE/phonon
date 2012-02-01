@@ -60,6 +60,6 @@ public:
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::VideoGraphicsObjectInterface,
-                    "org.kde.phonon.VideoGraphicsObjectInterface/4.7.0")
+                    "org.kde.phonon.VideoGraphicsObjectInterface/1.0")
 
 #endif // PHONON_VIDEOGRAPHICSOBJECTINTERFACE_H
