@@ -22,6 +22,8 @@
 #ifndef PHONON_ABSTRACTVIDEOGRAPHICSPAINTER_H
 #define PHONON_ABSTRACTVIDEOGRAPHICSPAINTER_H
 
+class QPainter;
+
 namespace Phonon {
 
 class VideoFrame;

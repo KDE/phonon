@@ -92,10 +92,9 @@ public:
     void setGeometry(const QRectF &newGeometry);
 
     // !reimpl
-    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 private slots:
-#warning booh
     void frameReady();
     void reset();
 };
