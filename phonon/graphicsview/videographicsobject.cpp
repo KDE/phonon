@@ -98,7 +98,6 @@ protected:
         Q_Q(VideoGraphicsObject);
         m_backendObject = Factory::createVideoGraphicsObject(q);
         if (m_backendObject) {
-            pINTERFACE_CALL(setVideoGraphicsObject(q));
             QObject::connect(m_backendObject, SIGNAL(frameReady()),
                              q, SLOT(frameReady()),
                              Qt::QueuedConnection);

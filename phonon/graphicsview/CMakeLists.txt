@@ -14,7 +14,8 @@ set(phonon_VGO_SRCS
 
 set(phonon_VGO_HDRS
     graphicsview/videoframe.h
-    graphicsview/videographicsobject.h
+    # VGO does not need to be public, as there is only pull but no push behavior.
+    #graphicsview/videographicsobject.h
     graphicsview/videographicsobjectinterface.h
 
     PARENT_SCOPE

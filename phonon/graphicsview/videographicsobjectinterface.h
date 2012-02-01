@@ -30,12 +30,6 @@ public:
     /// Destructor.
     virtual ~VideoGraphicsObjectInterface() {}
 
-    /// \returns frontend VideoGraphicsObject.
-    virtual VideoGraphicsObject *videoGraphicsObject() = 0;
-
-    /// \param object frontend VideoGraphicsObject to set.
-    virtual void setVideoGraphicsObject(VideoGraphicsObject *object) = 0;
-
     /// Lock video frame.
     virtual void lock() = 0;
 
