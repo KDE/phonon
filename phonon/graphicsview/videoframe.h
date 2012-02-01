@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2011-2012 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,12 +22,10 @@
 #ifndef PHONON_VIDEOFRAME_H
 #define PHONON_VIDEOFRAME_H
 
-#include <QtGui/QImage>
-
 namespace Phonon {
 
 /**
- * This class presents a simple video frame within Phonon.
+ * This struct presents a simple video frame within Phonon.
  * It has all the main characteristics of a frame. It has height, width and a
  * chroma format.
  * The chroma format also decides on how many picture planes one frame may have.
@@ -37,57 +35,35 @@ namespace Phonon {
  * \author Harald Sitter <sitter@kde.org
  */
 struct VideoFrame {
+    /**
+     * Format names are kept close to the fourcc names. For multiple pixel
+     * incarnations the pixel amount is always part of the name.
+     * \see http://www.fourcc.org
+     * \see http://www.fourcc.org/rgb.php
+     * \see http://www.fourcc.org/yuv.php
+     */
     enum Format {
-        // TODO: really reference qimg formats?
-        Format_Invalid = QImage::Format_Invalid,
-        Format_RGB888 = QImage::Format_RGB888,
-        Format_RGB32 = QImage::Format_RGB32,
-        Format_YCbCr420 = 0x10000,
-        Format_YV12 = Format_YCbCr420,
-        Format_YCbCr422 = 0x10001,
-        Format_YUY2 = Format_YCbCr422
+        Format_Invalid, /** < Invalid Frame */
+        Format_RGB32,   /** < Packed RGB32 */
+        Format_YV12,    /** < 3 planes 8 bit Y plane followed by 8 bit 2x2
+                              subsampled V and U planes. */
+        Format_I420     /** < Like YV12, but U comes before V */
     };
 
     /// The width.
-    int width;
+    unsigned int width;
 
     /// The height.
-    int height;
+    unsigned int height;
 
     /// The format.
     Format format;
 
     /// The amont of picture planes.
-    int planeCount;
+    unsigned int planeCount;
 
     /// The picture planes.
-    QByteArray plane[3];
-
-    /**
-     * Convenience method to create a QImage from a frame.
-     * This only works for RGB888 and RGB32. Consequently a frame must be valid
-     * and have exactly one plane for this to work properly.
-     *
-     * \returns a valid qimage if everything went ok, an invalid QImage if the frame
-     * is not compatible with a QImage format.
-     */
-    inline QImage qImage() const
-    {
-        // QImage can only handle packed formats.
-        if (planeCount != 1)
-            return QImage();
-
-        switch(format) {
-        case Format_RGB888:
-            return QImage(reinterpret_cast<const uchar *>(plane[0].constData()),
-                          width, height, QImage::Format_RGB888);
-        case Format_RGB32:
-            return QImage(reinterpret_cast<const uchar *>(plane[0].constData()),
-                          width, height, QImage::Format_RGB32);
-        default:
-            return QImage();
-        }
-    }
+    QByteArray plane[4];
 };
 
 } // namespace Phonon

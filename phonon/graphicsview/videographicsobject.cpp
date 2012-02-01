@@ -48,7 +48,15 @@ public:
     void init() {}
     void paint(QPainter *painter, QRectF target)
     {
-        painter->drawImage(target, m_frame->qImage());
+        // QImage can only handle packed formats.
+        if (m_frame->planeCount != 1 || m_frame->format != VideoFrame::Format_RGB32) {
+            painter->drawImage(target, QImage());
+        } else {
+            painter->drawImage(target,
+                               QImage(reinterpret_cast<const uchar *>(m_frame->plane[0].constData()),
+                                      m_frame->width, m_frame->height,
+                                      QImage::Format_RGB32));
+        }
     }
 };
 
