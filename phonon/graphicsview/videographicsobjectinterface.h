@@ -27,10 +27,10 @@ namespace Phonon {
 class VideoGraphicsObjectInterface
 {
 public:
-    /// Destructor.
+    /** Destructor. */
     virtual ~VideoGraphicsObjectInterface() {}
 
-    /// Lock video frame.
+    /** Lock video frame. */
     virtual void lock() = 0;
 
     /**
@@ -39,7 +39,7 @@ public:
      */
     virtual bool tryLock() = 0;
 
-    /// Unlock video frame.
+    /** Unlock video frame. */
     virtual void unlock() = 0;
 
     /**
@@ -49,18 +49,17 @@ public:
      */
     virtual const VideoFrame *frame() const = 0;
 
-    // Signals
-
-    /// Signal to be emitted when a new frame is ready for painting.
+    // ------------------------------ Signals ------------------------------- //
+    /** Signal to be emitted when a new frame is ready for painting. */
     virtual void frameReady() = 0;
 
-    /// Signal to be emitted when the frontend object should reset (Painters for instance).
+    /** Signal to be emitted when the frontend object should reset (Painters for instance). */
     virtual void reset() = 0;
 };
 
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::VideoGraphicsObjectInterface,
-                    "VideoGraphicsObjectInterface.phonon.kde.org")
+                    "org.kde.phonon.VideoGraphicsObjectInterface/4.7.0")
 
 #endif // PHONON_VIDEOGRAPHICSOBJECTINTERFACE_H
