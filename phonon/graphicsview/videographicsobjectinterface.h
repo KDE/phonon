@@ -24,6 +24,8 @@
 
 namespace Phonon {
 
+class VideoFrame;
+
 class VideoGraphicsObjectInterface
 {
 public:
