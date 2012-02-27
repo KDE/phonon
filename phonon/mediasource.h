@@ -97,9 +97,18 @@ class PHONON_EXPORT MediaSource
              */
             Stream,
             /**
-            * The MediaSource object describes a capture device
+            * The MediaSource object describes a single capture device.
+            * This could be either audio or video.
             */
             CaptureDevice,
+            /**
+             * The MediaSource object describes one device for video capture and one for audio
+             * capture. Facilitates capturing both audio and video at the same time, from
+             * different devices.
+             * It's essentially like two CaptureDevice media sources (one of video type, one
+             * of audio type) merged together.
+             */
+            AudioVideoCapture,
             /**
              * An empty MediaSource.
              *
@@ -153,6 +162,7 @@ class PHONON_EXPORT MediaSource
 #ifndef PHONON_NO_AUDIOCAPTURE
         /**
         * Creates a MediaSource object for audio capture devices.
+        * If the device is valid, this creates a 'CaptureDevice' type MediaSource.
         */
         MediaSource(const AudioCaptureDevice& device);
 #endif
@@ -160,6 +170,7 @@ class PHONON_EXPORT MediaSource
 #ifndef PHONON_NO_VIDEOCAPTURE
         /**
         * Creates a MediaSource object for video capture devices.
+        * If the device is valid, this creates a 'CaptureDevice' type MediaSource
         */
         MediaSource(const VideoCaptureDevice& device);
 #endif
@@ -167,8 +178,21 @@ class PHONON_EXPORT MediaSource
 #if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
         /**
          * Sets the source to the preferred audio capture device for the specified category
+         * If a valid device is found, this creates a 'CaptureDevice' type MediaSource
          */
         MediaSource(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
+
+        /**
+         * Creates a MediaSource object that tries to describe a video capture device and
+         * an audio capture device, together. The devices are appropriate for the specified
+         * category.
+         *
+         * If valid devices are found for both audio and video, then the resulting MediaSource
+         * is of type 'AudioVideoCapture'. If only an audio or a video valid device is found,
+         * the resulting type is 'CaptureDevice'. If no valid devices are found, the resulting
+         * type is 'Invalid'.
+         */
+        MediaSource(CaptureCategory category);
 #endif
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -282,8 +306,23 @@ class PHONON_EXPORT MediaSource
 
         /**
          * Returns the access list for the device of this media source. Valid for capture devices.
+         * \warning use only with MediaSource with type() == CaptureDevice
          */
         const DeviceAccessList& deviceAccessList() const;
+
+        /**
+         * Returns the access list for the video device used for capture.
+         * Valid for type() == CaptureDevice or type() == AudioVideoCapture.
+         * If used with CaptureDevice, the kind of device should be Video, for a valid result.
+         */
+        const DeviceAccessList& videoDeviceAccessList() const;
+
+        /**
+         * Returns the access list for the audio device used for capture.
+         * Valid for type() == CaptureDevice or type() == AudioVideoCapture.
+         * If used with CaptureDevice, the kind of device should be Audio, for a valid result.
+         */
+        const DeviceAccessList& audioDeviceAccessList() const;
 
         /**
          * Returns the device name of the MediaSource if type() == Disc; otherwise returns
@@ -322,12 +361,7 @@ class PHONON_EXPORT MediaSource
         QExplicitlySharedDataPointer<MediaSourcePrivate> d;
         MediaSource(MediaSourcePrivate &);
 
-        /**
-         * Creates a MediaSource object for a capture device, directly from the device access info.
-         *
-         * \param access How can the device be accessed (driver name - alsa, oss, etc.) and device name
-         */
-        MediaSource(const DeviceAccess &access);
+        PHONON_DEPRECATED MediaSource(const DeviceAccess &access);
 };
 
 } // namespace Phonon
