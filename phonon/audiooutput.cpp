@@ -49,19 +49,6 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
-static inline bool callSetOutputDevice(AudioOutputPrivate *const d, int index)
-{
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive())
-        return pulse->setOutputDevice(d->getStreamUuid(), index);
-
-    Iface<IFACES2> iface(d);
-    if (iface) {
-        return iface->setOutputDevice(AudioOutputDevice::fromIndex(index));
-    }
-    return Iface<IFACES0>::cast(d)->setOutputDevice(index);
-}
-
 static inline bool callSetOutputDevice(AudioOutputPrivate *const d, const AudioOutputDevice &dev)
 {
     PulseSupport *pulse = PulseSupport::getInstance();
@@ -285,7 +272,7 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
         d->device = newAudioOutputDevice;
     }
     if (k_ptr->backendObject()) {
-        return callSetOutputDevice(d, d->device.index());
+        return callSetOutputDevice(d, d->device);
     }
     return true;
 }
