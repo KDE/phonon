@@ -102,21 +102,21 @@ class PHONON_EXPORT MediaSource
             */
             CaptureDevice,
             /**
-             * The MediaSource object describes one device for video capture and one for audio
-             * capture. Facilitates capturing both audio and video at the same time, from
-             * different devices.
-             * It's essentially like two CaptureDevice media sources (one of video type, one
-             * of audio type) merged together.
-             */
-            AudioVideoCapture,
-            /**
              * An empty MediaSource.
              *
              * It can be used to unload the current media from a MediaObject.
              *
              * \see MediaSource()
              */
-            Empty
+            Empty,
+            /**
+             * The MediaSource object describes one device for video capture and one for audio
+             * capture. Facilitates capturing both audio and video at the same time, from
+             * different devices.
+             * It's essentially like two CaptureDevice media sources (one of video type, one
+             * of audio type) merged together.
+             */
+            AudioVideoCapture
 /*          post 4.0:
             / **
              * Links multiple MediaSource objects together.
