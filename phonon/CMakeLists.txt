@@ -8,11 +8,11 @@ macro_optional_find_package(GLIB2)
 macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
 
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
-   set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?" FORCE) # this one must be forced into the cache so it exists also in the toplevel CMakeLists.txt
+   set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?" PARENT_SCOPE)
    add_definitions(-DHAVE_PULSEAUDIO)
    include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
 else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
-   set(PHONON_PULSESUPPORT FALSE CACHE BOOL "Has Phonon pulseaudio support ?" FORCE) # this one must be forced into the cache so it exists also in the toplevel CMakeLists.txt
+   set(PHONON_PULSESUPPORT FALSE CACHE BOOL "Has Phonon pulseaudio support ?" PARENT_SCOPE)
    set(PULSEAUDIO_INCLUDE_DIR "")
    set(PULSEAUDIO_LIBRARY "")
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
