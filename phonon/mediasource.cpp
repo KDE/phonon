@@ -246,11 +246,15 @@ DiscType MediaSource::discType() const
 
 const DeviceAccessList& MediaSource::deviceAccessList() const
 {
+#ifndef PHONON_NO_AUDIOCAPTURE
     if (d->audioCaptureDevice.isValid())
         return d->audioDeviceAccessList;
+#endif
 
+#ifndef PHONON_NO_VIDEOCAPTURE
     if (d->videoCaptureDevice.isValid())
         return d->videoDeviceAccessList;
+#endif
 
     return d->audioDeviceAccessList;    // It should be invalid
 }
