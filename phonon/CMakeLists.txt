@@ -65,11 +65,11 @@ set(phonon_LIB_SRCS
    videowidget.cpp
    )
 
-if (PULSEAUDIO_FOUND)
+if (PHONON_PULSESUPPORT)
    list(APPEND phonon_LIB_SRCS
       pulsestream.cpp
    )
-endif (PULSEAUDIO_FOUND)
+endif (PHONON_PULSESUPPORT)
 
 if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
    list(APPEND phonon_LIB_SRCS
@@ -86,9 +86,9 @@ add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_
 
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
 target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
+if (PHONON_PULSESUPPORT)
     target_link_libraries(phonon ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
-endif (GLIB2_FOUND AND PULSEAUDIO_FOUND)
+endif (PHONON_PULSESUPPORT)
 
 if (QZEITGEIST_FOUND)
     target_link_libraries(phonon ${QZEITGEIST_LIBRARY})
