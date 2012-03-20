@@ -9,7 +9,9 @@ macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseau
 
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?" PARENT_SCOPE)
-   add_definitions(-DHAVE_PULSEAUDIO)
+   if(PHONON_PULSESUPPORT)
+       add_definitions(-DHAVE_PULSEAUDIO)
+   endif(PHONON_PULSESUPPORT)
    include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
 else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PHONON_PULSESUPPORT FALSE CACHE BOOL "Has Phonon pulseaudio support ?" PARENT_SCOPE)
