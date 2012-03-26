@@ -19,11 +19,6 @@ message("-- !!!!! Tests have been removed and need to be redone !!!!!")
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
-if (PHONON_NO_CAPTURE)
-    # Definitions to disable the compiling of any capture related components
-    add_definitions(-DPHONON_NO_VIDEOCAPTURE -DPHONON_NO_AUDIOCAPTURE)
-endif (PHONON_NO_CAPTURE)
-
 if (PHONON_BUILD_TESTS)
     message(STATUS "Building tests.")
     enable_testing()

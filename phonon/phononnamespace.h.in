@@ -43,6 +43,16 @@
  */
 #define PHONON_VERSION_STR "@PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONON_LIB_PATCH_VERSION@"
 
+/**
+ * Definitions to disable capture - should end up in the backends and
+ * platform plugins, too
+ */
+#cmakedefine PHONON_NO_CAPTURE
+#ifdef PHONON_NO_CAPTURE
+#define PHONON_NO_VIDEOCAPTURE
+#define PHONON_NO_AUDIOCAPTURE
+#endif
+
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 

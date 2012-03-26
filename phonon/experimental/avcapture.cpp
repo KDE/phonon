@@ -20,6 +20,8 @@
 
 */
 
+#include "phononnamespace_p.h"
+
 #if defined(PHONON_NO_VIDEOCAPTURE) || defined(PHONON_NO_AUDIOCAPTURE)
 #define NO_PHONON_AVCAPTURE
 #endif
@@ -32,7 +34,6 @@
 #include "avcaptureinterface.h"
 #include "factory_p.h"
 #include "globalconfig.h"
-#include "phononnamespace_p.h"
 
 #define PHONON_CLASSNAME AvCapture
 #define PHONON_INTERFACENAME AvCaptureInterface
