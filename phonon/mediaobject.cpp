@@ -258,6 +258,8 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
+    d->playingQueuedSource = false;
+
     d->sendToZeitgeist(StoppedState);
     INTERFACE_CALL(setSource(d->mediaSource));
     d->sendToZeitgeist();
@@ -439,8 +441,14 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
             break;
         }
 
+        QString eventManifestation;
+        if (playingQueuedSource)
+            eventManifestation = QZeitgeist::Manifestation::Event::ZGScheduledActivity;
+        else
+            eventManifestation = QZeitgeist::Manifestation::Event::ZGUserActivity;
+
         sendToZeitgeist(eventInterpretation,
-                        QZeitgeist::Manifestation::Event::ZGUserActivity,
+                        eventManifestation,
                         QLatin1Literal("app://" ) % Platform::applicationName() % QLatin1Literal(".desktop"),
                         QDateTime::currentDateTime(),
                         mediaSource.url(),
@@ -451,6 +459,7 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
     }
     // Unset this so we don't send it again after a pause+play
     readyForZeitgeist = false;
+    playingQueuedSource = false;
 #else
     Q_UNUSED(eventState)
 #endif
@@ -589,6 +598,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
 
     mediaSource = sourceQueue.head();
     readyForZeitgeist = false;
+    playingQueuedSource = true;
     pINTERFACE_CALL(setNextSource(mediaSource));
 }
 
