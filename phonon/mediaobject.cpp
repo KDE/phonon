@@ -449,7 +449,7 @@ void MediaObjectPrivate::sendToZeitgeist(State eventState)
 
         sendToZeitgeist(eventInterpretation,
                         eventManifestation,
-                        QLatin1Literal("app://" ) % Platform::applicationName() % QLatin1Literal(".desktop"),
+                        QLatin1Literal("application://" ) % Platform::applicationName() % QLatin1Literal(".desktop"),
                         QDateTime::currentDateTime(),
                         mediaSource.url(),
                         title,
