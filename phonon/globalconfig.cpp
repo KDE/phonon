@@ -271,6 +271,7 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
 {
     Q_ASSERT(config);
     Q_ASSERT(type == AudioOutputDeviceType);
+    Q_UNUSED(type);
 
     /*QString sb;
     sb = QString("(Size %1)").arg(currentList.size());
