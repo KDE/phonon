@@ -24,11 +24,11 @@
 #define SEEKSLIDER_P_H
 
 #include <QtCore/QPointer>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QIcon>
-#include <QtGui/QLabel>
-#include <QtGui/QPixmap>
-#include <QtGui/QStyle>
+#include <QBoxLayout>
+#include <QIcon>
+#include <QLabel>
+#include <QPixmap>
+#include <QStyle>
 
 #include "factory_p.h"
 #include "phonondefs_p.h"

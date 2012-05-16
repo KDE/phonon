@@ -27,9 +27,9 @@
 #include <phonon/MediaSource>
 #include <phonon/VideoWidget>
 
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMenu>
+#include <QContextMenuEvent>
+#include <QFileDialog>
+#include <QMenu>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)

@@ -24,12 +24,12 @@
 #define VOLUMESLIDER_P_H
 
 #include <QtCore/QPointer>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QIcon>
-#include <QtGui/QLabel>
-#include <QtGui/QPixmap>
-#include <QtGui/QStyle>
-#include <QtGui/QToolButton>
+#include <QBoxLayout>
+#include <QIcon>
+#include <QLabel>
+#include <QPixmap>
+#include <QStyle>
+#include <QToolButton>
 
 #include "factory_p.h"
 #include "phonondefs_p.h"

@@ -25,9 +25,9 @@
 #include "factory_p.h"
 #include <QtCore/QCoreApplication>
 #include <QtCore/QUrl>
-#include <QtGui/QIcon>
-#include <QtGui/QStyle>
-#include <QtGui/QApplication>
+#include <QIcon>
+#include <QStyle>
+#include <QApplication>
 
 QT_BEGIN_NAMESPACE
 

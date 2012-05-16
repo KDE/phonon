@@ -29,8 +29,8 @@
 #include "phononnamespace_p.h"
 #include <QtCore/QMimeData>
 #include <QtCore/QStringList>
-#include <QtGui/QIcon>
-#include <QtGui/QPainter>
+#include <QIcon>
+#include <QPainter>
 #include "factory_p.h"
 
 QT_BEGIN_NAMESPACE

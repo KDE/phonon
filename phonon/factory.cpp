@@ -40,8 +40,8 @@
 #ifndef PHONON_NO_DBUS
 #include <QtDBus/QtDBus>
 #endif
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
+#include <QApplication>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 

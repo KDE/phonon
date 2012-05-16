@@ -22,9 +22,9 @@
 
 #include "swiftslider_p.h"
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QStyle>
-#include <QtGui/QStyleOption>
+#include <QMouseEvent>
+#include <QStyle>
+#include <QStyleOption>
 
 QT_BEGIN_NAMESPACE
 

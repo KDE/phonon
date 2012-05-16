@@ -21,10 +21,10 @@
 
 #include "capture.h"
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QMessageBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QMessageBox>
 
 #include <phonon/AudioOutput>
 #include <phonon/MediaObject>

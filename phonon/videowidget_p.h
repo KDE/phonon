@@ -25,7 +25,7 @@
 
 #include "videowidget.h"
 #include "abstractvideooutput_p.h"
-#include <QtGui/QHBoxLayout>
+#include <QHBoxLayout>
 
 QT_BEGIN_NAMESPACE
 

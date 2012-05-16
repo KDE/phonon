@@ -29,12 +29,12 @@
 #include "effect.h"
 #include "effectparameter.h"
 #include "phonondefs_p.h"
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QSpinBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QSlider>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QSlider>
 #include <limits>
 
 #ifdef min

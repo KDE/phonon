@@ -27,7 +27,7 @@
 #include "phonondefs_p.h"
 #include "phononnamespace_p.h"
 
-#include <QtGui/QAction>
+#include <QAction>
 #define IFACES4 VideoWidgetInterface44
 #define IFACES0 VideoWidgetInterface, IFACES4
 #define PHONON_INTERFACENAME IFACES0

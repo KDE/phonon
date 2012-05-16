@@ -26,7 +26,7 @@
 #include "phonon_export.h"
 #include "phononnamespace.h"
 #include "mediasource.h"
-#include <QtGui/QWidget>
+#include <QWidget>
 
 QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE

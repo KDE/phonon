@@ -20,11 +20,11 @@
 */
 #include "player.h"
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QVBoxLayout>
+#include <QFileDialog>
+#include <QHBoxLayout>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 #include <phonon/AudioOutput>
 #include <phonon/MediaObject>

@@ -1,4 +1,4 @@
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 class MediaPlayer : public QMainWindow
 {

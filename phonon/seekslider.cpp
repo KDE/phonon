@@ -25,8 +25,8 @@
 #include "mediaobject.h"
 #include "phonondefs_p.h"
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QApplication>
+#include <QMouseEvent>
+#include <QApplication>
 
 QT_BEGIN_NAMESPACE
 

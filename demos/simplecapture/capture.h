@@ -22,7 +22,7 @@
 #ifndef CAPTURE_H
 #define CAPTURE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <phonon/Global>
 
 class QPushButton;
