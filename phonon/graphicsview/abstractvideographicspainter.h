@@ -75,11 +75,11 @@ public:
      */
     virtual void paint(QPainter *painter, QRectF target) = 0;
 
-    /// Destructor.
+    /** Destructor. */
     virtual ~AbstractVideoGraphicsPainter() {}
 
 protected:
-    /// Constructor.
+    /** Constructor. */
     AbstractVideoGraphicsPainter() {}
 
     /// The frame an implementatin is supposed to work with.

@@ -78,20 +78,22 @@ class PHONON_EXPORT VideoGraphicsObject : public QGraphicsObject, public MediaNo
     P_DECLARE_PRIVATE(VideoGraphicsObject)
     Q_OBJECT
 public:
-    /// Constructor. \param parent the parent of the object.
+    /** Constructor. \param parent the parent of the object. */
     explicit VideoGraphicsObject(QGraphicsItem *parent = 0);
 
-    /// Destructor.
+    /** Destructor. */
     virtual ~VideoGraphicsObject();
 
-    /// \returns the rectangle in which the object will paint, either equal
-    /// or smaller than the set .
+    /**
+     * \returns the rectangle in which the object will paint, either equal
+     * or smaller than the set .
+     */
     virtual QRectF boundingRect() const;
 
-    /// \param newGeometry the geometry this object should at most occupy.
+    /** \param newGeometry the geometry this object should at most occupy. */
     void setGeometry(const QRectF &newGeometry);
 
-    // !reimpl
+    /** \reimp */
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 private slots:
