@@ -31,39 +31,13 @@
 #include "glslpainter.h"
 #include "medianode_p.h"
 #include "phonondefs_p.h"
+#include "qpainterpainter.h"
 #include "videoframe.h"
 #include "videographicsobjectinterface.h"
 
 #define PHONON_INTERFACENAME VideoGraphicsObjectInterface
 
 namespace Phonon {
-
-// --------------------------------- Painter --------------------------------- //
-class QPainterPainter : public AbstractVideoGraphicsPainter
-{
-public:
-    QPainterPainter() {}
-    virtual ~QPainterPainter() {}
-
-    virtual QList<VideoFrame::Format> supportedFormats() const
-    {
-        return QList<VideoFrame::Format>() << VideoFrame::Format_RGB32;
-    }
-
-    void init() {}
-    void paint(QPainter *painter, QRectF target)
-    {
-        // QImage can only handle packed formats.
-        if (m_frame->planeCount != 1 || m_frame->format != VideoFrame::Format_RGB32) {
-            painter->drawImage(target, QImage());
-        } else {
-            painter->drawImage(target,
-                               QImage(reinterpret_cast<const uchar *>(m_frame->plane[0].constData()),
-                                      m_frame->width, m_frame->height,
-                                      QImage::Format_RGB32));
-        }
-    }
-};
 
 // --------------------------------- OBJECT --------------------------------- //
 class PainterFactory

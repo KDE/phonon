@@ -23,6 +23,8 @@
 #define PHONON_ABSTRACTVIDEOGRAPHICSPAINTER_H
 
 #include <QtCore/QList>
+#include <QtCore/QRectF>
+
 #include "videoframe.h"
 
 class QPainter;
