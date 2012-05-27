@@ -34,6 +34,8 @@ public:
     GlArbPainter();
     virtual ~GlArbPainter();
 
+    virtual QList<VideoFrame::Format> supportedFormats() const;
+
     void init();
     void paint(QPainter *painter, QRectF target);
 

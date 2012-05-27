@@ -96,6 +96,24 @@ public:
     /** \reimp */
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+
+    /**
+     * Whether the VideoGraphicsObject is ready to begin playback.
+     * Usually it would only be ready when it negotiated the format to use. To do
+     * this it most of the time requires at least one paint call. Before the VGO
+     * is ready a connected MediaObject will refuse to start playback!
+     *
+     * Should play be called before the VideoGraphicsObject the MediaObject will
+     * put the command on a pending list and wait for the ready signal to be
+     * emitted.
+     *
+     * \see ready()
+     */
+    bool isReady() const;
+
+signals:
+    void ready();
+
 private slots:
     void frameReady();
     void reset();

@@ -24,7 +24,7 @@
 
 namespace Phonon {
 
-class VideoFrame;
+#include "videoframe.h"
 
 class VideoGraphicsObjectInterface
 {
@@ -51,12 +51,28 @@ public:
      */
     virtual const VideoFrame *frame() const = 0;
 
+    /**
+     * Offers a list of video formats to the backend.
+     * This function may be called multiple times as part of format negotiation
+     * usually until the frontend found a painter that supports a format also
+     * supported by the backend.
+     * \param offers the possible formats (may be empty)
+     * \returns the preferred choice or Invalid
+     */
+    virtual VideoFrame::Format offering(QList<VideoFrame::Format> offers) const = 0;
+
+    /** Chooses \param format as format */
+    virtual void choose(VideoFrame::Format format) = 0;
+
     // ------------------------------ Signals ------------------------------- //
     /** Signal to be emitted when a new frame is ready for painting. */
     virtual void frameReady() = 0;
 
     /** Signal to be emitted when the frontend object should reset (Painters for instance). */
     virtual void reset() = 0;
+
+    /** To be emitted when the backend requires the format negotiation now. */
+    virtual void needFormat() = 0;
 };
 
 } // namespace Phonon

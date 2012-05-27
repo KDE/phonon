@@ -22,11 +22,12 @@
 #ifndef PHONON_ABSTRACTVIDEOGRAPHICSPAINTER_H
 #define PHONON_ABSTRACTVIDEOGRAPHICSPAINTER_H
 
+#include <QtCore/QList>
+#include "videoframe.h"
+
 class QPainter;
 
 namespace Phonon {
-
-class VideoFrame;
 
 /**
  * This class provides a well defined interface to video graphics painter
@@ -41,6 +42,8 @@ class VideoFrame;
 class AbstractVideoGraphicsPainter
 {
 public:
+    virtual QList<VideoFrame::Format> supportedFormats() const = 0;
+
     /**
      * Set a new frame on the painter.
      * This function should be called before any other function is used. The

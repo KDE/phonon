@@ -45,6 +45,11 @@ public:
     QPainterPainter() {}
     virtual ~QPainterPainter() {}
 
+    virtual QList<VideoFrame::Format> supportedFormats() const
+    {
+        return QList<VideoFrame::Format>() << VideoFrame::Format_RGB32;
+    }
+
     void init() {}
     void paint(QPainter *painter, QRectF target)
     {
@@ -61,10 +66,58 @@ public:
 };
 
 // --------------------------------- OBJECT --------------------------------- //
+class PainterFactory
+{
+public:
+    PainterFactory() :
+        m_chosenFormat(VideoFrame::Format_Invalid)
+    {
+        // This order also represents our preference for painters.
+        m_painters << new GlslPainter
+                   << new GlArbPainter
+                   << new QPainterPainter;
+    }
 
+    ~PainterFactory()
+    {
+        qDeleteAll(m_painters);
+    }
+
+    QList<VideoFrame::Format> supportedFormats() const
+    {
+        QList<VideoFrame::Format> formats;
+        foreach (const AbstractVideoGraphicsPainter *painter, m_painters) {
+            formats.append(painter->supportedFormats());
+        }
+        return formats;
+    }
+
+    AbstractVideoGraphicsPainter *createPainter(QList<VideoFrame::Format> options)
+    {
+        foreach (AbstractVideoGraphicsPainter *painter, m_painters) {
+            QList<VideoFrame::Format> formats = painter->supportedFormats();
+            foreach (VideoFrame::Format format, formats) {
+                if (options.contains(format)) {
+                    m_painters.removeAll(painter);
+                    m_chosenFormat = format;
+                    return painter;
+                }
+            }
+        }
+        return 0;
+    }
+
+    VideoFrame::Format chosenFormat() const { return m_chosenFormat; }
+
+private:
+    QList<AbstractVideoGraphicsPainter *> m_painters;
+    VideoFrame::Format m_chosenFormat;
+};
+
+// --------------------------------- OBJECT --------------------------------- //
 class VideoGraphicsObjectPrivate : public MediaNodePrivate
 {
-    Q_DECLARE_PUBLIC(VideoGraphicsObject)
+    P_DECLARE_PUBLIC(VideoGraphicsObject)
 public:
     VideoGraphicsObjectPrivate() :
         geometry(0, 0, 320, 240),
@@ -72,7 +125,8 @@ public:
         frameSize(0, 0),
         graphicsPainter(0),
         paintedOnce(false),
-        gotSize(false)
+        gotSize(false),
+        ready(false)
     {}
 
     virtual ~VideoGraphicsObjectPrivate()
@@ -83,18 +137,19 @@ public:
 
     virtual QObject *qObject() { return q_func(); }
 
-    AbstractVideoGraphicsPainter *createPainter(const VideoFrame *frame);
-
     void updateBoundingRect();
+    AbstractVideoGraphicsPainter *negotiateFormat();
 
     QRectF geometry;
     QRectF boundingRect;
     QSize frameSize;
 
+    PainterFactory painterFactory;
     AbstractVideoGraphicsPainter *graphicsPainter;
 
     bool paintedOnce;
     bool gotSize;
+    bool ready;
 
 protected:
     bool aboutToDeleteBackendObject() {}
@@ -112,6 +167,9 @@ protected:
             QObject::connect(m_backendObject, SIGNAL(reset()),
                              q, SLOT(reset()),
                              Qt::QueuedConnection);
+            // Frameready triggers an update/paint, within paint we negotiate.
+            QObject::connect(m_backendObject, SIGNAL(needFormat()),
+                             q, SLOT(frameReady()));
         }
     }
 };
@@ -136,44 +194,6 @@ QRectF VideoGraphicsObject::boundingRect() const
     return d->boundingRect;
 }
 
-AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::createPainter(const VideoFrame *frame)
-{
-    AbstractVideoGraphicsPainter *painter = 0;
-
-    // Used to override automatic painter selection.
-    const QByteArray paintEnv(qgetenv("PHONON_PAINT"));
-    QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext());
-
-    if (paintEnv != QByteArray("qpainter") && glContext) {
-        glContext->makeCurrent();
-
-        GlPainter *glPainter = 0;
-        const QByteArray glExtensions(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)));
-        if (QGLShaderProgram::hasOpenGLShaderPrograms(glContext)
-                && glExtensions.contains("ARB_shader_objects")
-                && (paintEnv == QByteArray("glsl") || paintEnv == QByteArray(""))) {
-            // Use GLSL.
-            glPainter = new GlslPainter;
-        } else if (glExtensions.contains("ARB_fragment_program")
-                   && (paintEnv == QByteArray("glarb") || paintEnv == QByteArray(""))) {
-            // Use GLARB painter.
-            glPainter = new GlArbPainter;
-        }
-#warning a qpainter glpaint would be good.
-
-        glPainter->setContext(glContext);
-        painter = glPainter;
-    }
-
-    if (!painter)
-        // If all fails, just use QPainter's builtin functions.
-        painter = new QPainterPainter;
-
-    painter->setFrame(frame);
-    painter->init();
-    return painter;
-}
-
 void VideoGraphicsObject::paint(QPainter *painter,
                                 const QStyleOptionGraphicsItem *option,
                                 QWidget *widget)
@@ -181,6 +201,11 @@ void VideoGraphicsObject::paint(QPainter *painter,
     P_D(VideoGraphicsObject);
 
     INTERFACE_CALL(lock());
+
+    if (!d->graphicsPainter)
+        d->negotiateFormat();
+#warning what if no painter could be created?
+    Q_ASSERT(d->graphicsPainter);
 
     const VideoFrame *frame = INTERFACE_CALL(frame());
 
@@ -195,8 +220,7 @@ void VideoGraphicsObject::paint(QPainter *painter,
         painter->fillRect(d->boundingRect, Qt::black);
         d->paintedOnce = true;
     } else {
-        if (!d->graphicsPainter)
-            d->graphicsPainter = d->createPainter(frame);
+        Q_ASSERT(d->graphicsPainter);
         d->graphicsPainter->setFrame(frame);
         d->graphicsPainter->paint(painter, d->boundingRect);
     }
@@ -222,6 +246,16 @@ void VideoGraphicsObjectPrivate::updateBoundingRect()
 
     boundingRect = QRectF(0, 0, scaledFrameSize.width(), scaledFrameSize.height());
     boundingRect.moveCenter(geometry.center());
+}
+
+AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::negotiateFormat()
+{
+    QList<VideoFrame::Format> formats = painterFactory.supportedFormats();
+    QList<VideoFrame::Format> choices;
+    pBACKEND_GET1(QList<VideoFrame::Format>, choices, "offering", QList<VideoFrame::Format>, formats);
+    AbstractVideoGraphicsPainter *painter = painterFactory.createPainter(choices);
+    pBACKEND_CALL1("choose", VideoFrame::Format, painterFactory.chosenFormat());
+    return painter;
 }
 
 void VideoGraphicsObject::frameReady()

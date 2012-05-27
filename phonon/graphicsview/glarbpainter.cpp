@@ -68,6 +68,26 @@ GlArbPainter::~GlArbPainter()
 //    }
 }
 
+QList<VideoFrame::Format> GlArbPainter::supportedFormats() const
+{
+    QList<VideoFrame::Format> formats;
+
+    QGLContext *glContext = const_cast<QGLContext *>(QGLContext::currentContext());
+    if (glContext) {
+        glContext->makeCurrent();
+
+        const QByteArray glExtensions(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)));
+        if (glExtensions.contains("ARB_fragment_program")) {
+            // We are usable.
+            return formats << VideoFrame::Format_I420
+                           << VideoFrame::Format_YV12
+                           << VideoFrame::Format_RGB32;
+        }
+    }
+
+    return formats << VideoFrame::Format_Invalid;
+}
+
 void GlArbPainter::init()
 {
     Q_ASSERT(m_context);
