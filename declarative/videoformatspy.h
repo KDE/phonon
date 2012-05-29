@@ -19,42 +19,36 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "qpainterpainter.h"
+#ifndef PHONON_DECLARATIVE_VIDEOFORMATSPY_H
+#define PHONON_DECLARATIVE_VIDEOFORMATSPY_H
 
-#include <QtGui/QImage>
-#include <QtGui/QPainter>
+#include <QtDeclarative/QDeclarativeItem>
+
+#include <phonon/graphicsview/videographicsobject.h>
 
 namespace Phonon {
+namespace Declarative {
 
-QPainterPainter::QPainterPainter()
+class VideoFormatSpyElement : public QDeclarativeItem
 {
-}
+    Q_OBJECT
+public:
+    explicit VideoFormatSpyElement(QDeclarativeItem *parent = 0);
 
-QPainterPainter:: ~QPainterPainter()
-{
-}
+    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
-QList<VideoFrame::Format> QPainterPainter::supportedFormats() const
-{
-    return QList<VideoFrame::Format>() << VideoFrame::Format_RGB32;
-}
+    inline QMap<GraphicsPainterType, QList<VideoFrame::Format> > formats() { return m_formats; }
 
-void QPainterPainter::init()
-{
-    m_inited = true;
-}
+signals:
+    void formatsChanged(QMap<GraphicsPainterType, QList<VideoFrame::Format> > formats);
 
-void QPainterPainter::paint(QPainter *painter, QRectF target)
-{
-    // QImage can only handle packed formats.
-    if (m_frame->planeCount != 1 || m_frame->format != VideoFrame::Format_RGB32) {
-        painter->drawImage(target, QImage());
-    } else {
-        painter->drawImage(target,
-                           QImage(reinterpret_cast<const uchar *>(m_frame->plane[0].constData()),
-                                  m_frame->width, m_frame->height,
-                                  QImage::Format_RGB32));
-    }
-}
+private:
+     QMap<GraphicsPainterType, QList<VideoFrame::Format> > m_formats;
+};
 
+} // namespace Declarative
 } // namespace Phonon
+
+QML_DECLARE_TYPE(Phonon::Declarative::VideoFormatSpyElement)
+
+#endif // PHONON_DECLARATIVE_VIDEOFORMATSPY_H

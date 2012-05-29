@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2011-2012 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -21,10 +21,6 @@
 
 #include "videographicsobject.h"
 
-#include <QtGui/QPainter>
-#warning
-#include <QtOpenGL/QGLShaderProgram>
-
 #include "abstractvideographicspainter.h"
 #include "factory_p.h"
 #include "glarbpainter.h"
@@ -39,56 +35,63 @@
 
 namespace Phonon {
 
-// --------------------------------- OBJECT --------------------------------- //
-class PainterFactory
+QMap<GraphicsPainterType, QList<VideoFrame::Format> > VideoGraphicsPainterMetaFactory::detectTypes()
+{
+    QMap<GraphicsPainterType, QList<VideoFrame::Format> > map;
+    map.insert(GraphicsPainterGlsl, GlslPainter().supportedFormats());
+    map.insert(GraphicsPainterGlArb, GlArbPainter().supportedFormats());
+    map.insert(GraphicsPainterQPainter, QPainterPainter().supportedFormats());
+    return map;
+}
+
+class PrivatePainterFactory
 {
 public:
-    PainterFactory() :
-        m_chosenFormat(VideoFrame::Format_Invalid)
+    AbstractVideoGraphicsPainter *factorize(QList<VideoFrame::Format> choices,
+                                            QMap<GraphicsPainterType, QList<VideoFrame::Format> > formats)
     {
-        // This order also represents our preference for painters.
-        m_painters << new GlslPainter
-                   << new GlArbPainter
-                   << new QPainterPainter;
-    }
-
-    ~PainterFactory()
-    {
-        qDeleteAll(m_painters);
-    }
-
-    QList<VideoFrame::Format> supportedFormats() const
-    {
-        QList<VideoFrame::Format> formats;
-        foreach (const AbstractVideoGraphicsPainter *painter, m_painters) {
-            formats.append(painter->supportedFormats());
-        }
-        return formats;
-    }
-
-    AbstractVideoGraphicsPainter *createPainter(QList<VideoFrame::Format> options)
-    {
-        foreach (AbstractVideoGraphicsPainter *painter, m_painters) {
-            QList<VideoFrame::Format> formats = painter->supportedFormats();
-            foreach (VideoFrame::Format format, formats) {
-                if (options.contains(format)) {
-                    m_painters.removeAll(painter);
-                    m_chosenFormat = format;
-                    return painter;
+        // Try to find a matching format.
+        // Iterate the painters in order glsl>glarb>qpainter, foreach painter check
+        // if it supports one of the choosen formats in the order from the backend.
+        // That way we get to choose our most preferred (e.g. reliable) painter,
+        // while honoring the backends priorization. Painting is weighted more
+        // because a bad painter in Qt Quick 1 will cause insanely bad quality (QPainter...)
+        GraphicsPainterType painterType = GraphicsPainterNone;
+        QMap<GraphicsPainterType,QList<VideoFrame::Format> >::const_iterator it = formats.constBegin();
+        while (it != formats.constEnd()) {
+            foreach (VideoFrame::Format format, choices) {
+                if (it.value().contains(format)) {
+                    chosenFormat = format;
+                    painterType = it.key();
+                    break;
                 }
             }
+            if (painterType != GraphicsPainterNone)
+                break;
+            ++it;
         }
+
+        switch(painterType) {
+        case GraphicsPainterNone:
+            // TODO: what to do what to do? :(
+            Q_ASSERT(painterType != GraphicsPainterNone);
+        case GraphicsPainterGlsl:
+            return new GlslPainter;
+        case GraphicsPainterGlArb:
+            return new GlArbPainter;
+        case GraphicsPainterQPainter:
+            return new QPainterPainter;
+        }
+
+        // Cannot reach.
+        Q_ASSERT(false);
         return 0;
     }
 
-    VideoFrame::Format chosenFormat() const { return m_chosenFormat; }
-
-private:
-    QList<AbstractVideoGraphicsPainter *> m_painters;
-    VideoFrame::Format m_chosenFormat;
+    VideoFrame::Format chosenFormat;
 };
 
-// --------------------------------- OBJECT --------------------------------- //
+// --------------------------------- PRIVATE -------------------------------- //
 class VideoGraphicsObjectPrivate : public MediaNodePrivate
 {
     P_DECLARE_PUBLIC(VideoGraphicsObject)
@@ -112,14 +115,16 @@ public:
     virtual QObject *qObject() { return q_func(); }
 
     void updateBoundingRect();
-    AbstractVideoGraphicsPainter *negotiateFormat();
+    void _p_negotiateFormat();
 
     QRectF geometry;
     QRectF boundingRect;
     QSize frameSize;
 
-    PainterFactory painterFactory;
     AbstractVideoGraphicsPainter *graphicsPainter;
+
+    // FIXME: pfui
+    QMap<GraphicsPainterType,QList<VideoFrame::Format> > spyFormats;
 
     bool paintedOnce;
     bool gotSize;
@@ -143,10 +148,66 @@ protected:
                              Qt::QueuedConnection);
             // Frameready triggers an update/paint, within paint we negotiate.
             QObject::connect(m_backendObject, SIGNAL(needFormat()),
-                             q, SLOT(frameReady()));
+                             q, SLOT(_p_negotiateFormat()),
+                             Qt::DirectConnection);
+            // FIXME: directconnection ...
+            // this is actually super wrong, as for example with VLC we get a foreign thread
+            // cb, so for the sake of not having to make this entire thing threadsafe, the backend
+            // needs to sync their cb with us
         }
     }
 };
+
+void VideoGraphicsObjectPrivate::updateBoundingRect()
+{
+    P_Q(VideoGraphicsObject);
+    emit q->prepareGeometryChange();
+
+    // keep aspect
+    QSizeF scaledFrameSize = frameSize;
+    scaledFrameSize.scale(geometry.size(), Qt::KeepAspectRatio);
+
+    boundingRect = QRectF(0, 0, scaledFrameSize.width(), scaledFrameSize.height());
+    boundingRect.moveCenter(geometry.center());
+}
+
+/**
+ * @brief VideoGraphicsObjectPrivate::_p_negotiateFormat
+ * Super spooky function. There are two ways formats can be known to the VGO:
+ *  * Previously detected by a (QML) Spy
+ *  * This function is called by paint() allowing us to introspect capabilities.
+ *
+ * Once the supported painters & formats were detected the actual negotiation starts.
+ * Currently this function always returns a painter, or it goes down in flames.
+ *
+ * @return Painter to use.
+ */
+void VideoGraphicsObjectPrivate::_p_negotiateFormat()
+{
+    QMap<GraphicsPainterType,QList<VideoFrame::Format> > formats;
+    if (spyFormats.empty())
+        formats = VideoGraphicsPainterMetaFactory::detectTypes();
+    else
+        formats = spyFormats;
+
+    QList<VideoFrame::Format> formatList;
+    QMap<GraphicsPainterType,QList<VideoFrame::Format> >::const_iterator it = formats.constBegin();
+    while (it != formats.constEnd()) {
+        foreach (VideoFrame::Format format, it.value()) {
+            if (!formatList.contains(format))
+                formatList.append(format);
+        }
+        ++it;
+    }
+
+    QList<VideoFrame::Format> choices;
+    pBACKEND_GET1(QList<VideoFrame::Format>, choices, "offering", QList<VideoFrame::Format>, formatList);
+    PrivatePainterFactory factory;
+    graphicsPainter = factory.factorize(choices, formats);
+    pINTERFACE_CALL(choose(factory.chosenFormat));
+}
+
+// --------------------------------- PUBLIC --------------------------------- //
 
 VideoGraphicsObject::VideoGraphicsObject(QGraphicsItem *parent) :
     QGraphicsObject(parent),
@@ -177,7 +238,8 @@ void VideoGraphicsObject::paint(QPainter *painter,
     INTERFACE_CALL(lock());
 
     if (!d->graphicsPainter)
-        d->negotiateFormat();
+        d->_p_negotiateFormat();
+
 #warning what if no painter could be created?
     Q_ASSERT(d->graphicsPainter);
 
@@ -192,14 +254,24 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
     if (frame->format == VideoFrame::Format_Invalid || !d->paintedOnce) {
         painter->fillRect(d->boundingRect, Qt::black);
+        if (!d->paintedOnce)
+            emit gotPaint();
         d->paintedOnce = true;
     } else {
         Q_ASSERT(d->graphicsPainter);
         d->graphicsPainter->setFrame(frame);
+        if (!d->graphicsPainter->inited())
+            d->graphicsPainter->init();
         d->graphicsPainter->paint(painter, d->boundingRect);
     }
 
     INTERFACE_CALL(unlock());
+}
+
+bool VideoGraphicsObject::canNegotiate() const
+{
+    P_D(const VideoGraphicsObject);
+    return d->paintedOnce || !d->spyFormats.empty();
 }
 
 void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
@@ -207,29 +279,6 @@ void VideoGraphicsObject::setGeometry(const QRectF &newGeometry)
     P_D(VideoGraphicsObject);
     d->geometry = newGeometry;
     d->updateBoundingRect();
-}
-
-void VideoGraphicsObjectPrivate::updateBoundingRect()
-{
-    P_Q(VideoGraphicsObject);
-    emit q->prepareGeometryChange();
-
-    // keep aspect
-    QSizeF scaledFrameSize = frameSize;
-    scaledFrameSize.scale(geometry.size(), Qt::KeepAspectRatio);
-
-    boundingRect = QRectF(0, 0, scaledFrameSize.width(), scaledFrameSize.height());
-    boundingRect.moveCenter(geometry.center());
-}
-
-AbstractVideoGraphicsPainter *VideoGraphicsObjectPrivate::negotiateFormat()
-{
-    QList<VideoFrame::Format> formats = painterFactory.supportedFormats();
-    QList<VideoFrame::Format> choices;
-    pBACKEND_GET1(QList<VideoFrame::Format>, choices, "offering", QList<VideoFrame::Format>, formats);
-    AbstractVideoGraphicsPainter *painter = painterFactory.createPainter(choices);
-    pBACKEND_CALL1("choose", VideoFrame::Format, painterFactory.chosenFormat());
-    return painter;
 }
 
 void VideoGraphicsObject::frameReady()
@@ -241,12 +290,25 @@ void VideoGraphicsObject::frameReady()
 void VideoGraphicsObject::reset()
 {
     P_D(VideoGraphicsObject);
+    // Do not reset the spyFormats as they will not change.
     d->paintedOnce = false;
     d->gotSize = false;
+
+    // The painter is reset because the backend may choose another format for
+    // another file (better conversion for some codec etc.)
     if (d->graphicsPainter) {
         delete d->graphicsPainter;
         d->graphicsPainter = 0;
     }
 }
 
+void VideoGraphicsObject::setSpyFormats(QMap<GraphicsPainterType,QList<VideoFrame::Format> > formats)
+{
+    P_D(VideoGraphicsObject);
+    d->spyFormats = formats;
+    // TODO: fake paint signal to ensure play() is issued?
+}
+
 } // namespace Phonon
+
+#include "moc_videographicsobject.cpp"

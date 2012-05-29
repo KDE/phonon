@@ -59,9 +59,10 @@ public:
      * \param offers the possible formats (may be empty)
      * \returns the preferred choice or Invalid
      */
-    virtual VideoFrame::Format offering(QList<VideoFrame::Format> offers) const = 0;
+    virtual QList<VideoFrame::Format> offering(QList<VideoFrame::Format> offers) = 0;
 
-    /** Chooses \param format as format */
+    // --------------------------- Q_INVOKABLES ----------------------------- //
+    /** Chooses \param format as frame format */
     virtual void choose(VideoFrame::Format format) = 0;
 
     // ------------------------------ Signals ------------------------------- //

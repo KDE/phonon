@@ -9,6 +9,7 @@ set(declarative_SRCS
     plugin.cpp
     subtitleelement.cpp
     volumefadereffectelement.cpp
+    videoformatspy.cpp
     videooutputelement.cpp
 
     # Work around bug in QtCreator not showing important things

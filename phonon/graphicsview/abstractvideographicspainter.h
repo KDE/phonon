@@ -83,12 +83,16 @@ public:
     /** Destructor. */
     virtual ~AbstractVideoGraphicsPainter() {}
 
-protected:
-    /** Constructor. */
-    AbstractVideoGraphicsPainter() {}
+    bool inited() const { return m_inited; }
 
-    /// The frame an implementatin is supposed to work with.
+protected:
+    AbstractVideoGraphicsPainter() : m_frame(0), m_inited(false) {}
+
+    /** The frame an implementatin is supposed to work with. */
     const VideoFrame *m_frame;
+
+    /** Whether or not the painter was inited */
+    bool m_inited;
 };
 
 } // namespace Phonon

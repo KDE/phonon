@@ -30,11 +30,11 @@ GlPainter::GlPainter() :
 
 GlPainter::~GlPainter()
 {
-    //        if (m_context) {
-    //            m_context->makeCurrent();
-    //            m_context = 0;
-    //            glDeleteTextures(m_textureCount, m_textureIds);
-    //        }
+#warning context may be long gone, leading to crashery
+//    if (m_context) {
+//        m_context->makeCurrent();
+//        glDeleteTextures(m_textureCount, m_textureIds);
+//    }
 }
 
 void GlPainter::setContext(QGLContext *context)

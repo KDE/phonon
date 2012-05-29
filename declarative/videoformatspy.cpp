@@ -19,42 +19,23 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "qpainterpainter.h"
-
-#include <QtGui/QImage>
-#include <QtGui/QPainter>
+#include "videoformatspy.h"
 
 namespace Phonon {
+namespace Declarative {
 
-QPainterPainter::QPainterPainter()
+VideoFormatSpyElement::VideoFormatSpyElement(QDeclarativeItem *parent)
+    : QDeclarativeItem(parent)
 {
+    setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
-QPainterPainter:: ~QPainterPainter()
+void VideoFormatSpyElement::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *)
 {
+    m_formats = VideoGraphicsPainterMetaFactory::detectTypes();
+    setFlag(QGraphicsItem::ItemHasNoContents, true);
+    emit formatsChanged(m_formats);
 }
 
-QList<VideoFrame::Format> QPainterPainter::supportedFormats() const
-{
-    return QList<VideoFrame::Format>() << VideoFrame::Format_RGB32;
-}
-
-void QPainterPainter::init()
-{
-    m_inited = true;
-}
-
-void QPainterPainter::paint(QPainter *painter, QRectF target)
-{
-    // QImage can only handle packed formats.
-    if (m_frame->planeCount != 1 || m_frame->format != VideoFrame::Format_RGB32) {
-        painter->drawImage(target, QImage());
-    } else {
-        painter->drawImage(target,
-                           QImage(reinterpret_cast<const uchar *>(m_frame->plane[0].constData()),
-                                  m_frame->width, m_frame->height,
-                                  QImage::Format_RGB32));
-    }
-}
-
+} // namespace Declarative
 } // namespace Phonon

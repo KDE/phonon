@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2011-2012 Harald Sitter <sitter@kde.org>
     Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
 
     This library is free software; you can redistribute it and/or
@@ -42,6 +42,7 @@ static const char *s_phonon_yv12Shader =
 "uniform sampler2D texV;\n"
 "uniform mediump mat4 colorMatrix;\n"
 "varying highp vec2 textureCoord;\n"
+"uniform lowp float opacity;"
 "void main(void)\n"
 "{\n"
 "    highp vec4 color = vec4(\n"
@@ -49,7 +50,7 @@ static const char *s_phonon_yv12Shader =
 "           texture2D(texV, textureCoord.st).r,\n" // !!!! mind the swp
 "           texture2D(texU, textureCoord.st).r,\n"
 "           1.0);\n"
-"    gl_FragColor = colorMatrix * color;\n"
+"    gl_FragColor = colorMatrix * color * opacity;\n"
 "}\n";
 
 GlslPainter::GlslPainter() :
@@ -58,8 +59,11 @@ GlslPainter::GlslPainter() :
 
 GlslPainter::~GlslPainter()
 {
-//    if (m_program)
-//        m_program->deleteLater();
+#warning context may be long gone, leading to crashery
+    if (m_program) {
+        m_program->removeAllShaders();
+        m_program->deleteLater();
+    }
 }
 
 QList<VideoFrame::Format> GlslPainter::supportedFormats() const
@@ -74,17 +78,17 @@ QList<VideoFrame::Format> GlslPainter::supportedFormats() const
         if (QGLShaderProgram::hasOpenGLShaderPrograms(glContext)
                 && glExtensions.contains("ARB_shader_objects")) {
             // We are usable.
-            return formats << VideoFrame::Format_I420
-                           << VideoFrame::Format_YV12
+            return formats << VideoFrame::Format_YV12
                            << VideoFrame::Format_RGB32;
         }
     }
 
-    return formats << VideoFrame::Format_Invalid;
+    return formats;
 }
 
 void GlslPainter::init()
 {
+    m_context = const_cast<QGLContext *>(QGLContext::currentContext());
     Q_ASSERT(m_context);
     m_context->makeCurrent();
 
@@ -127,6 +131,8 @@ void GlslPainter::init()
         qFatal("couldnt link shader");
 
     glGenTextures(m_textureCount, m_textureIds);
+
+    m_inited = true;
 }
 
 void GlslPainter::paint(QPainter *painter, QRectF target)
@@ -225,6 +231,7 @@ void GlslPainter::paint(QPainter *painter, QRectF target)
         m_program->setUniformValue("texRgb", 0);
     }
     m_program->setUniformValue("colorMatrix", m_colorMatrix);
+    m_program->setUniformValue("opacity", GLfloat(painter->opacity()));
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

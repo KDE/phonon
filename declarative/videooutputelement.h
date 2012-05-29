@@ -25,6 +25,7 @@
 #include <QtDeclarative/QDeclarativeItem>
 
 #include "abstractinitable.h"
+#include "videoformatspy.h"
 
 namespace Phonon {
 
@@ -69,9 +70,12 @@ public:
     bool isFullScreen() const;
     void setFullScreen(bool fullScreen);
 
+    void setSpy(VideoFormatSpyElement *spy);
+
 signals:
     void cursorVisibilityChanged();
     void fullScreenChanged();
+    void spyChanged();
 
 protected:
     /// Forwards geometry changes to the internal VideoGraphicsObject.
@@ -85,6 +89,9 @@ private:
 
     /// Whether the element is in fullscreen.
     bool m_isFullScreen;
+
+    /*** Spy or 0 */
+    VideoFormatSpyElement *m_spy;
 };
 
 } // namespace Declarative

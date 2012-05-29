@@ -79,17 +79,17 @@ QList<VideoFrame::Format> GlArbPainter::supportedFormats() const
         const QByteArray glExtensions(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)));
         if (glExtensions.contains("ARB_fragment_program")) {
             // We are usable.
-            return formats << VideoFrame::Format_I420
-                           << VideoFrame::Format_YV12
+            return formats << VideoFrame::Format_YV12
                            << VideoFrame::Format_RGB32;
         }
     }
 
-    return formats << VideoFrame::Format_Invalid;
+    return formats;
 }
 
 void GlArbPainter::init()
 {
+    m_context = const_cast<QGLContext *>(QGLContext::currentContext());
     Q_ASSERT(m_context);
     m_context->makeCurrent();
 
@@ -153,6 +153,8 @@ void GlArbPainter::init()
     }
 
     glGenTextures(m_textureCount, m_textureIds);
+
+    m_inited = true;
 }
 
 void GlArbPainter::paint(QPainter *painter, QRectF target)

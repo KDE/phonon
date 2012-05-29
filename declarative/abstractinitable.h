@@ -132,7 +132,8 @@ protected:
         }
     }
 
-    /// The Phonon::MediaObject that forms the root of the media graph this initable belongs to
+    /** The Phonon::MediaObject that forms the root of the media graph this initable belongs to */
+    // Parented by MediaElement.
     MediaObject *m_mediaObject;
 
     /// The Phonon::Path between Phonon::MediaObject and m_audioOutput

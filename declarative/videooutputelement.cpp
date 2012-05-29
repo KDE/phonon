@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2011-2012 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,9 +22,7 @@
 #include "videooutputelement.h"
 
 #include <QtGui/QApplication>
-#include <QtGui/QPainter>
 
-#include <phonon/audiooutput.h>
 #include <phonon/mediaobject.h>
 #include <phonon/graphicsview/videographicsobject.h>
 
@@ -34,7 +32,8 @@ namespace Declarative {
 VideoOutputElement::VideoOutputElement(QDeclarativeItem *parent) :
     QDeclarativeItem(parent),
     m_graphicsObject(0),
-    m_isFullScreen(false)
+    m_isFullScreen(false),
+    m_spy(0)
 {
 }
 
@@ -54,6 +53,26 @@ void VideoOutputElement::init(MediaObject *mediaObject)
 
     m_mediaObject = mediaObject;
     createPath(m_mediaObject, m_graphicsObject);
+
+    // Don't auto detect the spy if the user set one manually.
+    if (!m_spy) {
+        QDeclarativeItem *rootItem = parentItem();
+        while (rootItem->parentItem())
+            rootItem = rootItem->parentItem();
+
+        bool foundSpy = false;
+        foreach (QObject *qobject, rootItem->children()) {
+            VideoFormatSpyElement *spy = qobject_cast<VideoFormatSpyElement *>(qobject);
+            if (spy) {
+                setSpy(spy);
+                foundSpy = true;
+                break;
+            }
+        }
+
+        if (!foundSpy)
+            setSpy(new VideoFormatSpyElement(rootItem));
+    }
 
     initChildren(this);
 }
@@ -83,6 +102,17 @@ void VideoOutputElement::setFullScreen(bool fullScreen)
         qApp->activeWindow()->showNormal();
     }
     emit fullScreenChanged();
+}
+
+void VideoOutputElement::setSpy(VideoFormatSpyElement *spy)
+{
+    if (m_spy && m_spy != spy)
+        disconnect(m_spy, 0, m_graphicsObject, 0);
+    m_spy = spy;
+    connect(m_spy, SIGNAL(formatsChanged(QMap<GraphicsPainterType,QList<VideoFrame::Format> >)),
+            m_graphicsObject, SLOT(setSpyFormats(QMap<GraphicsPainterType,QList<VideoFrame::Format> >)));
+    m_graphicsObject->setSpyFormats(m_spy->formats());
+    emit spyChanged();
 }
 
 void VideoOutputElement::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)

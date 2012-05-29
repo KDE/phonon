@@ -48,6 +48,9 @@
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 
+
+#include <graphicsview/videographicsobject.h>
+
 #define PHONON_CLASSNAME MediaObject
 #define PHONON_INTERFACENAME MediaObjectInterface
 
@@ -110,6 +113,19 @@ void MediaObject::play()
 {
     P_D(MediaObject);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
+
+        VideoGraphicsObject *vgo = 0;
+        foreach (const Path &path, d->outputPaths) {
+            if (vgo = dynamic_cast<VideoGraphicsObject *>(path.sink())) {
+                // Play() is delayed until we had a paint event.
+                if (!vgo->canNegotiate()) {
+                    pWarning() << "VideoGraphicsObject not ready to be played because it has not received a paint() call yet, delaying playback.";
+                    connect(vgo, SIGNAL(gotPaint()), this, SLOT(play()));
+                    return;
+                }
+            }
+        }
+
         INTERFACE_CALL(play());
     }
 }

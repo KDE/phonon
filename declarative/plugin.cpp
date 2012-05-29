@@ -27,8 +27,12 @@
 #include "mediaelement.h"
 #include "metadata.h"
 #include "subtitleelement.h"
+#include "videoformatspy.h"
 #include "videooutputelement.h"
 #include "volumefadereffectelement.h"
+
+#include <QDeclarativeEngine>
+#include <QDeclarativeContext>
 
 namespace Phonon
 {

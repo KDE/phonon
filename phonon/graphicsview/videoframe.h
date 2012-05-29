@@ -22,6 +22,8 @@
 #ifndef PHONON_VIDEOFRAME_H
 #define PHONON_VIDEOFRAME_H
 
+#include <QtCore/QByteArray>
+
 namespace Phonon {
 
 /**

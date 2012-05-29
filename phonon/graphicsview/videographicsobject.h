@@ -23,13 +23,33 @@
 #define PHONON_VIDEOGRAPHICSOBJECT_H
 
 #include <QtGui/QGraphicsObject>
+#include <QtCore/QMap>
 
 #include "medianode.h"
+
+// FIXME: I really do not want a videoframe include :(
+#include "videoframe.h"
+
+// FIXME: review symbol exposure of QGV stuff
 
 namespace Phonon {
 
 class VideoFrame;
+class VideoGraphicsFormatSpy;
 class VideoGraphicsObjectPrivate;
+
+enum GraphicsPainterType {
+    GraphicsPainterNone,
+    GraphicsPainterGlsl,
+    GraphicsPainterGlArb,
+    GraphicsPainterQPainter
+};
+
+class PHONON_EXPORT VideoGraphicsPainterMetaFactory
+{
+public:
+    static QMap<GraphicsPainterType, QList<VideoFrame::Format> > detectTypes();
+};
 
 /**
  * This class is a video representation implementation for QGraphicsViews/Scenes.
@@ -111,12 +131,26 @@ public:
      */
     bool isReady() const;
 
+    // FIXME: q_invoke?
+    bool canNegotiate() const;
+
+public slots:
+    // FIXME: q_invoke?
+    void setSpyFormats(QMap<GraphicsPainterType, QList<VideoFrame::Format> > formats);
+
 signals:
     void ready();
 
+    // FIXME: ew?!
+    void gotPaint();
+
+    // TODO: make Q_PRIVATE
 private slots:
     void frameReady();
     void reset();
+
+private:
+    Q_PRIVATE_SLOT(k_func(), void _p_negotiateFormat())
 };
 
 } // namespace Phonon
