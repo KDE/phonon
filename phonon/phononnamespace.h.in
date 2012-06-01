@@ -80,23 +80,12 @@ namespace Phonon
      * \see MediaSource(Phonon::DiscType, const QString &deviceName)
      */
     enum DiscType {
-        /**
-         * No disc was selected. This is only useful as a return value from
-         * MediaSource::distType();
-         */
-        NoDisc = -1,
-        /**
-         * Identifies Audio CDs.
-         */
-        Cd = 0,
-        /**
-         * Identifies DVDs (not arbitrary data DVDs, only movie DVDs).
-         */
-        Dvd = 1,
-        /**
-         * Identifies Video CDs.
-         */
-        Vcd = 2
+        NoDisc = -1, /** < No disc was selected. Only used as default value in
+                          \class MediaSource */
+        Cd = 0,      /** < Audio CD */
+        Dvd = 1,     /** < Video DVD (no arbitrary data DVDs) */
+        Vcd = 2,     /** < Video CD */
+        BluRay = 3   /** < BluRay video disc */
     };
 
     /**
