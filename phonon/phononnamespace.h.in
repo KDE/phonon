@@ -85,7 +85,7 @@ namespace Phonon
         Cd = 0,      /** < Audio CD */
         Dvd = 1,     /** < Video DVD (no arbitrary data DVDs) */
         Vcd = 2,     /** < Video CD */
-        BluRay = 3   /** < BluRay video disc */
+        BluRay = 3   /** < BluRay video disc \since 4.7.0 */
     };
 
     /**
