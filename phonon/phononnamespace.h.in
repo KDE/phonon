@@ -98,7 +98,6 @@ namespace Phonon
          */
         Vcd = 2
     };
-    QDebug operator <<(QDebug dbg, const DiscType &);
 
     /**
      * Provided as keys for MediaObject::metaData for convenience, in addition to the strings defined in
@@ -139,7 +138,6 @@ namespace Phonon
         DescriptionMetaData,
         MusicBrainzDiscIdMetaData
     };
-    QDebug operator <<(QDebug dbg, const MetaData &);
 
     /**
      * The state the media producing object is in at the moment.
@@ -177,7 +175,6 @@ namespace Phonon
          */
         ErrorState
     };
-    QDebug operator <<(QDebug dbg, const State &);
 
     /**
      * Set's the category your program should be listed in in the mixer.
@@ -230,7 +227,6 @@ namespace Phonon
          */
         LastCategory = AccessibilityCategory
     };
-    QDebug operator <<(QDebug dbg, const Category &);
 
     /**
      * What capture category does an application adhere to. Mainly
@@ -263,7 +259,6 @@ namespace Phonon
          */
         ControlCaptureCategory = AccessibilityCategory
     };
-    QDebug operator <<(QDebug dbg, const CaptureCategory &);
 
     namespace Capture {
         /**
@@ -274,7 +269,6 @@ namespace Phonon
             VideoType
         };
     }
-    QDebug operator <<(QDebug dbg, const Capture::DeviceType &);
 
     /**
      * Tells your program how to recover from an error.
@@ -298,7 +292,6 @@ namespace Phonon
          */
         FatalError = 2
     };
-    QDebug operator <<(QDebug dbg, const ErrorType &);
 
     /**
      * Returns a (translated) string to show to the user identifying the given
@@ -326,43 +319,22 @@ namespace Phonon
 
 QT_END_NAMESPACE
 
-//X class kdbgstream;
-//X #include <kdebug.h>
-//X /**
-//X  * Implements needed operator to use Phonon::State with kDebug
-//X  */
-//X inline PHONON_EXPORT kdbgstream &operator<<(kdbgstream  & stream, const Phonon::State state)
-//X {
-//X     switch(state)
-//X     {
-//X     case Phonon::ErrorState:
-//X         stream << "ErrorState";
-//X         break;
-//X     case Phonon::LoadingState:
-//X         stream << "LoadingState";
-//X         break;
-//X     case Phonon::StoppedState:
-//X         stream << "StoppedState";
-//X         break;
-//X     case Phonon::PlayingState:
-//X         stream << "PlayingState";
-//X         break;
-//X     case Phonon::BufferingState:
-//X         stream << "BufferingState";
-//X         break;
-//X     case Phonon::PausedState:
-//X         stream << "PausedState";
-//X         break;
-//X     }
-//X     return stream;
-//X }
-
 #include <QtCore/QMetaType>
 
 Q_DECLARE_METATYPE(Phonon::State)
 Q_DECLARE_METATYPE(Phonon::ErrorType)
 Q_DECLARE_METATYPE(Phonon::Category)
 Q_DECLARE_METATYPE(Phonon::CaptureCategory)
+
+#ifndef PHONON_NO_DEBUG
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::DiscType &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MetaData &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::State &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Category &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::CaptureCategory &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Capture::DeviceType &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::ErrorType &);
+#endif // PHONON_NO_DEBUG
 
 QT_END_HEADER
 

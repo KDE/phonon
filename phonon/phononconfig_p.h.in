@@ -5,10 +5,10 @@
 
 #include <QtCore/qfeatures.h>
 
-/* Whether to build with D-Bus support */
+/** Whether to build with D-Bus support */
 #cmakedefine PHONON_NO_DBUS 1
 
-/* If QT_NO_DBUS is defined, always set PHONON_NO_DBUS */
+/** If QT_NO_DBUS is defined, always set PHONON_NO_DBUS */
 #if !defined(PHONON_NO_DBUS) && defined(QT_NO_DBUS)
 #define PHONON_NO_DBUS 1
 #endif
