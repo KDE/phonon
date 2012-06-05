@@ -123,7 +123,11 @@ endif(APPLE)
 # RPATH directories outside the current CMAKE_BINARY_DIR and also the library 
 # install directory. Alex
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
-set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemPlatformLibDir)
+list(FIND CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemCxxLibDir)
+if("${_isSystemPlatformLibDir}" STREQUAL "-1" AND "${_isSystemCxxLibDir}" STREQUAL "-1")
+   set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+endif("${_isSystemPlatformLibDir}" STREQUAL "-1" AND "${_isSystemCxxLibDir}" STREQUAL "-1")
 
 
 # Uninstall Target
