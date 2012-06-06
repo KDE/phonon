@@ -8,6 +8,7 @@ cmake_policy(SET CMP0002 OLD)
 include(CTest)
 include(CTestConfig.cmake)
 
+option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
@@ -19,6 +20,11 @@ message("-- !!!!! Tests have been removed and need to be redone !!!!!")
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
+
+if (PHONON_ASSERT_STATES)
+    message(STATUS "Enabling backend state machine validation.")
+    add_definitions(-DPHONON_ASSERT_STATES)
+endif (PHONON_ASSERT_STATES)
 
 if (PHONON_BUILD_TESTS)
     message(STATUS "Building tests.")

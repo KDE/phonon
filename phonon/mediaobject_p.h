@@ -127,6 +127,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #ifdef HAVE_QZEITGEIST
             log = new QZeitgeist::Log();
 #endif
+            validateStates = !(qgetenv("PHONON_ASSERT_STATES").isEmpty());
         }
 
         ~MediaObjectPrivate()
@@ -162,6 +163,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #ifdef HAVE_QZEITGEIST
         QZeitgeist::Log *log;
 #endif
+        bool validateStates;
 };
 }
 

@@ -51,6 +51,12 @@
 #define PHONON_CLASSNAME MediaObject
 #define PHONON_INTERFACENAME MediaObjectInterface
 
+#ifdef PHONON_ASSERT_STATES
+#define PHONON_INVALID_STATE(msg) Q_ASSERT_X(0, __FILE__, msg)
+#else
+#define PHONON_INVALID_STATE(msg) qDebug() << "State assert failed:" << msg
+#endif
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -501,39 +507,49 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 
 void MediaObjectPrivate::_k_validateFinished()
 {
+    if (!validateStates)
+        return;
     Q_Q(MediaObject);
     if (q->state() != Phonon::PlayingState)
-        Q_ASSERT_X(0, __FILE__, "Playback finished when we weren't playing!");
+        PHONON_INVALID_STATE("Playback finished when we weren't playing!");
 }
 
 void MediaObjectPrivate::_k_validateSourceChange()
 {
+    if (!validateStates)
+        return;
     Q_Q(MediaObject);
     if (q->state() != Phonon::StoppedState && q->state() != Phonon::PlayingState && q->state() != Phonon::PausedState && q->state() != Phonon::BufferingState) {
-        Q_ASSERT_X(0, __FILE__, "Source got changed outside a valid state");
+        PHONON_INVALID_STATE("Source got changed outside a valid state");
     }
 }
 
 void MediaObjectPrivate::_k_validateBufferStatus()
 {
+    if (!validateStates)
+        return;
     Q_Q(MediaObject);
     if (q->state() != Phonon::PlayingState && q->state() != Phonon::PausedState && q->state() != Phonon::BufferingState) {
-        Q_ASSERT_X(0, __FILE__, "Buffer status changed when we weren't supposed to be buffering");
+        PHONON_INVALID_STATE("Buffer status changed when we weren't supposed to be buffering");
     }
 }
 
 void MediaObjectPrivate::_k_validateTick(qint64 pos)
 {
+    if (!validateStates)
+        return;
     Q_Q(MediaObject);
     if (q->state() != Phonon::PlayingState)
-        Q_ASSERT_X(0, __FILE__, "Recieved tick outside of accepted states");
+        PHONON_INVALID_STATE("Recieved tick outside of accepted states.");
 }
 
 void MediaObjectPrivate::_k_validateStateChange(Phonon::State newstate, Phonon::State oldstate)
 {
+    if (!validateStates)
+        return;
     if (!validateStateTransition(newstate, oldstate)) {
         qDebug() << "Invalid state transition:" << stateName(oldstate) << "->" << stateName(newstate);
-        Q_ASSERT_X(0, __FILE__, "Invalid state transition");
+        PHONON_INVALID_STATE("Invalid state transition");
     } else {
         qDebug() << "Valid state transition:" << stateName(oldstate) << "->" << stateName(newstate);
     }
@@ -886,7 +902,8 @@ QString MediaObjectPrivate::stateName(Phonon::State state) const
         case Phonon::ErrorState:
             return QLatin1String("Error");
     }
-    Q_ASSERT_X(0, __FILE__, "Unkown State");
+    if (validateStates)
+        PHONON_INVALID_STATE("Unknown State");
     return QLatin1String("");
 }
 
