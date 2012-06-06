@@ -49,19 +49,6 @@ QT_BEGIN_NAMESPACE
 namespace Phonon
 {
 
-static inline bool callSetOutputDevice(AudioOutputPrivate *const d, int index)
-{
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive())
-        return pulse->setOutputDevice(d->getStreamUuid(), index);
-
-    Iface<IFACES2> iface(d);
-    if (iface) {
-        return iface->setOutputDevice(AudioOutputDevice::fromIndex(index));
-    }
-    return Iface<IFACES0>::cast(d)->setOutputDevice(index);
-}
-
 static inline bool callSetOutputDevice(AudioOutputPrivate *const d, const AudioOutputDevice &dev)
 {
     PulseSupport *pulse = PulseSupport::getInstance();
@@ -78,20 +65,20 @@ static inline bool callSetOutputDevice(AudioOutputPrivate *const d, const AudioO
 AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
     : AbstractAudioOutput(*new AudioOutputPrivate, parent)
 {
-    K_D(AudioOutput);
+    P_D(AudioOutput);
     d->init(category);
 }
 
 AudioOutput::AudioOutput(QObject *parent)
     : AbstractAudioOutput(*new AudioOutputPrivate, parent)
 {
-    K_D(AudioOutput);
+    P_D(AudioOutput);
     d->init(NoCategory);
 }
 
 void AudioOutputPrivate::init(Phonon::Category c)
 {
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
 #ifndef PHONON_NO_DBUS
     adaptor = new AudioOutputAdaptor(q);
     static unsigned int number = 0;
@@ -134,7 +121,7 @@ void AudioOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     m_backendObject = Factory::createAudioOutput(q);
     // (cg) Is it possible that PulseAudio initialisation means that the device here is not valid?
     // User reports seem to suggest this possibility but I can't see how :s.
@@ -147,13 +134,13 @@ void AudioOutputPrivate::createBackendObject()
 
 QString AudioOutput::name() const
 {
-    K_D(const AudioOutput);
+    P_D(const AudioOutput);
     return d->name;
 }
 
 void AudioOutput::setName(const QString &newName)
 {
-    K_D(AudioOutput);
+    P_D(AudioOutput);
     if (d->name == newName) {
         return;
     }
@@ -175,7 +162,7 @@ static const qreal VOLTAGE_TO_LOUDNESS_EXPONENT = qreal(1.0/LOUDNESS_TO_VOLTAGE_
 
 void AudioOutput::setVolume(qreal volume)
 {
-    K_D(AudioOutput);
+    P_D(AudioOutput);
     d->volume = volume;
     PulseSupport *pulse = PulseSupport::getInstance();
     if (k_ptr->backendObject()) {
@@ -199,7 +186,7 @@ void AudioOutput::setVolume(qreal volume)
 
 qreal AudioOutput::volume() const
 {
-    K_D(const AudioOutput);
+    P_D(const AudioOutput);
     if (d->muted || !d->m_backendObject || PulseSupport::getInstance()->isActive())
         return d->volume;
     return pow(INTERFACE_CALL(volume()), LOUDNESS_TO_VOLTAGE_EXPONENT);
@@ -212,7 +199,7 @@ static const qreal log10over20 = qreal(0.1151292546497022842); // ln(10) / 20
 
 qreal AudioOutput::volumeDecibel() const
 {
-    K_D(const AudioOutput);
+    P_D(const AudioOutput);
     if (d->muted || !d->m_backendObject || PulseSupport::getInstance()->isActive())
         return log(d->volume) / log10over20;
     return 0.67 * log(INTERFACE_CALL(volume())) / log10over20;
@@ -225,13 +212,13 @@ void AudioOutput::setVolumeDecibel(qreal newVolumeDecibel)
 
 bool AudioOutput::isMuted() const
 {
-    K_D(const AudioOutput);
+    P_D(const AudioOutput);
     return d->muted;
 }
 
 void AudioOutput::setMuted(bool mute)
 {
-    K_D(AudioOutput);
+    P_D(AudioOutput);
     if (d->muted != mute) {
         PulseSupport *pulse = PulseSupport::getInstance();
         if (mute) {
@@ -257,19 +244,19 @@ void AudioOutput::setMuted(bool mute)
 
 Category AudioOutput::category() const
 {
-    K_D(const AudioOutput);
+    P_D(const AudioOutput);
     return d->category;
 }
 
 AudioOutputDevice AudioOutput::outputDevice() const
 {
-    K_D(const AudioOutput);
+    P_D(const AudioOutput);
     return d->device;
 }
 
 bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
 {
-    K_D(AudioOutput);
+    P_D(AudioOutput);
     if (!newAudioOutputDevice.isValid()) {
         d->outputDeviceOverridden = d->forceMove = false;
         const int newIndex = GlobalConfig().audioOutputDeviceFor(d->category);
@@ -285,7 +272,7 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
         d->device = newAudioOutputDevice;
     }
     if (k_ptr->backendObject()) {
-        return callSetOutputDevice(d, d->device.index());
+        return callSetOutputDevice(d, d->device);
     }
     return true;
 }
@@ -300,7 +287,7 @@ bool AudioOutputPrivate::aboutToDeleteBackendObject()
 
 void AudioOutputPrivate::setupBackendObject()
 {
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     Q_ASSERT(m_backendObject);
     AbstractAudioOutputPrivate::setupBackendObject();
 
@@ -342,7 +329,7 @@ void AudioOutputPrivate::_k_volumeChanged(qreal newVolume)
 {
     volume = pow(newVolume, LOUDNESS_TO_VOLTAGE_EXPONENT);
     if (!muted) {
-        Q_Q(AudioOutput);
+        P_Q(AudioOutput);
         emit q->volumeChanged(volume);
     }
 }
@@ -350,7 +337,7 @@ void AudioOutputPrivate::_k_volumeChanged(qreal newVolume)
 void AudioOutputPrivate::_k_mutedChanged(bool newMuted)
 {
     muted = newMuted;
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     emit q->mutedChanged(newMuted);
 }
 
@@ -361,7 +348,7 @@ void AudioOutputPrivate::_k_revertFallback()
     }
     device = AudioOutputDevice::fromIndex(deviceBeforeFallback);
     callSetOutputDevice(this, device);
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     emit q->outputDeviceChanged(device);
 #ifndef PHONON_NO_DBUS
     emit adaptor->outputDeviceIndexChanged(device.index());
@@ -473,7 +460,7 @@ static struct
 
 void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &device2, DeviceChangeType type)
 {
-    Q_Q(AudioOutput);
+    P_Q(AudioOutput);
     deviceBeforeFallback = device.index();
     device = device2;
     emit q->outputDeviceChanged(device2);

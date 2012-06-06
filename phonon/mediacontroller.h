@@ -124,7 +124,7 @@ class PHONON_EXPORT MediaController : public QObject
         /**
          * Get the list of currently available menus for the present media source.
          *
-         * The list is always ordered by occurance in the NavgiationMenu enum.
+         * The list is always ordered by occurrence in the NavgiationMenu enum.
          * Should you wish to use a different order in your application you will
          * have to make appropriate changes.
          *

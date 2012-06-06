@@ -18,18 +18,22 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # Support PULSEAUDIO_MINIMUM_VERSION for compatibility:
-if(NOT PulseAudio_FIND_VERSION)
-  set(PulseAudio_FIND_VERSION "${PULSEAUDIO_MINIMUM_VERSION}")
-endif(NOT PulseAudio_FIND_VERSION)
+if(NOT PULSEAUDIO_FIND_VERSION)
+  set(PULSEAUDIO_FIND_VERSION "${PULSEAUDIO_MINIMUM_VERSION}")
+endif(NOT PULSEAUDIO_FIND_VERSION)
 
 # the minimum version of PulseAudio we require
-if(NOT PulseAudio_FIND_VERSION)
-  set(PulseAudio_FIND_VERSION "0.9.9")
-endif(NOT PulseAudio_FIND_VERSION)
+if(NOT PULSEAUDIO_FIND_VERSION)
+  set(PULSEAUDIO_FIND_VERSION "0.9.9")
+endif(NOT PULSEAUDIO_FIND_VERSION)
+
+# Newer PA's ship a PackageConfig.cmake file, so lets try and use it.
+macro_optional_find_package(PulseAudio ${PULSEAUDIO_FIND_VERSION} QUIET NO_MODULE)
+if (NOT PULSEAUDIO_FOUND)
 
 if (NOT WIN32)
    include(FindPkgConfig)
-   pkg_check_modules(PC_PULSEAUDIO QUIET libpulse>=${PulseAudio_FIND_VERSION})
+   pkg_check_modules(PC_PULSEAUDIO QUIET libpulse>=${PULSEAUDIO_FIND_VERSION})
    pkg_check_modules(PC_PULSEAUDIO_MAINLOOP QUIET libpulse-mainloop-glib)
 endif (NOT WIN32)
 
@@ -79,7 +83,7 @@ endif (PULSEAUDIO_INCLUDE_DIR AND NOT PULSEAUDIO_VERSION)
 
 if (PULSEAUDIO_INCLUDE_DIR AND PULSEAUDIO_LIBRARY)
   include(MacroEnsureVersion)
-  macro_ensure_version("${PulseAudio_FIND_VERSION}" "${PULSEAUDIO_VERSION}" PULSEAUDIO_FOUND)
+  macro_ensure_version("${PULSEAUDIO_FIND_VERSION}" "${PULSEAUDIO_VERSION}" PULSEAUDIO_FOUND)
 else (PULSEAUDIO_INCLUDE_DIR AND PULSEAUDIO_LIBRARY)
    set(PULSEAUDIO_FOUND FALSE)
 endif (PULSEAUDIO_INCLUDE_DIR AND PULSEAUDIO_LIBRARY)
@@ -98,3 +102,5 @@ else (PULSEAUDIO_FOUND)
 endif (PULSEAUDIO_FOUND)
 
 mark_as_advanced(PULSEAUDIO_INCLUDE_DIR PULSEAUDIO_LIBRARY PULSEAUDIO_MAINLOOP_LIBRARY)
+
+endif (NOT PULSEAUDIO_FOUND)

@@ -25,7 +25,7 @@
 #include "audiooutput.h"
 #include "videowidget.h"
 #include "path.h"
-#include <QtGui/QBoxLayout>
+#include <QBoxLayout>
 #include <QtCore/QEvent>
 
 QT_BEGIN_NAMESPACE

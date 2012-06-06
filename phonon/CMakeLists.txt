@@ -2,29 +2,32 @@ if (PHONON_BUILD_EXPERIMENTAL)
     add_subdirectory(experimental)
 endif (PHONON_BUILD_EXPERIMENTAL)
 
-set(PULSEAUDIO_FIND_VERSION "0.9.15")
-macro_optional_find_package(PulseAudio)
+macro_optional_find_package(PulseAudio 0.9.15)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
 macro_optional_find_package(GLIB2)
 macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
 
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
-   set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?" FORCE) # this one must be forced into the cache so it exists also in the toplevel CMakeLists.txt
-   add_definitions(-DHAVE_PULSEAUDIO)
+   set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?")
+   if(PHONON_PULSESUPPORT)
+       add_definitions(-DHAVE_PULSEAUDIO)
+   endif(PHONON_PULSESUPPORT)
    include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
 else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
-   set(PHONON_PULSESUPPORT FALSE CACHE BOOL "Has Phonon pulseaudio support ?" FORCE) # this one must be forced into the cache so it exists also in the toplevel CMakeLists.txt
+   set(PHONON_PULSESUPPORT FALSE CACHE BOOL "Has Phonon pulseaudio support ?")
    set(PULSEAUDIO_INCLUDE_DIR "")
    set(PULSEAUDIO_LIBRARY "")
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-macro_optional_find_package(QZeitgeist NO_MODULE )
-macro_log_feature(QZEITGEIST_FOUND "QtZeitgeist" "Qt bindings for Zeitgeist" "http://gitorious.org/kde-zeitgeist/libqzeitgeist/" FALSE)
+macro_optional_find_package(QZeitgeist 0.8)
+macro_log_feature(QZEITGEIST_FOUND "QZeitgeist" "Qt bindings for Zeitgeist" "http://projects.kde.org/kdesupport/libqzeitgeist/" FALSE "0.8")
 if (QZEITGEIST_FOUND)
     add_definitions(-DHAVE_QZEITGEIST)
     include_directories(${QZEITGEIST_INCLUDE_DIR})
 endif(QZEITGEIST_FOUND)
+
+include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
 set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
@@ -62,11 +65,11 @@ set(phonon_LIB_SRCS
    videowidget.cpp
    )
 
-if (PULSEAUDIO_FOUND)
+if (PHONON_PULSESUPPORT)
    list(APPEND phonon_LIB_SRCS
       pulsestream.cpp
    )
-endif (PULSEAUDIO_FOUND)
+endif (PHONON_PULSESUPPORT)
 
 if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
    list(APPEND phonon_LIB_SRCS
@@ -79,13 +82,13 @@ if (PHONON_NO_PLATFORMPLUGIN)
     add_definitions(-DQT_NO_PHONON_PLATFORMPLUGIN)
 endif (PHONON_NO_PLATFORMPLUGIN)
 
-add_definitions(-DPHONON_LIBRARY_PATH="${PLUGIN_INSTALL_DIR}/plugins")
+add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
 target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
+if (PHONON_PULSESUPPORT)
     target_link_libraries(phonon ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
-endif (GLIB2_FOUND AND PULSEAUDIO_FOUND)
+endif (PHONON_PULSESUPPORT)
 
 if (QZEITGEIST_FOUND)
     target_link_libraries(phonon ${QZEITGEIST_LIBRARY})
@@ -114,8 +117,11 @@ set_target_properties(phonon PROPERTIES
 
 
 install(TARGETS phonon EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
+# We write these to a strange place so the demos can find them properly
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
+# Required for demos/cmake/FindPhonon.cmake
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h)
 
 install(FILES
    abstractaudiooutput.h

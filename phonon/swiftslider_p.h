@@ -23,7 +23,7 @@
 #ifndef SWIFTSLIDER_H
 #define SWIFTSLIDER_H
 
-#include <QtGui/QSlider>
+#include <QSlider>
 
 QT_BEGIN_NAMESPACE
 

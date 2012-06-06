@@ -21,7 +21,7 @@
 
 #include "capture.h"
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QtCore/QUrl>
 
 int main(int argc, char** argv)

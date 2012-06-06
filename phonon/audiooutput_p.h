@@ -36,7 +36,7 @@ class AudioOutputAdaptor;
 
 class AudioOutputPrivate : public AbstractAudioOutputPrivate
 {
-    Q_DECLARE_PUBLIC(AudioOutput)
+    P_DECLARE_PUBLIC(AudioOutput)
     PHONON_PRIVATECLASS
     public:
         inline static AudioOutputPrivate *cast(MediaNodePrivate *x)

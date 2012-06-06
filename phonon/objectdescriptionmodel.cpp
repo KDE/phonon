@@ -29,7 +29,8 @@
 #include "phononnamespace_p.h"
 #include <QtCore/QMimeData>
 #include <QtCore/QStringList>
-#include <QtGui/QIcon>
+#include <QIcon>
+#include <QPainter>
 #include "factory_p.h"
 
 QT_BEGIN_NAMESPACE
@@ -162,12 +163,28 @@ QVariant ObjectDescriptionModelData::data(const QModelIndex &index, int role) co
         break;
     case Qt::DecorationRole:
         {
+            /* Returns an icon if available. Paint a subicon representing the entity (platform
+             * plugin or backend) which discovered this object, if it is specified */
             QVariant icon = d->data.at(index.row())->property("icon");
+            QVariant discovererIcon = d->data.at(index.row())->property("discovererIcon");
             if (icon.isValid()) {
                 if (icon.type() == QVariant::String) {
-                    return Platform::icon(icon.toString());
-                } else if (icon.type() == QVariant::Icon) {
-                    return icon;
+                    icon = Platform::icon(icon.toString());
+                }
+                if (discovererIcon.type() == QVariant::String) {
+                    discovererIcon = Platform::icon(discovererIcon.toString());
+                }
+                if (icon.type() == QVariant::Icon) {
+                    if (discovererIcon.type() == QVariant::Icon) {
+                        // Insert the subicon in the top-right corner of the icon
+                        QPixmap pixmap = icon.value<QIcon>().pixmap(QSize(64, 64));
+                        QPixmap subPixmap = discovererIcon.value<QIcon>().pixmap(QSize(22, 22));
+                        QPainter painter(&pixmap);
+                        painter.drawPixmap(42, 0, subPixmap);
+                        return QIcon(pixmap);
+                    } else {
+                        return icon;
+                    }
                 }
             }
         }

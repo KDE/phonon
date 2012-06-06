@@ -5,26 +5,27 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 # CMP0002: we have multiple targets with the same name for the unit tests
 cmake_policy(SET CMP0002 OLD)
 
+include(CTest)
+include(CTestConfig.cmake)
+
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
-option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
+option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
+option(PHONON_BUILD_DOC "Build the API documentation" OFF)
+option(PHONON_NO_DEBUG "Build without debug" OFF)
 message("-- !!!!! Tests have been removed and need to be redone !!!!!")
 #option(PHONON_BUILD_TESTS "Build the tests" OFF)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
-if (PHONON_NO_CAPTURE)
-    # Definitions to disable the compiling of any capture related components
-    add_definitions(-DPHONON_NO_VIDEOCAPTURE -DPHONON_NO_AUDIOCAPTURE)
-endif (PHONON_NO_CAPTURE)
-
 if (PHONON_BUILD_TESTS)
     message(STATUS "Building tests.")
     enable_testing()
 endif (PHONON_BUILD_TESTS)
 
+set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(cmake/FindPhononInternal.cmake)
@@ -33,13 +34,17 @@ include(cmake/FindPhononInternal.cmake)
 # It is highly advised to think twice before changing those.
 # If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
 set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
-set(PHONON_LIB_MINOR_VERSION "5") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "56") # Bump whenever you feel like it :P
+set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes with new interfaces
+set(PHONON_LIB_PATCH_VERSION "55") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
+
+if(PHONON_NO_DEBUG)
+    add_definitions(-DPHONON_NO_DEBUG)
+endif(PHONON_NO_DEBUG)
 
 include_directories(${QT_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -119,6 +124,9 @@ add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
+if(PHONON_BUILD_DOC)
+    add_subdirectory(doc)
+endif(PHONON_BUILD_DOC)
 add_subdirectory(phonon)
 add_subdirectory(includes)
 
@@ -126,7 +134,7 @@ if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
     #Allows find_package(Phonon) to not die in the demos
     set(PHONON_BUILDSYSTEM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-    set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+    set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/includes/)
     set(PHONON_LIBRARY phonon)
     #Lets the demos find the headers
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})

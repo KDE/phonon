@@ -24,7 +24,7 @@
 #include <phonon/mediasource.h>
 #include <phonon/mediaobject.h>
 
-#include <QtGui/QFileDialog>
+#include <QFileDialog>
 
 MediaController::MediaController(QObject *parent) :
     QObject(parent)

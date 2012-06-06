@@ -21,24 +21,19 @@
 
 #include "capture.h"
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
-#include <QtGui/QMessageBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QMessageBox>
 
 #include <phonon/AudioOutput>
-#include <phonon/AvCapture>
 #include <phonon/MediaObject>
 #include <phonon/VideoWidget>
-#include <phonon/VolumeSlider>
 
 CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f)
 {
-    // Create the objects used for capture and set up a default capture method
+    // Create the objects used for capture
     m_media = new Phonon::MediaObject(this);
-    m_avcapture = new Phonon::Experimental::AvCapture(this);
-    m_captureNode = m_avcapture;
 
     // Create the audio and video outputs (sinks)
     m_audioOutput = new Phonon::AudioOutput(this);
@@ -54,18 +49,7 @@ CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent
     m_stopButton = new QPushButton(this);
     m_stopButton->setText(tr("Stop"));
     m_stopButton->setEnabled(false);
-    connect(m_stopButton, SIGNAL(clicked()), this, SLOT(stop()));
-
-    m_moButton = new QRadioButton(this);
-    m_moButton->setText(tr("Use MediaObject"));
-    m_moButton->setAutoExclusive(true);
-    connect(m_moButton, SIGNAL(toggled(bool)), this, SLOT(enableMOCapture(bool)));
-
-    m_avcapButton = new QRadioButton(this);
-    m_avcapButton->setText(tr("Use Audio Video Capture (AvCapture)"));
-    m_avcapButton->setAutoExclusive(true);
-    m_avcapButton->setChecked(true);
-    connect(m_avcapButton, SIGNAL(toggled(bool)), this, SLOT(enableAvCapture(bool)));
+    connect(m_stopButton, SIGNAL(clicked()), m_media, SLOT(stop()));
 
     setLayout(new QVBoxLayout);
 
@@ -75,64 +59,21 @@ CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent
     layout()->addWidget(m_videoWidget);
 
     QHBoxLayout *buttonsLayout = new QHBoxLayout();
-    buttonsLayout->addWidget(m_moButton);
-    buttonsLayout->addWidget(m_avcapButton);
-    layout()->addItem(buttonsLayout);
-
-    buttonsLayout = new QHBoxLayout();
     buttonsLayout->addWidget(m_playButton);
     buttonsLayout->addWidget(m_stopButton);
     layout()->addItem(buttonsLayout);
 
-    // Set up capture and start it
-    setupCaptureSource();
-    playPause();
-}
+    /*
+     * Create the paths from the capture object to the outputs
+     * If the paths are invalid, then probably the backend doesn't support capture
+     */
+    Phonon::Path audioPath = Phonon::createPath(m_media, m_audioOutput);
+    Phonon::Path videoPath = Phonon::createPath(m_media, m_videoWidget);
 
-void CaptureWidget::enableMOCapture(bool enable)
-{
-    if (!enable)
-        return;
-
-    stop();
-    m_captureNode = m_media;
-    setupCaptureSource();
-}
-
-void CaptureWidget::enableAvCapture(bool enable)
-{
-    if (!enable)
-        return;
-
-    stop();
-    m_captureNode = m_avcapture;
-    setupCaptureSource();
-}
-
-void CaptureWidget::setupCaptureSource()
-{
-    // Disconnect the old paths, if they exist
-    if (m_audioPath.isValid()) {
-        m_audioPath.disconnect();
-    }
-    if (m_videoPath.isValid()) {
-        m_videoPath.disconnect();
-    }
-
-    // Reconnect the paths using the object used for capture
-    if (m_captureNode == m_media) {
-        m_audioPath = Phonon::createPath(m_media, m_audioOutput);
-        m_videoPath = Phonon::createPath(m_media, m_videoWidget);
-    }
-    if (m_captureNode == m_avcapture) {
-        m_audioPath = Phonon::createPath(m_avcapture, m_audioOutput);
-        m_videoPath = Phonon::createPath(m_avcapture, m_videoWidget);
-    }
-
-    if (!m_audioPath.isValid()) {
+    if (!audioPath.isValid()) {
         QMessageBox::critical(this, "Error", "Your backend may not support audio capturing.");
     }
-    if (!m_videoPath.isValid()) {
+    if (!videoPath.isValid()) {
         QMessageBox::critical(this, "Error", "Your backend may not support video capturing.");
     }
 
@@ -140,52 +81,23 @@ void CaptureWidget::setupCaptureSource()
      * Set up the devices used for capture
      * Phonon can easily get you the devices appropriate for a specific category.
      */
-    if (m_captureNode == m_media) {
-        Phonon::MediaSource source(Phonon::Capture::VideoType, Phonon::NoCaptureCategory);
-        m_media->setCurrentSource(source);
-    }
-    if (m_captureNode == m_avcapture) {
-        m_avcapture->setCaptureDevices(Phonon::NoCaptureCategory);
-    }
+    Phonon::MediaSource source(Phonon::Capture::VideoType, Phonon::NoCaptureCategory);
+    m_media->setCurrentSource(source);
 
-    // Connect the stateChanged signal from the object used for capture to our handling slot
-    if (m_captureNode == m_media) {
-        disconnect(m_avcapture, SIGNAL(stateChanged(Phonon::State,Phonon::State)));
-        connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State)));
-    }
-    if (m_captureNode == m_avcapture) {
-        disconnect(m_media, SIGNAL(stateChanged(Phonon::State,Phonon::State)));
-        connect(m_avcapture, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State)));
-    }
+    // Connect the stateChanged signal from the media object used for capture
+    connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+            this, SLOT(mediaStateChanged(Phonon::State)));
+
+    // Start capturing
+    playPause();
 }
 
 void CaptureWidget::playPause()
 {
-    if (m_captureNode == m_media) {
-        if (m_media->state() == Phonon::PlayingState) {
-            m_media->pause();
-        } else {
-            m_media->play();
-        }
-    }
-
-    if (m_captureNode == m_avcapture) {
-        if (m_avcapture->state() == Phonon::PlayingState) {
-            m_avcapture->pause();
-        } else {
-            m_avcapture->start();
-        }
-    }
-}
-
-void CaptureWidget::stop()
-{
-    if (m_captureNode == m_media) {
-        m_media->stop();
-    }
-
-    if (m_captureNode == m_avcapture) {
-        m_avcapture->stop();
+    if (m_media->state() == Phonon::PlayingState) {
+        m_media->pause();
+    } else {
+        m_media->play();
     }
 }
 

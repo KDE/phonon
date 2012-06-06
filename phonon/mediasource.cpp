@@ -95,15 +95,10 @@ MediaSource::MediaSource(DiscType dt, const QString &deviceName)
     d->deviceName = deviceName;
 }
 
-// NOTE: this is a protected constructor
-MediaSource::MediaSource(const DeviceAccess &access)
-    : d(new MediaSourcePrivate(CaptureDevice))
+// NOTE: this is deprecated
+MediaSource::MediaSource(const DeviceAccess &)
+    : d(new MediaSourcePrivate(Invalid))
 {
-    if (access.first.isEmpty() || access.second.isEmpty()) {
-        d->type = Invalid;
-        return;
-    }
-    d->deviceAccessList.append(access);
 }
 
 #ifndef PHONON_NO_AUDIOCAPTURE
@@ -123,6 +118,12 @@ MediaSource::MediaSource(const VideoCaptureDevice& device)
 #endif //PHONON_NO_VIDEOCAPTURE
 
 #if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
+MediaSource::MediaSource(CaptureCategory category)
+    : d(new MediaSourcePrivate(AudioVideoCapture))
+{
+    d->setCaptureDevices(category);
+}
+
 MediaSource::MediaSource(Capture::DeviceType deviceType, CaptureCategory category)
     : d(new MediaSourcePrivate(CaptureDevice))
 {
@@ -245,7 +246,27 @@ DiscType MediaSource::discType() const
 
 const DeviceAccessList& MediaSource::deviceAccessList() const
 {
-    return d->deviceAccessList;
+#ifndef PHONON_NO_AUDIOCAPTURE
+    if (d->audioCaptureDevice.isValid())
+        return d->audioDeviceAccessList;
+#endif
+
+#ifndef PHONON_NO_VIDEOCAPTURE
+    if (d->videoCaptureDevice.isValid())
+        return d->videoDeviceAccessList;
+#endif
+
+    return d->audioDeviceAccessList;    // It should be invalid
+}
+
+const DeviceAccessList& MediaSource::audioDeviceAccessList() const
+{
+    return d->audioDeviceAccessList;
+}
+
+const DeviceAccessList& MediaSource::videoDeviceAccessList() const
+{
+    return d->videoDeviceAccessList;
 }
 
 QString MediaSource::deviceName() const
@@ -296,6 +317,13 @@ void MediaSourcePrivate::setCaptureDevice(Capture::DeviceType deviceType, Captur
     }
 }
 
+void MediaSourcePrivate::setCaptureDevices(CaptureCategory category)
+{
+    setCaptureDevices(
+        AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)),
+        VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
+}
+
 void MediaSourcePrivate::setCaptureDevices(const AudioCaptureDevice &audioDevice, const VideoCaptureDevice &videoDevice)
 {
     audioCaptureDevice = audioDevice;
@@ -303,15 +331,21 @@ void MediaSourcePrivate::setCaptureDevices(const AudioCaptureDevice &audioDevice
 
     if (audioDevice.propertyNames().contains("deviceAccessList") &&
             !audioDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
-        deviceAccessList = audioDevice.property("deviceAccessList").value<DeviceAccessList>();
+        audioDeviceAccessList = audioDevice.property("deviceAccessList").value<DeviceAccessList>();
     }
 
     if (videoDevice.propertyNames().contains("deviceAccessList") &&
             !videoDevice.property("deviceAccessList").value<DeviceAccessList>().isEmpty()) {
-        deviceAccessList = videoDevice.property("deviceAccessList").value<DeviceAccessList>();
+        videoDeviceAccessList = videoDevice.property("deviceAccessList").value<DeviceAccessList>();
     }
 
-    type = deviceAccessList.isEmpty() ? MediaSource::Invalid : MediaSource::CaptureDevice;
+    bool validAudio = !audioDeviceAccessList.isEmpty();
+    bool validVideo = !videoDeviceAccessList.isEmpty();
+    type = MediaSource::Invalid;
+    if (validAudio && validVideo)
+        type = MediaSource::AudioVideoCapture;
+    else if (validAudio || validVideo)
+        type = MediaSource::CaptureDevice;
 }
 #endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
 

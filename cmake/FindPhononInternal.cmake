@@ -45,6 +45,12 @@ include(${phonon_cmake_module_dir}/MacroEnsureVersion.cmake)
 
 # - Qt
 
+# Store CMAKE_MODULE_PATH and then append the current dir to it, so we are sure
+# we get the FindQt4.cmake located next to us and not a different one.
+# The original CMAKE_MODULE_PATH is restored later on.
+set(_phonon_cmake_module_path_back ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${phonon_cmake_module_dir} ${CMAKE_MODULE_PATH} )
+
 # if the minimum Qt requirement is changed, change all occurrence in the
 # following lines
 if (NOT QT_MIN_VERSION)
@@ -77,6 +83,8 @@ if (NOT _automoc4_version_ok)
     message(FATAL_ERROR "Your version of automoc4 is too old. You have ${AUTOMOC4_VERSION}, you need at least 0.9.86")
 endif (NOT _automoc4_version_ok)
 
+# restore the original CMAKE_MODULE_PATH
+set(CMAKE_MODULE_PATH ${_phonon_cmake_module_path_back})
 
 # Set Installation Directories
 
@@ -115,7 +123,11 @@ endif(APPLE)
 # RPATH directories outside the current CMAKE_BINARY_DIR and also the library 
 # install directory. Alex
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
-set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemPlatformLibDir)
+list(FIND CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemCxxLibDir)
+if("${_isSystemPlatformLibDir}" STREQUAL "-1" AND "${_isSystemCxxLibDir}" STREQUAL "-1")
+   set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+endif("${_isSystemPlatformLibDir}" STREQUAL "-1" AND "${_isSystemCxxLibDir}" STREQUAL "-1")
 
 
 # Uninstall Target

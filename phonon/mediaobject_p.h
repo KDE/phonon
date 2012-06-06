@@ -23,16 +23,18 @@
 #ifndef MEDIAOBJECT_P_H
 #define MEDIAOBJECT_P_H
 
-#include "mediaobject.h"
-#include "medianode_p.h"
 #include <QtCore/QString>
-#include "medianodedestructionhandler_p.h"
-#include "mediasource.h"
 #include <QtCore/QQueue>
 #ifdef HAVE_QZEITGEIST
-#include <QtZeitgeist/Log>
-#include <QtZeitgeist/QtZeitgeist>
+#include <QZeitgeist/Log>
+#include <QZeitgeist/QZeitgeist>
 #endif
+
+#include "medianode_p.h"
+#include "medianodedestructionhandler_p.h"
+#include "mediaobject.h"
+#include "mediasource.h"
+#include "phonondefs_p.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -47,7 +49,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     friend class KioFallbackImpl;
     friend class AbstractMediaStream;
     friend class AbstractMediaStreamPrivate;
-    Q_DECLARE_PUBLIC(MediaObject)
+    P_DECLARE_PUBLIC(MediaObject)
     public:
         virtual QObject *qObject() { return q_func(); }
 
@@ -112,8 +114,9 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             abstractStream(0),
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            state(Phonon::StoppedState),
-            readyForZeitgeist(false)
+            state(Phonon::LoadingState),
+            readyForZeitgeist(false),
+            playingQueuedSource(false)
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             , errorType(Phonon::NormalError),
             errorOverride(false),
@@ -122,8 +125,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
 #ifdef HAVE_QZEITGEIST
-            QtZeitgeist::init();
-            log = new QtZeitgeist::Log();
+            log = new QZeitgeist::Log();
 #endif
         }
 
@@ -149,6 +151,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #else
             : 8;
         bool readyForZeitgeist;
+        bool playingQueuedSource;
         ErrorType errorType : 4;
         bool errorOverride : 1;
         bool ignoreLoadingToBufferingStateChange : 1;
@@ -157,7 +160,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         MediaSource mediaSource;
         QQueue<MediaSource> sourceQueue;
 #ifdef HAVE_QZEITGEIST
-        QtZeitgeist::Log *log;
+        QZeitgeist::Log *log;
 #endif
 };
 }
