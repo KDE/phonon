@@ -91,16 +91,16 @@ QDebug operator <<(QDebug dbg, const Phonon::DiscType &type)
 {
     switch (type) {
     case Phonon::NoDisc:
-        dbg.nospace() << "Phonon::NoDisc";
+        dbg.space() << "Phonon::NoDisc";
         break;
     case Phonon::Cd:
-        dbg.nospace() << "Phonon::Cd";
+        dbg.space() << "Phonon::Cd";
         break;
     case Phonon::Dvd:
-        dbg.nospace() << "Phonon::Dvd";
+        dbg.space() << "Phonon::Dvd";
         break;
     case Phonon::Vcd:
-        dbg.nospace() << "Phonon::Vcd";
+        dbg.space() << "Phonon::Vcd";
         break;
     }
     return dbg.maybeSpace();
@@ -110,28 +110,28 @@ QDebug operator <<(QDebug dbg, const Phonon::MetaData &metaData)
 {
     switch (metaData) {
     case Phonon::ArtistMetaData:
-        dbg.nospace() << "Phonon::ArtistMetaData";
+        dbg.space() << "Phonon::ArtistMetaData";
         break;
     case Phonon::AlbumMetaData:
-        dbg.nospace() << "Phonon::AlbumMetaData";
+        dbg.space() << "Phonon::AlbumMetaData";
         break;
     case Phonon::TitleMetaData:
-        dbg.nospace() << "Phonon::TitleMetaData";
+        dbg.space() << "Phonon::TitleMetaData";
         break;
     case Phonon::DateMetaData:
-        dbg.nospace() << "Phonon::DateMetaData";
+        dbg.space() << "Phonon::DateMetaData";
         break;
     case Phonon::GenreMetaData:
-        dbg.nospace() << "Phonon::GenreMetaData";
+        dbg.space() << "Phonon::GenreMetaData";
         break;
     case Phonon::TracknumberMetaData:
-        dbg.nospace() << "Phonon::TracknumberMetaData";
+        dbg.space() << "Phonon::TracknumberMetaData";
         break;
     case Phonon::DescriptionMetaData:
-        dbg.nospace() << "Phonon::DescriptionMetaData";
+        dbg.space() << "Phonon::DescriptionMetaData";
         break;
     case Phonon::MusicBrainzDiscIdMetaData:
-        dbg.nospace() << "Phonon::MusicBrainzDiscIdMetaData";
+        dbg.space() << "Phonon::MusicBrainzDiscIdMetaData";
         break;
     }
     return dbg.maybeSpace();
@@ -141,22 +141,22 @@ QDebug operator <<(QDebug dbg, const Phonon::State &state)
 {
     switch (state) {
     case Phonon::LoadingState:
-        dbg.nospace() << "Phonon::LoadingState";
+        dbg.space() << "Phonon::LoadingState";
         break;
     case Phonon::StoppedState:
-        dbg.nospace() << "Phonon::StoppedState";
+        dbg.space() << "Phonon::StoppedState";
         break;
     case Phonon::PlayingState:
-        dbg.nospace() << "Phonon::PlayingState";
+        dbg.space() << "Phonon::PlayingState";
         break;
     case Phonon::BufferingState:
-        dbg.nospace() << "Phonon::BufferingState";
+        dbg.space() << "Phonon::BufferingState";
         break;
     case Phonon::PausedState:
-        dbg.nospace() << "Phonon::PausedState";
+        dbg.space() << "Phonon::PausedState";
         break;
     case Phonon::ErrorState:
-        dbg.nospace() << "Phonon::ErrorState";
+        dbg.space() << "Phonon::ErrorState";
         break;
     }
     return dbg.maybeSpace();
@@ -164,7 +164,7 @@ QDebug operator <<(QDebug dbg, const Phonon::State &state)
 
 QDebug operator <<(QDebug dbg, const Phonon::Category &category)
 {
-    dbg.nospace() << categoryToString(category);
+    dbg.space() << categoryToString(category);
     return dbg.maybeSpace();
 }
 
@@ -172,10 +172,10 @@ QDebug operator <<(QDebug dbg, const Phonon::Capture::DeviceType &type)
 {
     switch (type) {
     case Phonon::Capture::AudioType:
-        dbg.nospace() << "Phonon::Capture::AudioType";
+        dbg.space() << "Phonon::Capture::AudioType";
         break;
     case Phonon::Capture::VideoType:
-        dbg.nospace() << "Phonon::Capture::VideoType";
+        dbg.space() << "Phonon::Capture::VideoType";
         break;
     }
     return dbg.maybeSpace();
@@ -185,13 +185,13 @@ QDebug operator <<(QDebug dbg, const Phonon::ErrorType &errorType)
 {
     switch (errorType) {
     case Phonon::NoError:
-        dbg.nospace() << "Phonon::NoError";
+        dbg.space() << "Phonon::NoError";
         break;
     case Phonon::NormalError:
-        dbg.nospace() << "Phonon::NormalError";
+        dbg.space() << "Phonon::NormalError";
         break;
     case Phonon::FatalError:
-        dbg.nospace() << "Phonon::FatalError";
+        dbg.space() << "Phonon::FatalError";
         break;
     }
     return dbg.maybeSpace();
