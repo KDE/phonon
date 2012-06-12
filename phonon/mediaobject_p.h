@@ -53,6 +53,8 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     public:
         virtual QObject *qObject() { return q_func(); }
 
+        QString stateName(Phonon::State state) const;
+
         /**
          * Sends the metadata for this media file to the Zeitgeist tracker
          *
@@ -91,7 +93,13 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         void _k_metaDataChanged(const QMultiMap<QString, QString> &);
         void _k_aboutToFinish();
         void _k_currentSourceChanged(const MediaSource &);
+        void _k_validateStateChange(Phonon::State, Phonon::State);
+        void _k_validateTick(qint64 pos);
+        void _k_validateFinished();
+        void _k_validateBufferStatus();
+        void _k_validateSourceChange();
         PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
+        bool validateStateTransition(Phonon::State newstate, Phonon::State oldstate);
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         void streamError(Phonon::ErrorType, const QString &);
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -119,6 +127,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #ifdef HAVE_QZEITGEIST
             log = new QZeitgeist::Log();
 #endif
+            validateStates = !(qgetenv("PHONON_ASSERT_STATES").isEmpty());
         }
 
         ~MediaObjectPrivate()
@@ -154,6 +163,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #ifdef HAVE_QZEITGEIST
         QZeitgeist::Log *log;
 #endif
+        bool validateStates;
 };
 }
 
