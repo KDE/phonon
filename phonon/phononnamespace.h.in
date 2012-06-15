@@ -303,6 +303,15 @@ namespace Phonon
         AllMedia = 0xFFFFFFFF
     };
     Q_DECLARE_FLAGS(MediaStreamTypes, MediaStreamType)*/
+
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::DiscType &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MetaData &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::State &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Category &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::CaptureCategory &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Capture::DeviceType &);
+    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::ErrorType &);
+
 } // namespace Phonon
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::MediaStreamTypes)
 
@@ -314,16 +323,6 @@ Q_DECLARE_METATYPE(Phonon::State)
 Q_DECLARE_METATYPE(Phonon::ErrorType)
 Q_DECLARE_METATYPE(Phonon::Category)
 Q_DECLARE_METATYPE(Phonon::CaptureCategory)
-
-#ifndef PHONON_NO_DEBUG
-    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::DiscType &);
-    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MetaData &);
-    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::State &);
-    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Category &);
-    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::CaptureCategory &);
-    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Capture::DeviceType &);
-    PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::ErrorType &);
-#endif // PHONON_NO_DEBUG
 
 QT_END_HEADER
 

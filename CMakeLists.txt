@@ -14,7 +14,6 @@ option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
-option(PHONON_NO_DEBUG "Build without debug" OFF)
 message("-- !!!!! Tests have been removed and need to be redone !!!!!")
 #option(PHONON_BUILD_TESTS "Build the tests" OFF)
 
@@ -47,10 +46,6 @@ set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
-
-if(PHONON_NO_DEBUG)
-    add_definitions(-DPHONON_NO_DEBUG)
-endif(PHONON_NO_DEBUG)
 
 include_directories(${QT_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}
