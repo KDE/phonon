@@ -9,26 +9,27 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1130.7845"
-   height="1093.5714"
+   width="1906.6178"
+   height="1093.5938"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="state-machine.svg">
   <defs
      id="defs4">
     <marker
        inkscape:stockid="DotL"
        orient="auto"
-       refY="0.0"
-       refX="0.0"
+       refY="0"
+       refX="0"
        id="DotL"
        style="overflow:visible">
       <path
          id="path4308"
-         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none"
-         transform="scale(0.8) translate(7.4, 1)" />
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none;marker-end:none"
+         transform="matrix(0.8,0,0,0.8,5.92,0.8)"
+         inkscape:connector-curvature="0" />
     </marker>
     <marker
        inkscape:stockid="Arrow1Mstart"
@@ -109,13 +110,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.45337466"
-     inkscape:cx="716.21766"
-     inkscape:cy="618.96192"
+     inkscape:cx="995.84578"
+     inkscape:cy="618.97029"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1024"
-     inkscape:window-height="675"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
      inkscape:window-x="-2"
      inkscape:window-y="-3"
      inkscape:window-maximized="1"
@@ -139,7 +140,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(259.71313,164.42353)">
+     transform="translate(539.34125,164.43749)">
     <rect
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect6850"
@@ -483,7 +484,9 @@
        sodipodi:linespacing="125%"
        transform="translate(-259.71313,-164.42353)"><tspan
          sodipodi:role="line"
-         id="tspan3292"></tspan></text>
+         id="tspan3292"
+         x="910.86426"
+         y="173.58328" /></text>
     <g
        id="g4844"
        transform="translate(-77.552718,6.0825661)">
@@ -648,7 +651,7 @@
            id="tspan3078-9-2-7-1">prefinishMarkReached()</tspan></text>
     </g>
     <path
-       style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#DotL)"
+       style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#DotL)"
        d="m 1158.7288,404.7208 -144.4609,-7.60321"
        id="path4241"
        inkscape:connector-curvature="0"
