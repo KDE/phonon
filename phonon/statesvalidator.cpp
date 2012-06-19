@@ -45,7 +45,9 @@ StatesValidator::StatesValidator(MediaObject *parent)
     , m_aboutToFinishPos(-1)
 {
     connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-                     this, SLOT(validateStateChange(Phonon::State, Phonon::State)));
+            this, SLOT(validateStateChange(Phonon::State, Phonon::State)));
+    connect(m_mediaObject, SIGNAL(currentSourceChanged(Phonon::MediaSource)),
+            this, SLOT(validateSourceChange()));
     connect(m_mediaObject, SIGNAL(tick(qint64)), this, SLOT(validateTick(qint64)));
     connect(m_mediaObject, SIGNAL(aboutToFinish()), this, SLOT(validateAboutToFinish()));
     connect(m_mediaObject, SIGNAL(finished()), this, SLOT(validateFinished()));
@@ -114,7 +116,7 @@ void StatesValidator::validateTick(qint64 pos)
     // result in a reemission of the signal. It should not, but it is allowed.
     // Point being, if the API consumer did not set one the first time, they
     // likely will not care about it a second time either.
-    if ((pos < m_aboutToFinishPos) && !m_sourceQueued)
+    if (m_aboutToFinishEmitted && (pos < m_aboutToFinishPos) && !m_sourceQueued)
         m_aboutToFinishEmitted = false;
     m_pos = pos;
 }
