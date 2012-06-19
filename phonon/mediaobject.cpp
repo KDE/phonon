@@ -47,15 +47,10 @@
 
 #include "phononnamespace_p.h"
 #include "platform_p.h"
+#include "statesvalidator_p.h"
 
 #define PHONON_CLASSNAME MediaObject
 #define PHONON_INTERFACENAME MediaObjectInterface
-
-#ifdef PHONON_ASSERT_STATES
-#define PHONON_INVALID_STATE(msg) Q_ASSERT_X(0, __FILE__, msg)
-#else
-#define PHONON_INVALID_STATE(msg) qDebug() << "State assert failed:" << msg
-#endif
 
 QT_BEGIN_NAMESPACE
 
@@ -505,125 +500,6 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-void MediaObjectPrivate::_k_validateFinished()
-{
-    if (!validateStates)
-        return;
-    Q_Q(MediaObject);
-    if (q->state() != Phonon::PlayingState)
-        PHONON_INVALID_STATE("Playback finished when we weren't playing!");
-}
-
-void MediaObjectPrivate::_k_validateSourceChange()
-{
-    if (!validateStates)
-        return;
-    Q_Q(MediaObject);
-    if (q->state() != Phonon::StoppedState && q->state() != Phonon::PlayingState && q->state() != Phonon::PausedState && q->state() != Phonon::BufferingState) {
-        PHONON_INVALID_STATE("Source got changed outside a valid state");
-    }
-}
-
-void MediaObjectPrivate::_k_validateBufferStatus()
-{
-    if (!validateStates)
-        return;
-    Q_Q(MediaObject);
-    if (q->state() != Phonon::PlayingState && q->state() != Phonon::PausedState && q->state() != Phonon::BufferingState) {
-        PHONON_INVALID_STATE("Buffer status changed when we weren't supposed to be buffering");
-    }
-}
-
-void MediaObjectPrivate::_k_validateTick(qint64 pos)
-{
-    if (!validateStates)
-        return;
-    Q_Q(MediaObject);
-    if (q->state() != Phonon::PlayingState)
-        PHONON_INVALID_STATE("Recieved tick outside of accepted states.");
-}
-
-void MediaObjectPrivate::_k_validateStateChange(Phonon::State newstate, Phonon::State oldstate)
-{
-    if (!validateStates)
-        return;
-    if (!validateStateTransition(newstate, oldstate)) {
-        qDebug() << "Invalid state transition:" << stateName(oldstate) << "->" << stateName(newstate);
-        PHONON_INVALID_STATE("Invalid state transition");
-    } else {
-        qDebug() << "Valid state transition:" << stateName(oldstate) << "->" << stateName(newstate);
-    }
-}
-
-bool MediaObjectPrivate::validateStateTransition(Phonon::State newstate, Phonon::State oldstate)
-{
-    switch (oldstate) {
-    case Phonon::StoppedState:
-        switch (newstate) {
-        case Phonon::LoadingState:
-        case Phonon::PlayingState:
-        case Phonon::PausedState:
-            return true;
-        default:
-            return false;
-        }
-        break;
-    case Phonon::LoadingState:
-        switch (newstate) {
-        case Phonon::ErrorState:
-        case Phonon::StoppedState:
-            return true;
-        default:
-            return false;
-        }
-        break;
-    case Phonon::ErrorState:
-        switch (newstate) {
-        case Phonon::LoadingState:
-            return true;
-        default:
-            return false;
-        }
-        break;
-    case Phonon::PlayingState:
-        switch (newstate) {
-        case Phonon::PausedState:
-        case Phonon::BufferingState:
-        case Phonon::ErrorState:
-        case Phonon::StoppedState:
-            return true;
-        default:
-            return false;
-        }
-        break;
-    case Phonon::PausedState:
-        switch (newstate) {
-        case Phonon::PlayingState:
-        case Phonon::BufferingState:
-        case Phonon::ErrorState:
-        case Phonon::StoppedState:
-            return true;
-        default:
-            return false;
-        }
-        break;
-    case Phonon::BufferingState:
-        switch (newstate) {
-        case Phonon::PlayingState:
-        case Phonon::PausedState:
-        case Phonon::ErrorState:
-#ifdef __GNUC__
-#warning TODO: buffering state needs fixing, should not transit to stop
-#endif // __GNUC__
-        case Phonon::StoppedState:
-            return true;
-        default:
-            return false;
-        }
-    }
-    return false;
-}
-
 // TODO: this needs serious cleanup...
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
 {
@@ -633,7 +509,7 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
     if (newstate == StoppedState) {
         readyForZeitgeist = true;
     }
-    pDebug() << "State changed from" << stateName(oldstate) << "to" << stateName(newstate) << "-> sending to zeitgeist.";
+    pDebug() << "State changed from" << oldstate << "to" << newstate << "-> sending to zeitgeist.";
     sendToZeitgeist(newstate);
 
     // AbstractMediaStream fallback stuff --------------------------------------
@@ -725,6 +601,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
     readyForZeitgeist = false;
     playingQueuedSource = true;
     pINTERFACE_CALL(setNextSource(mediaSource));
+    validator->sourceQueued();
 }
 
 void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
@@ -750,15 +627,10 @@ void MediaObjectPrivate::setupBackendObject()
     // signals, they ought to be done in private slots.
 
     qRegisterMetaType<MediaSource>("MediaSource");
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-                     q, SLOT(_k_validateStateChange(Phonon::State, Phonon::State)), Qt::DirectConnection);
     qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
-    QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
-                     q, SLOT(_k_validateTick()));
-    QObject::connect(m_backendObject, SIGNAL(finished()),
-                     q, SLOT(_k_validateFinished()));
-    QObject::connect(m_backendObject, SIGNAL(bufferStatus()),
-                     q, SLOT(_k_validateBufferStatus()));
+
+    if (validateStates)
+        validator = new StatesValidator(q); // Parented, and non-invasive to MO.
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
@@ -884,27 +756,6 @@ MediaObject *createPlayer(Phonon::Category category, const MediaSource &source)
         mo->setCurrentSource(source);
     }
     return mo;
-}
-
-QString MediaObjectPrivate::stateName(Phonon::State state) const
-{
-    switch (state) {
-        case Phonon::LoadingState:
-            return QLatin1String("Loading");
-        case Phonon::StoppedState:
-            return QLatin1String("Stopped");
-        case Phonon::PlayingState:
-            return QLatin1String("Playing");
-        case Phonon::BufferingState:
-            return QLatin1String("Buffering");
-        case Phonon::PausedState:
-            return QLatin1String("Paused");
-        case Phonon::ErrorState:
-            return QLatin1String("Error");
-    }
-    if (validateStates)
-        PHONON_INVALID_STATE("Unknown State");
-    return QLatin1String("");
 }
 
 } //namespace Phonon

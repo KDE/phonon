@@ -622,11 +622,6 @@ namespace Phonon
             Q_PRIVATE_SLOT(k_func(), void _k_aboutToFinish())
             Q_PRIVATE_SLOT(k_func(), void _k_currentSourceChanged(const MediaSource &))
             Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
-            Q_PRIVATE_SLOT(k_func(), void _k_validateStateChange(Phonon::State, Phonon::State));
-            Q_PRIVATE_SLOT(k_func(), void _k_validateTick(qint64));
-            Q_PRIVATE_SLOT(k_func(), void _k_validateFinished());
-            Q_PRIVATE_SLOT(k_func(), void _k_validateBufferStatus());
-            Q_PRIVATE_SLOT(k_func(), void _k_validateSourceChange());
     };
 
     /**
