@@ -49,7 +49,7 @@ StatesValidator::StatesValidator(MediaObject *parent)
     connect(m_mediaObject, SIGNAL(tick(qint64)), this, SLOT(validateTick(qint64)));
     connect(m_mediaObject, SIGNAL(aboutToFinish()), this, SLOT(validateAboutToFinish()));
     connect(m_mediaObject, SIGNAL(finished()), this, SLOT(validateFinished()));
-    connect(m_mediaObject, SIGNAL(bufferStatus()), this, SLOT(validateBufferStatus()));
+    connect(m_mediaObject, SIGNAL(bufferStatus(int)), this, SLOT(validateBufferStatus()));
 }
 
 StatesValidator::~StatesValidator()
@@ -122,10 +122,10 @@ void StatesValidator::validateTick(qint64 pos)
 void StatesValidator::validateStateChange(Phonon::State newstate, Phonon::State oldstate)
 {
     if (!validateStateTransition(newstate, oldstate)) {
-        qDebug() << "Invalid state transition:" << oldstate << "->" << newstate;
+        pDebug() << "Invalid state transition:" << oldstate << "->" << newstate;
         P_INVALID_STATE("Invalid state transition");
     } else {
-        qDebug() << "Valid state transition:" << oldstate << "->" << newstate;
+        pDebug() << "Valid state transition:" << oldstate << "->" << newstate;
     }
     m_prevState = oldstate;
 }
