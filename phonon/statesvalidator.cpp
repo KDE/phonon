@@ -37,6 +37,7 @@ namespace Phonon
 StatesValidator::StatesValidator(MediaObject *parent)
     : QObject(parent)
     , m_mediaObject(parent)
+    , m_prevState(Phonon::ErrorState)
     , m_sourceQueued(false)
     , m_aboutToFinishEmitted(false)
     , m_aboutToFinishBeforeSeek(false)
@@ -102,7 +103,11 @@ void StatesValidator::validateBufferStatus()
 
 void StatesValidator::validateTick(qint64 pos)
 {
-    if (m_mediaObject->state() != Phonon::PlayingState)
+    // Mind that Buffering is a concurrent state, you may have been playing and
+    // then start buffering for example for a seek.
+    if (m_mediaObject->state() != Phonon::PlayingState
+            && (m_prevState != Phonon::PlayingState
+                && m_mediaObject->state() != Phonon::BufferingState))
         P_INVALID_STATE("Recieved tick outside of Playing state.");
     // If and only if we did not queue a new source may a seek back in time
     // result in a reemission of the signal. It should not, but it is allowed.
@@ -121,6 +126,7 @@ void StatesValidator::validateStateChange(Phonon::State newstate, Phonon::State 
     } else {
         qDebug() << "Valid state transition:" << oldstate << "->" << newstate;
     }
+    m_prevState = oldstate;
 }
 
 bool StatesValidator::validateStateTransition(Phonon::State newstate, Phonon::State oldstate)

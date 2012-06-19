@@ -54,6 +54,8 @@ private:
 
     MediaObject *m_mediaObject;
 
+    Phonon::State m_prevState; /** < Track prev state to do a better job at Buffering validation */
+
     bool m_sourceQueued; /** < Track whether a source was queued in the backend */
     qint64 m_pos; /** < Track position for abouttofinish validation */
 
