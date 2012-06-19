@@ -23,12 +23,13 @@
 #include "statesvalidator_p.h"
 
 #include "mediaobject.h"
+#include "phononnamespace_p.h"
 
 #warning make entire shebang optional thru mediaobject
 #ifdef PHONON_ASSERT_STATES
 #define P_INVALID_STATE(msg) Q_ASSERT_X(0, __FILE__, msg)
 #else
-#define P_INVALID_STATE(msg) qDebug() << "State assert failed:" << msg
+#define P_INVALID_STATE(msg) pDebug() << "State assert failed:" << msg
 #endif
 
 namespace Phonon
