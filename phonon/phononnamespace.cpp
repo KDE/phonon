@@ -100,6 +100,9 @@ namespace Phonon
         case Phonon::Vcd:
             dbg.space() << "Phonon::Vcd";
             break;
+        case Phonon::BluRay:
+            dbg.space() << "Phonon::BluRay";
+            break;
         }
         return dbg.maybeSpace();
     }
