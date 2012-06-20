@@ -601,7 +601,9 @@ void MediaObjectPrivate::_k_aboutToFinish()
     readyForZeitgeist = false;
     playingQueuedSource = true;
     pINTERFACE_CALL(setNextSource(mediaSource));
-    validator->sourceQueued();
+
+    if (validator)
+        validator->sourceQueued();
 }
 
 void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
