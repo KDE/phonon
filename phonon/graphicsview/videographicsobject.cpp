@@ -131,7 +131,7 @@ public:
     bool ready;
 
 protected:
-    bool aboutToDeleteBackendObject() {}
+    bool aboutToDeleteBackendObject() { return true; }
     void createBackendObject()
     {
         if (m_backendObject)
