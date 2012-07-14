@@ -1,3 +1,5 @@
+add_subdirectory(graphicsview)
+
 if (PHONON_BUILD_EXPERIMENTAL)
     add_subdirectory(experimental)
 endif (PHONON_BUILD_EXPERIMENTAL)
@@ -64,6 +66,7 @@ set(phonon_LIB_SRCS
    volumeslider.cpp
    videoplayer.cpp
    videowidget.cpp
+   ${phonon_VGO_SRCS}
    )
 
 if (PHONON_PULSESUPPORT)
@@ -87,9 +90,14 @@ add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_
 
 automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
 target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+
 if (PHONON_PULSESUPPORT)
     target_link_libraries(phonon ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (PHONON_PULSESUPPORT)
+
+if (QT_QTOPENGL_LIBRARY AND OPENGL_FOUND)
+    target_link_libraries(phonon ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
+endif (QT_QTOPENGL_LIBRARY AND OPENGL_FOUND)
 
 if (QZEITGEIST_FOUND)
     target_link_libraries(phonon ${QZEITGEIST_LIBRARY})
@@ -162,6 +170,7 @@ install(FILES
    volumefadereffect.h
    volumefaderinterface.h
    volumeslider.h
+   ${phonon_VGO_HDRS}
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 

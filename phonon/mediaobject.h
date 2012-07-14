@@ -234,6 +234,14 @@ namespace Phonon
              */
             bool isSeekable() const;
 
+            /**
+             * \brief The time interval in milliseconds between two ticks.
+             *
+             * The %tick interval is the time that elapses between the emission
+             * of two tick signals.
+             *
+             * \returns the tick interval in milliseconds
+             */
             qint32 tickInterval() const;
 
             /**
@@ -405,6 +413,13 @@ namespace Phonon
 
         public Q_SLOTS:
 
+            /**
+             * Sets the tick interval in milliseconds.
+             *
+             * \param newTickInterval the new tick interval in milliseconds.
+             *
+             * \see tickInterval
+             */
             void setTickInterval(qint32 newTickInterval);
 
             /**
