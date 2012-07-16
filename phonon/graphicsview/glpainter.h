@@ -79,6 +79,8 @@ protected:
     GlTextureSize m_texSize[3];
 
     QMatrix4x4 m_colorMatrix;
+
+    bool m_texturesInited;
 };
 
 } // namespace Phonon

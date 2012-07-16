@@ -25,6 +25,7 @@ namespace Phonon {
 
 GlPainter::GlPainter() :
     m_context(0)
+  , m_texturesInited(false)
 {
 }
 
@@ -42,7 +43,6 @@ void GlPainter::setContext(QGLContext *context)
     m_context = context;
 }
 
-#define s(_d, p_n, p_d)  _d  * p_n / p_d
 void GlPainter::initRgb32()
 {
     Q_ASSERT(m_frame->planeCount == 1);
@@ -52,9 +52,6 @@ void GlPainter::initRgb32()
     m_texDescriptor.internalFormat = GL_RGBA;
     m_texDescriptor.format = GL_RGBA;
     m_texDescriptor.type = GL_UNSIGNED_BYTE;
-
-    m_texSize[0].width  = s(m_frame->width,  1, 1);
-    m_texSize[0].height = s(m_frame->height, 1, 1);
 }
 
 void GlPainter::initYv12()
@@ -66,16 +63,7 @@ void GlPainter::initYv12()
     m_texDescriptor.internalFormat = GL_LUMINANCE;
     m_texDescriptor.format = GL_LUMINANCE;
     m_texDescriptor.type = GL_UNSIGNED_BYTE;
-
-#warning there must be a better way!
-    m_texSize[0].width  = s(m_frame->width,  1, 1);
-    m_texSize[0].height = s(m_frame->height, 1, 1);
-    m_texSize[1].width  = s(m_frame->width,  1, 2);
-    m_texSize[1].height = s(m_frame->height, 1, 2);
-    m_texSize[2].width  = s(m_frame->width,  1, 2);
-    m_texSize[2].height = s(m_frame->height, 1, 2);
 }
-#undef s
 
 void GlPainter::initColorMatrix()
 {
@@ -104,25 +92,40 @@ void GlPainter::initColorMatrix()
 
 void GlPainter::initTextures()
 {
-    for (int i = 0; i < m_textureCount; ++i) {
-        glBindTexture(GL_TEXTURE_2D, m_textureIds[i]);
-        glTexImage2D(m_texDescriptor.target,
-                     0,
-                     m_texDescriptor.internalFormat,
-                     m_texSize[i].width,
-                     m_texSize[i].height,
-                     0,
-                     m_texDescriptor.format,
-                     m_texDescriptor.type,
-                     m_frame->plane[i].data());
-        // Scale appropriately so we can change to target geometry without
-        // much hassle.
-        glTexParameterf(m_texDescriptor.target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameterf(m_texDescriptor.target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameterf(m_texDescriptor.target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameterf(m_texDescriptor.target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameterf(m_texDescriptor.target, GL_TEXTURE_PRIORITY, 1.0);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    if (!m_texturesInited) {
+        for (unsigned i = 0; i < m_frame->planeCount; ++i) {
+            glBindTexture(m_texDescriptor.target, m_textureIds[i]);
+            glTexImage2D(m_texDescriptor.target,
+                         0,
+                         m_texDescriptor.internalFormat,
+                         m_frame->visiblePitch[i],
+                         m_frame->visibleLines[i],
+                         0,
+                         m_texDescriptor.format,
+                         m_texDescriptor.type,
+                         0);
+            // Scale appropriately so we can change to target geometry without
+            // much hassle.
+            glTexParameterf(m_texDescriptor.target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameterf(m_texDescriptor.target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameterf(m_texDescriptor.target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameterf(m_texDescriptor.target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameterf(m_texDescriptor.target, GL_TEXTURE_PRIORITY, 1.0);
+            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+            m_texturesInited = true;
+        }
+    }
+    for (unsigned i = 0; i < m_frame->planeCount; ++i) {
+        glBindTexture(m_texDescriptor.target, m_textureIds[i]);
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, m_frame->pitch[i]);
+        glTexSubImage2D(m_texDescriptor.target, 0,
+                        0, 0,
+                        m_frame->visiblePitch[i],
+                        m_frame->visibleLines[i],
+                        m_texDescriptor.format,
+                        m_texDescriptor.type,
+                        m_frame->plane[i].data());
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0); // reset to default
     }
 }
 
