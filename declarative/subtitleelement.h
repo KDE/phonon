@@ -23,6 +23,7 @@
 #define PHONON_DECLARATIVE_SUBTITLEELEMENT_H
 
 #include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 #include "abstractinitable.h"
 
