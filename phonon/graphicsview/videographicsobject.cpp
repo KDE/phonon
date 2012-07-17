@@ -254,8 +254,8 @@ void VideoGraphicsObject::paint(QPainter *painter,
 
     if (frame->format == VideoFrame::Format_Invalid || !d->paintedOnce) {
         painter->fillRect(d->boundingRect, Qt::black);
-        if (!d->paintedOnce)
-            emit gotPaint();
+        if (!d->paintedOnce) // Must not ever block here!
+            QMetaObject::invokeMethod(this, "gotPaint", Qt::QueuedConnection);
         d->paintedOnce = true;
     } else {
         Q_ASSERT(d->graphicsPainter);
