@@ -31,7 +31,9 @@ GlPainter::GlPainter() :
 
 GlPainter::~GlPainter()
 {
+#ifdef __GNUC__
 #warning context may be long gone, leading to crashery
+#endif
 //    if (m_context) {
 //        m_context->makeCurrent();
 //        glDeleteTextures(m_textureCount, m_textureIds);

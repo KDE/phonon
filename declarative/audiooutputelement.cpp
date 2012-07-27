@@ -54,7 +54,9 @@ void AudioOutputElement::init(MediaObject *mediaObject)
     Q_ASSERT(mediaObject);
 
     m_mediaObject = mediaObject;
+#ifdef __GNUC__
 #warning should go to base supposedly
+#endif
     m_path = createPath(m_mediaObject, m_audioOutput);
 
     initChildren(this);

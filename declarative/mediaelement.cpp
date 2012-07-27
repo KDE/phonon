@@ -34,7 +34,9 @@ MediaElement::MediaElement(QDeclarativeItem *parent) :
     m_finished(false),
     m_metaData(0)
 {
+#ifdef __GNC__
 #warning the whole lazy init stuff is getting a bit fugly
+#endif
 }
 
 MediaElement::~MediaElement()
@@ -81,7 +83,9 @@ void MediaElement::setSource(const QUrl &url)
 {
     m_source = url;
     m_finished = false;
+#ifdef __GNUC__
 #warning bloody workaround
+#endif
     qDebug() << url.scheme();
     if (url.scheme() == QLatin1String("dvd"))
         m_mediaObject->setCurrentSource(MediaSource(Phonon::Dvd));
@@ -197,7 +201,9 @@ void MediaElement::handleStateChange(Phonon::State newState, Phonon::State oldSt
 
     // The defined behaviour is that the backend is in paused after playing is
     // finished. Completely pointless and I'd rather not have people care about it.
+#ifdef __GNUC__
 #warning this is ubergross as there is plenty of other states we could switch to ... when will me statemachine appear :(
+#endif
     if (m_finished && oldState == PlayingState)
         m_mediaObject->stop();
 }

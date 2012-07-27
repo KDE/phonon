@@ -59,7 +59,9 @@ GlslPainter::GlslPainter() :
 
 GlslPainter::~GlslPainter()
 {
+#ifdef __GNUC__
 #warning context may be long gone, leading to crashery
+#endif
     if (m_program) {
         m_program->removeAllShaders();
         m_program->deleteLater();
@@ -154,7 +156,9 @@ void GlslPainter::paint(QPainter *painter, QRectF target)
     //////////////////////////////////////////////////////////////
 
     // As seen on the telly
+#ifdef __GNUC__
 #warning DUPLICATED CODE
+#endif
 
     const float textureCoordinates[] = {
         0, 1, // bottom left

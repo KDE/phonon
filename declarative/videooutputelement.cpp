@@ -48,7 +48,9 @@ void VideoOutputElement::classBegin()
 
 void VideoOutputElement::init(MediaObject *mediaObject)
 {
+#ifdef __GNUC__
 #warning inheritance bad -> inits all the phonon without being used
+#endif
     Q_ASSERT(mediaObject);
 
     m_mediaObject = mediaObject;

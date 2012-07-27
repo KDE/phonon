@@ -45,7 +45,9 @@ SubtitleElement::SubtitleElement(QObject *parent) :
 
 void SubtitleElement::init(MediaObject *mediaObject)
 {
+#ifdef __GNUC__
 #warning inheritance bad -> inits all the phonon without being used
+#endif
     Q_ASSERT(mediaObject);
 
     if (!isParentValid()) {
@@ -53,8 +55,9 @@ void SubtitleElement::init(MediaObject *mediaObject)
                       << "Video element\nSubtitle item can not be initialized.";
         return;
     }
-
+#ifdef __GNUC__
 #warning the mediacontroller should be moved into the mediaelement and only accessed
+#endif
     m_mediaController = new MediaController(mediaObject);
     connect(m_mediaController, SIGNAL(availableSubtitlesChanged()),
             this, SIGNAL(availableSubtitlesChanged()));

@@ -111,7 +111,9 @@ void GlArbPainter::init()
     if (glActiveTextureARB && glMultiTexCoord2fARB)
         glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &m_maxTextureUnits);
 
+#ifdef __GNUC__
 #warning should be moved to macro or something
+#endif
 
     Q_ASSERT(m_frame->format != VideoFrame::Format_Invalid);
     Q_ASSERT(!m_frame->plane[0].isNull());
@@ -220,7 +222,9 @@ void GlArbPainter::paint(QPainter *painter, QRectF target)
             m_colorMatrix(2, 2),
             m_colorMatrix(2, 3));
 
+#ifdef __GNUC__
 #warning for YUV we'll need to add the other 2 textures accordingly
+#endif
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
 

@@ -240,7 +240,9 @@ void VideoGraphicsObject::paint(QPainter *painter,
     if (!d->graphicsPainter)
         d->_p_negotiateFormat();
 
+#ifdef __GNUC__
 #warning what if no painter could be created?
+#endif
     Q_ASSERT(d->graphicsPainter);
 
     const VideoFrame *frame = INTERFACE_CALL(frame());
