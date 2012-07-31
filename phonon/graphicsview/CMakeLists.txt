@@ -1,6 +1,5 @@
 set(phonon_VGO_SRCS
     graphicsview/glpainter.cpp
-    graphicsview/glarbpainter.cpp
     graphicsview/glslpainter.cpp
     graphicsview/qpainterpainter.cpp
     graphicsview/videographicsobject.cpp

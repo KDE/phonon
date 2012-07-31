@@ -23,7 +23,6 @@
 
 #include "abstractvideographicspainter.h"
 #include "factory_p.h"
-#include "glarbpainter.h"
 #include "glslpainter.h"
 #include "medianode_p.h"
 #include "phonondefs_p.h"
@@ -39,7 +38,6 @@ QMap<GraphicsPainterType, QList<VideoFrame::Format> > VideoGraphicsPainterMetaFa
 {
     QMap<GraphicsPainterType, QList<VideoFrame::Format> > map;
     map.insert(GraphicsPainterGlsl, GlslPainter().supportedFormats());
-    map.insert(GraphicsPainterGlArb, GlArbPainter().supportedFormats());
     map.insert(GraphicsPainterQPainter, QPainterPainter().supportedFormats());
     return map;
 }
@@ -77,8 +75,6 @@ public:
             Q_ASSERT(painterType != GraphicsPainterNone);
         case GraphicsPainterGlsl:
             return new GlslPainter;
-        case GraphicsPainterGlArb:
-            return new GlArbPainter;
         case GraphicsPainterQPainter:
             return new QPainterPainter;
         }
