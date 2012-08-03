@@ -394,6 +394,14 @@ namespace Phonon
              *
              * \return The total time in milliseconds.
              *
+             * \note The total time may change throughout playback as more accurate
+             *       calculations become available, so it is recommended to connect
+             *       and use the totalTimeChanged signal whenever possible unless
+             *       best precision is not of importance.
+             *
+             * \warning The total time is undefined until the MediaObject entered
+             *          the PlayingState. A valid total time is always indicated by
+             *          emission of the totalTimeChanged signal.
              * \see totalTimeChanged
              */
             qint64 totalTime() const;
@@ -617,6 +625,12 @@ namespace Phonon
              * time of the media can only be known after some time. Initially the
              * totalTime function can not return useful information. You have
              * to wait for this signal to know the real total time.
+             *
+             * This signal may appear at any given point after a MediaSource was set.
+             * Namely in the LoadingState, BufferingState, PlayingState or PausedState.
+             *
+             * \note When changing the currentSource there is no signal emission until
+             *       a reasonable value for the new source has been calculated.
              *
              * \param newTotalTime The length of the media file in milliseconds.
              *
