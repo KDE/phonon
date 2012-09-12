@@ -10,6 +10,13 @@ set(PHONON_DOXYGEN_SOURCE_DIR
 )
 string(REGEX REPLACE ";" " " PHONON_DOXYGEN_SOURCE_DIR "${PHONON_DOXYGEN_SOURCE_DIR}")
 
+set(PHONON_DOXYGEN_EXCLUDE
+    ${PHONON_SOURCE_DIR}/phonon/backend
+    ${PHONON_SOURCE_DIR}/phonon/experimental
+)
+string(REGEX REPLACE ";" " " PHONON_DOXYGEN_EXCLUDE "${PHONON_DOXYGEN_EXCLUDE}")
+
+
 configure_file(Doxyfile.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
 add_custom_target("html" ALL
