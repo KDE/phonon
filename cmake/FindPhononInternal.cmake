@@ -74,14 +74,25 @@ endif(NOT QT_QTDBUS_FOUND)
 
 # - Automoc
 
-find_package(Automoc4 REQUIRED)
-if (NOT AUTOMOC4_VERSION)
-    set(AUTOMOC4_VERSION "0.9.83")
-endif (NOT AUTOMOC4_VERSION)
-macro_ensure_version("0.9.86" "${AUTOMOC4_VERSION}" _automoc4_version_ok)
-if (NOT _automoc4_version_ok)
-    message(FATAL_ERROR "Your version of automoc4 is too old. You have ${AUTOMOC4_VERSION}, you need at least 0.9.86")
-endif (NOT _automoc4_version_ok)
+# Starting with CMake 2.8.6 there is a builtin to replace automoc4, use that when possible.
+if(CMAKE_VERSION VERSION_GREATER 2.8.5)
+    message(STATUS "Using CMake automoc builtin")
+    set(CMAKE_AUTOMOC TRUE)
+    # Compatiblity Macro
+    macro(AUTOMOC4_ADD_LIBRARY _target_NAME _add_executable_param)
+        add_library(${_target_NAME} ${_add_executable_param} ${ARGN})
+    endmacro(AUTOMOC4_ADD_LIBRARY)
+else(CMAKE_VERSION VERSION_GREATER 2.8.5)
+    message(STATUS "Can not use CMake automoc builtin, trying to find automoc4")
+    find_package(Automoc4 REQUIRED)
+    if (NOT AUTOMOC4_VERSION)
+        set(AUTOMOC4_VERSION "0.9.83")
+    endif (NOT AUTOMOC4_VERSION)
+    macro_ensure_version("0.9.86" "${AUTOMOC4_VERSION}" _automoc4_version_ok)
+    if (NOT _automoc4_version_ok)
+        message(FATAL_ERROR "Your version of automoc4 is too old. You have ${AUTOMOC4_VERSION}, you need at least 0.9.86")
+    endif (NOT _automoc4_version_ok)
+endif(CMAKE_VERSION VERSION_GREATER 2.8.5)
 
 # restore the original CMAKE_MODULE_PATH
 set(CMAKE_MODULE_PATH ${_phonon_cmake_module_path_back})
