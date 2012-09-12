@@ -16,8 +16,7 @@ almost certainly the right choice for you.  It provides an API that any Qt
 developer will be comfortable with, and uses the native multimedia frameworks
 on Windows and MacOS.  On UNIX systems, where there is no one standard
 multimedia system, it offers <a href="http://www.gstreamer.net/">GStreamer</a>
-and <a href="http://xinehq.de/">Xine</a> backends, and more (such as
-<a href="http://www.videolan.org/">VLC</a>) are available from third parties.
+and <a href="http://www.videolan.org/">VLC</a> backends.
 
 However, Phonon is not aimed at professional audio applications (in the style of
 <a href="http://audacity.sourceforge.net/">Audacity</a>, say).  For these applications,
@@ -35,7 +34,6 @@ Nokia Corporation and/or its subsidiary(-ies)
 
 @maintainers
 Harald Sitter \<sitter@kde.org\>
-Martin Sandsmark \<martin.sandsmark@kde.org\>
 
 @licenses
 Libraries: @lgpl<br>
@@ -66,12 +64,12 @@ If you want more immediate help, try the \#phonon IRC channel on Freenode.
 
 */
 
-// DOXYGEN_VERSION=4.5.55
+// DOXYGEN_VERSION=4.7.0
 // DOXYGEN_NAME=Phonon
 // DOXYGEN_ENABLE=YES
-// DOXYGEN_SET_INPUT = @topdir@/phonon/ @topdir@/phonon/Mainpage.dox
-// DOXYGEN_SET_FILE_PATTERNS = *.h *.dox */phononnamespace.h.in
-// ignore backend docs
-// DOXYGEN_SET_EXCLUDE_PATTERNS = *interface.h */phonon/examples/* */tests/* *_p.h */experimental/videocapturedevice/* */phonon/backend*
+// DOXYGEN_SET_INPUT = @topdir@/phonon/
+// DOXYGEN_SET_EXCLUDE = @topdir@/phonon/backend/ @topdir@/phonon/experimental/
+// DOXYGEN_SET_FILE_PATTERNS = *.h *.dox
+// DOXYGEN_SET_EXCLUDE_PATTERNS = *interface.h *_p.h
 
 // vim:ts=4:sw=4:expandtab:filetype=doxygen
