@@ -68,9 +68,9 @@ endif (${QT_MIN_VERSION} VERSION_LESS "4.6.0")
 find_package(Qt4 ${_REQ_STRING_KDE4})
 
 # TODO: do we want this here?
-if (QT_QTDBUS_FOUND)
+if (NOT QT_QTDBUS_FOUND)
    message(WARNING "Building without DBus support as QtDBus was not found.")
-endif(QT_QTDBUS_FOUND)
+endif(NOT QT_QTDBUS_FOUND)
 
 # - Automoc
 
