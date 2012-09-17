@@ -18,15 +18,6 @@ set(phota_SRCS
 
 qt4_wrap_ui(phota_SRCS videoeffects.ui)
 
-#Fails on mediacontroller, for some reason mediacontroller.moc never gets created.
-#qt4_automoc(${phota_SRCS})
-
-qt4_wrap_cpp(phota_MOC_SRCS
-    mainwindow.h
-    mediacontroller.h
-    videoeffects.h
-)
-
-add_executable(phota ${phota_SRCS} ${phota_MOC_SRCS})
+phonon_add_executable(phota ${phota_SRCS})
 
 target_link_libraries(phota ${QT_LIBRARIES} phonon)

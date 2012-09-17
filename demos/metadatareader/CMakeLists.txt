@@ -14,8 +14,6 @@ set(metadatareader_SRCS
     metadatareader.cpp
 )
 
-qt4_automoc(${metadatareader_SRCS})
-
-add_executable(metadatareader ${metadatareader_SRCS} ${metadatareader_MOC_SRCS})
+phonon_add_executable(metadatareader ${metadatareader_SRCS})
 
 target_link_libraries(metadatareader ${QT_LIBRARIES} phonon)

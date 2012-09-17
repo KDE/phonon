@@ -67,6 +67,3 @@ void MetaDataReader::checkForError(Phonon::State state, Phonon::State)
         quit();
     }
 }
-
-
-#include "metadatareader.moc"

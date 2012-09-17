@@ -78,7 +78,10 @@ endif(NOT QT_QTDBUS_FOUND)
 if(CMAKE_VERSION VERSION_GREATER 2.8.5)
     message(STATUS "Using CMake automoc builtin")
     set(CMAKE_AUTOMOC TRUE)
-    # Compatiblity Macro
+    # Compatiblity Macros
+    macro(AUTOMOC4_ADD_EXECUTABLE _target_NAME)
+        add_executable(${_target_NAME} ${ARGN})
+    endmacro(AUTOMOC4_ADD_EXECUTABLE _target_NAME)
     macro(AUTOMOC4_ADD_LIBRARY _target_NAME _add_executable_param)
         add_library(${_target_NAME} ${_add_executable_param} ${ARGN})
     endmacro(AUTOMOC4_ADD_LIBRARY)

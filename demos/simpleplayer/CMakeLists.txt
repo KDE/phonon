@@ -14,8 +14,6 @@ set(simpleplayer_SRCS
     player.cpp
 )
 
-qt4_automoc(${simpleplayer_SRCS})
-
-add_executable(simpleplayer ${simpleplayer_SRCS} ${simpleplayer_MOC_SRCS})
+phonon_add_executable(simpleplayer ${simpleplayer_SRCS})
 
 target_link_libraries(simpleplayer ${QT_LIBRARIES} phonon)

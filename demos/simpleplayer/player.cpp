@@ -142,6 +142,3 @@ void Player::mediaStateChanged(Phonon::State newState, Phonon::State oldState)
         break;
     }
 }
-
-#include "player.moc"
-

@@ -123,5 +123,3 @@ void CaptureWidget::mediaStateChanged(Phonon::State newState)
         break;
     }
 }
-
-#include "capture.moc"

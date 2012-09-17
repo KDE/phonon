@@ -14,8 +14,6 @@ set(simplecapture_SRCS
     capture.cpp
 )
 
-qt4_automoc(${simplecapture_SRCS})
-
-add_executable(simplecapture ${simplecapture_SRCS} ${simplecapture_MOC_SRCS})
+phonon_add_executable(simplecapture ${simplecapture_SRCS})
 
 target_link_libraries(simplecapture ${QT_LIBRARIES} phonon)
