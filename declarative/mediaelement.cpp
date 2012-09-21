@@ -96,17 +96,17 @@ void MediaElement::setSource(const QUrl &url)
 
 bool MediaElement::isPlaying() const
 {
-    return m_state & PlayingState;
+    return m_state == PlayingState;
 }
 
 bool MediaElement::isPaused() const
 {
-    return m_state & PausedState;
+    return m_state == PausedState;
 }
 
 bool MediaElement::isStopped() const
 {
-    return m_state & StoppedState;
+    return m_state == StoppedState;
 }
 
 bool MediaElement::hasVideo() const
