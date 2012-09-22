@@ -28,7 +28,7 @@
 
 namespace Phonon {
 
-void GlslPainter::addFPSOverlay()
+void GlslPainter::calculateFPS()
 {
     if (m_fps.lastTime.isNull())
         m_fps.lastTime = QTime::currentTime();
@@ -36,20 +36,32 @@ void GlslPainter::addFPSOverlay()
 
     int delta = m_fps.lastTime.msecsTo(time);
     if (delta > 2000) {
+        m_fps.value = 1000.0 * m_fps.frames / qreal(delta);
+        if (m_fps.value < 20.0)
+            qWarning() << "Drawing less than 20 frames per second!";
+        m_fps.lastTime = time;
+        m_fps.frames = 0;
+    }
+
+    ++m_fps.frames;
+}
+
+void GlslPainter::addFPSOverlay()
+{
+    if (m_fps.value != m_fps.imagedValue) {
+        // Update image
         m_fps.img.fill(Qt::blue);
         QPainter painter(&(m_fps.img));
         painter.setPen(QColor(Qt::white));
-        painter.drawText(0, 16, QString::number((int)(1000.0 * m_fps.frames / qreal(delta))));
+        painter.drawText(0, 16, QString::number((int)m_fps.value));
         painter.end();
-        m_fps.lastTime = time;
-        m_fps.frames = 0;
     }
 
     GLuint id = m_context->bindTexture(m_fps.img);
     m_context->drawTexture(QPointF(0, 0), id);
     m_context->deleteTexture(id);
 
-    ++m_fps.frames;
+    m_fps.imagedValue = m_fps.value;
 }
 
 static const char *s_phonon_rgb32Shader =
@@ -266,6 +278,7 @@ void GlslPainter::paint(QPainter *painter, QRectF target)
     m_program->release();
     painter->endNativePainting();
 
+    calculateFPS();
     addFPSOverlay();
 }
 

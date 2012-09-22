@@ -42,10 +42,20 @@ public:
     void paint(QPainter *painter, QRectF target);
 
 private:
+    void calculateFPS();
     void addFPSOverlay();
 
     struct FPS {
-        FPS() : frames(0), img(32, 32, QImage::Format_ARGB32) {}
+        FPS()
+            : value(0)
+            , imagedValue(0)
+            , frames(0)
+            , img(32, 32, QImage::Format_ARGB32)
+        {
+        }
+
+        qreal value;
+        qreal imagedValue;
         quint64 frames;
         QTime lastTime;
         QImage img;
