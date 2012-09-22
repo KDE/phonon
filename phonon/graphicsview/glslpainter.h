@@ -22,6 +22,8 @@
 #ifndef PHONON_GLSLPAINTER_H
 #define PHONON_GLSLPAINTER_H
 
+#include <QtCore/QTime>
+
 #include "glpainter.h"
 
 class QGLShaderProgram;
@@ -40,6 +42,16 @@ public:
     void paint(QPainter *painter, QRectF target);
 
 private:
+    void addFPSOverlay();
+
+    struct FPS {
+        FPS() : frames(0), img(32, 32, QImage::Format_ARGB32) {}
+        quint64 frames;
+        QTime lastTime;
+        QImage img;
+    };
+
+    struct FPS m_fps;
     QGLShaderProgram *m_program;
 };
 

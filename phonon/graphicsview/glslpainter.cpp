@@ -28,6 +28,30 @@
 
 namespace Phonon {
 
+void GlslPainter::addFPSOverlay()
+{
+    if (m_fps.lastTime.isNull())
+        m_fps.lastTime = QTime::currentTime();
+    QTime time = QTime::currentTime();
+
+    int delta = m_fps.lastTime.msecsTo(time);
+    if (delta > 2000) {
+        m_fps.img.fill(Qt::blue);
+        QPainter painter(&(m_fps.img));
+        painter.setPen(QColor(Qt::white));
+        painter.drawText(0, 16, QString::number((int)(1000.0 * m_fps.frames / qreal(delta))));
+        painter.end();
+        m_fps.lastTime = time;
+        m_fps.frames = 0;
+    }
+
+    GLuint id = m_context->bindTexture(m_fps.img);
+    m_context->drawTexture(QPointF(0, 0), id);
+    m_context->deleteTexture(id);
+
+    ++m_fps.frames;
+}
+
 static const char *s_phonon_rgb32Shader =
 "uniform sampler2D textureSampler;\n"
 "varying highp vec2 textureCoord;\n"
@@ -241,6 +265,8 @@ void GlslPainter::paint(QPainter *painter, QRectF target)
 
     m_program->release();
     painter->endNativePainting();
+
+    addFPSOverlay();
 }
 
 } // namespace Phonon
