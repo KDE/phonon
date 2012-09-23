@@ -52,6 +52,19 @@ struct VideoFrame {
         Format_I420     /** < Like YV12, but U and V are swapped */
     };
 
+    VideoFrame()
+        : width(0)
+        , height(0)
+        , format(Format_Invalid)
+    {
+        for (int i = 0; i < 4; ++i) {
+            pitch[i] = 0;
+            visiblePitch[i] = 0;
+            lines[i] = 0;
+            visibleLines[i] = 0;
+        }
+    }
+
     /// The width.
     unsigned int width;
 
