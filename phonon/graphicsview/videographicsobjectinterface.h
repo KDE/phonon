@@ -22,9 +22,9 @@
 #ifndef PHONON_VIDEOGRAPHICSOBJECTINTERFACE_H
 #define PHONON_VIDEOGRAPHICSOBJECTINTERFACE_H
 
+#include "videoframe.h"
 namespace Phonon {
 
-#include "videoframe.h"
 
 class VideoGraphicsObjectInterface
 {
