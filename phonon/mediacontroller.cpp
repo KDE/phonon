@@ -96,6 +96,12 @@ MediaController::Features MediaController::supportedFeatures() const
     if (iface->hasInterface(AddonInterface::TitleInterface)) {
         ret |= Titles;
     }
+    if (iface->hasInterface(AddonInterface::SubtitleInterface)) {
+        ret |= Subtitles;
+    }
+    if(iface->hasInterface(AddonInterface::AudioChannelInterface)) {
+        ret |= AudioChannels;
+    }
     return ret;
 }
 

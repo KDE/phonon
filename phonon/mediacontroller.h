@@ -72,7 +72,16 @@ class PHONON_EXPORT MediaController : public QObject
              * On a CD, a title is a separate sound track. On DVD, a title is a
              * separate VOB file (i.e. usually a different video entity).
              */
-            Titles = 4
+            Titles = 4,
+            /**
+             * Subtitles for videos.
+             */
+            Subtitles = 5,
+            /**
+             * Audio channel/track setting for sources with multiple tracks.
+             * This can be a DVD or a regular file based container such as MKV or MP4.
+             */
+            AudioChannels = 6
         };
         Q_DECLARE_FLAGS(Features, Feature)
 
