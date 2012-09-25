@@ -239,6 +239,16 @@ class PHONON_EXPORT MediaController : public QObject
         void setCurrentSubtitle(const Phonon::SubtitleDescription &stream);
 
         /**
+         * \brief Selects a subtitle file as subtitle source for the media.
+         *
+         * \note The file will also be added to the model of SubtitleDescriptions,
+         *       so you do not need special handling in the UI.
+         *
+         * \see setCurrentSubtitle(const Phonon::SubtitleDescription &stream)
+         */
+        void setCurrentSubtitle(const QUrl &url);
+
+        /**
          * Sets/Unsets subtitles autodetection.
          *
          * A subtitle is autoselected when it exists a subtitle

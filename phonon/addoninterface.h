@@ -92,11 +92,12 @@ class AddonInterface
             currentSubtitle,    /**< \returns \c int representing the current subtitle */
             setCurrentSubtitle, /**< Sets the current subtitle to the first
                                      \c int in the QList */
+            setCurrentSubtitleFile, /**< Sets the current subtitle to the first QUrl */
             subtitleAutodetect, /**< \returns \c bool representing if subtitles
                                       autodetection is enabled */
             setSubtitleAutodetect, /**< Sets/Unsets subtitles autodetection */
             subtitleEncoding, /**< \returns a QString representing the current encoding
-			           used to render subtitles */
+                                   used to render subtitles */
             setSubtitleEncoding, /** Sets the current encoding used to render subtitles */
             subtitleFont, /**< \returns a QFont representing the current font used
                               to render subtitles */

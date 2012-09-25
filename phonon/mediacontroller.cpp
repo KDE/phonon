@@ -329,6 +329,13 @@ void MediaController::setCurrentSubtitle(const Phonon::SubtitleDescription &stre
         AddonInterface::setCurrentSubtitle, QList<QVariant>() << qVariantFromValue(stream));
 }
 
+void MediaController::setCurrentSubtitle(const QUrl &url)
+{
+    IFACE;
+    iface->interfaceCall(AddonInterface::SubtitleInterface,
+        AddonInterface::setCurrentSubtitleFile, QList<QVariant>() << url);
+}
+
 #undef IFACE
 
 } // namespace Phonon
