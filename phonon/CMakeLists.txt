@@ -1,8 +1,14 @@
-add_subdirectory(graphicsview)
-
-if (PHONON_BUILD_EXPERIMENTAL)
-    add_subdirectory(experimental)
-endif (PHONON_BUILD_EXPERIMENTAL)
+macro_optional_find_package(OpenGL)
+macro_log_feature(OPENGL_FOUND "OpenGL" "A cross-platform graphics programming language." "http://www.opengl.org" FALSE)
+macro_log_feature(QT_QTOPENGL_FOUND "QtOpenGL" "Qt Bindngs for OpenGL." "http://www.qt-project.org" FALSE)
+if (OPENGL_FOUND AND QT_QTOPENGL_FOUND)
+    set(PHONON_OPENGLSUPPORT TRUE CACHE BOOL "Has Phonon OpenGL support ?")
+    if(PHONON_OPENGLSUPPORT)
+        add_definitions(-DHAVE_OPENGL)
+    endif(PHONON_OPENGLSUPPORT)
+else (OPENGL_FOUND AND QT_QTOPENGL_FOUND)
+    set(PHONON_OPENGLSUPPORT FALSE CACHE BOOL "Has Phonon OpenGL support ?")
+endif (OPENGL_FOUND AND QT_QTOPENGL_FOUND)
 
 macro_optional_find_package(PulseAudio 0.9.15)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
@@ -13,13 +19,10 @@ if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?")
    if(PHONON_PULSESUPPORT)
        add_definitions(-DHAVE_PULSEAUDIO)
+       include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
    endif(PHONON_PULSESUPPORT)
-   include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR})
 else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PHONON_PULSESUPPORT FALSE CACHE BOOL "Has Phonon pulseaudio support ?")
-   set(PULSEAUDIO_INCLUDE_DIR "")
-   set(PULSEAUDIO_LIBRARY "")
-   set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
 macro_optional_find_package(QZeitgeist 0.8)
@@ -30,6 +33,10 @@ if (QZEITGEIST_FOUND)
 endif(QZEITGEIST_FOUND)
 
 include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
+
+if (PHONON_BUILD_EXPERIMENTAL)
+    add_subdirectory(experimental)
+endif (PHONON_BUILD_EXPERIMENTAL)
 
 set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
@@ -66,8 +73,16 @@ set(phonon_LIB_SRCS
    volumeslider.cpp
    videoplayer.cpp
    videowidget.cpp
-   ${phonon_VGO_SRCS}
+   graphicsview/qpainterpainter.cpp
+   graphicsview/videographicsobject.cpp
    )
+
+if (PHONON_OPENGLSUPPORT)
+   list(APPEND phonon_LIB_SRCS
+      graphicsview/glpainter.cpp
+      graphicsview/glslpainter.cpp
+   )
+endif (PHONON_OPENGLSUPPORT)
 
 if (PHONON_PULSESUPPORT)
    list(APPEND phonon_LIB_SRCS
@@ -95,9 +110,9 @@ if (PHONON_PULSESUPPORT)
     target_link_libraries(phonon ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (PHONON_PULSESUPPORT)
 
-if (QT_QTOPENGL_LIBRARY AND OPENGL_FOUND)
+if (PHONON_OPENGLSUPPORT)
     target_link_libraries(phonon ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
-endif (QT_QTOPENGL_LIBRARY AND OPENGL_FOUND)
+endif (PHONON_OPENGLSUPPORT)
 
 if (QZEITGEIST_FOUND)
     target_link_libraries(phonon ${QZEITGEIST_LIBRARY})
@@ -170,7 +185,8 @@ install(FILES
    volumefadereffect.h
    volumefaderinterface.h
    volumeslider.h
-   ${phonon_VGO_HDRS}
+   graphicsview/videoframe.h
+   graphicsview/videographicsobjectinterface.h
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
