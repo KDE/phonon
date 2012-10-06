@@ -280,8 +280,9 @@ ObjectDescriptionModelData::~ObjectDescriptionModelData()
 
 void ObjectDescriptionModelData::setModelData(const QList<QExplicitlySharedDataPointer<ObjectDescriptionData> > &newData)
 {
+    d->model->beginResetModel();
     d->data = newData;
-    d->model->reset();
+    d->model->endResetModel();
 }
 
 QList<QExplicitlySharedDataPointer<ObjectDescriptionData> > ObjectDescriptionModelData::modelData() const

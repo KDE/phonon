@@ -40,7 +40,8 @@ class ListModelHelper : public QAbstractListModel
         using QAbstractListModel::layoutAboutToBeChanged;
         using QAbstractListModel::changePersistentIndexList;
         using QAbstractListModel::layoutChanged;
-        using QAbstractListModel::reset;
+        using QAbstractListModel::beginResetModel;
+        using QAbstractListModel::endResetModel;
         using QAbstractListModel::beginInsertRows;
         using QAbstractListModel::endInsertRows;
         using QAbstractListModel::beginRemoveRows;
