@@ -186,6 +186,26 @@ endif (CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
 # Keep this portion copy'n'pastable for updatability.
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+# this macro is for internal use only.
+macro(KDE_CHECK_FLAG_EXISTS FLAG VAR DOC)
+   if(NOT ${VAR} MATCHES "${FLAG}")
+      set(${VAR} "${${VAR}} ${FLAG}" CACHE STRING "Flags used by the linker during ${DOC} builds." FORCE)
+   endif(NOT ${VAR} MATCHES "${FLAG}")
+endmacro(KDE_CHECK_FLAG_EXISTS FLAG VAR)
+
+if (MSVC)
+   set (KDE4_ENABLE_EXCEPTIONS -EHsc)
+
+   # Qt disables the native wchar_t type, do it too to avoid linking issues
+   set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Zc:wchar_t-" )
+
+   # make sure that no header adds libcmt by default using #pragma comment(lib, "libcmt.lib") as done by mfc/afx.h
+   kde_check_flag_exists("/NODEFAULTLIB:libcmt /DEFAULTLIB:msvcrt" CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "Release with Debug Info")
+   kde_check_flag_exists("/NODEFAULTLIB:libcmt /DEFAULTLIB:msvcrt" CMAKE_EXE_LINKER_FLAGS_RELEASE "release")
+   kde_check_flag_exists("/NODEFAULTLIB:libcmt /DEFAULTLIB:msvcrt" CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "release minsize")
+   kde_check_flag_exists("/NODEFAULTLIB:libcmtd /DEFAULTLIB:msvcrtd" CMAKE_EXE_LINKER_FLAGS_DEBUG "debug")
+endif(MSVC)
+
 # This macro is for internal use only
 # Return the directories present in gcc's include path.
 macro(_DETERMINE_GCC_SYSTEM_INCLUDE_DIRS _lang _result)
@@ -229,10 +249,15 @@ if (CMAKE_COMPILER_IS_GNUCXX)
    set(CMAKE_C_FLAGS_DEBUGFULL        "-g3 -fno-inline")
    set(CMAKE_C_FLAGS_PROFILE          "-g3 -fno-inline -ftest-coverage -fprofile-arcs")
 
+   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
+   # As of Qt 4.6.x we need to override the new exception macros if we want compile with -fno-exceptions
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-exceptions -DQT_NO_EXCEPTIONS -fno-check-new -fno-common")
+
    if (CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
-     set ( CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
-     # As off Qt 4.6.x we need to override the new exception macros if we want compile with -fno-exceptions
-     set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-exceptions -DQT_NO_EXCEPTIONS -fno-check-new -fno-common")
+     # This should not be needed, as it is also part of _KDE4_PLATFORM_DEFINITIONS below.
+     # It is kept here nonetheless both for backwards compatibility in case one does not use add_definitions(${KDE4_DEFINITIONS})
+     # and also because it is/was needed by glibc for snprintf to be available when building C files.
+     # See commit 4a44862b2d178c1d2e1eb4da90010d19a1e4a42c.
      add_definitions (-D_BSD_SOURCE)
    endif (CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
 
@@ -245,7 +270,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
    if (MINGW)
       set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols -Wl,--disable-auto-import")
       set (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--export-all-symbols -Wl,--disable-auto-import")
-
    endif (MINGW)
 
    check_cxx_compiler_flag(-fPIE HAVE_FPIE_SUPPORT)
@@ -308,20 +332,47 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       file(WRITE "${_source_file}" "${_source}")
       set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${QT_INCLUDES}")
 
-      try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${_include_dirs}" COMPILE_OUTPUT_VARIABLE _compile_output_var)
+      try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${_include_dirs}" OUTPUT_VARIABLE _compile_output_var)
 
       if(NOT _compile_result)
-         message(FATAL_ERROR "Qt compiled without support for -fvisibility=hidden. This will break plugins and linking of some applications. Please fix your Qt installation.")
+         message("${_compile_output_var}")
+         message(FATAL_ERROR "Qt compiled without support for -fvisibility=hidden. This will break plugins and linking of some applications. Please fix your Qt installation (try passing --reduce-exports to configure).")
       endif(NOT _compile_result)
 
       if (GCC_IS_NEWER_THAN_4_2)
-          set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden")
+         set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type -fvisibility-inlines-hidden")
       endif (GCC_IS_NEWER_THAN_4_2)
    else (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
       set (__KDE_HAVE_GCC_VISIBILITY 0)
    endif (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
 
 endif (CMAKE_COMPILER_IS_GNUCXX)
+
+
+if (CMAKE_C_COMPILER MATCHES "icc")
+
+   set (KDE4_ENABLE_EXCEPTIONS -fexceptions)
+   # Select flags.
+   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+   set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_CXX_FLAGS_DEBUG          "-O2 -g -fno-inline -noalign")
+   set(CMAKE_CXX_FLAGS_DEBUGFULL      "-g -fno-inline -noalign")
+   set(CMAKE_C_FLAGS_RELWITHDEBINFO   "-O2 -g")
+   set(CMAKE_C_FLAGS_RELEASE          "-O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_C_FLAGS_DEBUG            "-O2 -g -fno-inline -noalign")
+   set(CMAKE_C_FLAGS_DEBUGFULL        "-g -fno-inline -noalign")
+
+   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -ansi -Wall -w1 -Wpointer-arith -fno-common")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ansi -Wall -w1 -Wpointer-arith -fno-exceptions -fno-common")
+
+   # visibility support
+   set(__KDE_HAVE_ICC_VISIBILITY)
+#   check_cxx_compiler_flag(-fvisibility=hidden __KDE_HAVE_ICC_VISIBILITY)
+#   if (__KDE_HAVE_ICC_VISIBILITY)
+#      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+#   endif (__KDE_HAVE_ICC_VISIBILITY)
+
+endif (CMAKE_C_COMPILER MATCHES "icc")
 
 #-------------------------------------------------------------------------------
 
