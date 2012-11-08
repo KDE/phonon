@@ -23,6 +23,7 @@
 #define PHONON_DECLARATIVE_VIDEOELEMENT_H
 
 #include <QtDeclarative/QDeclarativeItem>
+#include <QtDeclarative/QDeclarativeParserStatus>
 
 #include "abstractinitable.h"
 #include "videoformatspy.h"

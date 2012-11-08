@@ -24,6 +24,7 @@
 
 #include <QtCore/QUrl>
 #include <QtDeclarative/QDeclarativeItem>
+#include <QtDeclarative/QDeclarativeParserStatus>
 
 #include <phonon/phononnamespace.h>
 
