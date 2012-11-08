@@ -21,19 +21,14 @@
 
 #include "videographicsobject.h"
 
-#include <QtGui/QPainter>
-
 #include "abstractvideographicspainter.h"
 #include "factory_p.h"
+#include "glslpainter.h"
 #include "medianode_p.h"
 #include "phonondefs_p.h"
 #include "qpainterpainter.h"
 #include "videoframe.h"
 #include "videographicsobjectinterface.h"
-
-#ifdef HAVE_OPENGL
-# include "glslpainter.h"
-#endif
 
 #define PHONON_INTERFACENAME VideoGraphicsObjectInterface
 
@@ -42,9 +37,7 @@ namespace Phonon {
 QMap<GraphicsPainterType, QList<VideoFrame::Format> > VideoGraphicsPainterMetaFactory::detectTypes()
 {
     QMap<GraphicsPainterType, QList<VideoFrame::Format> > map;
-#ifdef HAVE_OPENGL
     map.insert(GraphicsPainterGlsl, GlslPainter().supportedFormats());
-#endif
     map.insert(GraphicsPainterQPainter, QPainterPainter().supportedFormats());
     return map;
 }
@@ -80,10 +73,8 @@ public:
         case GraphicsPainterNone:
             // TODO: what to do what to do? :(
             Q_ASSERT(painterType != GraphicsPainterNone);
-#ifdef HAVE_OPENGL
         case GraphicsPainterGlsl:
             return new GlslPainter;
-#endif
         case GraphicsPainterQPainter:
             return new QPainterPainter;
         }
