@@ -67,7 +67,5 @@ void VideoDataOutput2Private::setupBackendObject()
 } // namespace Experimental
 } // namespace Phonon
 
-#include "videodataoutput2.moc"
-
 #undef PHONON_CLASSNAME
 // vim: sw=4 ts=4 tw=80

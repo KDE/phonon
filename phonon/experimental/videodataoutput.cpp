@@ -110,7 +110,5 @@ void VideoDataOutput::stop()
 } // namespace Experimental
 } // namespace Phonon
 
-#include "videodataoutput.moc"
-
 #undef PHONON_CLASSNAME
 // vim: sw=4 ts=4 tw=80

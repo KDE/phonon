@@ -65,8 +65,6 @@ void AudioDataOutputPrivate::setupBackendObject()
 
 } // namespace Phonon
 
-#include "audiodataoutput.moc"
-
 QT_END_NAMESPACE
 QT_END_HEADER
 
