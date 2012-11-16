@@ -27,6 +27,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QMutex>
+#include <QtGui/QApplication>
 
 #ifdef HAVE_PULSEAUDIO
 #include "pulsestream_p.h"
@@ -41,6 +42,7 @@
 #endif // HAVE_PULSEAUDIO
 
 #include "phononnamespace_p.h"
+#include "platform_p.h"
 
 QT_BEGIN_NAMESPACE
 
