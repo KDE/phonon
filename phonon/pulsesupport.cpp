@@ -1120,9 +1120,14 @@ static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString str
     logMessage(QString::fromLatin1("Initialising streamindex %1").arg(streamUuid));
     if (!role.isEmpty()) {
         logMessage(QString::fromLatin1("Setting role to %1 for streamindex %2").arg(role).arg(streamUuid));
-        setenv("PULSE_PROP_media.role", role.toLatin1().constData(), 1);
+        qputenv("PULSE_PROP_media.role", role.toLatin1());
     }
-    setenv("PULSE_PROP_phonon.streamid", streamUuid.toLatin1().constData(), 1);
+    qputenv("PULSE_PROP_phonon.streamid", streamUuid.toLatin1());
+
+    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_NAME, Platform::applicationName().toUtf8());
+    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_VERSION, qApp->applicationVersion().toUtf8());
+    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_ICON_NAME, qApp->applicationName().toUtf8());
+
     PulseStream *stream = new PulseStream(streamUuid);
     map[streamUuid] = stream;
     return stream;
