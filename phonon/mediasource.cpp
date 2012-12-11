@@ -349,6 +349,66 @@ void MediaSourcePrivate::setCaptureDevices(const AudioCaptureDevice &audioDevice
 }
 #endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
 
+QDebug operator <<(QDebug dbg, const Phonon::MediaSource &source)
+{
+    switch (source.type()) {
+    case MediaSource::Invalid:
+        dbg.nospace() << "Invalid()";
+        break;
+    case MediaSource::LocalFile:
+        dbg.nospace() << "LocalFile(" << source.url() << ")";
+        break;
+    case MediaSource::Url:
+        dbg.nospace() << "Url(" << source.url() << ")";
+        break;
+    case MediaSource::Disc:
+        dbg.nospace() << "Disc(";
+        switch (source.discType()) {
+        case NoDisc:
+            dbg.nospace() << "NoDisc";
+            break;
+        case Cd:
+            dbg.nospace() << "Cd: " << source.deviceName();
+            break;
+        case Dvd:
+            dbg.nospace() << "Dvd: " << source.deviceName();
+            break;
+        case Vcd:
+            dbg.nospace() << "Vcd: " << source.deviceName();
+            break;
+        case BluRay:
+            dbg.nospace() << "BluRay: " << source.deviceName();
+            break;
+        }
+        dbg.nospace() << ")";
+        break;
+    case MediaSource::Stream: {
+        dbg.nospace() << "Stream(IOAddr: " << source.d->ioDevice;
+        QObject *qiodevice = qobject_cast<QObject *>(source.d->ioDevice);
+        if (qiodevice)
+            dbg.nospace() << " IOClass: " << qiodevice->metaObject()->className();
+
+        dbg.nospace() << "; StreamAddr: " << source.stream();
+        QObject *qstream = qobject_cast<QObject *>(source.stream());
+        if (qstream)
+            dbg.nospace() << " StreamClass: " << qstream->metaObject()->className();
+
+        dbg.nospace() << ")";
+        break;
+    }
+    case MediaSource::CaptureDevice:
+    case MediaSource::AudioVideoCapture:
+        dbg.nospace() << "AudioVideoCapture(A:" << source.audioCaptureDevice().name()
+                      << "/V: " << source.videoCaptureDevice().name() << ")";
+        break;
+    case MediaSource::Empty:
+        dbg.nospace() << "Empty()";
+        break;
+    }
+
+    return dbg.maybeSpace();
+}
+
 } // namespace Phonon
 
 QT_END_NAMESPACE
