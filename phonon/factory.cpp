@@ -114,6 +114,7 @@ void Factory::setBackend(QObject *b)
 
 bool FactoryPrivate::createBackend()
 {
+    pDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STR << "trying to create backend...";
 #ifndef QT_NO_LIBRARY
     Q_ASSERT(m_backendObject == 0);
 
