@@ -47,6 +47,7 @@ set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes wit
 set(PHONON_LIB_PATCH_VERSION "60") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
+set(PHONON_LIB_SONAME phonon)
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
@@ -58,9 +59,9 @@ include_directories(${QT_INCLUDES}
                     ${CMAKE_CURRENT_BINARY_DIR}/phonon)
 
 # Convenience variable to hold target link libraries we always need.
-set(PHONON_LIBS phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+set(PHONON_LIBS ${PHONON_LIB_SONAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 if(QT_QTDBUS_FOUND)
-    list(APPEND PHONON_LIBS phonon ${QT_QTDBUS_LIBRARY})
+    list(APPEND PHONON_LIBS ${QT_QTDBUS_LIBRARY})
 endif(QT_QTDBUS_FOUND)
 
 

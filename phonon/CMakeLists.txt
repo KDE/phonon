@@ -88,35 +88,34 @@ endif (PHONON_NO_PLATFORMPLUGIN)
 
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 
-automoc4_add_library(phonon SHARED ${phonon_LIB_SRCS})
-target_link_libraries(phonon ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+automoc4_add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
+target_link_libraries(${PHONON_LIB_SONAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 if (PHONON_PULSESUPPORT)
-    target_link_libraries(phonon ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
+    target_link_libraries(${PHONON_LIB_SONAME} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (PHONON_PULSESUPPORT)
 
 if (QT_QTOPENGL_LIBRARY AND OPENGL_FOUND)
-    target_link_libraries(phonon ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
+    target_link_libraries(${PHONON_LIB_SONAME} ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
 endif (QT_QTOPENGL_LIBRARY AND OPENGL_FOUND)
 
 if (QZEITGEIST_FOUND)
-    target_link_libraries(phonon ${QZEITGEIST_LIBRARY})
+    target_link_libraries(${PHONON_LIB_SONAME} ${QZEITGEIST_LIBRARY})
 endif(QZEITGEIST_FOUND)
 
 if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-  target_link_libraries(phonon ${QT_QTDBUS_LIBRARY})
+  target_link_libraries(${PHONON_LIB_SONAME} ${QT_QTDBUS_LIBRARY})
 endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 if (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
   # We need to explicitly link libm to phonon in Solaris
-  target_link_libraries(phonon m)
+  target_link_libraries(${PHONON_LIB_SONAME} m)
 endif (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
 
-set_target_properties(phonon PROPERTIES
-                             VERSION ${PHONON_LIB_VERSION}
-                             SOVERSION ${PHONON_LIB_SOVERSION}
-                             DEFINE_SYMBOL MAKE_PHONON_LIB
-                             LINK_INTERFACE_LIBRARIES ""
-                             )
+set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
+                                           VERSION ${PHONON_LIB_VERSION}
+                                           SOVERSION ${PHONON_LIB_SOVERSION}
+                                           DEFINE_SYMBOL MAKE_PHONON_LIB
+                                           LINK_INTERFACE_LIBRARIES "")
 # LINK_INTERFACE_LIBRARIES: By default don't add any linked libraries to the "exported"
 # link interfaces, so that executables linking against this library
 # will not automatically add implicit dependencies to their link list.
@@ -125,7 +124,7 @@ set_target_properties(phonon PROPERTIES
 
 
 
-install(TARGETS phonon EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
 # We write these to a strange place so the demos can find them properly
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
