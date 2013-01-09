@@ -2,12 +2,6 @@ project(Phonon)
 
 cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
-# CMP0002: we have multiple targets with the same name for the unit tests
-cmake_policy(SET CMP0002 OLD)
-
-include(CTest)
-include(CTestConfig.cmake)
-
 option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
@@ -15,8 +9,6 @@ option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" O
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
-message("-- !!!!! Tests have been removed and need to be redone !!!!!")
-#option(PHONON_BUILD_TESTS "Build the tests" OFF)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
@@ -25,11 +17,6 @@ if (PHONON_ASSERT_STATES)
     message(STATUS "Enabling backend state machine validation.")
     add_definitions(-DPHONON_ASSERT_STATES)
 endif (PHONON_ASSERT_STATES)
-
-if (PHONON_BUILD_TESTS)
-    message(STATUS "Building tests.")
-    enable_testing()
-endif (PHONON_BUILD_TESTS)
 
 set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

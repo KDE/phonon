@@ -3,7 +3,6 @@
 #
 # macro (phonon_add_executable _target)
 # macro (phonon_add_designer_plugin _target _qrc_file)
-# macro (PHONON_ADD_UNIT_TEST _test_NAME)
 # macro (PHONON_UPDATE_ICONCACHE)
 # macro (PHONON_UPDATE_ICONCACHE)
 # macro (_PHONON_ADD_ICON_INSTALL_RULE _install_SCRIPT _install_PATH _group _orig_NAME _install_NAME _l10n_SUBDIR)
@@ -33,66 +32,6 @@ macro(phonon_add_designer_plugin _target _qrc_file)
     qt4_add_resources(_srcs ${_qrc_file})
     automoc4_add_library(${_target} MODULE ${_global_add_executable_param} ${_srcs})
 endmacro(phonon_add_designer_plugin)
-
-macro (PHONON_ADD_UNIT_TEST _test_NAME)
-   set(_srcList ${ARGN})
-   set(_nogui)
-   list(GET ${_srcList} 0 first_PARAM)
-   set(_add_executable_param ${_global_add_executable_param})
-   if(${first_PARAM} STREQUAL "NOGUI")
-      set(_nogui "NOGUI")
-      set(_add_executable_param)
-   endif(${first_PARAM} STREQUAL "NOGUI")
-
-   if (NOT PHONON_BUILD_TESTS)
-      set(_add_executable_param ${_add_executable_param} EXCLUDE_FROM_ALL)
-   endif (NOT PHONON_BUILD_TESTS)
-
-   automoc4_add_executable(${_test_NAME} ${_add_executable_param} ${_srcList})
-
-   if(NOT PHONON_TEST_OUTPUT)
-      set(PHONON_TEST_OUTPUT plaintext)
-   endif(NOT PHONON_TEST_OUTPUT)
-   set(PHONON_TEST_OUTPUT ${PHONON_TEST_OUTPUT} CACHE STRING "The output to generate when running the QTest unit tests")
-
-   set(using_qtest "")
-   foreach(_filename ${_srcList})
-      if(NOT using_qtest)
-         if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_filename}")
-            file(READ ${_filename} file_CONTENT)
-            string(REGEX MATCH "QTEST_(KDE)?MAIN" using_qtest "${file_CONTENT}")
-         endif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_filename}")
-      endif(NOT using_qtest)
-   endforeach(_filename)
-
-   set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME})
-   if (Q_WS_MAC AND NOT _nogui)
-      set(_executable ${EXECUTABLE_OUTPUT_PATH}/${_test_NAME}.app/Contents/MacOS/${_test_NAME})
-   else (Q_WS_MAC AND NOT _nogui)
-      # Use .shell wrapper where available, to use uninstalled libs.
-      #if (UNIX)
-      #   set(_executable ${_executable}.shell)
-      #endif (UNIX)
-   endif (Q_WS_MAC AND NOT _nogui)
-
-   if (using_qtest AND PHONON_TEST_OUTPUT STREQUAL "xml")
-      add_test( ${_test_NAME} ${_executable} -xml -o ${_test_NAME}.tml)
-   else (using_qtest AND PHONON_TEST_OUTPUT STREQUAL "xml")
-      add_test( ${_test_NAME} ${_executable} )
-   endif (using_qtest AND PHONON_TEST_OUTPUT STREQUAL "xml")
-
-   if (NOT MSVC_IDE)   #not needed for the ide
-      # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests
-      if (NOT PHONON_BUILD_TESTS)
-         get_directory_property(_buildtestsAdded BUILDTESTS_ADDED)
-         if(NOT _buildtestsAdded)
-            add_custom_target(buildtests)
-            set_directory_properties(PROPERTIES BUILDTESTS_ADDED TRUE)
-         endif(NOT _buildtestsAdded)
-         add_dependencies(buildtests ${_test_NAME})
-      endif (NOT PHONON_BUILD_TESTS)
-   endif (NOT MSVC_IDE)
-endmacro (PHONON_ADD_UNIT_TEST)
 
 macro (PHONON_UPDATE_ICONCACHE)
     # Update mtime of hicolor icon theme dir.
