@@ -65,12 +65,8 @@ endif (${QT_MIN_VERSION} VERSION_LESS "4.6.0")
 # # Qt libs and are flexible regarding the install location of Qt under Windows:
 # set(QT_USE_IMPORTED_TARGETS TRUE)
 
+set(_REQ_STRING_KDE4 REQUIRED)
 find_package(Qt4 ${_REQ_STRING_KDE4})
-
-# TODO: do we want this here?
-if (NOT QT_QTDBUS_FOUND)
-   message(WARNING "Building without DBus support as QtDBus was not found.")
-endif(NOT QT_QTDBUS_FOUND)
 
 # - Automoc
 

@@ -36,6 +36,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(cmake/FindPhononInternal.cmake)
 
+macro_log_feature(QT_QTDBUS_FOUND "Qt4 DBus" "" "" FALSE)
+
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 
