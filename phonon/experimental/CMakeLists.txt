@@ -19,15 +19,15 @@ set(phononexperimental_LIB_SRCS
     ../abstractaudiooutput_p.cpp
     ../abstractvideooutput_p.cpp
    )
-automoc4_add_library(phononexperimental SHARED ${phononexperimental_LIB_SRCS})
-target_link_libraries(phononexperimental ${PHONON_LIBS})
-set_target_properties(phononexperimental PROPERTIES
+automoc4_add_library(${PHONON_LIB_SONAME}experimental SHARED ${phononexperimental_LIB_SRCS})
+target_link_libraries(${PHONON_LIB_SONAME}experimental ${PHONON_LIBS})
+set_target_properties(${PHONON_LIB_SONAME}experimental PROPERTIES
                                          VERSION ${PHONON_LIB_VERSION}
                                          SOVERSION ${PHONON_LIB_SOVERSION}
                                          DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
                                          LINK_INTERFACE_LIBRARIES ""
                                          )
-install(TARGETS phononexperimental EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ${PHONON_LIB_SONAME}experimental EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install headers ###############
 install(FILES
