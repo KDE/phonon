@@ -13,6 +13,17 @@ option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
+# The following variables directly influence the library's soname version.
+# It is highly advised to think twice before changing those.
+# If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
+set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
+set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes with new interfaces
+set(PHONON_LIB_PATCH_VERSION "60") # Bump whenever you feel like it :P
+set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
+set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
+set(PHONON_LIB_SONAME phonon)
+set(PHONON_LIB_SONAME_CAMEL Phonon)
+
 if (PHONON_ASSERT_STATES)
     message(STATUS "Enabling backend state machine validation.")
     add_definitions(-DPHONON_ASSERT_STATES)
@@ -28,17 +39,6 @@ macro_log_feature(QT_QTOPENGL_FOUND "Qt4 OpenGL" "" "" FALSE)
 
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
-
-# The following variables directly influence the library's soname version.
-# It is highly advised to think twice before changing those.
-# If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
-set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
-set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "60") # Bump whenever you feel like it :P
-set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
-set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
-set(PHONON_LIB_SONAME phonon)
-set(PHONON_LIB_SONAME_CAMEL Phonon)
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
