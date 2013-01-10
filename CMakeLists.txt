@@ -37,6 +37,7 @@ set(PHONON_LIB_PATCH_VERSION "60") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 set(PHONON_LIB_SONAME phonon)
+set(PHONON_LIB_SONAME_CAMEL Phonon)
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
@@ -64,7 +65,7 @@ macro(MAKE_ABS_INSTALL_PATH _absVar _path)
 endmacro(MAKE_ABS_INSTALL_PATH)
 
 
-set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/phonon/buildsystem/)
+set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/${PHONON_LIB_SONAME}/buildsystem/)
 
 
 # Provide a cmake option, which, if set, force the Qt stuff to be installed into the
@@ -165,28 +166,29 @@ if(NOT WIN32) # pkgconfig file
     make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
     make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/phonon.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
 
-set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/phonon )
+set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/${PHONON_LIB_SONAME} )
 
 # figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
 # runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
 # This relative path will be configured into the PhononConfig.cmake
 file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake @ONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake @ONLY)
 
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/PhononConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/PhononConfigVersion.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
         DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
 
 install(EXPORT PhononLibs DESTINATION ${CMAKECONFIG_INSTALL_DIR} NAMESPACE Phonon:: FILE PhononTargets.cmake )
 
 
-install(FILES qt_phonon.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR} )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
 
 # This generates a nice library descriptor to use with [1]. It also spits out
 # a script that makes installing various versions for an ABI check a lot easier.
