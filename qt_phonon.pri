@@ -5,4 +5,4 @@
 # Consequently, we have to do some stunts to get values out of the cache.
 !exists($$_QMAKE_CACHE_)| \
    !contains($$list($$fromfile($$_QMAKE_CACHE_, CONFIG)), QTDIR_build): \
-    QT_CONFIG += phonon
+    QT_CONFIG += @PHONON_LIB_SONAME@
