@@ -51,23 +51,16 @@ include(${phonon_cmake_module_dir}/MacroEnsureVersion.cmake)
 set(_phonon_cmake_module_path_back ${CMAKE_MODULE_PATH})
 set(CMAKE_MODULE_PATH ${phonon_cmake_module_dir} ${CMAKE_MODULE_PATH} )
 
-# if the minimum Qt requirement is changed, change all occurrence in the
-# following lines
-if (NOT QT_MIN_VERSION)
-  set(QT_MIN_VERSION "4.6.0")
-endif (NOT QT_MIN_VERSION)
-if (${QT_MIN_VERSION} VERSION_LESS "4.6.0")
-  set(QT_MIN_VERSION "4.6.0")
-endif (${QT_MIN_VERSION} VERSION_LESS "4.6.0")
-
 # # Tell FindQt4.cmake to point the QT_QTFOO_LIBRARY targets at the imported targets
 # # for the Qt libraries, so we get full handling of release and debug versions of the
 # # Qt libs and are flexible regarding the install location of Qt under Windows:
 # set(QT_USE_IMPORTED_TARGETS TRUE)
 
-set(_REQ_STRING_KDE4 REQUIRED)
-find_package(Qt4 ${_REQ_STRING_KDE4})
+find_package(Qt5Core REQUIRED)
+macro_log_feature(Qt5Core_FOUND "Qt5 Core" "" "" TRUE)
 
+find_package(Qt5Widgets REQUIRED)
+macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets" "" "" TRUE)
 # - Automoc
 
 # Starting with CMake 2.8.6 there is a builtin to replace automoc4, use that when possible.
@@ -101,7 +94,7 @@ set(CMAKE_MODULE_PATH ${_phonon_cmake_module_path_back})
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
 
 set(SHARE_INSTALL_PREFIX        "share")  #              CACHE PATH "Base directory for files which go to share/")
-set(INCLUDE_INSTALL_DIR         "include" ) #           CACHE PATH "The subdirectory to the header prefix")
+set(INCLUDE_INSTALL_DIR         "include/phonon4qt5" ) #           CACHE PATH "The subdirectory to the header prefix")
 set(BIN_INSTALL_DIR             "bin"     ) #         CACHE PATH "The install dir for executables (default ${EXEC_INSTALL_PREFIX}/bin)")
 set(LIB_INSTALL_DIR             "lib${LIB_SUFFIX}" ) #  CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed (default is ${EXEC_INSTALL_PREFIX}/lib${LIB_SUFFIX})")
 set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/kde4"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
@@ -326,7 +319,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       set(_source "#include <QtCore/QtGlobal>\n int main()\n {\n #ifndef QT_VISIBILITY_AVAILABLE \n #error QT_VISIBILITY_AVAILABLE is not available\n #endif \n }\n")
       set(_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/check_qt_visibility.cpp)
       file(WRITE "${_source_file}" "${_source}")
-      set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${QT_INCLUDES}")
+      set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${Qt5Core_INCLUDE_DIRS}")
 
       try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${_include_dirs}" OUTPUT_VARIABLE _compile_output_var)
 
