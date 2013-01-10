@@ -1,6 +1,6 @@
-project(Phonon)
+project(Phonon4Qt5)
 
-cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 
 option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
@@ -21,8 +21,8 @@ set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes wit
 set(PHONON_LIB_PATCH_VERSION "60") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
-set(PHONON_LIB_SONAME phonon)
-set(PHONON_LIB_SONAME_CAMEL Phonon)
+set(PHONON_LIB_SONAME phonon4qt5)
+set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
 
 if (PHONON_ASSERT_STATES)
     message(STATUS "Enabling backend state machine validation.")
@@ -34,8 +34,11 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(cmake/FindPhononInternal.cmake)
 
-macro_log_feature(QT_QTDBUS_FOUND "Qt4 DBus" "" "" FALSE)
-macro_log_feature(QT_QTOPENGL_FOUND "Qt4 OpenGL" "" "" FALSE)
+find_package(Qt5DBus)
+macro_log_feature(Qt5DBus_FOUND "Qt5 DBus" "" "" FALSE)
+
+find_package(Qt5OpenGL)
+macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL" "" "" FALSE)
 
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
@@ -43,7 +46,9 @@ macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
 
-include_directories(${QT_INCLUDES}
+include_directories(${Qt5Core_INCLUDE_DIRS}
+                    ${Qt5Widgets_INCLUDE_DIRS}
+                    ${Qt5DBus_INCLUDE_DIRS}
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${CMAKE_CURRENT_SOURCE_DIR}/phonon

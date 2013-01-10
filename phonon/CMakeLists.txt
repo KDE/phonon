@@ -75,11 +75,11 @@ if (PHONON_PULSESUPPORT)
    )
 endif (PHONON_PULSESUPPORT)
 
-if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
+if (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
    list(APPEND phonon_LIB_SRCS
       audiooutputadaptor.cpp
    )
-endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
+endif (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
 
 option(PHONON_NO_PLATFORMPLUGIN "Do not use any platform plugin")
 if (PHONON_NO_PLATFORMPLUGIN)
@@ -89,23 +89,25 @@ endif (PHONON_NO_PLATFORMPLUGIN)
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 
 automoc4_add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
-target_link_libraries(${PHONON_LIB_SONAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets)
+
+if(Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
+    qt5_use_modules(${PHONON_LIB_SONAME} DBus)
+endif(Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
 
 if (PHONON_PULSESUPPORT)
     target_link_libraries(${PHONON_LIB_SONAME} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (PHONON_PULSESUPPORT)
 
-if (QT_QTOPENGL_LIBRARY AND OPENGL_FOUND)
-    target_link_libraries(${PHONON_LIB_SONAME} ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY})
-endif (QT_QTOPENGL_LIBRARY AND OPENGL_FOUND)
+if (Qt5OpenGL_FOUND AND OPENGL_FOUND)
+    qt5_use_modules(${PHONON_LIB_SONAME} OpenGL)
+    target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_gl_LIBRARY})
+endif (Qt5OpenGL_FOUND AND OPENGL_FOUND)
 
 if (QZEITGEIST_FOUND)
     target_link_libraries(${PHONON_LIB_SONAME} ${QZEITGEIST_LIBRARY})
 endif(QZEITGEIST_FOUND)
 
-if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-  target_link_libraries(${PHONON_LIB_SONAME} ${QT_QTDBUS_LIBRARY})
-endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 if (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
   # We need to explicitly link libm to phonon in Solaris
   target_link_libraries(${PHONON_LIB_SONAME} m)
@@ -121,7 +123,6 @@ set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
 # will not automatically add implicit dependencies to their link list.
 # This reduces inter-package dependencies and makes it easier to remove
 # dependencies of shared libraries without breaking binary compatibility.
-
 
 
 install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
@@ -173,7 +174,7 @@ install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
-if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
+if (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
     install(FILES org.kde.Phonon.AudioOutput.xml  DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
-endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
+endif (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
 
