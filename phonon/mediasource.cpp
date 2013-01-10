@@ -28,7 +28,6 @@
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
-#include <QtCore/QFSFileEngine>
 
 QT_BEGIN_NAMESPACE
 
@@ -48,28 +47,39 @@ MediaSource::MediaSource()
 MediaSource::MediaSource(const QString &filename)
     : d(new MediaSourcePrivate(LocalFile))
 {
-    const QFileInfo fileInfo(filename);
-    if (fileInfo.exists()) {
-        bool localFs = QAbstractFileEngine::LocalDiskFlag & QFSFileEngine(filename).fileFlags(QAbstractFileEngine::LocalDiskFlag);
-        if (localFs && !filename.startsWith(QLatin1String(":/")) && !filename.startsWith(QLatin1String("qrc://"))) {
-            d->url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
-        } else {
+    if (filename.startsWith(QLatin1String(":/")) || filename.startsWith(QLatin1String("qrc:///"))) {
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            // it's a Qt resource -> use QFile
+        d->url.setScheme("qrc");
+        d->url.setPath(filename.mid(filename.startsWith(QLatin1Char(':')) ? 1 : 6));
+
+        // QFile needs :/ syntax
+        QString path(QLatin1Char(':') + d->url.path());
+
+        if (QFile::exists(path)) {
             d->type = Stream;
-            d->ioDevice = new QFile(filename);
+            d->ioDevice = new QFile(path);
             d->setStream(new IODeviceStream(d->ioDevice, d->ioDevice));
-            d->url =  QUrl::fromLocalFile(fileInfo.absoluteFilePath());
-#else
-            d->type = Invalid;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        }
-    } else {
-        d->url = filename;
-        if (d->url.isValid()) {
-            d->type = Url;
         } else {
             d->type = Invalid;
+        }
+#else
+        d->type = Invalid;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+    } else {
+        const QFileInfo fileinfo(filename);
+        if (fileinfo.exists()) {
+            d->url = QUrl::fromLocalFile(fileinfo.absoluteFilePath());
+            if (!d->url.host().isEmpty()) {
+                // filename points to a file on a network share (eg \\host\share\path)
+                d->type = Url;
+            }
+        } else {
+            d->url = filename;
+            if (d->url.isValid()) {
+                d->type = Url;
+            } else {
+                d->type = Invalid;
+            }
         }
     }
 }
@@ -78,6 +88,22 @@ MediaSource::MediaSource(const QUrl &url)
     : d(new MediaSourcePrivate(Url))
 {
     if (url.isValid()) {
+        if (url.scheme() == QLatin1String("qrc")) {
+#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            // QFile needs :/ syntax
+            QString path(QLatin1Char(':') + url.path());
+
+            if (QFile::exists(path)) {
+                d->type = Stream;
+                d->ioDevice = new QFile(path);
+                d->setStream(new IODeviceStream(d->ioDevice, d->ioDevice));
+            } else {
+                d->type = Invalid;
+            }
+#else
+            d->type = Invalid;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        }
         d->url = url;
     } else {
         d->type = Invalid;

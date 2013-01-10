@@ -247,46 +247,49 @@ class CleanUpGlobalStatic
  */
 #define PHONON_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                            \
 static QBasicAtomicPointer<TYPE > _k_static_##NAME = Q_BASIC_ATOMIC_INITIALIZER(0); \
-static bool _k_static_##NAME##_destroyed;                                      \
+static bool _k_static_##NAME##_destroyed;                                           \
 static struct PHONON_GLOBAL_STATIC_STRUCT_NAME(NAME)                                \
-{                                                                              \
-    bool isDestroyed()                                                         \
-    {                                                                          \
-        return _k_static_##NAME##_destroyed;                                   \
-    }                                                                          \
-    inline operator TYPE*()                                                    \
-    {                                                                          \
-        return operator->();                                                   \
-    }                                                                          \
-    inline TYPE *operator->()                                                  \
-    {                                                                          \
-        TYPE *p = _k_static_##NAME;                                            \
-        if (!p) {                                                              \
-            if (isDestroyed()) {                                               \
+{                                                                                   \
+    inline bool isDestroyed() const                                                 \
+    {                                                                               \
+        return _k_static_##NAME##_destroyed;                                        \
+    }                                                                               \
+    inline bool exists() const                                                      \
+    {                                                                               \
+        return _k_static_##NAME.load() != 0;                                        \
+    }                                                                               \
+    inline operator TYPE*()                                                         \
+    {                                                                               \
+        return operator->();                                                        \
+    }                                                                               \
+    inline TYPE *operator->()                                                       \
+    {                                                                               \
+        if (!_k_static_##NAME.load()) {                                             \
+            if (isDestroyed()) {                                                    \
                 qFatal("Fatal Error: Accessed global static '%s *%s()' after destruction. " \
-                       "Defined at %s:%d", #TYPE, #NAME, __FILE__, __LINE__);  \
-            }                                                                  \
-            p = new TYPE ARGS;                                                 \
-            if (!_k_static_##NAME.testAndSetOrdered(0, p)) {                   \
-                delete p;                                                      \
-                p = _k_static_##NAME;                                          \
-            } else {                                                           \
-                static Phonon::CleanUpGlobalStatic cleanUpObject = { destroy }; \
-            }                                                                  \
-        }                                                                      \
-        return p;                                                              \
-    }                                                                          \
-    inline TYPE &operator*()                                                   \
-    {                                                                          \
-        return *operator->();                                                  \
-    }                                                                          \
-    static void destroy()                                                      \
-    {                                                                          \
-        _k_static_##NAME##_destroyed = true;                                   \
-        TYPE *x = _k_static_##NAME;                                            \
-        _k_static_##NAME = 0;                                                  \
-        delete x;                                                              \
-    }                                                                          \
+                       "Defined at %s:%d", #TYPE, #NAME, __FILE__, __LINE__);       \
+            }                                                                       \
+            TYPE *x = new TYPE ARGS;                                                \
+            if (!_k_static_##NAME.testAndSetOrdered(0, x)                           \
+                && _k_static_##NAME.load() != x ) {                                 \
+                delete x;                                                           \
+            } else {                                                                \
+                static Phonon::CleanUpGlobalStatic cleanUpObject = { destroy };     \
+            }                                                                       \
+        }                                                                           \
+        return _k_static_##NAME.load();                                             \
+    }                                                                               \
+    inline TYPE &operator*()                                                        \
+    {                                                                               \
+        return *operator->();                                                       \
+    }                                                                               \
+    static void destroy()                                                           \
+    {                                                                               \
+        _k_static_##NAME##_destroyed = true;                                        \
+        TYPE *x = _k_static_##NAME.load();                                          \
+        _k_static_##NAME.store(0);                                                  \
+        delete x;                                                                   \
+    }                                                                               \
 } NAME;
 
 QT_END_NAMESPACE

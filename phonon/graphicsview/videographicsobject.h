@@ -22,7 +22,7 @@
 #ifndef PHONON_VIDEOGRAPHICSOBJECT_H
 #define PHONON_VIDEOGRAPHICSOBJECT_H
 
-#include <QtGui/QGraphicsObject>
+#include <QtWidgets/QGraphicsObject>
 #include <QtCore/QMap>
 
 #include "medianode.h"
