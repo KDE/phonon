@@ -63,52 +63,49 @@ static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_ContainerFor
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VisualizationType[]      = { "Phonon::VisualizationDescription\0" };
 */
 
+#define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
+    &QAbstractListModel::staticMetaObject, \
+    QTypedArrayData<char>::fromRawData(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X, \
+                                       sizeof(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X)), \
+    qt_meta_data_Phonon__ObjectDescriptionModel, \
+    0, 0, 0 }
+
 namespace Phonon
 {
 
 template<> const QMetaObject ObjectDescriptionModel<AudioOutputDeviceType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioOutputDeviceType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(AudioOutputDeviceType)
 };
 template<> const QMetaObject ObjectDescriptionModel<AudioCaptureDeviceType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCaptureDeviceType,
-    qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(AudioCaptureDeviceType)
 };
 template<> const QMetaObject ObjectDescriptionModel<VideoCaptureDeviceType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCaptureDeviceType,
-    qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(VideoCaptureDeviceType)
 };
 template<> const QMetaObject ObjectDescriptionModel<EffectType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_EffectType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(EffectType)
 };
 template<> const QMetaObject ObjectDescriptionModel<AudioChannelType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioChannelType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(AudioChannelType)
 };
 template<> const QMetaObject ObjectDescriptionModel<SubtitleType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_SubtitleType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(SubtitleType)
 };
-/*template<> const QMetaObject ObjectDescriptionModel<VideoOutputDeviceType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoOutputDeviceType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+/*
+template<> const QMetaObject ObjectDescriptionModel<VideoOutputDeviceType>::staticMetaObject = {
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(VideoOutputDeviceType)
 };
 template<> const QMetaObject ObjectDescriptionModel<AudioCodecType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCodecType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(AudioCodecType)
 };
 template<> const QMetaObject ObjectDescriptionModel<VideoCodecType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCodecType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(VideoCodecType)
 };
 template<> const QMetaObject ObjectDescriptionModel<ContainerFormatType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_ContainerFormatType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(ContainerFormatType)
 };
 template<> const QMetaObject ObjectDescriptionModel<VisualizationType>::staticMetaObject = {
-    { &QAbstractListModel::staticMetaObject, qt_meta_stringdata_Phonon__ObjectDescriptionModel_VisualizationType,
-      qt_meta_data_Phonon__ObjectDescriptionModel, 0 }
+    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(VisualizationType)
 };*/
 
 template<ObjectDescriptionType type>

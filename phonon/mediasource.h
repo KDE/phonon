@@ -137,12 +137,16 @@ class PHONON_EXPORT MediaSource
         /**
          * Creates a MediaSource object for a local file or a Qt resource.
          *
+         * \deprecated Use MediaSource(QUrl("qrc:///...")) for a Qt resource, MediaSource(QUrl::fromLocalFile("...")) for a local file, or MediaSource(QUrl("...")) for an URL.
+         *
          * \param fileName file name of a local media file or a Qt resource that was compiled in.
          */
-        MediaSource(const QString &fileName); //krazy:exclude=explicit
+        PHONON_DEPRECATED MediaSource(const QString &fileName); //krazy:exclude=explicit
 
         /**
          * Creates a MediaSource object for a URL.
+         *
+         * A Qt resource can be specified by using an url with a qrc scheme.
          *
          * \param url URL to a media file or stream.
          */

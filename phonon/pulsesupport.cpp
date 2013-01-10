@@ -27,7 +27,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QMutex>
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 #ifdef HAVE_PULSEAUDIO
 #include "pulsestream_p.h"

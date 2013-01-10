@@ -23,7 +23,7 @@
 #ifndef PHONON_PULSESTREAM_P_H
 #define PHONON_PULSESTREAM_P_H
 
-#include <QtCore/QtGlobal>
+#include <QtCore/QObject>
 
 #include <pulse/pulseaudio.h>
 #include <stdint.h>
