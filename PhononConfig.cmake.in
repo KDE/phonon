@@ -17,9 +17,9 @@ set(PHONON_BUILDSYSTEM_DIR "${rootDir}/@BUILDSYSTEM_INSTALL_DIR@")
 
 include(${currentDir}/PhononTargets.cmake )
 
-set(PHONON_LIBRARY Phonon::phonon)
+set(PHONON_LIBRARY Phonon::@PHONON_LIB_SONAME@)
 if(PHONON_FOUND_EXPERIMENTAL)
-    set(PHONON_EXPERIMENTAL_LIBRARY Phonon::phononexperimental)
+    set(PHONON_EXPERIMENTAL_LIBRARY Phonon::@PHONON_LIB_SONAME@experimental)
 endif(PHONON_FOUND_EXPERIMENTAL)
 set(PHONON_LIBRARIES ${PHONON_LIBRARY} ${PHONON_EXPERIMENTAL_LIBRARY})
 # The following one is only for compatiblity
