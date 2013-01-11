@@ -57,13 +57,13 @@ set(CMAKE_MODULE_PATH ${phonon_cmake_module_dir} ${CMAKE_MODULE_PATH} )
 # set(QT_USE_IMPORTED_TARGETS TRUE)
 
 find_package(Qt5Core REQUIRED)
-macro_log_feature(Qt5Core_FOUND "Qt5 Core" "" "" TRUE)
+macro_log_feature(Qt5Core_FOUND "Qt5 Core (qtbase)" "" "" TRUE)
 
 find_package(Qt5Gui REQUIRED)
-macro_log_feature(Qt5Gui_FOUND "Qt5 Gui" "" "" TRUE)
+macro_log_feature(Qt5Gui_FOUND "Qt5 Gui (qtbase)" "" "" TRUE)
 
 find_package(Qt5Widgets REQUIRED)
-macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets" "" "" TRUE)
+macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets (qtbase)" "" "" TRUE)
 
 # Compat variables for plugins.
 function(_QT4_QUERY_QMAKE VAR RESULT)
