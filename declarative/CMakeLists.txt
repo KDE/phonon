@@ -21,8 +21,9 @@ phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})
 
 target_link_libraries(phononqmlplugin
     ${PHONON_LIBS}
-    ${QT_QTDECLARATIVE_LIBRARY}
 )
+
+qt5_use_modules(phononqmlplugin Declarative)
 
 install(TARGETS phononqmlplugin DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
 install(FILES ${phonon_QMLS} DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)

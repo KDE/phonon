@@ -69,6 +69,7 @@ namespace Declarative
 
 class Plugin : public QDeclarativeExtensionPlugin
 {
+    Q_PLUGIN_METADATA(IID "org.kde.phonon.DeclarativePlugin")
 public:
     virtual void registerTypes(const char *uri);
 };

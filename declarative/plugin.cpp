@@ -58,5 +58,3 @@ void Plugin::registerTypes(const char *uri)
 
 } // namespace Declarative
 } // namespace Phonon
-
-Q_EXPORT_PLUGIN2(PhononDeclarativePlugin, QT_PREPEND_NAMESPACE(Phonon::Declarative::Plugin));
