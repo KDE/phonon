@@ -1,10 +1,10 @@
 project(phota)
-cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Widgets REQUIRED)
 
-find_package(Phonon REQUIRED)
+find_package(Phonon4Qt5 REQUIRED)
 
 add_definitions(${QT_DEFINITIONS} ${PHONON_DEFINITIONS})
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${PHONON_INCLUDES})
@@ -16,8 +16,9 @@ set(phota_SRCS
     videoeffects.cpp
 )
 
-qt4_wrap_ui(phota_SRCS videoeffects.ui)
+qt5_wrap_ui(phota_SRCS videoeffects.ui)
 
 phonon_add_executable(phota ${phota_SRCS})
 
-target_link_libraries(phota ${QT_LIBRARIES} phonon)
+qt5_use_modules(phota Core Widgets)
+target_link_libraries(phota ${QT_LIBRARIES} phonon4qt5)
