@@ -27,7 +27,7 @@ namespace Phonon
 
 int PacketPool::packetSize() const { return d_ptr->packetSize; }
 int PacketPool::poolSize() const { return d_ptr->poolSize; }
-int PacketPool::unusedPackets() const { return d_ptr->ringBufferSize; }
+int PacketPool::unusedPackets() const { return d_ptr->ringBufferSize.loadAcquire(); }
 
 PacketPoolPrivate::PacketPoolPrivate(int _packetSize, int _poolSize)
     : freePackets(new PacketPrivate *[_poolSize]),
@@ -44,7 +44,7 @@ PacketPoolPrivate::PacketPoolPrivate(int _packetSize, int _poolSize)
 
 PacketPoolPrivate::~PacketPoolPrivate()
 {
-    Q_ASSERT(poolSize == ringBufferSize);
+    Q_ASSERT(poolSize == ringBufferSize.loadAcquire());
     for (int i = 0; i < poolSize; ++i) {
         delete freePackets[i];
     }
