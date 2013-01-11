@@ -103,9 +103,9 @@ if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     set(PHONON_QT_PLUGIN_INSTALL_DIR   ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to." FORCE)
 else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     # in this case, the values can be adjusted by the user e.g. via cmake-gui, so no FORCE
-    set(PHONON_QT_IMPORTS_INSTALL_DIR lib${LIB_SUFFIX}/qt4/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
-    set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt4/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
-    set(PHONON_QT_PLUGIN_INSTALL_DIR   lib${LIB_SUFFIX}/qt4/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
+    set(PHONON_QT_IMPORTS_INSTALL_DIR lib${LIB_SUFFIX}/qt5/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
+    set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt5/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
+    set(PHONON_QT_PLUGIN_INSTALL_DIR   lib${LIB_SUFFIX}/qt5/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
 endif(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
 
 
