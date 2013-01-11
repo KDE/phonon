@@ -72,11 +72,7 @@ include_directories(${Qt5Core_INCLUDE_DIRS}
                     ${CMAKE_CURRENT_BINARY_DIR}/phonon)
 
 # Convenience variable to hold target link libraries we always need.
-set(PHONON_LIBS ${PHONON_LIB_SONAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-if(QT_QTDBUS_FOUND)
-    list(APPEND PHONON_LIBS ${QT_QTDBUS_LIBRARY})
-endif(QT_QTDBUS_FOUND)
-
+set(PHONON_LIBS ${PHONON_LIB_SONAME})
 
 # helper macro to make the install paths absolute
 macro(MAKE_ABS_INSTALL_PATH _absVar _path)
