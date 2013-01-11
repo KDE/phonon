@@ -21,7 +21,7 @@
 
 #include "videooutputelement.h"
 
-#include <QtGui/QApplication>
+#include <QApplication>
 
 #include <phonon/mediaobject.h>
 #include <phonon/graphicsview/videographicsobject.h>
