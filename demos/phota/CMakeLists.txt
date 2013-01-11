@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
-find_package(Phonon4Qt5 REQUIRED)
+find_package(Phonon REQUIRED)
 
 add_definitions(${QT_DEFINITIONS} ${PHONON_DEFINITIONS})
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${PHONON_INCLUDES})
@@ -21,4 +21,4 @@ qt5_wrap_ui(phota_SRCS videoeffects.ui)
 phonon_add_executable(phota ${phota_SRCS})
 
 qt5_use_modules(phota Core Widgets)
-target_link_libraries(phota ${QT_LIBRARIES} phonon4qt5)
+target_link_libraries(phota ${PHONON_LIBRARY})
