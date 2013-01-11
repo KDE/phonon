@@ -59,6 +59,9 @@ set(CMAKE_MODULE_PATH ${phonon_cmake_module_dir} ${CMAKE_MODULE_PATH} )
 find_package(Qt5Core REQUIRED)
 macro_log_feature(Qt5Core_FOUND "Qt5 Core" "" "" TRUE)
 
+find_package(Qt5Gui REQUIRED)
+macro_log_feature(Qt5Gui_FOUND "Qt5 Gui" "" "" TRUE)
+
 find_package(Qt5Widgets REQUIRED)
 macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets" "" "" TRUE)
 
