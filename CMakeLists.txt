@@ -32,16 +32,33 @@ endif (PHONON_ASSERT_STATES)
 set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+################################# Requirements #################################
+# Core Requirements and CFlag Magic
 include(cmake/FindPhononInternal.cmake)
 
+# DBus Audio Output Introspection
 find_package(Qt5DBus)
 macro_log_feature(Qt5DBus_FOUND "Qt5 DBus" "" "" FALSE)
+set(QT_QTDBUS_FOUND Qt5DBus_FOUND)
 
+# Designer Plugin
+find_package(Qt5Designer)
+macro_log_feature(Qt5Designer_FOUND "Qt5 Designer" "" "" FALSE)
+set(QT_QTDESIGNER_FOUND Qt5Designer_FOUND)
+
+# VideoGraphicsObject GL Painting
 find_package(Qt5OpenGL)
 macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL" "" "" FALSE)
+set(QT_QTOPENGL_FOUND Qt5OpenGL_FOUND)
 
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
+
+# Declarative/QML1
+find_package(Qt5Declarative)
+macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative" "" "" FALSE)
+set(QT_QTDECLARATIVE_FOUND Qt5Declarative_FOUND)
+################################################################################
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
@@ -72,7 +89,6 @@ endmacro(MAKE_ABS_INSTALL_PATH)
 
 
 set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/${PHONON_LIB_SONAME}/buildsystem/)
-
 
 # Provide a cmake option, which, if set, force the Qt stuff to be installed into the
 # system Qt directories, which may be outside CMAKE_INSTALL_PREFIX.
