@@ -73,6 +73,7 @@ QT_BEGIN_NAMESPACE
 class PhononCollection: public QObject, public QDesignerCustomWidgetCollectionInterface
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.kde.phonon.PhononCollection")
     Q_INTERFACES(QDesignerCustomWidgetCollectionInterface)
 public:
     explicit PhononCollection(QObject *parent = 0);
@@ -97,8 +98,6 @@ QList<QDesignerCustomWidgetInterface*> PhononCollection::customWidgets() const
 {
     return m_plugins;
 }
-
-Q_EXPORT_PLUGIN(PhononCollection)
 
 QT_END_NAMESPACE
 
