@@ -61,6 +61,26 @@ macro_log_feature(Qt5Core_FOUND "Qt5 Core" "" "" TRUE)
 
 find_package(Qt5Widgets REQUIRED)
 macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets" "" "" TRUE)
+
+# Compat variables for plugins.
+function(_QT4_QUERY_QMAKE VAR RESULT)
+    get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} LOCATION)
+    execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} "-query" ${VAR}
+                    RESULT_VARIABLE return_code
+                    OUTPUT_VARIABLE output)
+    if(NOT return_code)
+        file(TO_CMAKE_PATH "${output}" output)
+        STRING(REGEX REPLACE "(\r?\n)+$" "" output "${output}")
+        set(${RESULT} ${output} PARENT_SCOPE)
+    endif(NOT return_code)
+endfunction(_QT4_QUERY_QMAKE)
+
+_qt4_query_qmake(QT_INSTALL_IMPORTS QT_IMPORTS_DIR)
+_qt4_query_qmake(QT_HOST_DATA QT_MKSPECS_DIR)
+_qt4_query_qmake(QT_INSTALL_PLUGINS QT_PLUGINS_DIR)
+
+set(QT_MKSPECS_DIR "${QT_MKSPECS_DIR}/mkspecs")
+
 # - Automoc
 
 # Starting with CMake 2.8.6 there is a builtin to replace automoc4, use that when possible.
