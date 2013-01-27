@@ -86,6 +86,8 @@ endmacro(MAKE_ABS_INSTALL_PATH)
 
 set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/${PHONON_LIB_SONAME}/buildsystem/)
 
+include(GNUInstallDirs)
+
 # Provide a cmake option, which, if set, force the Qt stuff to be installed into the
 # system Qt directories, which may be outside CMAKE_INSTALL_PREFIX.
 # By default always install inside CMAKE_INSTALL_PREFIX.
@@ -99,9 +101,9 @@ if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     set(PHONON_QT_PLUGIN_INSTALL_DIR   ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to." FORCE)
 else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     # in this case, the values can be adjusted by the user e.g. via cmake-gui, so no FORCE
-    set(PHONON_QT_IMPORTS_INSTALL_DIR lib${LIB_SUFFIX}/qt5/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
+    set(PHONON_QT_IMPORTS_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/qt5/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
     set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt5/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
-    set(PHONON_QT_PLUGIN_INSTALL_DIR   lib${LIB_SUFFIX}/qt5/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
+    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${CMAKE_INSTALL_LIBDIR}/qt5/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
 endif(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
 
 
