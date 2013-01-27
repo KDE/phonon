@@ -65,6 +65,10 @@ macro_log_feature(Qt5Gui_FOUND "Qt5 Gui (qtbase)" "" "" TRUE)
 find_package(Qt5Widgets REQUIRED)
 macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets (qtbase)" "" "" TRUE)
 
+if (Qt5_POSITION_INDEPENDENT_CODE)
+   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
 # Compat variables for plugins.
 function(_QT4_QUERY_QMAKE VAR RESULT)
     get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} LOCATION)
