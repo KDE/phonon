@@ -15,7 +15,6 @@ qt5_use_modules(phononwidgets Designer)
 
 target_link_libraries(phononwidgets
     ${PHONON_LIBS}
-    phonon
 )
 
 install(TARGETS phononwidgets DESTINATION ${PHONON_QT_PLUGIN_INSTALL_DIR})

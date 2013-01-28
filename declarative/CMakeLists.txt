@@ -21,7 +21,6 @@ phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})
 
 target_link_libraries(phononqmlplugin
     ${PHONON_LIBS}
-    phonon
 )
 
 qt5_use_modules(phononqmlplugin Declarative)
