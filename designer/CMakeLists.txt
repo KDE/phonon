@@ -14,7 +14,6 @@ phonon_add_designer_plugin(phononwidgets phononwidgets.qrc ${phononwidgetsplugin
 target_link_libraries(phononwidgets
     ${PHONON_LIBS}
     ${QT_QTDESIGNER_LIBRARY}
-    phonon
 )
 
 install(TARGETS phononwidgets DESTINATION ${PHONON_QT_PLUGIN_INSTALL_DIR})
