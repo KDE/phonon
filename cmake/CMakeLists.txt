@@ -3,7 +3,6 @@ install(FILES cmake_uninstall.cmake.in
               FindAutomoc4.cmake
               FindPackageHandleStandardArgs.cmake
               FindPhononInternal.cmake
-              PhononMacros.cmake
               MacroEnsureVersion.cmake
               MacroLogFeature.cmake
               MacroOptionalFindPackage.cmake
