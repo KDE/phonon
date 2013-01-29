@@ -15,7 +15,9 @@ set(PHONON_INCLUDE_DIR "${rootDir}/@INCLUDE_INSTALL_DIR@")
 set(PHONON_LIBRARY_DIR "${rootDir}/@LIB_INSTALL_DIR@")
 set(PHONON_BUILDSYSTEM_DIR "${rootDir}/@BUILDSYSTEM_INSTALL_DIR@")
 
-include(${currentDir}/PhononTargets.cmake )
+if(NOT TARGET Phonon::phonon4qt5)
+  include(${currentDir}/PhononTargets.cmake)
+endif()
 
 set(PHONON_LIBRARY Phonon::@PHONON_LIB_SONAME@)
 if(PHONON_FOUND_EXPERIMENTAL)
