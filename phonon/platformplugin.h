@@ -29,7 +29,7 @@
 #include "phonon_export.h"
 #include "objectdescription.h"
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
@@ -130,6 +130,6 @@ Q_DECLARE_INTERFACE(Phonon::PlatformPlugin, "3PlatformPlugin.phonon.kde.org")
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_PLATFORMPLUGIN_H

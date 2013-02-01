@@ -53,7 +53,7 @@
 #define PHONON_NO_AUDIOCAPTURE
 #endif
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 class QString;
@@ -324,7 +324,7 @@ Q_DECLARE_METATYPE(Phonon::ErrorType)
 Q_DECLARE_METATYPE(Phonon::Category)
 Q_DECLARE_METATYPE(Phonon::CaptureCategory)
 
-QT_END_HEADER
+
 
 // vim: sw=4 ts=4 tw=80
 #endif // PHONONNAMESPACE_H

@@ -17,7 +17,7 @@
 #ifndef PHONON_NO_DBUS
 #include <QtDBus/QtDBus>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 class QByteArray;
@@ -104,7 +104,7 @@ Q_SIGNALS: // SIGNALS
 } // namespace Phonon
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_NO_DBUS
 

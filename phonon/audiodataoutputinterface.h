@@ -23,7 +23,7 @@
 #ifndef PHONON_AUDIODATAOUTPUTINTERFACE_H
 #define PHONON_AUDIODATAOUTPUTINTERFACE_H
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -45,6 +45,6 @@ class AudioDataOutputInterface
 Q_DECLARE_INTERFACE(Phonon::AudioDataOutputInterface, "0AudioDataOutputInterface.phonon.kde.org")
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_AUDIODATAOUTPUTINTERFACE_H

@@ -28,7 +28,7 @@
 
 #include <QtCore/QObject>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 #ifdef __QT_SYNCQT__
@@ -243,7 +243,7 @@ namespace BackendCapabilities
 } // namespace Phonon
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // Phonon_BACKENDCAPABILITIES_H
 // vim: sw=4 ts=4 tw=80

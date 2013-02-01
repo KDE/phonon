@@ -27,7 +27,7 @@
 #include "phonondefs.h"
 #include <QWidget>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_VOLUMESLIDER
@@ -149,7 +149,7 @@ class PHONON_EXPORT VolumeSlider : public QWidget
 #endif //QT_NO_PHONON_VOLUMESLIDER
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 // vim: sw=4 ts=4 et
 #endif // PHONON_UI_VOLUMESLIDER_H

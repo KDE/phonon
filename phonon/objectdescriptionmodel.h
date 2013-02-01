@@ -30,7 +30,7 @@
 #include <QtCore/QModelIndex>
 #include <QtCore/QStringList>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
@@ -382,7 +382,7 @@ and existing builds. */
 #endif //QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_OBJECTDESCRIPTIONMODEL_H
 // vim: sw=4 ts=4 tw=80

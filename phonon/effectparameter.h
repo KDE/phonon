@@ -28,7 +28,7 @@
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QVariant>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_EFFECT
@@ -231,7 +231,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::EffectParameter::Hints)
 #endif //QT_NO_PHONON_EFFECT
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_EFFECTPARAMETER_H
 // vim: sw=4 ts=4 tw=80

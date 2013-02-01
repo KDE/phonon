@@ -28,7 +28,7 @@
 #include "phonondefs.h"
 #include <QtCore/QtGlobal>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -146,6 +146,6 @@ Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phono
 #endif
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_AUDIOOUTPUTINTERFACE_H

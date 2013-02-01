@@ -26,7 +26,7 @@
 
 #include "phonon_export.h"
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -78,6 +78,6 @@ public:
 } // namespace Phonon
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_MRL_H

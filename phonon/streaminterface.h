@@ -26,7 +26,7 @@
 #include "phonon_export.h"
 #include <QtCore/QObject>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -136,6 +136,6 @@ Q_DECLARE_INTERFACE(Phonon::StreamInterface, "StreamInterface1.phonon.kde.org")
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_STREAMINTERFACE_H

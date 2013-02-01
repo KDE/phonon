@@ -30,7 +30,7 @@
 #include <QtCore/QtGlobal>
 #include <QtCore/QSet>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -88,6 +88,6 @@ namespace Phonon
 } // namespace Phonon
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_PULSESUPPORT_H

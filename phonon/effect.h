@@ -29,7 +29,7 @@
 #include "objectdescription.h"
 #include "medianode.h"
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_EFFECT
@@ -112,7 +112,7 @@ namespace Phonon
 #endif // QT_NO_EFFECT
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 // vim: sw=4 ts=4 tw=80
 #endif // PHONON_EFFECT_H

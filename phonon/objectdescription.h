@@ -32,7 +32,7 @@
 #include <QtCore/QString>
 #include <QtCore/QVariant>
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -389,6 +389,6 @@ Q_DECLARE_METATYPE(QList<Phonon::SubtitleDescription>)
 Q_DECLARE_METATYPE(Phonon::DeviceAccess)
 Q_DECLARE_METATYPE(Phonon::DeviceAccessList)
 
-QT_END_HEADER
+
 
 #endif // PHONON_OBJECTDESCRIPTION_H

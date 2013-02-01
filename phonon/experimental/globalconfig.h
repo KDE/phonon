@@ -29,7 +29,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include "export.h"
 #include "../globalconfig.h"
 
-QT_BEGIN_HEADER
+
 QT_BEGIN_NAMESPACE
 
 namespace Phonon
@@ -58,6 +58,6 @@ Q_SIGNALS:
 } // namespace Phonon
 
 QT_END_NAMESPACE
-QT_END_HEADER
+
 
 #endif // PHONON_EXPERIMENTAL_GLOBALCONFIG_P_H
