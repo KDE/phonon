@@ -34,8 +34,6 @@
 #include <QtCore/QSet>
 #include <QtCore/QStringList>
 
-QT_BEGIN_NAMESPACE
-
 PHONON_GLOBAL_STATIC(Phonon::BackendCapabilitiesPrivate, globalBCPrivate)
 
 namespace Phonon
@@ -139,8 +137,6 @@ QList<EffectDescription> BackendCapabilities::availableAudioEffects()
 #endif //QT_NO_PHONON_EFFECT
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #include "moc_backendcapabilities.cpp"
 

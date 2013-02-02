@@ -27,8 +27,6 @@ Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 #include "medianode.h"
 #include <QtCore/QObject>
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
@@ -50,8 +48,6 @@ namespace Phonon
     };
 } //namespace Phonon
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 // vim: sw=4 ts=4 tw=80
 #endif // Phonon_ABSTRACTAUDIOOUTPUTBASE_H

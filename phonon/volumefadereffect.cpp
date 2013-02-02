@@ -30,8 +30,6 @@
 #define PHONON_CLASSNAME VolumeFaderEffect
 #define PHONON_INTERFACENAME VolumeFaderInterface
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 
 namespace Phonon
@@ -99,8 +97,6 @@ void VolumeFaderEffectPrivate::setupBackendObject()
 
 
 #endif //QT_NO_PHONON_VOLUMEFADEREFFECT
-
-QT_END_NAMESPACE
 
 #include "moc_volumefadereffect.cpp"
 

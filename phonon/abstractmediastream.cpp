@@ -29,8 +29,6 @@
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -188,8 +186,6 @@ void AbstractMediaStreamPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 
 } // namespace Phonon
 
-
-QT_END_NAMESPACE
 
 #include "moc_abstractmediastream.cpp"
 

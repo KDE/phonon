@@ -26,8 +26,6 @@
 #include <QtCore/QtGlobal>
 #include "phonon_export.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 #ifdef PHONON_BACKEND_VERSION_4_4
 # ifndef PHONON_BACKEND_VERSION_4_3
@@ -143,7 +141,5 @@ public: \
      */ \
     classname(QObject *parent = 0); \
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // PHONONDEFS_H

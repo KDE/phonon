@@ -30,8 +30,6 @@
 #include "effect.h"
 #include "medianodedestructionhandler_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QObject;
 
 namespace Phonon
@@ -73,7 +71,5 @@ class PathPrivate : public QSharedData, private MediaNodeDestructionHandler
 };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #endif // PATH_P_H

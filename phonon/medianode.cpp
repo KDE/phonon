@@ -26,8 +26,6 @@
 #include "medianodedestructionhandler_p.h"
 #include "factory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -126,5 +124,3 @@ void MediaNodePrivate::deleteBackendObject()
 
 
 } // namespace Phonon
-
-QT_END_NAMESPACE

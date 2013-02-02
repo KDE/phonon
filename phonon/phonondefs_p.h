@@ -133,8 +133,6 @@ QMetaObject::invokeMethod(m_backendObject, methodName, Qt::DirectConnection, Q_A
 #define pBACKEND_CALL2(methodName, varType1, var1, varType2, var2) \
 QMetaObject::invokeMethod(m_backendObject, methodName, Qt::DirectConnection, Q_ARG(varType1, var1), Q_ARG(varType2, var2))
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     namespace
@@ -290,8 +288,6 @@ namespace Phonon
         const T0 *const iface;
     };
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #define INTERFACE_CALL(function) \
 Iface<PHONON_INTERFACENAME >::cast(d)->function

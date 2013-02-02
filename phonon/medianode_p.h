@@ -31,8 +31,6 @@ Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 #include "phononpimpl_p.h"
 #include "phonon_export.h"
 
-QT_BEGIN_NAMESPACE
-
 class QObject;
 
 namespace Phonon
@@ -141,7 +139,5 @@ namespace Phonon
     };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #endif // PHONON_MEDIANODE_P_H

@@ -31,8 +31,6 @@
 
 static const char *toolTipC = "Phonon Video Widget";
 
-QT_BEGIN_NAMESPACE
-
 VideoWidgetPlugin::VideoWidgetPlugin(const QString &group, QObject *parent) :
     QObject(parent),
     m_group(group),
@@ -110,5 +108,3 @@ QString VideoWidgetPlugin::domXml() const
         </widget>\
     </ui>");
 }
-
-QT_END_NAMESPACE

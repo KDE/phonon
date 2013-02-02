@@ -28,8 +28,6 @@
 #include "phonon_export.h"
 #include "path.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
@@ -63,7 +61,5 @@ namespace Phonon
 
 } // namespace Phonon
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // PHONON_MEDIANODE_H

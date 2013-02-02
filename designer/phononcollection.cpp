@@ -68,8 +68,6 @@
 #include <QtDesigner/QDesignerCustomWidgetCollectionInterface>
 #include <QtCore/qplugin.h>
 
-QT_BEGIN_NAMESPACE
-
 class PhononCollection: public QObject, public QDesignerCustomWidgetCollectionInterface
 {
     Q_OBJECT
@@ -99,6 +97,5 @@ QList<QDesignerCustomWidgetInterface*> PhononCollection::customWidgets() const
     return m_plugins;
 }
 
-QT_END_NAMESPACE
 
 #include "phononcollection.moc"

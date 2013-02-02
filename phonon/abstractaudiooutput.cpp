@@ -25,8 +25,6 @@ Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
 #define PHONON_CLASSNAME AbstractAudioOutput
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -40,8 +38,6 @@ namespace Phonon
     }
 
 } //namespace Phonon
-
-QT_END_NAMESPACE
 
 #undef PHONON_CLASSNAME
 

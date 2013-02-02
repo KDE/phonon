@@ -25,8 +25,6 @@
 
 #include "videowidget.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_VIDEO
 
@@ -72,7 +70,5 @@ Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface, "VideoWidgetInterface3.phonon.
 
 #endif //QT_NO_PHONON_VIDEO
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // PHONON_VIDEOWIDGETINTERFACE_H

@@ -23,8 +23,6 @@
 #include "pulsestream_p.h"
 #include <QtCore/qmath.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -96,8 +94,6 @@ void PulseStream::setMute(bool mute)
 
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #include "moc_pulsestream_p.cpp"
 

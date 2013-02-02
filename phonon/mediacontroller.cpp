@@ -31,8 +31,6 @@
 #include <QtGui/QFont>
 #include "frontendinterface_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
 
 namespace Phonon
@@ -341,8 +339,6 @@ void MediaController::setCurrentSubtitle(const QUrl &url)
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_MEDIACONTROLLER
-
-QT_END_NAMESPACE
 
 #include "moc_mediacontroller.cpp"
 

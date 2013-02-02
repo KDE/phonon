@@ -28,8 +28,6 @@
 #include "phononnamespace.h"
 #include <QWidget>
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_SEEKSLIDER
 
@@ -150,8 +148,6 @@ class PHONON_EXPORT SeekSlider : public QWidget
 
 #endif //QT_NO_PHONON_SEEKSLIDER
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 // vim: sw=4 ts=4 tw=80
 #endif // PHONON_UI_SEEKSLIDER_H

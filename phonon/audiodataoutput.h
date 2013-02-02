@@ -26,8 +26,6 @@
 #include "abstractaudiooutput.h"
 #include "phonondefs.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template<typename T> class QVector;
@@ -128,8 +126,6 @@ namespace Phonon
     };
 } // namespace Phonon
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 // vim: sw=4 ts=4 tw=80
 #endif // Phonon_AUDIODATAOUTPUT_H

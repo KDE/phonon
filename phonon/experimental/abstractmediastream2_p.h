@@ -31,8 +31,6 @@
 #include "medianodedestructionhandler_p.h"
 #include "streameventqueue_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class MediaObjectPrivate;
 class QAbstractEventDispatcher;
 
@@ -60,8 +58,6 @@ class PHONON_EXPORT AbstractMediaStream2Private : public AbstractMediaStreamPriv
         bool firstConnect;
 };
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #endif // ABSTRACTMEDIASTREAM2_P_H
 // vim: sw=4 sts=4 et tw=100

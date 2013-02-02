@@ -27,8 +27,6 @@
 #include "abstractvideooutput.h"
 #include <QWidget>
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 class QString;
 
@@ -213,8 +211,6 @@ class AbstractVideoOutput;
 
 #endif //QT_NO_PHONON_VIDEO
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 // vim: sw=4 ts=4 tw=80
 #endif // Phonon_VIDEOWIDGET_H

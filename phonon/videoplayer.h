@@ -28,8 +28,6 @@
 #include "mediasource.h"
 #include <QWidget>
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_VIDEOPLAYER
 
@@ -201,8 +199,6 @@ class PHONON_EXPORT VideoPlayer : public QWidget
 
 #endif //QT_NO_PHONON_VIDEOPLAYER
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // Phonon_VIDEOPLAYER_H
 // vim: sw=4 ts=4 tw=80

@@ -36,8 +36,6 @@
 #include "seekslider.h"
 #include "swiftslider_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_SEEKSLIDER
 
 namespace Phonon
@@ -96,8 +94,6 @@ class SeekSliderPrivate
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_SEEKSLIDER
-
-QT_END_NAMESPACE
 
 #endif // SEEKSLIDER_P_H
 // vim: sw=4 ts=4 tw=80

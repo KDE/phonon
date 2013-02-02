@@ -29,8 +29,6 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QEvent>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -183,8 +181,6 @@ AbstractMediaStream2Private::~AbstractMediaStream2Private()
 }
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #include "moc_abstractmediastream2.cpp"
 

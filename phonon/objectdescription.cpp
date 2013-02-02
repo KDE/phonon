@@ -31,8 +31,6 @@
 #include "platformplugin.h"
 #include "pulsesupport.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -149,8 +147,6 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
 }
 
 } //namespace Phonon
-
-QT_END_NAMESPACE
 
 
 void Phonon::registerMetaTypes()

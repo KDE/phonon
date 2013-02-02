@@ -28,8 +28,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 class QUrl;
 class QIcon;
@@ -202,8 +200,6 @@ namespace Factory
 } // namespace Factory
 } // namespace Phonon
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // PHONON_FACTORY_P_H
 // vim: sw=4 ts=4

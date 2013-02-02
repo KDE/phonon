@@ -44,8 +44,6 @@
 
 #include <QtDesigner/QDesignerCustomWidgetInterface>
 
-QT_BEGIN_NAMESPACE
-
 class VolumeSliderPlugin: public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
@@ -69,7 +67,5 @@ private:
     const QString m_group;
     bool m_initialized;
 };
-
-QT_END_NAMESPACE
 
 #endif // VOLUMESLIDER_PLUGIN_H

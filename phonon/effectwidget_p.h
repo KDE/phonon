@@ -29,8 +29,6 @@
 #include "effectwidget.h"
 #include "phonondefs_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_EFFECTWIDGET
 
 namespace Phonon
@@ -58,8 +56,6 @@ namespace Phonon
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_EFFECTWIDGET
-
-QT_END_NAMESPACE
 
 #endif // PHONON_UI_EFFECTWIDGET_P_H
 

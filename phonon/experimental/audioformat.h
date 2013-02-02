@@ -26,9 +26,6 @@
 #include <QtCore/QtGlobal>
 #include "phononnamespace.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 namespace Experimental
@@ -94,7 +91,5 @@ inline uint qHash(const AudioFormat &p)
 inline uint qHash(const Phonon::Experimental::AudioFormat &p) { return Phonon::Experimental::qHash(p); } //krazy:exclude=inline
 #endif
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // PHONON_X_AUDIOFORMAT_H

@@ -27,8 +27,6 @@
 #include "medianode.h"
 #include <QtCore/QObject>
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_VIDEO
 
@@ -68,7 +66,5 @@ namespace Experimental
 
 #endif //QT_NO_PHONON_VIDEO
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // Phonon_ABSTRACTVIDEOOUTPUTBASE_H

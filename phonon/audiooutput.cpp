@@ -44,8 +44,6 @@
 #define IFACES0 AudioOutputInterface40, IFACES1
 #define PHONON_INTERFACENAME IFACES0
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -536,8 +534,6 @@ AudioOutputPrivate::~AudioOutputPrivate()
 }
 
 } //namespace Phonon
-
-QT_END_NAMESPACE
 
 #include "moc_audiooutput.cpp"
 

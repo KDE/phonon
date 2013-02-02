@@ -26,8 +26,6 @@
 #include "phonon_export.h"
 #include "effect.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 
@@ -171,8 +169,6 @@ namespace Phonon
 
 #endif //QT_NO_PHONON_VOLUMEFADEREFFECT
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 // vim: sw=4 ts=4 tw=80
 #endif // PHONON_VOLUMEFADEREFFECT_H

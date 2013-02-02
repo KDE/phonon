@@ -78,8 +78,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-QT_BEGIN_NAMESPACE
-
 // -----------------  MimeTypeDialog: Display mime types in scrollable text
 
 class MimeTypeDialog : public QDialog {
@@ -190,5 +188,3 @@ QObject *VideoPlayerTaskMenuFactory::createExtension(QObject *object,
 
     return 0;
 }
-
-QT_END_NAMESPACE

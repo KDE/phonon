@@ -26,8 +26,6 @@
 #include <QtCore/QVariant>
 #include "lockfreequeue_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -86,7 +84,5 @@ class StreamEventQueue
 };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #endif // PHONON_STREAMEVENTQUEUE_P_H

@@ -29,8 +29,6 @@
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
@@ -87,8 +85,6 @@ class QSettingsGroup
 };
 } // namespace Phonon
 
-QT_END_NAMESPACE
-QT_END_HEADER
 #endif //QT_NO_PHONON_SETTINGSGROUP
 
 #endif // PHONON_QSETTINGSGROUP_P_H

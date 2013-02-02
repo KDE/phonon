@@ -28,8 +28,6 @@
 #include "phononnamespace.h"
 #include "objectdescription.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 class QString;
 
@@ -174,8 +172,6 @@ namespace Phonon
     };
 } //namespace Phonon
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 // vim: sw=4 ts=4 tw=80
 #endif // Phonon_AUDIOOUTPUT_H

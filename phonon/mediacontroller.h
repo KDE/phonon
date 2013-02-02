@@ -30,8 +30,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QtGlobal>
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
 
@@ -348,7 +346,5 @@ Q_DECLARE_METATYPE(QList<Phonon::MediaController::NavigationMenu>)
 
 #endif //QT_NO_PHONON_MEDIACONTROLLER
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // PHONON_MEDIACONTROLLER_H

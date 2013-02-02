@@ -26,8 +26,6 @@
 #include "abstractmediastream_p.h"
 #include "mediasource_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 namespace Phonon
@@ -111,7 +109,5 @@ void StreamInterface::reset()
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
-QT_END_NAMESPACE
 
 

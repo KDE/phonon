@@ -29,8 +29,6 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -436,7 +434,5 @@ QDebug operator <<(QDebug dbg, const Phonon::MediaSource &source)
 }
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 // vim: sw=4 sts=4 et tw=100

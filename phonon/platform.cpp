@@ -29,8 +29,6 @@
 #include <QStyle>
 #include <QApplication>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -140,5 +138,3 @@ QList<QPair<QByteArray, QString> > Platform::deviceAccessListFor(const Phonon::A
 }
 
 } // namespace Phonon
-
-QT_END_NAMESPACE

@@ -28,8 +28,6 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include "phonondefs.h"
 #include "objectdescription.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
@@ -86,7 +84,5 @@ namespace Phonon
     };
 } // namespace Phonon
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // PHONON_GLOBALCONFIG_H

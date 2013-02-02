@@ -28,8 +28,6 @@
 #include "phonondefs.h"
 #include "phononnamespace.h"
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
 
 namespace Phonon
 {
@@ -660,8 +658,6 @@ namespace Phonon
     PHONON_EXPORT MediaObject *createPlayer(Phonon::Category category, const MediaSource &source = MediaSource());
 } //namespace Phonon
 
-QT_END_NAMESPACE
-QT_END_HEADER
 
 // vim: sw=4 ts=4 tw=80
 #endif // Phonon_MEDIAOBJECT_H

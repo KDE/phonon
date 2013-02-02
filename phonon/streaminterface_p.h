@@ -26,8 +26,6 @@
 #include "streaminterface.h"
 #include "mediasource.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 namespace Phonon
@@ -52,8 +50,6 @@ class StreamInterfacePrivate
 } // namespace Phonon
 
 #endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
-QT_END_NAMESPACE
 
 #endif // STREAMINTERFACE_P_H
 // vim: sw=4 sts=4 et tw=100

@@ -35,8 +35,6 @@
 #include <QtCore/QList>
 #include <QtCore/QVariant>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -771,5 +769,3 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(ObjectDescriptionType
 
 
 } // namespace Phonon
-
-QT_END_NAMESPACE

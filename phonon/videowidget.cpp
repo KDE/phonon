@@ -32,8 +32,6 @@
 #define IFACES0 VideoWidgetInterface, IFACES4
 #define PHONON_INTERFACENAME IFACES0
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon
@@ -186,8 +184,6 @@ bool VideoWidget::event(QEvent *e)
 } //namespace Phonon
 
 #endif //QT_NO_PHONON_VIDEO
-
-QT_END_NAMESPACE
 
 #include "moc_videowidget.cpp"
 
