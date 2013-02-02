@@ -29,8 +29,6 @@
 #include <QtCore/QtGlobal>
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 /** \class AudioOutputInterface audiooutputinterface.h phonon/AudioOutputInterface
@@ -144,8 +142,6 @@ namespace Phonon { typedef AudioOutputInterface40 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phonon.kde.org")
 #endif
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_AUDIOOUTPUTINTERFACE_H

@@ -36,8 +36,6 @@
 #include "mediasource.h"
 #include "phonondefs_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 class FrontendInterfacePrivate;
@@ -159,8 +157,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         StatesValidator *validator;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif // MEDIAOBJECT_P_H
 // vim: sw=4 ts=4 tw=80

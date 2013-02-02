@@ -54,8 +54,6 @@
 #endif
 
 
-QT_BEGIN_NAMESPACE
-
 class QString;
 
 /**
@@ -314,8 +312,6 @@ namespace Phonon
 
 } // namespace Phonon
 //Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::MediaStreamTypes)
-
-QT_END_NAMESPACE
 
 #include <QtCore/QMetaType>
 

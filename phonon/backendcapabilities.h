@@ -29,8 +29,6 @@
 #include <QtCore/QObject>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifdef __QT_SYNCQT__
 // Tell syncqt that the BackendCapabilities namespace should be treated like a class
 #pragma qt_class(Phonon::BackendCapabilities)
@@ -241,8 +239,6 @@ namespace BackendCapabilities
 //    PHONON_EXPORT QList<ContainerFormatDescription> availableContainerFormats();
 } // namespace BackendCapabilities
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // Phonon_BACKENDCAPABILITIES_H

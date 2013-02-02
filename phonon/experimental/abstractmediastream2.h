@@ -26,8 +26,6 @@
 #include "abstractmediastream.h"
 
 
-QT_BEGIN_NAMESPACE
-
 class QByteArray;
 
 namespace Phonon
@@ -146,8 +144,6 @@ class PHONON_EXPORT AbstractMediaStream2 : public AbstractMediaStream
 };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_ABSTRACTMEDIASTREAM2_H

@@ -26,8 +26,6 @@
 #include <QtCore/qglobal.h>
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 /**
@@ -55,8 +53,6 @@ protected:
     virtual void phononObjectDestroyed(MediaNodePrivate *) = 0;
 };
 }
-
-QT_END_NAMESPACE
 
 
 #endif // MEDIANODEDESTRUCTIONHANDLER_P_H

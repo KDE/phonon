@@ -28,8 +28,6 @@
 #include <QtCore/QObject>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VIDEO
 
 class QString;
@@ -67,8 +65,6 @@ namespace Experimental
 } //namespace Phonon
 
 #endif //QT_NO_PHONON_VIDEO
-
-QT_END_NAMESPACE
 
 
 #endif // Phonon_ABSTRACTVIDEOOUTPUTBASE_H

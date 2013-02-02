@@ -33,8 +33,6 @@
 #include <QtCore/QSharedData>
 #include <QtCore/QPointer>
 
-QT_BEGIN_NAMESPACE
-
 class QFile;
 
 namespace Phonon
@@ -95,8 +93,6 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
 };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #endif // MEDIASOURCE_P_H
 // vim: sw=4 sts=4 et tw=100

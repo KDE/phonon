@@ -36,8 +36,6 @@
 #include "platform_p.h"
 #include "swiftslider_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VOLUMESLIDER
 
 namespace Phonon
@@ -97,8 +95,6 @@ class VolumeSliderPrivate
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_VOLUMESLIDER
-
-QT_END_NAMESPACE
 
 #endif // VOLUMESLIDER_P_H
 // vim: sw=4 sts=4 et tw=100

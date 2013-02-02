@@ -29,8 +29,6 @@
 #include <QtCore/QExplicitlySharedDataPointer>
 
 
-QT_BEGIN_NAMESPACE
-
 template<class T> class QList;
 
 namespace Phonon
@@ -236,8 +234,6 @@ class PHONON_EXPORT Path
 PHONON_EXPORT Path createPath(MediaNode *source, MediaNode *sink);
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_PATH_H

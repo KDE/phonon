@@ -69,8 +69,6 @@
 
 #include <phonon/phononnamespace.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 class VideoPlayer;
@@ -110,7 +108,5 @@ protected:
     QObject *createExtension(QObject *object,
                              const QString &iid, QObject *parent) const;
 };
-
-QT_END_NAMESPACE
 
 #endif // VIDEOPLAYERTASKMENU_H

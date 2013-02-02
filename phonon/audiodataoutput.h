@@ -27,8 +27,6 @@
 #include "phonondefs.h"
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template<typename T> class QVector;
 template<typename Key, typename T> class QMap;
@@ -127,8 +125,6 @@ namespace Phonon
             void endOfMedia(int remainingSamples);
     };
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 // vim: sw=4 ts=4 tw=80

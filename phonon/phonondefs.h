@@ -27,8 +27,6 @@
 #include "phonon_export.h"
 
 
-QT_BEGIN_NAMESPACE
-
 #ifdef PHONON_BACKEND_VERSION_4_4
 # ifndef PHONON_BACKEND_VERSION_4_3
 #  define PHONON_BACKEND_VERSION_4_3
@@ -142,8 +140,6 @@ public: \
      * Constructs an object with the given \p parent.
      */ \
     classname(QObject *parent = 0); \
-
-QT_END_NAMESPACE
 
 
 #endif // PHONONDEFS_H

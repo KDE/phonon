@@ -29,8 +29,6 @@
 #include "path.h"
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -62,8 +60,6 @@ namespace Phonon
     };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_MEDIANODE_H

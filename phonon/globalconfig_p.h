@@ -28,8 +28,6 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include "phonon_export.h"
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     class GlobalConfigPrivate
@@ -41,8 +39,6 @@ namespace Phonon
             QSettings config;
     };
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_GLOBALCONFIG_P_H

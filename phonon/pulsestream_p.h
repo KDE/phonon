@@ -32,8 +32,6 @@
 #include "phononnamespace.h"
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     class PHONON_EXPORT PulseStream : public QObject
@@ -67,8 +65,6 @@ namespace Phonon
             bool mMute;
     };
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_PULSESTREAM_P_H

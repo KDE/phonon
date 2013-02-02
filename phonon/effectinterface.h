@@ -27,8 +27,6 @@
 #include <QtCore/QVariant>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_EFFECT
 
 namespace Phonon
@@ -61,8 +59,6 @@ namespace Phonon
 Q_DECLARE_INTERFACE(Phonon::EffectInterface, "EffectInterface0.phonon.kde.org")
 
 #endif //QT_NO_PHONON_EFFECT
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_EFFECTINTERFACE_H

@@ -29,8 +29,6 @@
 #include <QWidget>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VIDEOPLAYER
 
 namespace Phonon
@@ -200,8 +198,6 @@ class PHONON_EXPORT VideoPlayer : public QWidget
 } //namespace Phonon
 
 #endif //QT_NO_PHONON_VIDEOPLAYER
-
-QT_END_NAMESPACE
 
 
 #endif // Phonon_VIDEOPLAYER_H

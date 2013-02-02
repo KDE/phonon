@@ -31,8 +31,6 @@
 // Otherwise, it could break when a new version of Qt ships.
 //
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -288,6 +286,4 @@ static struct PHONON_GLOBAL_STATIC_STRUCT_NAME(NAME)                            
         delete x;                                                              \
     }                                                                          \
 } NAME;
-
-QT_END_NAMESPACE
 #endif // PHONON_GLOBALSTATIC_P_H

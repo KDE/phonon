@@ -27,8 +27,6 @@
 #include "phononnamespace_p.h"
 #include "factory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VOLUMESLIDER
 
 namespace Phonon
@@ -262,8 +260,6 @@ void VolumeSlider::setSingleStep(int milliseconds)
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_VOLUMESLIDER
-
-QT_END_NAMESPACE
 
 #include "moc_volumeslider.cpp"
 

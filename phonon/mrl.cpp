@@ -23,8 +23,6 @@
 
 #include <QtCore/QFile>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -78,7 +76,5 @@ QByteArray Mrl::toEncoded(FormattingOptions options) const
 
     return encodedMrl;
 }
-
-QT_END_NAMESPACE
 
 } // namespace Phonon

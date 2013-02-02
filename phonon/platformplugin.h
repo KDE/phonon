@@ -30,8 +30,6 @@
 #include "objectdescription.h"
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
 
 class QUrl;
@@ -128,8 +126,6 @@ class PlatformPlugin
 Q_DECLARE_INTERFACE(Phonon::PlatformPlugin, "3PlatformPlugin.phonon.kde.org")
 
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_PLATFORMPLUGIN_H

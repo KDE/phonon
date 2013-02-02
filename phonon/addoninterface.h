@@ -30,8 +30,6 @@
 #include <QtCore/QVariant>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
 
 namespace Phonon
@@ -178,8 +176,6 @@ class AddonInterface
 Q_DECLARE_INTERFACE(Phonon::AddonInterface, "AddonInterface0.2.phonon.kde.org")
 
 #endif //QT_NO_PHONON_MEDIACONTROLLER
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_ADDONINTERFACE_H

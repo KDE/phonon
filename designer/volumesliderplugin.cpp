@@ -45,8 +45,6 @@
 
 static const char *toolTipC = "Phonon Volume Slider";
 
-QT_BEGIN_NAMESPACE
-
 VolumeSliderPlugin::VolumeSliderPlugin(const QString &group, QObject *parent) :
     QObject(parent),
     m_group(group),
@@ -113,5 +111,3 @@ QString VolumeSliderPlugin::domXml() const
         <widget class=\"Phonon::VolumeSlider\" name=\"volumeSlider\"/>\
     </ui>");
 }
-
-QT_END_NAMESPACE

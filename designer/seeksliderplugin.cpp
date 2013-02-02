@@ -45,8 +45,6 @@
 
 static const char *toolTipC = "Phonon Seek Slider";
 
-QT_BEGIN_NAMESPACE
-
 SeekSliderPlugin::SeekSliderPlugin(const QString &group, QObject *parent) :
     QObject(parent),
     m_group(group),
@@ -113,5 +111,3 @@ QString SeekSliderPlugin::domXml() const
         <widget class=\"Phonon::SeekSlider\" name=\"seekSlider\"/>\
     </ui>");
 }
-
-QT_END_NAMESPACE

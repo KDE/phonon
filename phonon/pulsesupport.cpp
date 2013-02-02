@@ -44,8 +44,6 @@
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -1355,8 +1353,6 @@ void PulseSupport::clearStreamCache(QString streamUuid) {
 }
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #include "moc_pulsesupport.cpp"
 

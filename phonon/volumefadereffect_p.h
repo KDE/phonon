@@ -26,8 +26,6 @@
 #include "effect_p.h"
 #include "volumefadereffect.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 
 namespace Phonon
@@ -51,8 +49,6 @@ class VolumeFaderEffectPrivate : public EffectPrivate
 }
 
 #endif //QT_NO_PHONON_VOLUMEFADEREFFECT
-
-QT_END_NAMESPACE
 
 #endif // PHONON_VOLUMEFADEREFFECT_P_H
 // vim: sw=4 ts=4 tw=80

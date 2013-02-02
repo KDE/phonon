@@ -26,8 +26,6 @@
 #include "videowidget.h"
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon
@@ -71,8 +69,6 @@ Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface44, "VideoWidgetInterface44.phon
 Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface, "VideoWidgetInterface3.phonon.kde.org")
 
 #endif //QT_NO_PHONON_VIDEO
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_VIDEOWIDGETINTERFACE_H

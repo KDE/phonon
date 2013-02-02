@@ -22,8 +22,6 @@
 
 #include "abstractvideooutput_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon
@@ -37,5 +35,3 @@ bool AbstractVideoOutputPrivate::aboutToDeleteBackendObject()
 } //namespace Phonon
 
 #endif //QT_NO_PHONON_VIDEO
-
-QT_END_NAMESPACE

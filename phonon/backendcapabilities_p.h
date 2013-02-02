@@ -27,8 +27,6 @@
 #include <QtCore/QObject>
 #include "factory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 class BackendCapabilitiesPrivate : public BackendCapabilities::Notifier
@@ -44,8 +42,6 @@ class BackendCapabilitiesPrivate : public BackendCapabilities::Notifier
 };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #endif // PHONON_BACKENDCAPABILITIES_P_H
 // vim: sw=4 sts=4 et tw=100

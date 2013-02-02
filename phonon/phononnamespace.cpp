@@ -31,8 +31,6 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QList>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     /*!
@@ -224,7 +222,5 @@ Q_CONSTRUCTOR_FUNCTION(registerPhononMetaTypes)
 #else
 static const int _Phonon_registerMetaTypes = registerPhononMetaTypes();
 #endif
-
-QT_END_NAMESPACE
 
 // vim: sw=4 ts=4

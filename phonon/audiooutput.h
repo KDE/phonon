@@ -29,8 +29,6 @@
 #include "objectdescription.h"
 
 
-QT_BEGIN_NAMESPACE
-
 class QString;
 
 class AudioOutputAdaptor;
@@ -173,8 +171,6 @@ namespace Phonon
             Q_PRIVATE_SLOT(k_func(), void _k_deviceChanged(int device))
     };
 } //namespace Phonon
-
-QT_END_NAMESPACE
 
 
 // vim: sw=4 ts=4 tw=80

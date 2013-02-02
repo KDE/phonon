@@ -30,8 +30,6 @@
 #include "medianode.h"
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_EFFECT
 
 class QString;
@@ -110,8 +108,6 @@ namespace Phonon
 } //namespace Phonon
 
 #endif // QT_NO_EFFECT
-
-QT_END_NAMESPACE
 
 
 // vim: sw=4 ts=4 tw=80

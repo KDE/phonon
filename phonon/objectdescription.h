@@ -33,8 +33,6 @@
 #include <QtCore/QVariant>
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     class ObjectDescriptionPrivate;
@@ -357,8 +355,6 @@ typedef QList<DeviceAccess> DeviceAccessList;
 void PHONON_EXPORT_DEPRECATED registerMetaTypes();
 
 } //namespace Phonon
-
-QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(Phonon::AudioOutputDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)

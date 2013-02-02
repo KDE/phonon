@@ -27,8 +27,6 @@
 #include <QtCore/QObject>
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 class StreamInterface;
@@ -234,8 +232,6 @@ class MediaObjectInterface
 }
 
 Q_DECLARE_INTERFACE(Phonon::MediaObjectInterface, "MediaObjectInterface3.phonon.kde.org")
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_MEDIAOBJECTINTERFACE_H

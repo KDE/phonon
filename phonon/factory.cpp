@@ -43,8 +43,6 @@
 #include <QApplication>
 #include <QMessageBox>
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -495,8 +493,6 @@ QObject *Factory::registerQObject(QObject *o)
 }
 
 } //namespace Phonon
-
-QT_END_NAMESPACE
 
 #include "factory.moc"
 #include "moc_factory_p.cpp"

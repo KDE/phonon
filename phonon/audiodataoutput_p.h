@@ -27,8 +27,6 @@
 #include "abstractaudiooutput_p.h"
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -46,8 +44,6 @@ class AudioDataOutputPrivate : public AbstractAudioOutputPrivate
 };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // AUDIODATAOUTPUT_P_H

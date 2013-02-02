@@ -30,8 +30,6 @@
 #include <QtCore/QSet>
 
 
-QT_BEGIN_NAMESPACE
-
 class QVariant;
 
 namespace Phonon
@@ -281,8 +279,6 @@ class BackendInterface
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::BackendInterface, "BackendInterface3.phonon.kde.org")
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_BACKENDINTERFACE_H

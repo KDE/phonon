@@ -29,8 +29,6 @@
 #include <QtCore/QVariant>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_EFFECT
 
 namespace Phonon
@@ -229,8 +227,6 @@ inline uint qHash(const Phonon::EffectParameter &param) { return Phonon::qHash(p
 Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::EffectParameter::Hints)
 
 #endif //QT_NO_PHONON_EFFECT
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_EFFECTPARAMETER_H

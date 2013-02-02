@@ -26,8 +26,6 @@
  * Implementation of adaptor class AudioOutputAdaptor
  */
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 
@@ -94,8 +92,6 @@ void AudioOutputAdaptor::setOutputDeviceIndex(int newAudioOutputDeviceIndex)
 }
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #include "moc_audiooutputadaptor_p.cpp"
 

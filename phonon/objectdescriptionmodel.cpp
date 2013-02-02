@@ -33,8 +33,6 @@
 #include <QPainter>
 #include "factory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 
 
@@ -401,5 +399,3 @@ INSTANTIATE_META_FUNCTIONS(VisualizationType);
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
-
-QT_END_NAMESPACE

@@ -30,8 +30,6 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include "../globalconfig.h"
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
 namespace Experimental
@@ -56,8 +54,6 @@ Q_SIGNALS:
 
 } // namespace Experimental
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_EXPERIMENTAL_GLOBALCONFIG_P_H

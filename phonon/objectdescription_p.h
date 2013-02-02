@@ -29,8 +29,6 @@
 #include <QtCore/QVariant>
 #include "phononnamespace_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     class ObjectDescriptionPrivate
@@ -57,8 +55,6 @@ namespace Phonon
             QHash<QByteArray, QVariant> properties;
     };
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #endif // PHONON_OBJECTDESCRIPTION_P_H
 // vim: sw=4 ts=4 tw=80

@@ -31,8 +31,6 @@
 #include <QtCore/QStringList>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 
 namespace Phonon
@@ -380,8 +378,6 @@ and existing builds. */
 }
 
 #endif //QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_OBJECTDESCRIPTIONMODEL_H

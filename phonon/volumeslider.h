@@ -28,8 +28,6 @@
 #include <QWidget>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VOLUMESLIDER
 
 namespace Phonon
@@ -147,8 +145,6 @@ class PHONON_EXPORT VolumeSlider : public QWidget
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_VOLUMESLIDER
-
-QT_END_NAMESPACE
 
 
 // vim: sw=4 ts=4 et

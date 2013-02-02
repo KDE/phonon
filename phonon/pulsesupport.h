@@ -31,8 +31,6 @@
 #include <QtCore/QSet>
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     class PulseStream;
@@ -86,8 +84,6 @@ namespace Phonon
             bool mEnabled;
     };
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_PULSESUPPORT_H

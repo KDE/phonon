@@ -28,8 +28,6 @@
 #include "phononnamespace_p.h"
 #include <QtCore/QPointer>
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
 
 namespace Phonon
@@ -62,7 +60,5 @@ class FrontendInterfacePrivate
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_MEDIACONTROLLER
-
-QT_END_NAMESPACE
 
 #endif // PHONON_FRONTENDINTERFACEPRIVATE_H

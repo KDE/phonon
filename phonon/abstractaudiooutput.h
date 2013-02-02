@@ -28,8 +28,6 @@ Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QObject>
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     class AbstractAudioOutputPrivate;
@@ -49,8 +47,6 @@ namespace Phonon
         ~AbstractAudioOutput();
     };
 } //namespace Phonon
-
-QT_END_NAMESPACE
 
 
 // vim: sw=4 ts=4 tw=80

@@ -26,8 +26,6 @@
 #include "abstractmediastream.h"
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 class QIODevice;
@@ -51,8 +49,6 @@ class IODeviceStream : public AbstractMediaStream
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_IODEVICESTREAM_P_H

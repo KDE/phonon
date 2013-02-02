@@ -29,8 +29,6 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #include "objectdescription.h"
 
 
-QT_BEGIN_NAMESPACE
-
 namespace Phonon
 {
     class GlobalConfigPrivate;
@@ -85,8 +83,6 @@ namespace Phonon
         GlobalConfigPrivate *const k_ptr;
     };
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_GLOBALCONFIG_H

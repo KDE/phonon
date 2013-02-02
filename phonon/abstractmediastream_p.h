@@ -30,8 +30,6 @@
 
 #include "medianodedestructionhandler_p.h"
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 class MediaObjectPrivate;
@@ -76,8 +74,6 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHan
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
-QT_END_NAMESPACE
 
 #endif // ABSTRACTMEDIASTREAM_P_H
 // vim: sw=4 sts=4 et tw=100

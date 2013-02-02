@@ -29,8 +29,6 @@
 #include <QtCore/QStringList>
 
 
-QT_BEGIN_NAMESPACE
-
 class QUrl;
 class QIcon;
 
@@ -201,8 +199,6 @@ namespace Factory
 //X    void freeSoundcardDevices();
 } // namespace Factory
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_FACTORY_P_H

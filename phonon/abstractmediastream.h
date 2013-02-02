@@ -28,8 +28,6 @@
 #include <QtCore/QObject>
 
 
-QT_BEGIN_NAMESPACE
-
 class QByteArray;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -220,8 +218,6 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_ABSTRACTMEDIASTREAM_H

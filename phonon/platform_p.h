@@ -30,8 +30,6 @@
 #include "phonon_export.h"
 #include "objectdescription.h"
 
-QT_BEGIN_NAMESPACE
-
 class QIcon;
 class QObject;
 class QUrl;
@@ -56,7 +54,5 @@ QList<QPair<QByteArray, QString> > deviceAccessListFor(const Phonon::AudioOutput
 
 } // namespace Platform
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 #endif // PHONON_PLATFORM_P_H

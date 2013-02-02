@@ -27,8 +27,6 @@
 #include <QtCore/QObject>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 
 namespace Phonon
@@ -51,8 +49,6 @@ class VolumeFaderInterface
 Q_DECLARE_INTERFACE(Phonon::VolumeFaderInterface, "VolumeFaderInterface4.phonon.kde.org")
 
 #endif //QT_NO_PHONON_VOLUMEFADEREFFECT
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_VOLUMEFADERINTERFACE_H

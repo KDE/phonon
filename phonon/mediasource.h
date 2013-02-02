@@ -33,8 +33,6 @@
 #include <QtCore/QString>
 
 
-QT_BEGIN_NAMESPACE
-
 class QUrl;
 class QIODevice;
 
@@ -368,8 +366,6 @@ class PHONON_EXPORT MediaSource
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MediaSource &);
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_MEDIASOURCE_H

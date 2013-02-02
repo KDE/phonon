@@ -18,8 +18,6 @@
 #include <QtDBus/QtDBus>
 
 
-QT_BEGIN_NAMESPACE
-
 class QByteArray;
 template<class T> class QList;
 template<class Key, class Value> class QMap;
@@ -102,8 +100,6 @@ Q_SIGNALS: // SIGNALS
 };
 
 } // namespace Phonon
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_NO_DBUS

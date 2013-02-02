@@ -28,8 +28,6 @@
 #include <QWidget>
 
 
-QT_BEGIN_NAMESPACE
-
 #ifndef QT_NO_PHONON_EFFECTWIDGET
 
 namespace Phonon
@@ -67,8 +65,6 @@ class Effect;
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_EFFECTWIDGET
-
-QT_END_NAMESPACE
 
 
 #endif // PHONON_UI_EFFECTWIDGET_H
