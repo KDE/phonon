@@ -39,17 +39,17 @@ include(cmake/FindPhononInternal.cmake)
 # DBus Audio Output Introspection
 find_package(Qt5DBus)
 macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" "" "" FALSE)
-set(QT_QTDBUS_FOUND Qt5DBus_FOUND)
+set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 
 # Designer Plugin
 find_package(Qt5Designer)
 macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" "" "" FALSE)
-set(QT_QTDESIGNER_FOUND Qt5Designer_FOUND)
+set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
 
 # VideoGraphicsObject GL Painting
 find_package(Qt5OpenGL)
 macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" "" "" FALSE)
-set(QT_QTOPENGL_FOUND Qt5OpenGL_FOUND)
+set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
@@ -57,7 +57,7 @@ macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 # Declarative/QML1
 find_package(Qt5Declarative)
 macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" "" "" FALSE)
-set(QT_QTDECLARATIVE_FOUND Qt5Declarative_FOUND)
+set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 ################################################################################
 
 add_definitions(${QT_DEFINITIONS})
