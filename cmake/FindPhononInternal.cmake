@@ -325,13 +325,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       macro_ensure_version("4.3.0" "${_gcc_version}" GCC_IS_NEWER_THAN_4_3)
    endif (_gcc_version)
 
-   # save a little by making local statics not threadsafe
-   # ### do not enable it for older compilers, see
-   # ### http://gcc.gnu.org/bugzilla/show_bug.cgi?id=31806
-   if (GCC_IS_NEWER_THAN_4_3)
-       set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-threadsafe-statics")
-   endif (GCC_IS_NEWER_THAN_4_3)
-
    set(_GCC_COMPILED_WITH_BAD_ALLOCATOR FALSE)
    if (GCC_IS_NEWER_THAN_4_1)
       exec_program(${CMAKE_C_COMPILER} ARGS ${CMAKE_C_COMPILER_ARG1} -v OUTPUT_VARIABLE _gcc_alloc_info)
