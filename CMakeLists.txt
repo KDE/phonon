@@ -1,4 +1,4 @@
-project(Phonon4Qt5)
+project(Phonon)
 
 cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 
@@ -7,11 +7,14 @@ option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" ON)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
-option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
+option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
+
+option(PHONON_BUILD_PHONON4QT5 "Build Phonon 4 transitional library for Qt5 (API compatible with regular Phonon4)" OFF)
+set(PHONON_PHONON4QT5_ARGS "" CACHE STRING "Additional arguments to CMake which will be used for the Phonon4Qt5 sub build.")
 
 # The following variables directly influence the library's soname version.
 # It is highly advised to think twice before changing those.
@@ -21,8 +24,13 @@ set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes wit
 set(PHONON_LIB_PATCH_VERSION "60") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
-set(PHONON_LIB_SONAME phonon4qt5)
-set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
+set(PHONON_LIB_SONAME phonon)
+set(PHONON_LIB_SONAME_CAMEL Phonon)
+
+if (PHONON_INTERNAL_BUILD_QT5)
+    set(PHONON_LIB_SONAME phonon4qt5)
+    set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
+endif (PHONON_INTERNAL_BUILD_QT5)
 
 if (PHONON_ASSERT_STATES)
     message(STATUS "Enabling backend state machine validation.")
@@ -36,36 +44,42 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Core Requirements and CFlag Magic
 include(cmake/FindPhononInternal.cmake)
 
-# DBus Audio Output Introspection
-find_package(Qt5DBus)
-macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" "" "" FALSE)
-set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
-
-# Designer Plugin
-find_package(Qt5Designer)
-macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" "" "" FALSE)
-set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
-
-# VideoGraphicsObject GL Painting
-find_package(Qt5OpenGL)
-macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" "" "" FALSE)
-set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
-
+# Internal is shared with backends, so continue specific finders here...
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 
-# Declarative/QML1
-find_package(Qt5Declarative)
-macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" "" "" FALSE)
-set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+if (NOT PHONON_INTERNAL_BUILD_QT5) # Qt 4
+    macro_log_feature(QT_QTDBUS_FOUND "Qt4 DBus" "" "" FALSE)
+    macro_log_feature(QT_QTDESIGNER_FOUND "Qt4 Designer" "" "" FALSE)
+    macro_log_feature(QT_QTOPENGL_FOUND "Qt4 OpenGL" "" "" FALSE)
+    macro_log_feature(QT_QTDECLARATIVE_FOUND "Qt4 Declarative" "" "" FALSE)
+else (NOT PHONON_INTERNAL_BUILD_QT5) # Qt 5
+    # DBus Audio Output Introspection
+    find_package(Qt5DBus)
+    macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" "" "" FALSE)
+    set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
+
+    # Designer Plugin
+    find_package(Qt5Designer)
+    macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" "" "" FALSE)
+    set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
+
+    # VideoGraphicsObject GL Painting
+    find_package(Qt5OpenGL)
+    macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" "" "" FALSE)
+    set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
+
+    # Declarative/QML1
+    find_package(Qt5Declarative)
+    macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" "" "" FALSE)
+    set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+endif (NOT PHONON_INTERNAL_BUILD_QT5)
 ################################################################################
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
 
-include_directories(${Qt5Core_INCLUDE_DIRS}
-                    ${Qt5Widgets_INCLUDE_DIRS}
-                    ${Qt5DBus_INCLUDE_DIRS}
+include_directories(${QT_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${CMAKE_CURRENT_SOURCE_DIR}/phonon
@@ -206,9 +220,13 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
 
 install(EXPORT PhononLibs DESTINATION ${CMAKECONFIG_INSTALL_DIR} NAMESPACE Phonon:: FILE PhononTargets.cmake )
 
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
+if (NOT PHONON_INTERNAL_BUILD_QT5)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
+else (NOT PHONON_INTERNAL_BUILD_QT5)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt5_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
+endif (NOT PHONON_INTERNAL_BUILD_QT5)
 
 # This generates a nice library descriptor to use with [1]. It also spits out
 # a script that makes installing various versions for an ABI check a lot easier.
@@ -226,3 +244,23 @@ if(PHONON_BUILD_DESCRIPTOR)
 endif(PHONON_BUILD_DESCRIPTOR)
 
 macro_display_feature_log()
+
+if (CMAKE_VERSION VERSION_LESS 2.8.0 AND PHONON_BUILD_PHONON4QT5)
+    message(FATAL_ERROR "Building Phonon4Qt5 requires CMake >= 2.8.0")
+else ()
+    if (PHONON_BUILD_PHONON4QT5 AND NOT PHONON_INTERNAL_BUILD_QT5 AND NOT TARGET phonon4qt5)
+        include(ExternalProject)
+        externalproject_add(phonon4qt5
+                            SOURCE_DIR ${CMAKE_SOURCE_DIR}
+                            TMP_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/meta/tmpfiles/p4q5
+                            STAMP_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/meta/stampfiles/p4q5
+                            BINARY_DIR ${CMAKE_BINARY_DIR}/phonon4qt5-binary
+                            CMAKE_ARGS -DPHONON_INTERNAL_BUILD_QT5=TRUE
+                                      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                                      ${PHONON_PHONON4QT5_ARGS}
+                            INSTALL_COMMAND ""
+        )
+
+        install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" --build ${CMAKE_CURRENT_BINARY_DIR}/phonon4qt5-binary --target install)")
+    endif()
+endif()

@@ -23,7 +23,7 @@ target_link_libraries(phononqmlplugin
     ${PHONON_LIBS}
 )
 
-qt5_use_modules(phononqmlplugin Declarative)
+qt5_use_modules(phononqmlplugin Core Gui Declarative)
 
 install(TARGETS phononqmlplugin DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
 install(FILES ${phonon_QMLS} DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)

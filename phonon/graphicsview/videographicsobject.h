@@ -22,8 +22,8 @@
 #ifndef PHONON_VIDEOGRAPHICSOBJECT_H
 #define PHONON_VIDEOGRAPHICSOBJECT_H
 
-#include <QtWidgets/QGraphicsObject>
-#include <QtCore/QMap>
+#include <QGraphicsObject>
+#include <QMap>
 
 #include "medianode.h"
 

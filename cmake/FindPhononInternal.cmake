@@ -56,37 +56,84 @@ set(CMAKE_MODULE_PATH ${phonon_cmake_module_dir} ${CMAKE_MODULE_PATH} )
 # # Qt libs and are flexible regarding the install location of Qt under Windows:
 # set(QT_USE_IMPORTED_TARGETS TRUE)
 
-find_package(Qt5Core REQUIRED)
-macro_log_feature(Qt5Core_FOUND "Qt5 Core (qtbase)" "" "" TRUE)
+if (NOT PHONON_INTERNAL_BUILD_QT5) # Qt4
+    if (NOT QT_MIN_VERSION)
+      set(QT_MIN_VERSION "4.6.0")
+    endif (NOT QT_MIN_VERSION)
+    if (${QT_MIN_VERSION} VERSION_LESS "4.6.0")
+      set(QT_MIN_VERSION "4.6.0")
+    endif (${QT_MIN_VERSION} VERSION_LESS "4.6.0")
 
-find_package(Qt5Gui REQUIRED)
-macro_log_feature(Qt5Gui_FOUND "Qt5 Gui (qtbase)" "" "" TRUE)
+    find_package(Qt4)
+    macro_log_feature(QT4_FOUND "Qt4" "" "" TRUE)
 
-find_package(Qt5Widgets REQUIRED)
-macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets (qtbase)" "" "" TRUE)
+    # ----- compat
+    macro (qt5_use_modules target)
+        set(_deps "")
+        foreach (arg ${ARGN})
+            if (arg STREQUAL "Core")
+                list(APPEND _deps ${QT_QTCORE_LIBRARY})
+            elseif (arg STREQUAL "Gui")
+                list(APPEND _deps ${QT_QTGUI_LIBRARY})
+            elseif (arg STREQUAL "Widgets")
+                list(APPEND _deps ${QT_QTGUI_LIBRARY})
+            elseif (arg STREQUAL "DBus")
+                list(APPEND _deps ${QT_QTDBUS_LIBRARY})
+            elseif (arg STREQUAL "OpenGL")
+                list(APPEND _deps ${QT_QTOPENGL_LIBRARY})
+            elseif (arg STREQUAL "Declarative")
+                list(APPEND _deps ${QT_QTDECLARATIVE_LIBRARY})
+            elseif (arg STREQUAL "Designer")
+                list(APPEND _deps ${QT_QTDESIGNER_LIBRARY})
+            else ()
+                message("qt5_use_modules could not map ${arg} to Qt 4")
+            endif ()
+        endforeach ()
+        target_link_libraries(${target} ${_deps})
+    endmacro (qt5_use_modules target args)
 
-if (Qt5_POSITION_INDEPENDENT_CODE)
-   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-endif()
+    macro (qt5_add_resources)
+        qt4_add_resources(${ARGN})
+    endmacro (qt5_add_resources)
+else (NOT PHONON_INTERNAL_BUILD_QT5) # Qt5
+    find_package(Qt5Core)
+    macro_log_feature(Qt5Core_FOUND "Qt5 Core (qtbase)" "" "" TRUE)
 
-# Compat variables for plugins.
-function(_QT4_QUERY_QMAKE VAR RESULT)
-    get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} LOCATION)
-    execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} "-query" ${VAR}
-                    RESULT_VARIABLE return_code
-                    OUTPUT_VARIABLE output)
-    if(NOT return_code)
-        file(TO_CMAKE_PATH "${output}" output)
-        STRING(REGEX REPLACE "(\r?\n)+$" "" output "${output}")
-        set(${RESULT} ${output} PARENT_SCOPE)
-    endif(NOT return_code)
-endfunction(_QT4_QUERY_QMAKE)
+    find_package(Qt5Gui)
+    macro_log_feature(Qt5Gui_FOUND "Qt5 Gui (qtbase)" "" "" TRUE)
 
-_qt4_query_qmake(QT_INSTALL_IMPORTS QT_IMPORTS_DIR)
-_qt4_query_qmake(QT_HOST_DATA QT_MKSPECS_DIR)
-_qt4_query_qmake(QT_INSTALL_PLUGINS QT_PLUGINS_DIR)
+    find_package(Qt5Widgets)
+    macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets (qtbase)" "" "" TRUE)
 
-set(QT_MKSPECS_DIR "${QT_MKSPECS_DIR}/mkspecs")
+    if (Qt5_POSITION_INDEPENDENT_CODE)
+      set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    endif()
+
+    #---- compat
+    # Compat variables for plugins.
+    function(_QT4_QUERY_QMAKE VAR RESULT)
+        get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} LOCATION)
+        execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} "-query" ${VAR}
+                        RESULT_VARIABLE return_code
+                        OUTPUT_VARIABLE output)
+        if(NOT return_code)
+            file(TO_CMAKE_PATH "${output}" output)
+            STRING(REGEX REPLACE "(\r?\n)+$" "" output "${output}")
+            set(${RESULT} ${output} PARENT_SCOPE)
+        endif(NOT return_code)
+    endfunction(_QT4_QUERY_QMAKE)
+
+    _qt4_query_qmake(QT_INSTALL_IMPORTS QT_IMPORTS_DIR)
+    _qt4_query_qmake(QT_HOST_DATA QT_MKSPECS_DIR)
+    _qt4_query_qmake(QT_INSTALL_PLUGINS QT_PLUGINS_DIR)
+
+    set(QT_MKSPECS_DIR "${QT_MKSPECS_DIR}/mkspecs")
+
+    # ---- more compat
+    set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
+                    ${Qt5Widgets_INCLUDE_DIRS}
+                    ${Qt5DBus_INCLUDE_DIRS})
+endif (NOT PHONON_INTERNAL_BUILD_QT5)
 
 # - Automoc
 
@@ -121,10 +168,13 @@ set(CMAKE_MODULE_PATH ${_phonon_cmake_module_path_back})
 include(GNUInstallDirs)
 
 set(SHARE_INSTALL_PREFIX        "share")  #              CACHE PATH "Base directory for files which go to share/")
-set(INCLUDE_INSTALL_DIR         "include/phonon4qt5" ) #           CACHE PATH "The subdirectory to the header prefix")
+set(INCLUDE_INSTALL_DIR         "include/${PHONON_LIB_SONAME}" ) #           CACHE PATH "The subdirectory to the header prefix")
 set(BIN_INSTALL_DIR             "bin"     ) #         CACHE PATH "The install dir for executables (default ${EXEC_INSTALL_PREFIX}/bin)")
 set(LIB_INSTALL_DIR             "${CMAKE_INSTALL_LIBDIR}" ) #  CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed"
-set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/qt5"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
+set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/kde4"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
+if (PHONON_INTERNAL_BUILD_QT5)
+    set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/qt5"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/qt5)")
+endif (PHONON_INTERNAL_BUILD_QT5)
 set(ICON_INSTALL_DIR            "${SHARE_INSTALL_PREFIX}/icons"             CACHE PATH "The icon install dir (default ${SHARE_INSTALL_PREFIX}/share/icons/)")
 set(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde5/services"     CACHE PATH "The install dir for service (desktop, protocol, ...) files")
 set(DBUS_INTERFACES_INSTALL_DIR "${SHARE_INSTALL_PREFIX}/dbus-1/interfaces" CACHE PATH "The dbus interfaces install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/interfaces)")
@@ -339,7 +389,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       set(_source "#include <QtCore/QtGlobal>\n int main()\n {\n #ifndef QT_VISIBILITY_AVAILABLE \n #error QT_VISIBILITY_AVAILABLE is not available\n #endif \n }\n")
       set(_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/check_qt_visibility.cpp)
       file(WRITE "${_source_file}" "${_source}")
-      set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${Qt5Core_INCLUDE_DIRS}")
+      set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${QT_INCLUDES}")
 
       try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${_include_dirs}" OUTPUT_VARIABLE _compile_output_var)
 

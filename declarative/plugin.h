@@ -69,7 +69,9 @@ namespace Declarative
 
 class Plugin : public QDeclarativeExtensionPlugin
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     Q_PLUGIN_METADATA(IID "org.kde.phonon.DeclarativePlugin")
+#endif
 public:
     virtual void registerTypes(const char *uri);
 };

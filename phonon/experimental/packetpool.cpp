@@ -27,7 +27,11 @@ namespace Phonon
 
 int PacketPool::packetSize() const { return d_ptr->packetSize; }
 int PacketPool::poolSize() const { return d_ptr->poolSize; }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 int PacketPool::unusedPackets() const { return d_ptr->ringBufferSize.loadAcquire(); }
+#else
+int PacketPool::unusedPackets() const { return d_ptr->ringBufferSize; }
+#endif
 
 PacketPoolPrivate::PacketPoolPrivate(int _packetSize, int _poolSize)
     : freePackets(new PacketPrivate *[_poolSize]),
@@ -44,7 +48,11 @@ PacketPoolPrivate::PacketPoolPrivate(int _packetSize, int _poolSize)
 
 PacketPoolPrivate::~PacketPoolPrivate()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     Q_ASSERT(poolSize == ringBufferSize.loadAcquire());
+#else
+    Q_ASSERT(poolSize == ringBufferSize);
+#endif
     for (int i = 0; i < poolSize; ++i) {
         delete freePackets[i];
     }

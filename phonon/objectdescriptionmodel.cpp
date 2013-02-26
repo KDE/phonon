@@ -63,12 +63,20 @@ static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_ContainerFor
 static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VisualizationType[]      = { "Phonon::VisualizationDescription\0" };
 */
 
-#define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
-    &QAbstractListModel::staticMetaObject, \
-    QTypedArrayData<char>::fromRawData(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X, \
-                                       sizeof(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X)), \
-    qt_meta_data_Phonon__ObjectDescriptionModel, \
-    0, 0, 0 }
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0) // Qt 4
+    #define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
+        &QAbstractListModel::staticMetaObject, \
+        qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X, \
+        qt_meta_data_Phonon__ObjectDescriptionModel, \
+        0 }
+#else // Qt 5
+    #define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
+        &QAbstractListModel::staticMetaObject, \
+        QTypedArrayData<char>::fromRawData(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X, \
+                                          sizeof(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X)), \
+        qt_meta_data_Phonon__ObjectDescriptionModel, \
+        0, 0, 0 }
+#endif
 
 namespace Phonon
 {

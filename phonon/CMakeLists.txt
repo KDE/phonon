@@ -22,13 +22,16 @@ else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-message(WARNING "QZeitgeist has not been ported to Qt5, support is disabled.")
-#macro_optional_find_package(QZeitgeist 0.8)
-#macro_log_feature(QZEITGEIST_FOUND "QZeitgeist" "Qt bindings for Zeitgeist" "http://projects.kde.org/kdesupport/libqzeitgeist/" FALSE "0.8")
-#if (QZEITGEIST_FOUND)
-#    add_definitions(-DHAVE_QZEITGEIST)
-#    include_directories(${QZEITGEIST_INCLUDE_DIR})
-#endif(QZEITGEIST_FOUND)
+if (PHONON_INTERNAL_BUILD_QT5)
+    message(WARNING "QZeitgeist has not been ported to Qt5, support is disabled.")
+else ()
+    macro_optional_find_package(QZeitgeist 0.8)
+    macro_log_feature(QZEITGEIST_FOUND "QZeitgeist" "Qt bindings for Zeitgeist" "http://projects.kde.org/kdesupport/libqzeitgeist/" FALSE "0.8")
+    if (QZEITGEIST_FOUND)
+      add_definitions(-DHAVE_QZEITGEIST)
+      include_directories(${QZEITGEIST_INCLUDE_DIR})
+    endif(QZEITGEIST_FOUND)
+endif()
 
 include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
@@ -76,11 +79,11 @@ if (PHONON_PULSESUPPORT)
    )
 endif (PHONON_PULSESUPPORT)
 
-if (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
+if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
    list(APPEND phonon_LIB_SRCS
       audiooutputadaptor.cpp
    )
-endif (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
+endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 
 option(PHONON_NO_PLATFORMPLUGIN "Do not use any platform plugin")
 if (PHONON_NO_PLATFORMPLUGIN)
@@ -92,18 +95,18 @@ add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_
 automoc4_add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
 qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets)
 
-if(Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
+if(QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
     qt5_use_modules(${PHONON_LIB_SONAME} DBus)
-endif(Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
+endif(QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 
 if (PHONON_PULSESUPPORT)
     target_link_libraries(${PHONON_LIB_SONAME} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (PHONON_PULSESUPPORT)
 
-if (Qt5OpenGL_FOUND AND OPENGL_FOUND)
+if (QT_QTOPENGL_FOUND AND OPENGL_FOUND)
     qt5_use_modules(${PHONON_LIB_SONAME} OpenGL)
     target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_gl_LIBRARY})
-endif (Qt5OpenGL_FOUND AND OPENGL_FOUND)
+endif (QT_QTOPENGL_FOUND AND OPENGL_FOUND)
 
 if (QZEITGEIST_FOUND)
     target_link_libraries(${PHONON_LIB_SONAME} ${QZEITGEIST_LIBRARY})
@@ -175,8 +178,8 @@ install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
-if (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
+if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.kde.Phonon.AudioOutput.xml ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
-endif (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
+endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 

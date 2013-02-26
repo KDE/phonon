@@ -1,13 +1,8 @@
-QT.@PHONON_LIB_SONAME@.VERSION = @PHONON_LIB_VERSION@
-QT.@PHONON_LIB_SONAME@.MAJOR_VERSION = @PHONON_LIB_MAJOR_VERSION@
-QT.@PHONON_LIB_SONAME@.MINOR_VERSION = @PHONON_LIB_MINOR_VERSION@
-QT.@PHONON_LIB_SONAME@.PATCH_VERSION = @PHONON_LIB_PATCH_VERSION@
-QT.@PHONON_LIB_SONAME@.name = @PHONON_LIB_SONAME@
-QT.@PHONON_LIB_SONAME@.bins =
-QT.@PHONON_LIB_SONAME@.includes = @ABS_INCLUDE_INSTALL_DIR@
-QT.@PHONON_LIB_SONAME@.private_includes =
-QT.@PHONON_LIB_SONAME@.sources =
-QT.@PHONON_LIB_SONAME@.libs = @ABS_LIB_INSTALL_DIR@
-QT.@PHONON_LIB_SONAME@.plugins = @QT_PLUGINS_DIR@
-QT.@PHONON_LIB_SONAME@.imports = @PHONON_QT_IMPORTS_INSTALL_DIR@
-QT.@PHONON_LIB_SONAME@.depends = core widgets
+#configuration
+# If we install this into an in-builddir deployment of Qt, it would confuse
+# the next build of Qt. So pretend we're not there in this case.
+# This file is loaded by qt_config.prf, before .qmake.cache has been loaded.
+# Consequently, we have to do some stunts to get values out of the cache.
+!exists($$_QMAKE_CACHE_)| \
+   !contains($$list($$fromfile($$_QMAKE_CACHE_, CONFIG)), QTDIR_build): \
+    QT_CONFIG += @PHONON_LIB_SONAME@
