@@ -53,7 +53,6 @@ set(phonon_LIB_SRCS
    platform.cpp
    pulsesupport.cpp
 #    seekslider.cpp
-   statesvalidator.cpp
    streaminterface.cpp
 #    swiftslider.cpp
 #    volumefadereffect.cpp

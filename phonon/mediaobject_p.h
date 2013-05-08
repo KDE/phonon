@@ -110,9 +110,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             , errorType(Phonon::NormalError),
             errorOverride(false),
             ignoreLoadingToBufferingStateChange(false),
-            ignoreErrorToLoadingStateChange(false),
-            validateStates(!(qgetenv("PHONON_ASSERT_STATES").isEmpty())),
-            validator(0)
+            ignoreErrorToLoadingStateChange(false)
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
 #ifdef HAVE_QZEITGEIST
@@ -153,8 +151,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #ifdef HAVE_QZEITGEIST
         QZeitgeist::Log *log;
 #endif
-        bool validateStates;
-        StatesValidator *validator;
 };
 }
 

@@ -47,7 +47,6 @@
 
 #include "phononnamespace_p.h"
 #include "platform_p.h"
-#include "statesvalidator_p.h"
 
 #define PHONON_CLASSNAME MediaObject
 #define PHONON_INTERFACENAME MediaObjectInterface
@@ -599,9 +598,6 @@ void MediaObjectPrivate::_k_aboutToFinish()
     readyForZeitgeist = false;
     playingQueuedSource = true;
     pINTERFACE_CALL(setNextSource(mediaSource));
-
-    if (validator)
-        validator->sourceQueued();
 }
 
 void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
@@ -628,9 +624,6 @@ void MediaObjectPrivate::setupBackendObject()
 
     qRegisterMetaType<MediaSource>("MediaSource");
     qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
-
-    if (validateStates)
-        validator = new StatesValidator(q); // Parented, and non-invasive to MO.
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
