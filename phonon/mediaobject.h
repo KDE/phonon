@@ -35,14 +35,14 @@ namespace Phonon
 
     class PHONON_EXPORT MediaObject : public QObject, public MediaNode
     {
-        friend class FrontendInterfacePrivate;
         Q_OBJECT
         P_DECLARE_PRIVATE(MediaObject)
-        PHONON_OBJECT(MediaObject)
 
         Q_PROPERTY(qint32 tickInterval READ tickInterval WRITE setTickInterval)
 
         public:
+            MediaObject(QObject *parent = 0);
+
             /**
              * Destroys the MediaObject.
              */

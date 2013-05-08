@@ -29,7 +29,6 @@
 #include "phonondefs_p.h"
 #include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
-#include "frontendinterface_p.h"
 
 #include <QtCore/QStringBuilder>
 #include <QtCore/QStringList>
@@ -595,12 +594,6 @@ void MediaObjectPrivate::setupBackendObject()
         emit q->stateChanged(backendState, state);
         state = backendState;
     }
-
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-    for (int i = 0 ; i < interfaceList.count(); ++i) {
-        interfaceList.at(i)->_backendObjectChanged();
-    }
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
     // set up attributes
     if (isPlayable(mediaSource.type())) {
