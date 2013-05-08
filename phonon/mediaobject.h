@@ -25,12 +25,10 @@
 
 #include "medianode.h"
 #include "mediasource.h"
-#include "phonon_export.h"
-#include "phonondefs.h"
-#include "phononnamespace.h"
 
 namespace Phonon
 {
+
 class MediaObjectPrivate;
 
 class PHONON_EXPORT MediaObject : public QObject, public MediaNode
@@ -78,12 +76,8 @@ private:
     Q_PRIVATE_SLOT(k_func(), void _k_resumePlay())
     Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
     Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<QString, QString> &))
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    Q_PRIVATE_SLOT(k_func(), void _k_currentSourceChanged(const MediaSource &))
-    Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
 };
+
 } //namespace Phonon
 
 #endif // PHONON_MEDIAOBJECT_H

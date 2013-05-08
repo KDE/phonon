@@ -31,7 +31,6 @@
 #include <QtCore/QSharedData>
 #include <QtCore/QString>
 
-
 class QUrl;
 class QIODevice;
 
@@ -115,12 +114,6 @@ class PHONON_EXPORT MediaSource
              * of audio type) merged together.
              */
             AudioVideoCapture
-/*          post 4.0:
-            / **
-             * Links multiple MediaSource objects together.
-             * /
-            Link
-*/
         };
 
         /**
@@ -331,11 +324,6 @@ class PHONON_EXPORT MediaSource
          */
         VideoCaptureDevice videoCaptureDevice() const;
 #endif
-
-/*      post 4.0:
-        MediaSource(const QList<MediaSource> &mediaList);
-        QList<MediaSource> substreams() const;
-*/
 
     protected:
         QExplicitlySharedDataPointer<MediaSourcePrivate> d;

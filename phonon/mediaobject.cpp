@@ -194,7 +194,7 @@ MediaSource MediaObject::currentSource() const
 void MediaObject::setCurrentSource(const MediaSource &newSource)
 {
     P_D(MediaObject);
-    if (!k_ptr->backendObject()) {
+    if (!d->backendObject()) {
         d->mediaSource = newSource;
         return;
     }
@@ -221,10 +221,8 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
 
 bool MediaObjectPrivate::aboutToDeleteBackendObject()
 {
-    //pDebug() << Q_FUNC_INFO;
     prefinishMark = pINTERFACE_CALL(prefinishMark());
     transitionTime = pINTERFACE_CALL(transitionTime());
-    //pDebug() << Q_FUNC_INFO;
     if (m_backendObject) {
         state = pINTERFACE_CALL(state());
         currentTime = pINTERFACE_CALL(currentTime());
@@ -246,22 +244,6 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-// TODO: this needs serious cleanup...
-void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
-{
-    P_Q(MediaObject);
-
-    emit q->stateChanged(newstate, oldstate);
-}
-
-void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
-{
-    P_Q(MediaObject);
-    pDebug() << Q_FUNC_INFO;
-
-    emit q->currentSourceChanged(source);
-}
-
 void MediaObjectPrivate::setupBackendObject()
 {
     P_Q(MediaObject);
@@ -276,16 +258,10 @@ void MediaObjectPrivate::setupBackendObject()
     qRegisterMetaType<MediaSource>("MediaSource");
     qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-                     q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-#else
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
     QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),
                      q, SIGNAL(hasVideoChanged(bool)), Qt::QueuedConnection);
-
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
                      q, SIGNAL(tick(qint64)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),
