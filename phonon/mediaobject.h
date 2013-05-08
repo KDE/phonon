@@ -650,12 +650,6 @@ namespace Phonon
             Q_PRIVATE_SLOT(k_func(), void _k_currentSourceChanged(const MediaSource &))
             Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
     };
-
-    /**
-     * Convenience function to create a MediaObject and AudioOutput connected by
-     * a path.
-     */
-    PHONON_EXPORT MediaObject *createPlayer(Phonon::Category category, const MediaSource &source = MediaSource());
 } //namespace Phonon
 
 

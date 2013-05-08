@@ -740,17 +740,6 @@ void MediaObjectPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
     Q_UNUSED(bp);
 }
 
-MediaObject *createPlayer(Phonon::Category category, const MediaSource &source)
-{
-    MediaObject *mo = new MediaObject;
-    AudioOutput *ao = new AudioOutput(category, mo);
-    createPath(mo, ao);
-    if (isPlayable(source.type())) {
-        mo->setCurrentSource(source);
-    }
-    return mo;
-}
-
 } //namespace Phonon
 
 #include "moc_mediaobject.cpp"

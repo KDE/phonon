@@ -30,9 +30,9 @@ set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
    abstractaudiooutput_p.cpp
    abstractmediastream.cpp
-   abstractvideooutput.cpp
-   abstractvideooutput_p.cpp
-   audiodataoutput.cpp
+#   abstractvideooutput.cpp
+#   abstractvideooutput_p.cpp
+#   audiodataoutput.cpp
    audiooutput.cpp
    audiooutputinterface.cpp
    backendcapabilities.cpp
@@ -47,7 +47,7 @@ set(phonon_LIB_SRCS
    mediasource.cpp
    objectdescription.cpp
    objectdescriptionmodel.cpp
-   path.cpp
+#   path.cpp
    phononnamespace.cpp
    platform.cpp
    pulsesupport.cpp

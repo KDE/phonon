@@ -26,19 +26,12 @@
 
 #include "phonondefs.h"
 #include "phonon_export.h"
-#include "path.h"
-
 
 namespace Phonon
 {
-
-    class Path;
     class MediaNodePrivate;
     class PHONON_EXPORT MediaNode
     {
-        friend class Path;
-        friend class PathPrivate;
-        friend PHONON_EXPORT Path createPath(MediaNode *source, MediaNode *sink);
         P_DECLARE_PRIVATE(MediaNode)
     public:
         virtual ~MediaNode();
@@ -50,9 +43,6 @@ namespace Phonon
          * \return \c false if the object is not implemented by the backend
          */
         bool isValid() const;
-
-        QList<Path> inputPaths() const;
-        QList<Path> outputPaths() const;
 
     protected:
         MediaNode(MediaNodePrivate &dd);

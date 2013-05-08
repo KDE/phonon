@@ -22,6 +22,8 @@
 
 #include "phononnamespace.h"
 #include "phononnamespace_p.h"
+
+#include "objectdescription.h"
 #include "phonondefs_p.h"
 
 #include "factory_p.h"

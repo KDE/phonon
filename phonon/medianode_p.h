@@ -27,7 +27,6 @@ Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 #include <QtCore/QList>
 #include <QtCore/QObject>
 
-#include "path.h"
 #include "phononpimpl_p.h"
 #include "phonon_export.h"
 
@@ -117,11 +116,6 @@ namespace Phonon
         */
         void removeDestructionHandler(MediaNodeDestructionHandler *handler);
 
-        void addOutputPath(const Path &);
-        void addInputPath(const Path &);
-        void removeOutputPath(const Path &);
-        void removeInputPath(const Path &);
-
         const QObject *qObject() const { return const_cast<MediaNodePrivate *>(this)->qObject(); }
         virtual QObject *qObject() { return 0; }
 
@@ -129,9 +123,6 @@ namespace Phonon
         MediaNode *q_ptr;
     public:
         QObject *m_backendObject;
-    protected:
-        QList<Path> outputPaths;
-        QList<Path> inputPaths;
 
     private:
         QList<MediaNodeDestructionHandler *> handlers;
