@@ -188,55 +188,6 @@ namespace BackendCapabilities
     PHONON_EXPORT QList<VideoCaptureDevice> availableAVCaptureDevices();
 #endif // NOT PHONON_NO_VIDEOCAPTURE AND NOT PHONON_NO_AUDIOCAPTURE
 
-    /**
-     * Returns the visualization effects the backend supports.
-     *
-     * \return A list of VisualizationEffect objects that give a name and
-     * description for every supported visualization effect.
-     */
-//    PHONON_EXPORT QList<VisualizationDescription> availableVisualizations();
-
-#ifndef QT_NO_PHONON_EFFECT
-    /**
-     * Returns descriptions for the audio effects the backend supports.
-     *
-     * \return A list of AudioEffectDescription objects that give a name and
-     * description for every supported audio effect.
-     */
-    PHONON_EXPORT QList<EffectDescription> availableAudioEffects();
-#endif //QT_NO_PHONON_EFFECT
-
-//X     /**
-//X      * Returns descriptions for the video effects the backend supports.
-//X      *
-//X      * \return A list of VideoEffectDescription objects that give a name and
-//X      * description for every supported video effect.
-//X      */
-//X     PHONON_EXPORT QList<EffectDescription> availableVideoEffects();
-
-    /**
-     * Returns descriptions for the audio codecs the backend supports.
-     *
-     * \return A list of AudioCodec objects that give a name and
-     * description for every supported audio codec.
-     */
-//    PHONON_EXPORT QList<AudioCodecDescription> availableAudioCodecs();
-
-    /**
-     * Returns descriptions for the video codecs the backend supports.
-     *
-     * \return A list of VideoCodec objects that give a name and
-     * description for every supported video codec.
-     */
-//    PHONON_EXPORT QList<VideoCodecDescription> availableVideoCodecs();
-
-    /**
-     * Returns descriptions for the container formats the backend supports.
-     *
-     * \return A list of ContainerFormat objects that give a name and
-     * description for every supported container format.
-     */
-//    PHONON_EXPORT QList<ContainerFormatDescription> availableContainerFormats();
 } // namespace BackendCapabilities
 } // namespace Phonon
 

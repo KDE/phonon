@@ -37,9 +37,6 @@
 #include <QtCore/QList>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QPointer>
-#ifndef PHONON_NO_DBUS
-#include <QtDBus/QtDBus>
-#endif
 #include <QApplication>
 #include <QMessageBox>
 
@@ -68,13 +65,6 @@ class FactoryPrivate : public Phonon::Factory::Sender
 
     private Q_SLOTS:
         /**
-         * This is called via DBUS when the user changes the Phonon Backend.
-         */
-#ifndef PHONON_NO_DBUS
-        void phononBackendChanged();
-#endif //PHONON_NO_DBUS
-
-        /**
          * unregisters the backend object
          */
         void objectDestroyed(QObject *);
@@ -100,15 +90,6 @@ void Factory::setBackend(QObject *b)
     Q_ASSERT(globalFactory->m_backendObject == 0);
     globalFactory->m_backendObject = b;
 }
-
-/*void Factory::createBackend(const QString &library, const QString &version)
-{
-    Q_ASSERT(globalFactory->m_backendObject == 0);
-    PlatformPlugin *f = globalFactory->platformPlugin();
-    if (f) {
-        globalFactory->m_backendObject = f->createBackend(library, version);
-    }
-}*/
 
 bool FactoryPrivate::createBackend()
 {
@@ -145,19 +126,6 @@ bool FactoryPrivate::createBackend()
             }
 
             QStringList plugins(dir.entryList(QDir::Files));
-
-#ifdef Q_OS_SYMBIAN
-            /* On Symbian OS we might have two plugins, one which uses Symbian
-             * MMF framework("mmf"), and one which uses Real Networks's
-             * Helix("hxphonon"). We prefer the latter because it's more
-             * sophisticated, so we make sure the Helix backend is attempted
-             * to be loaded first, and the MMF backend is used for backup. */
-            {
-                const int helix = plugins.indexof(QLatin1String("hxphonon"));
-                if (helix != -1)
-                    plugins.move(helix, 0);
-            }
-#endif
 
             if (!backendEnv.isEmpty()) {
                 pDebug() << "trying to load:" << backendEnv << "as first choice";
@@ -223,10 +191,6 @@ FactoryPrivate::FactoryPrivate()
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
     // as the whole backend might still be alive.
     qAddPostRoutine(globalFactory.destroy);
-#ifndef PHONON_NO_DBUS
-    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.Phonon.Factory"),
-        QLatin1String("phononBackendChanged"), this, SLOT(phononBackendChanged()));
-#endif
 }
 
 FactoryPrivate::~FactoryPrivate()
@@ -299,29 +263,6 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
     }
 }
 
-#ifndef PHONON_NO_DBUS
-void FactoryPrivate::phononBackendChanged()
-{
-#ifdef __GNUC__
-#warning TODO hyperspeed: the message box only ought to be shown once and not for \
-    every backend switch
-#endif
-    QMessageBox::information(qApp->activeWindow(),
-                             tr("Restart Application"),
-                             tr("You changed the backend of the Phonon multimedia system.\n\n"
-                                "To apply this change you will need to"
-                                " restart '%1'.").arg(qAppName()));
-    emit backendChanged();
-}
-#endif //PHONON_NO_DBUS
-
-//X void Factory::freeSoundcardDevices()
-//X {
-//X     if (globalFactory->backend) {
-//X         globalFactory->backend->freeSoundcardDevices();
-//X     }
-//X }
-
 void FactoryPrivate::objectDestroyed(QObject * obj)
 {
     //pDebug() << Q_FUNC_INFO << obj;
@@ -370,11 +311,6 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     if (m_noPlatformPlugin) {
         return 0;
     }
-#ifndef PHONON_NO_DBUS
-    if (!QCoreApplication::instance() || QCoreApplication::applicationName().isEmpty()) {
-        pWarning() << "Phonon needs QCoreApplication::applicationName to be set to export audio output names through the DBUS interface";
-    }
-#endif
     Q_ASSERT(QCoreApplication::instance());
     const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
     if (!platform_plugin_env.isEmpty()) {
@@ -458,10 +394,6 @@ QObject *Factory::backend(bool createWhenNull)
     }
     if (createWhenNull && globalFactory->m_backendObject == 0) {
         globalFactory->createBackend();
-        // XXX: might create "reentrancy" problems:
-        // a method calls this method and is called again because the
-        // backendChanged signal is emitted
-        emit globalFactory->backendChanged();
     }
     return globalFactory->m_backendObject;
 }
@@ -496,5 +428,3 @@ QObject *Factory::registerQObject(QObject *o)
 
 #include "factory.moc"
 #include "moc_factory_p.cpp"
-
-// vim: sw=4 ts=4

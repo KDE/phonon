@@ -59,10 +59,6 @@ namespace Factory
     {
         Q_OBJECT
         Q_SIGNALS:
-            /**
-             * Emitted after the backend has successfully been changed.
-             */
-            void backendChanged();
 
             /**
              * \copydoc BackendCapabilities::Notifier::availableAudioOutputDevicesChanged

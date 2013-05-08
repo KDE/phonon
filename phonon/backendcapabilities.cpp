@@ -121,25 +121,6 @@ QList<VideoCaptureDevice> BackendCapabilities::availableAVCaptureDevices()
 }
 #endif // NOT PHONON_NO_VIDEOCAPTURE AND NOT PHONON_NO_AUDIOCAPTURE
 
-#ifndef QT_NO_PHONON_EFFECT
-QList<EffectDescription> BackendCapabilities::availableAudioEffects()
-{
-    BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend());
-    QList<EffectDescription> ret;
-    if (backendIface) {
-        const QList<int> deviceIndexes = backendIface->objectDescriptionIndexes(Phonon::EffectType);
-        for (int i = 0; i < deviceIndexes.count(); ++i) {
-            ret.append(EffectDescription::fromIndex(deviceIndexes.at(i)));
-        }
-    }
-    return ret;
-}
-#endif //QT_NO_PHONON_EFFECT
-
 } // namespace Phonon
 
 #include "moc_backendcapabilities.cpp"
-
-// vim: sw=4 ts=4
-
-
