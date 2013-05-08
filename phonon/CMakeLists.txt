@@ -42,7 +42,6 @@ set(phonon_LIB_SRCS
    factory.cpp
    globalconfig.cpp
    iodevicestream.cpp
-   mediacontroller.cpp
    mediaobject.cpp
    medianode.cpp
    mediasource.cpp
@@ -132,7 +131,6 @@ install(FILES
    effectwidget.h
    globalconfig.h
    globaldescriptioncontainer.h
-   mediacontroller.h
    medianode.h
    mediaobject.h
    mediaobjectinterface.h
