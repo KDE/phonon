@@ -132,22 +132,6 @@ MediaSource::MediaSource(QIODevice *ioDevice)
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-/* post 4.0
-MediaSource::MediaSource(const QList<MediaSource> &mediaList)
-    : d(new MediaSourcePrivate(Link))
-{
-    d->linkedSources = mediaList;
-    foreach (MediaSource ms, mediaList) {
-        Q_ASSERT(ms.type() != Link);
-    }
-}
-
-QList<MediaSource> MediaSource::substreams() const
-{
-    return d->linkedSources;
-}
-*/
-
 MediaSource::~MediaSource()
 {
 }
@@ -383,5 +367,3 @@ QDebug operator <<(QDebug dbg, const Phonon::MediaSource &source)
 }
 
 } // namespace Phonon
-
-// vim: sw=4 sts=4 et tw=100

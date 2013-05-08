@@ -47,15 +47,11 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         void init(Phonon::Category c);
         QString getStreamUuid();
 
-
     protected:
         AudioOutputPrivate(CastId castId = MediaNodePrivate::AudioOutputType)
             : AbstractAudioOutputPrivate(castId),
             name(Platform::applicationName()),
-            volume(Platform::loadVolume(name)),
-#ifndef PHONON_NO_DBUS
-            adaptor(0),
-#endif
+            volume(1.0),
             deviceBeforeFallback(-1),
             outputDeviceOverridden(false),
             forceMove(false),
@@ -84,9 +80,6 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         Phonon::AudioOutputDevice device;
         qreal volume;
         QString streamUuid;
-#ifndef PHONON_NO_DBUS
-        Phonon::AudioOutputAdaptor *adaptor;
-#endif
         Category category;
         int deviceBeforeFallback;
         bool outputDeviceOverridden;
@@ -96,4 +89,3 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
 } //namespace Phonon
 
 #endif // AUDIOOUTPUT_P_H
-// vim: sw=4 ts=4 tw=80

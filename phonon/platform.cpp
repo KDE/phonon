@@ -32,32 +32,6 @@
 namespace Phonon
 {
 
-void Platform::saveVolume(const QString &outputName, qreal volume)
-{
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    PlatformPlugin *f = Factory::platformPlugin();
-    if (f) {
-        f->saveVolume(outputName, volume);
-    }
-#else
-    Q_UNUSED(outputName);
-    Q_UNUSED(volume);
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-}
-
-qreal Platform::loadVolume(const QString &outputName)
-{
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    const PlatformPlugin *f = Factory::platformPlugin();
-    if (f) {
-        return f->loadVolume(outputName);
-    }
-#else
-    Q_UNUSED(outputName);
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-    return 1.0;
-}
-
 AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *parent)
 {
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN

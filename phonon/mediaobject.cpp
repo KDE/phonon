@@ -1,6 +1,7 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2011 Trever Fischer <tdfischer@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -18,21 +19,17 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
+
 #include "mediaobject.h"
 #include "mediaobject_p.h"
 
 #include "factory_p.h"
 #include "mediaobjectinterface.h"
-#include "audiooutput.h"
 #include "phonondefs_p.h"
 #include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
 
-#include <QtCore/QStringBuilder>
-#include <QtCore/QStringList>
-#include <QtCore/QDateTime>
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
 
@@ -286,10 +283,8 @@ void MediaObjectPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
 #endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
-#ifndef QT_NO_PHONON_VIDEO
     QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),
                      q, SIGNAL(hasVideoChanged(bool)), Qt::QueuedConnection);
-#endif //QT_NO_PHONON_VIDEO
 
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
                      q, SIGNAL(tick(qint64)), Qt::QueuedConnection);
@@ -385,4 +380,3 @@ void MediaObjectPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 
 #undef PHONON_CLASSNAME
 #undef PHONON_INTERFACENAME
-// vim: sw=4 tw=100 et

@@ -136,8 +136,6 @@ void AudioOutput::setName(const QString &newName)
     PulseSupport *pulse = PulseSupport::getInstance();
     if (pulse->isActive())
         pulse->setOutputName(d->getStreamUuid(), newName);
-    else
-        setVolume(Platform::loadVolume(newName));
 }
 
 static const qreal LOUDNESS_TO_VOLTAGE_EXPONENT = qreal(0.67);
@@ -163,8 +161,6 @@ void AudioOutput::setVolume(qreal volume)
     } else {
         emit volumeChanged(volume);
     }
-    if (!pulse->isActive())
-        Platform::saveVolume(d->name, volume);
 }
 
 qreal AudioOutput::volume() const

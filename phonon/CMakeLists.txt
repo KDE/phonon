@@ -38,8 +38,6 @@ set(phonon_LIB_SRCS
    medianode.cpp
    mediasource.cpp
    objectdescription.cpp
-   objectdescriptionmodel.cpp
-#   path.cpp
    phononnamespace.cpp
    platform.cpp
    pulsesupport.cpp
@@ -127,8 +125,6 @@ install(FILES
    mediaobjectinterface.h
    mediasource.h
    objectdescription.h
-   objectdescriptionmodel.h
-   path.h
    phonon_export.h
    phonondefs.h
    platformplugin.h
