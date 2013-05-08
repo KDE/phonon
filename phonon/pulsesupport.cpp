@@ -1108,12 +1108,6 @@ void PulseSupport::setCaptureDevicePriorityForCategory(CaptureCategory category,
 #endif
 }
 
-void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<int> order)
-{
-    CaptureCategory cat = categoryToCaptureCategory(category);
-    setCaptureDevicePriorityForCategory(cat, order);
-}
-
 #ifdef HAVE_PULSEAUDIO
 static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString streamUuid, QString role)
 {
@@ -1159,17 +1153,6 @@ PulseStream *PulseSupport::registerOutputStream(QString streamUuid, Category cat
 }
 
 PulseStream *PulseSupport::registerCaptureStream(QString streamUuid, CaptureCategory category)
-{
-#ifndef HAVE_PULSEAUDIO
-    Q_UNUSED(streamUuid);
-    Q_UNUSED(category);
-    return NULL;
-#else
-    return register_stream(s_captureStreams, streamUuid, category);
-#endif
-}
-
-PulseStream *PulseSupport::registerCaptureStream(QString streamUuid, Category category)
 {
 #ifndef HAVE_PULSEAUDIO
     Q_UNUSED(streamUuid);

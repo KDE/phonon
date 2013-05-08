@@ -52,12 +52,8 @@ namespace Phonon
             void setOutputDevicePriorityForCategory(Category category, QList<int> order);
             void setCaptureDevicePriorityForCategory(CaptureCategory category, QList<int> order);
 
-            PHONON_DEPRECATED void setCaptureDevicePriorityForCategory(Category category, QList<int> order);
-
             PulseStream *registerOutputStream(QString streamUuid, Category category);
             PulseStream *registerCaptureStream(QString streamUuid, CaptureCategory category);
-
-            PHONON_DEPRECATED PulseStream *registerCaptureStream(QString streamUuid, Category category);
 
             void emitObjectDescriptionChanged(ObjectDescriptionType);
 

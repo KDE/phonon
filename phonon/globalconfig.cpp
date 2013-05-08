@@ -606,24 +606,6 @@ QHash<QByteArray, QVariant> GlobalConfig::audioCaptureDeviceProperties(int index
     return deviceProperties(AudioCaptureDeviceType, index);
 }
 
-void GlobalConfig::setAudioCaptureDeviceListFor(Category category, QList<int> order)
-{
-    CaptureCategory cat = categoryToCaptureCategory(category);
-    setAudioCaptureDeviceListFor(cat, order);
-}
-
-QList<int> GlobalConfig::audioCaptureDeviceListFor(Category category, int override) const
-{
-    CaptureCategory cat = categoryToCaptureCategory(category);
-    return audioCaptureDeviceListFor(cat, override);
-}
-
-int GlobalConfig::audioCaptureDeviceFor(Category category, int override) const
-{
-    CaptureCategory cat = categoryToCaptureCategory(category);
-    return audioCaptureDeviceFor(cat, override);
-}
-
 #endif //PHONON_NO_AUDIOCAPTURE
 
 
@@ -711,24 +693,6 @@ int GlobalConfig::videoCaptureDeviceFor(CaptureCategory category, int override) 
 QHash<QByteArray, QVariant> GlobalConfig::videoCaptureDeviceProperties(int index) const
 {
     return deviceProperties(VideoCaptureDeviceType, index);
-}
-
-void GlobalConfig::setVideoCaptureDeviceListFor(Category category, QList<int> order)
-{
-    CaptureCategory cat = categoryToCaptureCategory(category);
-    setVideoCaptureDeviceListFor(cat, order);
-}
-
-QList<int> GlobalConfig::videoCaptureDeviceListFor(Category category, int override) const
-{
-    CaptureCategory cat = categoryToCaptureCategory(category);
-    return videoCaptureDeviceListFor(cat, override);
-}
-
-int GlobalConfig::videoCaptureDeviceFor(Category category, int override) const
-{
-    CaptureCategory cat = categoryToCaptureCategory(category);
-    return videoCaptureDeviceFor(cat, override);
 }
 
 #endif // PHONON_NO_VIDEOCAPTURE

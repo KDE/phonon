@@ -42,46 +42,6 @@ MediaSource::MediaSource()
 {
 }
 
-MediaSource::MediaSource(const QString &filename)
-    : d(new MediaSourcePrivate(LocalFile))
-{
-    if (filename.startsWith(QLatin1String(":/")) || filename.startsWith(QLatin1String("qrc:///"))) {
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        d->url.setScheme("qrc");
-        d->url.setPath(filename.mid(filename.startsWith(QLatin1Char(':')) ? 1 : 6));
-
-        // QFile needs :/ syntax
-        QString path(QLatin1Char(':') + d->url.path());
-
-        if (QFile::exists(path)) {
-            d->type = Stream;
-            d->ioDevice = new QFile(path);
-            d->setStream(new IODeviceStream(d->ioDevice, d->ioDevice));
-        } else {
-            d->type = Invalid;
-        }
-#else
-        d->type = Invalid;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    } else {
-        const QFileInfo fileinfo(filename);
-        if (fileinfo.exists()) {
-            d->url = QUrl::fromLocalFile(fileinfo.absoluteFilePath());
-            if (!d->url.host().isEmpty()) {
-                // filename points to a file on a network share (eg \\host\share\path)
-                d->type = Url;
-            }
-        } else {
-            d->url = filename;
-            if (d->url.isValid()) {
-                d->type = Url;
-            } else {
-                d->type = Invalid;
-            }
-        }
-    }
-}
-
 MediaSource::MediaSource(const QUrl &url)
     : d(new MediaSourcePrivate(Url))
 {
@@ -117,12 +77,6 @@ MediaSource::MediaSource(DiscType dt, const QString &deviceName)
     }
     d->discType = dt;
     d->deviceName = deviceName;
-}
-
-// NOTE: this is deprecated
-MediaSource::MediaSource(const DeviceAccess &)
-    : d(new MediaSourcePrivate(Invalid))
-{
 }
 
 #ifndef PHONON_NO_AUDIOCAPTURE

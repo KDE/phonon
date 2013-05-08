@@ -147,11 +147,3 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
 }
 
 } //namespace Phonon
-
-
-void Phonon::registerMetaTypes()
-{
-    // Deprecated, does nothing
-}
-
-// vim: sw=4 ts=4
