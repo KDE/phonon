@@ -1,9 +1,3 @@
-add_subdirectory(graphicsview)
-
-if (PHONON_BUILD_EXPERIMENTAL)
-    add_subdirectory(experimental)
-endif (PHONON_BUILD_EXPERIMENTAL)
-
 macro_optional_find_package(PulseAudio 0.9.15)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
 macro_optional_find_package(GLIB2)
@@ -42,9 +36,9 @@ set(phonon_LIB_SRCS
    audiooutput.cpp
    audiooutputinterface.cpp
    backendcapabilities.cpp
-   effect.cpp
-   effectparameter.cpp
-   effectwidget.cpp
+#    effect.cpp
+#    effectparameter.cpp
+#    effectwidget.cpp
    factory.cpp
    globalconfig.cpp
    iodevicestream.cpp
@@ -59,14 +53,14 @@ set(phonon_LIB_SRCS
    phononnamespace.cpp
    platform.cpp
    pulsesupport.cpp
-   seekslider.cpp
+#    seekslider.cpp
    statesvalidator.cpp
    streaminterface.cpp
-   swiftslider.cpp
-   volumefadereffect.cpp
-   volumeslider.cpp
-   videoplayer.cpp
-   videowidget.cpp
+#    swiftslider.cpp
+#    volumefadereffect.cpp
+#    volumeslider.cpp
+#    videoplayer.cpp
+#    videowidget.cpp
    ${phonon_VGO_SRCS}
    )
 

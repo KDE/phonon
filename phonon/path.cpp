@@ -55,12 +55,6 @@ class ConnectionTransaction
 
 PathPrivate::~PathPrivate()
 {
-#ifndef QT_NO_PHONON_EFFECT
-    for (int i = 0; i < effects.count(); ++i) {
-        effects.at(i)->k_ptr->removeDestructionHandler(this);
-    }
-    delete effectsParent;
-#endif
 }
 
 Path::~Path()
@@ -82,74 +76,6 @@ bool Path::isValid() const
     return d->sourceNode != 0 && d->sinkNode != 0;
 }
 
-#ifndef QT_NO_PHONON_EFFECT
-Effect *Path::insertEffect(const EffectDescription &desc, Effect *insertBefore)
-{
-    if (!d->effectsParent) {
-        d->effectsParent = new QObject;
-    }
-    Effect *e = new Effect(desc, d->effectsParent);
-    if (!e->isValid()) {
-        delete e;
-        return 0;
-    }
-    bool success = insertEffect(e, insertBefore);
-    if (!success) {
-        delete e;
-        return 0;
-    }
-    return e;
-}
-
-bool Path::insertEffect(Effect *newEffect, Effect *insertBefore)
-{
-    QObject *newEffectBackend = newEffect ? newEffect->k_ptr->backendObject() : 0;
-    if (!isValid() || !newEffectBackend || d->effects.contains(newEffect) ||
-            (insertBefore && (!d->effects.contains(insertBefore) || !insertBefore->k_ptr->backendObject()))) {
-        return false;
-    }
-    QObject *leftNode = 0;
-    QObject *rightNode = 0;
-    const int insertIndex = insertBefore ? d->effects.indexOf(insertBefore) : d->effects.size();
-    if (insertIndex == 0) {
-        //prepend
-        leftNode = d->sourceNode->k_ptr->backendObject();
-    } else {
-        leftNode = d->effects[insertIndex - 1]->k_ptr->backendObject();
-    }
-
-    if (insertIndex == d->effects.size()) {
-        //append
-        rightNode = d->sinkNode->k_ptr->backendObject();
-    } else {
-        Q_ASSERT(insertBefore);
-        rightNode = insertBefore->k_ptr->backendObject();
-    }
-
-    QList<QObjectPair> disconnections, connections;
-    disconnections << QObjectPair(leftNode, rightNode);
-    connections << QObjectPair(leftNode, newEffectBackend)
-        << QObjectPair(newEffectBackend, rightNode);
-
-    if (d->executeTransaction(disconnections, connections)) {
-        newEffect->k_ptr->addDestructionHandler(d.data());
-        d->effects.insert(insertIndex, newEffect);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool Path::removeEffect(Effect *effect)
-{
-    return d->removeEffect(effect);
-}
-
-QList<Effect *> Path::effects() const
-{
-    return d->effects;
-}
-#endif //QT_NO_PHONON_EFFECT
 
 bool Path::reconnect(MediaNode *source, MediaNode *sink)
 {
@@ -167,11 +93,7 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
 
     if (bnewSource != bcurrentSource) {
         //we need to change the source
-#ifndef QT_NO_PHONON_EFFECT
-        MediaNode *next = d->effects.isEmpty() ? sink : d->effects.first();
-#else
         MediaNode *next = sink;
-#endif //QT_NO_PHONON_EFFECT
         QObject *bnext = next->k_ptr->backendObject();
         if (bcurrentSource)
             disconnections << QObjectPair(bcurrentSource, bnext);
@@ -179,11 +101,7 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
     }
 
     if (bnewSink != bcurrentSink) {
-#ifndef QT_NO_PHONON_EFFECT
-        MediaNode *previous = d->effects.isEmpty() ? source : d->effects.last();
-#else
         MediaNode *previous = source;
-#endif //QT_NO_PHONON_EFFECT
         QObject *bprevious = previous->k_ptr->backendObject();
         if (bcurrentSink)
             disconnections << QObjectPair(bprevious, bcurrentSink);
@@ -230,11 +148,6 @@ bool Path::disconnect()
     QObjectList list;
     if (d->sourceNode)
         list << d->sourceNode->k_ptr->backendObject();
-#ifndef QT_NO_PHONON_EFFECT
-    for (int i = 0; i < d->effects.count(); ++i) {
-        list << d->effects.at(i)->k_ptr->backendObject();
-    }
-#endif
     if (d->sinkNode) {
         list << d->sinkNode->k_ptr->backendObject();
     }
@@ -256,13 +169,6 @@ bool Path::disconnect()
             d->sourceNode->k_ptr->removeDestructionHandler(d.data());
         }
         d->sourceNode = 0;
-
-#ifndef QT_NO_PHONON_EFFECT
-        for (int i = 0; i < d->effects.count(); ++i) {
-            d->effects.at(i)->k_ptr->removeDestructionHandler(d.data());
-        }
-        d->effects.clear();
-#endif 
 
         if (d->sinkNode) {
             d->sinkNode->k_ptr->removeInputPath(*this);
@@ -352,41 +258,6 @@ bool PathPrivate::executeTransaction( const QList<QObjectPair> &disconnections, 
     return true;
 }
 
-#ifndef QT_NO_PHONON_EFFECT
-bool PathPrivate::removeEffect(Effect *effect)
-{
-    if (!effects.contains(effect))
-        return false;
-
-    QObject *leftNode = 0;
-    QObject *rightNode = 0;
-    const int index = effects.indexOf(effect);
-    if (index == 0) {
-        leftNode = sourceNode->k_ptr->backendObject(); //append
-    } else {
-        leftNode = effects[index - 1]->k_ptr->backendObject();
-    }
-    if (index == effects.size()-1) {
-        rightNode = sinkNode->k_ptr->backendObject(); //prepend
-    } else {
-        rightNode = effects[index + 1]->k_ptr->backendObject();
-    }
-
-    QList<QObjectPair> disconnections, connections;
-    QObject *beffect = effect->k_ptr->backendObject();
-    disconnections << QObjectPair(leftNode, beffect) << QObjectPair(beffect, rightNode);
-    connections << QObjectPair(leftNode, rightNode);
-
-    if (executeTransaction(disconnections, connections)) {
-        effect->k_ptr->removeDestructionHandler(this);
-        effects.removeAt(index);
-        return true;
-    }
-    return false;
-}
-#endif //QT_NO_PHONON_EFFECT
-
-
 void PathPrivate::phononObjectDestroyed(MediaNodePrivate *mediaNodePrivate)
 {
     Q_ASSERT(mediaNodePrivate);
@@ -395,13 +266,7 @@ void PathPrivate::phononObjectDestroyed(MediaNodePrivate *mediaNodePrivate)
         QObject *bsink = sinkNode->k_ptr->backendObject();
         QObject *bsource = sourceNode->k_ptr->backendObject();
         QList<QObjectPair> disconnections;
-#ifndef QT_NO_PHONON_EFFECT
-        disconnections << QObjectPair(bsource, effects.isEmpty() ? bsink : effects.first()->k_ptr->backendObject());
-        if (!effects.isEmpty())
-            disconnections << QObjectPair(effects.last()->k_ptr->backendObject(), bsink);
-#else
         disconnections << QObjectPair(bsource, bsink);
-#endif //QT_NO_PHONON_EFFECT
 
         executeTransaction(disconnections, QList<QObjectPair>());
 
@@ -417,14 +282,6 @@ void PathPrivate::phononObjectDestroyed(MediaNodePrivate *mediaNodePrivate)
         sourceNode = 0;
         sinkNode = 0;
     } else {
-#ifndef QT_NO_PHONON_EFFECT
-        for (int i = 0; i < effects.count(); ++i) {
-            Effect *e = effects.at(i);
-            if (e->k_ptr == mediaNodePrivate) {
-                removeEffect(e);
-            }
-        }
-#endif //QT_NO_PHONON_EFFECT
     }
 }
 

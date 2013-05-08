@@ -21,8 +21,8 @@ set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes wit
 set(PHONON_LIB_PATCH_VERSION "60") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
-set(PHONON_LIB_SONAME phonon4qt5)
-set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
+set(PHONON_LIB_SONAME phonon5)
+set(PHONON_LIB_SONAME_CAMEL Phonon5)
 
 if (PHONON_ASSERT_STATES)
     message(STATUS "Enabling backend state machine validation.")

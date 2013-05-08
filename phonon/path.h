@@ -35,7 +35,6 @@ namespace Phonon
 {
 
 class PathPrivate;
-class Effect;
 class MediaNode;
 
 /** \class Path path.h phonon/Path
@@ -97,82 +96,6 @@ class PHONON_EXPORT Path
         bool isValid() const;
         //MediaStreamTypes mediaStreamTypes() const;
 
-#ifndef QT_NO_PHONON_EFFECT
-        /**
-         * Creates and inserts an effect into the path.
-         *
-         * You may insert effects of the same class as often as you like,
-         * but if you insert the same object, the call will fail.
-         *
-         * \param desc The EffectDescription object for the effect to be inserted.
-         *
-         * \param insertBefore If you already inserted an effect you can
-         * tell with this parameter in which order the data gets
-         * processed. If this is \c 0 the effect is appended at the end of
-         * the processing list. If the effect has not been inserted before
-         * the method will do nothing and return \c false.
-         *
-         * \return Returns a pointer to the effect object if it could be inserted
-         * at the specified position. If \c 0 is returned the effect was not
-         * inserted.
-         *
-         * \see removeEffect
-         * \see effects
-         */
-        Effect *insertEffect(const EffectDescription &desc, Effect *insertBefore = 0);
-
-        /**
-         * Inserts an effect into the path.
-         *
-         * You may insert effects of the same class as often as you like,
-         * but if you insert the same object, the call will fail.
-         *
-         * \param newEffect An Effect object.
-         *
-         * \param insertBefore If you already inserted an effect you can
-         * tell with this parameter in which order the data gets
-         * processed. If this is \c 0 the effect is appended at the end of
-         * the processing list. If the effect has not been inserted before
-         * the method will do nothing and return \c false.
-         *
-         * \return Returns whether the effect could be inserted at the
-         * specified position. If \c false is returned the effect was not
-         * inserted.
-         *
-         * \see removeEffect
-         * \see effects
-         */
-        bool insertEffect(Effect *newEffect, Effect *insertBefore = 0);
-
-        /**
-         * Removes an effect from the path.
-         *
-         * If the effect gets deleted while it is still connected the effect
-         * will be removed automatically.
-         *
-         * \param effect The effect to be removed.
-         *
-         * \return Returns whether the call was successful. If it returns
-         * \c false the effect could not be found in the path, meaning it
-         * has not been inserted before.
-         *
-         * \see insertEffect
-         * \see effects
-         */
-        bool removeEffect(Effect *effect);
-
-        /**
-         * Returns a list of Effect objects that are currently
-         * used as effects. The order in the list determines the order the
-         * signal is sent through the effects.
-         *
-         * \return A list with all current effects.
-         *
-         * \see insertEffect
-         * \see removeEffect
-         */
-        QList<Effect *> effects() const;
-#endif //QT_NO_PHONON_EFFECT
 
         /**
          * Tries to change the MediaNodes the path is connected to.

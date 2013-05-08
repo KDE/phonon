@@ -24,8 +24,6 @@
 #include "phononnamespace_p.h"
 #include "phonondefs_p.h"
 
-#include "experimental/videoframe2.h"
-
 #include "factory_p.h"
 
 #include <QtCore/QCoreApplication>
@@ -207,7 +205,6 @@ static int registerPhononMetaTypes()
     // need those for QSettings
     qRegisterMetaType<QList<int> >();
     qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
-    qRegisterMetaType<Phonon::Experimental::VideoFrame2>();
 
     qRegisterMetaType<Phonon::DeviceAccess>();
     qRegisterMetaTypeStreamOperators<Phonon::DeviceAccess>("Phonon::DeviceAccess");
