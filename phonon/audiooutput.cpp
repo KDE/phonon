@@ -22,7 +22,6 @@
 #include "audiooutput.h"
 #include "audiooutput_p.h"
 
-#include "audiooutputadaptor_p.h"
 #include "audiooutputinterface.h"
 #include "factory_p.h"
 #include "globalconfig.h"
@@ -39,13 +38,9 @@
 #include <QtCore/qmath.h>
 
 #define PHONON_CLASSNAME AudioOutput
-#define IFACES2 AudioOutputInterface42
-#define IFACES1 IFACES2
-#define IFACES0 AudioOutputInterface40, IFACES1
-#define PHONON_INTERFACENAME IFACES0
+#define PHONON_INTERFACENAME AudioOutputInterface
 
-namespace Phonon
-{
+namespace Phonon {
 
 static inline bool callSetOutputDevice(AudioOutputPrivate *const d, const AudioOutputDevice &dev)
 {
@@ -53,11 +48,7 @@ static inline bool callSetOutputDevice(AudioOutputPrivate *const d, const AudioO
     if (pulse->isActive())
         return pulse->setOutputDevice(d->getStreamUuid(), dev.index());
 
-    Iface<IFACES2> iface(d);
-    if (iface) {
-        return iface->setOutputDevice(dev);
-    }
-    return Iface<IFACES0>::cast(d)->setOutputDevice(dev.index());
+    return INTERFACE_CALL(setOutputDevice(dev));
 }
 
 AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
@@ -250,7 +241,7 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
         }
         d->device = newAudioOutputDevice;
     }
-    if (k_ptr->backendObject()) {
+    if (d->backendObject()) {
         return callSetOutputDevice(d, d->device);
     }
     return true;
@@ -428,11 +419,11 @@ void AudioOutputPrivate::_k_deviceChanged(int deviceIndex)
     }
 }
 
-static struct
-{
-    int first;
-    int second;
-} g_lastFallback = { 0, 0 };
+    static struct
+    {
+        int first;
+        int second;
+    } g_lastFallback = { 0, 0 };
 
 void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &device2, DeviceChangeType type)
 {
@@ -509,6 +500,3 @@ AudioOutputPrivate::~AudioOutputPrivate()
 
 #undef PHONON_CLASSNAME
 #undef PHONON_INTERFACENAME
-#undef IFACES2
-#undef IFACES1
-#undef IFACES0

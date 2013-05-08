@@ -209,6 +209,6 @@ class MediaObjectInterface
 };
 }
 
-Q_DECLARE_INTERFACE(Phonon::MediaObjectInterface, "MediaObjectInterface3.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::MediaObjectInterface, "MediaObjectInterface.phonon.kde.org/5.0")
 
 #endif // PHONON_MEDIAOBJECTINTERFACE_H

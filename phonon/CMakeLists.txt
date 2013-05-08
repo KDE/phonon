@@ -26,7 +26,6 @@ set(phonon_LIB_SRCS
 #   abstractvideooutput_p.cpp
 #   audiodataoutput.cpp
    audiooutput.cpp
-   audiooutputinterface.cpp
    backendcapabilities.cpp
 #    effect.cpp
 #    effectparameter.cpp
@@ -98,7 +97,6 @@ set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
 
 install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
 # We write these to a strange place so the demos can find them properly
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
 # Required for demos/cmake/FindPhonon.cmake
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h)

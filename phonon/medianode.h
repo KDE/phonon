@@ -1,6 +1,7 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies). <thierry.bastian@trolltech.com>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -18,7 +19,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_MEDIANODE_H
@@ -27,29 +27,32 @@
 #include "phonondefs.h"
 #include "phonon_export.h"
 
-namespace Phonon
-{
-    class MediaNodePrivate;
-    class PHONON_EXPORT MediaNode
-    {
-        P_DECLARE_PRIVATE(MediaNode)
-    public:
-        virtual ~MediaNode();
-        /**
-         * Tells whether the backend provides an implementation of this
-         * class.
-         *
-         * \return \c true if backend provides an implementation
-         * \return \c false if the object is not implemented by the backend
-         */
-        bool isValid() const;
+namespace Phonon {
 
-    protected:
-        MediaNode(MediaNodePrivate &dd);
-        MediaNodePrivate *const k_ptr;
-    };
+class MediaNodePrivate;
+
+class PHONON_EXPORT MediaNode
+{
+public:
+    virtual ~MediaNode();
+
+    /**
+     * Tells whether the backend provides an implementation of this
+     * class.
+     *
+     * \return \c true if backend provides an implementation
+     * \return \c false if the object is not implemented by the backend
+     */
+    bool isValid() const;
+
+protected:
+    MediaNode(MediaNodePrivate &dd);
+    MediaNodePrivate *const k_ptr;
+
+private:
+    P_DECLARE_PRIVATE(MediaNode)
+};
 
 } // namespace Phonon
-
 
 #endif // PHONON_MEDIANODE_H
