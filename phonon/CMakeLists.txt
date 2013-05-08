@@ -69,12 +69,6 @@ if (PHONON_PULSESUPPORT)
    )
 endif (PHONON_PULSESUPPORT)
 
-if (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
-   list(APPEND phonon_LIB_SRCS
-      audiooutputadaptor.cpp
-   )
-endif (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
-
 option(PHONON_NO_PLATFORMPLUGIN "Do not use any platform plugin")
 if (PHONON_NO_PLATFORMPLUGIN)
     add_definitions(-DQT_NO_PHONON_PLATFORMPLUGIN)
@@ -84,10 +78,6 @@ add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_
 
 automoc4_add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
 qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets)
-
-if(Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
-    qt5_use_modules(${PHONON_LIB_SONAME} DBus)
-endif(Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
 
 if (PHONON_PULSESUPPORT)
     target_link_libraries(${PHONON_LIB_SONAME} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
@@ -166,9 +156,3 @@ install(FILES
    ${phonon_VGO_HDRS}
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
-
-if (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.kde.Phonon.AudioOutput.xml ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
-endif (Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
-

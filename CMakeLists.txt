@@ -11,7 +11,6 @@ option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
-option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
 # The following variables directly influence the library's soname version.
 # It is highly advised to think twice before changing those.
@@ -35,11 +34,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 ################################# Requirements #################################
 # Core Requirements and CFlag Magic
 include(cmake/FindPhononInternal.cmake)
-
-# DBus Audio Output Introspection
-find_package(Qt5DBus)
-macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" "" "" FALSE)
-set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 
 # Designer Plugin
 find_package(Qt5Designer)
@@ -65,7 +59,6 @@ remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
 
 include_directories(${Qt5Core_INCLUDE_DIRS}
                     ${Qt5Widgets_INCLUDE_DIRS}
-                    ${Qt5DBus_INCLUDE_DIRS}
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${CMAKE_CURRENT_SOURCE_DIR}/phonon

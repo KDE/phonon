@@ -77,16 +77,6 @@ AudioOutput::AudioOutput(QObject *parent)
 void AudioOutputPrivate::init(Phonon::Category c)
 {
     P_Q(AudioOutput);
-#ifndef PHONON_NO_DBUS
-    adaptor = new AudioOutputAdaptor(q);
-    static unsigned int number = 0;
-    const QString &path = QLatin1String("/AudioOutputs/") + QString::number(number++);
-    QDBusConnection con = QDBusConnection::sessionBus();
-    con.registerObject(path, q);
-    emit adaptor->newOutputAvailable(con.baseService(), path);
-    q->connect(q, SIGNAL(volumeChanged(qreal)), adaptor, SIGNAL(volumeChanged(qreal)));
-    q->connect(q, SIGNAL(mutedChanged(bool)), adaptor, SIGNAL(mutedChanged(bool)));
-#endif
 
     category = c;
 #ifndef QT_NO_QUUID_STRING
@@ -148,11 +138,6 @@ void AudioOutput::setName(const QString &newName)
         pulse->setOutputName(d->getStreamUuid(), newName);
     else
         setVolume(Platform::loadVolume(newName));
-#ifndef PHONON_NO_DBUS
-    if (d->adaptor) {
-        emit d->adaptor->nameChanged(newName);
-    }
-#endif
 }
 
 static const qreal LOUDNESS_TO_VOLTAGE_EXPONENT = qreal(0.67);
@@ -348,9 +333,6 @@ void AudioOutputPrivate::_k_revertFallback()
     callSetOutputDevice(this, device);
     P_Q(AudioOutput);
     emit q->outputDeviceChanged(device);
-#ifndef PHONON_NO_DBUS
-    emit adaptor->outputDeviceIndexChanged(device.index());
-#endif
 }
 
 void AudioOutputPrivate::_k_audioDeviceFailed()
@@ -462,9 +444,6 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     deviceBeforeFallback = device.index();
     device = device2;
     emit q->outputDeviceChanged(device2);
-#ifndef PHONON_NO_DBUS
-    emit adaptor->outputDeviceIndexChanged(device.index());
-#endif
     const AudioOutputDevice &device1 = AudioOutputDevice::fromIndex(deviceBeforeFallback);
     switch (type) {
     case FallbackChange:
@@ -526,11 +505,6 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
 AudioOutputPrivate::~AudioOutputPrivate()
 {
     PulseSupport::getInstance()->clearStreamCache(streamUuid);
-#ifndef PHONON_NO_DBUS
-    if (adaptor) {
-        emit adaptor->outputDestroyed();
-    }
-#endif
 }
 
 } //namespace Phonon
