@@ -26,7 +26,6 @@
 #include "mediasource.h"
 #include "abstractmediastream.h"
 #include "objectdescription.h"
-#include "mrl.h"
 
 #include <QtCore/QUrl>
 #include <QtCore/QString>
@@ -58,7 +57,7 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
 #endif
 
         MediaSource::Type type;
-        Mrl url;
+        QUrl url;
         Phonon::DiscType discType;
         QString deviceName;                         // Used for discs
         Phonon::DeviceAccessList audioDeviceAccessList;

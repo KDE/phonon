@@ -253,11 +253,6 @@ QString MediaSource::fileName() const
     return d->url.toLocalFile();
 }
 
-Mrl MediaSource::mrl() const
-{
-    return Mrl(d->url);
-}
-
 QUrl MediaSource::url() const
 {
     return d->url;

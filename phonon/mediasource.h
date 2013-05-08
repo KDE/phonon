@@ -26,7 +26,6 @@
 #include "phonon_export.h"
 #include "phononnamespace.h"
 
-#include "mrl.h"
 #include "objectdescription.h"
 
 #include <QtCore/QSharedData>
@@ -281,19 +280,6 @@ class PHONON_EXPORT MediaSource
          * QString().
          */
         QString fileName() const;
-
-        /**
-         * Returns the MRL of the MediaSource if type() == URL or type() == LocalFile; otherwise
-         * returns Mrl().
-         * Phonon::Mrl is based on QUrl and adds some additional functionality that
-         * is necessary to ensure proper encoding usage in the Phonon backends.
-         *
-         * Usually you will not have to use this in an application.
-         *
-         * \since 4.5
-         * \ingroup Backend
-         */
-        Mrl mrl() const;
 
         /**
          * Returns the url of the MediaSource if type() == URL or type() == LocalFile; otherwise

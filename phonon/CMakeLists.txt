@@ -46,7 +46,6 @@ set(phonon_LIB_SRCS
    mediaobject.cpp
    medianode.cpp
    mediasource.cpp
-   mrl.cpp
    objectdescription.cpp
    objectdescriptionmodel.cpp
    path.cpp
@@ -149,7 +148,6 @@ install(FILES
    mediaobject.h
    mediaobjectinterface.h
    mediasource.h
-   mrl.h
    objectdescription.h
    objectdescriptionmodel.h
    path.h
