@@ -28,7 +28,6 @@
 
 namespace Phonon
 {
-
 class MediaObjectPrivate;
 
 class PHONON_EXPORT MediaObject : public QObject, public MediaNode
@@ -47,8 +46,8 @@ public:
     QMultiMap<QString, QString> metaData() const;
     QString errorString() const;
     ErrorType errorType() const;
-    MediaSource currentSource() const;
-    void setCurrentSource(const MediaSource &source);
+    Source currentSource() const;
+    void setCurrentSource(const Source &source);
     qint64 currentTime() const;
     qint64 totalTime() const;
     qint64 remainingTime() const;
@@ -68,7 +67,7 @@ Q_SIGNALS:
     void hasVideoChanged(bool hasVideo);
     void bufferStatus(int percentFilled);
     void finished();
-    void currentSourceChanged(const Phonon::MediaSource &newSource);
+    void currentSourceChanged(const Phonon::Source &newSource);
     void totalTimeChanged(qint64 newTotalTime);
 
 private:
@@ -77,7 +76,6 @@ private:
     Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
     Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<QString, QString> &))
 };
-
 } //namespace Phonon
 
 #endif // PHONON_MEDIAOBJECT_H

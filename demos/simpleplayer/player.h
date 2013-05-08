@@ -22,6 +22,7 @@
 #define PLAYER_H
 
 #include <QWidget>
+#include <QUrl>
 #include <phonon/Global>
 
 class QPushButton;
@@ -45,7 +46,7 @@ public slots:
     /**
      * @brief Load a specific URL
      */
-    void load(const Phonon::Mrl &url);
+    void load(const QUrl &url);
 
     /**
      * @brief Prompt the user for a file to load

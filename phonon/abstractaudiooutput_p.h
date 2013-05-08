@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_ABSTRACTAUDIOOUTPUT_P_H
@@ -27,20 +27,22 @@
 #include "medianode_p.h"
 #include "phonondefs_p.h"
 
-namespace Phonon
-{
+namespace Phonon {
+
 class AbstractAudioOutputPrivate : public MediaNodePrivate
 {
     P_DECLARE_PUBLIC(AbstractAudioOutput)
     PHONON_PRIVATEABSTRACTCLASS
-    public:
-        virtual QObject *qObject() { return q_func(); }
-    protected:
-        AbstractAudioOutputPrivate(CastId castId = AbstractAudioOutputPrivateType)
-            : MediaNodePrivate(castId)
-        {
-        }
+public:
+    virtual QObject *qObject() { return q_func(); }
+
+protected:
+    AbstractAudioOutputPrivate(CastId castId = AbstractAudioOutputPrivateType)
+        : MediaNodePrivate(castId)
+    {
+    }
 };
-} //namespace Phonon
+
+} // namespace Phonon
 
 #endif // PHONON_ABSTRACTAUDIOOUTPUT_P_H

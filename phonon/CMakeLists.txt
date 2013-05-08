@@ -20,8 +20,8 @@ include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
 set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
-   abstractaudiooutput_p.cpp
-   abstractmediastream.cpp
+#   abstractaudiooutput_p.cpp
+#   abstractmediastream.cpp
 #   abstractvideooutput.cpp
 #   abstractvideooutput_p.cpp
 #   audiodataoutput.cpp
@@ -33,7 +33,7 @@ set(phonon_LIB_SRCS
 #    effectwidget.cpp
    factory.cpp
    globalconfig.cpp
-   iodevicestream.cpp
+#   iodevicestream.cpp
    mediaobject.cpp
    medianode.cpp
    mediasource.cpp
@@ -42,7 +42,7 @@ set(phonon_LIB_SRCS
    platform.cpp
    pulsesupport.cpp
 #    seekslider.cpp
-   streaminterface.cpp
+#   streaminterface.cpp
 #    swiftslider.cpp
 #    volumefadereffect.cpp
 #    volumeslider.cpp
@@ -105,9 +105,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_
 
 install(FILES
    abstractaudiooutput.h
-   abstractmediastream.h
+#   abstractmediastream.h
    abstractvideooutput.h
-   addoninterface.h
    audiodataoutput.h
    audiodataoutputinterface.h
    audiooutput.h

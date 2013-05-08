@@ -181,7 +181,7 @@ class MediaObjectInterface
         /**
          * Returns the current source.
          */
-        virtual MediaSource source() const = 0;
+        virtual Source source() const = 0;
 
         /**
          * Sets the current source. When this function is called the MediaObject is
@@ -203,36 +203,12 @@ class MediaObjectInterface
          * MediaSource::autoDelete, the AbstractMediaStream is deleted when the
          * last MediaSource ref is deleted.
          */
-        virtual void setSource(const MediaSource &) = 0;
-
-        /**
-         * Sets the next source to be used for transitions. When a next source
-         * is set playback should continue with the new source. In that case
-         * finished and prefinishMarkReached are not emitted.
-         *
-         * \param source The source to transition to (crossfade/gapless/gap). If
-         * \p source is an invalid MediaSource object then the queue is empty
-         * and the playback should stop normally.
-         *
-         * \warning Keep the MediaSource object around as long as the backend
-         * uses the AbstractMediaStream returned by the MediaSource. In case
-         * that no other reference to the MediaSource exists and it is set to
-         * MediaSource::autoDelete, the AbstractMediaStream is deleted when the
-         * last MediaSource ref is deleted.
-         */
-        virtual void setNextSource(const MediaSource &source) = 0;
+        virtual void setSource(const Source &) = 0;
 
         virtual qint64 remainingTime() const { return totalTime() - currentTime(); }
-        virtual qint32 prefinishMark() const = 0;
-        virtual void setPrefinishMark(qint32) = 0;
-
-        virtual qint32 transitionTime() const = 0;
-        virtual void setTransitionTime(qint32) = 0;
 };
 }
 
 Q_DECLARE_INTERFACE(Phonon::MediaObjectInterface, "MediaObjectInterface3.phonon.kde.org")
 
-
 #endif // PHONON_MEDIAOBJECTINTERFACE_H
-// vim: sw=4 ts=4 tw=80

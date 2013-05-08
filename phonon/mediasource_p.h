@@ -40,7 +40,7 @@ namespace Phonon
 class PHONON_EXPORT MediaSourcePrivate : public QSharedData
 {
     public:
-        MediaSourcePrivate(MediaSource::Type t)
+        MediaSourcePrivate(Source::Type t)
             : type(t), discType(NoDisc),
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             stream(0),
@@ -56,7 +56,7 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         void setStream(AbstractMediaStream *s);
 #endif
 
-        MediaSource::Type type;
+        Source::Type type;
         QUrl url;
         Phonon::DiscType discType;
         QString deviceName;                         // Used for discs

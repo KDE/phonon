@@ -73,9 +73,9 @@ PHONON_INTERFACE_GETTER(bool, hasVideo, false)
 PHONON_INTERFACE_GETTER(bool, isSeekable, false)
 PHONON_INTERFACE_GETTER(qint64, currentTime, d->currentTime)
 
-static inline bool isPlayable(const MediaSource::Type t)
+static inline bool isPlayable(const Source::Type t)
 {
-    return t != MediaSource::Invalid && t != MediaSource::Empty;
+    return t != Source::Invalid && t != Source::Empty;
 }
 
 void MediaObject::play()
@@ -185,13 +185,13 @@ qint64 MediaObject::remainingTime() const
     return ret;
 }
 
-MediaSource MediaObject::currentSource() const
+Source MediaObject::currentSource() const
 {
     P_D(const MediaObject);
     return d->mediaSource;
 }
 
-void MediaObject::setCurrentSource(const MediaSource &newSource)
+void MediaObject::setCurrentSource(const Source &newSource)
 {
     P_D(MediaObject);
     if (!d->backendObject()) {
@@ -208,21 +208,19 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     d->abstractStream = 0; // abstractStream auto-deletes
-    if (d->mediaSource.type() == MediaSource::Stream) {
+    if (d->mediaSource.type() == Source::Stream) {
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
     }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     d->playingQueuedSource = false;
+#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     INTERFACE_CALL(setSource(d->mediaSource));
 }
 
 bool MediaObjectPrivate::aboutToDeleteBackendObject()
 {
-    prefinishMark = pINTERFACE_CALL(prefinishMark());
-    transitionTime = pINTERFACE_CALL(transitionTime());
     if (m_backendObject) {
         state = pINTERFACE_CALL(state());
         currentTime = pINTERFACE_CALL(currentTime());
@@ -255,7 +253,7 @@ void MediaObjectPrivate::setupBackendObject()
     // This causes major headaches. If we must enforce implicit execution stop via
     // signals, they ought to be done in private slots.
 
-    qRegisterMetaType<MediaSource>("MediaSource");
+    qRegisterMetaType<Source>("MediaSource");
     qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
 
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
@@ -270,21 +268,15 @@ void MediaObjectPrivate::setupBackendObject()
                      q, SIGNAL(bufferStatus(int)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(finished()),
                      q, SIGNAL(finished()), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(aboutToFinish()),
-                     q, SLOT(_k_aboutToFinish()), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(prefinishMarkReached(qint32)),
-                     q, SIGNAL(prefinishMarkReached(qint32)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
                      q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString, QString>)),
                      q, SLOT(_k_metaDataChanged(QMultiMap<QString, QString>)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(MediaSource)),
-                     q, SLOT(_k_currentSourceChanged(MediaSource)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(Source)),
+                     q, SIGNAL(currentSourceChanged(Phonon::Source)), Qt::QueuedConnection);
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));
-    pINTERFACE_CALL(setPrefinishMark(prefinishMark));
-    pINTERFACE_CALL(setTransitionTime(transitionTime));
 
     switch(state)
     {
@@ -310,7 +302,7 @@ void MediaObjectPrivate::setupBackendObject()
     // set up attributes
     if (isPlayable(mediaSource.type())) {
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        if (mediaSource.type() == MediaSource::Stream) {
+        if (mediaSource.type() == Source::Stream) {
             Q_ASSERT(mediaSource.stream());
             mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
         }

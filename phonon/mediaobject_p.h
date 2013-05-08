@@ -55,7 +55,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         void _k_resumePause();
         void _k_metaDataChanged(const QMultiMap<QString, QString> &);
         void _k_aboutToFinish();
-        void _k_currentSourceChanged(const MediaSource &);
+        void _k_currentSourceChanged(const Source &);
         PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         void streamError(Phonon::ErrorType, const QString &);
@@ -66,14 +66,12 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             tickInterval(0),
             metaData(),
             errorString(),
-            prefinishMark(0),
-            transitionTime(0), // gapless playback
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             abstractStream(0),
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            state(Phonon::StoppedState),
-            playingQueuedSource(false)
+            state(Phonon::StoppedState)
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+            , playingQueuedSource(false)
             , errorType(Phonon::NormalError)
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
@@ -87,8 +85,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         qint32 tickInterval;
         QMultiMap<QString, QString> metaData;
         QString errorString;
-        qint32 prefinishMark;
-        qint32 transitionTime;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         AbstractMediaStream *abstractStream;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -100,7 +96,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         bool playingQueuedSource;
         ErrorType errorType : 4;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        MediaSource mediaSource;
+        Source mediaSource;
 };
 }
 

@@ -21,8 +21,6 @@
 
 #include <QApplication>
 
-#include <phonon/Mrl>
-
 #include "player.h"
 
 int main(int argc, char **argv)
@@ -38,7 +36,7 @@ int main(int argc, char **argv)
     //Not passing an argument of what to play will prompt for a file inside Player::load(), called by Player::playPause()
     QStringList args = QApplication::arguments();
     if (args.size() > 1) {
-        p.load(Phonon::Mrl(args[1]));
+        p.load(QUrl(args[1]));
     }
 
     return app.exec();

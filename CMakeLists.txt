@@ -54,7 +54,7 @@ macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" "" "" FALSE)
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 ################################################################################
 
-add_definitions(${QT_DEFINITIONS})
+add_definitions(${QT_DEFINITIONS} -DQT_NO_PHONON_ABSTRACTMEDIASTREAM)
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
 
 include_directories(${Qt5Core_INCLUDE_DIRS}

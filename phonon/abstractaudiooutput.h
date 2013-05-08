@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
-Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,37 +18,39 @@ Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
-#ifndef Phonon_ABSTRACTAUDIOOUTPUTBASE_H
-#define Phonon_ABSTRACTAUDIOOUTPUTBASE_H
+
+#ifndef PHONON_ABSTRACTAUDIOOUTPUTBASE_H
+#define PHONON_ABSTRACTAUDIOOUTPUTBASE_H
 
 #include "phonondefs.h"
-#include "phonon_export.h"
 #include "medianode.h"
+
 #include <QtCore/QObject>
 
+namespace Phonon {
 
-namespace Phonon
+class AbstractAudioOutputPrivate;
+
+/** \class AbstractAudioOutput abstractaudiooutput.h phonon/AbstractAudioOutput
+ * Common base class for all audio outputs.
+ *
+ * \see AudioOutput
+ */
+class PHONON_EXPORT AbstractAudioOutput : public QObject, public MediaNode
 {
-    class AbstractAudioOutputPrivate;
+    Q_OBJECT
 
-    /** \class AbstractAudioOutput abstractaudiooutput.h phonon/AbstractAudioOutput
-    * Common base class for all audio outputs.
-    *
-    * \see AudioOutput
-    */
-    class PHONON_EXPORT AbstractAudioOutput : public QObject, public MediaNode
-    {
-        Q_OBJECT
-        P_DECLARE_PRIVATE(AbstractAudioOutput)
-    protected:
-        AbstractAudioOutput(AbstractAudioOutputPrivate &dd, QObject *parent);
-    public:
-        ~AbstractAudioOutput();
-    };
+public:
+    ~AbstractAudioOutput();
+
+protected:
+    AbstractAudioOutput(AbstractAudioOutputPrivate &dd, QObject *parent);
+
+private:
+    P_DECLARE_PRIVATE(AbstractAudioOutput)
+};
+
 } //namespace Phonon
 
-
-// vim: sw=4 ts=4 tw=80
-#endif // Phonon_ABSTRACTAUDIOOUTPUTBASE_H
+#endif // PHONON_ABSTRACTAUDIOOUTPUTBASE_H

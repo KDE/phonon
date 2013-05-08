@@ -28,7 +28,6 @@
 
 #include <phonon/AudioOutput>
 #include <phonon/MediaObject>
-#include <phonon/Mrl>
 #include <phonon/SeekSlider>
 #include <phonon/VideoWidget>
 
@@ -55,10 +54,6 @@ Player::Player(QWidget* parent, Qt::WindowFlags flags)
     //After a MediaSource is loaded, this signal will be emitted to let us know
     //if a video stream was found.
     connect(m_media, SIGNAL(hasVideoChanged(bool)), videoOut, SLOT(setVisible(bool)));
-
-    //Link the media object to our audio and video outputs.
-    Phonon::createPath(m_media, audioOut);
-    Phonon::createPath(m_media, videoOut);
 
     //This widget will contain the stop/pause buttons
     QWidget *buttonBar = new QWidget(this);
@@ -101,10 +96,10 @@ void Player::playPause()
     }
 }
 
-void Player::load(const Phonon::Mrl &mrl)
+void Player::load(const QUrl &mrl)
 {
     if (mrl.scheme().isEmpty())
-        m_media->setCurrentSource(Phonon::Mrl::fromLocalFile(mrl.toString()));
+        m_media->setCurrentSource(QUrl::fromLocalFile(mrl.toString()));
     else
         m_media->setCurrentSource(mrl);
     m_media->play();
@@ -115,7 +110,7 @@ void Player::load()
     QString url = QFileDialog::getOpenFileName(this);
     if (url.isEmpty())
         return;
-    load(Phonon::Mrl::fromLocalFile(url));
+    load(QUrl::fromLocalFile(url));
 }
 
 void Player::mediaStateChanged(Phonon::State newState, Phonon::State oldState)

@@ -32,7 +32,7 @@
 namespace Phonon
 {
 class StreamInterfacePrivate;
-class MediaSource;
+class Source;
 
 /** \class StreamInterface streaminterface.h phonon/StreamInterface
  * \brief Backend interface to handle media streams (AbstractMediaStream).
@@ -90,7 +90,7 @@ class PHONON_EXPORT StreamInterface
          * AbstractMediaStream object. Only after the connection is done will the following
          * functions have an effect.
          */
-        void connectToSource(const MediaSource &mediaSource);
+        void connectToSource(const Source &mediaSource);
 
         /**
          * Call this function to tell the AbstractMediaStream that you need more data. The data will

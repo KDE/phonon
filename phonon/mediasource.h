@@ -57,10 +57,10 @@ class AbstractMediaStream;
  * \ingroup Recording
  * \author Matthias Kretz <kretz@kde.org>
  */
-class PHONON_EXPORT MediaSource
+class PHONON_EXPORT Source
 {
     friend class StreamInterface;
-    friend QDebug operator <<(QDebug dbg, const Phonon::MediaSource &);
+    friend QDebug operator <<(QDebug dbg, const Phonon::Source &);
     public:
         /**
          * Identifies the type of media described by the MediaSource object.
@@ -124,7 +124,7 @@ class PHONON_EXPORT MediaSource
          *
          * \see Empty
          */
-        MediaSource();
+        Source();
 
         /**
          * Creates a MediaSource object for a URL.
@@ -133,7 +133,7 @@ class PHONON_EXPORT MediaSource
          *
          * \param url URL to a media file or stream.
          */
-        MediaSource(const QUrl &url); //krazy:exclude=explicit
+        Source(const QUrl &url); //krazy:exclude=explicit
 
         /**
          * Creates a MediaSource object for discs.
@@ -143,14 +143,14 @@ class PHONON_EXPORT MediaSource
          * has more than one CD drive. It is recommended to use Solid to retrieve the device name in
          * a portable way.
          */
-        MediaSource(DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
+        Source(DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 
 #ifndef PHONON_NO_AUDIOCAPTURE
         /**
         * Creates a MediaSource object for audio capture devices.
         * If the device is valid, this creates a 'CaptureDevice' type MediaSource.
         */
-        MediaSource(const AudioCaptureDevice& device);
+        Source(const AudioCaptureDevice& device);
 #endif
 
 #ifndef PHONON_NO_VIDEOCAPTURE
@@ -158,7 +158,7 @@ class PHONON_EXPORT MediaSource
         * Creates a MediaSource object for video capture devices.
         * If the device is valid, this creates a 'CaptureDevice' type MediaSource
         */
-        MediaSource(const VideoCaptureDevice& device);
+        Source(const VideoCaptureDevice& device);
 #endif
 
 #if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
@@ -166,7 +166,7 @@ class PHONON_EXPORT MediaSource
          * Sets the source to the preferred audio capture device for the specified category
          * If a valid device is found, this creates a 'CaptureDevice' type MediaSource
          */
-        MediaSource(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
+        Source(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
 
         /**
          * Creates a MediaSource object that tries to describe a video capture device and
@@ -178,7 +178,7 @@ class PHONON_EXPORT MediaSource
          * the resulting type is 'CaptureDevice'. If no valid devices are found, the resulting
          * type is 'Invalid'.
          */
-        MediaSource(CaptureCategory category);
+        Source(CaptureCategory category);
 #endif
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
@@ -192,7 +192,7 @@ class PHONON_EXPORT MediaSource
          *
          * \see setAutoDelete
          */
-        MediaSource(AbstractMediaStream *stream); //krazy:exclude=explicit
+        Source(AbstractMediaStream *stream); //krazy:exclude=explicit
 
         /**
          * Creates a MediaSource object for a QIODevice.
@@ -205,32 +205,32 @@ class PHONON_EXPORT MediaSource
          *
          * \see setAutoDelete
          */
-        MediaSource(QIODevice *ioDevice); //krazy:exclude=explicit
+        Source(QIODevice *ioDevice); //krazy:exclude=explicit
 #endif
 
         /**
          * Destroys the MediaSource object.
          */
-        ~MediaSource();
+        ~Source();
 
         /**
          * Constructs a copy of \p rhs.
          *
          * This constructor is fast thanks to explicit sharing.
          */
-        MediaSource(const MediaSource &rhs);
+        Source(const Source &rhs);
 
         /**
          * Assigns \p rhs to this MediaSource and returns a reference to this MediaSource.
          *
          * This operation is fast thanks to explicit sharing.
          */
-        MediaSource &operator=(const MediaSource &rhs);
+        Source &operator=(const Source &rhs);
 
         /**
          * Returns \p true if this MediaSource is equal to \p rhs; otherwise returns \p false.
          */
-        bool operator==(const MediaSource &rhs) const;
+        bool operator==(const Source &rhs) const;
 
         /**
          * Tell the MediaSource to take ownership of the AbstractMediaStream or QIODevice that was
@@ -327,12 +327,11 @@ class PHONON_EXPORT MediaSource
 
     protected:
         QExplicitlySharedDataPointer<MediaSourcePrivate> d;
-        MediaSource(MediaSourcePrivate &);
+        Source(MediaSourcePrivate &);
 };
 
-PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MediaSource &);
+PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Source &);
 
 } // namespace Phonon
-
 
 #endif // PHONON_MEDIASOURCE_H

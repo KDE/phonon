@@ -121,7 +121,7 @@ set(CMAKE_MODULE_PATH ${_phonon_cmake_module_path_back})
 include(GNUInstallDirs)
 
 set(SHARE_INSTALL_PREFIX        "share")  #              CACHE PATH "Base directory for files which go to share/")
-set(INCLUDE_INSTALL_DIR         "include/phonon4qt5" ) #           CACHE PATH "The subdirectory to the header prefix")
+set(INCLUDE_INSTALL_DIR         "include/phonon5" ) #           CACHE PATH "The subdirectory to the header prefix")
 set(BIN_INSTALL_DIR             "bin"     ) #         CACHE PATH "The install dir for executables (default ${EXEC_INSTALL_PREFIX}/bin)")
 set(LIB_INSTALL_DIR             "${CMAKE_INSTALL_LIBDIR}" ) #  CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed"
 set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/qt5"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
