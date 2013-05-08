@@ -16,14 +16,6 @@ else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-message(WARNING "QZeitgeist has not been ported to Qt5, support is disabled.")
-#macro_optional_find_package(QZeitgeist 0.8)
-#macro_log_feature(QZEITGEIST_FOUND "QZeitgeist" "Qt bindings for Zeitgeist" "http://projects.kde.org/kdesupport/libqzeitgeist/" FALSE "0.8")
-#if (QZEITGEIST_FOUND)
-#    add_definitions(-DHAVE_QZEITGEIST)
-#    include_directories(${QZEITGEIST_INCLUDE_DIR})
-#endif(QZEITGEIST_FOUND)
-
 include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
 set(phonon_LIB_SRCS

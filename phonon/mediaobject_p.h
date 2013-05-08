@@ -25,10 +25,6 @@
 
 #include <QtCore/QString>
 #include <QtCore/QQueue>
-#ifdef HAVE_QZEITGEIST
-#include <QZeitgeist/Log>
-#include <QZeitgeist/QZeitgeist>
-#endif
 
 #include "medianode_p.h"
 #include "medianodedestructionhandler_p.h"
@@ -42,38 +38,11 @@ class FrontendInterfacePrivate;
 
 class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestructionHandler
 {
-    friend class KioFallbackImpl;
     friend class AbstractMediaStream;
     friend class AbstractMediaStreamPrivate;
     P_DECLARE_PUBLIC(MediaObject)
     public:
         virtual QObject *qObject() { return q_func(); }
-
-        /**
-         * Sends the metadata for this media file to the Zeitgeist tracker
-         *
-         * \param eventInterpretation The interpretation of the event
-         * \param eventManifestation The manifestation type of the event
-         * \param eventActor The application or entity responsible for emitting the zeitgeist event
-         * \param eventTimestamp The time
-         * \param subjectURI The file's URI
-         * \param subjectText A free-form annotation
-         * \param subjectInterpretation The interpretation type
-         * \param subjectManifestation The manifestation type
-         * \param subjectMimetype The file's mimetype
-         */
-        void sendToZeitgeist(const QString &event_interpretation,
-                             const QString &event_manifestation,
-                             const QString &event_actor,
-                             const QDateTime &subject_timestamp,
-                             const QUrl &subject_uri,
-                             const QString &subject_text,
-                             const QString &subject_interpretation,
-                             const QString &subject_manifestation,
-                             const QString &subject_mimetype);
-
-        void sendToZeitgeist(State);
-        void sendToZeitgeist();
 
     QList<FrontendInterfacePrivate *> interfaceList;
     protected:
@@ -102,26 +71,16 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             abstractStream(0),
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            state(Phonon::LoadingState),
-            readyForZeitgeist(false),
+            state(Phonon::StoppedState),
             playingQueuedSource(false)
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            , errorType(Phonon::NormalError),
-            errorOverride(false),
-            ignoreLoadingToBufferingStateChange(false),
-            ignoreErrorToLoadingStateChange(false)
+            , errorType(Phonon::NormalError)
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
-#ifdef HAVE_QZEITGEIST
-            log = new QZeitgeist::Log();
-#endif
         }
 
         ~MediaObjectPrivate()
         {
-#ifdef HAVE_QZEITGEIST
-            delete log;
-#endif
         }
 
         qint64 currentTime;
@@ -138,17 +97,10 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             ;
 #else
             : 8;
-        bool readyForZeitgeist;
         bool playingQueuedSource;
         ErrorType errorType : 4;
-        bool errorOverride : 1;
-        bool ignoreLoadingToBufferingStateChange : 1;
-        bool ignoreErrorToLoadingStateChange : 1;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         MediaSource mediaSource;
-#ifdef HAVE_QZEITGEIST
-        QZeitgeist::Log *log;
-#endif
 };
 }
 
