@@ -33,136 +33,14 @@ namespace Phonon
 {
     class MediaObjectPrivate;
 
-    /** \class MediaObject mediaobject.h phonon/MediaObject
-     * \short Interface for media playback of a given URL.
-     *
-     * This class is the most important class in %Phonon. Use it to open a media
-     * file at an arbitrary location, a CD or DVD or to stream media data from
-     * the application to the backend.
-     *
-     * This class controls the state (play, pause, stop, seek)
-     * and you can use it to get a lot of information about the media data.
-     *
-     * Notice that most functions of this class are asynchronous.
-     * That means if you call play() the object only starts playing when the
-     * stateChanged() signal tells you that the object changed into PlayingState.
-     * The states you can expect are documented for those methods.
-     *
-     * A common usage example is the following:
-     * \code
-     * media = new MediaObject(this);
-     * connect(media, SIGNAL(finished()), SLOT(slotFinished());
-     * media->setCurrentSource("/home/username/music/filename.ogg");
-     * media->play();
-     * \endcode
-     *
-     * If you want to play more than one media file (one after another) you can
-     * either tell MediaObject about all those files
-     * \code
-     * media->setCurrentSource(":/sounds/startsound.ogg");
-     * media->enqueue("/home/username/music/song.mp3");
-     * media->enqueue(":/sounds/endsound.ogg");
-     * \endcode
-     * or provide the next file just in time:
-     * \code
-     *   media->setCurrentSource(":/sounds/startsound.ogg");
-     *   connect(media, SIGNAL(aboutToFinish()), SLOT(enqueueNextSource()));
-     * }
-     *
-     * void enqueueNextSource()
-     * {
-     *   media->enqueue("/home/username/music/song.mp3");
-     * }
-     * \endcode
-     *
-     * Some platforms support system-wide tracking of a user's activities. For
-     * instance, the zeitgeist project (http://zeitgeist-project.com) on Linux.
-     *
-     * This integration is opt-in only and can be enabled by setting the
-     * PlaybackTracking property to true:
-     * \code
-     * media->setProperty("PlaybackTracking", true);
-     * \endcode
-     *
-     * This kind of information is normally used to provide a universal history
-     * view to the user, such as what songs were played when, regardless of the
-     * media player. This is in addition to any emails read, IM conversations,
-     * websites viewed, etc.
-     *
-     * \ingroup Playback
-     * \ingroup Recording
-     * \author Matthias Kretz <kretz@kde.org>
-     */
     class PHONON_EXPORT MediaObject : public QObject, public MediaNode
     {
         friend class FrontendInterfacePrivate;
         Q_OBJECT
         P_DECLARE_PRIVATE(MediaObject)
         PHONON_OBJECT(MediaObject)
-        /**
-         * \brief Defines the time between media sources.
-         *
-         * A positive transition time defines a gap of silence between queued
-         * media sources.
-         *
-         * A transition time of 0 ms requests gapless playback (sample precise
-         * queueing of the next source).
-         *
-         * A negative transition time defines a crossfade between the queued
-         * media sources.
-         *
-         * Defaults to 0 (gapless playback).
-         *
-         * \warning This feature might not work reliably on every platform.
-         */
-        Q_PROPERTY(qint32 transitionTime READ transitionTime WRITE setTransitionTime)
 
-        /**
-         * \brief Get a signal before playback finishes.
-         *
-         * This property specifies the time in milliseconds the
-         * prefinishMarkReached signal is
-         * emitted before the playback finishes. A value of \c 0 disables the
-         * signal.
-         *
-         * Defaults to \c 0 (disabled).
-         *
-         * \warning For some media data the total time cannot be determined
-         * accurately, therefore the accuracy of the prefinishMarkReached signal
-         * can be bad sometimes. Still, it is better to use this method than to
-         * look at totalTime() and currentTime() to emulate the behaviour
-         * because the backend might have more information available than your
-         * application does through totalTime and currentTime.
-         *
-         * \see prefinishMarkReached
-         */
-        Q_PROPERTY(qint32 prefinishMark READ prefinishMark WRITE setPrefinishMark)
 
-        /**
-         * \brief The time interval in milliseconds between two ticks.
-         *
-         * The %tick interval is the time that elapses between the emission of two tick signals.
-         * If you set the interval to \c 0 the tick signal gets disabled.
-         *
-         * Defaults to \c 0 (disabled).
-         *
-         * \warning The back-end is free to choose a different tick interval close
-         * to what you asked for. This means that the following code \em may \em fail:
-         * \code
-         * int x = 200;
-         * media->setTickInterval(x);
-         * Q_ASSERT(x == producer->tickInterval());
-         * \endcode
-         * On the other hand the following is guaranteed:
-         * \code
-         * int x = 200;
-         * media->setTickInterval(x);
-         * Q_ASSERT(x >= producer->tickInterval() &&
-         *          x <= 2 * producer->tickInterval());
-         * \endcode
-         *
-         * \see tick
-         */
         Q_PROPERTY(qint32 tickInterval READ tickInterval WRITE setTickInterval)
         public:
             /**
@@ -242,33 +120,6 @@ namespace Phonon
              */
             qint32 tickInterval() const;
 
-            /**
-             * Returns the strings associated with the given \p key.
-             *
-             * Backends should use the keys specified in the Ogg Vorbis
-             * documentation: http://xiph.org/vorbis/doc/v-comment.html
-             *
-             * Therefore the following should work with every backend:
-             *
-             * A typical usage looks like this:
-             * \code
-             * setMetaArtist (media->metaData("ARTIST"     ));
-             * setMetaAlbum  (media->metaData("ALBUM"      ));
-             * setMetaTitle  (media->metaData("TITLE"      ));
-             * setMetaDate   (media->metaData("DATE"       ));
-             * setMetaGenre  (media->metaData("GENRE"      ));
-             * setMetaTrack  (media->metaData("TRACKNUMBER"));
-             * setMetaComment(media->metaData("DESCRIPTION"));
-             * \endcode
-             *
-             * For Audio CDs you can query
-             * \code
-             * metaData("MUSICBRAINZ_DISCID");
-             * \endcode
-             * to get a DiscID hash that you can use with the MusicBrainz
-             * service:
-             * http://musicbrainz.org/doc/ClientHOWTO
-             */
             QStringList metaData(const QString &key) const;
 
             /**
@@ -321,64 +172,6 @@ namespace Phonon
             void setCurrentSource(const MediaSource &source);
 
             /**
-             * Returns the queued media sources. This list does not include
-             * the current source (returned by currentSource).
-             */
-            QList<MediaSource> queue() const;
-
-            /**
-             * Set the MediaSources to play when the current media has finished.
-             *
-             * This function will overwrite the current queue.
-             *
-             * \see clearQueue
-             * \see enqueue
-             */
-            void setQueue(const QList<MediaSource> &sources);
-
-            /**
-             * Set the MediaSources to play when the current media has finished.
-             *
-             * This function overwrites the current queue.
-             *
-             * \see clearQueue
-             * \see enqueue
-             */
-            void setQueue(const QList<QUrl> &urls);
-
-            /**
-             * Appends one source to the queue. Use this function to provide
-             * the next source just in time after the aboutToFinish signal was
-             * emitted.
-             *
-             * \see aboutToFinish
-             * \see setQueue
-             * \see clearQueue
-             */
-            void enqueue(const MediaSource &source);
-
-            /**
-             * Appends multiple sources to the queue.
-             *
-             * \see setQueue
-             * \see clearQueue
-             */
-            void enqueue(const QList<MediaSource> &sources);
-
-            /**
-             * Appends multiple sources to the queue.
-             *
-             * \see setQueue
-             * \see clearQueue
-             */
-            void enqueue(const QList<QUrl> &urls);
-
-            /**
-             * Clears the queue of sources.
-             */
-            void clearQueue();
-
-            /**
              * Get the current time (in milliseconds) of the file currently being played.
              *
              * \return The current time in milliseconds.
@@ -410,12 +203,6 @@ namespace Phonon
              * \return The remaining time in milliseconds.
              */
             qint64 remainingTime() const;
-
-            qint32 prefinishMark() const;
-            void setPrefinishMark(qint32 msecToEnd);
-
-            qint32 transitionTime() const;
-            void setTransitionTime(qint32 msec);
 
         public Q_SLOTS:
 
@@ -480,13 +267,6 @@ namespace Phonon
              * \see SeekSlider
              */
             void seek(qint64 time);
-
-            /**
-             * Stops and removes all playing and enqueued media sources.
-             *
-             * \see setCurrentSource
-             */
-            void clear();
 
         Q_SIGNALS:
             /**
@@ -590,34 +370,6 @@ namespace Phonon
             void currentSourceChanged(const Phonon::MediaSource &newSource);
 
             /**
-             * Emitted before the playback of the whole queue stops. When this
-             * signal is emitted you still have time to provide the next
-             * MediaSource (using enqueue()) so that playback continues.
-             *
-             * This signal can be used to provide the next MediaSource just in
-             * time for the transition still to work.
-             *
-             * \see enqueue
-             */
-            void aboutToFinish();
-
-            /**
-             * Emitted when there are only \p msecToEnd milliseconds left
-             * for playback.
-             *
-             * \param msecToEnd The remaining time until the playback queue finishes.
-             *
-             * \warning This signal is not emitted when there is another source in the queue.
-             * It is only emitted when the queue is empty.
-             *
-             * \see setPrefinishMark
-             * \see prefinishMark
-             * \see aboutToFinish
-             * \see finished
-             */
-            void prefinishMarkReached(qint32 msecToEnd);
-
-            /**
              * This signal is emitted as soon as the total time of the media file is
              * known or has changed. For most non-local media data the total
              * time of the media can only be known after some time. Initially the
@@ -646,7 +398,6 @@ namespace Phonon
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
             Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            Q_PRIVATE_SLOT(k_func(), void _k_aboutToFinish())
             Q_PRIVATE_SLOT(k_func(), void _k_currentSourceChanged(const MediaSource &))
             Q_PRIVATE_SLOT(k_func(), void _k_stateChanged(Phonon::State, Phonon::State))
     };

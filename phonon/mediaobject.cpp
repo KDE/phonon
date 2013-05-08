@@ -199,12 +199,6 @@ QMultiMap<QString, QString> MediaObject::metaData() const
     return d->metaData;
 }
 
-PHONON_INTERFACE_GETTER(qint32, prefinishMark, d->prefinishMark)
-PHONON_INTERFACE_SETTER(setPrefinishMark, prefinishMark, qint32)
-
-PHONON_INTERFACE_GETTER(qint32, transitionTime, d->transitionTime)
-PHONON_INTERFACE_SETTER(setTransitionTime, transitionTime, qint32)
-
 qint64 MediaObject::totalTime() const
 {
     P_D(const MediaObject);
@@ -261,64 +255,6 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     d->sendToZeitgeist(StoppedState);
     INTERFACE_CALL(setSource(d->mediaSource));
     d->sendToZeitgeist();
-}
-
-void MediaObject::clear()
-{
-    P_D(MediaObject);
-    d->sourceQueue.clear();
-    setCurrentSource(MediaSource());
-}
-
-QList<MediaSource> MediaObject::queue() const
-{
-    P_D(const MediaObject);
-    return d->sourceQueue;
-}
-
-void MediaObject::setQueue(const QList<MediaSource> &sources)
-{
-    P_D(MediaObject);
-    d->sourceQueue.clear();
-    enqueue(sources);
-}
-
-void MediaObject::setQueue(const QList<QUrl> &urls)
-{
-    P_D(MediaObject);
-    d->sourceQueue.clear();
-    enqueue(urls);
-}
-
-void MediaObject::enqueue(const MediaSource &source)
-{
-    P_D(MediaObject);
-    if (!isPlayable(d->mediaSource.type())) {
-        // the current source is nothing valid so this source needs to become the current one
-        setCurrentSource(source);
-    } else {
-        d->sourceQueue << source;
-    }
-}
-
-void MediaObject::enqueue(const QList<MediaSource> &sources)
-{
-    for (int i = 0; i < sources.count(); ++i) {
-        enqueue(sources.at(i));
-    }
-}
-
-void MediaObject::enqueue(const QList<QUrl> &urls)
-{
-    for (int i = 0; i < urls.count(); ++i) {
-        enqueue(urls.at(i));
-    }
-}
-
-void MediaObject::clearQueue()
-{
-    P_D(MediaObject);
-    d->sourceQueue.clear();
 }
 
 void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
@@ -578,35 +514,10 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
     emit q->stateChanged(newstate, oldstate);
 }
 
-void MediaObjectPrivate::_k_aboutToFinish()
-{
-    P_Q(MediaObject);
-    pDebug() << Q_FUNC_INFO;
-
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    abstractStream = 0; // abstractStream auto-deletes
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
-    if (sourceQueue.isEmpty()) {
-        emit q->aboutToFinish();
-        if (sourceQueue.isEmpty()) {
-            return;
-        }
-    }
-
-    mediaSource = sourceQueue.head();
-    readyForZeitgeist = false;
-    playingQueuedSource = true;
-    pINTERFACE_CALL(setNextSource(mediaSource));
-}
-
 void MediaObjectPrivate::_k_currentSourceChanged(const MediaSource &source)
 {
     P_Q(MediaObject);
     pDebug() << Q_FUNC_INFO;
-
-    if (!sourceQueue.isEmpty() && sourceQueue.head() == source)
-        sourceQueue.dequeue();
 
     emit q->currentSourceChanged(source);
 }

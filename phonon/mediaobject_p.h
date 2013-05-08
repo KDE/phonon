@@ -39,7 +39,6 @@
 namespace Phonon
 {
 class FrontendInterfacePrivate;
-class StatesValidator;
 
 class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestructionHandler
 {
@@ -147,7 +146,6 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         bool ignoreErrorToLoadingStateChange : 1;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         MediaSource mediaSource;
-        QQueue<MediaSource> sourceQueue;
 #ifdef HAVE_QZEITGEIST
         QZeitgeist::Log *log;
 #endif
