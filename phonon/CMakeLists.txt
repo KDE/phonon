@@ -58,7 +58,6 @@ set(phonon_LIB_SRCS
 #    volumeslider.cpp
 #    videoplayer.cpp
 #    videowidget.cpp
-   ${phonon_VGO_SRCS}
    )
 
 if (PHONON_PULSESUPPORT)

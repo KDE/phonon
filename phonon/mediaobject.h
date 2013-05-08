@@ -36,7 +36,6 @@ namespace Phonon
     class PHONON_EXPORT MediaObject : public QObject, public MediaNode
     {
         Q_OBJECT
-        P_DECLARE_PRIVATE(MediaObject)
 
         Q_PROPERTY(qint32 tickInterval READ tickInterval WRITE setTickInterval)
 
@@ -138,6 +137,7 @@ namespace Phonon
             void totalTimeChanged(qint64 newTotalTime);
 
         private:
+            P_DECLARE_PRIVATE(MediaObject)
             Q_PRIVATE_SLOT(k_func(), void _k_resumePlay())
             Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
             Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<QString, QString> &))
