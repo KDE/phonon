@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_MEDIAOBJECTINTERFACE_H
@@ -26,10 +26,7 @@
 #include "mediaobject.h"
 #include <QtCore/QObject>
 
-
-namespace Phonon
-{
-class StreamInterface;
+namespace Phonon {
 
 /** \class MediaObjectInterface mediaobjectinterface.h phonon/MediaObjectInterface
  * \short Backend interface for media sources.
@@ -136,12 +133,6 @@ public:
      */
     virtual void setTickInterval(qint32 interval) = 0;
 
-    /**
-     * Check whether the media data includes a video stream.
-     *
-     * \return returns \p true if the media contains video data
-     */
-    virtual bool hasVideo() const = 0;
     /**
      * If the current media may be seeked returns true.
      *

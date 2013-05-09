@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef MEDIAOBJECT_P_H
