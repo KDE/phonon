@@ -40,7 +40,6 @@ class BackendInterface
 
         enum Class {
             PlayerClass,
-            MediaObjectClass = PlayerClass,
             VolumeFaderEffectClass,
             AudioOutputClass,
             AudioDataOutputClass,

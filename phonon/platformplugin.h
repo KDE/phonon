@@ -50,22 +50,11 @@ public:
     virtual AbstractMediaStream *createMediaStream(const QUrl &url, QObject *parent) = 0;
 
     /**
-     * Returns the icon for the given icon name.
-     */
-    virtual QIcon icon(const QString &name) const = 0;
-
-    /**
      * Shows a notification popup
      */
     virtual void notification(const char *notificationName, const QString &text,
                               const QStringList &actions = QStringList(), QObject *receiver = 0,
                               const char *actionSlot = 0) const = 0;
-
-    /**
-     * Returns the name of the application. For most Qt application this is
-     * QCoreApplication::applicationName(), but for KDE this is overridden by KAboutData.
-     */
-    virtual QString applicationName() const = 0;
 
     /**
      * Creates a backend object. This way the platform can decide the backend preference.

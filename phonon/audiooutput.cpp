@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -109,24 +110,6 @@ void AudioOutputPrivate::createBackendObject()
     if (m_backendObject) {
         setupBackendObject();
     }
-}
-
-QString AudioOutput::name() const
-{
-    P_D(const AudioOutput);
-    return d->name;
-}
-
-void AudioOutput::setName(const QString &newName)
-{
-    P_D(AudioOutput);
-    if (d->name == newName) {
-        return;
-    }
-    d->name = newName;
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive())
-        pulse->setOutputName(d->getStreamUuid(), newName);
 }
 
 static const qreal LOUDNESS_TO_VOLTAGE_EXPONENT = qreal(0.67);

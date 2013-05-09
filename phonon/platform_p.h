@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,17 +18,17 @@
 
     You should have received a copy of the GNU Lesser General Public 
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_PLATFORM_P_H
 #define PHONON_PLATFORM_P_H
 
-#include <QtCore/QStringList>
-#include <QtCore/QtGlobal>
-#include <QtCore/QPair>
 #include "phonon_export.h"
 #include "objectdescription.h"
+
+#include <QtCore/QPair>
+#include <QtCore/QStringList>
+#include <QtCore/QtGlobal>
 
 class QIcon;
 class QObject;
@@ -41,11 +42,9 @@ class AbstractMediaStream;
 namespace Platform {
 
 AbstractMediaStream *createMediaStream(const QUrl &url, QObject *parent);
-QIcon icon(const QString &name, QStyle *style = 0);
 void notification(const char *notificationName, const QString &text,
                   const QStringList &actions = QStringList(), QObject *receiver = 0,
                   const char *actionSlot = 0);
-QString applicationName();
 QList<QPair<QByteArray, QString> > deviceAccessListFor(const Phonon::AudioOutputDevice &deviceDesc);
 
 } // namespace Platform

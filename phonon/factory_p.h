@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2004-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_FACTORY_P_H
@@ -27,7 +27,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-
 
 class QUrl;
 class QIcon;
@@ -82,6 +81,7 @@ namespace Factory
      */
     PHONON_EXPORT Sender *sender();
 
+#warning createObject!
     QObject *createPlayer(QObject *parent = 0);
 
     /**
@@ -113,7 +113,6 @@ namespace Factory
      */
 #ifndef QT_NO_PHONON_VIDEO
     QObject *createVideoWidget(QObject *parent = 0);
-    QObject *createVideoGraphicsObject(QObject *parent = 0);
 #endif //QT_NO_PHONON_VIDEO
 
     /**
@@ -178,6 +177,4 @@ namespace Factory
 } // namespace Factory
 } // namespace Phonon
 
-
 #endif // PHONON_FACTORY_P_H
-// vim: sw=4 ts=4

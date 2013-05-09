@@ -310,7 +310,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
 
             m_platformPlugin = qobject_cast<PlatformPlugin *>(plInstance);
             if (m_platformPlugin) {
-                pDebug() << Q_FUNC_INFO << "platform plugin" << m_platformPlugin->applicationName();
+                pDebug() << Q_FUNC_INFO << "platform plugin" << m_platformPlugin;
                 return m_platformPlugin;
             } else {
                 pDebug() << Q_FUNC_INFO << "platform plugin cast fail" << plInstance;

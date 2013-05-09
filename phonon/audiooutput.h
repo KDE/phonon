@@ -41,7 +41,6 @@ class PHONON_EXPORT AudioOutput : public AbstractAudioOutput
 public:
     explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
     explicit AudioOutput(QObject *parent = 0);
-    QString name() const;
     qreal volume() const;
     qreal volumeDecibel() const;
     Phonon::Category category() const;
@@ -49,7 +48,6 @@ public:
     bool isMuted() const;
 
 public Q_SLOTS:
-    void setName(const QString &newName);
     void setVolume(qreal newVolume);
     void setVolumeDecibel(qreal newVolumeDecibel);
     bool setOutputDevice(const Phonon::AudioOutputDevice &newAudioOutputDevice);

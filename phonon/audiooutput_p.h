@@ -28,8 +28,8 @@
 #include "phononconfig_p.h"
 #include "platform_p.h"
 
-namespace Phonon
-{
+namespace Phonon {
+
 class AudioOutputAdaptor;
 
 class AudioOutputPrivate : public AbstractAudioOutputPrivate
@@ -43,7 +43,6 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
 protected:
     AudioOutputPrivate()
         : AbstractAudioOutputPrivate()
-        , name(Platform::applicationName())
         , volume(1.0)
         , deviceBeforeFallback(-1)
         , outputDeviceOverridden(false)
@@ -69,7 +68,6 @@ protected:
     void _k_deviceChanged(int deviceIndex);
 
 private:
-    QString name;
     Phonon::AudioOutputDevice device;
     qreal volume;
     QString streamUuid;
@@ -79,6 +77,7 @@ private:
     bool forceMove;
     bool muted;
 };
+
 } //namespace Phonon
 
 #endif // AUDIOOUTPUT_P_H

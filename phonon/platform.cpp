@@ -1,12 +1,13 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
     version 2.1 of the License, or (at your option) version 3, or any
     later version accepted by the membership of KDE e.V. (or its
-    successor approved by the membership of KDE e.V.), Nokia Corporation 
+    successor approved by the membership of KDE e.V.), Nokia Corporation
     (or its successors, if any) and the KDE Free Qt Foundation, which shall
     act as a proxy defined in Section 6 of version 3 of the license.
 
@@ -15,9 +16,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "platform_p.h"
@@ -25,11 +25,7 @@
 #include "platformplugin.h"
 #include "factory_p.h"
 
-#include <QStyle>
-#include <QApplication>
-
-namespace Phonon
-{
+namespace Phonon {
 
 AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *parent)
 {
@@ -43,28 +39,6 @@ AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *paren
     Q_UNUSED(parent);
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
     return 0;
-}
-
-QIcon Platform::icon(const QString &name, QStyle *style)
-{
-    QIcon ret;
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    if (const PlatformPlugin *f = Factory::platformPlugin()) {
-        ret = f->icon(name);
-    }
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-    if (ret.isNull()) {
-        if (!style) {
-            style = QApplication::style();
-        }
-        if (name == QLatin1String("player-volume")) {
-            ret = style->standardPixmap(QStyle::SP_MediaVolume);
-        } else if (name == QLatin1String("player-volume-muted")) {
-            ret = style->standardPixmap(QStyle::SP_MediaVolumeMuted);
-        }
-    }
-
-    return ret;
 }
 
 void Platform::notification(const char *notificationName, const QString &text,
@@ -83,20 +57,6 @@ void Platform::notification(const char *notificationName, const QString &text,
     Q_UNUSED(receiver);
     Q_UNUSED(actionSlot);
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
-}
-
-QString Platform::applicationName()
-{
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    const PlatformPlugin *f = Factory::platformPlugin();
-    if (f) {
-        return f->applicationName();
-    }
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-    QString ret = QCoreApplication::applicationName();
-    if (ret.isEmpty())
-        ret = QCoreApplication::applicationFilePath();
-    return ret;
 }
 
 QList<QPair<QByteArray, QString> > Platform::deviceAccessListFor(const Phonon::AudioOutputDevice &deviceDesc)

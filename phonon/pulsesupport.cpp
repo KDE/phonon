@@ -27,7 +27,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QMutex>
-#include <QtWidgets/QApplication>
+#include <QtGui/QGuiApplication>
 
 #ifdef HAVE_PULSEAUDIO
 #include "pulsestream_p.h"
@@ -1118,9 +1118,10 @@ static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString str
     }
     qputenv("PULSE_PROP_phonon.streamid", streamUuid.toLatin1());
 
-    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_NAME, Platform::applicationName().toUtf8());
-    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_VERSION, qApp->applicationVersion().toUtf8());
-    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_ICON_NAME, qApp->applicationName().toUtf8());
+    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_NAME, QGuiApplication::applicationDisplayName().toUtf8());
+    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_VERSION, QGuiApplication::applicationVersion().toUtf8());
+#warning evaluate putting binary data here
+    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_ICON_NAME, QGuiApplication::applicationName().toUtf8());
 
     PulseStream *stream = new PulseStream(streamUuid);
     map[streamUuid] = stream;
