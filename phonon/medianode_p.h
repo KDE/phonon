@@ -33,70 +33,61 @@ Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 class QObject;
 
 namespace Phonon {
-    class MediaNode;
 
-    class PHONON_EXPORT MediaNodePrivate
-    {
-        P_DECLARE_PUBLIC(MediaNode)
+class MediaNode;
 
-        friend class AudioOutputPrivate;
-        friend class FactoryPrivate;
+class PHONON_EXPORT MediaNodePrivate
+{
+    friend class FactoryPrivate;
 
-    protected:
-        enum CastId {
-            MediaNodePrivateType,
-            AbstractAudioOutputPrivateType,
-            AudioOutputType
-        };
-    public:
-        /**
-        * Returns the backend object. If the object does not exist it tries to
-        * create it before returning.
-        *
-        * \return the Iface object, might return \c 0
-        */
-        QObject *backendObject();
+public:
+    /**
+     * Returns the backend object. If the object does not exist it tries to
+     * create it before returning.
+     *
+     * \return the Iface object, might return \c 0
+     */
+    QObject *backendObject();
 
-        const CastId castId;
+protected:
+    MediaNodePrivate();
 
-    protected:
-        MediaNodePrivate(CastId _castId = MediaNodePrivateType);
+    virtual ~MediaNodePrivate();
 
-        virtual ~MediaNodePrivate();
+    /**
+     * \internal
+     * This method cleanly deletes the Iface object. It is called on
+     * destruction and before a backend change.
+     */
+    void deleteBackendObject();
 
-        /**
-        * \internal
-        * This method cleanly deletes the Iface object. It is called on
-        * destruction and before a backend change.
-        */
-        void deleteBackendObject();
+    virtual bool aboutToDeleteBackendObject() = 0;
 
-        virtual bool aboutToDeleteBackendObject() = 0;
+    /**
+     * \internal
+     * Creates the Iface object belonging to this class. For most cases the
+     * implementation is
+     * \code
+     * Q_Q(ClassName);
+     * m_iface = Factory::createClassName(this);
+     * return m_iface;
+     * \endcode
+     *
+     * This function should not be called except from slotCreateIface.
+     *
+     * \see slotCreateIface
+     */
+    virtual void createBackendObject() = 0;
 
-        /**
-        * \internal
-        * Creates the Iface object belonging to this class. For most cases the
-        * implementation is
-        * \code
-        * Q_Q(ClassName);
-        * m_iface = Factory::createClassName(this);
-        * return m_iface;
-        * \endcode
-        *
-        * This function should not be called except from slotCreateIface.
-        *
-        * \see slotCreateIface
-        */
-        virtual void createBackendObject() = 0;
+protected:
+    MediaNode *q_ptr;
+public:
+    QObject *m_backendObject;
 
-    protected:
-        MediaNode *q_ptr;
-    public:
-        QObject *m_backendObject;
-
-    private:
-        Q_DISABLE_COPY(MediaNodePrivate)
-    };
+private:
+    P_DECLARE_PUBLIC(MediaNode)
+    Q_DISABLE_COPY(MediaNodePrivate)
+};
 
 } // namespace Phonon
 

@@ -37,54 +37,47 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
     P_DECLARE_PUBLIC(AudioOutput)
     PHONON_PRIVATECLASS
     public:
-        inline static AudioOutputPrivate *cast(MediaNodePrivate *x)
-        {
-            if (x && x->castId == MediaNodePrivate::AudioOutputType) {
-                return static_cast<AudioOutputPrivate *>(x);
-            }
-            return 0;
-        }
         void init(Phonon::Category c);
-        QString getStreamUuid();
+    QString getStreamUuid();
 
-    protected:
-        AudioOutputPrivate(CastId castId = MediaNodePrivate::AudioOutputType)
-            : AbstractAudioOutputPrivate(castId),
-            name(Platform::applicationName()),
-            volume(1.0),
-            deviceBeforeFallback(-1),
-            outputDeviceOverridden(false),
-            forceMove(false),
-            muted(false)
-        {
-        }
+protected:
+    AudioOutputPrivate()
+        : AbstractAudioOutputPrivate()
+        , name(Platform::applicationName())
+        , volume(1.0)
+        , deviceBeforeFallback(-1)
+        , outputDeviceOverridden(false)
+        , forceMove(false)
+        , muted(false)
+    {
+    }
 
-        ~AudioOutputPrivate();
+    ~AudioOutputPrivate();
 
-        enum DeviceChangeType {
-            FallbackChange,
-            HigherPreferenceChange,
-            SoundSystemChange
-        };
-        void handleAutomaticDeviceChange(const AudioOutputDevice &newDev, DeviceChangeType type);
+    enum DeviceChangeType {
+        FallbackChange,
+        HigherPreferenceChange,
+        SoundSystemChange
+    };
+    void handleAutomaticDeviceChange(const AudioOutputDevice &newDev, DeviceChangeType type);
 
-        void _k_volumeChanged(qreal);
-        void _k_mutedChanged(bool);
-        void _k_revertFallback();
-        void _k_audioDeviceFailed();
-        void _k_deviceListChanged();
-        void _k_deviceChanged(int deviceIndex);
+    void _k_volumeChanged(qreal);
+    void _k_mutedChanged(bool);
+    void _k_revertFallback();
+    void _k_audioDeviceFailed();
+    void _k_deviceListChanged();
+    void _k_deviceChanged(int deviceIndex);
 
-    private:
-        QString name;
-        Phonon::AudioOutputDevice device;
-        qreal volume;
-        QString streamUuid;
-        Category category;
-        int deviceBeforeFallback;
-        bool outputDeviceOverridden;
-        bool forceMove;
-        bool muted;
+private:
+    QString name;
+    Phonon::AudioOutputDevice device;
+    qreal volume;
+    QString streamUuid;
+    Category category;
+    int deviceBeforeFallback;
+    bool outputDeviceOverridden;
+    bool forceMove;
+    bool muted;
 };
 } //namespace Phonon
 

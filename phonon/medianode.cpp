@@ -16,7 +16,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -26,39 +26,38 @@
 #include "medianodedestructionhandler_p.h"
 #include "factory_p.h"
 
-namespace Phonon
-{
+namespace Phonon {
 
-    MediaNode::MediaNode(MediaNodePrivate &dd)
-        : k_ptr(&dd)
-    {
-        k_ptr->q_ptr = this;
-    }
+MediaNode::MediaNode(MediaNodePrivate &dd)
+    : k_ptr(&dd)
+{
+    k_ptr->q_ptr = this;
+}
 
 bool MediaNode::isValid() const
 {
     return const_cast<MediaNodePrivate *>(k_ptr)->backendObject() != 0;
 }
 
-    MediaNode::~MediaNode()
-    {
-        delete k_ptr;
-    }
+MediaNode::~MediaNode()
+{
+    delete k_ptr;
+}
 
-    QObject *MediaNodePrivate::backendObject()
-    {
-        if (!m_backendObject && Factory::backend()) {
-            createBackendObject();
-        }
-        return m_backendObject;
+QObject *MediaNodePrivate::backendObject()
+{
+    if (!m_backendObject && Factory::backend()) {
+        createBackendObject();
     }
+    return m_backendObject;
+}
 
-    MediaNodePrivate::~MediaNodePrivate()
-    {
-        Factory::deregisterFrontendObject(this);
-        delete m_backendObject;
-        m_backendObject = 0;
-    }
+MediaNodePrivate::~MediaNodePrivate()
+{
+    Factory::deregisterFrontendObject(this);
+    delete m_backendObject;
+    m_backendObject = 0;
+}
 
 void MediaNodePrivate::deleteBackendObject()
 {
@@ -68,9 +67,10 @@ void MediaNodePrivate::deleteBackendObject()
     }
 }
 
-    MediaNodePrivate::MediaNodePrivate(MediaNodePrivate::CastId _castId) : castId(_castId),
-        m_backendObject(0)
-    {
-        Factory::registerFrontendObject(this);
-    }
+MediaNodePrivate::MediaNodePrivate()
+    : m_backendObject(0)
+{
+    Factory::registerFrontendObject(this);
+}
+
 } // namespace Phonon

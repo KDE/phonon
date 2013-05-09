@@ -37,8 +37,8 @@ public:
     virtual QObject *qObject() { return q_func(); }
 
 protected:
-    AbstractAudioOutputPrivate(CastId castId = AbstractAudioOutputPrivateType)
-        : MediaNodePrivate(castId)
+    AbstractAudioOutputPrivate()
+        : MediaNodePrivate()
     {
     }
 };
