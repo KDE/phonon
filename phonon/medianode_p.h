@@ -59,7 +59,7 @@ namespace Phonon
         */
         QObject *backendObject();
 
-        const CastId castId;
+//        const CastId castId;
 
     protected:
         MediaNodePrivate(CastId _castId = MediaNodePrivateType);
@@ -90,34 +90,6 @@ namespace Phonon
         * \see slotCreateIface
         */
         virtual void createBackendObject() = 0;
-
-    public:
-        /**
-        * \internal
-        * This class has its own destroyed signal since some cleanup calls
-        * need the pointer to the backend object intact. The
-        * QObject::destroyed signals comes after the backend object was
-        * deleted.
-        *
-        * As this class cannot derive from QObject a simple handler
-        * interface is used.
-        */
-        void addDestructionHandler(MediaNodeDestructionHandler *handler);
-
-        /**
-        * \internal
-        * This class has its own destroyed signal since some cleanup calls
-        * need the pointer to the backend object intact. The
-        * QObject::destroyed signals comes after the backend object was
-        * deleted.
-        *
-        * As this class cannot derive from QObject a simple handler
-        * interface is used.
-        */
-        void removeDestructionHandler(MediaNodeDestructionHandler *handler);
-
-        const QObject *qObject() const { return const_cast<MediaNodePrivate *>(this)->qObject(); }
-        virtual QObject *qObject() { return 0; }
 
     protected:
         MediaNode *q_ptr;

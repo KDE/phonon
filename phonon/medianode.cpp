@@ -76,14 +76,4 @@ void MediaNodePrivate::deleteBackendObject()
     {
         Factory::registerFrontendObject(this);
     }
-
-    void MediaNodePrivate::addDestructionHandler(MediaNodeDestructionHandler *handler)
-    {
-        handlers.append(handler);
-    }
-
-    void MediaNodePrivate::removeDestructionHandler(MediaNodeDestructionHandler *handler)
-    {
-        handlers.removeAll(handler);
-    }
 } // namespace Phonon
