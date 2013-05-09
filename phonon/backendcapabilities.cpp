@@ -36,38 +36,11 @@
 
 PHONON_GLOBAL_STATIC(Phonon::BackendCapabilitiesPrivate, globalBCPrivate)
 
-namespace Phonon
-{
+namespace Phonon {
 
 BackendCapabilities::Notifier *BackendCapabilities::notifier()
 {
     return globalBCPrivate;
-}
-
-QStringList BackendCapabilities::availableMimeTypes()
-{
-    if (BackendInterface *backendIface = qobject_cast<BackendInterface *>(Factory::backend()))
-        return backendIface->availableMimeTypes();
-    else
-        return QStringList();
-}
-
-bool BackendCapabilities::isMimeTypeAvailable(const QString &mimeType)
-{
-    QObject *m_backendObject = Factory::backend(false);
-    if (!m_backendObject) {
-        if (!Factory::isMimeTypeAvailable(mimeType)) {
-            return false;
-        }
-        // without loading the backend we found out that the MIME type might be supported, now we
-        // want to know for certain. For that we need to load the backend.
-        m_backendObject = Factory::backend(true);
-    }
-    if (!m_backendObject) {
-        // no backend == no MIME type supported at all
-        return false;
-    }
-    return availableMimeTypes().contains(mimeType);
 }
 
 QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()

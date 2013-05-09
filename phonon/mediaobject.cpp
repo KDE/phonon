@@ -24,6 +24,8 @@
 #include "mediaobject.h"
 #include "mediaobject_p.h"
 
+#include "abstractaudiooutput.h"
+#include "abstractaudiooutput_p.h"
 #include "factory_p.h"
 #include "mediaobjectinterface.h"
 #include "phonondefs_p.h"
@@ -69,7 +71,6 @@ Phonon::State MediaObject::state() const
 
 PHONON_INTERFACE_SETTER(setTickInterval, tickInterval, qint32)
 PHONON_INTERFACE_GETTER(qint32, tickInterval, d->tickInterval)
-PHONON_INTERFACE_GETTER(bool, hasVideo, false)
 PHONON_INTERFACE_GETTER(bool, isSeekable, false)
 PHONON_INTERFACE_GETTER(qint64, currentTime, d->currentTime)
 
@@ -185,13 +186,27 @@ qint64 MediaObject::remainingTime() const
     return ret;
 }
 
-Source MediaObject::currentSource() const
+#warning bool and drop qwarning
+void MediaObject::addAudioOutput(AbstractAudioOutput *audioOutput)
+{
+    P_D(MediaObject);
+    d->audioOutputs.append(audioOutput);
+//    qDebug() << audioOutput;
+//    qDebug() << audioOutput->k_func();
+//    qDebug() << audioOutput->k_func()->backendObject();
+    d->createBackendObject();
+    if (!d->backendObject())
+        qWarning("No PrivateObject present");
+    INTERFACE_CALL(addAudioOutput(audioOutput->k_func()->backendObject()));
+}
+
+Source MediaObject::source() const
 {
     P_D(const MediaObject);
     return d->mediaSource;
 }
 
-void MediaObject::setCurrentSource(const Source &newSource)
+void MediaObject::setSource(const Source &newSource)
 {
     P_D(MediaObject);
     if (!d->backendObject()) {
@@ -253,13 +268,11 @@ void MediaObjectPrivate::setupBackendObject()
     // This causes major headaches. If we must enforce implicit execution stop via
     // signals, they ought to be done in private slots.
 
-    qRegisterMetaType<Source>("MediaSource");
+    qRegisterMetaType<Source>("Source");
     qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
 
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
                      q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),
-                     q, SIGNAL(hasVideoChanged(bool)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
                      q, SIGNAL(tick(qint64)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),
@@ -273,7 +286,7 @@ void MediaObjectPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString, QString>)),
                      q, SLOT(_k_metaDataChanged(QMultiMap<QString, QString>)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(Source)),
-                     q, SIGNAL(currentSourceChanged(Phonon::Source)), Qt::QueuedConnection);
+                     q, SIGNAL(currentSourceChanged(Source)), Qt::QueuedConnection);
 
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));

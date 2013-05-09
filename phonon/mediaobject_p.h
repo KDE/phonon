@@ -97,6 +97,8 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         ErrorType errorType : 4;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         Source mediaSource;
+
+        QList<AbstractAudioOutput *> audioOutputs;
 };
 }
 

@@ -26,19 +26,20 @@
 #include "medianode.h"
 #include "mediasource.h"
 
-namespace Phonon
-{
+namespace Phonon {
+
+class AbstractAudioOutput;
 class MediaObjectPrivate;
 
 class PHONON_EXPORT MediaObject : public QObject, public MediaNode
 {
     Q_OBJECT
+
 public:
     MediaObject(QObject *parent = 0);
     ~MediaObject();
 
     State state() const;
-    bool hasVideo() const;
     bool isSeekable() const;
     qint32 tickInterval() const;
     QStringList metaData(const QString &key) const;
@@ -46,11 +47,14 @@ public:
     QMultiMap<QString, QString> metaData() const;
     QString errorString() const;
     ErrorType errorType() const;
-    Source currentSource() const;
-    void setCurrentSource(const Source &source);
+    Source source() const;
+    void setSource(const Source &source);
     qint64 currentTime() const;
     qint64 totalTime() const;
     qint64 remainingTime() const;
+
+#warning merge outputs?
+    void addAudioOutput(AbstractAudioOutput *audioOutput);
 
 public Q_SLOTS:
     void setTickInterval(qint32 newTickInterval);
@@ -64,10 +68,9 @@ Q_SIGNALS:
     void tick(qint64 time);
     void metaDataChanged();
     void seekableChanged(bool isSeekable);
-    void hasVideoChanged(bool hasVideo);
     void bufferStatus(int percentFilled);
     void finished();
-    void currentSourceChanged(const Phonon::Source &newSource);
+    void currentSourceChanged(const Source &newSource);
     void totalTimeChanged(qint64 newTotalTime);
 
 private:

@@ -47,6 +47,13 @@ set(phonon_LIB_SRCS
 #    volumeslider.cpp
 #    videoplayer.cpp
 #    videowidget.cpp
+
+# QTC Compat
+    mediaobject_p.h
+
+    audiooutputinterface.h
+    backendinterface.h
+    mediaobjectinterface.h
    )
 
 if (PHONON_PULSESUPPORT)

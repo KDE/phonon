@@ -114,22 +114,6 @@ namespace BackendCapabilities
     PHONON_EXPORT Notifier *notifier();
 
     /**
-     * Returns a list of mime types that the Backend can decode.
-     *
-     * \see isMimeTypeAvailable()
-     */
-    PHONON_EXPORT QStringList availableMimeTypes();
-
-    /**
-     * Often all you want to know is whether one given MIME type can be
-     * decoded by the backend. Use this method in favor of availableMimeTypes()
-     * as it can give you a negative answer without having a backend loaded.
-     *
-     * \see availableMimeTypes();
-     */
-    PHONON_EXPORT bool isMimeTypeAvailable(const QString &mimeType);
-
-    /**
      * Returns the audio output devices the backend supports.
      *
      * \return A list of AudioOutputDevice objects that give a name and

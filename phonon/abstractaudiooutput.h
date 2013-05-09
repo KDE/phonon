@@ -39,6 +39,7 @@ class AbstractAudioOutputPrivate;
  */
 class PHONON_EXPORT AbstractAudioOutput : public QObject, public MediaNode
 {
+    friend class MediaObject;
     Q_OBJECT
 
 public:
