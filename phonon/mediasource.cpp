@@ -32,18 +32,18 @@
 namespace Phonon
 {
 
-Source::Source(MediaSourcePrivate &dd)
+Source::Source(SourcePrivate &dd)
     : d(&dd)
 {
 }
 
 Source::Source()
-    : d(new MediaSourcePrivate(Empty))
+    : d(new SourcePrivate(Empty))
 {
 }
 
 Source::Source(const QUrl &url)
-    : d(new MediaSourcePrivate(Url))
+    : d(new SourcePrivate(Url))
 {
     if (url.isValid()) {
         if (url.scheme() == QLatin1String("qrc")) {
@@ -69,7 +69,7 @@ Source::Source(const QUrl &url)
 }
 
 Source::Source(DiscType dt, const QString &deviceName)
-    : d(new MediaSourcePrivate(Disc))
+    : d(new SourcePrivate(Disc))
 {
     if (dt == NoDisc) {
         d->type = Invalid;
@@ -81,7 +81,7 @@ Source::Source(DiscType dt, const QString &deviceName)
 
 #ifndef PHONON_NO_AUDIOCAPTURE
 Source::Source(const AudioCaptureDevice& device)
-    : d(new MediaSourcePrivate(CaptureDevice))
+    : d(new SourcePrivate(CaptureDevice))
 {
     d->setCaptureDevices(device, VideoCaptureDevice());
 }
@@ -89,7 +89,7 @@ Source::Source(const AudioCaptureDevice& device)
 
 #ifndef PHONON_NO_VIDEOCAPTURE
 Source::Source(const VideoCaptureDevice& device)
-    : d(new MediaSourcePrivate(CaptureDevice))
+    : d(new SourcePrivate(CaptureDevice))
 {
     d->setCaptureDevices(AudioCaptureDevice(), device);
 }
@@ -97,13 +97,13 @@ Source::Source(const VideoCaptureDevice& device)
 
 #if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
 Source::Source(CaptureCategory category)
-    : d(new MediaSourcePrivate(AudioVideoCapture))
+    : d(new SourcePrivate(AudioVideoCapture))
 {
     d->setCaptureDevices(category);
 }
 
 Source::Source(Capture::DeviceType deviceType, CaptureCategory category)
-    : d(new MediaSourcePrivate(CaptureDevice))
+    : d(new SourcePrivate(CaptureDevice))
 {
     d->setCaptureDevice(deviceType, category);
 }
@@ -111,7 +111,7 @@ Source::Source(Capture::DeviceType deviceType, CaptureCategory category)
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 Source::Source(AbstractMediaStream *stream)
-    : d(new MediaSourcePrivate(Stream))
+    : d(new SourcePrivate(Stream))
 {
     if (stream) {
         d->setStream(stream);
@@ -121,7 +121,7 @@ Source::Source(AbstractMediaStream *stream)
 }
 
 Source::Source(QIODevice *ioDevice)
-    : d(new MediaSourcePrivate(Stream))
+    : d(new SourcePrivate(Stream))
 {
     if (ioDevice) {
         d->setStream(new IODeviceStream(ioDevice, ioDevice));
@@ -136,7 +136,7 @@ Source::~Source()
 {
 }
 
-MediaSourcePrivate::~MediaSourcePrivate()
+SourcePrivate::~SourcePrivate()
 {
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     if (autoDelete) {
@@ -237,7 +237,7 @@ AbstractMediaStream *Source::stream() const
     return d->stream;
 }
 
-void MediaSourcePrivate::setStream(AbstractMediaStream *s)
+void SourcePrivate::setStream(AbstractMediaStream *s)
 {
     stream = s;
 }
@@ -258,7 +258,7 @@ VideoCaptureDevice Source::videoCaptureDevice() const
 #endif //PHONON_NO_VIDEOCAPTURE
 
 #if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
-void MediaSourcePrivate::setCaptureDevice(Capture::DeviceType deviceType, CaptureCategory category)
+void SourcePrivate::setCaptureDevice(Capture::DeviceType deviceType, CaptureCategory category)
 {
     switch (deviceType) {
         case Capture::VideoType: {
@@ -274,14 +274,14 @@ void MediaSourcePrivate::setCaptureDevice(Capture::DeviceType deviceType, Captur
     }
 }
 
-void MediaSourcePrivate::setCaptureDevices(CaptureCategory category)
+void SourcePrivate::setCaptureDevices(CaptureCategory category)
 {
     setCaptureDevices(
         AudioCaptureDevice::fromIndex(GlobalConfig().audioCaptureDeviceFor(category)),
         VideoCaptureDevice::fromIndex(GlobalConfig().videoCaptureDeviceFor(category)));
 }
 
-void MediaSourcePrivate::setCaptureDevices(const AudioCaptureDevice &audioDevice, const VideoCaptureDevice &videoDevice)
+void SourcePrivate::setCaptureDevices(const AudioCaptureDevice &audioDevice, const VideoCaptureDevice &videoDevice)
 {
     audioCaptureDevice = audioDevice;
     videoCaptureDevice = videoDevice;

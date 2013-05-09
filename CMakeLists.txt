@@ -16,8 +16,8 @@ option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 # It is highly advised to think twice before changing those.
 # If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
 set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
-set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "60") # Bump whenever you feel like it :P
+set(PHONON_LIB_MINOR_VERSION "50") # Only change on binary compatible changes with new interfaces
+set(PHONON_LIB_PATCH_VERSION "0") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 set(PHONON_LIB_SONAME phonon5)

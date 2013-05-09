@@ -221,5 +221,3 @@ Q_CONSTRUCTOR_FUNCTION(registerPhononMetaTypes)
 #else
 static const int _Phonon_registerMetaTypes = registerPhononMetaTypes();
 #endif
-
-// vim: sw=4 ts=4

@@ -38,16 +38,16 @@
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 
-#define PHONON_CLASSNAME MediaObject
-#define PHONON_INTERFACENAME MediaObjectInterface
+#define PHONON_CLASSNAME Player
+#define PHONON_INTERFACENAME PlayerInterface
 
 namespace Phonon
 {
 PHONON_OBJECT_IMPL
 
-MediaObject::~MediaObject()
+Player::~Player()
 {
-    P_D(MediaObject);
+    P_D(Player);
     if (d->m_backendObject) {
         switch (state()) {
         case PlayingState:
@@ -60,9 +60,9 @@ MediaObject::~MediaObject()
     }
 }
 
-Phonon::State MediaObject::state() const
+Phonon::State Player::state() const
 {
-    P_D(const MediaObject);
+    P_D(const Player);
     if (!d->m_backendObject) {
         return d->state;
     }
@@ -79,57 +79,57 @@ static inline bool isPlayable(const Source::Type t)
     return t != Source::Invalid && t != Source::Empty;
 }
 
-void MediaObject::play()
+void Player::play()
 {
-    P_D(MediaObject);
+    P_D(Player);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(play());
     }
 }
 
-void MediaObject::pause()
+void Player::pause()
 {
-    P_D(MediaObject);
+    P_D(Player);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(pause());
     }
 }
 
-void MediaObject::stop()
+void Player::stop()
 {
-    P_D(MediaObject);
+    P_D(Player);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(stop());
     }
 }
 
-void MediaObject::seek(qint64 time)
+void Player::seek(qint64 time)
 {
-    P_D(MediaObject);
+    P_D(Player);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
         INTERFACE_CALL(seek(time));
     }
 }
 
-QString MediaObject::errorString() const
+QString Player::errorString() const
 {
     if (state() == Phonon::ErrorState) {
-        P_D(const MediaObject);
+        P_D(const Player);
         return INTERFACE_CALL(errorString());
     }
     return QString();
 }
 
-ErrorType MediaObject::errorType() const
+ErrorType Player::errorType() const
 {
     if (state() == Phonon::ErrorState) {
-        P_D(const MediaObject);
+        P_D(const Player);
         return INTERFACE_CALL(errorType());
     }
     return Phonon::NoError;
 }
 
-QStringList MediaObject::metaData(Phonon::MetaData f) const
+QStringList Player::metaData(Phonon::MetaData f) const
 {
     switch (f) {
     case ArtistMetaData:
@@ -152,30 +152,30 @@ QStringList MediaObject::metaData(Phonon::MetaData f) const
     return QStringList();
 }
 
-QStringList MediaObject::metaData(const QString &key) const
+QStringList Player::metaData(const QString &key) const
 {
-    P_D(const MediaObject);
+    P_D(const Player);
     return d->metaData.values(key);
 }
 
-QMultiMap<QString, QString> MediaObject::metaData() const
+QMultiMap<QString, QString> Player::metaData() const
 {
-    P_D(const MediaObject);
+    P_D(const Player);
     return d->metaData;
 }
 
-qint64 MediaObject::totalTime() const
+qint64 Player::totalTime() const
 {
-    P_D(const MediaObject);
+    P_D(const Player);
     if (!d->m_backendObject) {
         return -1;
     }
     return INTERFACE_CALL(totalTime());
 }
 
-qint64 MediaObject::remainingTime() const
+qint64 Player::remainingTime() const
 {
-    P_D(const MediaObject);
+    P_D(const Player);
     if (!d->m_backendObject) {
         return -1;
     }
@@ -187,9 +187,9 @@ qint64 MediaObject::remainingTime() const
 }
 
 #warning bool and drop qwarning
-void MediaObject::addAudioOutput(AbstractAudioOutput *audioOutput)
+void Player::addAudioOutput(AbstractAudioOutput *audioOutput)
 {
-    P_D(MediaObject);
+    P_D(Player);
     d->audioOutputs.append(audioOutput);
 //    qDebug() << audioOutput;
 //    qDebug() << audioOutput->k_func();
@@ -200,15 +200,15 @@ void MediaObject::addAudioOutput(AbstractAudioOutput *audioOutput)
     INTERFACE_CALL(addAudioOutput(audioOutput->k_func()->backendObject()));
 }
 
-Source MediaObject::source() const
+Source Player::source() const
 {
-    P_D(const MediaObject);
+    P_D(const Player);
     return d->mediaSource;
 }
 
-void MediaObject::setSource(const Source &newSource)
+void Player::setSource(const Source &newSource)
 {
-    P_D(MediaObject);
+    P_D(Player);
     if (!d->backendObject()) {
         d->mediaSource = newSource;
         return;
@@ -234,7 +234,7 @@ void MediaObject::setSource(const Source &newSource)
     INTERFACE_CALL(setSource(d->mediaSource));
 }
 
-bool MediaObjectPrivate::aboutToDeleteBackendObject()
+bool PlayerPrivate::aboutToDeleteBackendObject()
 {
     if (m_backendObject) {
         state = pINTERFACE_CALL(state());
@@ -245,9 +245,9 @@ bool MediaObjectPrivate::aboutToDeleteBackendObject()
 }
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text)
+void PlayerPrivate::streamError(Phonon::ErrorType type, const QString &text)
 {
-    P_Q(MediaObject);
+    P_Q(Player);
     State lastState = q->state();
     errorType = type;
     errorString = text;
@@ -257,9 +257,9 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-void MediaObjectPrivate::setupBackendObject()
+void PlayerPrivate::setupBackendObject()
 {
-    P_Q(MediaObject);
+    P_Q(Player);
     Q_ASSERT(m_backendObject);
 
     // Queue *everything* there is. That way the backend always is in a defined state.
@@ -324,29 +324,29 @@ void MediaObjectPrivate::setupBackendObject()
     }
 }
 
-void MediaObjectPrivate::_k_resumePlay()
+void PlayerPrivate::_k_resumePlay()
 {
-    qobject_cast<MediaObjectInterface *>(m_backendObject)->play();
+    pINTERFACE_CALL(play());
     if (currentTime > 0) {
-        qobject_cast<MediaObjectInterface *>(m_backendObject)->seek(currentTime);
+        pINTERFACE_CALL(seek(currentTime));
     }
 }
 
-void MediaObjectPrivate::_k_resumePause()
+void PlayerPrivate::_k_resumePause()
 {
     pINTERFACE_CALL(pause());
     if (currentTime > 0) {
-        qobject_cast<MediaObjectInterface *>(m_backendObject)->seek(currentTime);
+        pINTERFACE_CALL(seek(currentTime));
     }
 }
 
-void MediaObjectPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &newMetaData)
+void PlayerPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &newMetaData)
 {
     metaData = newMetaData;
     emit q_func()->metaDataChanged();
 }
 
-void MediaObjectPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
+void PlayerPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
 {
     // this method is called from Phonon::Base::~Base(), meaning the AudioPath
     // dtor has already been called, also virtual functions don't work anymore

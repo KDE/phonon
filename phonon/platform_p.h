@@ -34,12 +34,11 @@ class QObject;
 class QUrl;
 class QStyle;
 
-namespace Phonon
-{
+namespace Phonon {
+
 class AbstractMediaStream;
 
-namespace Platform
-{
+namespace Platform {
 
 AbstractMediaStream *createMediaStream(const QUrl &url, QObject *parent);
 QIcon icon(const QString &name, QStyle *style = 0);

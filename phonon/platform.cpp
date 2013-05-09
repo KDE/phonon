@@ -21,11 +21,10 @@
 */
 
 #include "platform_p.h"
+
 #include "platformplugin.h"
 #include "factory_p.h"
-#include <QtCore/QCoreApplication>
-#include <QtCore/QUrl>
-#include <QIcon>
+
 #include <QStyle>
 #include <QApplication>
 

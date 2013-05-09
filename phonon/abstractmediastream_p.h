@@ -38,11 +38,11 @@ namespace Phonon
 {
 class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHandler
 {
-    friend class MediaObject;
+    friend class Player;
     P_DECLARE_PUBLIC(AbstractMediaStream)
     public:
         void setStreamInterface(StreamInterface *);
-        void setMediaObjectPrivate(MediaObjectPrivate *);
+        void setMediaObjectPrivate(PlayerPrivate *);
         ~AbstractMediaStreamPrivate();
 
     protected:
@@ -67,7 +67,7 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHan
         bool streamSeekable;
         bool ignoreWrites;
         StreamInterface *streamInterface;
-        MediaObjectPrivate *mediaObjectPrivate;
+        PlayerPrivate *mediaObjectPrivate;
         Phonon::ErrorType errorType;
         QString errorText;
 };

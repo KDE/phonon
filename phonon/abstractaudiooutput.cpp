@@ -24,8 +24,6 @@
 #include "abstractaudiooutput_p.h"
 #include "factory_p.h"
 
-#define PHONON_CLASSNAME AbstractAudioOutput
-
 namespace Phonon {
 
 AbstractAudioOutput::AbstractAudioOutput(AbstractAudioOutputPrivate &dd,
@@ -50,7 +48,5 @@ void AbstractAudioOutputPrivate::setupBackendObject()
 }
 
 } //namespace Phonon
-
-#undef PHONON_CLASSNAME
 
 #include "moc_abstractaudiooutput.cpp"

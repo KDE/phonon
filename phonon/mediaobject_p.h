@@ -20,8 +20,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MEDIAOBJECT_P_H
-#define MEDIAOBJECT_P_H
+#ifndef PHONON_MEDIAOBJECT_P_H
+#define PHONON_MEDIAOBJECT_P_H
 
 #include <QtCore/QString>
 #include <QtCore/QQueue>
@@ -36,11 +36,11 @@ namespace Phonon
 {
 class FrontendInterfacePrivate;
 
-class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestructionHandler
+class PlayerPrivate : public MediaNodePrivate, private MediaNodeDestructionHandler
 {
     friend class AbstractMediaStream;
     friend class AbstractMediaStreamPrivate;
-    P_DECLARE_PUBLIC(MediaObject)
+    P_DECLARE_PUBLIC(Player)
     public:
         virtual QObject *qObject() { return q_func(); }
 
@@ -61,7 +61,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         void streamError(Phonon::ErrorType, const QString &);
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-        MediaObjectPrivate()
+        PlayerPrivate()
             : currentTime(0),
             tickInterval(0),
             metaData(),
@@ -77,7 +77,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
         {
         }
 
-        ~MediaObjectPrivate()
+        ~PlayerPrivate()
         {
         }
 
@@ -102,5 +102,5 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 };
 }
 
-#endif // MEDIAOBJECT_P_H
+#endif // PHONON_MEDIAOBJECT_P_H
 // vim: sw=4 ts=4 tw=80

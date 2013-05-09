@@ -37,7 +37,7 @@ class QIODevice;
 namespace Phonon
 {
 
-class MediaSourcePrivate;
+class SourcePrivate;
 class AbstractMediaStream;
 
 /** \class MediaSource mediasource.h phonon/MediaSource
@@ -326,8 +326,8 @@ class PHONON_EXPORT Source
 #endif
 
     protected:
-        QExplicitlySharedDataPointer<MediaSourcePrivate> d;
-        Source(MediaSourcePrivate &);
+        QExplicitlySharedDataPointer<SourcePrivate> d;
+        Source(SourcePrivate &);
 };
 
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Source &);

@@ -34,7 +34,7 @@ class QByteArray;
 
 namespace Phonon
 {
-class MediaObject;
+class Player;
 class AbstractMediaStreamPrivate;
 
 /** \class AbstractMediaStream abstractmediastream.h phonon/AbstractMediaStream
@@ -102,7 +102,7 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(AbstractMediaStream)
-    friend class MediaObject;
+    friend class Player;
     friend class MediaObjectPrivate;
     friend class StreamInterface;
     public:

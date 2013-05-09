@@ -273,7 +273,7 @@ QObject *Factory::create ## classname(int arg1, QObject *parent) \
     return 0; \
 }
 
-FACTORY_IMPL(MediaObject)
+FACTORY_IMPL(Player)
 #ifndef QT_NO_PHONON_EFFECT
 FACTORY_IMPL_1ARG(Effect)
 #endif //QT_NO_PHONON_EFFECT

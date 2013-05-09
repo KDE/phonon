@@ -83,12 +83,8 @@ namespace Factory
      */
     PHONON_EXPORT Sender *sender();
 
-    /**
-     * Create a new backend object for a MediaObject.
-     *
-     * \return a pointer to the MediaObject the backend provides.
-     */
-    QObject *createMediaObject(QObject *parent = 0);
+    QObject *createPlayer(QObject *parent = 0);
+
     /**
      * Create a new backend object for a Effect.
      *

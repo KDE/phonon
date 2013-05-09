@@ -20,8 +20,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_MEDIAOBJECT_H
-#define PHONON_MEDIAOBJECT_H
+#ifndef PHONON_PLAYER_H
+#define PHONON_PLAYER_H
 
 #include "medianode.h"
 #include "mediasource.h"
@@ -29,15 +29,15 @@
 namespace Phonon {
 
 class AbstractAudioOutput;
-class MediaObjectPrivate;
+class PlayerPrivate;
 
-class PHONON_EXPORT MediaObject : public QObject, public MediaNode
+class PHONON_EXPORT Player : public QObject, public MediaNode
 {
     Q_OBJECT
 
 public:
-    MediaObject(QObject *parent = 0);
-    ~MediaObject();
+    Player(QObject *parent = 0);
+    ~Player();
 
     State state() const;
     bool isSeekable() const;
@@ -74,11 +74,11 @@ Q_SIGNALS:
     void totalTimeChanged(qint64 newTotalTime);
 
 private:
-    P_DECLARE_PRIVATE(MediaObject)
+    P_DECLARE_PRIVATE(Player)
     Q_PRIVATE_SLOT(k_func(), void _k_resumePlay())
     Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
     Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<QString, QString> &))
 };
 } //namespace Phonon
 
-#endif // PHONON_MEDIAOBJECT_H
+#endif // PHONON_PLAYER_H

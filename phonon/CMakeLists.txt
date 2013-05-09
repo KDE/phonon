@@ -68,6 +68,7 @@ set(phonon_LIB_SRCS
     audiooutputinterface.h
     backendinterface.h
     mediaobjectinterface.h
+    platformplugin.h
    )
 
 if (PHONON_PULSESUPPORT)

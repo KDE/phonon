@@ -20,8 +20,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_MEDIAOBJECTINTERFACE_H
-#define PHONON_MEDIAOBJECTINTERFACE_H
+#ifndef PHONON_PLAYERINTERFACE_H
+#define PHONON_PLAYERINTERFACE_H
 
 #include "mediaobject.h"
 #include <QtCore/QObject>
@@ -59,10 +59,10 @@ namespace Phonon {
  * \author Matthias Kretz <kretz@kde.org>
  * \see MediaObject
  */
-class MediaObjectInterface
+class PlayerInterface
 {
 public:
-    virtual ~MediaObjectInterface() {}
+    virtual ~PlayerInterface() {}
 
     /**
      * Requests the playback to start.
@@ -202,6 +202,6 @@ public:
 };
 }
 
-Q_DECLARE_INTERFACE(Phonon::MediaObjectInterface, "MediaObjectInterface.phonon.kde.org/5.0")
+Q_DECLARE_INTERFACE(Phonon::PlayerInterface, "org.kde.phonon.PlayerInterface/5.0")
 
-#endif // PHONON_MEDIAOBJECTINTERFACE_H
+#endif // PHONON_PLAYERINTERFACE_H

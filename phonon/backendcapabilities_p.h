@@ -44,4 +44,4 @@ class BackendCapabilitiesPrivate : public BackendCapabilities::Notifier
 } // namespace Phonon
 
 #endif // PHONON_BACKENDCAPABILITIES_P_H
-// vim: sw=4 sts=4 et tw=100
+

@@ -39,7 +39,8 @@ class BackendInterface
         virtual ~BackendInterface() {}
 
         enum Class {
-            MediaObjectClass,
+            PlayerClass,
+            MediaObjectClass = PlayerClass,
             VolumeFaderEffectClass,
             AudioOutputClass,
             AudioDataOutputClass,
