@@ -59,7 +59,7 @@ namespace Phonon
         */
         QObject *backendObject();
 
-//        const CastId castId;
+        const CastId castId;
 
     protected:
         MediaNodePrivate(CastId _castId = MediaNodePrivateType);
