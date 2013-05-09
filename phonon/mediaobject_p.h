@@ -32,8 +32,8 @@
 #include "mediasource.h"
 #include "phonondefs_p.h"
 
-namespace Phonon
-{
+namespace Phonon {
+
 class FrontendInterfacePrivate;
 
 class PlayerPrivate : public MediaNodePrivate, private MediaNodeDestructionHandler
@@ -45,62 +45,52 @@ class PlayerPrivate : public MediaNodePrivate, private MediaNodeDestructionHandl
         virtual QObject *qObject() { return q_func(); }
 
     QList<FrontendInterfacePrivate *> interfaceList;
-    protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
-        virtual void phononObjectDestroyed(MediaNodePrivate *);
-        PHONON_EXPORT void setupBackendObject();
+protected:
+    virtual bool aboutToDeleteBackendObject();
+    virtual void createBackendObject();
+    virtual void phononObjectDestroyed(MediaNodePrivate *);
+    PHONON_EXPORT void setupBackendObject();
 
-        void _k_resumePlay();
-        void _k_resumePause();
-        void _k_metaDataChanged(const QMultiMap<QString, QString> &);
-        void _k_aboutToFinish();
-        void _k_currentSourceChanged(const Source &);
-        PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
+    void _k_resumePlay();
+    void _k_resumePause();
+    void _k_metaDataChanged(const QMultiMap<QString, QString> &);
+    void _k_aboutToFinish();
+    void _k_currentSourceChanged(const Source &);
+    PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        void streamError(Phonon::ErrorType, const QString &);
+    void streamError(Phonon::ErrorType, const QString &);
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-        PlayerPrivate()
-            : currentTime(0),
-            tickInterval(0),
-            metaData(),
-            errorString(),
+    PlayerPrivate()
+        : currentTime(0)
+        , tickInterval(0)
+        , metaData()
+        , errorString()
+        , state(Phonon::StoppedState)
+    #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        , abstractStream(0)
+        , playingQueuedSource(false)
+        , errorType(Phonon::NormalError)
+    #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+    {}
+
+    ~PlayerPrivate() {}
+
+    qint64 currentTime;
+    qint32 tickInterval;
+    QMultiMap<QString, QString> metaData;
+    QString errorString;
+    State state;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            abstractStream(0),
+    AbstractMediaStream *abstractStream;
+    bool playingQueuedSource;
+    ErrorType errorType;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            state(Phonon::StoppedState)
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            , playingQueuedSource(false)
-            , errorType(Phonon::NormalError)
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        {
-        }
+    Source mediaSource;
 
-        ~PlayerPrivate()
-        {
-        }
-
-        qint64 currentTime;
-        qint32 tickInterval;
-        QMultiMap<QString, QString> metaData;
-        QString errorString;
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        AbstractMediaStream *abstractStream;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        State state
-#ifdef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            ;
-#else
-            : 8;
-        bool playingQueuedSource;
-        ErrorType errorType : 4;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        Source mediaSource;
-
-        QList<AbstractAudioOutput *> audioOutputs;
+    QList<AbstractAudioOutput *> audioOutputs;
 };
-}
+
+} // namespace Phonon
 
 #endif // PHONON_MEDIAOBJECT_P_H
-// vim: sw=4 ts=4 tw=80

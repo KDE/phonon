@@ -59,7 +59,6 @@ namespace Factory
     {
         Q_OBJECT
         Q_SIGNALS:
-
             /**
              * \copydoc BackendCapabilities::Notifier::availableAudioOutputDevicesChanged
              */

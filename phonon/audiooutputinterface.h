@@ -24,25 +24,26 @@
 #ifndef PHONON_AUDIOOUTPUTINTERFACE_H
 #define PHONON_AUDIOOUTPUTINTERFACE_H
 
-#include "phononnamespace.h"
 #include "objectdescription.h"
+#include "phononnamespace.h"
 #include "phonondefs.h"
+
 #include <QtCore/QtGlobal>
 
 namespace Phonon {
 
 class AudioOutputInterface
 {
-    public:
-        virtual ~AudioOutputInterface() {}
-        virtual qreal volume() const = 0;
-        virtual void setVolume(qreal) = 0;
-        virtual int outputDevice() const = 0;
-        virtual bool setOutputDevice(const Phonon::AudioOutputDevice &) = 0;
+public:
+    virtual ~AudioOutputInterface() {}
+    virtual qreal volume() const = 0;
+    virtual void setVolume(qreal) = 0;
+    virtual int outputDevice() const = 0;
+    virtual bool setOutputDevice(const Phonon::AudioOutputDevice &) = 0;
 };
 
 } // namespace Phonon
 
-Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface, "AudioOutputInterface.phonon.kde.org/5.0")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface, "org.kde.phonon.AudioOutputInterface/5.0")
 
 #endif // PHONON_AUDIOOUTPUTINTERFACE_H

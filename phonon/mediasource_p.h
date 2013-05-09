@@ -42,11 +42,11 @@ public:
     SourcePrivate(Source::Type t)
         : type(t)
         , discType(NoDisc)
+        , autoDelete(false)
     #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         , stream(0)
         , ioDevice(0)
     #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        , autoDelete(false)
     {
     }
 
