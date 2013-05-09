@@ -27,7 +27,6 @@
 #include <QtCore/QQueue>
 
 #include "medianode_p.h"
-#include "medianodedestructionhandler_p.h"
 #include "mediaobject.h"
 #include "mediasource.h"
 #include "phonondefs_p.h"
@@ -36,13 +35,13 @@ namespace Phonon {
 
 class FrontendInterfacePrivate;
 
-class PlayerPrivate : public MediaNodePrivate, private MediaNodeDestructionHandler
+class PlayerPrivate : public MediaNodePrivate
 {
     friend class AbstractMediaStream;
     friend class AbstractMediaStreamPrivate;
-    P_DECLARE_PUBLIC(Player)
-    public:
-        virtual QObject *qObject() { return q_func(); }
+
+public:
+    virtual QObject *qObject() { return q_func(); }
 
     QList<FrontendInterfacePrivate *> interfaceList;
 protected:
@@ -89,6 +88,9 @@ protected:
     Source mediaSource;
 
     QList<AbstractAudioOutput *> audioOutputs;
+
+private:
+    P_DECLARE_PUBLIC(Player)
 };
 
 } // namespace Phonon

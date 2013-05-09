@@ -32,10 +32,8 @@ Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 
 class QObject;
 
-namespace Phonon
-{
+namespace Phonon {
     class MediaNode;
-    class MediaNodeDestructionHandler;
 
     class PHONON_EXPORT MediaNodePrivate
     {
@@ -97,7 +95,6 @@ namespace Phonon
         QObject *m_backendObject;
 
     private:
-        QList<MediaNodeDestructionHandler *> handlers;
         Q_DISABLE_COPY(MediaNodePrivate)
     };
 
