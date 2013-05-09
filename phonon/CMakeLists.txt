@@ -49,7 +49,21 @@ set(phonon_LIB_SRCS
 #    videowidget.cpp
 
 # QTC Compat
+    abstractaudiooutput_p.h
+    audiooutput_p.h
+    backendcapabilities_p.h
+    factory_p.h
+    globalconfig_p.h
+    globalstatic_p.h
+    medianode_p.h
     mediaobject_p.h
+    mediasource_p.h
+    phonondefs_p.h
+    phononnamespace_p.h
+    phononpimpl_p.h
+    platform_p.h
+    pulsestream_p.h
+    qsettingsgroup_p.h
 
     audiooutputinterface.h
     backendinterface.h

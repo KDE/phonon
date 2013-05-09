@@ -236,19 +236,6 @@ Factory::Sender *Factory::sender()
     return globalFactory;
 }
 
-bool Factory::isMimeTypeAvailable(const QString &mimeType)
-{
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    PlatformPlugin *f = globalFactory->platformPlugin();
-    if (f) {
-        return f->isMimeTypeAvailable(mimeType);
-    }
-#else
-    Q_UNUSED(mimeType);
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-    return true; // the MIME type might be supported, let BackendCapabilities find out
-}
-
 void Factory::registerFrontendObject(MediaNodePrivate *bp)
 {
     globalFactory->mediaNodePrivateList.prepend(bp); // inserted last => deleted first

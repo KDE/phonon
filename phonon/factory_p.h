@@ -173,26 +173,13 @@ namespace Factory
      */
     PHONON_EXPORT QObject *registerQObject(QObject *o);
 
-    bool isMimeTypeAvailable(const QString &mimeType);
-
     PHONON_EXPORT void registerFrontendObject(MediaNodePrivate *);
     PHONON_EXPORT void deregisterFrontendObject(MediaNodePrivate *);
 
     PHONON_EXPORT void setBackend(QObject *);
-    //PHONON_EXPORT void createBackend(const QString &library, const QString &version = QString());
 
     PHONON_EXPORT PlatformPlugin *platformPlugin();
 
-//X    It is probably better if we can get away with internal handling of
-//X    freeing the soundcard device when it's not needed anymore and
-//X    providing an IPC method to stop all MediaObjects -> free all
-//X    devices
-//X    /**
-//X     * \internal
-//X     * This is called when the application needs to free the soundcard
-//X     * device(s).
-//X     */
-//X    void freeSoundcardDevices();
 } // namespace Factory
 } // namespace Phonon
 

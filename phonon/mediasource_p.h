@@ -87,7 +87,6 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         VideoCaptureDevice videoCaptureDevice;
 #endif
 
-        //QList<MediaSource> linkedSources;
         bool autoDelete;
 };
 
