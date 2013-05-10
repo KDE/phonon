@@ -79,6 +79,7 @@ private:
     Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
     Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<QString, QString> &))
 };
+
 } //namespace Phonon
 
 #endif // PHONON_PLAYER_H

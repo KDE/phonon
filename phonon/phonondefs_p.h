@@ -74,40 +74,6 @@ PHONON_CLASSNAME::PHONON_CLASSNAME(PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Privat
 { \
 }
 
-#warning PHONON_OBJECT_IMPL needs to go
-#define PHONON_OBJECT_IMPL \
-PHONON_CLASSNAME::PHONON_CLASSNAME(QObject *parent) \
-    : QObject(parent), \
-    MediaNode(*new PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)()) \
-{ \
-} \
-void PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)::createBackendObject() \
-{ \
-    if (m_backendObject) \
-        return; \
-    P_Q(PHONON_CLASSNAME); \
-    m_backendObject = Factory::PHONON_CONCAT_HELPER(create, PHONON_CLASSNAME)(q); \
-    if (m_backendObject) { \
-        setupBackendObject(); \
-    } \
-}
-
-#define PHONON_HEIR_IMPL(parentclass) \
-PHONON_CLASSNAME::PHONON_CLASSNAME(QObject *parent) \
-    : parentclass(*new PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private), parent) \
-{ \
-} \
-void PHONON_CONCAT_HELPER(PHONON_CLASSNAME, Private)::createBackendObject() \
-{ \
-    if (m_backendObject) \
-        return; \
-    P_Q(PHONON_CLASSNAME); \
-    m_backendObject = Factory::PHONON_CONCAT_HELPER(create, PHONON_CLASSNAME)(q); \
-    if (m_backendObject) { \
-        setupBackendObject(); \
-    } \
-}
-
 #define BACKEND_GET(returnType, returnVar, methodName) \
 QMetaObject::invokeMethod(d->m_backendObject, methodName, Qt::DirectConnection, Q_RETURN_ARG(returnType, returnVar))
 #define BACKEND_GET1(returnType, returnVar, methodName, varType1, var1) \

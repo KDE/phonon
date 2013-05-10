@@ -67,6 +67,11 @@ void MediaNodePrivate::deleteBackendObject()
     }
 }
 
+bool MediaNodePrivate::aboutToDeleteBackendObject()
+{
+    return true;
+}
+
 MediaNodePrivate::MediaNodePrivate()
     : m_backendObject(0)
 {

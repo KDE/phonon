@@ -27,6 +27,7 @@
 
 namespace Phonon {
 
+#warning move KIO construction into consumer app? (kdelibs/runtime?)
 AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *parent)
 {
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
@@ -41,6 +42,7 @@ AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *paren
     return 0;
 }
 
+#warning move notifications to runtime?
 void Platform::notification(const char *notificationName, const QString &text,
         const QStringList &actions, QObject *receiver,
         const char *actionSlot)

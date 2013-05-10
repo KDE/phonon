@@ -61,8 +61,6 @@ protected:
      */
     void deleteBackendObject();
 
-    virtual bool aboutToDeleteBackendObject() = 0;
-
     /**
      * \internal
      * Creates the Iface object belonging to this class. For most cases the
@@ -78,6 +76,8 @@ protected:
      * \see slotCreateIface
      */
     virtual void createBackendObject() = 0;
+
+    virtual bool aboutToDeleteBackendObject();
 
 protected:
     MediaNode *q_ptr;

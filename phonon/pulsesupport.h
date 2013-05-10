@@ -30,7 +30,6 @@
 #include <QtCore/QtGlobal>
 #include <QtCore/QSet>
 
-
 namespace Phonon
 {
     class PulseStream;

@@ -41,9 +41,13 @@
 #define PHONON_CLASSNAME Player
 #define PHONON_INTERFACENAME PlayerInterface
 
-namespace Phonon
+namespace Phonon {
+
+Player::Player(QObject *parent)
+    : QObject(parent)
+    , MediaNode(*new PlayerPrivate)
 {
-PHONON_OBJECT_IMPL
+}
 
 Player::~Player()
 {
@@ -191,9 +195,9 @@ void Player::addAudioOutput(AbstractAudioOutput *audioOutput)
 {
     P_D(Player);
     d->audioOutputs.append(audioOutput);
-//    qDebug() << audioOutput;
-//    qDebug() << audioOutput->k_func();
-//    qDebug() << audioOutput->k_func()->backendObject();
+    //    qDebug() << audioOutput;
+    //    qDebug() << audioOutput->k_func();
+    //    qDebug() << audioOutput->k_func()->backendObject();
     d->createBackendObject();
     if (!d->backendObject())
         qWarning("No PrivateObject present");
@@ -216,8 +220,8 @@ void Player::setSource(const Source &newSource)
 
     pDebug() << Q_FUNC_INFO << newSource.type() << newSource.url() << newSource.deviceName();
 
-    stop(); // first call stop as that often is the expected state
-            // for setting a new URL
+    // first call stop as that often is the expected state for setting a new URL
+    stop();
 
     d->mediaSource = newSource;
 
@@ -242,6 +246,16 @@ bool PlayerPrivate::aboutToDeleteBackendObject()
         tickInterval = pINTERFACE_CALL(tickInterval());
     }
     return true;
+}
+
+void PlayerPrivate::createBackendObject()
+{
+    if (m_backendObject)
+        return;
+    P_Q(Player);
+    m_backendObject = Factory::createPlayer(q);
+    if (m_backendObject)
+        setupBackendObject();
 }
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM

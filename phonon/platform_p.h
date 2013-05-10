@@ -30,10 +30,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QtGlobal>
 
-class QIcon;
-class QObject;
 class QUrl;
-class QStyle;
 
 namespace Phonon {
 
