@@ -133,13 +133,6 @@ namespace Phonon
      */
     enum State {
         /**
-         * After construction it might take a while before the Player is
-         * ready to play(). Normally this doesn't happen for local
-         * files, but can happen for remote files where the asynchronous
-         * mimetype detection and prebuffering can take a while.
-         */
-        LoadingState,
-        /**
          * The Player has a valid media file loaded and is ready for
          * playing.
          */

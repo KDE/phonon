@@ -139,9 +139,6 @@ namespace Phonon
     QDebug operator <<(QDebug dbg, const Phonon::State &state)
     {
         switch (state) {
-        case Phonon::LoadingState:
-            dbg.space() << "Phonon::LoadingState";
-            break;
         case Phonon::StoppedState:
             dbg.space() << "Phonon::StoppedState";
             break;
