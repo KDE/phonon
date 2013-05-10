@@ -21,20 +21,20 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_MEDIANODE_H
-#define PHONON_MEDIANODE_H
+#ifndef PHONON_FRONTEND_H
+#define PHONON_FRONTEND_H
 
 #include "phonondefs.h"
 #include "phonon_export.h"
 
 namespace Phonon {
 
-class MediaNodePrivate;
+class FrontendPrivate;
 
-class PHONON_EXPORT MediaNode
+class PHONON_EXPORT Frontend
 {
 public:
-    virtual ~MediaNode();
+    virtual ~Frontend();
 
     /**
      * Tells whether the backend provides an implementation of this
@@ -46,13 +46,13 @@ public:
     bool isValid() const;
 
 protected:
-    MediaNode(MediaNodePrivate &dd);
-    MediaNodePrivate *const k_ptr;
+    Frontend(FrontendPrivate &dd);
+    FrontendPrivate *const k_ptr;
 
 private:
-    P_DECLARE_PRIVATE(MediaNode)
+    P_DECLARE_PRIVATE(Frontend)
 };
 
 } // namespace Phonon
 
-#endif // PHONON_MEDIANODE_H
+#endif // PHONON_FRONTEND_H

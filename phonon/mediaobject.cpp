@@ -45,7 +45,7 @@ namespace Phonon {
 
 Player::Player(QObject *parent)
     : QObject(parent)
-    , MediaNode(*new PlayerPrivate)
+    , Frontend(*new PlayerPrivate)
 {
 }
 
@@ -360,7 +360,7 @@ void PlayerPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &newMet
     emit q_func()->metaDataChanged();
 }
 
-void PlayerPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
+void PlayerPrivate::phononObjectDestroyed(FrontendPrivate *bp)
 {
     // this method is called from Phonon::Base::~Base(), meaning the AudioPath
     // dtor has already been called, also virtual functions don't work anymore

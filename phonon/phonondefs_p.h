@@ -207,7 +207,7 @@ namespace Phonon
     class Iface
     {
     public:
-        static inline T0 *cast(MediaNodePrivate *const d)
+        static inline T0 *cast(FrontendPrivate *const d)
         {
             if (IsValid<T1>::Result) {
                 T0 *ret;
@@ -221,7 +221,7 @@ namespace Phonon
             return qobject_cast<T0 *>(d->m_backendObject);
         }
 
-        static inline const T0 *cast(const MediaNodePrivate *const d)
+        static inline const T0 *cast(const FrontendPrivate *const d)
         {
             if (IsValid<T1>::Result) {
                 const T0 *ret;
@@ -235,7 +235,7 @@ namespace Phonon
             return qobject_cast<T0 *>(d->m_backendObject);
         }
 
-        inline Iface(MediaNodePrivate *const d) : iface(cast(d)) {}
+        inline Iface(FrontendPrivate *const d) : iface(cast(d)) {}
         inline operator       T0 *()       { return iface; }
         inline operator const T0 *() const { return iface; }
         inline       T0 *operator->()       { Q_ASSERT(iface); return iface; }
@@ -248,7 +248,7 @@ namespace Phonon
     class ConstIface
     {
     public:
-        inline ConstIface(const MediaNodePrivate *const d) : iface(Iface<T0, T1, T2>::cast(d)) {}
+        inline ConstIface(const FrontendPrivate *const d) : iface(Iface<T0, T1, T2>::cast(d)) {}
         inline operator const T0 *() const { return iface; }
         inline const T0 *operator->() const { Q_ASSERT(iface); return iface; }
     private:

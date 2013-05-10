@@ -28,8 +28,6 @@
 #include "mediaobject_p.h"
 #include "streaminterface.h"
 
-#include "medianodedestructionhandler_p.h"
-
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 class MediaObjectPrivate;
@@ -60,7 +58,7 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHan
         virtual void setStreamSeekable(bool s);
         virtual void writeData(const QByteArray &data);
         virtual void endOfData();
-        void phononObjectDestroyed(MediaNodePrivate *);
+        void phononObjectDestroyed(FrontendPrivate *);
 
         AbstractMediaStream *q_ptr;
         qint64 streamSize;

@@ -29,7 +29,7 @@ namespace Phonon {
 AbstractAudioOutput::AbstractAudioOutput(AbstractAudioOutputPrivate &dd,
                                          QObject *parent)
     : QObject(parent)
-    , MediaNode(dd)
+    , Frontend(dd)
 {
 }
 

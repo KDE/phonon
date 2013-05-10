@@ -29,7 +29,7 @@
 
 namespace Phonon {
 
-class AbstractAudioOutputPrivate : public MediaNodePrivate
+class AbstractAudioOutputPrivate : public FrontendPrivate
 {
     P_DECLARE_PUBLIC(AbstractAudioOutput)
     PHONON_PRIVATEABSTRACTCLASS
@@ -38,7 +38,7 @@ public:
 
 protected:
     AbstractAudioOutputPrivate()
-        : MediaNodePrivate()
+        : FrontendPrivate()
     {
     }
 };

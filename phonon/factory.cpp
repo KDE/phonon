@@ -61,7 +61,7 @@ class FactoryPrivate : public Phonon::Factory::Sender
         QPointer<QObject> m_backendObject;
 
         QList<QObject *> objects;
-        QList<MediaNodePrivate *> mediaNodePrivateList;
+        QList<FrontendPrivate *> mediaNodePrivateList;
 
     private Q_SLOTS:
         /**
@@ -236,12 +236,12 @@ Factory::Sender *Factory::sender()
     return globalFactory;
 }
 
-void Factory::registerFrontendObject(MediaNodePrivate *bp)
+void Factory::registerFrontendObject(FrontendPrivate *bp)
 {
     globalFactory->mediaNodePrivateList.prepend(bp); // inserted last => deleted first
 }
 
-void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
+void Factory::deregisterFrontendObject(FrontendPrivate *bp)
 {
     // The Factory can already be cleaned up while there are other frontend objects still alive.
     // When those are deleted they'll call deregisterFrontendObject through ~BasePrivate

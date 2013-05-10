@@ -37,7 +37,7 @@ class AbstractAudioOutputPrivate;
  *
  * \see AudioOutput
  */
-class PHONON_EXPORT AbstractAudioOutput : public QObject, public MediaNode
+class PHONON_EXPORT AbstractAudioOutput : public QObject, public Frontend
 {
 #warning friending P
     friend class Player;

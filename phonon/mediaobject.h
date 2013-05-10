@@ -31,7 +31,7 @@ namespace Phonon {
 class AbstractAudioOutput;
 class PlayerPrivate;
 
-class PHONON_EXPORT Player : public QObject, public MediaNode
+class PHONON_EXPORT Player : public QObject, public Frontend
 {
     Q_OBJECT
 

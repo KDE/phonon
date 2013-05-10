@@ -35,7 +35,7 @@ namespace Phonon {
 
 class FrontendInterfacePrivate;
 
-class PlayerPrivate : public MediaNodePrivate
+class PlayerPrivate : public FrontendPrivate
 {
     friend class AbstractMediaStream;
     friend class AbstractMediaStreamPrivate;
@@ -47,7 +47,7 @@ public:
 protected:
     virtual bool aboutToDeleteBackendObject();
     virtual void createBackendObject();
-    virtual void phononObjectDestroyed(MediaNodePrivate *);
+    virtual void phononObjectDestroyed(FrontendPrivate *);
     PHONON_EXPORT void setupBackendObject();
 
     void _k_resumePlay();

@@ -34,7 +34,7 @@ class QIcon;
 namespace Phonon
 {
     class PlatformPlugin;
-    class MediaNodePrivate;
+    class FrontendPrivate;
     class AbstractMediaStream;
 
 /**
@@ -167,8 +167,8 @@ namespace Factory
      */
     PHONON_EXPORT QObject *registerQObject(QObject *o);
 
-    PHONON_EXPORT void registerFrontendObject(MediaNodePrivate *);
-    PHONON_EXPORT void deregisterFrontendObject(MediaNodePrivate *);
+    PHONON_EXPORT void registerFrontendObject(FrontendPrivate *);
+    PHONON_EXPORT void deregisterFrontendObject(FrontendPrivate *);
 
     PHONON_EXPORT void setBackend(QObject *);
 

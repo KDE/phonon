@@ -1,6 +1,7 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies). <thierry.bastian@trolltech.com>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -18,33 +19,31 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "medianode.h"
 #include "medianode_p.h"
-#include "medianodedestructionhandler_p.h"
 #include "factory_p.h"
 
 namespace Phonon {
 
-MediaNode::MediaNode(MediaNodePrivate &dd)
+Frontend::Frontend(FrontendPrivate &dd)
     : k_ptr(&dd)
 {
     k_ptr->q_ptr = this;
 }
 
-bool MediaNode::isValid() const
+bool Frontend::isValid() const
 {
-    return const_cast<MediaNodePrivate *>(k_ptr)->backendObject() != 0;
+    return const_cast<FrontendPrivate *>(k_ptr)->backendObject() != 0;
 }
 
-MediaNode::~MediaNode()
+Frontend::~Frontend()
 {
     delete k_ptr;
 }
 
-QObject *MediaNodePrivate::backendObject()
+QObject *FrontendPrivate::backendObject()
 {
     if (!m_backendObject && Factory::backend()) {
         createBackendObject();
@@ -52,14 +51,14 @@ QObject *MediaNodePrivate::backendObject()
     return m_backendObject;
 }
 
-MediaNodePrivate::~MediaNodePrivate()
+FrontendPrivate::~FrontendPrivate()
 {
     Factory::deregisterFrontendObject(this);
     delete m_backendObject;
     m_backendObject = 0;
 }
 
-void MediaNodePrivate::deleteBackendObject()
+void FrontendPrivate::deleteBackendObject()
 {
     if (m_backendObject && aboutToDeleteBackendObject()) {
         delete m_backendObject;
@@ -67,12 +66,12 @@ void MediaNodePrivate::deleteBackendObject()
     }
 }
 
-bool MediaNodePrivate::aboutToDeleteBackendObject()
+bool FrontendPrivate::aboutToDeleteBackendObject()
 {
     return true;
 }
 
-MediaNodePrivate::MediaNodePrivate()
+FrontendPrivate::FrontendPrivate()
     : m_backendObject(0)
 {
     Factory::registerFrontendObject(this);
