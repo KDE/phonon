@@ -84,7 +84,7 @@ endif (PHONON_NO_PLATFORMPLUGIN)
 
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 
-automoc4_add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
+add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
 qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets)
 
 if (PHONON_PULSESUPPORT)
@@ -95,15 +95,6 @@ if (Qt5OpenGL_FOUND AND OPENGL_FOUND)
     qt5_use_modules(${PHONON_LIB_SONAME} OpenGL)
     target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_gl_LIBRARY})
 endif (Qt5OpenGL_FOUND AND OPENGL_FOUND)
-
-if (QZEITGEIST_FOUND)
-    target_link_libraries(${PHONON_LIB_SONAME} ${QZEITGEIST_LIBRARY})
-endif(QZEITGEIST_FOUND)
-
-if (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
-  # We need to explicitly link libm to phonon in Solaris
-  target_link_libraries(${PHONON_LIB_SONAME} m)
-endif (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
 
 set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
                                            VERSION ${PHONON_LIB_VERSION}

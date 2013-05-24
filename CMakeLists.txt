@@ -1,11 +1,9 @@
 project(Phonon5)
 
-cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
 
-option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
-option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
-option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" ON)
+option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
@@ -22,11 +20,6 @@ set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 set(PHONON_LIB_SONAME phonon5)
 set(PHONON_LIB_SONAME_CAMEL Phonon5)
-
-if (PHONON_ASSERT_STATES)
-    message(STATUS "Enabling backend state machine validation.")
-    add_definitions(-DPHONON_ASSERT_STATES)
-endif (PHONON_ASSERT_STATES)
 
 set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -174,7 +167,6 @@ if(PHONON_BUILD_DEMOS)
 endif(PHONON_BUILD_DEMOS)
 
 if(NOT WIN32) # pkgconfig file
-
     make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
     make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
     make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
@@ -193,29 +185,12 @@ file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_D
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake @ONLY)
 
-
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
         DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
 
 install(EXPORT PhononLibs DESTINATION ${CMAKECONFIG_INSTALL_DIR} NAMESPACE Phonon:: FILE PhononTargets.cmake )
 
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
-
-# This generates a nice library descriptor to use with [1]. It also spits out
-# a script that makes installing various versions for an ABI check a lot easier.
-# Basically the script ends up in your build dir and by running it you will
-# get phonon installed to MAIN_SOURCE_DIR/../abi/VERSION/prefix.
-# You can then invoke the ABI check with something like:
-#   abi-compliance-checker.pl -l phonon -d1  4.4.4/usr/4.4.4.xml -d2 4.4.57/usr/4.4.57.xml
-# [1] http://ispras.linux-foundation.org/index.php/ABI_compliance_checker
-if(PHONON_BUILD_DESCRIPTOR)
-    set(DESCRIPTOR_FILE_PATH ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_VERSION}.xml)
-    set(ABI_SCRIPT_FILE_PATH ${CMAKE_CURRENT_BINARY_DIR}/abi-check-install.sh)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lib-descriptor.xml.cmake ${DESCRIPTOR_FILE_PATH} @ONLY)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/abi-check-install.sh.cmake ${ABI_SCRIPT_FILE_PATH} @ONLY)
-    install(FILES ${DESCRIPTOR_FILE_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX})
-endif(PHONON_BUILD_DESCRIPTOR)
 
 macro_display_feature_log()
