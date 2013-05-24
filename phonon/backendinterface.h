@@ -35,23 +35,23 @@ namespace Phonon {
 
 class BackendInterface
 {
-    public:
-        virtual ~BackendInterface() {}
+public:
+    virtual ~BackendInterface() {}
 
-        enum Class {
-            PlayerClass,
-            VolumeFaderEffectClass,
-            AudioOutputClass,
-            AudioDataOutputClass,
-            VisualizationClass,
-            VideoDataOutputClass,
-            EffectClass,
-            VideoWidgetClass
-        };
+    enum Class {
+        PlayerClass,
+        VolumeFaderEffectClass,
+        AudioOutputClass,
+        AudioDataOutputClass,
+        VisualizationClass,
+        VideoDataOutputClass,
+        EffectClass,
+        VideoWidgetClass
+    };
 
-        virtual QObject *createObject(Class c, QObject *parent, const QList<QVariant> &args = QList<QVariant>()) = 0;
-        virtual QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const = 0;
-        virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
+    virtual QObject *createObject(Class c, QObject *parent, const QList<QVariant> &args = QList<QVariant>()) = 0;
+    virtual QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const = 0;
+    virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
 };
 
 } // namespace Phonon

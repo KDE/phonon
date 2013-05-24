@@ -63,7 +63,7 @@ set(phonon_LIB_SRCS
     phononpimpl_p.h
     platform_p.h
     pulsestream_p.h
-    qsettingsgroup_p.h
+#    qsettingsgroup_p.h
 
     audiooutputinterface.h
     backendinterface.h

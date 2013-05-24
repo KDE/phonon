@@ -27,9 +27,7 @@
 #include "factory_p.h"
 #include "globalconfig.h"
 #include "objectdescription.h"
-#include "phononconfig_p.h"
 #include "phononnamespace_p.h"
-#include "platform_p.h"
 #include "pulsesupport.h"
 #ifdef HAVE_PULSEAUDIO
 #  include "pulsestream_p.h"
@@ -38,7 +36,6 @@
 #include <QtCore/QUuid>
 #include <QtCore/qmath.h>
 
-#define PHONON_CLASSNAME AudioOutput
 #define PHONON_INTERFACENAME AudioOutputInterface
 
 namespace Phonon {
@@ -481,5 +478,4 @@ AudioOutputPrivate::~AudioOutputPrivate()
 
 #include "moc_audiooutput.cpp"
 
-#undef PHONON_CLASSNAME
 #undef PHONON_INTERFACENAME

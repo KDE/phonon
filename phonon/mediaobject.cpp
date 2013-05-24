@@ -1,7 +1,7 @@
 /*
     Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2011 Trever Fischer <tdfischer@kde.org>
-    Copyright (C) 2013 Harald Sitter <sitter@kde.org
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -36,7 +36,6 @@
 #include <QtCore/QUrl>
 
 #include "phononnamespace_p.h"
-#include "platform_p.h"
 
 #define PHONON_CLASSNAME Player
 #define PHONON_INTERFACENAME PlayerInterface
@@ -195,9 +194,6 @@ void Player::addAudioOutput(AbstractAudioOutput *audioOutput)
 {
     P_D(Player);
     d->audioOutputs.append(audioOutput);
-    //    qDebug() << audioOutput;
-    //    qDebug() << audioOutput->k_func();
-    //    qDebug() << audioOutput->k_func()->backendObject();
     d->createBackendObject();
     if (!d->backendObject())
         qWarning("No PrivateObject present");
@@ -305,8 +301,7 @@ void PlayerPrivate::setupBackendObject()
     // set up attributes
     pINTERFACE_CALL(setTickInterval(tickInterval));
 
-    switch(state)
-    {
+    switch(state) {
     case StoppedState:
         break;
     case PlayingState:
@@ -316,6 +311,7 @@ void PlayerPrivate::setupBackendObject()
         QTimer::singleShot(0, q, SLOT(_k_resumePause()));
         break;
     }
+
     const State backendState = pINTERFACE_CALL(state());
     if (state != backendState && state != ErrorState) {
         // careful: if state is ErrorState we might be switching from a

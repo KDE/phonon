@@ -200,7 +200,8 @@ public:
 
     virtual void addAudioOutput(QObject *audioOutput) = 0;
 };
-}
+
+} // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::PlayerInterface, "org.kde.phonon.PlayerInterface/5.0")
 

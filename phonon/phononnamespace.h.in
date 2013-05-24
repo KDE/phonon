@@ -285,16 +285,6 @@ namespace Phonon
      */
     PHONON_EXPORT QString categoryToString(CaptureCategory c);
 
-    // TODO: naming
-    /*enum MediaStreamType {
-        Audio = 1,
-        Video = 2,
-        StillImage = 4,
-        Subtitle = 8,
-        AllMedia = 0xFFFFFFFF
-    };
-    Q_DECLARE_FLAGS(MediaStreamTypes, MediaStreamType)*/
-
     PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::DiscType &);
     PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MetaData &);
     PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::State &);
@@ -304,7 +294,6 @@ namespace Phonon
     PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::ErrorType &);
 
 } // namespace Phonon
-//Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::MediaStreamTypes)
 
 #include <QtCore/QMetaType>
 
@@ -313,7 +302,4 @@ Q_DECLARE_METATYPE(Phonon::ErrorType)
 Q_DECLARE_METATYPE(Phonon::Category)
 Q_DECLARE_METATYPE(Phonon::CaptureCategory)
 
-
-
-// vim: sw=4 ts=4 tw=80
 #endif // PHONONNAMESPACE_H

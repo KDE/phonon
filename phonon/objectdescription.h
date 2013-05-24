@@ -275,53 +275,19 @@ QDebug operator<<(QDebug dbg, const ObjectDescription<T> &d)
     return dbg.space();
 }
 
-/**
- * \ingroup BackendInformation
- */
 typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;
-/**
- * \ingroup BackendInformation
- */
+
 #ifndef PHONON_NO_AUDIOCAPTURE
 typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
 #endif //PHONON_NO_AUDIOCAPTURE
-/**
- * \ingroup BackendInformation
- */
-//typedef ObjectDescription<VideoOutputDeviceType> VideoOutputDevice;
-/**
- * \ingroup BackendInformation
- */
+
 #ifndef PHONON_NO_VIDEOCAPTURE
 typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
 #endif
-/**
- * \ingroup BackendInformation
- */
+
 #ifndef QT_NO_PHONON_EFFECT
 typedef ObjectDescription<EffectType> EffectDescription;
 #endif //QT_NO_PHONON_EFFECT
-
-/**
- * \ingroup BackendInformation
- */
-//typedef ObjectDescription<AudioCodecType> AudioCodecDescription;
-/**
- * \ingroup BackendInformation
- */
-//typedef ObjectDescription<VideoCodecType> VideoCodecDescription;
-/**
- * \ingroup BackendInformation
- */
-//typedef ObjectDescription<ContainerFormatType> ContainerFormatDescription;
-/**
- * \ingroup BackendInformation
- */
-//typedef ObjectDescription<VisualizationType> VisualizationDescription;
-#ifndef QT_NO_PHONON_MEDIACONTROLLER
-typedef ObjectDescription<AudioChannelType> AudioChannelDescription;
-typedef ObjectDescription<SubtitleType> SubtitleDescription;
-#endif //QT_NO_PHONON_MEDIACONTROLLER
 
 /**
  * \short Information about how to access a device

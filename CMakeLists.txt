@@ -1,4 +1,4 @@
-project(Phonon4Qt5)
+project(Phonon5)
 
 cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 

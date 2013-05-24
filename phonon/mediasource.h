@@ -40,294 +40,67 @@ namespace Phonon
 class SourcePrivate;
 class AbstractMediaStream;
 
-/** \class MediaSource mediasource.h phonon/MediaSource
- * Note that all constructors of this class are implicit, so that you can simply write
- * \code
- * MediaObject m;
- * QString fileName("/home/foo/bar.ogg");
- * QUrl url("http://www.example.com/stream.mp3");
- * QBuffer *someBuffer;
- * m.setCurrentSource(fileName);
- * m.setCurrentSource(url);
- * m.setCurrentSource(someBuffer);
- * m.setCurrentSource(Phonon::Cd);
- * \endcode
- *
- * \ingroup Playback
- * \ingroup Recording
- * \author Matthias Kretz <kretz@kde.org>
- */
 class PHONON_EXPORT Source
 {
     friend class StreamInterface;
     friend QDebug operator <<(QDebug dbg, const Phonon::Source &);
-    public:
-        /**
-         * Identifies the type of media described by the MediaSource object.
-         *
-         * \see MediaSource::type()
-         */
-        enum Type {
-            /**
-             * The MediaSource object does not describe any valid source.
-             */
-            Invalid = -1,
-            /**
-             * The MediaSource object describes a local file.
-             */
-            LocalFile,
-            /**
-             * The MediaSource object describes a URL, which can be both a local file and a file on
-             * the network.
-             */
-            Url,
-            /**
-             * The MediaSource object describes a disc.
-             */
-            Disc,
-            /**
-             * The MediaSource object describes a data stream.
-             *
-             * This is also the type used for QIODevices.
-             *
-             * \see AbstractMediaStream
-             */
-            Stream,
-            /**
-            * The MediaSource object describes a single capture device.
-            * This could be either audio or video.
-            */
-            CaptureDevice,
-            /**
-             * An empty MediaSource.
-             *
-             * It can be used to unload the current media from a MediaObject.
-             *
-             * \see MediaSource()
-             */
-            Empty,
-            /**
-             * The MediaSource object describes one device for video capture and one for audio
-             * capture. Facilitates capturing both audio and video at the same time, from
-             * different devices.
-             * It's essentially like two CaptureDevice media sources (one of video type, one
-             * of audio type) merged together.
-             */
-            AudioVideoCapture
-        };
+public:
+    enum Type {
+        Invalid = -1,
+        LocalFile,
+        Url,
+        Disc,
+        Stream,
+        CaptureDevice,
+        Empty,
+        AudioVideoCapture
+    };
 
-        /**
-         * Creates an empty MediaSource.
-         *
-         * An empty MediaSource is considered valid and can be set on a MediaObject to unload its
-         * current media.
-         *
-         * \see Empty
-         */
-        Source();
-
-        /**
-         * Creates a MediaSource object for a URL.
-         *
-         * A Qt resource can be specified by using an url with a qrc scheme.
-         *
-         * \param url URL to a media file or stream.
-         */
-        Source(const QUrl &url); //krazy:exclude=explicit
-
-        /**
-         * Creates a MediaSource object for discs.
-         *
-         * \param discType See \ref DiscType
-         * \param deviceName A platform dependent device name. This can be useful if the computer
-         * has more than one CD drive. It is recommended to use Solid to retrieve the device name in
-         * a portable way.
-         */
-        Source(DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
-
+    Source();
+    Source(const QUrl &url);
+    Source(DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
 #ifndef PHONON_NO_AUDIOCAPTURE
-        /**
-        * Creates a MediaSource object for audio capture devices.
-        * If the device is valid, this creates a 'CaptureDevice' type MediaSource.
-        */
-        Source(const AudioCaptureDevice& device);
+    Source(const AudioCaptureDevice& device);
 #endif
-
 #ifndef PHONON_NO_VIDEOCAPTURE
-        /**
-        * Creates a MediaSource object for video capture devices.
-        * If the device is valid, this creates a 'CaptureDevice' type MediaSource
-        */
-        Source(const VideoCaptureDevice& device);
+    Source(const VideoCaptureDevice& device);
 #endif
-
 #if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
-        /**
-         * Sets the source to the preferred audio capture device for the specified category
-         * If a valid device is found, this creates a 'CaptureDevice' type MediaSource
-         */
-        Source(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
-
-        /**
-         * Creates a MediaSource object that tries to describe a video capture device and
-         * an audio capture device, together. The devices are appropriate for the specified
-         * category.
-         *
-         * If valid devices are found for both audio and video, then the resulting MediaSource
-         * is of type 'AudioVideoCapture'. If only an audio or a video valid device is found,
-         * the resulting type is 'CaptureDevice'. If no valid devices are found, the resulting
-         * type is 'Invalid'.
-         */
-        Source(CaptureCategory category);
+    Source(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
+    Source(CaptureCategory category);
 #endif
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        /**
-         * Creates a MediaSource object for a data stream.
-         *
-         * Your application can provide the media data by subclassing AbstractMediaStream and
-         * passing a pointer to that object. %Phonon will never delete the \p stream.
-         *
-         * \param stream The AbstractMediaStream subclass to provide the media data.
-         *
-         * \see setAutoDelete
-         */
-        Source(AbstractMediaStream *stream); //krazy:exclude=explicit
-
-        /**
-         * Creates a MediaSource object for a QIODevice.
-         *
-         * This constructor can be very handy in the combination of QByteArray and QBuffer.
-         *
-         * \param ioDevice An arbitrary readable QIODevice subclass. If the device is not opened
-         * MediaSource will open it as QIODevice::ReadOnly. Sequential I/O devices are possible,
-         * too. For those MediaObject::isSeekable() will have to return false obviously.
-         *
-         * \see setAutoDelete
-         */
-        Source(QIODevice *ioDevice); //krazy:exclude=explicit
+    Source(AbstractMediaStream *stream); //krazy:exclude=explicit
+    Source(QIODevice *ioDevice); //krazy:exclude=explicit
 #endif
-
-        /**
-         * Destroys the MediaSource object.
-         */
-        ~Source();
-
-        /**
-         * Constructs a copy of \p rhs.
-         *
-         * This constructor is fast thanks to explicit sharing.
-         */
-        Source(const Source &rhs);
-
-        /**
-         * Assigns \p rhs to this MediaSource and returns a reference to this MediaSource.
-         *
-         * This operation is fast thanks to explicit sharing.
-         */
-        Source &operator=(const Source &rhs);
-
-        /**
-         * Returns \p true if this MediaSource is equal to \p rhs; otherwise returns \p false.
-         */
-        bool operator==(const Source &rhs) const;
-
-        /**
-         * Tell the MediaSource to take ownership of the AbstractMediaStream or QIODevice that was
-         * passed in the constructor.
-         *
-         * The default setting is \p false, for safety. If you turn it on, you should only access
-         * the AbstractMediaStream/QIODevice object as long as you yourself keep a MediaSource
-         * object around. As long as you keep the MediaSource object wrapping the stream/device
-         * the object will not get deleted.
-         *
-         * \see autoDelete
-         */
-        void setAutoDelete(bool enable);
-
-        /**
-         * Returns the setting of the auto-delete option. The default is \p false.
-         *
-         * \see setAutoDelete
-         */
-        bool autoDelete() const;
-
-        /**
-         * Returns the type of the MediaSource (depends on the constructor that was used).
-         *
-         * \see Type
-         */
-        Type type() const;
-
-        /**
-         * Returns the file name of the MediaSource if type() == LocalFile; otherwise returns
-         * QString().
-         */
-        QString fileName() const;
-
-        /**
-         * Returns the url of the MediaSource if type() == URL or type() == LocalFile; otherwise
-         * returns QUrl().
-         */
-        QUrl url() const;
-
-        /**
-         * Returns the disc type of the MediaSource if type() == Disc; otherwise returns \ref
-         * NoDisc.
-         */
-        DiscType discType() const;
-
-        /**
-         * Returns the access list for the device of this media source. Valid for capture devices.
-         * \warning use only with MediaSource with type() == CaptureDevice
-         */
-        const DeviceAccessList& deviceAccessList() const;
-
-        /**
-         * Returns the access list for the video device used for capture.
-         * Valid for type() == CaptureDevice or type() == AudioVideoCapture.
-         * If used with CaptureDevice, the kind of device should be Video, for a valid result.
-         */
-        const DeviceAccessList& videoDeviceAccessList() const;
-
-        /**
-         * Returns the access list for the audio device used for capture.
-         * Valid for type() == CaptureDevice or type() == AudioVideoCapture.
-         * If used with CaptureDevice, the kind of device should be Audio, for a valid result.
-         */
-        const DeviceAccessList& audioDeviceAccessList() const;
-
-        /**
-         * Returns the device name of the MediaSource if type() == Disc; otherwise returns
-         * QString().
-         */
-        QString deviceName() const;
-
+    ~Source();
+    Source(const Source &rhs);
+    Source &operator=(const Source &rhs);
+    bool operator==(const Source &rhs) const;
+    void setAutoDelete(bool enable);
+    bool autoDelete() const;
+    Type type() const;
+    QString fileName() const;
+    QUrl url() const;
+    DiscType discType() const;
+    const DeviceAccessList& deviceAccessList() const;
+    const DeviceAccessList& videoDeviceAccessList() const;
+    const DeviceAccessList& audioDeviceAccessList() const;
+    QString deviceName() const;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        /**
-         * Returns the media stream of the MediaSource if type() == Stream; otherwise returns 0.
-         * QIODevices are handled as streams, too.
-         */
-        AbstractMediaStream *stream() const;
+    AbstractMediaStream *stream() const;
 #endif
-
 #ifndef PHONON_NO_AUDIOCAPTURE
-        /**
-         * Returns the audio capture device for the media source if applicable.
-         */
-        AudioCaptureDevice audioCaptureDevice() const;
+    AudioCaptureDevice audioCaptureDevice() const;
 #endif
-
 #ifndef PHONON_NO_VIDEOCAPTURE
-        /**
-         * Returns the video capture device for the media source if applicable.
-         */
-        VideoCaptureDevice videoCaptureDevice() const;
+    VideoCaptureDevice videoCaptureDevice() const;
 #endif
 
-    protected:
-        QExplicitlySharedDataPointer<SourcePrivate> d;
-        Source(SourcePrivate &);
+protected:
+    QExplicitlySharedDataPointer<SourcePrivate> d;
+    Source(SourcePrivate &);
 };
 
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Source &);

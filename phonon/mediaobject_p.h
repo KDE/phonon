@@ -20,15 +20,11 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_MEDIAOBJECT_P_H
-#define PHONON_MEDIAOBJECT_P_H
-
-#include <QtCore/QString>
-#include <QtCore/QQueue>
+#ifndef PHONON_PLAYER_P_H
+#define PHONON_PLAYER_P_H
 
 #include "medianode_p.h"
 #include "mediaobject.h"
-#include "mediasource.h"
 #include "phonondefs_p.h"
 
 namespace Phonon {
@@ -95,4 +91,4 @@ private:
 
 } // namespace Phonon
 
-#endif // PHONON_MEDIAOBJECT_P_H
+#endif // PHONON_PLAYER_P_H
