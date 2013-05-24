@@ -244,23 +244,3 @@ if(PHONON_BUILD_DESCRIPTOR)
 endif(PHONON_BUILD_DESCRIPTOR)
 
 macro_display_feature_log()
-
-if (CMAKE_VERSION VERSION_LESS 2.8.0 AND PHONON_BUILD_PHONON4QT5)
-    message(FATAL_ERROR "Building Phonon4Qt5 requires CMake >= 2.8.0")
-else ()
-    if (PHONON_BUILD_PHONON4QT5 AND NOT PHONON_INTERNAL_BUILD_QT5 AND NOT TARGET phonon4qt5)
-        include(ExternalProject)
-        externalproject_add(phonon4qt5
-                            SOURCE_DIR ${CMAKE_SOURCE_DIR}
-                            TMP_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/meta/tmpfiles/p4q5
-                            STAMP_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/meta/stampfiles/p4q5
-                            BINARY_DIR ${CMAKE_BINARY_DIR}/phonon4qt5-binary
-                            CMAKE_ARGS -DPHONON_INTERNAL_BUILD_QT5=TRUE
-                                      -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-                                      ${PHONON_PHONON4QT5_ARGS}
-                            INSTALL_COMMAND ""
-        )
-
-        install(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" --build ${CMAKE_CURRENT_BINARY_DIR}/phonon4qt5-binary --target install)")
-    endif()
-endif()
