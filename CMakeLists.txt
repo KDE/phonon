@@ -30,7 +30,7 @@ if(PHONON_BUILD_PHONON4QT5)
     set(PHONON_INTERNAL_BUILD_QT5 true)
     set(PHONON_LIB_SONAME phonon4qt5)
     set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
-endif (PHONON_INTERNAL_BUILD_QT5)
+endif(PHONON_BUILD_PHONON4QT5)
 
 if (PHONON_ASSERT_STATES)
     message(STATUS "Enabling backend state machine validation.")
