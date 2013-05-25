@@ -1,4 +1,8 @@
-add_subdirectory(graphicsview)
+if(NOT PHONON_NO_GRAPHICSVIEW)
+    add_subdirectory(graphicsview)
+else()
+    add_definitions(-DPHONON_NO_GRAPHICSVIEW)
+endif()
 
 if (PHONON_BUILD_EXPERIMENTAL)
     add_subdirectory(experimental)
@@ -103,10 +107,10 @@ if (PHONON_PULSESUPPORT)
     target_link_libraries(${PHONON_LIB_SONAME} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (PHONON_PULSESUPPORT)
 
-if (QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+if(NOT PHONON_NO_GRAPHICSVIEW)
     qt5_use_modules(${PHONON_LIB_SONAME} OpenGL)
     target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_gl_LIBRARY})
-endif (QT_QTOPENGL_FOUND AND OPENGL_FOUND)
+endif()
 
 if (QZEITGEIST_FOUND)
     target_link_libraries(${PHONON_LIB_SONAME} ${QZEITGEIST_LIBRARY})

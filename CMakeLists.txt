@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
-option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" ON)
+option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
 option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
@@ -74,6 +74,10 @@ else (NOT PHONON_BUILD_PHONON4QT5) # Qt 5
     set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 endif (NOT PHONON_BUILD_PHONON4QT5)
 ################################################################################
+
+if(NOT PHONON_BUILD_DECLARATIVE_PLUGIN OR NOT QT_QTOPENGL_FOUND OR NOT OPENGL_FOUND OR NOT QT_QTDECLARATIVE_FOUND)
+    set(PHONON_NO_GRAPHICSVIEW true)
+endif()
 
 add_definitions(${QT_DEFINITIONS})
 remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
@@ -171,9 +175,9 @@ if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
 
-if(QT_QTDECLARATIVE_FOUND AND PHONON_BUILD_DECLARATIVE_PLUGIN)
+if(NOT PHONON_NO_GRAPHICSVIEW)
     add_subdirectory(declarative)
-endif(QT_QTDECLARATIVE_FOUND AND PHONON_BUILD_DECLARATIVE_PLUGIN)
+endif(PHONON_NO_GRAPHICSVIEW)
 
 if(PHONON_BUILD_DOC)
     add_subdirectory(doc)
