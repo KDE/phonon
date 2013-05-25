@@ -6,6 +6,7 @@ set(PHONON_VERSION "@PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONO
 get_filename_component(currentDir ${CMAKE_CURRENT_LIST_FILE} PATH) # get the directory where I myself am
 get_filename_component(rootDir ${currentDir}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix
 
+set(PHONON_NO_GRAPHICSVIEW @PHONON_NO_GRAPHICSVIEW@)
 set(PHONON_PULSESUPPORT @PHONON_PULSESUPPORT@)
 set(PHONON_FOUND_EXPERIMENTAL @PHONON_BUILD_EXPERIMENTAL@)
 
