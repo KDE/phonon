@@ -56,7 +56,7 @@ set(CMAKE_MODULE_PATH ${phonon_cmake_module_dir} ${CMAKE_MODULE_PATH} )
 # # Qt libs and are flexible regarding the install location of Qt under Windows:
 # set(QT_USE_IMPORTED_TARGETS TRUE)
 
-if (NOT PHONON_INTERNAL_BUILD_QT5) # Qt4
+if (NOT PHONON_BUILD_PHONON4QT5) # Qt4
     if (NOT QT_MIN_VERSION)
       set(QT_MIN_VERSION "4.6.0")
     endif (NOT QT_MIN_VERSION)
@@ -95,7 +95,7 @@ if (NOT PHONON_INTERNAL_BUILD_QT5) # Qt4
     macro (qt5_add_resources)
         qt4_add_resources(${ARGN})
     endmacro (qt5_add_resources)
-else (NOT PHONON_INTERNAL_BUILD_QT5) # Qt5
+else (NOT PHONON_BUILD_PHONON4QT5) # Qt5
     find_package(Qt5Core)
     macro_log_feature(Qt5Core_FOUND "Qt5 Core (qtbase)" "" "" TRUE)
 
@@ -133,7 +133,7 @@ else (NOT PHONON_INTERNAL_BUILD_QT5) # Qt5
     set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
                     ${Qt5Widgets_INCLUDE_DIRS}
                     ${Qt5DBus_INCLUDE_DIRS})
-endif (NOT PHONON_INTERNAL_BUILD_QT5)
+endif (NOT PHONON_BUILD_PHONON4QT5)
 
 # - Automoc
 
@@ -169,20 +169,20 @@ include(GNUInstallDirs)
 
 set(SHARE_INSTALL_PREFIX        "share")  #              CACHE PATH "Base directory for files which go to share/")
 set(INCLUDE_INSTALL_DIR         "include" ) #           CACHE PATH "The subdirectory to the header prefix")
-if (PHONON_INTERNAL_BUILD_QT5)
+if (PHONON_BUILD_PHONON4QT5)
     set(INCLUDE_INSTALL_DIR         "include/${PHONON_LIB_SONAME}" ) #           CACHE PATH "The subdirectory to the header prefix")
-endif (PHONON_INTERNAL_BUILD_QT5)
+endif (PHONON_BUILD_PHONON4QT5)
 set(BIN_INSTALL_DIR             "bin"     ) #         CACHE PATH "The install dir for executables (default ${EXEC_INSTALL_PREFIX}/bin)")
 set(LIB_INSTALL_DIR             "${CMAKE_INSTALL_LIBDIR}" ) #  CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed"
 set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/kde4"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
-if (PHONON_INTERNAL_BUILD_QT5)
-    set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/qt5"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/qt5)")
-endif(PHONON_INTERNAL_BUILD_QT5)
+if (PHONON_BUILD_PHONON4QT5)
+    set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/qt5"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/qt5)" FORCE)
+endif(PHONON_BUILD_PHONON4QT5)
 set(ICON_INSTALL_DIR            "${SHARE_INSTALL_PREFIX}/icons"             CACHE PATH "The icon install dir (default ${SHARE_INSTALL_PREFIX}/share/icons/)")
 set(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde4/services"     CACHE PATH "The install dir for service (desktop, protocol, ...) files")
-if (PHONON_INTERNAL_BUILD_QT5)
+if (PHONON_BUILD_PHONON4QT5)
     set(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde5/services"     CACHE PATH "The install dir for service (desktop, protocol, ...) files")
-endif(PHONON_INTERNAL_BUILD_QT5)
+endif(PHONON_BUILD_PHONON4QT5)
 set(DBUS_INTERFACES_INSTALL_DIR "${SHARE_INSTALL_PREFIX}/dbus-1/interfaces" CACHE PATH "The dbus interfaces install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/interfaces)")
 set(DBUS_SERVICES_INSTALL_DIR   "${SHARE_INSTALL_PREFIX}/dbus-1/services"   CACHE PATH "The dbus services install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/services)")
 

@@ -22,7 +22,7 @@ else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-if (PHONON_INTERNAL_BUILD_QT5)
+if (PHONON_BUILD_PHONON4QT5)
     message(WARNING "QZeitgeist has not been ported to Qt5, support is disabled.")
 else ()
     macro_optional_find_package(QZeitgeist 0.8)

@@ -27,7 +27,6 @@ set(PHONON_LIB_SONAME phonon)
 set(PHONON_LIB_SONAME_CAMEL Phonon)
 
 if(PHONON_BUILD_PHONON4QT5)
-    set(PHONON_INTERNAL_BUILD_QT5 true)
     set(PHONON_LIB_SONAME phonon4qt5)
     set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
 endif(PHONON_BUILD_PHONON4QT5)
@@ -48,12 +47,12 @@ include(cmake/FindPhononInternal.cmake)
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 
-if (NOT PHONON_INTERNAL_BUILD_QT5) # Qt 4
+if (NOT PHONON_BUILD_PHONON4QT5) # Qt 4
     macro_log_feature(QT_QTDBUS_FOUND "Qt4 DBus" "" "" FALSE)
     macro_log_feature(QT_QTDESIGNER_FOUND "Qt4 Designer" "" "" FALSE)
     macro_log_feature(QT_QTOPENGL_FOUND "Qt4 OpenGL" "" "" FALSE)
     macro_log_feature(QT_QTDECLARATIVE_FOUND "Qt4 Declarative" "" "" FALSE)
-else (NOT PHONON_INTERNAL_BUILD_QT5) # Qt 5
+else (NOT PHONON_BUILD_PHONON4QT5) # Qt 5
     # DBus Audio Output Introspection
     find_package(Qt5DBus)
     macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" "" "" FALSE)
@@ -73,7 +72,7 @@ else (NOT PHONON_INTERNAL_BUILD_QT5) # Qt 5
     find_package(Qt5Declarative)
     macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" "" "" FALSE)
     set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
-endif (NOT PHONON_INTERNAL_BUILD_QT5)
+endif (NOT PHONON_BUILD_PHONON4QT5)
 ################################################################################
 
 add_definitions(${QT_DEFINITIONS})
@@ -220,13 +219,13 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
 
 install(EXPORT PhononLibs DESTINATION ${CMAKECONFIG_INSTALL_DIR} NAMESPACE Phonon:: FILE PhononTargets.cmake )
 
-if (NOT PHONON_INTERNAL_BUILD_QT5)
+if (NOT PHONON_BUILD_PHONON4QT5)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
-else (NOT PHONON_INTERNAL_BUILD_QT5)
+else (NOT PHONON_BUILD_PHONON4QT5)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt5_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
-endif (NOT PHONON_INTERNAL_BUILD_QT5)
+endif (NOT PHONON_BUILD_PHONON4QT5)
 
 # This generates a nice library descriptor to use with [1]. It also spits out
 # a script that makes installing various versions for an ABI check a lot easier.
