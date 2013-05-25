@@ -14,7 +14,6 @@ option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
 option(PHONON_BUILD_PHONON4QT5 "Build Phonon 4 transitional library for Qt5 (API compatible with regular Phonon4)" OFF)
-set(PHONON_PHONON4QT5_ARGS "" CACHE STRING "Additional arguments to CMake which will be used for the Phonon4Qt5 sub build.")
 
 # The following variables directly influence the library's soname version.
 # It is highly advised to think twice before changing those.
@@ -28,10 +27,7 @@ set(PHONON_LIB_SONAME phonon)
 set(PHONON_LIB_SONAME_CAMEL Phonon)
 
 if(PHONON_BUILD_PHONON4QT5)
-    set(PHONON_INTERNAL_BUILD_QT5  true)
-endif(PHONON_BUILD_PHONON4QT5)
-
-if (PHONON_INTERNAL_BUILD_QT5)
+    set(PHONON_INTERNAL_BUILD_QT5 true)
     set(PHONON_LIB_SONAME phonon4qt5)
     set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
 endif (PHONON_INTERNAL_BUILD_QT5)
