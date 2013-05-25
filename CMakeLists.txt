@@ -176,8 +176,9 @@ if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
 
 if(NOT PHONON_NO_GRAPHICSVIEW)
+    message(STATUS "Not building declarative plugin.")
     add_subdirectory(declarative)
-endif(PHONON_NO_GRAPHICSVIEW)
+endif()
 
 if(PHONON_BUILD_DOC)
     add_subdirectory(doc)

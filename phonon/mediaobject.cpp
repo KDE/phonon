@@ -49,8 +49,9 @@
 #include "platform_p.h"
 #include "statesvalidator_p.h"
 
-
+#ifndef PHONON_NO_GRAPHICSVIEW
 #include <graphicsview/videographicsobject.h>
+#endif PHONON_BUILD_DECLARATIVE_PLUGIN
 
 #define PHONON_CLASSNAME MediaObject
 #define PHONON_INTERFACENAME MediaObjectInterface
@@ -113,6 +114,7 @@ void MediaObject::play()
     P_D(MediaObject);
     if (d->backendObject() && isPlayable(d->mediaSource.type())) {
 
+    #ifndef PHONON_NO_GRAPHICSVIEW
         VideoGraphicsObject *vgo = 0;
         foreach (const Path &path, d->outputPaths) {
             if (vgo = dynamic_cast<VideoGraphicsObject *>(path.sink())) {
@@ -124,6 +126,7 @@ void MediaObject::play()
                 }
             }
         }
+    #endif
 
         INTERFACE_CALL(play());
     }

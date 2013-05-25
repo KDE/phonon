@@ -1,6 +1,8 @@
 if(NOT PHONON_NO_GRAPHICSVIEW)
+    message(STATUS "Building graphicsview.")
     add_subdirectory(graphicsview)
 else()
+    message(STATUS "Not Building graphicsview.")
     add_definitions(-DPHONON_NO_GRAPHICSVIEW)
 endif()
 
