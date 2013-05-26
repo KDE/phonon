@@ -1,6 +1,7 @@
 project(Phonon)
 
 cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
+add_definitions(-DPHONON_BUILD_WITH_CMAKE)
 
 option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)

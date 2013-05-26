@@ -23,7 +23,7 @@
 #ifndef PHONONNAMESPACE_H
 #define PHONONNAMESPACE_H
 
-#include "phonon_export.h"
+#include \"phonon_export.h\"
 
 /**
  * Helper macro that can be used like
@@ -36,18 +36,18 @@
 /**
  * PHONON_VERSION is (major << 16) + (minor << 8) + patch.
  */
-#define PHONON_VERSION PHONON_VERSION_CHECK(@PHONON_LIB_MAJOR_VERSION@, @PHONON_LIB_MINOR_VERSION@, @PHONON_LIB_PATCH_VERSION@)
+#define PHONON_VERSION PHONON_VERSION_CHECK($${PHONON_LIB_MAJOR_VERSION}, $${PHONON_LIB_MINOR_VERSION}, $${PHONON_LIB_PATCH_VERSION})
 
 /**
  * PHONON_VERSION_STR is "major.minor.patch". E.g. "4.2.1"
  */
-#define PHONON_VERSION_STR "@PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONON_LIB_PATCH_VERSION@"
+#define PHONON_VERSION_STR \"$${PHONON_LIB_MAJOR_VERSION}.$${PHONON_LIB_MINOR_VERSION}.$${PHONON_LIB_PATCH_VERSION}\"
 
 /**
  * Definitions to disable capture - should end up in the backends and
  * platform plugins, too
  */
-#cmakedefine PHONON_NO_CAPTURE
+$${PHONON_NO_CAPTURE_DEFINE}
 #ifdef PHONON_NO_CAPTURE
 #define PHONON_NO_VIDEOCAPTURE
 #define PHONON_NO_AUDIOCAPTURE
