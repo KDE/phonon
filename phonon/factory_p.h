@@ -28,14 +28,10 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 
-class QUrl;
-class QIcon;
+namespace Phonon {
 
-namespace Phonon
-{
-    class PlatformPlugin;
-    class FrontendPrivate;
-    class AbstractMediaStream;
+class PlatformPlugin;
+class FrontendPrivate;
 
 /**
  * \internal
@@ -49,130 +45,130 @@ namespace Phonon
  *
  * \author Matthias Kretz <kretz@kde.org>
  */
-namespace Factory
+namespace Factory {
+
+/**
+ * Emits signals for Phonon::Factory.
+ */
+class Sender : public QObject
 {
+    Q_OBJECT
+Q_SIGNALS:
     /**
-     * Emits signals for Phonon::Factory.
+     * \copydoc BackendCapabilities::Notifier::availableAudioOutputDevicesChanged
      */
-    class Sender : public QObject
-    {
-        Q_OBJECT
-        Q_SIGNALS:
-            /**
-             * \copydoc BackendCapabilities::Notifier::availableAudioOutputDevicesChanged
-             */
-            void availableAudioOutputDevicesChanged();
-
-            /**
-             * \copydoc BackendCapabilities::Notifier::availableAudioCaptureDevicesChanged
-             */
-            void availableAudioCaptureDevicesChanged();
-
-            /**
-             * \copydoc BackendCapabilities::Notifier::availableVideoCaptureDevicesChanged
-             */
-            void availableVideoCaptureDevicesChanged();
-    };
+    void availableAudioOutputDevicesChanged();
 
     /**
-     * Returns a pointer to the object emitting the signals.
-     *
-     * \see Sender::backendChanged()
+     * \copydoc BackendCapabilities::Notifier::availableAudioCaptureDevicesChanged
      */
-    PHONON_EXPORT Sender *sender();
+    void availableAudioCaptureDevicesChanged();
+
+    /**
+     * \copydoc BackendCapabilities::Notifier::availableVideoCaptureDevicesChanged
+     */
+    void availableVideoCaptureDevicesChanged();
+};
+
+/**
+ * Returns a pointer to the object emitting the signals.
+ *
+ * \see Sender::backendChanged()
+ */
+PHONON_EXPORT Sender *sender();
 
 #warning createObject!
-    QObject *createPlayer(QObject *parent = 0);
+QObject *createPlayer(QObject *parent = 0);
 
-    /**
-     * Create a new backend object for a Effect.
-     *
-     * \return a pointer to the Effect the backend provides.
-     */
+/**
+ * Create a new backend object for a Effect.
+ *
+ * \return a pointer to the Effect the backend provides.
+ */
 #ifndef QT_NO_PHONON_EFFECT
-    QObject *createEffect(int effectId, QObject *parent = 0);
+QObject *createEffect(int effectId, QObject *parent = 0);
 #endif //QT_NO_PHONON_EFFECT
-    /**
-     * Create a new backend object for a VolumeFaderEffect.
-     *
-     * \return a pointer to the VolumeFaderEffect the backend provides.
-     */
+/**
+ * Create a new backend object for a VolumeFaderEffect.
+ *
+ * \return a pointer to the VolumeFaderEffect the backend provides.
+ */
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
-    QObject *createVolumeFaderEffect(QObject *parent = 0);
+QObject *createVolumeFaderEffect(QObject *parent = 0);
 #endif //QT_NO_PHONON_VOLUMEFADEREFFECT
-    /**
-     * Create a new backend object for a AudioOutput.
-     *
-     * \return a pointer to the AudioOutput the backend provides.
-     */
-    QObject *createAudioOutput(QObject *parent = 0);
-    /**
-     * Create a new backend object for a VideoWidget.
-     *
-     * \return a pointer to the VideoWidget the backend provides.
-     */
+/**
+ * Create a new backend object for a AudioOutput.
+ *
+ * \return a pointer to the AudioOutput the backend provides.
+ */
+QObject *createAudioOutput(QObject *parent = 0);
+/**
+ * Create a new backend object for a VideoWidget.
+ *
+ * \return a pointer to the VideoWidget the backend provides.
+ */
 #ifndef QT_NO_PHONON_VIDEO
-    QObject *createVideoWidget(QObject *parent = 0);
+QObject *createVideoWidget(QObject *parent = 0);
 #endif //QT_NO_PHONON_VIDEO
 
-    /**
-    * Create a new backend object for a AudioDataOutput.
-    *
-    * \return a pointer to the AudioDataOutput the backend provides.
-    */
-    PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
+/**
+  * Create a new backend object for a AudioDataOutput.
+  *
+  * \return a pointer to the AudioDataOutput the backend provides.
+  */
+PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
 
-    /**
-     * \return a pointer to the backend interface.
-     */
-    PHONON_EXPORT QObject *backend(bool createWhenNull = true);
+/**
+ * \return a pointer to the backend interface.
+ */
+PHONON_EXPORT QObject *backend(bool createWhenNull = true);
 
-    /**
-     * Unique identifier for the Backend. Can be used in configuration files
-     * for example.
-     */
-    QString identifier();
+/**
+ * Unique identifier for the Backend. Can be used in configuration files
+ * for example.
+ */
+QString identifier();
 
-    /**
-     * Get the name of the Backend. It's the name from the .desktop file.
-     */
-    PHONON_EXPORT QString backendName();
+/**
+ * Get the name of the Backend. It's the name from the .desktop file.
+ */
+PHONON_EXPORT QString backendName();
 
-    /**
-     * Get the comment of the Backend. It's the comment from the .desktop file.
-     */
-    QString backendComment();
+/**
+ * Get the comment of the Backend. It's the comment from the .desktop file.
+ */
+QString backendComment();
 
-    /**
-     * Get the version of the Backend. It's the version from the .desktop file.
-     *
-     * The version is especially interesting if there are several versions
-     * available for binary incompatible versions of the backend's media
-     * framework.
-     */
-    QString backendVersion();
+/**
+ * Get the version of the Backend. It's the version from the .desktop file.
+ *
+ * The version is especially interesting if there are several versions
+ * available for binary incompatible versions of the backend's media
+ * framework.
+ */
+QString backendVersion();
 
-    /**
-     * Get the icon (name) of the Backend. It's the icon from the .desktop file.
-     */
-    QString backendIcon();
+/**
+ * Get the icon (name) of the Backend. It's the icon from the .desktop file.
+ */
+QString backendIcon();
 
-    /**
-     * Get the website of the Backend. It's the website from the .desktop file.
-     */
-    QString backendWebsite();
+/**
+ * Get the website of the Backend. It's the website from the .desktop file.
+ */
+QString backendWebsite();
 
-    /**
-     * registers the backend object
-     */
-    PHONON_EXPORT QObject *registerQObject(QObject *o);
+/**
+ * registers the backend object
+ */
+PHONON_EXPORT QObject *registerQObject(QObject *o);
 
-    PHONON_EXPORT void registerFrontendObject(FrontendPrivate *);
-    PHONON_EXPORT void deregisterFrontendObject(FrontendPrivate *);
+PHONON_EXPORT void registerFrontendObject(FrontendPrivate *);
+PHONON_EXPORT void deregisterFrontendObject(FrontendPrivate *);
 
-    PHONON_EXPORT void setBackend(QObject *);
+PHONON_EXPORT void setBackend(QObject *);
 
-    PHONON_EXPORT PlatformPlugin *platformPlugin();
+PHONON_EXPORT PlatformPlugin *platformPlugin();
 
 } // namespace Factory
 } // namespace Phonon
