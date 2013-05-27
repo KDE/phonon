@@ -124,41 +124,6 @@ PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
 PHONON_EXPORT QObject *backend(bool createWhenNull = true);
 
 /**
- * Unique identifier for the Backend. Can be used in configuration files
- * for example.
- */
-QString identifier();
-
-/**
- * Get the name of the Backend. It's the name from the .desktop file.
- */
-PHONON_EXPORT QString backendName();
-
-/**
- * Get the comment of the Backend. It's the comment from the .desktop file.
- */
-QString backendComment();
-
-/**
- * Get the version of the Backend. It's the version from the .desktop file.
- *
- * The version is especially interesting if there are several versions
- * available for binary incompatible versions of the backend's media
- * framework.
- */
-QString backendVersion();
-
-/**
- * Get the icon (name) of the Backend. It's the icon from the .desktop file.
- */
-QString backendIcon();
-
-/**
- * Get the website of the Backend. It's the website from the .desktop file.
- */
-QString backendWebsite();
-
-/**
  * registers the backend object
  */
 PHONON_EXPORT QObject *registerQObject(QObject *o);

@@ -393,12 +393,6 @@ QString Factory::name() \
     return QString(); \
 } \
 
-GET_STRING_PROPERTY(identifier)
-GET_STRING_PROPERTY(backendName)
-GET_STRING_PROPERTY(backendComment)
-GET_STRING_PROPERTY(backendVersion)
-GET_STRING_PROPERTY(backendIcon)
-GET_STRING_PROPERTY(backendWebsite)
 #endif //QT_NO_PROPERTIES
 QObject *Factory::registerQObject(QObject *o)
 {
