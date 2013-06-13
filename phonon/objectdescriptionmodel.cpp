@@ -35,7 +35,27 @@
 
 #ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 
+// If this wasn't so terrible ...
+// ObjectDescriptionModel is a template class. Moc however cannot handle
+// templates so the solution done here is to *manually* do whatever moc does.
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0) // Qt 5
+static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
+
+ // content:
+       7,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       0,    0, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+       0        // eod
+};
+#else // Qt 4
 static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
 
  // content:
@@ -48,34 +68,47 @@ static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
 
        0        // eod
 };
+#endif
 
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioOutputDeviceType[]  = { "Phonon::AudioOutputDevice\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCaptureDeviceType[] = { "Phonon::AudioCaptureDevice\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCaptureDeviceType[] = { "Phonon::VideoCaptureDevice\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_EffectType[]             = { "Phonon::EffectDescription\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioChannelType[]        = { "Phonon::AudioChannelDescription\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_SubtitleType[]     = { "Phonon::SubtitleDescription\0" };
-/*
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoOutputDeviceType[]  = { "Phonon::VideoOutputDevice\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCodecType[]         = { "Phonon::AudioCodecDescription\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCodecType[]         = { "Phonon::VideoCodecDescription\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_ContainerFormatType[]    = { "Phonon::ContainerFormatDescription\0" };
-static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VisualizationType[]      = { "Phonon::VisualizationDescription\0" };
-*/
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0) // Qt 5
+    #define P_STATIC_META_STRINGDATA(name, string, stringlen, stringlenplustwo) \
+        struct qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name##_t { QByteArrayData data[1]; char stringdata[stringlenplustwo]; }; \
+        static const qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name##_t qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name = { \
+            { \
+                Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(stringlen, offsetof(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## name ## _t, stringdata) + 0 - 0 * sizeof(QByteArrayData)) \
+            }, \
+            string \
+        };
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0) // Qt 4
+    P_STATIC_META_STRINGDATA(AudioOutputDeviceType,     "Phonon::AudioOutputDeviceModel\0",  30, 32)
+    P_STATIC_META_STRINGDATA(AudioCaptureDeviceType,    "Phonon::AudioCaptureDeviceModel\0", 31, 33)
+    P_STATIC_META_STRINGDATA(VideoCaptureDeviceType,    "Phonon::VideoCaptureDeviceModel\0", 31, 33)
+    P_STATIC_META_STRINGDATA(EffectType,                "Phonon::EffectModel\0",             19, 21)
+    P_STATIC_META_STRINGDATA(AudioChannelType,          "Phonon::AudioChannelModel\0",       25, 27)
+    P_STATIC_META_STRINGDATA(SubtitleType,              "Phonon::SubtitleModel\0",           21, 23)
+
+    #undef P_STATIC_META_STRINGDATA
+#else // Qt 4
+    static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioOutputDeviceType[]  = { "Phonon::AudioOutputDevice\0" };
+    static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioCaptureDeviceType[] = { "Phonon::AudioCaptureDevice\0" };
+    static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_VideoCaptureDeviceType[] = { "Phonon::VideoCaptureDevice\0" };
+    static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_EffectType[]             = { "Phonon::EffectDescription\0" };
+    static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_AudioChannelType[]        = { "Phonon::AudioChannelDescription\0" };
+    static const char qt_meta_stringdata_Phonon__ObjectDescriptionModel_SubtitleType[]     = { "Phonon::SubtitleDescription\0" };
+#endif
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0) // Qt 5
+    #define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
+        &QAbstractListModel::staticMetaObject, \
+        qt_meta_stringdata_Phonon__ObjectDescriptionModel_##X.data, \
+        qt_meta_data_Phonon__ObjectDescriptionModel, \
+        0, 0, 0 }
+#else // Qt 4
     #define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
         &QAbstractListModel::staticMetaObject, \
         qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X, \
         qt_meta_data_Phonon__ObjectDescriptionModel, \
         0 }
-#else // Qt 5
-    #define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
-        &QAbstractListModel::staticMetaObject, \
-        QTypedArrayData<char>::fromRawData(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X, \
-                                          sizeof(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## X)), \
-        qt_meta_data_Phonon__ObjectDescriptionModel, \
-        0, 0, 0 }
 #endif
 
 namespace Phonon
@@ -99,22 +132,6 @@ template<> const QMetaObject ObjectDescriptionModel<AudioChannelType>::staticMet
 template<> const QMetaObject ObjectDescriptionModel<SubtitleType>::staticMetaObject = {
     OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(SubtitleType)
 };
-/*
-template<> const QMetaObject ObjectDescriptionModel<VideoOutputDeviceType>::staticMetaObject = {
-    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(VideoOutputDeviceType)
-};
-template<> const QMetaObject ObjectDescriptionModel<AudioCodecType>::staticMetaObject = {
-    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(AudioCodecType)
-};
-template<> const QMetaObject ObjectDescriptionModel<VideoCodecType>::staticMetaObject = {
-    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(VideoCodecType)
-};
-template<> const QMetaObject ObjectDescriptionModel<ContainerFormatType>::staticMetaObject = {
-    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(ContainerFormatType)
-};
-template<> const QMetaObject ObjectDescriptionModel<VisualizationType>::staticMetaObject = {
-    OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(VisualizationType)
-};*/
 
 template<ObjectDescriptionType type>
 const QMetaObject *ObjectDescriptionModel<type>::metaObject() const
@@ -125,6 +142,9 @@ const QMetaObject *ObjectDescriptionModel<type>::metaObject() const
 template<ObjectDescriptionType type>
 void *ObjectDescriptionModel<type>::qt_metacast(const char *_clname)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0) // Qt 5
+    qWarning("WARNING: Phonon4Qt5 has not been verified to successfully qt_metacast ObjectDescriptionModels.");
+#endif
     if (!_clname) {
         return 0;
     }
