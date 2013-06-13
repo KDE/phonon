@@ -80,6 +80,8 @@ QIcon Platform::icon(const QString &name, QStyle *style)
         ret = f->icon(name);
     }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
+
+    // No platform plugin present. Use internal versions.
     if (ret.isNull()) {
         if (!style) {
             style = QApplication::style();
@@ -90,6 +92,23 @@ QIcon Platform::icon(const QString &name, QStyle *style)
             ret = style->standardPixmap(QStyle::SP_MediaVolumeMuted);
         }
     }
+
+#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0) // QIcon::fromTheme was introduced in 4.6.0.
+    // Still no icon set. Use QIcon to access the platform theme.
+    if (ret.isNull())
+        ret = QIcon::fromTheme(name);
+
+    // Now we are getting angry... keep dropping '-foo' parts from the end of
+    // the name until we get something usable or run out of substrings.
+    // (this is a simplified version of fallback lookup as done by KIconLoader;
+    //  essentially audio-card-pci can also be provided by audio-card which is
+    //  the more generic version).
+    QString choppedName = name;
+    while (ret.isNull() && !choppedName.isEmpty()) {
+        choppedName.resize(choppedName.lastIndexOf(QChar('-')));
+        ret = QIcon::fromTheme(choppedName);
+    }
+#endif
 
     return ret;
 }
