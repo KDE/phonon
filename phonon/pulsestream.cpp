@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2010 Colin Guthrie <cguthrie@mandriva.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,11 +18,13 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "pulsestream_p.h"
+
 #include <QtCore/qmath.h>
+
+#include "pulsesupport.h"
 
 namespace Phonon
 {
@@ -32,6 +35,7 @@ PulseStream::PulseStream(QString streamUuid)
   , mIndex(PA_INVALID_INDEX)
   , mDevice(-1)
   , mMute(false)
+  , mCachedVolume(-1)
 {
     pa_cvolume_init(&mVolume);
 }
@@ -74,6 +78,8 @@ static const qreal VOLTAGE_TO_LOUDNESS_EXPONENT = qreal(1.0/LOUDNESS_TO_VOLTAGE_
 
 void PulseStream::setVolume(const pa_cvolume *volume)
 {
+    if (mCachedVolume != -1)
+        QMetaObject::invokeMethod(this, "applyCachedVolume", Qt::QueuedConnection);
     if (pa_cvolume_equal(&mVolume, volume) == 0) {
         memcpy(&mVolume, volume, sizeof(mVolume));
         qreal vol = (qreal)pa_cvolume_avg(volume) / PA_VOLUME_NORM;
@@ -92,6 +98,23 @@ void PulseStream::setMute(bool mute)
     }
 }
 
+qreal PulseStream::cachedVolume() const
+{
+    return mCachedVolume;
+}
+
+void PulseStream::setCachedVolume(qreal volume)
+{
+    mCachedVolume = volume;
+}
+
+void PulseStream::applyCachedVolume()
+{
+    if (mCachedVolume == -1)
+        return;
+    PulseSupport::getInstance()->setOutputVolume(mStreamUuid, mCachedVolume);
+    mCachedVolume = -1;
+}
 
 } // namespace Phonon
 

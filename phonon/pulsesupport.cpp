@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2009 Colin Guthrie <cguthrie@mandriva.org>
+/*
+    Copyright (C) 2010 Colin Guthrie <cguthrie@mandriva.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "pulsesupport.h"
@@ -1266,6 +1266,10 @@ bool PulseSupport::setOutputVolume(QString streamUuid, qreal volume) {
             return false;
         }
         pa_operation_unref(o);
+    } else if (s_outputStreams.contains(streamUuid) && s_outputStreams[streamUuid]->index() == PA_INVALID_INDEX) {
+        logMessage(QString::fromLatin1("Setting volume on an invalid stream ..... this better be intended"));
+        PulseStream *stream = s_outputStreams[streamUuid];
+        stream->setCachedVolume(volume);
     }
     return true;
 #endif

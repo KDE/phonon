@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2010 Colin Guthrie <cguthrie@mandriva.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_PULSESTREAM_P_H
@@ -52,10 +52,16 @@ namespace Phonon
             void setVolume(const pa_cvolume *volume);
             void setMute(bool mute);
 
+            qreal cachedVolume() const;
+            void setCachedVolume(qreal volume);
+
         signals:
             void usingDevice(int device);
             void volumeChanged(qreal volume);
             void muteChanged(bool mute);
+
+    private slots:
+            void applyCachedVolume();
 
         private:
             QString mStreamUuid;
@@ -63,6 +69,8 @@ namespace Phonon
             int mDevice;
             pa_cvolume mVolume;
             bool mMute;
+            // -1 = not set
+            qreal mCachedVolume;
     };
 } // namespace Phonon
 
