@@ -26,7 +26,11 @@
 #include <QtCore/QtGlobal>
 #include "phonon_export.h"
 
-
+#ifdef PHONON_BACKEND_VERSION_4_7
+# ifndef PHONON_BACKEND_VERSION_4_4
+#  define PHONON_BACKEND_VERSION_4_4
+# endif
+#endif
 #ifdef PHONON_BACKEND_VERSION_4_4
 # ifndef PHONON_BACKEND_VERSION_4_3
 #  define PHONON_BACKEND_VERSION_4_3

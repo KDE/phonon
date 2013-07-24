@@ -131,16 +131,49 @@ class AudioOutputInterface42 : public AudioOutputInterface40
         PHONON_EXPORT QList<QPair<QByteArray, QString> > deviceAccessListFor(const Phonon::AudioOutputDevice &) const;
 };
 
+class AudioOutputInterface47 : public AudioOutputInterface42
+{
+public:
+    /**
+     * This function is meant to be used in conjuction with \class PulseSupport
+     * to either get the property set for the associated PulseAudio straem or
+     * to automatically apply them to the envrionment.
+     *
+     * If a backend subsystem supports actively setting arbitrary properties
+     * this method should be preferred and PulseSupport::streamProperties()
+     * should be used.
+     * If a backend subsystem does not support setting arbitrary properties
+     * PulseSupport::setupStreamEnvironment() should be called as close to
+     * stream creation as possible to manipulate the process envrionment
+     * such that PulseAudio will pick up the properties.
+     *
+     * \param uuid the UUID used by PulseSupport to identify the associated stream
+     *
+     * \since 4.7.0
+     */
+    virtual void setStreamUuid(QString uuid) = 0;
+};
+
 } // namespace Phonon
 
-#ifdef PHONON_BACKEND_VERSION_4_2
+#ifdef PHONON_BACKEND_VERSION_4_7
+#warning 47
+namespace Phonon { typedef AudioOutputInterface47 AudioOutputInterface; }
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface40, "AudioOutputInterface2.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "4AudioOutputInterface.phonon.kde.org")
+#elif defined PHONON_BACKEND_VERSION_4_2
+#warning 42
 namespace Phonon { typedef AudioOutputInterface42 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface40, "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "3AudioOutputInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface47, "4AudioOutputInterface.phonon.kde.org")
 #else
+#warning 40
 namespace Phonon { typedef AudioOutputInterface40 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface47, "4AudioOutputInterface.phonon.kde.org")
 #endif
 
 

@@ -103,6 +103,10 @@ void AudioOutputPrivate::init(Phonon::Category c)
             q->connect(stream, SIGNAL(usingDevice(int)), SLOT(_k_deviceChanged(int)));
             q->connect(stream, SIGNAL(volumeChanged(qreal)), SLOT(_k_volumeChanged(qreal)));
             q->connect(stream, SIGNAL(muteChanged(bool)), SLOT(_k_mutedChanged(bool)));
+
+            AudioOutputInterface47 *iface = Iface<AudioOutputInterface47>::cast(this);
+            if (iface)
+                iface->setStreamUuid(streamUuid);
         }
     }
 #endif
