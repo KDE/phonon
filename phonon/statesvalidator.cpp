@@ -43,8 +43,8 @@ StatesValidator::StatesValidator(MediaObject *parent)
     , m_aboutToFinishBeforeSeek(false)
     , m_aboutToFinishPos(-1)
 {
-    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-            this, SLOT(validateStateChange(Phonon::State, Phonon::State)));
+    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+            this, SLOT(validateStateChange(Phonon::State,Phonon::State)));
     connect(m_mediaObject, SIGNAL(currentSourceChanged(Phonon::MediaSource)),
             this, SLOT(validateSourceChange()));
     connect(m_mediaObject, SIGNAL(tick(qint64)), this, SLOT(validateTick(qint64)));

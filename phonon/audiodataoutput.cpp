@@ -55,8 +55,8 @@ void AudioDataOutputPrivate::setupBackendObject()
     qRegisterMetaType<QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > >("QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> >");
 
     QObject::connect(m_backendObject,
-            SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &)),
-            q, SIGNAL(dataReady(const QMap<Phonon::AudioDataOutput::Channel, QVector<qint16> > &)));
+            SIGNAL(dataReady(QMap<Phonon::AudioDataOutput::Channel,QVector<qint16> >)),
+            q, SIGNAL(dataReady(QMap<Phonon::AudioDataOutput::Channel,QVector<qint16> >)));
     QObject::connect(m_backendObject, SIGNAL(endOfMedia(int)), q, SIGNAL(endOfMedia(int)));
 }
 

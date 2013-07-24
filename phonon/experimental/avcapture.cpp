@@ -170,7 +170,7 @@ void AvCapturePrivate::setupBackendObject()
     P_Q(AvCapture);
     Q_ASSERT(m_backendObject);
 
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), q, SIGNAL(stateChanged(Phonon::State,Phonon::State)), Qt::QueuedConnection);
 
     // set up attributes
     pINTERFACE_CALL(setAudioCaptureDevice(audioCaptureDevice));

@@ -67,11 +67,11 @@ void VideoDataOutputPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
 
-    //QObject::connect(m_backendObject, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)),
-    //        q, SIGNAL(frameReady(const Phonon::Experimental::VideoFrame &)));
+    //QObject::connect(m_backendObject, SIGNAL(frameReady(Phonon::Experimental::VideoFrame)),
+    //        q, SIGNAL(frameReady(Phonon::Experimental::VideoFrame)));
 
-    QObject::connect(m_backendObject, SIGNAL(displayFrame(qint64, qint64)),
-                     q, SIGNAL(displayFrame(qint64, qint64)));
+    QObject::connect(m_backendObject, SIGNAL(displayFrame(qint64,qint64)),
+                     q, SIGNAL(displayFrame(qint64,qint64)));
     QObject::connect(m_backendObject, SIGNAL(endOfMedia()), q, SIGNAL(endOfMedia()));
 }
 

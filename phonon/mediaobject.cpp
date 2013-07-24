@@ -652,11 +652,11 @@ void MediaObjectPrivate::setupBackendObject()
         validator = new StatesValidator(q); // Parented, and non-invasive to MO.
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-                     q, SLOT(_k_stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+                     q, SLOT(_k_stateChanged(Phonon::State,Phonon::State)), Qt::QueuedConnection);
 #else
-    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-                     q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+                     q, SIGNAL(stateChanged(Phonon::State,Phonon::State)), Qt::QueuedConnection);
 #endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
 #ifndef QT_NO_PHONON_VIDEO
     QObject::connect(m_backendObject, SIGNAL(hasVideoChanged(bool)),
@@ -677,8 +677,8 @@ void MediaObjectPrivate::setupBackendObject()
                      q, SIGNAL(prefinishMarkReached(qint32)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
                      q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString, QString>)),
-                     q, SLOT(_k_metaDataChanged(QMultiMap<QString, QString>)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString,QString>)),
+                     q, SLOT(_k_metaDataChanged(QMultiMap<QString,QString>)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(MediaSource)),
                      q, SLOT(_k_currentSourceChanged(MediaSource)), Qt::QueuedConnection);
 

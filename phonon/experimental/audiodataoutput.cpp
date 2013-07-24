@@ -57,11 +57,11 @@ void AudioDataOutputPrivate::setupBackendObject()
     pBACKEND_CALL1("setFormat", Phonon::Experimental::AudioDataOutput::Format, format);
     pBACKEND_CALL1("setDataSize", int, dataSize);
     QObject::connect(m_backendObject,
-            SIGNAL(dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<qint16> > &)),
-            q, SIGNAL(dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<qint16> > &)));
+            SIGNAL(dataReady(QMap<Phonon::Experimental::AudioDataOutput::Channel,QVector<qint16> >)),
+            q, SIGNAL(dataReady(QMap<Phonon::Experimental::AudioDataOutput::Channel,QVector<qint16> >)));
     QObject::connect(m_backendObject,
-            SIGNAL(dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<float> > &)),
-            q, SIGNAL(dataReady(const QMap<Phonon::Experimental::AudioDataOutput::Channel, QVector<float> > &)));
+            SIGNAL(dataReady(QMap<Phonon::Experimental::AudioDataOutput::Channel,QVector<float> >)),
+            q, SIGNAL(dataReady(QMap<Phonon::Experimental::AudioDataOutput::Channel,QVector<float> >)));
     QObject::connect(m_backendObject, SIGNAL(endOfMedia(int)), q, SIGNAL(endOfMedia(int)));
 }
 
