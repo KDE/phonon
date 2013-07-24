@@ -44,6 +44,8 @@
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 
+#define PA_PROP_PHONON_STREAMID "phonon.streamid"
+
 namespace Phonon
 {
 
@@ -541,7 +543,7 @@ static void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, v
 
     // loop through (*i) and extract phonon->streamindex...
     const char *t;
-    if ((t = pa_proplist_gets(i->proplist, "phonon.streamid"))) {
+    if ((t = pa_proplist_gets(i->proplist, PA_PROP_PHONON_STREAMID))) {
         logMessage(QString::fromLatin1("Found PulseAudio stream index %1 for Phonon Output Stream %2").arg(i->index).arg(QLatin1String(t)));
 
         // We only care about our own streams (other phonon processes are irrelevent)
@@ -584,7 +586,7 @@ static void source_output_cb(pa_context *c, const pa_source_output_info *i, int 
 
     // loop through (*i) and extract phonon->streamindex...
     const char *t;
-    if ((t = pa_proplist_gets(i->proplist, "phonon.streamid"))) {
+    if ((t = pa_proplist_gets(i->proplist, PA_PROP_PHONON_STREAMID))) {
         logMessage(QString::fromLatin1("Found PulseAudio stream index %1 for Phonon Capture Stream %2").arg(i->index).arg(QLatin1String(t)));
 
         // We only care about our own streams (other phonon processes are irrelevent)
@@ -1359,5 +1361,3 @@ void PulseSupport::clearStreamCache(QString streamUuid) {
 } // namespace Phonon
 
 #include "moc_pulsesupport.cpp"
-
-// vim: sw=4 ts=4
