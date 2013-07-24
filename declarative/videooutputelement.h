@@ -19,8 +19,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_DECLARATIVE_VIDEOELEMENT_H
-#define PHONON_DECLARATIVE_VIDEOELEMENT_H
+#ifndef PHONON_DECLARATIVE_VIDEOOUTPUTELEMENT_H
+#define PHONON_DECLARATIVE_VIDEOOUTPUTELEMENT_H
 
 #include <QtDeclarative/QDeclarativeItem>
 #include <QtDeclarative/QDeclarativeParserStatus>
@@ -98,4 +98,4 @@ private:
 } // namespace Declarative
 } // namespace Phonon
 
-#endif // PHONON_DECLARATIVE_VIDEOELEMENT_H
+#endif // PHONON_DECLARATIVE_VIDEOOUTPUTELEMENT_H
