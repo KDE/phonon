@@ -98,10 +98,10 @@ void VideoOutputElement::setFullScreen(bool fullScreen)
 {
     if (fullScreen) {
         m_isFullScreen = true;
-        qApp->activeWindow()->showFullScreen();
+        qApp->activeWindow()->setWindowState(qApp->activeWindow()->windowState() | Qt::WindowFullScreen);
     } else {
         m_isFullScreen = false;
-        qApp->activeWindow()->showNormal();
+        qApp->activeWindow()->setWindowState(qApp->activeWindow()->windowState() & ~Qt::WindowFullScreen);
     }
     emit fullScreenChanged();
 }
