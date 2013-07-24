@@ -38,7 +38,7 @@ namespace Phonon
     {
         Q_OBJECT
         public:
-            PulseStream(QString streamUuid);
+            PulseStream(QString streamUuid, QString role);
             ~PulseStream();
 
             QString uuid() const;
@@ -54,6 +54,8 @@ namespace Phonon
 
             qreal cachedVolume() const;
             void setCachedVolume(qreal volume);
+
+            QString role() const;
 
         signals:
             void usingDevice(int device);
@@ -71,6 +73,7 @@ namespace Phonon
             bool mMute;
             // -1 = not set
             qreal mCachedVolume;
+            QString mRole;
     };
 } // namespace Phonon
 

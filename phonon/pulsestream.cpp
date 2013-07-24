@@ -29,13 +29,14 @@
 namespace Phonon
 {
 
-PulseStream::PulseStream(QString streamUuid)
+PulseStream::PulseStream(QString streamUuid, QString role)
   : QObject()
   , mStreamUuid(streamUuid)
   , mIndex(PA_INVALID_INDEX)
   , mDevice(-1)
   , mMute(false)
   , mCachedVolume(-1)
+  , mRole(role)
 {
     pa_cvolume_init(&mVolume);
 }
@@ -106,6 +107,11 @@ qreal PulseStream::cachedVolume() const
 void PulseStream::setCachedVolume(qreal volume)
 {
     mCachedVolume = volume;
+}
+
+QString PulseStream::role() const
+{
+    return mRole;
 }
 
 void PulseStream::applyCachedVolume()

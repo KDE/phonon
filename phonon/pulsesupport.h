@@ -56,8 +56,10 @@ namespace Phonon
 
             PulseStream *registerOutputStream(QString streamUuid, Category category);
             PulseStream *registerCaptureStream(QString streamUuid, CaptureCategory category);
-
             PHONON_DEPRECATED PulseStream *registerCaptureStream(QString streamUuid, Category category);
+
+            QHash<QString, QString> streamProperties(QString streamUuid) const;
+            void setupStreamEnvironment(QString streamUuid);
 
             void emitObjectDescriptionChanged(ObjectDescriptionType);
 

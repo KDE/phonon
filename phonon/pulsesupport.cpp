@@ -1120,18 +1120,22 @@ void PulseSupport::setCaptureDevicePriorityForCategory(Category category, QList<
 static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString streamUuid, QString role)
 {
     logMessage(QString::fromLatin1("Initialising streamindex %1").arg(streamUuid));
-    if (!role.isEmpty()) {
-        logMessage(QString::fromLatin1("Setting role to %1 for streamindex %2").arg(role).arg(streamUuid));
-        qputenv("PULSE_PROP_media.role", role.toLatin1());
-    }
-    qputenv("PULSE_PROP_phonon.streamid", streamUuid.toLatin1());
 
-    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_NAME, Platform::applicationName().toUtf8());
-    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_VERSION, qApp->applicationVersion().toUtf8());
-    qputenv("PULSE_PROP_OVERRIDE_"PA_PROP_APPLICATION_ICON_NAME, qApp->applicationName().toUtf8());
-
-    PulseStream *stream = new PulseStream(streamUuid);
+    PulseStream *stream = new PulseStream(streamUuid, role);
     map[streamUuid] = stream;
+
+    // Setup envrionment...
+    // These values are considered static, so we force property overrides for them.
+    if (!Platform::applicationName().isEmpty())
+        qputenv(QString("PULSE_PROP_OVERRIDE_%1").arg(PA_PROP_APPLICATION_NAME).toUtf8(),
+                Platform::applicationName().toUtf8());
+    if (!qApp->applicationVersion().isEmpty())
+        qputenv(QString("PULSE_PROP_OVERRIDE_%1").arg(PA_PROP_APPLICATION_VERSION).toUtf8(),
+                qApp->applicationVersion().toUtf8());
+    if (!qApp->applicationName().isEmpty())
+        qputenv(QString("PULSE_PROP_OVERRIDE_%1").arg(PA_PROP_APPLICATION_ICON_NAME).toUtf8(),
+                qApp->applicationName().toUtf8());
+
     return stream;
 }
 
@@ -1180,6 +1184,59 @@ PulseStream *PulseSupport::registerCaptureStream(QString streamUuid, Category ca
 #else
     return register_stream(s_captureStreams, streamUuid, category);
 #endif
+}
+
+QHash<QString, QString> PulseSupport::streamProperties(QString streamUuid) const
+{
+    QHash<QString, QString> properties;
+
+#ifdef HAVE_PULSEAUDIO
+    PulseStream *stream = 0;
+
+    // Try to find the stream among the known output streams.
+    if (!stream)
+        stream = s_outputStreams.value(streamUuid);
+
+    // Not an output stream, try capture streams.
+    if (!stream)
+        stream = s_captureStreams.value(streamUuid);
+
+    // Also no capture stream, start crying and return an empty hash.
+    if (!stream) {
+        qWarning() << Q_FUNC_INFO << "Requested UUID Could not be found. Returning with empty properties.";
+        return properties;
+    }
+
+    properties[QLatin1String(PA_PROP_PHONON_STREAMID)] = stream->uuid();
+    properties[QLatin1String(PA_PROP_MEDIA_ROLE)] = stream->role();
+
+    // Tear down environment before returning. This is to prevent backends from
+    // being overridden by the environment if present.
+    QHashIterator<QString, QString> it(properties);
+    while (it.hasNext()) {
+        it.next();
+        unsetenv(QString("PULSE_PROP_OVERRIDE_%1").arg(it.key()).toUtf8());
+    }
+#endif // HAVE_PULSEAUDIO
+
+    return properties;
+}
+
+void PulseSupport::setupStreamEnvironment(QString streamUuid)
+{
+    pDebug() << "Please note that your current Phonon backend is trying to force"
+                " stream dependent PulseAudio properties through envrionment variables."
+                " Slightly unprecise timing in doing so will prevent the first"
+                " of two subsequently started AudioOutputs to have disfunct volume"
+                " control. Also see https://bugs.kde.org/show_bug.cgi?id=321288";
+
+    const QHash<QString, QString> properties = streamProperties(streamUuid);
+
+    QHashIterator<QString, QString> it(properties);
+    while (it.hasNext()) {
+        it.next();
+        qputenv(QString("PULSE_PROP_OVERRIDE_%1").arg(it.key()).toUtf8(), it.value().toUtf8());
+    }
 }
 
 void PulseSupport::emitObjectDescriptionChanged(ObjectDescriptionType type)
