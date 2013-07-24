@@ -44,12 +44,12 @@ PulseStream::~PulseStream()
 {
 }
 
-QString PulseStream::uuid()
+QString PulseStream::uuid() const
 {
     return mStreamUuid;
 }
 
-uint32_t PulseStream::index()
+uint32_t PulseStream::index() const
 {
     return mIndex;
 }
@@ -59,7 +59,7 @@ void PulseStream::setIndex(uint32_t index)
     mIndex = index;
 }
 
-uint8_t PulseStream::channels()
+uint8_t PulseStream::channels() const
 {
     return mVolume.channels;
 }

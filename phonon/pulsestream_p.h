@@ -41,12 +41,12 @@ namespace Phonon
             PulseStream(QString streamUuid);
             ~PulseStream();
 
-            QString uuid();
+            QString uuid() const;
 
-            uint32_t index();
+            uint32_t index() const;
             void setIndex(uint32_t index);
 
-            uint8_t channels();
+            uint8_t channels() const;
 
             void setDevice(int device);
             void setVolume(const pa_cvolume *volume);
