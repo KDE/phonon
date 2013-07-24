@@ -34,7 +34,7 @@ MediaElement::MediaElement(QDeclarativeItem *parent) :
     m_finished(false),
     m_metaData(0)
 {
-#ifdef __GNC__
+#ifdef __GNUC__
 #warning the whole lazy init stuff is getting a bit fugly
 #endif
 }
