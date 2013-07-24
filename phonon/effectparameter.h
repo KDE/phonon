@@ -151,7 +151,7 @@ class PHONON_EXPORT EffectParameter
         enum Hint {
             /**
              * If this hint is set it means that
-             * the the control has only two states: zero and non-zero.
+             * the control has only two states: zero and non-zero.
              *
              * \see isToggleControl()
              */

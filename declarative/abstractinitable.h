@@ -106,7 +106,7 @@ public:
      *
      * While the latter option permits startup improvements due to lazy init()
      * up until the point when the user actually tries to use the Phonon graph
-     * it also requires you to protect your class from accesses to unitialized
+     * it also requires you to protect your class from accesses to uninitialized
      * members before init() was called.
      *
      * To help with the protection there are the macros P_D_PROTECT and

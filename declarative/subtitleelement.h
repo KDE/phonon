@@ -39,7 +39,7 @@ namespace Declarative {
  * of Phonon::MediaController, but mind that this class is limited to subtitle
  * related actions.
  *
- * Like every Phonon Qt Quick class this class provides semi-lazy initalization
+ * Like every Phonon Qt Quick class this class provides semi-lazy initialization
  * as provided described by the AbstractInitAble class.
  *
  * \see Phonon::MediaController

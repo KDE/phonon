@@ -110,7 +110,7 @@ void StatesValidator::validateTick(qint64 pos)
     if (m_mediaObject->state() != Phonon::PlayingState
             && (m_prevState != Phonon::PlayingState
                 && m_mediaObject->state() != Phonon::BufferingState))
-        P_INVALID_STATE("Recieved tick outside of Playing state.");
+        P_INVALID_STATE("Received tick outside of Playing state.");
     // If and only if we did not queue a new source may a seek back in time
     // result in a reemission of the signal. It should not, but it is allowed.
     // Point being, if the API consumer did not set one the first time, they

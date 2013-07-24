@@ -36,7 +36,7 @@ namespace Declarative {
  * For general information regarding capabilities please see the documentation
  * of Phonon::VolumeFaderEffect.
  *
- * Like every Phonon Qt Quick class this class provides semi-lazy initalization
+ * Like every Phonon Qt Quick class this class provides semi-lazy initialization
  * as provided described by the AbstractInitAble class.
  *
  * \see Phonon::VolumeFaderEffect

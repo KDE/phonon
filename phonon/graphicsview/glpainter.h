@@ -59,7 +59,7 @@ public:
     /** Initialize for an YV12 frame. */
     void initYv12();
 
-    /** Initalize the color matrix to be used for YUV->RGB color conversion. */
+    /** Initialize the color matrix to be used for YUV->RGB color conversion. */
     void initColorMatrix();
 
     /**

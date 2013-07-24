@@ -50,7 +50,7 @@ public:
     {
         // Try to find a matching format.
         // Iterate the painters in order glsl>glarb>qpainter, foreach painter check
-        // if it supports one of the choosen formats in the order from the backend.
+        // if it supports one of the chosen formats in the order from the backend.
         // That way we get to choose our most preferred (e.g. reliable) painter,
         // while honoring the backends priorization. Painting is weighted more
         // because a bad painter in Qt Quick 1 will cause insanely bad quality (QPainter...)
