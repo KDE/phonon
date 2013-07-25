@@ -157,19 +157,16 @@ public:
 } // namespace Phonon
 
 #ifdef PHONON_BACKEND_VERSION_4_7
-#warning 47
 namespace Phonon { typedef AudioOutputInterface47 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface40, "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "4AudioOutputInterface.phonon.kde.org")
 #elif defined PHONON_BACKEND_VERSION_4_2
-#warning 42
 namespace Phonon { typedef AudioOutputInterface42 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface40, "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "3AudioOutputInterface.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface47, "4AudioOutputInterface.phonon.kde.org")
 #else
-#warning 40
 namespace Phonon { typedef AudioOutputInterface40 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phonon.kde.org")
