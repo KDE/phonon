@@ -38,7 +38,6 @@ MetaDataReader::MetaDataReader(QString &file, QTextStream &out):
 
 MetaDataReader::~MetaDataReader()
 {
-    delete mediaObj;
 }
 
 
