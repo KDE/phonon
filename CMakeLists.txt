@@ -48,30 +48,35 @@ include(cmake/FindPhononInternal.cmake)
 find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 
+set(DBUS_DESC "Needed to enable control of AudioOutputs via DBus")
+set(DESIGNER_DESC "Needed to build the Qt Designer plugin.")
+set(GL_DESC "Only recommended when bulding the super experimental QML support.")
+set(DECL_DESC "Only recommended when bulding the super experimental QML support.")
+
 if (NOT PHONON_BUILD_PHONON4QT5) # Qt 4
-    macro_log_feature(QT_QTDBUS_FOUND "Qt4 DBus" "" "" FALSE)
-    macro_log_feature(QT_QTDESIGNER_FOUND "Qt4 Designer" "" "" FALSE)
-    macro_log_feature(QT_QTOPENGL_FOUND "Qt4 OpenGL" "" "" FALSE)
-    macro_log_feature(QT_QTDECLARATIVE_FOUND "Qt4 Declarative" "" "" FALSE)
+    macro_log_feature(QT_QTDBUS_FOUND "Qt4 DBus" ${DBUS_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
+    macro_log_feature(QT_QTDESIGNER_FOUND "Qt4 Designer" ${DESIGNER_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
+    macro_log_feature(QT_QTOPENGL_FOUND "Qt4 OpenGL" ${GL_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
+    macro_log_feature(QT_QTDECLARATIVE_FOUND "Qt4 Declarative" ${DECL_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
 else (NOT PHONON_BUILD_PHONON4QT5) # Qt 5
     # DBus Audio Output Introspection
     find_package(Qt5DBus)
-    macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" "" "" FALSE)
+    macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" ${DBUS_DESC} "http://www.qt.gitorious.net/qt/qtbase" FALSE)
     set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 
     # Designer Plugin
     find_package(Qt5Designer)
-    macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" "" "" FALSE)
+    macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" ${DESIGNER_DESC} "http://www.qt.gitorious.net/qt/qttools" FALSE)
     set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
 
     # VideoGraphicsObject GL Painting
     find_package(Qt5OpenGL)
-    macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" "" "" FALSE)
+    macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" ${GL_DESC} "http://www.qt.gitorious.net/qt/qtbase" FALSE)
     set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 
     # Declarative/QML1
     find_package(Qt5Declarative)
-    macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" "" "" FALSE)
+    macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" ${DECL_DESC} "http://www.qt.gitorious.net/qt/qtquick1" FALSE)
     set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 endif (NOT PHONON_BUILD_PHONON4QT5)
 ################################################################################
