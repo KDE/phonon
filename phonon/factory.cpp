@@ -302,10 +302,6 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
 #ifndef PHONON_NO_DBUS
 void FactoryPrivate::phononBackendChanged()
 {
-#ifdef __GNUC__
-#warning TODO hyperspeed: the message box only ought to be shown once and not for \
-    every backend switch
-#endif
     QMessageBox::information(qApp->activeWindow(),
                              tr("Restart Application"),
                              tr("You changed the backend of the Phonon multimedia system.\n\n"
