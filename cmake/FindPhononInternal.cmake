@@ -98,7 +98,7 @@ if (NOT PHONON_BUILD_PHONON4QT5) # Qt4
 
     macro (qt5_wrap_ui)
         qt4_wrap_ui(${ARGN})
-    endmacro (qt5_add_resources)
+    endmacro ()
 else (NOT PHONON_BUILD_PHONON4QT5) # Qt5
     find_package(Qt5Core)
     macro_log_feature(Qt5Core_FOUND "Qt5 Core (qtbase)" "" "" TRUE)
