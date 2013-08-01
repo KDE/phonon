@@ -1,0 +1,3 @@
+EXCLUDE qclasses
+SKIP /doc
+SKIP /build
