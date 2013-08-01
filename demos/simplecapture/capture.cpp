@@ -85,7 +85,7 @@ CaptureWidget::CaptureWidget(QWidget* parent, Qt::WindowFlags f): QWidget(parent
     m_media->setCurrentSource(source);
 
     // Connect the stateChanged signal from the media object used for capture
-    connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+    connect(m_media, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
             this, SLOT(mediaStateChanged(Phonon::State)));
 
     // Start capturing

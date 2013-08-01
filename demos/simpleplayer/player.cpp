@@ -87,7 +87,7 @@ Player::Player(QWidget* parent, Qt::WindowFlags flags)
 
     //The mediaStateChanged slot will update the GUI elements to reflect what
     //the user can do next
-    connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
+    connect(m_media, SIGNAL(stateChanged(Phonon::State,Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State,Phonon::State)));
 }
 
 void Player::playPause()

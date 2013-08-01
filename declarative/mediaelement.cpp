@@ -49,8 +49,8 @@ void MediaElement::classBegin()
     m_mediaObject->setTickInterval(100);
     m_mediaObject->setCurrentSource(MediaSource(m_source));
 
-    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-            this, SLOT(handleStateChange(Phonon::State, Phonon::State)));
+    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
+            this, SLOT(handleStateChange(Phonon::State,Phonon::State)));
     connect(m_mediaObject, SIGNAL(finished()),
             this, SLOT(handleFinished()));
 
