@@ -51,7 +51,7 @@
 
 #ifndef PHONON_NO_GRAPHICSVIEW
 #include <graphicsview/videographicsobject.h>
-#endif PHONON_BUILD_DECLARATIVE_PLUGIN
+#endif
 
 #define PHONON_CLASSNAME MediaObject
 #define PHONON_INTERFACENAME MediaObjectInterface
