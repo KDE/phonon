@@ -189,9 +189,7 @@ bool StatesValidator::validateStateTransition(Phonon::State newstate, Phonon::St
         case Phonon::PlayingState:
         case Phonon::PausedState:
         case Phonon::ErrorState:
-#ifdef __GNUC__
-#warning TODO: buffering state needs fixing, should not transit to stop
-#endif // __GNUC__
+// TODO: buffering state needs fixing, should not transit to stop
         case Phonon::StoppedState:
             return true;
         default:
