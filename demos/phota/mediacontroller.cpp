@@ -39,7 +39,7 @@ Phonon::MediaObject *MediaController::mediaObject() const
 
 void MediaController::openFile()
 {
-    QString file = QFileDialog::getOpenFileName(0, tr("Open a new file to play"), "");
+    QUrl file = QUrl::fromLocalFile(QFileDialog::getOpenFileName(0, tr("Open a new file to play"), ""));
     if (!file.isEmpty()) {
         Phonon::MediaSource s(file);
         playSource(s);

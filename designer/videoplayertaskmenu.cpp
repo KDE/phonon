@@ -156,7 +156,7 @@ void VideoPlayerTaskMenu::slotMimeTypes()
 
 void VideoPlayerTaskMenu::slotLoad()
 {
-    const QString fileName = QFileDialog::getOpenFileName(m_widget->window(), tr("Choose Video Player Media Source"));
+    const QUrl fileName = QUrl::fromLocalFile(QFileDialog::getOpenFileName(m_widget->window(), tr("Choose Video Player Media Source")));
     if (fileName.isEmpty())
         return;
     m_widget->load(Phonon::MediaSource(fileName));

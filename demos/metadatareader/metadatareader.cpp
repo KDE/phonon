@@ -32,7 +32,7 @@ MetaDataReader::MetaDataReader(QString &file, QTextStream &out):
     connect(mediaObj, SIGNAL(metaDataChanged()), this, SLOT(printMetaData()));
     connect(mediaObj, SIGNAL(stateChanged(Phonon::State,Phonon::State)), SLOT(checkForError(Phonon::State,Phonon::State)));
 
-    mediaObj->setCurrentSource(file);
+    mediaObj->setCurrentSource(QUrl::fromLocalFile(file));
 }
 
 
