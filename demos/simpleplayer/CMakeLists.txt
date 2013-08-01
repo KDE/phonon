@@ -1,9 +1,6 @@
 project(simpleplayer)
 cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-
 find_package(Phonon REQUIRED)
 
 add_definitions(${QT_DEFINITIONS} ${PHONON_DEFINITIONS})
