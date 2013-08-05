@@ -1,0 +1,93 @@
+/**
+
+\page phonon4qt5 Phonon4Qt5
+
+<p><b>
+\ref index "Overview" |
+Phonon4Qt5
+</b></p>
+
+Phonon4Qt5, as the name suggets, is a version of the Phonon 4 library built
+against Qt5 rather than Qt4.
+
+It has the same API as a Phonon built against Qt4, but differs in ABI and file
+names.
+This allows development and/or delpoyment of your application to happen against
+either version of Qt.
+
+\section phonon4qt5_building Building
+
+To build Phonon4Qt5 you will have to pass PHONON_BUILD_PHONON4QT5 to CMake to
+switch it into Qt5 build mode.
+
+Additionally if you are build against a qt-project provided binary build of Qt5
+you may have to define the CMAKE_PREFIX_PATH to make CMake find Qt5.
+
+For example:
+\verbatim
+mkdir build5
+cd build5
+cmake .. -DPHONON_BUILD_PHONON4QT5=ON -DCMAKE_PREFIX_PATH=/opt/Qt5.0.0/5.0.0/gcc_64
+\endverbatim
+
+Phonon4Qt5 installation does not conflict with regular Phonon installations in
+any way; It uses different file and folder names for everything installed.
+
+\section phonon4qt5_using Usage
+
+Except for a couple of lines in CMake, using Phonon4Qt5 is identical to using
+Phonon.
+
+\subsection phonon4qt5_using_cmake CMake
+To check for Phonon4Qt5 in your CMake project simply use find_package. Variables
+other than *_FOUND variable will have a generic PHONON prefix making it easier
+to support both versions without excessive if/else blocks.
+
+\code{.cmake}
+if(BUILDING_AGAINST_QT5)
+    find_package(Phonon4Qt5 REQUIRED)
+else()
+    find_package(Phonon REQUIRED)
+endif()
+
+# These are present regardless of which path was chosen
+message("${PHONON_LIBRARY} contains the path to libphonon4qt5 or libphonon")
+message("${PHONON_INCLUDE_DIR} contains the phonon4qt5 or phonon include directory")
+\endcode
+
+\note While you were able to get away with not adding PHONON_INCLUDE_DIR to
+CMake's include_directories on various Unix systems, this will not work with
+Phonon4Qt5; It is using nested directories to achieve 100 % source compatibility
+with Phonon, so your compiler will not be able to find phonon/* includes by
+simply looking in standard paths.
+
+\subsection phonon4qt5_using_qmake QMake
+
+To use Phonon4Qt5 in your QMake project you can simply use:
+\code{.pro}
+QT += phonon4qt5
+\endcode
+
+QMake will take care of everything else.
+
+\subsection phonon4qt5_using_cpp C++
+
+For the actual code there is absolutely no difference between Phonon and
+Phonon4Qt5.
+
+Consequently the following code example will work with either version:
+\code{.cpp}
+#include <QUrl>
+#include <phonon/MediaSource>
+
+int main()
+{
+    QUrl url("file:///home/user/firefly.webm");
+    Phonon::MediaSource source(url);
+    if (!source.isValid())
+        return 1;
+    return 0;
+}
+\endcode
+
+*/

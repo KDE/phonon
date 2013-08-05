@@ -7,6 +7,7 @@ set(PHONON_DOXYGEN_QHP_NAMESPACE "org.kde.phonon.${PHONON_LIB_VERSION}")
 set(PHONON_DOXYGEN_SRCS
     ${PHONON_SOURCE_DIR}/Mainpage.dox
     ${PHONON_SOURCE_DIR}/doc/Backend.dox
+    ${PHONON_SOURCE_DIR}/doc/Phonon4Qt5.dox
     ${PHONON_SOURCE_DIR}/phonon
 )
 string(REGEX REPLACE ";" " " PHONON_DOXYGEN_SRCS "${PHONON_DOXYGEN_SRCS}")
