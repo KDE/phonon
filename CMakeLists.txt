@@ -58,6 +58,7 @@ if (NOT PHONON_BUILD_PHONON4QT5) # Qt 4
     macro_log_feature(QT_QTDESIGNER_FOUND "Qt4 Designer" ${DESIGNER_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
     macro_log_feature(QT_QTOPENGL_FOUND "Qt4 OpenGL" ${GL_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
     macro_log_feature(QT_QTDECLARATIVE_FOUND "Qt4 Declarative" ${DECL_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
+    set(PHONON_PKG_DEPENDENCIES "QtCore QtGui QtDBus")
 else (NOT PHONON_BUILD_PHONON4QT5) # Qt 5
     # DBus Audio Output Introspection
     find_package(Qt5DBus)
@@ -78,6 +79,8 @@ else (NOT PHONON_BUILD_PHONON4QT5) # Qt 5
     find_package(Qt5Declarative)
     macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" ${DECL_DESC} "http://www.qt.gitorious.net/qt/qtquick1" FALSE)
     set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+
+    set(PHONON_PKG_DEPENDENCIES "Qt5Core Qt5Gui Qt5DBus")
 endif (NOT PHONON_BUILD_PHONON4QT5)
 ################################################################################
 

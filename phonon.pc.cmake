@@ -7,6 +7,6 @@ buildsystemdir=@ABS_BUILDSYSTEM_INSTALL_DIR@
 Name: @PHONON_LIB_SONAME_CAMEL@
 Description: Phonon library needed to build applications
 Version: @PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONON_LIB_PATCH_VERSION@
-Requires: QtCore QtGui QtDBus
+Requires: @PHONON_PKG_DEPENDENCIES@
 Libs: -L${libdir} -l@PHONON_LIB_SONAME@
 Cflags: -I${includedir}
