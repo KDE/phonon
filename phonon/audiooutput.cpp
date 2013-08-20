@@ -39,9 +39,10 @@
 #include <QtCore/qmath.h>
 
 #define PHONON_CLASSNAME AudioOutput
+#define IFECES7 AudioOutputInterface47
 #define IFACES2 AudioOutputInterface42
 #define IFACES1 IFACES2
-#define IFACES0 AudioOutputInterface40, IFACES1
+#define IFACES0 AudioOutputInterface40, IFACES1, IFECES7
 #define PHONON_INTERFACENAME IFACES0
 
 namespace Phonon
@@ -543,6 +544,7 @@ AudioOutputPrivate::~AudioOutputPrivate()
 
 #undef PHONON_CLASSNAME
 #undef PHONON_INTERFACENAME
+#undef IFECES7
 #undef IFACES2
 #undef IFACES1
 #undef IFACES0
