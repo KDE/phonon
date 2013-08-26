@@ -27,18 +27,11 @@
 #include "abstractaudiooutput.h"
 #include "abstractaudiooutput_p.h"
 #include "factory_p.h"
-#include "mediaobjectinterface.h"
-#include "phonondefs_p.h"
-#include "abstractmediastream.h"
-#include "abstractmediastream_p.h"
 
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
 
 #include "phononnamespace_p.h"
-
-#define PHONON_CLASSNAME Player
-#define PHONON_INTERFACENAME PlayerInterface
 
 namespace Phonon {
 
@@ -51,15 +44,16 @@ Player::Player(QObject *parent)
 Player::~Player()
 {
     P_D(Player);
-    if (d->m_backendObject) {
-        switch (state()) {
-        case PlayingState:
-        case PausedState:
-            stop();
-            break;
-        case StoppedState:
-            break;
-        }
+    if (!d->m_backendObject)
+        return;
+
+    switch (state()) {
+    case PlayingState:
+    case PausedState:
+        stop();
+        break;
+    case StoppedState:
+        break;
     }
 }
 
@@ -69,13 +63,39 @@ Phonon::State Player::state() const
     if (!d->m_backendObject) {
         return d->state;
     }
-    return INTERFACE_CALL(state());
+    return d->interface->state();
 }
 
-PHONON_INTERFACE_SETTER(setTickInterval, tickInterval, qint32)
-PHONON_INTERFACE_GETTER(qint32, tickInterval, d->tickInterval)
-PHONON_INTERFACE_GETTER(bool, isSeekable, false)
-PHONON_INTERFACE_GETTER(qint64, currentTime, d->currentTime)
+void Player::setTickInterval(qint32 newTickInterval)
+{
+    P_D(Player);
+    if (d->interface)
+        d->interface->setTickInterval(newTickInterval);
+}
+
+qint32 Player::tickInterval() const
+{
+    P_D(const Player);
+    if (!d->interface)
+        return d->tickInterval;
+    return d->interface->tickInterval();
+}
+
+bool Player::isSeekable() const
+{
+    P_D(const Player);
+    if (!d->interface)
+        return false;
+    return d->interface->isSeekable();
+}
+
+qint64 Player::currentTime() const
+{
+    P_D(const Player);
+    if (!d->interface)
+        return d->currentTime;
+    return d->interface->currentTime();
+}
 
 static inline bool isPlayable(const Source::Type t)
 {
@@ -85,50 +105,44 @@ static inline bool isPlayable(const Source::Type t)
 void Player::play()
 {
     P_D(Player);
-    if (d->backendObject() && isPlayable(d->mediaSource.type())) {
-        INTERFACE_CALL(play());
-    }
+    if (d->interface && isPlayable(d->mediaSource.type()))
+        d->interface->play();
 }
 
 void Player::pause()
 {
     P_D(Player);
-    if (d->backendObject() && isPlayable(d->mediaSource.type())) {
-        INTERFACE_CALL(pause());
-    }
+    if (d->interface && isPlayable(d->mediaSource.type()))
+        d->interface->pause();
 }
 
 void Player::stop()
 {
     P_D(Player);
-    if (d->backendObject() && isPlayable(d->mediaSource.type())) {
-        INTERFACE_CALL(stop());
-    }
+    if (d->interface && isPlayable(d->mediaSource.type()))
+        d->interface->stop();
 }
 
 void Player::seek(qint64 time)
 {
     P_D(Player);
-    if (d->backendObject() && isPlayable(d->mediaSource.type())) {
-        INTERFACE_CALL(seek(time));
-    }
+    if (d->interface && isPlayable(d->mediaSource.type()))
+        d->interface->seek(time);
 }
 
 QString Player::errorString() const
 {
-    if (state() == Phonon::ErrorState) {
-        P_D(const Player);
-        return INTERFACE_CALL(errorString());
-    }
+    P_D(const Player);
+    if (d->interface && state() == Phonon::ErrorState)
+        return d->interface->errorString();
     return QString();
 }
 
 ErrorType Player::errorType() const
 {
-    if (state() == Phonon::ErrorState) {
-        P_D(const Player);
-        return INTERFACE_CALL(errorType());
-    }
+    P_D(const Player);
+    if (d->interface && state() == Phonon::ErrorState)
+        return d->interface->errorType();
     return Phonon::NoError;
 }
 
@@ -170,22 +184,20 @@ QMultiMap<QString, QString> Player::metaData() const
 qint64 Player::totalTime() const
 {
     P_D(const Player);
-    if (!d->m_backendObject) {
+    if (!d->interface)
         return -1;
-    }
-    return INTERFACE_CALL(totalTime());
+    return d->interface->totalTime();
 }
 
 qint64 Player::remainingTime() const
 {
     P_D(const Player);
-    if (!d->m_backendObject) {
+    if (!d->interface)
         return -1;
-    }
-    qint64 ret = INTERFACE_CALL(remainingTime());
-    if (ret < 0) {
-        return -1;
-    }
+
+    const qint64 ret = d->interface->remainingTime();
+    if (ret < -1)
+        return -1; // Less than -1 is not a valid return value from us.
     return ret;
 }
 
@@ -197,7 +209,7 @@ void Player::addAudioOutput(AbstractAudioOutput *audioOutput)
     d->createBackendObject();
     if (!d->backendObject())
         qWarning("No PrivateObject present");
-    INTERFACE_CALL(addAudioOutput(audioOutput->k_func()->backendObject()));
+    d->interface->addAudioOutput(audioOutput->k_func()->backendObject());
 }
 
 Source Player::source() const
@@ -209,7 +221,7 @@ Source Player::source() const
 void Player::setSource(const Source &newSource)
 {
     P_D(Player);
-    if (!d->backendObject()) {
+    if (!d->interface) {
         d->mediaSource = newSource;
         return;
     }
@@ -231,15 +243,16 @@ void Player::setSource(const Source &newSource)
     d->playingQueuedSource = false;
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
-    INTERFACE_CALL(setSource(d->mediaSource));
+    d->interface->setSource(d->mediaSource);
 }
 
 bool PlayerPrivate::aboutToDeleteBackendObject()
 {
-    if (m_backendObject) {
-        state = pINTERFACE_CALL(state());
-        currentTime = pINTERFACE_CALL(currentTime());
-        tickInterval = pINTERFACE_CALL(tickInterval());
+#warning why do we grab data from the backend when deleting? because of onthefly switching?
+    if (interface) {
+        state = interface->state();
+        currentTime = interface->currentTime();
+        tickInterval = interface->tickInterval();
     }
     return true;
 }
@@ -248,9 +261,11 @@ void PlayerPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
+
     P_Q(Player);
     m_backendObject = Factory::createPlayer(q);
-    if (m_backendObject)
+    interface = qobject_cast<PlayerInterface *>(m_backendObject);
+    if (m_backendObject && interface) // We need to have at least the base interface.
         setupBackendObject();
 }
 
@@ -299,7 +314,7 @@ void PlayerPrivate::setupBackendObject()
                      q, SIGNAL(currentSourceChanged(Source)), Qt::QueuedConnection);
 
     // set up attributes
-    pINTERFACE_CALL(setTickInterval(tickInterval));
+    interface->setTickInterval(tickInterval);
 
     switch(state) {
     case StoppedState:
@@ -312,7 +327,7 @@ void PlayerPrivate::setupBackendObject()
         break;
     }
 
-    const State backendState = pINTERFACE_CALL(state());
+    const State backendState = interface->state();
     if (state != backendState && state != ErrorState) {
         // careful: if state is ErrorState we might be switching from a
         // MediaObject to a ByteStream for KIO fallback. In that case the state
@@ -330,24 +345,28 @@ void PlayerPrivate::setupBackendObject()
             mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
         }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        pINTERFACE_CALL(setSource(mediaSource));
+        interface->setSource(mediaSource);
     }
 }
 
 void PlayerPrivate::_k_resumePlay()
 {
-    pINTERFACE_CALL(play());
-    if (currentTime > 0) {
-        pINTERFACE_CALL(seek(currentTime));
-    }
+    if (!interface)
+        return; // Cannot happen short of bad eventloop timing.
+
+    interface->play();
+    if (currentTime > 0)
+        interface->seek(currentTime);
 }
 
 void PlayerPrivate::_k_resumePause()
 {
-    pINTERFACE_CALL(pause());
-    if (currentTime > 0) {
-        pINTERFACE_CALL(seek(currentTime));
-    }
+    if (!interface)
+        return; // Cannot happen short of bad eventloop timing.
+
+    interface->pause();
+    if (currentTime > 0)
+        interface->seek(currentTime);
 }
 
 void PlayerPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &newMetaData)
@@ -368,6 +387,3 @@ void PlayerPrivate::phononObjectDestroyed(FrontendPrivate *bp)
 } //namespace Phonon
 
 #include "moc_mediaobject.cpp"
-
-#undef PHONON_CLASSNAME
-#undef PHONON_INTERFACENAME

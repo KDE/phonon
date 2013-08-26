@@ -26,6 +26,7 @@
 #include "medianode_p.h"
 #include "mediaobject.h"
 #include "phonondefs_p.h"
+#include "mediaobjectinterface.h"
 
 namespace Phonon {
 
@@ -65,10 +66,12 @@ protected:
         , playingQueuedSource(false)
         , errorType(Phonon::NormalError)
     #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+        , interface(0)
     {}
 
     ~PlayerPrivate() {}
 
+#warning base uses m_ prefix, playerprivate does not....
     qint64 currentTime;
     qint32 tickInterval;
     QMultiMap<QString, QString> metaData;
@@ -81,6 +84,8 @@ protected:
     Source mediaSource;
 
     QList<AbstractAudioOutput *> audioOutputs;
+
+    PlayerInterface *interface;
 
 private:
     P_DECLARE_PUBLIC(Player)
