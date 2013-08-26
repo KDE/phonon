@@ -39,7 +39,6 @@ class PlayerPrivate : public FrontendPrivate
 public:
     virtual QObject *qObject() { return q_func(); }
 
-    QList<FrontendInterfacePrivate *> interfaceList;
 protected:
     virtual bool aboutToDeleteBackendObject();
     virtual void createBackendObject();
