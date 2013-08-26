@@ -59,7 +59,6 @@ protected:
         : currentTime(0)
         , tickInterval(0)
         , metaData()
-        , errorString()
         , state(Phonon::StoppedState)
     #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         , abstractStream(0)
@@ -73,7 +72,6 @@ protected:
     qint64 currentTime;
     qint32 tickInterval;
     QMultiMap<QString, QString> metaData;
-    QString errorString;
     State state;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     AbstractMediaStream *abstractStream;
