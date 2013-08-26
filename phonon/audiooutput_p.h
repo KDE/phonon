@@ -23,8 +23,9 @@
 #ifndef AUDIOOUTPUT_P_H
 #define AUDIOOUTPUT_P_H
 
-#include "audiooutput.h"
 #include "abstractaudiooutput_p.h"
+#include "audiooutput.h"
+#include "audiooutputinterface.h"
 #include "platform_p.h"
 
 namespace Phonon {
@@ -42,6 +43,7 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
 protected:
     AudioOutputPrivate()
         : AbstractAudioOutputPrivate()
+        , interface(0)
         , volume(1.0)
         , deviceBeforeFallback(-1)
         , outputDeviceOverridden(false)
@@ -59,6 +61,8 @@ protected:
     };
     void handleAutomaticDeviceChange(const AudioOutputDevice &newDev, DeviceChangeType type);
 
+    bool callSetOutputDevice(const AudioOutputDevice &dev);
+
     void _k_volumeChanged(qreal);
     void _k_mutedChanged(bool);
     void _k_revertFallback();
@@ -67,6 +71,7 @@ protected:
     void _k_deviceChanged(int deviceIndex);
 
 private:
+    AudioOutputInterface *interface;
     Phonon::AudioOutputDevice device;
     qreal volume;
     QString streamUuid;
