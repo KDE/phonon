@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -26,17 +26,7 @@
 #include <QtCore/QtGlobal>
 #include "phonon_export.h"
 
-
-#ifdef PHONON_BACKEND_VERSION_4_4
-# ifndef PHONON_BACKEND_VERSION_4_3
-#  define PHONON_BACKEND_VERSION_4_3
-# endif
-#endif
-#ifdef PHONON_BACKEND_VERSION_4_3
-# ifndef PHONON_BACKEND_VERSION_4_2
-#  define PHONON_BACKEND_VERSION_4_2
-# endif
-#endif
+#warning phonondefs is nigh empty, remove it?
 
 // the following inlines are correct - exclude per line doesn't work for multiline-macros so exclude
 // the whole file for inline checks
@@ -46,100 +36,30 @@
     inline const Class##Private* k_func() const { return reinterpret_cast<const Class##Private *>(k_ptr); } \
     friend class Class##Private;
 
-/**
- * \internal
- * Used in class declarations to provide the needed functions. This is used for
- * abstract base classes.
- *
- * \param classname The Name of the class this macro is used for.
- *
- * Example:
- * \code
- * class AbstractEffect : public QObject
- * {
- *   Q _OBJECT
- *   Q_PROPERTY(int propertyA READ propertyA WRITE setPropertyA)
- *   PHONON_ABSTRACTBASE(AbstractEffect)
- *   public:
- *     int propertyA() const;
- *     void setPropertyA(int);
- * };
- * \endcode
- *
- * \see PHONON_OBJECT
- * \see PHONON_HEIR
- */
-#define PHONON_ABSTRACTBASE(classname) \
-protected: \
-    /**
-     * \internal
-     * Constructor that is called from derived classes.
-     *
-     * \param parent Standard QObject parent.
-     */ \
-    classname(classname ## Private &dd, QObject *parent); \
-private:
+//#define PHONON_ABSTRACTBASE(classname) \
+//protected: \
+//    /**
+//     * \internal
+//     * Constructor that is called from derived classes.
+//     *
+//     * \param parent Standard QObject parent.
+//     */ \
+//    classname(classname ## Private &dd, QObject *parent); \
+//private:
 
-/**
- * \internal
- * Used in class declarations to provide the needed functions. This is used for
- * classes that inherit QObject directly.
- *
- * \param classname The Name of the class this macro is used for.
- *
- * Example:
- * \code
- * class EffectSettings : public QObject
- * {
- *   Q _OBJECT
- *   Q_PROPERTY(int propertyA READ propertyA WRITE setPropertyA)
- *   PHONON_OBJECT(EffectSettings)
- *   public:
- *     int propertyA() const;
- *     void setPropertyA(int);
- * };
- * \endcode
- *
- * \see PHONON_ABSTRACTBASE
- * \see PHONON_HEIR
- */
-#define PHONON_OBJECT(classname) \
-public: \
-    /**
-     * Constructs an object with the given \p parent.
-     */ \
-    classname(QObject *parent = 0); \
-private:
+//#define PHONON_OBJECT(classname) \
+//public: \
+//    /**
+//     * Constructs an object with the given \p parent.
+//     */ \
+//    classname(QObject *parent = 0); \
+//private:
 
-/**
- * \internal
- * Used in class declarations to provide the needed functions. This is used for
- * classes that inherit another Phonon object.
- *
- * \param classname The Name of the class this macro is used for.
- *
- * Example:
- * \code
- * class ConcreteEffect : public AbstractEffect
- * {
- *   Q _OBJECT
- *   Q_PROPERTY(int propertyB READ propertyB WRITE setPropertyB)
- *   PHONON_HEIR(ConcreteEffect)
- *   public:
- *     int propertyB() const;
- *     void setPropertyB(int);
- * };
- * \endcode
- *
- * \see PHONON_ABSTRACTBASE
- * \see PHONON_OBJECT
- */
-#define PHONON_HEIR(classname) \
-public: \
-    /**
-     * Constructs an object with the given \p parent.
-     */ \
-    classname(QObject *parent = 0); \
-
+//#define PHONON_HEIR(classname) \
+//public: \
+//    /**
+//     * Constructs an object with the given \p parent.
+//     */ \
+//    classname(QObject *parent = 0); \
 
 #endif // PHONONDEFS_H

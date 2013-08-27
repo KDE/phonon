@@ -34,10 +34,8 @@ class AudioOutputAdaptor;
 
 class AudioOutputPrivate : public AbstractAudioOutputPrivate
 {
-    P_DECLARE_PUBLIC(AudioOutput)
-    PHONON_PRIVATECLASS
-    public:
-        void init(Phonon::Category c);
+public:
+    void init(Phonon::Category c);
     QString getStreamUuid();
 
 protected:
@@ -53,6 +51,15 @@ protected:
     }
 
     ~AudioOutputPrivate();
+
+    /** \reimp */
+    virtual bool aboutToDeleteBackendObject();
+
+    /** \reimp */
+    virtual void createBackendObject();
+
+    /** \reimp */
+    void setupBackendObject();
 
     enum DeviceChangeType {
         FallbackChange,
@@ -80,6 +87,8 @@ private:
     bool outputDeviceOverridden;
     bool forceMove;
     bool muted;
+
+    P_DECLARE_PUBLIC(AudioOutput)
 };
 
 } //namespace Phonon

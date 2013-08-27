@@ -27,20 +27,17 @@
 
 namespace Phonon {
 
-Frontend::Frontend(FrontendPrivate &dd)
-    : k_ptr(&dd)
+FrontendPrivate::FrontendPrivate()
+    : m_backendObject(0)
 {
-    k_ptr->q_ptr = this;
+    Factory::registerFrontendObject(this);
 }
 
-bool Frontend::isValid() const
+FrontendPrivate::~FrontendPrivate()
 {
-    return const_cast<FrontendPrivate *>(k_ptr)->backendObject() != 0;
-}
-
-Frontend::~Frontend()
-{
-    delete k_ptr;
+    Factory::deregisterFrontendObject(this);
+    delete m_backendObject;
+    m_backendObject = 0;
 }
 
 QObject *FrontendPrivate::backendObject()
@@ -49,13 +46,6 @@ QObject *FrontendPrivate::backendObject()
         createBackendObject();
     }
     return m_backendObject;
-}
-
-FrontendPrivate::~FrontendPrivate()
-{
-    Factory::deregisterFrontendObject(this);
-    delete m_backendObject;
-    m_backendObject = 0;
 }
 
 void FrontendPrivate::deleteBackendObject()
@@ -71,10 +61,20 @@ bool FrontendPrivate::aboutToDeleteBackendObject()
     return true;
 }
 
-FrontendPrivate::FrontendPrivate()
-    : m_backendObject(0)
+Frontend::Frontend(FrontendPrivate &dd)
+    : k_ptr(&dd)
 {
-    Factory::registerFrontendObject(this);
+    k_ptr->q_ptr = this;
+}
+
+bool Frontend::isValid() const
+{
+    return const_cast<FrontendPrivate *>(k_ptr)->backendObject() != 0;
+}
+
+Frontend::~Frontend()
+{
+    delete k_ptr;
 }
 
 } // namespace Phonon

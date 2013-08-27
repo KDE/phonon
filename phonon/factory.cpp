@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2004-2007 Matthias Kretz <kretz@kde.org>
-    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2011-2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -36,8 +36,6 @@
 #include <QtCore/QList>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QPointer>
-#include <QApplication>
-#include <QMessageBox>
 
 namespace Phonon
 {

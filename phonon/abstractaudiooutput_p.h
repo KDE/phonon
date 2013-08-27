@@ -32,7 +32,6 @@ namespace Phonon {
 class AbstractAudioOutputPrivate : public FrontendPrivate
 {
     P_DECLARE_PUBLIC(AbstractAudioOutput)
-    PHONON_PRIVATEABSTRACTCLASS
 public:
     virtual QObject *qObject() { return q_func(); }
 
@@ -41,6 +40,12 @@ protected:
         : FrontendPrivate()
     {
     }
+
+    /** \reimp */
+    virtual bool aboutToDeleteBackendObject();
+
+    /** \reimp */
+    void setupBackendObject();
 };
 
 } // namespace Phonon
