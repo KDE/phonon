@@ -207,9 +207,6 @@ FactoryPrivate::~FactoryPrivate()
 
 void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
 {
-#ifdef PHONON_METHODTEST
-    Q_UNUSED(type);
-#else
     pDebug() << Q_FUNC_INFO << type;
     switch (type) {
     case AudioOutputDeviceType:
@@ -225,7 +222,6 @@ void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
         break;
     }
     //emit capabilitiesChanged();
-#endif // PHONON_METHODTEST
 }
 
 Factory::Sender *Factory::sender()
