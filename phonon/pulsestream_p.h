@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2010 Colin Guthrie <cguthrie@mandriva.org>
 
     This library is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_PULSESTREAM_P_H
@@ -26,45 +25,44 @@
 #include <QtCore/QObject>
 
 #include <pulse/pulseaudio.h>
-#include <stdint.h>
 
 #include "phonon_export.h"
 #include "phononnamespace.h"
 
-
 namespace Phonon
 {
-    class PHONON_EXPORT PulseStream : public QObject
-    {
-        Q_OBJECT
-        public:
-            PulseStream(QString streamUuid);
-            ~PulseStream();
 
-            QString uuid();
+class PHONON_EXPORT PulseStream : public QObject
+{
+    Q_OBJECT
+public:
+    PulseStream(QString streamUuid, QObject *parent = 0);
+    ~PulseStream();
 
-            uint32_t index();
-            void setIndex(uint32_t index);
+    QString uuid();
 
-            uint8_t channels();
+    uint32_t index();
+    void setIndex(uint32_t index);
 
-            void setDevice(int device);
-            void setVolume(const pa_cvolume *volume);
-            void setMute(bool mute);
+    uint8_t channels();
 
-        signals:
-            void usingDevice(int device);
-            void volumeChanged(qreal volume);
-            void muteChanged(bool mute);
+    void setDevice(int device);
+    void setVolume(const pa_cvolume *volume);
+    void setMute(bool mute);
 
-        private:
-            QString mStreamUuid;
-            uint32_t mIndex;
-            int mDevice;
-            pa_cvolume mVolume;
-            bool mMute;
-    };
+signals:
+    void usingDevice(int device);
+    void volumeChanged(qreal volume);
+    void muteChanged(bool mute);
+
+private:
+    QString m_streamUuid;
+    uint32_t m_index;
+    int m_device;
+    pa_cvolume m_volume;
+    bool m_mute;
+};
+
 } // namespace Phonon
-
 
 #endif // PHONON_PULSESTREAM_P_H
