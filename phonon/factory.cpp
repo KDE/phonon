@@ -385,9 +385,9 @@ QString Factory::name() \
         return globalFactory->m_backendObject->property(#name).toString(); \
     } \
     return QString(); \
-} \
-
+}
 #endif //QT_NO_PROPERTIES
+
 QObject *Factory::registerQObject(QObject *o)
 {
     if (o) {
