@@ -48,10 +48,12 @@ namespace Experimental
      *
      * \see VideoWidget
      */
-    class PHONON_EXPORT AbstractVideoOutput : public MediaNode
+    class PHONON_EXPORT AbstractVideoOutput : public Frontend
     {
+#warning FRIEEEEEEEEEEEEEEEENDS
         friend class Experimental::Visualization;
         friend class Experimental::VisualizationPrivate;
+        friend class Player;
         P_DECLARE_PRIVATE(AbstractVideoOutput)
         protected:
             /**

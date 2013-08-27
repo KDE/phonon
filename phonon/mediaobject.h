@@ -29,6 +29,7 @@
 namespace Phonon {
 
 class AbstractAudioOutput;
+class AbstractVideoOutput;
 class PlayerPrivate;
 
 class PHONON_EXPORT Player : public QObject, public Frontend
@@ -55,6 +56,7 @@ public:
 
 #warning merge outputs?
     void addAudioOutput(AbstractAudioOutput *audioOutput);
+    void addVideoOutput(AbstractVideoOutput *videoOutput);
 
 public Q_SLOTS:
     void setTickInterval(qint32 newTickInterval);

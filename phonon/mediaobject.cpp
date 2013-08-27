@@ -26,6 +26,8 @@
 
 #include "abstractaudiooutput.h"
 #include "abstractaudiooutput_p.h"
+#include "abstractvideooutput.h"
+#include "abstractvideooutput_p.h"
 #include "factory_p.h"
 
 #include <QtCore/QTimer>
@@ -210,6 +212,15 @@ void Player::addAudioOutput(AbstractAudioOutput *audioOutput)
     if (!d->backendObject())
         qWarning("No PrivateObject present");
     d->interface->addAudioOutput(audioOutput->k_func()->backendObject());
+}
+
+void Player::addVideoOutput(AbstractVideoOutput *videoOutput)
+{
+    P_D(Player);
+    d->videoOutputs.append(videoOutput);
+    if (!d->interface)
+        d->createBackendObject();
+    d->interface->addVideoOutput(videoOutput->k_func()->backendObject());
 }
 
 Source Player::source() const

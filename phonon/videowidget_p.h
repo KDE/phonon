@@ -25,51 +25,57 @@
 
 #include "videowidget.h"
 #include "abstractvideooutput_p.h"
+
 #include <QHBoxLayout>
 
 #ifndef QT_NO_PHONON_VIDEO
 
-namespace Phonon
-{
+namespace Phonon {
+
+class VideoWidgetInterface;
 
 class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 {
+public:
+    virtual QObject *qObject() { return q_func(); }
+protected:
+    virtual bool aboutToDeleteBackendObject();
+    virtual void createBackendObject();
+    void setupBackendObject();
+
+    VideoWidgetPrivate(VideoWidget *parent)
+        : layout(parent)
+        , aspectRatio(VideoWidget::AspectRatioAuto)
+        , scaleMode(VideoWidget::FitInView)
+        , brightness(0)
+        , contrast(0)
+        , hue(0)
+        , saturation(0)
+        , interface(0)
+    {
+        layout.setMargin(0);
+    }
+
+    QHBoxLayout layout;
+    VideoWidget::AspectRatio aspectRatio;
+    VideoWidget::ScaleMode scaleMode;
+    Qt::WindowFlags changeFlags;
+
+    qreal brightness;
+    qreal contrast;
+    qreal hue;
+    qreal saturation;
+
+    VideoWidgetInterface *interface;
+
+private:
+    void init();
+
     P_DECLARE_PUBLIC(VideoWidget)
-    public:
-        virtual QObject *qObject() { return q_func(); }
-    protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
-        void setupBackendObject();
-
-        VideoWidgetPrivate(VideoWidget *parent)
-            : layout(parent),
-              aspectRatio(VideoWidget::AspectRatioAuto),
-              scaleMode(VideoWidget::FitInView),
-              brightness(0),
-              contrast(0),
-              hue(0),
-              saturation(0)
-        {
-            layout.setMargin(0);
-        }
-
-        QHBoxLayout layout;
-        VideoWidget::AspectRatio aspectRatio;
-        VideoWidget::ScaleMode scaleMode;
-        Qt::WindowFlags changeFlags;
-
-        qreal brightness;
-        qreal contrast;
-        qreal hue;
-        qreal saturation;
-
-    private:
-        void init();
 };
 
 } // namespace Phonon
 
 #endif //QT_NO_PHONON_VIDEO
+
 #endif // VIDEOWIDGET_P_H
-// vim: sw=4 ts=4 tw=80

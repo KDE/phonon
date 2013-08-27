@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "videowidget.h"
@@ -28,14 +28,10 @@
 #include "phononnamespace_p.h"
 
 #include <QAction>
-#define IFACES4 VideoWidgetInterface44
-#define IFACES0 VideoWidgetInterface, IFACES4
-#define PHONON_INTERFACENAME IFACES0
 
 #ifndef QT_NO_PHONON_VIDEO
 
-namespace Phonon
-{
+namespace Phonon {
 
 VideoWidget::VideoWidget(QWidget *parent)
     : QWidget(parent)
@@ -46,8 +42,6 @@ VideoWidget::VideoWidget(QWidget *parent)
     d->createBackendObject();
     setMouseTracking(true);
 }
-
-
 
 VideoWidget::VideoWidget(VideoWidgetPrivate &dd, QWidget *parent)
     : QWidget(parent),
@@ -74,39 +68,107 @@ void VideoWidgetPrivate::createBackendObject()
         return;
     P_Q(VideoWidget);
     m_backendObject = Factory::createVideoWidget(q);
-    if (m_backendObject) {
+    interface = qobject_cast<VideoWidgetInterface *>(m_backendObject);
+    if (m_backendObject && interface) // Need at least base interface.
         setupBackendObject();
-    }
 }
 
-#define PHONON_CLASSNAME VideoWidget
+VideoWidget::AspectRatio VideoWidget::aspectRatio() const
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        return d->interface->aspectRatio();
+    return d->aspectRatio;
+}
 
-PHONON_INTERFACE_GETTER(Phonon::VideoWidget::AspectRatio, aspectRatio, d->aspectRatio)
-PHONON_INTERFACE_SETTER(setAspectRatio, aspectRatio, Phonon::VideoWidget::AspectRatio)
+void VideoWidget::setAspectRatio(VideoWidget::AspectRatio aspectRatio)
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        d->interface->setAspectRatio(aspectRatio);
+}
 
-PHONON_INTERFACE_GETTER(Phonon::VideoWidget::ScaleMode, scaleMode, d->scaleMode)
-PHONON_INTERFACE_SETTER(setScaleMode, scaleMode, Phonon::VideoWidget::ScaleMode)
+VideoWidget::ScaleMode VideoWidget::scaleMode() const
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        return d->interface->scaleMode();
+    return d->scaleMode;
+}
 
-PHONON_INTERFACE_GETTER(qreal, brightness, d->brightness)
-PHONON_INTERFACE_SETTER(setBrightness, brightness, qreal)
+void VideoWidget::setScaleMode(VideoWidget::ScaleMode scaleMode)
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        d->interface->setScaleMode(scaleMode);
+}
 
-PHONON_INTERFACE_GETTER(qreal, contrast, d->contrast)
-PHONON_INTERFACE_SETTER(setContrast, contrast, qreal)
+qreal VideoWidget::brightness() const
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        return d->interface->brightness();
+    return d->brightness;
+}
 
-PHONON_INTERFACE_GETTER(qreal, hue, d->hue)
-PHONON_INTERFACE_SETTER(setHue, hue, qreal)
+void VideoWidget::setBrightness(qreal brightness)
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        d->interface->setBrightness(brightness);
+}
 
-PHONON_INTERFACE_GETTER(qreal, saturation, d->saturation)
-PHONON_INTERFACE_SETTER(setSaturation, saturation, qreal)
+qreal VideoWidget::contrast() const
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        return d->interface->contrast();
+    return d->contrast;
+}
 
+void VideoWidget::setContrast(qreal contrast)
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        d->interface->setContrast(contrast);
+}
+
+qreal VideoWidget::hue() const
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        return d->interface->hue();
+    return d->hue;
+}
+
+void VideoWidget::setHue(qreal hue)
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        d->interface->setHue(hue);
+}
+
+qreal VideoWidget::saturation() const
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        return d->interface->saturation();
+    return d->saturation;
+}
+
+void VideoWidget::setSaturation(qreal saturation)
+{
+    P_D(const VideoWidget);
+    if (d->interface)
+        d->interface->setSaturation(saturation);
+}
 
 QImage VideoWidget::snapshot() const {
     P_D(const VideoWidget);
-    ConstIface<IFACES4> iface(d);
-    if(iface) return iface->snapshot();
+    if (d->interface)
+        return d->interface->snapshot();
     return QImage(); // TODO not implemented in VideoInterface
 }
-
 
 void VideoWidget::setFullScreen(bool newFullScreen)
 {
@@ -154,8 +216,8 @@ void VideoWidget::enterFullScreen()
 
 bool VideoWidgetPrivate::aboutToDeleteBackendObject()
 {
-    aspectRatio = pINTERFACE_CALL(aspectRatio());
-    scaleMode = pINTERFACE_CALL(scaleMode());
+    aspectRatio = interface->aspectRatio();
+    scaleMode = interface->scaleMode();
     return AbstractVideoOutputPrivate::aboutToDeleteBackendObject();
 }
 
@@ -165,10 +227,10 @@ void VideoWidgetPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
     //AbstractVideoOutputPrivate::setupBackendObject();
     pDebug() << "calling setAspectRatio on the backend " << aspectRatio;
-    pINTERFACE_CALL(setAspectRatio(aspectRatio));
-    pINTERFACE_CALL(setScaleMode(scaleMode));
+    interface->setAspectRatio(aspectRatio);
+    interface->setScaleMode(scaleMode);
 
-    QWidget *w = pINTERFACE_CALL(widget());
+    QWidget *w = interface->widget();
     if (w) {
         layout.addWidget(w);
         q->setSizePolicy(w->sizePolicy());
@@ -186,6 +248,3 @@ bool VideoWidget::event(QEvent *e)
 #endif //QT_NO_PHONON_VIDEO
 
 #include "moc_videowidget.cpp"
-
-#undef PHONON_CLASSNAME
-// vim: sw=4 ts=4 tw=80

@@ -22,8 +22,8 @@ set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
 #   abstractaudiooutput_p.cpp
 #   abstractmediastream.cpp
-#   abstractvideooutput.cpp
-#   abstractvideooutput_p.cpp
+   abstractvideooutput.cpp
+   abstractvideooutput_p.cpp
 #   audiodataoutput.cpp
    audiooutput.cpp
    backendcapabilities.cpp
@@ -46,7 +46,7 @@ set(phonon_LIB_SRCS
 #    volumefadereffect.cpp
 #    volumeslider.cpp
 #    videoplayer.cpp
-#    videowidget.cpp
+    videowidget.cpp
 
 # QTC Compat
     abstractaudiooutput_p.h

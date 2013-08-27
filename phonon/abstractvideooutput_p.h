@@ -29,16 +29,23 @@
 
 #ifndef QT_NO_PHONON_VIDEO
 
-namespace Phonon
+namespace Phonon {
+
+class AbstractVideoOutputPrivate : public FrontendPrivate
 {
-class AbstractVideoOutputPrivate : public MediaNodePrivate
-{
+protected:
+    /** \reimp */
+    virtual bool aboutToDeleteBackendObject();
+
+    /** \reimp */
+    void setupBackendObject();
+
+private:
     P_DECLARE_PUBLIC(AbstractVideoOutput)
-    PHONON_PRIVATEABSTRACTCLASS
 };
+
 } //namespace Phonon
 
 #endif //QT_NO_PHONON_VIDEO
 
 #endif // ABSTRACTVIDEOOUTPUT_P_H
-// vim: sw=4 ts=4 tw=80

@@ -84,6 +84,7 @@ protected:
     Source mediaSource;
 
     QList<AbstractAudioOutput *> audioOutputs;
+    QList<AbstractVideoOutput *> videoOutputs;
 
     PlayerInterface *interface;
 

@@ -199,6 +199,7 @@ public:
     virtual qint64 remainingTime() const { return totalTime() - currentTime(); }
 
     virtual void addAudioOutput(QObject *audioOutput) = 0;
+    virtual void addVideoOutput(QObject *videoOutput) = 0;
 };
 
 } // namespace Phonon

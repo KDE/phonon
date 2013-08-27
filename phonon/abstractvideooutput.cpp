@@ -28,7 +28,7 @@ namespace Phonon
 {
 
 AbstractVideoOutput::AbstractVideoOutput(AbstractVideoOutputPrivate &d)
-    : MediaNode(d)
+    : Frontend(d)
 {
 }
 
