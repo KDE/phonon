@@ -36,7 +36,6 @@ class AudioOutputPrivate;
 
 class PHONON_EXPORT AudioOutput : public AbstractAudioOutput
 {
-    friend class FactoryPrivate;
     Q_OBJECT
 public:
     explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
