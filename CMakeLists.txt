@@ -21,7 +21,7 @@ option(PHONON_BUILD_PHONON4QT5 "Build Phonon 4 transitional library for Qt5 (API
 # If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
 set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
 set(PHONON_LIB_MINOR_VERSION "6") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "61") # Bump whenever you feel like it :P
+set(PHONON_LIB_PATCH_VERSION "80") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
 set(PHONON_LIB_SONAME phonon)
