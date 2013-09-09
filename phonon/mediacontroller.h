@@ -272,6 +272,9 @@ class PHONON_EXPORT MediaController : public QObject
          * matter, and once detection is set it will remain set that way for
          * this exact combination of MediaController and MediaObject.
          *
+         * \note The subtitle autodetection may only be changed in states other
+         *       than Playing | Buffering | Paused.
+         *
          * \see subtitleAutodetect
          */
         void setSubtitleAutodetect(bool enable);
@@ -284,6 +287,10 @@ class PHONON_EXPORT MediaController : public QObject
          * Link text IANA character-sets encoding file @endlink
          * If no encoding is explicitly set, it defaults to UTF-8.
          *
+         * \note The subtitle encoding may only be changed in states other
+         *       than Playing | Buffering | Paused.
+         * \note Decoding support may vary between backends.
+         *
          * \see subtitleEncoding
          */
         void setSubtitleEncoding(const QString &encoding);
@@ -291,7 +298,13 @@ class PHONON_EXPORT MediaController : public QObject
         /**
          * Selects the current font used to render subtitles.
          *
-         * If no font is explicitly set, it defaults to the application's font
+         * If no font is explicitly set, the system default font is used.
+         *
+         * \note The subtitle font may only be changed in states other
+         *       than Playing | Buffering | Paused.
+         * \note Non-system fonts can not be used. In particular adding
+         *       fonts manually to the QFontDatabase will not make them
+         *       available as render fonts.
          *
          * \see subtitleFont
          */
