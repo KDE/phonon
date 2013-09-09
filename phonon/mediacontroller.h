@@ -163,8 +163,25 @@ class PHONON_EXPORT MediaController : public QObject
         SubtitleDescription currentSubtitle() const;
 
         /**
-         * Returns a state meaning if subtitles are autodetected
-         * each time the current source changes.
+         * Subtitle auto-detection transparently tries to find a subtitle file
+         * for the current MediaSource and will automatically select a possible
+         * match. Detected subtitles are added to the regular subtitle
+         * descriptions, allowing the user to deactivate it manually or switch
+         * to another detected file.
+         *
+         * Matching method depends on the backend in use and may either be
+         * driven by a backend or even subsystem implementation. Consequently
+         * different backends may not give the same results. At any rate all
+         * algorithms are supposed to give as accurate as possible matches.
+         * Should you require reproducible matching across backends you should
+         * deactivate auto-detection entirely and instead do the lookup yourself
+         * and set the desired file using setCurrentSubtitle(QUrl); the file
+         * will still be added to the subtitledescriptions model.
+         *
+         * \note Auto-detection is always activate so long as the backend supports it.
+         *
+         * \returns \c true if subtitles are autodetected, otherwise \c false is
+         * returned.
          *
          * \see setSubtitleAutodetect
          */
@@ -249,12 +266,11 @@ class PHONON_EXPORT MediaController : public QObject
         /**
          * Sets/Unsets subtitles autodetection.
          *
-         * A subtitle is autoselected when it exists a subtitle
-         * matching the same name as the media, in the same directory.
-         * All standard types of subtitles are supported: sub, srt, smi, ssa,
-         * ass and asc.
-         * By default autodetection is on when a MediaObject is connected
-         * to a MediaController.
+         * Detection is attempted when moving the MediaObject into Playing state.
+         * In order to enable/disable autodetection it must be set before play()
+         * is called. Whether a MediaSource is set on the MediaObject does not
+         * matter, and once detection is set it will remain set that way for
+         * this exact combination of MediaController and MediaObject.
          *
          * \see subtitleAutodetect
          */
