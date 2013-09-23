@@ -135,7 +135,7 @@ class AudioOutputInterface47 : public AudioOutputInterface42
 {
 public:
     /**
-     * This function is meant to be used in conjuction with \class PulseSupport
+     * This function is meant to be used in conjuction with PulseSupport
      * to either get the property set for the associated PulseAudio straem or
      * to automatically apply them to the envrionment.
      *
