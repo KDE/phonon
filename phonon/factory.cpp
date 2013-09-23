@@ -54,6 +54,9 @@ class FactoryPrivate : public Phonon::Factory::Sender
     public:
         FactoryPrivate();
         ~FactoryPrivate();
+        bool tryCreateBackend(const QString &path);
+        // Implementation depends on Qt version.
+        bool createSuitableBackend(const QString &libPath, const QList<QString> &plugins);
         bool createBackend();
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
         PlatformPlugin *platformPlugin();
@@ -101,15 +104,131 @@ void Factory::setBackend(QObject *b)
     globalFactory->m_backendObject = b;
 }
 
-/*void Factory::createBackend(const QString &library, const QString &version)
+bool FactoryPrivate::tryCreateBackend(const QString &path)
 {
-    Q_ASSERT(globalFactory->m_backendObject == 0);
-    PlatformPlugin *f = globalFactory->platformPlugin();
-    if (f) {
-        globalFactory->m_backendObject = f->createBackend(library, version);
-    }
-}*/
+    QPluginLoader pluginLoader(path);
 
+    pDebug() << "attempting to load" << path;
+    if (!pluginLoader.load()) {
+        pDebug() << Q_FUNC_INFO << "  load failed:" << pluginLoader.errorString();
+        return false;
+    }
+    pDebug() << pluginLoader.instance();
+    m_backendObject = pluginLoader.instance();
+    if (m_backendObject) {
+        return true;
+    }
+
+    // no backend found, don't leave an unused plugin in memory
+    pluginLoader.unload();
+    return false;
+}
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+struct BackendDescriptor {
+    explicit BackendDescriptor(const QString &path)
+        : isValid(false)
+    {
+        QPluginLoader loader(path);
+
+        iid = loader.metaData().value(QLatin1String("IID")).toString();
+
+        const QJsonObject metaData = loader.metaData().value(QLatin1String("MetaData")).toObject();
+        name = metaData.value(QLatin1String("Name")).toString();
+        icon = metaData.value(QLatin1String("Icon")).toString();
+        version = metaData.value(QLatin1String("Version")).toString();
+        website = metaData.value(QLatin1String("Website")).toString();
+        preference = metaData.value(QLatin1String("InitialPreference")).toDouble();
+
+        pluginPath = path;
+
+        if (name.isEmpty())
+            name = QFileInfo(path).baseName();
+
+        if (iid.isEmpty())
+            return; // Not valid.
+
+        isValid = true;
+    }
+
+    bool isValid;
+
+    QString iid;
+
+    QString name;
+    QString icon;
+    QString version;
+    QString website;
+    int preference;
+
+    QString pluginPath;
+
+    /** Implemented for qSort(QList) */
+    bool operator <(const BackendDescriptor &rhs) const
+    {
+        return this->preference < rhs.preference;
+    }
+};
+
+bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<QString> &plugins)
+{
+    // User configured preference.
+    QList<QString> iidPreference;
+    QSettings settings("kde.org", "libphonon");
+    const int size = settings.beginReadArray("Backends");
+    for (int i = 0; i < size; ++i) {
+        settings.setArrayIndex(i);
+        iidPreference.append(settings.value("iid").toString());
+    }
+    settings.endArray();
+
+    // Find physical backend plugins.
+    QList<BackendDescriptor> foundBackends;
+    foreach (const QString &plugin, plugins) {
+        BackendDescriptor descriptor(libPath + plugin);
+        if (!descriptor.isValid)
+            continue;
+        foundBackends.append(descriptor);
+    }
+    qSort(foundBackends);
+
+    // Try to pick a preferred backend.
+    foreach (const QString &iid, iidPreference) {
+        // This is slightly inefficient but we only have 2 backends :P
+        // Also using a list requires less overall code than QMap<iid,desc>.
+        QList<BackendDescriptor>::iterator it;
+        for (it = foundBackends.begin(); it != foundBackends.end(); ++it) {
+            const BackendDescriptor &descriptor = *it;
+            if (descriptor.iid != iid)
+                continue;
+            if (tryCreateBackend(descriptor.pluginPath))
+                return true;
+            else // Drop backends that failed to construct.
+                foundBackends.erase(it);
+        }
+    }
+
+    // No Preferred backend could be constructed. Try all remaining backends
+    // in order of initial preference.
+    // Note that unconstructable backends have been dropped previously.
+    foreach (const BackendDescriptor &descriptor, foundBackends) {
+        if (tryCreateBackend(descriptor.pluginPath))
+            return true;
+    }
+    return false;
+}
+#else // Qt 4
+bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<QString> &plugins)
+{
+    foreach (const QString &plugin, plugins) {
+        if (tryCreateBackend(libPath + plugin))
+            return true;
+    }
+    return false;
+}
+#endif
+
+// This entire function is so terrible to read I hope it implodes some day.
 bool FactoryPrivate::createBackend()
 {
     pDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STR << "trying to create backend...";
@@ -166,22 +285,11 @@ bool FactoryPrivate::createBackend()
                     plugins.move(backendIndex, 0);
             }
 
-            foreach (const QString &plugin, plugins) {
-                QPluginLoader pluginLoader(libPath + plugin);
-                if (!pluginLoader.load()) {
-                    pDebug() << Q_FUNC_INFO << "  load failed:"
-                             << pluginLoader.errorString();
-                    continue;
-                }
-                pDebug() << pluginLoader.instance();
-                m_backendObject = pluginLoader.instance();
-                if (m_backendObject) {
-                    break;
-                }
-
-                // no backend found, don't leave an unused plugin in memory
-                pluginLoader.unload();
-            }
+            // This function implements a very simple trial-and-error loader for
+            // Qt 4 and on top of that a preference system for Qt 5. Therefore
+            // in Qt 5 we have backend preference independent of a platform
+            // plugin.
+            createSuitableBackend(libPath, plugins);
 
             if (m_backendObject) {
                 break;
