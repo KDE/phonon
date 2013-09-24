@@ -374,16 +374,8 @@ QObject *Factory::backend()
     if (globalFactory->m_backendObject == 0)
         globalFactory->createBackend();
 
-#ifndef QT_NO_PROPERTIES
-#define GET_STRING_PROPERTY(name) \
-QString Factory::name() \
-{ \
-    if (globalFactory->m_backendObject) { \
-        return globalFactory->m_backendObject->property(#name).toString(); \
-    } \
-    return QString(); \
+    return globalFactory->m_backendObject;
 }
-#endif //QT_NO_PROPERTIES
 
 QObject *Factory::registerQObject(QObject *o)
 {
