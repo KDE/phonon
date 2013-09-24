@@ -43,7 +43,7 @@ namespace Phonon
 class PlatformPlugin;
 class FactoryPrivate : public Phonon::Factory::Sender
 {
-    friend QObject *Factory::backend(bool);
+    friend QObject *Factory::backend();
     Q_OBJECT
     public:
         FactoryPrivate();
@@ -366,16 +366,13 @@ PlatformPlugin *Factory::platformPlugin()
 }
 #endif // QT_NO_PHONON_PLATFORMPLUGIN
 
-QObject *Factory::backend(bool createWhenNull)
+QObject *Factory::backend()
 {
-    if (globalFactory.isDestroyed()) {
+    if (globalFactory.isDestroyed())
         return 0;
-    }
-    if (createWhenNull && globalFactory->m_backendObject == 0) {
+
+    if (globalFactory->m_backendObject == 0)
         globalFactory->createBackend();
-    }
-    return globalFactory->m_backendObject;
-}
 
 #ifndef QT_NO_PROPERTIES
 #define GET_STRING_PROPERTY(name) \

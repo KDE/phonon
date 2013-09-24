@@ -54,7 +54,7 @@ QObject *createAudioOutput(QObject *parent = 0);
 QObject *createVideoWidget(QObject *parent = 0);
 
 PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
-PHONON_EXPORT QObject *backend(bool createWhenNull = true);
+PHONON_EXPORT QObject *backend();
 PHONON_EXPORT QObject *registerQObject(QObject *o);
 PHONON_EXPORT void registerFrontendObject(FrontendPrivate *);
 PHONON_EXPORT void deregisterFrontendObject(FrontendPrivate *);
