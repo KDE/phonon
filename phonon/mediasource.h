@@ -58,22 +58,14 @@ public:
 
     Source();
     Source(const QUrl &url);
-    Source(DiscType discType, const QString &deviceName = QString()); //krazy:exclude=explicit
-#ifndef PHONON_NO_AUDIOCAPTURE
+    Source(DiscType discType, const QString &deviceName = QString());
     Source(const AudioCaptureDevice& device);
-#endif
-#ifndef PHONON_NO_VIDEOCAPTURE
     Source(const VideoCaptureDevice& device);
-#endif
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
     Source(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
     Source(CaptureCategory category);
-#endif
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    Source(AbstractMediaStream *stream); //krazy:exclude=explicit
-    Source(QIODevice *ioDevice); //krazy:exclude=explicit
-#endif
+    Source(AbstractMediaStream *stream);
+    Source(QIODevice *ioDevice);
     ~Source();
     Source(const Source &rhs);
     Source &operator=(const Source &rhs);
@@ -88,15 +80,9 @@ public:
     const DeviceAccessList& videoDeviceAccessList() const;
     const DeviceAccessList& audioDeviceAccessList() const;
     QString deviceName() const;
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     AbstractMediaStream *stream() const;
-#endif
-#ifndef PHONON_NO_AUDIOCAPTURE
     AudioCaptureDevice audioCaptureDevice() const;
-#endif
-#ifndef PHONON_NO_VIDEOCAPTURE
     VideoCaptureDevice videoCaptureDevice() const;
-#endif
 
 protected:
     QExplicitlySharedDataPointer<SourcePrivate> d;

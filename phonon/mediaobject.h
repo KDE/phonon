@@ -23,7 +23,7 @@
 #ifndef PHONON_PLAYER_H
 #define PHONON_PLAYER_H
 
-#include "medianode.h"
+#include "frontend.h"
 #include "mediasource.h"
 
 namespace Phonon {
@@ -35,7 +35,6 @@ class PlayerPrivate;
 class PHONON_EXPORT Player : public QObject, public Frontend
 {
     Q_OBJECT
-
 public:
     Player(QObject *parent = 0);
     ~Player();

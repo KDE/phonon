@@ -33,106 +33,32 @@ namespace Phonon {
 class PlatformPlugin;
 class FrontendPrivate;
 
-/**
- * \internal
- * \brief Factory to access the preferred Backend.
- *
- * This class is used internally to get the backend's implementation.
- * It keeps track of the objects that were created. When a
- * request for a backend change comes, it asks all frontend objects to delete
- * their backend objects and then checks whether they were all deleted. Only
- * then the old backend is unloaded and the new backend is loaded.
- *
- * \author Matthias Kretz <kretz@kde.org>
- */
 namespace Factory {
 
-/**
- * Emits signals for Phonon::Factory.
- */
 class Sender : public QObject
 {
     Q_OBJECT
 Q_SIGNALS:
-    /**
-     * \copydoc BackendCapabilities::Notifier::availableAudioOutputDevicesChanged
-     */
     void availableAudioOutputDevicesChanged();
-
-    /**
-     * \copydoc BackendCapabilities::Notifier::availableAudioCaptureDevicesChanged
-     */
     void availableAudioCaptureDevicesChanged();
-
-    /**
-     * \copydoc BackendCapabilities::Notifier::availableVideoCaptureDevicesChanged
-     */
     void availableVideoCaptureDevicesChanged();
 };
 
-/**
- * Returns a pointer to the object emitting the signals.
- *
- * \see Sender::backendChanged()
- */
 PHONON_EXPORT Sender *sender();
 
 #warning createObject!
 QObject *createPlayer(QObject *parent = 0);
-
-/**
- * Create a new backend object for a Effect.
- *
- * \return a pointer to the Effect the backend provides.
- */
-#ifndef QT_NO_PHONON_EFFECT
 QObject *createEffect(int effectId, QObject *parent = 0);
-#endif //QT_NO_PHONON_EFFECT
-/**
- * Create a new backend object for a VolumeFaderEffect.
- *
- * \return a pointer to the VolumeFaderEffect the backend provides.
- */
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
 QObject *createVolumeFaderEffect(QObject *parent = 0);
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
-/**
- * Create a new backend object for a AudioOutput.
- *
- * \return a pointer to the AudioOutput the backend provides.
- */
 QObject *createAudioOutput(QObject *parent = 0);
-/**
- * Create a new backend object for a VideoWidget.
- *
- * \return a pointer to the VideoWidget the backend provides.
- */
-#ifndef QT_NO_PHONON_VIDEO
 QObject *createVideoWidget(QObject *parent = 0);
-#endif //QT_NO_PHONON_VIDEO
 
-/**
-  * Create a new backend object for a AudioDataOutput.
-  *
-  * \return a pointer to the AudioDataOutput the backend provides.
-  */
 PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
-
-/**
- * \return a pointer to the backend interface.
- */
 PHONON_EXPORT QObject *backend(bool createWhenNull = true);
-
-/**
- * registers the backend object
- */
 PHONON_EXPORT QObject *registerQObject(QObject *o);
-
 PHONON_EXPORT void registerFrontendObject(FrontendPrivate *);
 PHONON_EXPORT void deregisterFrontendObject(FrontendPrivate *);
-
 PHONON_EXPORT void setBackend(QObject *);
-
 PHONON_EXPORT PlatformPlugin *platformPlugin();
 
 } // namespace Factory
