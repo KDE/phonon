@@ -17,56 +17,33 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
-#ifndef Phonon_ABSTRACTVIDEOOUTPUTBASE_H
-#define Phonon_ABSTRACTVIDEOOUTPUTBASE_H
 
+#ifndef PHONON_ABSTRACTVIDEOOUTPUT_H
+#define PHONON_ABSTRACTVIDEOOUTPUT_H
+
+#include "frontend.h"
 #include "phonondefs.h"
 #include "phonon_export.h"
-#include "medianode.h"
+
 #include <QtCore/QObject>
-
-
-#ifndef QT_NO_PHONON_VIDEO
 
 class QString;
 
 namespace Phonon
 {
 
-namespace Experimental
+class AbstractVideoOutputPrivate;
+
+class PHONON_EXPORT AbstractVideoOutput : public Frontend
 {
-    class Visualization;
-    class VisualizationPrivate;
-} // namespace Experimental
-
-    class AbstractVideoOutputPrivate;
-
-    /** \class AbstractVideoOutput abstractvideooutput.h phonon/AbstractVideoOutput
-     * \brief Common base class for all video outputs.
-     *
-     * \see VideoWidget
-     */
-    class PHONON_EXPORT AbstractVideoOutput : public Frontend
-    {
 #warning FRIEEEEEEEEEEEEEEEENDS
-        friend class Experimental::Visualization;
-        friend class Experimental::VisualizationPrivate;
-        friend class Player;
-        P_DECLARE_PRIVATE(AbstractVideoOutput)
-        protected:
-            /**
-             * \internal
-             * Constructor that is called from derived classes.
-             *
-             * \param d the private object
-             */
-            AbstractVideoOutput(AbstractVideoOutputPrivate &d);
-    };
-} //namespace Phonon
+    friend class Player;
+    P_DECLARE_PRIVATE(AbstractVideoOutput)
+protected:
+        AbstractVideoOutput(AbstractVideoOutputPrivate &d);
+};
 
-#endif //QT_NO_PHONON_VIDEO
+} // namespace Phonon
 
-
-#endif // Phonon_ABSTRACTVIDEOOUTPUTBASE_H
+#endif // PHONON_ABSTRACTVIDEOOUTPUT_H
