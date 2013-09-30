@@ -820,6 +820,12 @@ PulseSupport::PulseSupport()
         return;
     }
 
+    if (!QAbstractEventDispatcher::instance() || !QAbstractEventDispatcher::instance()->metaObject()) {
+        qWarning("WARNING: Cannot construct PulseSupport because there is no Eventloop."
+                 " May be because of application shutdown.");
+        return;
+    }
+
     // We require a glib event loop
     if (!QByteArray(QAbstractEventDispatcher::instance()->metaObject()->className()).contains("EventDispatcherGlib")) {
         qWarning("WARNING: Disabling PulseAudio integration for lack of GLib event loop.");
