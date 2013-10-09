@@ -24,6 +24,7 @@
 #define PHONON_OBJECTDESCRIPTION_H
 
 #include "phonon_export.h"
+#include "phonondefs.h"
 
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QDebug>
@@ -34,50 +35,21 @@
 
 namespace Phonon
 {
-    class ObjectDescriptionPrivate;
+//    class ObjectDescriptionPrivate;
 
-    /**
-     * Defines the type of information that is contained in a ObjectDescription
-     * object.
-     *
-     * \ingroup Backend
-     */
+//    /**
+//     * Defines the type of information that is contained in a ObjectDescription
+//     * object.
+//     *
+//     * \ingroup Backend
+//     */
     enum ObjectDescriptionType
     {
-        /**
-         * Audio output devices. This can be soundcards (with different drivers), soundservers or
-         * other virtual outputs like playback on a different computer on the
-         * network.
-         *
-         * For Hardware devices the backend should use libkaudiodevicelist
-         * (AudioDevice and AudioDeviceEnumerator) which will list removable
-         * devices even when they are unplugged and provide a unique identifier
-         * that can make backends use the same identifiers.
-         */
         AudioOutputDeviceType,
-
-        /**
-         * Lists all processing effects the backend supports.
-         */
         EffectType,
         AudioChannelType,
         SubtitleType,
-
-        /**
-         * Audio capture devices. This can be soundcards (with different drivers), soundservers or
-         * other virtual inputs like capture on a different computer on the
-         * network.
-         *
-         * For Hardware devices the backend should use libkaudiodevicelist
-         * (AudioDevice and AudioDeviceEnumerator) which will list removable
-         * devices even when they are unplugged and provide a unique identifier
-         * that can make backends use the same identifiers.
-         */
         AudioCaptureDeviceType,
-
-        /**
-         * Video capture devices. Includes webcams.
-         */
         VideoCaptureDeviceType
 
         //VideoOutputDeviceType,
@@ -87,207 +59,103 @@ namespace Phonon
         //VisualizationType,
     };
 
-/** \internal
- * \class ObjectDescriptionData objectdescription.h phonon/ObjectDescription
- * \brief Data class for objects describing devices or features of the backend.
- *
- * \author Matthias Kretz <kretz@kde.org>
- * \see BackendCapabilities
- */
-class PHONON_EXPORT ObjectDescriptionData : public QSharedData //krazy:exclude=dpointer (it's protected, which should be fine for this type of class)
+class DescriptionBasePrivate;
+#warning ongoing qobject derivee discussion
+class DescriptionBase
 {
-    public:
-        /**
-         * Returns \c true if this ObjectDescription describes the same
-         * as \p otherDescription; otherwise returns \c false.
-         */
-        bool operator==(const ObjectDescriptionData &otherDescription) const;
+public:
+    int index() const;
+    QString name() const;
+    QString description() const;
 
-        /**
-         * Returns the name of the capture source.
-         *
-         * \return A string that should be presented to the user to
-         * choose the capture source.
-         */
-        QString name() const;
+    bool isValid() const; /* valid description */
 
-        /**
-         * Returns a description of the capture source. This text should
-         * make clear what sound source this is, which is sometimes hard
-         * to describe or understand from just the name.
-         *
-         * \return A string describing the capture source.
-         */
-        QString description() const;
+#warning operator impl in derivee?
+    DescriptionBase &operator=(const DescriptionBase &other);
+    bool operator==(const DescriptionBase &other) const;
+    bool operator!=(const DescriptionBase &other) const;
 
-        /**
-         * Returns a named property.
-         *
-         * If the property is not set an invalid value is returned.
-         *
-         * \see propertyNames()
-         */
-        QVariant property(const char *name) const;
+protected:
+    DescriptionBase();
+    DescriptionBase(const DescriptionBase &other);
+    virtual ~DescriptionBase();
 
-        /**
-         * Returns all names that return valid data when property() is called.
-         *
-         * \see property()
-         */
-        QList<QByteArray> propertyNames() const;
+    DescriptionBase(DescriptionBasePrivate &dd);
+    DescriptionBasePrivate *const k_ptr;
 
-        /**
-         * Returns \c true if the Tuple is valid (index != -1); otherwise returns
-         * \c false.
-         */
-        bool isValid() const;
-
-        /**
-         * A unique identifier for this device/. Used internally
-         * to distinguish between the devices/.
-         *
-         * \return An integer that uniquely identifies every device/
-         */
-        int index() const;
-
-        static ObjectDescriptionData *fromIndex(ObjectDescriptionType type, int index);
-
-        ~ObjectDescriptionData();
-
-        ObjectDescriptionData(ObjectDescriptionPrivate * = 0);
-        ObjectDescriptionData(int index, const QHash<QByteArray, QVariant> &properties);
-
-    protected:
-        ObjectDescriptionPrivate *const d;
-
-    private:
-        ObjectDescriptionData &operator=(const ObjectDescriptionData &rhs);
+    P_DECLARE_PRIVATE(DescriptionBase)
 };
 
-template<ObjectDescriptionType T> class ObjectDescriptionModel;
-
-/** \class ObjectDescription objectdescription.h phonon/ObjectDescription
- * \short Provides a tuple of enduser visible name and description.
- *
- * Some parts give the enduser choices, e.g. what source to capture audio from.
- * These choices are described by the name and description methods of this class
- * and identified with the id method. Subclasses then define additional
- * information like which audio and video choices belong together.
- *
- * \ingroup Frontend
- * \author Matthias Kretz <kretz@kde.org>
- */
-template<ObjectDescriptionType T>
-class ObjectDescription
+#warning consider turning devices into one class with properties or templatify it derivees only have boilerplate code
+class DeviceDescriptionBasePrivate;
+class DeviceDescriptionBase : public DescriptionBase
 {
-    public:
-        /**
-         * Returns a new description object that describes the
-         * device/effect/codec/...  with the given \p index.
-         */
-        static inline ObjectDescription<T> fromIndex(int index) { //krazy:exclude=inline
-            return ObjectDescription<T>(QExplicitlySharedDataPointer<ObjectDescriptionData>(ObjectDescriptionData::fromIndex(T, index)));
-        }
+public:
+    bool isAvailable() const;
 
-        /**
-         * Returns \c true if this ObjectDescription describes the same
-         * as \p otherDescription; otherwise returns \c false.
-         */
-        inline bool operator==(const ObjectDescription &otherDescription) const { //krazy:exclude=inline
-            return *d == *otherDescription.d;
-        }
+    PHONON_DEPRECATED QVariant property(const char *name) const;
+    PHONON_DEPRECATED QList<QByteArray> propertyNames() const;
 
-        /**
-         * Returns \c false if this ObjectDescription describes the same
-         * as \p otherDescription; otherwise returns \c true.
-         */
-        inline bool operator!=(const ObjectDescription &otherDescription) const { //krazy:exclude=inline
-            return !operator==(otherDescription);
-        }
+protected:
+    DeviceDescriptionBase();
+    virtual ~DeviceDescriptionBase();
 
-        /**
-         * Returns the name of the capture source.
-         *
-         * \return A string that should be presented to the user to
-         * choose the capture source.
-         */
-        inline QString name() const { return d->name(); } //krazy:exclude=inline
+    DeviceDescriptionBase(DeviceDescriptionBasePrivate &dd);
 
-        /**
-         * Returns a description of the capture source. This text should
-         * make clear what sound source this is, which is sometimes hard
-         * to describe or understand from just the name.
-         *
-         * \return A string describing the capture source.
-         */
-        inline QString description() const { return d->description(); } //krazy:exclude=inline
-
-        /**
-         * Returns a named property.
-         *
-         * If the property is not set an invalid value is returned.
-         *
-         * \see propertyNames()
-         */
-        inline QVariant property(const char *name) const { return d->property(name); } //krazy:exclude=inline
-
-        /**
-         * Returns all names that return valid data when property() is called.
-         *
-         * \see property()
-         */
-        inline QList<QByteArray> propertyNames() const { return d->propertyNames(); } //krazy:exclude=inline
-
-        /**
-         * Returns \c true if the Tuple is valid (index != -1); otherwise returns
-         * \c false.
-         */
-        inline bool isValid() const { return d->isValid(); } //krazy:exclude=inline
-
-        /**
-         * A unique identifier for this device/. Used internally
-         * to distinguish between the devices/.
-         *
-         * \return An integer that uniquely identifies every device/
-         */
-        inline int index() const { return d->index(); } //krazy:exclude=inline
-
-        ObjectDescription() : d(new ObjectDescriptionData(0)) {}
-        ObjectDescription(int index, const QHash<QByteArray, QVariant> &properties) : d(new ObjectDescriptionData(index, properties)) {}
-
-    protected:
-        friend class ObjectDescriptionModel<T>;
-        ObjectDescription(const QExplicitlySharedDataPointer<ObjectDescriptionData> &dd) : d(dd) {}
-        QExplicitlySharedDataPointer<ObjectDescriptionData> d;
+    P_DECLARE_PRIVATE(DeviceDescriptionBase)
 };
 
-template<ObjectDescriptionType T>
-QDebug operator<<(QDebug dbg, const ObjectDescription<T> &d)
+class AudioOutputDevice : public DeviceDescriptionBase
 {
-    dbg.nospace() << "\n{\n";
-    dbg.nospace() << "  index: " << d.index() << "\n";
-    Q_FOREACH (const QByteArray &propertyName, d.propertyNames()) {
-        dbg.nospace() << "  " << propertyName << ": " <<
-                         d.property(propertyName).toString() << "\n";
-    }
-    dbg.nospace() << "}\n";
+public:
+    AudioOutputDevice();
+    AudioOutputDevice(int index, QString name, QString description);
+    ~AudioOutputDevice();
 
-    return dbg.space();
-}
+#warning fromindex boogieman - why here why at all what is the beef with globalconfig...
+    static AudioOutputDevice fromIndex(int i);
+};
 
-typedef ObjectDescription<AudioOutputDeviceType> AudioOutputDevice;
+class AudioCaptureDevice : public DeviceDescriptionBase
+{
+public:
+    AudioCaptureDevice();
+    AudioCaptureDevice(int index, QString name, QString description);
+    ~AudioCaptureDevice();
 
-#ifndef PHONON_NO_AUDIOCAPTURE
-typedef ObjectDescription<AudioCaptureDeviceType> AudioCaptureDevice;
-#endif //PHONON_NO_AUDIOCAPTURE
+#warning fromindex boogieman
+    static AudioCaptureDevice fromIndex(int i) { return AudioCaptureDevice(0, "unknown ACD", "unknown ACD description"); }
+};
 
-#ifndef PHONON_NO_VIDEOCAPTURE
-typedef ObjectDescription<VideoCaptureDeviceType> VideoCaptureDevice;
-#endif
+class VideoCaptureDevice : public DeviceDescriptionBase
+{
+public:
+    VideoCaptureDevice();
+    VideoCaptureDevice(int index, QString name, QString description);
+    ~VideoCaptureDevice();
 
-#ifndef QT_NO_PHONON_EFFECT
-typedef ObjectDescription<EffectType> EffectDescription;
-#endif //QT_NO_PHONON_EFFECT
+#warning fromindex boogieman
+    static VideoCaptureDevice fromIndex(int i) { return VideoCaptureDevice(0, "unknown VCD", "unknown VCD description"); }
+};
+
+class EffectDescription : public DescriptionBase
+{
+public:
+    EffectDescription(); /* constructs invalid description */
+    EffectDescription(int index, QString name, QString description);
+};
+
+#warning sub is a stub
+class SubtitleDescription : public DescriptionBase
+{
+};
+
+#warning audiochannel is a stub
+class AudioChannelDescription : public DescriptionBase
+{
+};
+
+
 
 /**
  * \short Information about how to access a device
@@ -316,6 +184,8 @@ typedef QPair<QByteArray, QString> DeviceAccess;
  * \see AudioCaptureDevice
  */
 typedef QList<DeviceAccess> DeviceAccessList;
+
+
 
 } //namespace Phonon
 

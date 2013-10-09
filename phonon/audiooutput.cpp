@@ -328,7 +328,7 @@ void AudioOutputPrivate::_k_deviceListChanged()
 #ifndef QT_NO_PHONON_SETTINGSGROUP
     pDebug() << Q_FUNC_INFO;
     // Check to see if we have an override and do not change to a higher priority device if the overridden device is still present.
-    if (outputDeviceOverridden && device.property("available").toBool()) {
+    if (outputDeviceOverridden && device.isAvailable()) {
         return;
     }
     // let's see if there's a usable device higher in the preference list
@@ -337,7 +337,7 @@ void AudioOutputPrivate::_k_deviceListChanged()
     for (int i = 0; i < deviceList.count(); ++i) {
         const int devIndex = deviceList.at(i);
         const AudioOutputDevice &info = AudioOutputDevice::fromIndex(devIndex);
-        if (!info.property("available").toBool()) {
+        if (!info.isAvailable()) {
             if (device.index() == devIndex) {
                 // we've reached the currently used device and it's not available anymore, so we
                 // fallback to the next available device
@@ -436,7 +436,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
         // a device was perhaps not available when this object was created (although
         // I can't quite work out how that would be....)
         if (device1.isValid()) {
-            if (device1.property("available").toBool()) {
+            if (device1.isAvailable()) {
                 const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
                         "which has higher preference or is specifically configured for this stream.</html>").arg(device2.name());
                 Platform::notification("AudioDeviceFallback", text,
