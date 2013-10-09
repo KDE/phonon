@@ -24,7 +24,7 @@
 #define PHONON_ABSTRACTAUDIOOUTPUTBASE_H
 
 #include "phonondefs.h"
-#include "medianode.h"
+#include "frontend.h"
 
 #include <QtCore/QObject>
 

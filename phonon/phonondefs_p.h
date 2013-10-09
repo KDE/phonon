@@ -24,7 +24,7 @@
 #define PHONONDEFS_P_H`
 
 #include <QtCore/QMetaType>
-#include "medianode_p.h"
+#include "frontend_p.h"
 #include "phononpimpl_p.h"
 
 #warning phonondefsp almost empty, remove? ... note qlist at end!!

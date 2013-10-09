@@ -24,7 +24,7 @@
 #define ABSTRACTVIDEOOUTPUT_P_H
 
 #include "abstractvideooutput.h"
-#include "medianode_p.h"
+#include "frontend_p.h"
 #include "phonondefs_p.h"
 
 #ifndef QT_NO_PHONON_VIDEO

@@ -23,7 +23,7 @@
 #ifndef PHONON_PLAYER_P_H
 #define PHONON_PLAYER_P_H
 
-#include "medianode_p.h"
+#include "frontend_p.h"
 #include "mediaobject.h"
 #include "phonondefs_p.h"
 #include "mediaobjectinterface.h"

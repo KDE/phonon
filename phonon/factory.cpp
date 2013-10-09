@@ -23,7 +23,7 @@
 #include "factory_p.h"
 
 #include "backendinterface.h"
-#include "medianode_p.h"
+#include "frontend_p.h"
 #include "mediaobject.h"
 #include "audiooutput.h"
 #include "globalstatic_p.h"

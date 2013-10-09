@@ -24,7 +24,7 @@
 #define PHONON_ABSTRACTAUDIOOUTPUT_P_H
 
 #include "abstractaudiooutput.h"
-#include "medianode_p.h"
+#include "frontend_p.h"
 #include "phonondefs_p.h"
 
 namespace Phonon {

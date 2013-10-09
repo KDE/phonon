@@ -21,8 +21,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "medianode.h"
-#include "medianode_p.h"
+#include "frontend.h"
+#include "frontend_p.h"
 #include "factory_p.h"
 
 namespace Phonon {

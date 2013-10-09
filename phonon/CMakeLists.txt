@@ -34,7 +34,7 @@ set(phonon_LIB_SRCS
    globalconfig.cpp
 #   iodevicestream.cpp
    mediaobject.cpp
-   medianode.cpp
+   frontend.cpp
    mediasource.cpp
    objectdescription.cpp
    phononnamespace.cpp
@@ -55,7 +55,7 @@ set(phonon_LIB_SRCS
     factory_p.h
     globalconfig_p.h
     globalstatic_p.h
-    medianode_p.h
+    frontend_p.h
     mediaobject_p.h
     mediasource_p.h
     phonondefs_p.h
@@ -131,7 +131,6 @@ install(FILES
     frontend.h
     globalconfig.h
     globaldescriptioncontainer.h
-    medianode.h
     mediaobject.h
     mediaobjectinterface.h
     mediasource.h
