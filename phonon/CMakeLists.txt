@@ -128,6 +128,7 @@ install(FILES
     effectinterface.h
     effectparameter.h
     effectwidget.h
+    frontend.h
     globalconfig.h
     globaldescriptioncontainer.h
     medianode.h
