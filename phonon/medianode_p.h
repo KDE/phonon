@@ -81,7 +81,7 @@ protected:
 
 protected:
     Frontend *q_ptr;
-public:
+#warning this was public no one knows why
     QObject *m_backendObject;
 
 private:
