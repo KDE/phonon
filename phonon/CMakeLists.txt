@@ -51,7 +51,6 @@ set(phonon_LIB_SRCS
 # QTC Compat
     abstractaudiooutput_p.h
     audiooutput_p.h
-    backendcapabilities_p.h
     factory_p.h
     globalconfig_p.h
     globalstatic_p.h
