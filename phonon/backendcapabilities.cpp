@@ -34,13 +34,17 @@
 #include <QtCore/QSet>
 #include <QtCore/QStringList>
 
-PHONON_GLOBAL_STATIC(Phonon::BackendCapabilitiesPrivate, globalBCPrivate)
-
 namespace Phonon {
 
-BackendCapabilities::Notifier *BackendCapabilities::notifier()
+BackendCapabilities::Notifier::Notifier(QObject *parent)
+    : QObject(parent)
 {
-    return globalBCPrivate;
+    connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()),
+            this, SIGNAL(availableAudioOutputDevicesChanged()));
+    connect(Factory::sender(), SIGNAL(availableAudioCaptureDevicesChanged()),
+            this, SIGNAL(availableAudioCaptureDevicesChanged()));
+    connect(Factory::sender(), SIGNAL(availableVideoCaptureDevicesChanged()),
+            this, SIGNAL(availableVideoCaptureDevicesChanged()));
 }
 
 QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()

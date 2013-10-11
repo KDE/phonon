@@ -37,14 +37,18 @@ namespace BackendCapabilities {
 class Notifier : public QObject
 {
     Q_OBJECT
+public:
+    explicit Notifier(QObject *parent = 0);
+
 Q_SIGNALS:
     void capabilitiesChanged();
     void availableAudioOutputDevicesChanged();
     void availableAudioCaptureDevicesChanged();
     void availableVideoCaptureDevicesChanged();
-};
 
-PHONON_EXPORT Notifier *notifier();
+private:
+    Q_DISABLE_COPY(Notifier)
+};
 
 PHONON_EXPORT QList<AudioOutputDevice> availableAudioOutputDevices();
 PHONON_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevices();
