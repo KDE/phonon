@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +18,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONON_BACKENDCAPABILITIES_H
@@ -28,11 +28,10 @@
 
 #include <QtCore/QObject>
 
-template<class T> class QList;
-class QStringList;
-
 namespace Phonon {
 namespace BackendCapabilities {
+
+#warning look into making BC a class
 
 class Notifier : public QObject
 {
@@ -49,6 +48,8 @@ Q_SIGNALS:
 private:
     Q_DISABLE_COPY(Notifier)
 };
+
+#warning maybe keep ::notifier for compat.....
 
 PHONON_EXPORT QList<AudioOutputDevice> availableAudioOutputDevices();
 PHONON_EXPORT QList<AudioCaptureDevice> availableAudioCaptureDevices();
