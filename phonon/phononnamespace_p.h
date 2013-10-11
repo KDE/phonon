@@ -29,7 +29,8 @@
 #if defined(QT_NO_DEBUG)
 #define pDebug if (true) {} else qDebug
 #else
-#define pDebug if (qgetenv("PHONON_DEBUG").isEmpty()) {} else qDebug
+#warning debug always on
+#define pDebug /*if (qgetenv("PHONON_DEBUG").isEmpty()) {} else*/ qDebug
 #endif
 #define pWarning() qDebug() << "WARNING:"
 #define pError() qDebug() << "ERROR:"
