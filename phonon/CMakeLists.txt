@@ -139,9 +139,9 @@ install(FILES
     frontend.h
     globalconfig.h
     globaldescriptioncontainer.h
-    mediaobject.h
-    mediaobjectinterface.h
-    mediasource.h
+    player.h
+    playerinterface.h
+    source.h
     objectdescription.h
     phonon_export.h
     phonondefs.h
