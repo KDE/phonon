@@ -25,7 +25,7 @@
 
 #include "phonon_export.h"
 #include "abstractmediastream.h"
-#include "mediaobject_p.h"
+#include "player_p.h"
 #include "streaminterface.h"
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM

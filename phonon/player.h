@@ -24,7 +24,7 @@
 #define PHONON_PLAYER_H
 
 #include "frontend.h"
-#include "mediasource.h"
+#include "source.h"
 
 namespace Phonon {
 

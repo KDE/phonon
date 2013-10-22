@@ -24,7 +24,7 @@
 #define SOURCE_P_H
 
 #include "abstractmediastream.h"
-#include "mediasource.h"
+#include "source.h"
 #include "objectdescription.h"
 
 #include <QtCore/QUrl>

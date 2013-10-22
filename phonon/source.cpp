@@ -20,8 +20,8 @@
 
 */
 
-#include "mediasource.h"
-#include "mediasource_p.h"
+#include "source.h"
+#include "source_p.h"
 #include "iodevicestream_p.h"
 #include "abstractmediastream_p.h"
 #include "globalconfig.h"

@@ -24,7 +24,7 @@
 
 #include "backendinterface.h"
 #include "frontend_p.h"
-#include "mediaobject.h"
+#include "player.h"
 #include "audiooutput.h"
 #include "globalstatic_p.h"
 #include "objectdescription.h"

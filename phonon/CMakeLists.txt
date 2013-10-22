@@ -19,6 +19,21 @@ endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
 set(phonon_LIB_SRCS
+    frontend.cpp
+    player.cpp
+    source.cpp
+
+    # Private (QTC Compat)
+    frontend_p.h
+    player_p.h
+    source_p.h
+
+    # Interfaces (QTC Compat)
+    playerinterface.h
+)
+
+set(phonon_LIB_SRCS
+${phonon_LIB_SRCS}
    abstractaudiooutput.cpp
 #   abstractaudiooutput_p.cpp
 #   abstractmediastream.cpp
@@ -33,9 +48,6 @@ set(phonon_LIB_SRCS
    factory.cpp
    globalconfig.cpp
 #   iodevicestream.cpp
-   mediaobject.cpp
-   frontend.cpp
-   mediasource.cpp
    objectdescription.cpp
    phononnamespace.cpp
    platform.cpp
@@ -55,8 +67,6 @@ set(phonon_LIB_SRCS
     globalconfig_p.h
     globalstatic_p.h
     frontend_p.h
-    mediaobject_p.h
-    mediasource_p.h
     phonondefs_p.h
     phononnamespace_p.h
     phononpimpl_p.h
@@ -66,7 +76,6 @@ set(phonon_LIB_SRCS
 
     audiooutputinterface.h
     backendinterface.h
-    mediaobjectinterface.h
     platformplugin.h
    )
 
@@ -84,7 +93,7 @@ endif (PHONON_NO_PLATFORMPLUGIN)
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 
 add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
-qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets)
+qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets Quick)
 
 if (PHONON_PULSESUPPORT)
     target_link_libraries(${PHONON_LIB_SONAME} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})

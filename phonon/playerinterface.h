@@ -23,7 +23,7 @@
 #ifndef PHONON_PLAYERINTERFACE_H
 #define PHONON_PLAYERINTERFACE_H
 
-#include "mediaobject.h"
+#include "player.h"
 #include <QtCore/QObject>
 
 namespace Phonon {

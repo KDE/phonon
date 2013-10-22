@@ -21,8 +21,8 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mediaobject.h"
-#include "mediaobject_p.h"
+#include "player.h"
+#include "player_p.h"
 
 #include "abstractaudiooutput.h"
 #include "abstractaudiooutput_p.h"
@@ -397,4 +397,4 @@ void PlayerPrivate::phononObjectDestroyed(FrontendPrivate *bp)
 
 } //namespace Phonon
 
-#include "moc_mediaobject.cpp"
+#include "moc_player.cpp"
