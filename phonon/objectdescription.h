@@ -35,14 +35,6 @@
 
 namespace Phonon
 {
-//    class ObjectDescriptionPrivate;
-
-//    /**
-//     * Defines the type of information that is contained in a ObjectDescription
-//     * object.
-//     *
-//     * \ingroup Backend
-//     */
     enum ObjectDescriptionType
     {
         AudioOutputDeviceType,
@@ -60,6 +52,7 @@ namespace Phonon
     };
 
 class DescriptionBasePrivate;
+#warning drop base suffix? reads terribly...
 #warning ongoing qobject derivee discussion
 class DescriptionBase
 {
@@ -67,6 +60,9 @@ public:
     int index() const;
     QString name() const;
     QString description() const;
+#warning need QString iconHint name of icon to use for this device
+#warning need Capabilities capabilities Video|Audio (in case a device can do both?)
+#warning need QString discoverer or Discoverer discoverer (indicating device of source... in 4 this was either backendname or kde)
 
     bool isValid() const; /* valid description */
 
@@ -75,6 +71,7 @@ public:
     bool operator==(const DescriptionBase &other) const;
     bool operator!=(const DescriptionBase &other) const;
 
+#warning ctor/dtor need to be public if we want qlist<foo>
 protected:
     DescriptionBase();
     DescriptionBase(const DescriptionBase &other);
@@ -86,8 +83,9 @@ protected:
     P_DECLARE_PRIVATE(DescriptionBase)
 };
 
-#warning consider turning devices into one class with properties or templatify it derivees only have boilerplate code
 class DeviceDescriptionBasePrivate;
+#warning consider turning devices into one class with properties or templatify it derivees only have boilerplate code
+#warning drop base suffix? reads terribly...
 class DeviceDescriptionBase : public DescriptionBase
 {
 public:
@@ -96,6 +94,7 @@ public:
     PHONON_DEPRECATED QVariant property(const char *name) const;
     PHONON_DEPRECATED QList<QByteArray> propertyNames() const;
 
+#warning ctor/dtor need to be public if we want qlist<foo>
 protected:
     DeviceDescriptionBase();
     virtual ~DeviceDescriptionBase();
@@ -109,6 +108,7 @@ class AudioOutputDevice : public DeviceDescriptionBase
 {
 public:
     AudioOutputDevice();
+#warning possibly needs available param
     AudioOutputDevice(int index, QString name, QString description);
     ~AudioOutputDevice();
 
