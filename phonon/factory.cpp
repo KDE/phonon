@@ -43,30 +43,21 @@ namespace Phonon
 class FactoryPrivate : public Phonon::Factory::Sender
 {
     Q_OBJECT
-    public:
-        FactoryPrivate();
-        ~FactoryPrivate();
-        bool createBackend();
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-        PlatformPlugin *platformPlugin();
+public:
+    FactoryPrivate();
+    ~FactoryPrivate();
+    bool createBackend();
+    PlatformPlugin *platformPlugin();
+    PlatformPlugin *m_platformPlugin;
+    bool m_noPlatformPlugin;
+    QPointer<QObject> m_backendObject;
+    QList<QObject *> objects;
+    QList<FrontendPrivate *> mediaNodePrivateList;
+    BackendInterface *interface;
 
-        PlatformPlugin *m_platformPlugin;
-        bool m_noPlatformPlugin;
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-        QPointer<QObject> m_backendObject;
-
-        QList<QObject *> objects;
-        QList<FrontendPrivate *> mediaNodePrivateList;
-
-        BackendInterface *interface;
-
-    private Q_SLOTS:
-        /**
-         * unregisters the backend object
-         */
-        void objectDestroyed(QObject *);
-
-        void objectDescriptionChanged(ObjectDescriptionType);
+private Q_SLOTS:
+    void objectDestroyed(QObject *);
+    void objectDescriptionChanged(ObjectDescriptionType);
 };
 
 PHONON_GLOBAL_STATIC(Phonon::FactoryPrivate, globalFactory)
@@ -93,14 +84,13 @@ bool FactoryPrivate::createBackend()
     // consequently will try to find/load the defined backend manually.
     const QByteArray backendEnv = qgetenv("PHONON_BACKEND");
 
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     PlatformPlugin *f = globalFactory->platformPlugin();
     if (f && backendEnv.isEmpty()) {
         // TODO: it would be very groovy if we could add a param, so that the
         // platform could also try to load the defined backend as preferred choice.
         m_backendObject = f->createBackend();
     }
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
+
     if (!m_backendObject) {
         ensureLibraryPathSet();
 
@@ -171,13 +161,10 @@ bool FactoryPrivate::createBackend()
 }
 
 FactoryPrivate::FactoryPrivate()
-    :
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    m_platformPlugin(0),
-    m_noPlatformPlugin(false),
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
-    m_backendObject(0),
-    interface(0)
+    : m_platformPlugin(0)
+    , m_noPlatformPlugin(false)
+    , m_backendObject(0)
+    , interface(0)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
@@ -195,9 +182,7 @@ FactoryPrivate::~FactoryPrivate()
         qDeleteAll(objects);
     }
     delete m_backendObject;
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
     delete m_platformPlugin;
-#endif //QT_NO_PHONON_PLATFORMPLUGIN
 }
 
 void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
@@ -286,7 +271,6 @@ QObject *Factory::createAudioDataOutput(QObject *parent)
     return registerQObject(interface()->createObject(BackendInterface::AudioDataOutputClass, parent));
 }
 
-#ifndef QT_NO_PHONON_PLATFORMPLUGIN
 PlatformPlugin *FactoryPrivate::platformPlugin()
 {
     if (m_platformPlugin) {
@@ -369,7 +353,6 @@ PlatformPlugin *Factory::platformPlugin()
 {
     return globalFactory->platformPlugin();
 }
-#endif // QT_NO_PHONON_PLATFORMPLUGIN
 
 QObject *Factory::backend()
 {
