@@ -29,7 +29,7 @@
 #include "factory_p.h"
 
 #include <QtCore/QCoreApplication>
-#include <QtCore/QList>
+#include <QtCore/QStringList>
 
 namespace Phonon
 {

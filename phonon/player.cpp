@@ -30,6 +30,7 @@
 #include "abstractvideooutput_p.h"
 #include "factory_p.h"
 
+#include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
 

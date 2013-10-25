@@ -26,7 +26,6 @@
 #include "phonon_export.h"
 
 #include <QtCore/QObject>
-#include <QtCore/QStringList>
 
 namespace Phonon {
 
