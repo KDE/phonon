@@ -42,7 +42,6 @@ class PHONON_EXPORT AbstractAudioOutput : public QObject, public Frontend
 #warning friending P
     friend class Player;
     Q_OBJECT
-
 public:
     ~AbstractAudioOutput();
 

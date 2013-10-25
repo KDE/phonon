@@ -36,7 +36,6 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
 {
 public:
     void init(Phonon::Category c);
-    QString getStreamUuid();
 
 protected:
     AudioOutputPrivate()
@@ -83,7 +82,6 @@ private:
     AudioOutputInterface *interface;
     Phonon::AudioOutputDevice device;
     qreal volume;
-    QString streamUuid;
     Category category;
     int deviceBeforeFallback;
     bool outputDeviceOverridden;

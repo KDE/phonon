@@ -53,18 +53,10 @@ void AudioOutputPrivate::init(Phonon::Category c)
     P_Q(AudioOutput);
 
     category = c;
-#ifndef QT_NO_QUUID_STRING
-    streamUuid = QUuid::createUuid().toString();
-#endif
 
     createBackendObject();
 
     q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(_k_deviceListChanged()));
-}
-
-QString AudioOutputPrivate::getStreamUuid()
-{
-    return streamUuid;
 }
 
 void AudioOutputPrivate::createBackendObject()
@@ -142,16 +134,18 @@ void AudioOutput::setMuted(bool mute)
     P_D(AudioOutput);
     if (d->muted == mute)
         return;
+    d->muted = mute;
 
-    if (mute) {
-        if (d->interface)
-            d->interface->setVolume(0.0);
-        d->muted = mute;
-    } else {
-        if (d->interface)
-            d->interface->setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT));
-        d->muted = mute;
-    }
+    qreal volume = 0.0;
+#warning it may be a good idea to restore the volume via the backend....
+    if (!mute) // Restore volume.
+        volume = pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT);
+
+    if (d->interface)
+#warning how would that emit mutedChanged? if (vol==0) ???
+        d->interface->setVolume(volume);
+    else // Fake mute.
+        emit mutedChanged(mute);
 }
 
 Category AudioOutput::category() const
