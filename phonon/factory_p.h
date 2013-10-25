@@ -30,6 +30,7 @@
 
 namespace Phonon {
 
+class BackendInterface;
 class PlatformPlugin;
 class FrontendPrivate;
 
@@ -53,8 +54,10 @@ QObject *createVolumeFaderEffect(QObject *parent = 0);
 QObject *createAudioOutput(QObject *parent = 0);
 QObject *createVideoWidget(QObject *parent = 0);
 
+#warning whats with all this rubbish being exported
 PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
 PHONON_EXPORT QObject *backend();
+BackendInterface *interface();
 PHONON_EXPORT QObject *registerQObject(QObject *o);
 PHONON_EXPORT void registerFrontendObject(FrontendPrivate *);
 PHONON_EXPORT void deregisterFrontendObject(FrontendPrivate *);

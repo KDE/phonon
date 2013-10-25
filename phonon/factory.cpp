@@ -60,6 +60,8 @@ class FactoryPrivate : public Phonon::Factory::Sender
         QList<QObject *> objects;
         QList<FrontendPrivate *> mediaNodePrivateList;
 
+        BackendInterface *interface;
+
     private Q_SLOTS:
         /**
          * unregisters the backend object
@@ -176,7 +178,8 @@ FactoryPrivate::FactoryPrivate()
     m_platformPlugin(0),
     m_noPlatformPlugin(false),
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
-    m_backendObject(0)
+    m_backendObject(0),
+    interface(0)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
@@ -243,37 +246,47 @@ void FactoryPrivate::objectDestroyed(QObject * obj)
     objects.removeAll(obj);
 }
 
-#define FACTORY_IMPL(classname) \
-QObject *Factory::create ## classname(QObject *parent) \
-{ \
-    if (backend()) { \
-        return registerQObject(qobject_cast<BackendInterface *>(backend())->createObject(BackendInterface::classname##Class, parent)); \
-    } \
-    return 0; \
-}
-#define FACTORY_IMPL_1ARG(classname) \
-QObject *Factory::create ## classname(int arg1, QObject *parent) \
-{ \
-    if (backend()) { \
-        return registerQObject(qobject_cast<BackendInterface *>(backend())->createObject(BackendInterface::classname##Class, parent, QList<QVariant>() << arg1)); \
-    } \
-    return 0; \
+QObject *Factory::createPlayer(QObject *parent)
+{
+    if (!backend())
+        return 0;
+    return registerQObject(interface()->createObject(BackendInterface::PlayerClass, parent));
 }
 
-FACTORY_IMPL(Player)
-#ifndef QT_NO_PHONON_EFFECT
-FACTORY_IMPL_1ARG(Effect)
-#endif //QT_NO_PHONON_EFFECT
-#ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
-FACTORY_IMPL(VolumeFaderEffect)
-#endif //QT_NO_PHONON_VOLUMEFADEREFFECT
-FACTORY_IMPL(AudioOutput)
-#ifndef QT_NO_PHONON_VIDEO
-FACTORY_IMPL(VideoWidget)
-#endif //QT_NO_PHONON_VIDEO
-FACTORY_IMPL(AudioDataOutput)
+QObject *Factory::createEffect(int effectId, QObject *parent)
+{
+    if (!backend())
+        return 0;
+    return registerQObject(interface()->createObject(BackendInterface::EffectClass, parent, QList<QVariant>() << effectId));
+}
 
-#undef FACTORY_IMPL
+QObject *Factory::createVolumeFaderEffect(QObject *parent)
+{
+    if (!backend())
+        return 0;
+    return registerQObject(interface()->createObject(BackendInterface::VolumeFaderEffectClass, parent));
+}
+
+QObject *Factory::createAudioOutput(QObject *parent)
+{
+    if (!backend())
+        return 0;
+    return registerQObject(interface()->createObject(BackendInterface::AudioOutputClass, parent));
+}
+
+QObject *Factory::createVideoWidget(QObject *parent)
+{
+    if (!backend())
+        return 0;
+    return registerQObject(interface()->createObject(BackendInterface::VideoWidgetClass, parent));
+}
+
+QObject *Factory::createAudioDataOutput(QObject *parent)
+{
+    if (!backend())
+        return 0;
+    return registerQObject(interface()->createObject(BackendInterface::AudioDataOutputClass, parent));
+}
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
 PlatformPlugin *FactoryPrivate::platformPlugin()
@@ -365,16 +378,29 @@ QObject *Factory::backend()
     if (globalFactory.isDestroyed())
         return 0;
 
-    if (globalFactory->m_backendObject == 0)
+    if (globalFactory->m_backendObject == 0) {
         globalFactory->createBackend();
+        if (globalFactory->m_backendObject)
+            globalFactory->interface = qobject_cast<BackendInterface *>(globalFactory->m_backendObject);
+    }
 
     return globalFactory->m_backendObject;
+}
+
+BackendInterface *Factory::interface()
+{
+    if (globalFactory.isDestroyed())
+        return 0;
+
+    return globalFactory->interface;
 }
 
 QObject *Factory::registerQObject(QObject *o)
 {
     if (o) {
-        QObject::connect(o, SIGNAL(destroyed(QObject *)), globalFactory, SLOT(objectDestroyed(QObject *)), Qt::DirectConnection);
+        QObject::connect(o, SIGNAL(destroyed(QObject *)),
+                         globalFactory, SLOT(objectDestroyed(QObject *)),
+                         Qt::DirectConnection);
         globalFactory->objects.append(o);
     }
     return o;
