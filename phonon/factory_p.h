@@ -46,21 +46,20 @@ Q_SIGNALS:
 
 PHONON_EXPORT Sender *sender();
 
-#warning createObject!
+#warning consider creating an int command...
 QObject *createPlayer(QObject *parent = 0);
 QObject *createEffect(int effectId, QObject *parent = 0);
 QObject *createVolumeFaderEffect(QObject *parent = 0);
 QObject *createAudioOutput(QObject *parent = 0);
 QObject *createVideoWidget(QObject *parent = 0);
 
-#warning whats with all this rubbish being exported
-PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
-PHONON_EXPORT QObject *backend();
+QObject *createAudioDataOutput(QObject *parent = 0);
+QObject *backend();
 BackendInterface *interface();
-PHONON_EXPORT QObject *registerQObject(QObject *o);
-PHONON_EXPORT void registerFrontendObject(FrontendPrivate *);
-PHONON_EXPORT void deregisterFrontendObject(FrontendPrivate *);
-PHONON_EXPORT PlatformPlugin *platformPlugin();
+QObject *registerQObject(QObject *o);
+void registerFrontendObject(FrontendPrivate *);
+void deregisterFrontendObject(FrontendPrivate *);
+PlatformPlugin *platformPlugin();
 
 } // namespace Factory
 } // namespace Phonon
