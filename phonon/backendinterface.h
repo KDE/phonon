@@ -49,9 +49,12 @@ public:
         VideoWidgetClass
     };
 
+#warning generic BS
     virtual QObject *createObject(Class c, QObject *parent, const QList<QVariant> &args = QList<QVariant>()) = 0;
     virtual QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const = 0;
     virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
+
+    virtual QList<AudioOutputDevice> audioOutputDevices() const;
 };
 
 } // namespace Phonon

@@ -48,14 +48,15 @@ BackendCapabilities::Notifier::Notifier(QObject *parent)
 
 QList<AudioOutputDevice> BackendCapabilities::availableAudioOutputDevices()
 {
-    QList<AudioOutputDevice> ret;
-#ifndef QT_NO_PHONON_SETTINGSGROUP
-    const QList<int> deviceIndexes = GlobalConfig().audioOutputDeviceListFor(Phonon::NoCategory, GlobalConfig::ShowAdvancedDevices);
-    for (int i = 0; i < deviceIndexes.count(); ++i) {
-        ret.append(AudioOutputDevice::fromIndex(deviceIndexes.at(i)));
-    }
-#endif //QT_NO_PHONON_SETTINGSGROUP
-    return ret;
+    return qobject_cast<BackendInterface *>(Factory::backend())->audioOutputDevices();
+//    QList<AudioOutputDevice> ret;
+//#ifndef QT_NO_PHONON_SETTINGSGROUP
+//    const QList<int> deviceIndexes = GlobalConfig().audioOutputDeviceListFor(Phonon::NoCategory, GlobalConfig::ShowAdvancedDevices);
+//    for (int i = 0; i < deviceIndexes.count(); ++i) {
+//        ret.append(AudioOutputDevice::fromIndex(deviceIndexes.at(i)));
+//    }
+//#endif //QT_NO_PHONON_SETTINGSGROUP
+//    return ret;
 }
 
 
