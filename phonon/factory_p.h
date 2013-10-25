@@ -52,13 +52,14 @@ QObject *createEffect(int effectId, QObject *parent = 0);
 QObject *createVolumeFaderEffect(QObject *parent = 0);
 QObject *createAudioOutput(QObject *parent = 0);
 QObject *createVideoWidget(QObject *parent = 0);
-
 QObject *createAudioDataOutput(QObject *parent = 0);
+
 QObject *backend();
 BackendInterface *interface();
 QObject *registerQObject(QObject *o);
 void registerFrontendObject(FrontendPrivate *);
 void deregisterFrontendObject(FrontendPrivate *);
+
 PlatformPlugin *platformPlugin();
 
 } // namespace Factory

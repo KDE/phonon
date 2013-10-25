@@ -24,10 +24,7 @@
 
 #include "backendinterface.h"
 #include "frontend_p.h"
-#include "player.h"
-#include "audiooutput.h"
 #include "globalstatic_p.h"
-#include "objectdescription.h"
 #include "platformplugin.h"
 #include "phononnamespace_p.h"
 
@@ -35,10 +32,8 @@
 #include <QtCore/QDir>
 #include <QtCore/QList>
 #include <QtCore/QPluginLoader>
-#include <QtCore/QPointer>
 
-namespace Phonon
-{
+namespace Phonon {
 
 class FactoryPrivate : public Phonon::Factory::Sender
 {
@@ -46,18 +41,26 @@ class FactoryPrivate : public Phonon::Factory::Sender
 public:
     FactoryPrivate();
     ~FactoryPrivate();
+
     bool createBackend();
+#warning why is there a createBackend but no createPPlugin... why is it a gateway function....
     PlatformPlugin *platformPlugin();
-    PlatformPlugin *m_platformPlugin;
-    bool m_noPlatformPlugin;
-    QPointer<QObject> m_backendObject;
-    QList<QObject *> objects;
-    QList<FrontendPrivate *> mediaNodePrivateList;
+
+    QObject *backendObject;
     BackendInterface *interface;
+
+    QList<QObject *> objects;
+    QList<FrontendPrivate *> frontendPrivates;
 
 private Q_SLOTS:
     void objectDestroyed(QObject *);
     void objectDescriptionChanged(ObjectDescriptionType);
+
+private:
+    // Note that platformPlugin members are private because one must use
+    // platformPlugin().
+    PlatformPlugin *m_platformPlugin;
+    bool m_noPlatformPluginFound; /* Set if initial creation failed. */
 };
 
 PHONON_GLOBAL_STATIC(Phonon::FactoryPrivate, globalFactory)
@@ -77,7 +80,7 @@ bool FactoryPrivate::createBackend()
 {
     pDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STR << "trying to create backend...";
 #ifndef QT_NO_LIBRARY
-    Q_ASSERT(m_backendObject == 0);
+    Q_ASSERT(backendObject == 0);
 
     // If the user defines a backend with PHONON_BACKEND this overrides the
     // platform plugin (because we cannot influence its lookup priority) and
@@ -88,10 +91,10 @@ bool FactoryPrivate::createBackend()
     if (f && backendEnv.isEmpty()) {
         // TODO: it would be very groovy if we could add a param, so that the
         // platform could also try to load the defined backend as preferred choice.
-        m_backendObject = f->createBackend();
+        backendObject = f->createBackend();
     }
 
-    if (!m_backendObject) {
+    if (!backendObject) {
         ensureLibraryPathSet();
 
         // could not load a backend through the platform plugin. Falling back to the default
@@ -123,8 +126,8 @@ bool FactoryPrivate::createBackend()
                     continue;
                 }
                 pDebug() << pluginLoader.instance();
-                m_backendObject = pluginLoader.instance();
-                if (m_backendObject) {
+                backendObject = pluginLoader.instance();
+                if (backendObject) {
                     break;
                 }
 
@@ -132,11 +135,11 @@ bool FactoryPrivate::createBackend()
                 pluginLoader.unload();
             }
 
-            if (m_backendObject) {
+            if (backendObject) {
                 break;
             }
         }
-        if (!m_backendObject) {
+        if (!backendObject) {
             pWarning() << Q_FUNC_INFO << "phonon backend plugin could not be loaded";
             return false;
         }
@@ -144,12 +147,12 @@ bool FactoryPrivate::createBackend()
 
     pDebug() << Q_FUNC_INFO
              << "Phonon backend"
-             << m_backendObject->property("backendName").toString()
+             << backendObject->property("backendName").toString()
              << "version"
-             << m_backendObject->property("backendVersion").toString()
+             << backendObject->property("backendVersion").toString()
              << "loaded";
 
-    connect(m_backendObject, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
+    connect(backendObject, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
             SLOT(objectDescriptionChanged(ObjectDescriptionType)));
 
     return true;
@@ -162,8 +165,8 @@ bool FactoryPrivate::createBackend()
 
 FactoryPrivate::FactoryPrivate()
     : m_platformPlugin(0)
-    , m_noPlatformPlugin(false)
-    , m_backendObject(0)
+    , m_noPlatformPluginFound(false)
+    , backendObject(0)
     , interface(0)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
@@ -174,14 +177,14 @@ FactoryPrivate::FactoryPrivate()
 
 FactoryPrivate::~FactoryPrivate()
 {
-    for (int i = 0; i < mediaNodePrivateList.count(); ++i) {
-        mediaNodePrivateList.at(i)->deleteBackendObject();
+    for (int i = 0; i < frontendPrivates.count(); ++i) {
+        frontendPrivates.at(i)->deleteBackendObject();
     }
     if (objects.size() > 0) {
         pError() << "The backend objects are not deleted as was requested.";
         qDeleteAll(objects);
     }
-    delete m_backendObject;
+    delete backendObject;
     delete m_platformPlugin;
 }
 
@@ -211,7 +214,7 @@ Factory::Sender *Factory::sender()
 
 void Factory::registerFrontendObject(FrontendPrivate *bp)
 {
-    globalFactory->mediaNodePrivateList.prepend(bp); // inserted last => deleted first
+    globalFactory->frontendPrivates.prepend(bp); // inserted last => deleted first
 }
 
 void Factory::deregisterFrontendObject(FrontendPrivate *bp)
@@ -219,7 +222,7 @@ void Factory::deregisterFrontendObject(FrontendPrivate *bp)
     // The Factory can already be cleaned up while there are other frontend objects still alive.
     // When those are deleted they'll call deregisterFrontendObject through ~BasePrivate
     if (!globalFactory.isDestroyed()) {
-        globalFactory->mediaNodePrivateList.removeAll(bp);
+        globalFactory->frontendPrivates.removeAll(bp);
     }
 }
 
@@ -276,7 +279,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     if (m_platformPlugin) {
         return m_platformPlugin;
     }
-    if (m_noPlatformPlugin) {
+    if (m_noPlatformPluginFound) {
         return 0;
     }
     Q_ASSERT(QCoreApplication::instance());
@@ -345,7 +348,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
         dir.setNameFilters(QStringList());
     }
     pDebug() << Q_FUNC_INFO << "platform plugin could not be loaded";
-    m_noPlatformPlugin = true;
+    m_noPlatformPluginFound = true;
     return 0;
 }
 
@@ -359,13 +362,13 @@ QObject *Factory::backend()
     if (globalFactory.isDestroyed())
         return 0;
 
-    if (globalFactory->m_backendObject == 0) {
+    if (globalFactory->backendObject == 0) {
         globalFactory->createBackend();
-        if (globalFactory->m_backendObject)
-            globalFactory->interface = qobject_cast<BackendInterface *>(globalFactory->m_backendObject);
+        if (globalFactory->backendObject)
+            globalFactory->interface = qobject_cast<BackendInterface *>(globalFactory->backendObject);
     }
 
-    return globalFactory->m_backendObject;
+    return globalFactory->backendObject;
 }
 
 BackendInterface *Factory::interface()
@@ -387,7 +390,7 @@ QObject *Factory::registerQObject(QObject *o)
     return o;
 }
 
-} //namespace Phonon
+} // namespace Phonon
 
 #include "factory.moc"
 #include "moc_factory_p.cpp"
