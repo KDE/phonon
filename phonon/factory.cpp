@@ -40,10 +40,8 @@
 namespace Phonon
 {
 
-class PlatformPlugin;
 class FactoryPrivate : public Phonon::Factory::Sender
 {
-    friend QObject *Factory::backend();
     Q_OBJECT
     public:
         FactoryPrivate();
