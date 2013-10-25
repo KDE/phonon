@@ -54,13 +54,13 @@ protected:
     }
 
     /** \reimp */
-    virtual bool aboutToDeleteBackendObject();
+    virtual bool aboutToDeleteBackendObject() Q_DECL_FINAL;
 
     /** \reimp */
-    virtual void createBackendObject();
+    virtual void createBackendObject() Q_DECL_FINAL;
 
     /** \reimp */
-    void setupBackendObject();
+    virtual void setupBackendObject() Q_DECL_FINAL;
 
     enum DeviceChangeType {
         FallbackChange,
@@ -69,7 +69,12 @@ protected:
     };
     void handleAutomaticDeviceChange(const AudioOutputDevice &newDev, DeviceChangeType type);
 
-    bool callSetOutputDevice(const AudioOutputDevice &dev);
+    /**
+     * @brief Checks if interface is null and sets output device.
+     * @param dev Device to set
+     * @return \c false if interface==0
+     */
+    bool safeSetOutputDevice(const AudioOutputDevice &dev);
 
     void _k_volumeChanged(qreal);
     void _k_mutedChanged(bool);

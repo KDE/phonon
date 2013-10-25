@@ -42,10 +42,10 @@ protected:
     }
 
     /** \reimp */
-    virtual bool aboutToDeleteBackendObject();
+    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE;
 
-    /** \reimp */
-    void setupBackendObject();
+#warning why is setupBackendObject not in a base?
+    virtual void setupBackendObject();
 };
 
 } // namespace Phonon

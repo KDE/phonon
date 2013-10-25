@@ -51,12 +51,10 @@ AudioOutput::AudioOutput(QObject *parent)
 void AudioOutputPrivate::init(Phonon::Category c)
 {
     P_Q(AudioOutput);
-
     category = c;
-
     createBackendObject();
-
-    q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(_k_deviceListChanged()));
+    q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()),
+               this, SLOT(_k_deviceListChanged()));
 }
 
 void AudioOutputPrivate::createBackendObject()
@@ -70,9 +68,8 @@ void AudioOutputPrivate::createBackendObject()
     // User reports seem to suggest this possibility but I can't see how :s.
     // See other comment and check for isValid() in handleAutomaticDeviceChange()
     device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
-    if (m_backendObject && interface) {
+    if (m_backendObject && interface)
         setupBackendObject();
-    }
 }
 
 static const qreal LOUDNESS_TO_VOLTAGE_EXPONENT = qreal(0.67);
@@ -113,7 +110,7 @@ static const qreal log10over20 = qreal(0.1151292546497022842); // ln(10) / 20
 qreal AudioOutput::volumeDecibel() const
 {
     P_D(const AudioOutput);
-    if (d->muted || !d->m_backendObject)
+    if (d->muted || !d->interface)
         return log(d->volume) / log10over20;
     return 0.67 * log(d->interface->volume()) / log10over20;
 }
@@ -163,24 +160,21 @@ AudioOutputDevice AudioOutput::outputDevice() const
 bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
 {
     P_D(AudioOutput);
+
     if (!newAudioOutputDevice.isValid()) {
         d->outputDeviceOverridden = d->forceMove = false;
         const int newIndex = GlobalConfig().audioOutputDeviceFor(d->category);
-        if (newIndex == d->device.index()) {
+        if (newIndex == d->device.index())
             return true;
-        }
         d->device = AudioOutputDevice::fromIndex(newIndex);
     } else {
         d->outputDeviceOverridden = d->forceMove = true;
-        if (d->device == newAudioOutputDevice) {
+        if (d->device == newAudioOutputDevice)
             return true;
-        }
         d->device = newAudioOutputDevice;
     }
-    if (d->backendObject()) {
-        return d->callSetOutputDevice(d->device);
-    }
-    return true;
+
+    return d->safeSetOutputDevice(d->device);
 }
 
 bool AudioOutputPrivate::aboutToDeleteBackendObject()
@@ -207,7 +201,7 @@ void AudioOutputPrivate::setupBackendObject()
     // There is no need to set the output device initially if PA is used as
     // we know it will not work (stream doesn't exist yet) and that this will be
     // handled by _k_deviceChanged()
-    if (!callSetOutputDevice(device) && !outputDeviceOverridden) {
+    if (!safeSetOutputDevice(device) && !outputDeviceOverridden) {
         // fall back in the preference list of output devices
         QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
         if (deviceList.isEmpty()) {
@@ -215,14 +209,14 @@ void AudioOutputPrivate::setupBackendObject()
         }
         for (int i = 0; i < deviceList.count(); ++i) {
             const AudioOutputDevice &dev = AudioOutputDevice::fromIndex(deviceList.at(i));
-            if (callSetOutputDevice(dev)) {
+            if (safeSetOutputDevice(dev)) {
                 handleAutomaticDeviceChange(dev, AudioOutputPrivate::FallbackChange);
                 return; // found one that works
             }
         }
         // if we get here there is no working output device. Tell the backend.
         const AudioOutputDevice none;
-        callSetOutputDevice(none);
+        safeSetOutputDevice(none);
         handleAutomaticDeviceChange(none, FallbackChange);
 #endif //QT_NO_PHONON_SETTINGSGROUP
     }
@@ -250,7 +244,7 @@ void AudioOutputPrivate::_k_revertFallback()
         return;
     }
     device = AudioOutputDevice::fromIndex(deviceBeforeFallback);
-    callSetOutputDevice(device);
+    safeSetOutputDevice(device);
     P_Q(AudioOutput);
     emit q->outputDeviceChanged(device);
 }
@@ -270,7 +264,7 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
         // if it's the same device as the one that failed, ignore it
         if (device.index() != devIndex) {
             const AudioOutputDevice &info = AudioOutputDevice::fromIndex(devIndex);
-            if (callSetOutputDevice(info)) {
+            if (safeSetOutputDevice(info)) {
                 handleAutomaticDeviceChange(info, FallbackChange);
                 return; // found one that works
             }
@@ -279,7 +273,7 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
 #endif //QT_NO_PHONON_SETTINGSGROUP
     // if we get here there is no working output device. Tell the backend.
     const AudioOutputDevice none;
-    callSetOutputDevice(none);
+    safeSetOutputDevice(none);
     handleAutomaticDeviceChange(none, FallbackChange);
 }
 
@@ -313,7 +307,7 @@ void AudioOutputPrivate::_k_deviceListChanged()
             // we've reached the currently used device, nothing to change
             break;
         }
-        if (callSetOutputDevice(info)) {
+        if (safeSetOutputDevice(info)) {
             handleAutomaticDeviceChange(info, changeType);
             break; // found one with higher preference that works
         }
@@ -332,7 +326,7 @@ void AudioOutputPrivate::_k_deviceChanged(int deviceIndex)
         forceMove = false;
         const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
         if (currentDevice != device) {
-            if (!callSetOutputDevice(device)) {
+            if (!safeSetOutputDevice(device)) {
                 // What to do if we are overridden and cannot change to our preferred device?
             }
         }
@@ -420,7 +414,7 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
     }
 }
 
-bool AudioOutputPrivate::callSetOutputDevice(const AudioOutputDevice &dev)
+bool AudioOutputPrivate::safeSetOutputDevice(const AudioOutputDevice &dev)
 {
     if (!interface)
         return false;
