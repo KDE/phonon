@@ -39,7 +39,7 @@ namespace Phonon
  * example, "4.0.0"). This may be a different version than the
  * version the application was compiled against.
  *
- * \sa PHONON_VERSION_STR
+ * \see PHONON_VERSION_STR
  */
 const char *phononVersion()
 {
