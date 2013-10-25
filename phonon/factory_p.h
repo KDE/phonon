@@ -58,7 +58,6 @@ PHONON_EXPORT QObject *backend();
 PHONON_EXPORT QObject *registerQObject(QObject *o);
 PHONON_EXPORT void registerFrontendObject(FrontendPrivate *);
 PHONON_EXPORT void deregisterFrontendObject(FrontendPrivate *);
-PHONON_EXPORT void setBackend(QObject *);
 PHONON_EXPORT PlatformPlugin *platformPlugin();
 
 } // namespace Factory

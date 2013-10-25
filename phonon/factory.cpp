@@ -82,12 +82,6 @@ static inline void ensureLibraryPathSet()
 #endif // PHONON_LIBRARY_PATH
 }
 
-void Factory::setBackend(QObject *b)
-{
-    Q_ASSERT(globalFactory->m_backendObject == 0);
-    globalFactory->m_backendObject = b;
-}
-
 bool FactoryPrivate::createBackend()
 {
     pDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STR << "trying to create backend...";
