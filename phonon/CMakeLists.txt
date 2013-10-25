@@ -1,16 +1,19 @@
 include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
 set(phonon_LIB_SRCS
+    factory.cpp
     frontend.cpp
     player.cpp
     source.cpp
 
     # Private (QTC Compat)
+    factory_p.h
     frontend_p.h
     player_p.h
     source_p.h
 
     # Interfaces (QTC Compat)
+    backendinterface.h
     playerinterface.h
 )
 
@@ -27,7 +30,6 @@ ${phonon_LIB_SRCS}
 #    effect.cpp
 #    effectparameter.cpp
 #    effectwidget.cpp
-   factory.cpp
    globalconfig.cpp
 #   iodevicestream.cpp
    objectdescription.cpp
@@ -45,7 +47,6 @@ ${phonon_LIB_SRCS}
 # QTC Compat
     abstractaudiooutput_p.h
     audiooutput_p.h
-    factory_p.h
     globalconfig_p.h
     globalstatic_p.h
     frontend_p.h
@@ -57,7 +58,6 @@ ${phonon_LIB_SRCS}
 #    qsettingsgroup_p.h
 
     audiooutputinterface.h
-    backendinterface.h
     platformplugin.h
    )
 
