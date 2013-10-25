@@ -55,6 +55,9 @@ public:
     virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
 
     virtual QList<AudioOutputDevice> audioOutputDevices() const;
+
+Q_SIGNALS:
+    void objectDescriptionChanged(ObjectDescriptionType);
 };
 
 } // namespace Phonon
