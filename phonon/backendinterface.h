@@ -57,7 +57,7 @@ public:
     virtual QList<AudioOutputDevice> audioOutputDevices() const;
 
 Q_SIGNALS:
-    void objectDescriptionChanged(ObjectDescriptionType);
+    virtual void objectDescriptionChanged(ObjectDescriptionType) = 0;
 };
 
 } // namespace Phonon

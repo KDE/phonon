@@ -28,10 +28,6 @@
 #include "globalconfig.h"
 #include "objectdescription.h"
 #include "phononnamespace_p.h"
-#include "pulsesupport.h"
-#ifdef HAVE_PULSEAUDIO
-#  include "pulsestream_p.h"
-#endif
 
 #include <QtCore/QUuid>
 #include <QtCore/qmath.h>
@@ -62,18 +58,6 @@ void AudioOutputPrivate::init(Phonon::Category c)
 #endif
 
     createBackendObject();
-
-#ifdef HAVE_PULSEAUDIO
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
-        PulseStream *stream = pulse->registerOutputStream(streamUuid, category);
-        if (stream) {
-            q->connect(stream, SIGNAL(usingDevice(int)), SLOT(_k_deviceChanged(int)));
-            q->connect(stream, SIGNAL(volumeChanged(qreal)), SLOT(_k_volumeChanged(qreal)));
-            q->connect(stream, SIGNAL(muteChanged(bool)), SLOT(_k_mutedChanged(bool)));
-        }
-    }
-#endif
 
     q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()), SLOT(_k_deviceListChanged()));
 }
@@ -106,28 +90,25 @@ void AudioOutput::setVolume(qreal volume)
 {
     P_D(AudioOutput);
     d->volume = volume;
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (d->backendObject()) {
-        if (pulse->isActive()) {
-            pulse->setOutputVolume(d->getStreamUuid(), volume);
-        } else if (!d->muted && d->interface) {
-            // using Stevens' power law loudness is proportional to (sound pressure)^0.67
-            // sound pressure is proportional to voltage:
-            // p² \prop P \prop V²
-            // => if a factor for loudness of x is requested
-            d->interface->setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT));
-      } else {
-          emit volumeChanged(volume);
-      }
-    } else {
+
+    if (d->interface) { // Fake property change.
         emit volumeChanged(volume);
+        return;
+    }
+
+    if (!d->muted) {
+        // using Stevens' power law loudness is proportional to (sound pressure)^0.67
+        // sound pressure is proportional to voltage:
+        // p² \prop P \prop V²
+        // => if a factor for loudness of x is requested
+        d->interface->setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT));
     }
 }
 
 qreal AudioOutput::volume() const
 {
     P_D(const AudioOutput);
-    if (d->muted || !d->interface || PulseSupport::getInstance()->isActive())
+    if (d->muted || !d->interface)
         return d->volume;
     return pow(d->interface->volume(), LOUDNESS_TO_VOLTAGE_EXPONENT);
 }
@@ -140,7 +121,7 @@ static const qreal log10over20 = qreal(0.1151292546497022842); // ln(10) / 20
 qreal AudioOutput::volumeDecibel() const
 {
     P_D(const AudioOutput);
-    if (d->muted || !d->m_backendObject || PulseSupport::getInstance()->isActive())
+    if (d->muted || !d->m_backendObject)
         return log(d->volume) / log10over20;
     return 0.67 * log(d->interface->volume()) / log10over20;
 }
@@ -159,26 +140,17 @@ bool AudioOutput::isMuted() const
 void AudioOutput::setMuted(bool mute)
 {
     P_D(AudioOutput);
-    if (d->muted != mute) {
-        PulseSupport *pulse = PulseSupport::getInstance();
-        if (mute) {
-            d->muted = mute;
-            if (k_ptr->backendObject()) {
-                if (pulse->isActive())
-                    pulse->setOutputMute(d->getStreamUuid(), mute);
-                else
-                    d->interface->setVolume(0.0);
-            }
-        } else {
-            if (k_ptr->backendObject()) {
-                if (pulse->isActive())
-                    pulse->setOutputMute(d->getStreamUuid(), mute);
-                else
-                    d->interface->setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT));
-            }
-            d->muted = mute;
-        }
-        emit mutedChanged(mute);
+    if (d->muted == mute)
+        return;
+
+    if (mute) {
+        if (d->interface)
+            d->interface->setVolume(0.0);
+        d->muted = mute;
+    } else {
+        if (d->interface)
+            d->interface->setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT));
+        d->muted = mute;
     }
 }
 
@@ -233,33 +205,31 @@ void AudioOutputPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(volumeChanged(qreal)), q, SLOT(_k_volumeChanged(qreal)));
     QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()), q, SLOT(_k_audioDeviceFailed()));
 
-    if (!PulseSupport::getInstance()->isActive()) {
-        // set up attributes
-        interface->setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT));
+    // set up attributes
+    interface->setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT));
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
-        // if the output device is not available and the device was not explicitly set
-        // There is no need to set the output device initially if PA is used as
-        // we know it will not work (stream doesn't exist yet) and that this will be
-        // handled by _k_deviceChanged()
-        if (!callSetOutputDevice(device) && !outputDeviceOverridden) {
-            // fall back in the preference list of output devices
-            QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
-            if (deviceList.isEmpty()) {
-                return;
-            }
-            for (int i = 0; i < deviceList.count(); ++i) {
-                const AudioOutputDevice &dev = AudioOutputDevice::fromIndex(deviceList.at(i));
-                if (callSetOutputDevice(dev)) {
-                    handleAutomaticDeviceChange(dev, AudioOutputPrivate::FallbackChange);
-                    return; // found one that works
-                }
-            }
-            // if we get here there is no working output device. Tell the backend.
-            const AudioOutputDevice none;
-            callSetOutputDevice(none);
-            handleAutomaticDeviceChange(none, FallbackChange);
+    // if the output device is not available and the device was not explicitly set
+    // There is no need to set the output device initially if PA is used as
+    // we know it will not work (stream doesn't exist yet) and that this will be
+    // handled by _k_deviceChanged()
+    if (!callSetOutputDevice(device) && !outputDeviceOverridden) {
+        // fall back in the preference list of output devices
+        QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
+        if (deviceList.isEmpty()) {
+            return;
         }
+        for (int i = 0; i < deviceList.count(); ++i) {
+            const AudioOutputDevice &dev = AudioOutputDevice::fromIndex(deviceList.at(i));
+            if (callSetOutputDevice(dev)) {
+                handleAutomaticDeviceChange(dev, AudioOutputPrivate::FallbackChange);
+                return; // found one that works
+            }
+        }
+        // if we get here there is no working output device. Tell the backend.
+        const AudioOutputDevice none;
+        callSetOutputDevice(none);
+        handleAutomaticDeviceChange(none, FallbackChange);
 #endif //QT_NO_PHONON_SETTINGSGROUP
     }
 }
@@ -293,8 +263,7 @@ void AudioOutputPrivate::_k_revertFallback()
 
 void AudioOutputPrivate::_k_audioDeviceFailed()
 {
-    if (PulseSupport::getInstance()->isActive())
-        return;
+#warning used to abort on PA use
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
 
@@ -322,8 +291,7 @@ void AudioOutputPrivate::_k_audioDeviceFailed()
 
 void AudioOutputPrivate::_k_deviceListChanged()
 {
-    if (PulseSupport::getInstance()->isActive())
-        return;
+#warning used to abort on PA use
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
     pDebug() << Q_FUNC_INFO;
@@ -388,11 +356,11 @@ void AudioOutputPrivate::_k_deviceChanged(int deviceIndex)
     }
 }
 
-    static struct
-    {
-        int first;
-        int second;
-    } g_lastFallback = { 0, 0 };
+static struct
+{
+    int first;
+    int second;
+} g_lastFallback = { 0, 0 };
 
 void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &device2, DeviceChangeType type)
 {
@@ -406,10 +374,10 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
         if (g_lastFallback.first != device1.index() || g_lastFallback.second != device2.index()) {
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
             const QString &text = //device2.isValid() ?
-                AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
-                        "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name()) /*:
-                AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
-                        "No other device available.</html>").arg(device1.name())*/;
+                    AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
+                                    "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name()) /*:
+                        AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
+                                "No other device available.</html>").arg(device1.name())*/;
             Platform::notification("AudioDeviceFallback", text);
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
             g_lastFallback.first = device1.index();
@@ -417,20 +385,20 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
         }
         break;
     case HigherPreferenceChange:
-        {
+    {
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
         const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
-                "which just became available and has higher preference.</html>").arg(device2.name());
+                                             "which just became available and has higher preference.</html>").arg(device2.name());
         Platform::notification("AudioDeviceFallback", text,
-                QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
-                q, SLOT(_k_revertFallback()));
+                               QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
+                               q, SLOT(_k_revertFallback()));
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
         g_lastFallback.first = 0;
         g_lastFallback.second = 0;
-        }
+    }
         break;
     case SoundSystemChange:
-        {
+    {
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
         // If device1 is not "valid" this indicates that the preferences used to select
         // a device was perhaps not available when this object was created (although
@@ -438,14 +406,14 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
         if (device1.isValid()) {
             if (device1.isAvailable()) {
                 const QString text = AudioOutput::tr("<html>Switching to the audio playback device <b>%1</b><br/>"
-                        "which has higher preference or is specifically configured for this stream.</html>").arg(device2.name());
+                                                     "which has higher preference or is specifically configured for this stream.</html>").arg(device2.name());
                 Platform::notification("AudioDeviceFallback", text,
-                        QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
-                        q, SLOT(_k_revertFallback()));
+                                       QStringList(AudioOutput::tr("Revert back to device '%1'").arg(device1.name())),
+                                       q, SLOT(_k_revertFallback()));
             } else {
                 const QString &text =
-                    AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
-                            "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name());
+                        AudioOutput::tr("<html>The audio playback device <b>%1</b> does not work.<br/>"
+                                        "Falling back to <b>%2</b>.</html>").arg(device1.name()).arg(device2.name());
                 Platform::notification("AudioDeviceFallback", text);
             }
         }
@@ -453,25 +421,16 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
         //outputDeviceOverridden = true;
         g_lastFallback.first = 0;
         g_lastFallback.second = 0;
-        }
+    }
         break;
     }
 }
 
 bool AudioOutputPrivate::callSetOutputDevice(const AudioOutputDevice &dev)
 {
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive())
-        return pulse->setOutputDevice(streamUuid, dev.index());
-
     if (!interface)
         return false;
     return interface->setOutputDevice(dev);
-}
-
-AudioOutputPrivate::~AudioOutputPrivate()
-{
-    PulseSupport::getInstance()->clearStreamCache(streamUuid);
 }
 
 } //namespace Phonon

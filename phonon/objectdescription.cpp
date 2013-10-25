@@ -29,7 +29,6 @@
 #include <QtCore/QStringList>
 #include "backendinterface.h"
 #include "platformplugin.h"
-#include "pulsesupport.h"
 #include "phononpimpl_p.h"
 
 namespace Phonon

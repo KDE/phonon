@@ -50,7 +50,9 @@ protected:
     {
     }
 
-    ~AudioOutputPrivate();
+    ~AudioOutputPrivate()
+    {
+    }
 
     /** \reimp */
     virtual bool aboutToDeleteBackendObject();

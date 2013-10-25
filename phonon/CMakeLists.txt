@@ -51,7 +51,7 @@ ${phonon_LIB_SRCS}
    objectdescription.cpp
    phononnamespace.cpp
    platform.cpp
-   pulsesupport.cpp
+#   pulsesupport.cpp
 #    seekslider.cpp
 #   streaminterface.cpp
 #    swiftslider.cpp
@@ -71,7 +71,7 @@ ${phonon_LIB_SRCS}
     phononnamespace_p.h
     phononpimpl_p.h
     platform_p.h
-    pulsestream_p.h
+#    pulsestream_p.h
 #    qsettingsgroup_p.h
 
     audiooutputinterface.h
@@ -81,7 +81,7 @@ ${phonon_LIB_SRCS}
 
 if (PHONON_PULSESUPPORT)
    list(APPEND phonon_LIB_SRCS
-      pulsestream.cpp
+#      pulsestream.cpp
    )
 endif (PHONON_PULSESUPPORT)
 
