@@ -56,7 +56,9 @@ QObject *createAudioDataOutput(QObject *parent = 0);
 
 QObject *backend();
 BackendInterface *interface();
+
 QObject *registerQObject(QObject *o);
+
 void registerFrontendObject(FrontendPrivate *);
 void deregisterFrontendObject(FrontendPrivate *);
 
