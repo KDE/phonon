@@ -42,9 +42,8 @@ find_package(OpenGL)
 macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 
 # Declarative/QML1
-find_package(Qt5Declarative)
-macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" "" "" FALSE)
-set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+find_package(Qt5Quick)
+macro_log_feature(Qt5Quick_FOUND "Qt5 Declarative (qtdeclarative)" "" "" FALSE)
 ################################################################################
 
 add_definitions(${QT_DEFINITIONS} -DQT_NO_PHONON_ABSTRACTMEDIASTREAM)
