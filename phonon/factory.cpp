@@ -253,10 +253,15 @@ bool FactoryPrivate::createBackend()
 
         // could not load a backend through the platform plugin. Falling back to the default
         // (finding the first loadable backend).
-        const QLatin1String suffix("/phonon_backend/");
         const QStringList paths = QCoreApplication::libraryPaths();
         for (int i = 0; i < paths.count(); ++i) {
-            const QString libPath = paths.at(i) + suffix;
+#warning this actually breaks with qmake....
+#ifndef PHONON_BACKEND_DIR_SUFFIX
+#ifdef __GNUC__
+#error PHONON_BACKEND_DIR_SUFFIX must be defined.
+#endif
+#endif
+            const QString libPath = paths.at(i) + PHONON_BACKEND_DIR_SUFFIX;
             const QDir dir(libPath);
             if (!dir.exists()) {
                 pDebug() << Q_FUNC_INFO << dir.absolutePath() << "does not exist";

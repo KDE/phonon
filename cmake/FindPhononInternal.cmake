@@ -182,6 +182,10 @@ set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/kde4"                   CACH
 if (PHONON_BUILD_PHONON4QT5)
     set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/qt5"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/qt5)" FORCE)
 endif(PHONON_BUILD_PHONON4QT5)
+set(BACKEND_INSTALL_DIR "${PLUGIN_INSTALL_DIR}/plugins/${PHONON_LIB_SONAME}_backend")
+if(WIN32) # Imported from Phonon VLC
+    set(BACKEND_INSTALL_DIR "bin/${PHONON_LIB_SONAME}_backend")
+endif()
 set(ICON_INSTALL_DIR            "${SHARE_INSTALL_PREFIX}/icons"             CACHE PATH "The icon install dir (default ${SHARE_INSTALL_PREFIX}/share/icons/)")
 set(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde4/services"     CACHE PATH "The install dir for service (desktop, protocol, ...) files")
 if (PHONON_BUILD_PHONON4QT5)
