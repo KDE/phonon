@@ -54,7 +54,7 @@ namespace Phonon
 class DescriptionBasePrivate;
 #warning drop base suffix? reads terribly...
 #warning ongoing qobject derivee discussion
-class DescriptionBase
+class PHONON_EXPORT DescriptionBase
 {
 public:
     int index() const;
@@ -86,7 +86,7 @@ protected:
 class DeviceDescriptionBasePrivate;
 #warning consider turning devices into one class with properties or templatify it derivees only have boilerplate code
 #warning drop base suffix? reads terribly...
-class DeviceDescriptionBase : public DescriptionBase
+class PHONON_EXPORT DeviceDescriptionBase : public DescriptionBase
 {
 public:
     bool isAvailable() const;
@@ -104,7 +104,7 @@ protected:
     P_DECLARE_PRIVATE(DeviceDescriptionBase)
 };
 
-class AudioOutputDevice : public DeviceDescriptionBase
+class PHONON_EXPORT AudioOutputDevice : public DeviceDescriptionBase
 {
 public:
     AudioOutputDevice();
@@ -116,7 +116,7 @@ public:
     static AudioOutputDevice fromIndex(int i);
 };
 
-class AudioCaptureDevice : public DeviceDescriptionBase
+class PHONON_EXPORT AudioCaptureDevice : public DeviceDescriptionBase
 {
 public:
     AudioCaptureDevice();
@@ -127,7 +127,7 @@ public:
     static AudioCaptureDevice fromIndex(int i) { return AudioCaptureDevice(0, "unknown ACD", "unknown ACD description"); }
 };
 
-class VideoCaptureDevice : public DeviceDescriptionBase
+class PHONON_EXPORT VideoCaptureDevice : public DeviceDescriptionBase
 {
 public:
     VideoCaptureDevice();
@@ -138,7 +138,7 @@ public:
     static VideoCaptureDevice fromIndex(int i) { return VideoCaptureDevice(0, "unknown VCD", "unknown VCD description"); }
 };
 
-class EffectDescription : public DescriptionBase
+class PHONON_EXPORT EffectDescription : public DescriptionBase
 {
 public:
     EffectDescription(); /* constructs invalid description */
@@ -146,12 +146,12 @@ public:
 };
 
 #warning sub is a stub
-class SubtitleDescription : public DescriptionBase
+class PHONON_EXPORT SubtitleDescription : public DescriptionBase
 {
 };
 
 #warning audiochannel is a stub
-class AudioChannelDescription : public DescriptionBase
+class PHONON_EXPORT AudioChannelDescription : public DescriptionBase
 {
 };
 
