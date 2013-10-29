@@ -54,6 +54,8 @@ QObject *createAudioOutput(QObject *parent = 0);
 QObject *createVideoWidget(QObject *parent = 0);
 QObject *createAudioDataOutput(QObject *parent = 0);
 
+QObject *createVideoSurfaceOutput();
+
 QObject *backend();
 BackendInterface *interface();
 

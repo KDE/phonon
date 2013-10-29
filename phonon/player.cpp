@@ -218,9 +218,11 @@ void Player::addAudioOutput(AbstractAudioOutput *audioOutput)
     d->interface->addAudioOutput(audioOutput->k_func()->backendObject());
 }
 
-void Player::addVideoOutput(AbstractVideoOutput *videoOutput)
+void Player::addVideoOutput(QObject *qvo)
 {
+    qDebug() << Q_FUNC_INFO;
     P_D(Player);
+    AbstractVideoOutput *videoOutput = dynamic_cast<AbstractVideoOutput *>(qvo);
     d->videoOutputs.append(videoOutput);
     if (!d->interface)
         d->createBackendObject();

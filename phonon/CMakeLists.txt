@@ -59,6 +59,10 @@ ${phonon_LIB_SRCS}
 
     audiooutputinterface.h
     platformplugin.h
+
+videoitem.cpp
+videoitem.h
+videosurfaceinterface.h
    )
 
 option(PHONON_NO_PLATFORMPLUGIN "Do not use any platform plugin")
@@ -70,6 +74,8 @@ add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_
 
 add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
 qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets Quick)
+
+target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_gl_LIBRARY})
 
 set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
                                            VERSION ${PHONON_LIB_VERSION}
@@ -121,6 +127,12 @@ install(FILES
     volumefadereffect.h
     volumefaderinterface.h
     volumeslider.h
+
+
+videoitem.h
+videosurfaceinterface.h
+
+
     ${phonon_VGO_HDRS}
     ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)

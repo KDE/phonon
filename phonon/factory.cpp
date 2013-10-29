@@ -274,6 +274,14 @@ QObject *Factory::createAudioDataOutput(QObject *parent)
     return registerQObject(interface()->createObject(BackendInterface::AudioDataOutputClass, parent));
 }
 
+QObject *Factory::createVideoSurfaceOutput()
+{
+    if (!backend())
+        return 0;
+#warning parent 0
+    return registerQObject(interface()->createObject(BackendInterface::VideoSurfaceOutputClass, 0));
+}
+
 PlatformPlugin *FactoryPrivate::platformPlugin()
 {
     if (m_platformPlugin) {

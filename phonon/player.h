@@ -55,7 +55,7 @@ public:
 
 #warning merge outputs?
     void addAudioOutput(AbstractAudioOutput *audioOutput);
-    void addVideoOutput(AbstractVideoOutput *videoOutput);
+    Q_INVOKABLE void addVideoOutput(QObject *videoOutput);
 
 public Q_SLOTS:
     void setTickInterval(qint32 newTickInterval);
