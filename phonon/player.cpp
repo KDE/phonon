@@ -72,8 +72,11 @@ Phonon::State Player::state() const
 void Player::setTickInterval(qint32 newTickInterval)
 {
     P_D(Player);
+#warning caching is inconsistent and semi broken ...
     if (d->interface)
         d->interface->setTickInterval(newTickInterval);
+    else
+        d->tickInterval = newTickInterval;
 }
 
 qint32 Player::tickInterval() const

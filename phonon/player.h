@@ -61,17 +61,22 @@ public Q_SLOTS:
     void setTickInterval(qint32 newTickInterval);
     void play();
     void pause();
+#warning stop needs to force a state reset including signals (i.e. stop should not only stop but cause the gui to reflect that...)
     void stop();
+#warning qslider - the supposed goto ui widget - uses int.... consider compat interface
     void seek(qint64 time);
 
 Q_SIGNALS:
     void stateChanged(Phonon::State newstate, Phonon::State oldstate);
+#warning terrible name
     void tick(qint64 time);
     void metaDataChanged();
     void seekableChanged(bool isSeekable);
     void bufferStatus(int percentFilled);
     void finished();
+#warning terrible name and/or additional signal for queuing/playlist stuff needed
     void currentSourceChanged(const Source &newSource);
+#warning terrible name
     void totalTimeChanged(qint64 newTotalTime);
 
 private:
