@@ -35,7 +35,7 @@ class AbstractVideoOutputPrivate : public FrontendPrivate
 {
 protected:
     /** \reimp */
-    virtual bool aboutToDeleteBackendObject();
+    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE;
 
     /** \reimp */
     void setupBackendObject();

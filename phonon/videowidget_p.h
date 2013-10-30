@@ -36,8 +36,13 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 public:
     virtual QObject *qObject() { return q_func(); }
 protected:
-    virtual bool aboutToDeleteBackendObject();
-    virtual void createBackendObject();
+    /** \reimp */
+    virtual bool aboutToDeleteBackendObject() Q_DECL_FINAL;
+
+    /** \reimp */
+    virtual void createBackendObject() Q_DECL_FINAL;
+
+#warning !!! AVOP::setup is not virtual..............
     void setupBackendObject();
 
     VideoWidgetPrivate(VideoWidget *parent)
