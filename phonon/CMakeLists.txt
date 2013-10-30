@@ -56,6 +56,7 @@ ${phonon_LIB_SRCS}
     platform_p.h
 #    pulsestream_p.h
 #    qsettingsgroup_p.h
+    videowidget_p.h
 
     audiooutputinterface.h
     platformplugin.h

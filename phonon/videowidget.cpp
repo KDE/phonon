@@ -29,8 +29,6 @@
 
 #include <QAction>
 
-#ifndef QT_NO_PHONON_VIDEO
-
 namespace Phonon {
 
 VideoWidget::VideoWidget(QWidget *parent)
@@ -243,8 +241,6 @@ bool VideoWidget::event(QEvent *e)
     return QWidget::event(e);
 }
 
-} //namespace Phonon
-
-#endif //QT_NO_PHONON_VIDEO
+} // namespace Phonon
 
 #include "moc_videowidget.cpp"

@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -23,15 +23,11 @@
 #define PHONON_ABSTRACTVIDEOOUTPUT_H
 
 #include "frontend.h"
-#include "phonondefs.h"
 #include "phonon_export.h"
-
-#include <QtCore/QObject>
 
 class QString;
 
-namespace Phonon
-{
+namespace Phonon {
 
 class AbstractVideoOutputPrivate;
 
@@ -39,9 +35,11 @@ class PHONON_EXPORT AbstractVideoOutput : public Frontend
 {
 #warning FRIEEEEEEEEEEEEEEEENDS
     friend class Player;
-    P_DECLARE_PRIVATE(AbstractVideoOutput)
 protected:
-        AbstractVideoOutput(AbstractVideoOutputPrivate &d);
+    AbstractVideoOutput(AbstractVideoOutputPrivate &d);
+
+private:
+    P_DECLARE_PRIVATE(AbstractVideoOutput)
 };
 
 } // namespace Phonon

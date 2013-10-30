@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -17,18 +17,15 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#ifndef VIDEOWIDGET_P_H
-#define VIDEOWIDGET_P_H
+#ifndef PHONON_VIDEOWIDGET_P_H
+#define PHONON_VIDEOWIDGET_P_H
 
 #include "videowidget.h"
 #include "abstractvideooutput_p.h"
 
 #include <QHBoxLayout>
-
-#ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon {
 
@@ -76,6 +73,4 @@ private:
 
 } // namespace Phonon
 
-#endif //QT_NO_PHONON_VIDEO
-
-#endif // VIDEOWIDGET_P_H
+#endif // PHONON_VIDEOWIDGET_P_H
