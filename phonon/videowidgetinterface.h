@@ -25,8 +25,6 @@
 
 #include "videowidget.h"
 
-#ifndef QT_NO_PHONON_VIDEO
-
 namespace Phonon {
 
 class VideoWidgetInterface
@@ -53,7 +51,5 @@ public:
 } // namespace Phonon
 
 Q_DECLARE_INTERFACE(Phonon::VideoWidgetInterface, "org.kde.phonon.VideoWidgetInterface/5.0")
-
-#endif //QT_NO_PHONON_VIDEO
 
 #endif // PHONON_VIDEOWIDGETINTERFACE_H
