@@ -1,5 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,26 +18,20 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#ifndef AUDIOOUTPUT_P_H
-#define AUDIOOUTPUT_P_H
+#ifndef PHONON_AUDIOOUTPUT_P_H
+#define PHONON_AUDIOOUTPUT_P_H
 
 #include "abstractaudiooutput_p.h"
 #include "audiooutput.h"
-#include "audiooutputinterface.h"
-#include "platform_p.h"
 
 namespace Phonon {
 
-class AudioOutputAdaptor;
+class AudioOutputInterface;
 
 class AudioOutputPrivate : public AbstractAudioOutputPrivate
 {
-public:
-    void init(Phonon::Category c);
-
 protected:
     AudioOutputPrivate()
         : AbstractAudioOutputPrivate()
@@ -49,10 +44,6 @@ protected:
     {
     }
 
-    ~AudioOutputPrivate()
-    {
-    }
-
     /** \reimp */
     virtual bool aboutToDeleteBackendObject() Q_DECL_FINAL;
 
@@ -62,6 +53,8 @@ protected:
     /** \reimp */
     virtual void setupBackendObject() Q_DECL_FINAL;
 
+    void init(Phonon::Category c);
+
     enum DeviceChangeType {
         FallbackChange,
         HigherPreferenceChange,
@@ -70,9 +63,9 @@ protected:
     void handleAutomaticDeviceChange(const AudioOutputDevice &newDev, DeviceChangeType type);
 
     /**
-     * @brief Checks if interface is null and sets output device.
-     * @param dev Device to set
-     * @return \c false if interface==0
+     * \brief Checks if interface is null and sets output device.
+     * \param dev Device to set
+     * \return \c false if interface==0
      */
     bool safeSetOutputDevice(const AudioOutputDevice &dev);
 
@@ -98,4 +91,4 @@ private:
 
 } //namespace Phonon
 
-#endif // AUDIOOUTPUT_P_H
+#endif // PHONON_AUDIOOUTPUT_P_H

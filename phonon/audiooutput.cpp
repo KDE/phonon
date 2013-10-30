@@ -28,6 +28,7 @@
 #include "globalconfig.h"
 #include "objectdescription.h"
 #include "phononnamespace_p.h"
+#include "platform_p.h"
 
 #include <QtCore/QUuid>
 #include <QtCore/qmath.h>
