@@ -23,7 +23,6 @@ ${phonon_LIB_SRCS}
 #   abstractaudiooutput_p.cpp
 #   abstractmediastream.cpp
    abstractvideooutput.cpp
-   abstractvideooutput_p.cpp
 #   audiodataoutput.cpp
    audiooutput.cpp
    backendcapabilities.cpp

@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -17,17 +17,13 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
-#ifndef ABSTRACTVIDEOOUTPUT_P_H
-#define ABSTRACTVIDEOOUTPUT_P_H
+#ifndef PHONON_ABSTRACTVIDEOOUTPUT_P_H
+#define PHONON_ABSTRACTVIDEOOUTPUT_P_H
 
 #include "abstractvideooutput.h"
 #include "frontend_p.h"
-#include "phonondefs_p.h"
-
-#ifndef QT_NO_PHONON_VIDEO
 
 namespace Phonon {
 
@@ -35,8 +31,11 @@ class AbstractVideoOutputPrivate : public FrontendPrivate
 {
 protected:
     /** \reimp */
-    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE;
+    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE {
+        return true;
+    }
 
+#warning technically that is not a reimp and its unclear why it is not virtual to begin with (also see AAOP etc.)
     /** \reimp */
     void setupBackendObject();
 
@@ -46,6 +45,4 @@ private:
 
 } //namespace Phonon
 
-#endif //QT_NO_PHONON_VIDEO
-
-#endif // ABSTRACTVIDEOOUTPUT_P_H
+#endif // PHONON_ABSTRACTVIDEOOUTPUT_P_H
