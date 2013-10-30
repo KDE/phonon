@@ -37,9 +37,6 @@ class PlayerPrivate : public FrontendPrivate
     friend class AbstractMediaStream;
     friend class AbstractMediaStreamPrivate;
 
-public:
-    virtual QObject *qObject() { return q_func(); }
-
 protected:
     virtual bool aboutToDeleteBackendObject();
     virtual void createBackendObject();

@@ -32,8 +32,6 @@ namespace Phonon {
 class AbstractAudioOutputPrivate : public FrontendPrivate
 {
     P_DECLARE_PUBLIC(AbstractAudioOutput)
-public:
-    virtual QObject *qObject() { return q_func(); }
 
 protected:
     AbstractAudioOutputPrivate()
