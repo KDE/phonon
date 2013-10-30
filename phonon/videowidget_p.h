@@ -33,8 +33,6 @@ class VideoWidgetInterface;
 
 class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 {
-public:
-    virtual QObject *qObject() { return q_func(); }
 protected:
     /** \reimp */
     virtual bool aboutToDeleteBackendObject() Q_DECL_FINAL;
