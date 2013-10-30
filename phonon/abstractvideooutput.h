@@ -35,6 +35,7 @@ class PHONON_EXPORT AbstractVideoOutput : public Frontend
 {
 #warning FRIEEEEEEEEEEEEEEEENDS
     friend class Player;
+#warning virtual dtor... align with AAO
 protected:
     AbstractVideoOutput(AbstractVideoOutputPrivate &d);
 

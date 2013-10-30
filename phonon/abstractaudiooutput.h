@@ -37,12 +37,14 @@ class AbstractAudioOutputPrivate;
  *
  * \see AudioOutput
  */
+#warning why does AAO derive from QObject and not the specifics? certainly disaligned from AVO
 class PHONON_EXPORT AbstractAudioOutput : public QObject, public Frontend
 {
 #warning friending P
     friend class Player;
     Q_OBJECT
 public:
+#warning virtual?
     ~AbstractAudioOutput();
 
 protected:
