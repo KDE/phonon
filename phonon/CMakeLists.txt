@@ -1,5 +1,6 @@
 include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
+# Mostly clean and refactored Phonon 5 sources
 set(phonon_LIB_SRCS
     factory.cpp
     frontend.cpp
@@ -9,7 +10,7 @@ set(phonon_LIB_SRCS
     # Librarians
     phononversion.cpp
 
-    # Private (QTC Compat)
+    # Privates (QTC Compat)
     factory_p.h
     frontend_p.h
     player_p.h
@@ -20,6 +21,7 @@ set(phonon_LIB_SRCS
     playerinterface.h
 )
 
+# random plunder battlefield4 sources
 set(phonon_LIB_SRCS
 ${phonon_LIB_SRCS}
    abstractaudiooutput.cpp
