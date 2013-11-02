@@ -27,6 +27,7 @@
 #include "globalstatic_p.h"
 #include "platformplugin.h"
 #include "phononnamespace_p.h"
+#include "phononversion.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>

@@ -6,6 +6,9 @@ set(phonon_LIB_SRCS
     player.cpp
     source.cpp
 
+    # Librarians
+    phononversion.cpp
+
     # Private (QTC Compat)
     factory_p.h
     frontend_p.h
@@ -84,12 +87,8 @@ set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
 # This reduces inter-package dependencies and makes it easier to remove
 # dependencies of shared libraries without breaking binary compatibility.
 
-
 install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
-# We write these to a strange place so the demos can find them properly
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
-# Required for demos/cmake/FindPhonon.cmake
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h)
 
 install(FILES
     abstractaudiooutput.h
