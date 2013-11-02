@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
 
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
-option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 
