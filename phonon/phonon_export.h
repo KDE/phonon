@@ -23,6 +23,8 @@
 #ifndef PHONON_EXPORT_H
 #define PHONON_EXPORT_H
 
+#warning why do we have phononnamespace phononversion phonondefs but phononUNDERSCOREexport
+
 #include <QtCore/QtGlobal>
 
 #ifndef PHONON_EXPORT
