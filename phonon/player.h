@@ -53,13 +53,22 @@ public:
     qint64 totalTime() const;
     qint64 remainingTime() const;
 
+#warning error magic TBD
+    QString errorString() const;
+    ErrorType errorType() const;
+
 #warning merge outputs?
+    // Outputs are unordered.
     void addAudioOutput(AbstractAudioOutput *audioOutput);
     void addVideoOutput(AbstractVideoOutput *videoOutput);
 
+#warning should effects be set on the player rather than on the output? vlc doesnt really support per-output
+
 public Q_SLOTS:
+#warning why do we need a tick interval again?
     void setTickInterval(qint32 newTickInterval);
     void play();
+#warning ADD convenience statics, no support for video, autodelete on finished()
     void pause();
 #warning stop needs to force a state reset including signals (i.e. stop should not only stop but cause the gui to reflect that...)
     void stop();
@@ -73,6 +82,7 @@ Q_SIGNALS:
     void metaDataChanged();
     void seekableChanged(bool isSeekable);
     void bufferStatus(int percentFilled);
+#warning whats the purpose of finished if there is no builtin queue
     void finished();
 #warning terrible name and/or additional signal for queuing/playlist stuff needed
     void currentSourceChanged(const Source &newSource);
