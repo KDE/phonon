@@ -20,14 +20,17 @@ either version of Qt.
 To build Phonon4Qt5 you will have to pass PHONON_BUILD_PHONON4QT5 to CMake to
 switch it into Qt5 build mode.
 
-Additionally if you are build against a qt-project provided binary build of Qt5
-you may have to define the CMAKE_PREFIX_PATH to make CMake find Qt5.
+Additionally if you are building against a qt-project provided binary build of Qt5
+you may have to define the CMAKE_PREFIX_PATH to make CMake find Qt5. If you are
+using QMake for your application you will additionally have to instruct cmake to
+install Qt extensions into the actual Qt directory using
+PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT.
 
 For example:
 \verbatim
 mkdir build5
 cd build5
-cmake .. -DPHONON_BUILD_PHONON4QT5=ON -DCMAKE_PREFIX_PATH=/opt/Qt5.0.0/5.0.0/gcc_64
+cmake .. -DPHONON_BUILD_PHONON4QT5=ON -DCMAKE_PREFIX_PATH=/opt/Qt5.0.0/5.0.0/gcc_64 -DPHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT=ON
 \endverbatim
 
 Phonon4Qt5 installation does not conflict with regular Phonon installations in
@@ -68,7 +71,10 @@ To use Phonon4Qt5 in your QMake project you can simply use:
 QT += phonon4qt5
 \endcode
 
-QMake will take care of everything else.
+QMake will take care of everything else. Except in certain situations QMake will
+not be able to find the files necessary to enable a phonon4qt5 build, building
+phono4qt5 with PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT, as explained above,
+should prevent this from happening.
 
 \subsection phonon4qt5_using_cpp C++
 
