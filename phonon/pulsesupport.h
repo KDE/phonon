@@ -58,7 +58,38 @@ namespace Phonon
             PulseStream *registerCaptureStream(QString streamUuid, CaptureCategory category);
             PHONON_DEPRECATED PulseStream *registerCaptureStream(QString streamUuid, Category category);
 
+            /**
+             * Whenever possible this function should be used to get Phonon
+             * specific PulseAudio stream properties and set them on specific
+             * streams. When precisely setting them per stream is not possible
+             * the envrionment setup function PulseSupport::setupStreamEnvironment
+             * should be called as close to stream creation as possible. The
+             * more time passes between setup and stream creation the more
+             * likely race conditions between setup of more than one AudioOutput
+             * will appear.
+             *
+             * \param streamUuid the AudioOutputs' stream UUID set by the frontend through
+             *                   AudioOutputInterface47::setStreamUuid
+             *
+             * \returns a hash of all properties set by setupStreamEnvironment
+             *
+             * \see setupStreamEnvironment
+             * \since 4.7.0
+             */
             QHash<QString, QString> streamProperties(QString streamUuid) const;
+
+            /**
+             * Sets PulseAudio override properties in the process' envrionment.
+             * Manually setting the properties on a per-stream basis is
+             * preferred as envrionment overrides are subject to race conditions
+             * when creating more than one stream around the same time.
+             *
+             * \param streamUuid the AudioOutputs' stream UUID set by the frontend
+             *                   through AudioOutputInterface47::setStreamUuid
+             *
+             * \see streamProperties
+             * \since 4.7.0
+             */
             void setupStreamEnvironment(QString streamUuid);
 
             void emitObjectDescriptionChanged(ObjectDescriptionType);

@@ -184,6 +184,7 @@ class PHONON_EXPORT MediaController : public QObject
          * returned.
          *
          * \see setSubtitleAutodetect
+         * \since 4.7.0
          */
         bool subtitleAutodetect() const;
 
@@ -191,6 +192,7 @@ class PHONON_EXPORT MediaController : public QObject
          * Returns the encoding used to render subtitles
          *
          * \see setSubtitleEncoding
+         * \since 4.7.0
          */
         QString subtitleEncoding() const;
 
@@ -199,6 +201,7 @@ class PHONON_EXPORT MediaController : public QObject
          *
          * \see setSubtitleFont
          * \see QApplication::setFont
+         * \since 4.7.0
          */
         QFont subtitleFont() const;
 
@@ -276,6 +279,7 @@ class PHONON_EXPORT MediaController : public QObject
          *       than Playing | Buffering | Paused.
          *
          * \see subtitleAutodetect
+         * \since 4.7.0
          */
         void setSubtitleAutodetect(bool enable);
 
@@ -292,6 +296,7 @@ class PHONON_EXPORT MediaController : public QObject
          * \note Decoding support may vary between backends.
          *
          * \see subtitleEncoding
+         * \since 4.7.0
          */
         void setSubtitleEncoding(const QString &encoding);
 
@@ -307,6 +312,7 @@ class PHONON_EXPORT MediaController : public QObject
          *       available as render fonts.
          *
          * \see subtitleFont
+         * \since 4.7.0
          */
         void setSubtitleFont(const QFont &font);
 
