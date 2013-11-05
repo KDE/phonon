@@ -36,6 +36,13 @@ cmake .. -DPHONON_BUILD_PHONON4QT5=ON -DCMAKE_PREFIX_PATH=/opt/Qt5.0.0/5.0.0/gcc
 Phonon4Qt5 installation does not conflict with regular Phonon installations in
 any way; It uses different file and folder names for everything installed.
 
+\subsection phonon4qt5_building_backends Backends
+
+Since Phonon4Qt5 uses isolated paths from regular Phonon, the backends also need
+to be built specifically in Phonon4Qt5 mode using the PHONON_BUILD_PHONON4QT5
+option for CMake. Defining PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT
+however is not necessary as Phonon has internal logic for backend plugin lookup.
+
 \section phonon4qt5_using Usage
 
 Except for a couple of lines in CMake, using Phonon4Qt5 is identical to using
