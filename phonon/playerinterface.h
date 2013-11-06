@@ -53,6 +53,7 @@ public:
     virtual void addVideoOutput(QObject *videoOutput) = 0;
 
 Q_SIGNALS:
+    virtual void metaDataChanged(QMultiMap<MetaData, QString>) = 0;
     virtual void stateChanged(Phonon::State newState, Phonon::State oldState) = 0;
     virtual void tick(qint64 time) = 0;
 };

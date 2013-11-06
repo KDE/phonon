@@ -45,7 +45,7 @@ protected:
 
     void _k_resumePlay();
     void _k_resumePause();
-    void _k_metaDataChanged(const QMultiMap<QString, QString> &);
+    void _k_metaDataChanged(const QMultiMap<MetaData, QString> &);
     void _k_aboutToFinish();
     void _k_currentSourceChanged(const Source &);
     PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
@@ -71,7 +71,7 @@ protected:
 #warning base uses m_ prefix, playerprivate does not....
     qint64 currentTime;
     qint32 tickInterval;
-    QMultiMap<QString, QString> metaData;
+    QMultiMap<MetaData, QString> metaData;
     State state;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     AbstractMediaStream *abstractStream;

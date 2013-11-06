@@ -152,36 +152,13 @@ ErrorType Player::errorType() const
     return Phonon::NoError;
 }
 
-QStringList Player::metaData(Phonon::MetaData f) const
-{
-    switch (f) {
-    case ArtistMetaData:
-        return metaData(QLatin1String("ARTIST"));
-    case AlbumMetaData:
-        return metaData(QLatin1String("ALBUM"));
-    case TitleMetaData:
-        return metaData(QLatin1String("TITLE"));
-    case DateMetaData:
-        return metaData(QLatin1String("DATE"));
-    case GenreMetaData:
-        return metaData(QLatin1String("GENRE"));
-    case TracknumberMetaData:
-        return metaData(QLatin1String("TRACKNUMBER"));
-    case DescriptionMetaData:
-        return metaData(QLatin1String("DESCRIPTION"));
-    case MusicBrainzDiscIdMetaData:
-        return metaData(QLatin1String("MUSICBRAINZ_DISCID"));
-    }
-    return QStringList();
-}
-
-QStringList Player::metaData(const QString &key) const
+QStringList Player::metaData(MetaData f) const
 {
     P_D(const Player);
-    return d->metaData.values(key);
+    return d->metaData.values(f);
 }
 
-QMultiMap<QString, QString> Player::metaData() const
+QMultiMap<MetaData, QString> Player::metaData() const
 {
     P_D(const Player);
     return d->metaData;
@@ -323,8 +300,8 @@ void PlayerPrivate::setupBackendObject()
                      q, SIGNAL(finished()), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
                      q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<QString, QString>)),
-                     q, SLOT(_k_metaDataChanged(QMultiMap<QString, QString>)), Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<MetaData, QString>)),
+                     q, SLOT(_k_metaDataChanged(QMultiMap<MetaData, QString>)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(Source)),
                      q, SIGNAL(currentSourceChanged(Source)), Qt::QueuedConnection);
 
@@ -384,7 +361,7 @@ void PlayerPrivate::_k_resumePause()
         interface->seek(currentTime);
 }
 
-void PlayerPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &newMetaData)
+void PlayerPrivate::_k_metaDataChanged(const QMultiMap<MetaData, QString> &newMetaData)
 {
     metaData = newMetaData;
     emit q_func()->metaDataChanged();

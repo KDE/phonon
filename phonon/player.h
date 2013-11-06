@@ -42,9 +42,8 @@ public:
     State state() const;
     bool isSeekable() const;
     qint32 tickInterval() const;
-    QStringList metaData(const QString &key) const;
-    QStringList metaData(Phonon::MetaData key) const;
-    QMultiMap<QString, QString> metaData() const;
+    QStringList metaData(MetaData key) const;
+    QMultiMap<MetaData, QString> metaData() const;
     QString errorString() const;
     ErrorType errorType() const;
     Source source() const;
@@ -93,7 +92,7 @@ private:
     P_DECLARE_PRIVATE(Player)
     Q_PRIVATE_SLOT(k_func(), void _k_resumePlay())
     Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
-    Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<QString, QString> &))
+    Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<MetaData, QString> &))
 };
 
 } //namespace Phonon
