@@ -54,7 +54,7 @@ public:
     virtual QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const = 0;
     virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
 
-    virtual QList<AudioOutputDevice> audioOutputDevices() const;
+    virtual QList<AudioOutputDevice> audioOutputDevices() const = 0;
 
 Q_SIGNALS:
     virtual void objectDescriptionChanged(ObjectDescriptionType) = 0;
