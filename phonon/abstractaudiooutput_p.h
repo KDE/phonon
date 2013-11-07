@@ -25,7 +25,6 @@
 
 #include "abstractaudiooutput.h"
 #include "frontend_p.h"
-#include "phonondefs_p.h"
 
 namespace Phonon {
 

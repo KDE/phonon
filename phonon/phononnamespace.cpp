@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "phononnamespace.h"
@@ -31,8 +30,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QStringList>
 
-namespace Phonon
-{
+namespace Phonon {
 
 QString categoryToString(Category c)
 {
@@ -181,7 +179,8 @@ QDebug operator <<(QDebug dbg, const Phonon::ErrorType &errorType)
     }
     return dbg.maybeSpace();
 }
-}
+
+} // namespace Phonon
 
 static int registerPhononMetaTypes()
 {
@@ -199,6 +198,7 @@ static int registerPhononMetaTypes()
     qRegisterMetaType<Phonon::DeviceAccessList>();
     qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("Phonon::DeviceAccessList");
 
+#warning anything
     return 0; // something
 }
 

@@ -44,6 +44,7 @@ Q_SIGNALS:
     void availableVideoCaptureDevicesChanged();
 };
 
+#warning export wut private wut
 PHONON_EXPORT Sender *sender();
 
 #warning consider creating an int command...

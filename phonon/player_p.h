@@ -38,8 +38,12 @@ class PlayerPrivate : public FrontendPrivate
     friend class AbstractMediaStreamPrivate;
 
 protected:
+    /** \reimp */
     virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
+
+    /** \reimp */
     virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
+
 #warning this really needs to become virtual in frontendprivate
     void setupBackendObject();
 
