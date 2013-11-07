@@ -38,15 +38,34 @@ enum DiscType {
     BluRay = 3   /** < BluRay video disc \since 4.7.0 */
 };
 
+// http://xiph.org/vorbis/doc/v-comment.html
 enum MetaData {
     ArtistMetaData,
     AlbumMetaData,
     TitleMetaData,
     DateMetaData,
     GenreMetaData,
+#warning TrackNumber or Tracknumber
     TracknumberMetaData,
     DescriptionMetaData,
+    CopyrightMetaData,
+    LicenseMetaData,
+    OrganizationMetaData,
+    DateMetaData,
+    LocationMetaData,
+    ContactMetaData,
+    IsrcMetaData,
+#warning this here field is ENOSTANDARD, what to do with it
     MusicBrainzDiscIdMetaData
+#warning VLC also has additional data though some of those may be video or something, needs investigation
+//    UrlMetaData, supposedly the media URL?
+//    RatingMetaData,
+//    SettingMetaData, may be location from above
+//    LanguageMetaData, may be video
+//    NowPlayingMetaData, probably bool playing or possible a nowplaying of a stream?
+//    PublisherMetaData, probably Organization from above
+//    EncodedByMetaData,
+//    ArtworkUrlMetaData, sounds vlc specific (e.g. downloaded album cover)
 };
 
 enum State {
