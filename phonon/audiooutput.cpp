@@ -108,6 +108,8 @@ void AudioOutputPrivate::init(Phonon::Category c)
             AudioOutputInterface47 *iface = Iface<AudioOutputInterface47>::cast(this);
             if (iface)
                 iface->setStreamUuid(streamUuid);
+            else
+                pulse->setupStreamEnvironment(streamUuid);
         }
     }
 #endif
