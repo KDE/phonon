@@ -63,6 +63,7 @@ ${phonon_LIB_SRCS}
 #    qsettingsgroup_p.h
     videowidget_p.h
     videowidgetinterface.h
+    phonondefs.h
 
     audiooutputinterface.h
     platformplugin.h
