@@ -45,13 +45,12 @@ protected:
     }
 
     /** \reimp */
-    virtual bool aboutToDeleteBackendObject() Q_DECL_FINAL;
+    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
     /** \reimp */
-    virtual void createBackendObject() Q_DECL_FINAL;
+    virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
-    /** \reimp */
-    virtual void setupBackendObject() Q_DECL_FINAL;
+    void setupBackendObject();
 
     void init(Phonon::Category c);
 
