@@ -57,14 +57,14 @@ enum MetaData {
 #warning this here field is ENOSTANDARD, what to do with it
     MusicBrainzDiscIdMetaData
 #warning VLC also has additional data though some of those may be video or something, needs investigation
-//    UrlMetaData, supposedly the media URL?
+//    UrlMetaData, unknown, not the URL of the media though
 //    RatingMetaData,
-//    SettingMetaData, may be location from above
+//    SettingMetaData, appears to be encoding settings " HAS_INDEX IS_INTERLEAVED"
 //    LanguageMetaData, may be video
-//    NowPlayingMetaData, probably bool playing or possible a nowplaying of a stream?
-//    PublisherMetaData, probably Organization from above
-//    EncodedByMetaData,
-//    ArtworkUrlMetaData, sounds vlc specific (e.g. downloaded album cover)
+//    NowPlayingMetaData, when playing a stream contains album/title/whateverinfo
+//    PublisherMetaData, maps to organization
+//    EncodedByMetaData, who encoded this file
+//    ArtworkUrlMetaData, vlc specific cache (e.g. downloaded album cover)
 };
 
 enum State {
