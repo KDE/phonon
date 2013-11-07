@@ -30,12 +30,10 @@ namespace Phonon {
 FrontendPrivate::FrontendPrivate()
     : m_backendObject(0)
 {
-    Factory::registerFrontendObject(this);
 }
 
 FrontendPrivate::~FrontendPrivate()
 {
-    Factory::deregisterFrontendObject(this);
     delete m_backendObject;
     m_backendObject = 0;
 }

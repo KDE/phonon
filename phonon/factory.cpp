@@ -50,11 +50,7 @@ public:
     QObject *backendObject;
     BackendInterface *interface;
 
-    QList<QObject *> objects;
-    QList<FrontendPrivate *> frontendPrivates;
-
 private Q_SLOTS:
-    void objectDestroyed(QObject *);
     void objectDescriptionChanged(ObjectDescriptionType);
 
 private:
@@ -178,13 +174,6 @@ FactoryPrivate::FactoryPrivate()
 
 FactoryPrivate::~FactoryPrivate()
 {
-    for (int i = 0; i < frontendPrivates.count(); ++i) {
-        frontendPrivates.at(i)->deleteBackendObject();
-    }
-    if (objects.size() > 0) {
-        pError() << "The backend objects are not deleted as was requested.";
-        qDeleteAll(objects);
-    }
     delete backendObject;
     delete m_platformPlugin;
 }
@@ -213,66 +202,46 @@ Factory::Sender *Factory::sender()
     return globalFactory;
 }
 
-void Factory::registerFrontendObject(FrontendPrivate *bp)
-{
-    globalFactory->frontendPrivates.prepend(bp); // inserted last => deleted first
-}
-
-void Factory::deregisterFrontendObject(FrontendPrivate *bp)
-{
-    // The Factory can already be cleaned up while there are other frontend objects still alive.
-    // When those are deleted they'll call deregisterFrontendObject through ~BasePrivate
-    if (!globalFactory.isDestroyed()) {
-        globalFactory->frontendPrivates.removeAll(bp);
-    }
-}
-
-void FactoryPrivate::objectDestroyed(QObject * obj)
-{
-    //pDebug() << Q_FUNC_INFO << obj;
-    objects.removeAll(obj);
-}
-
 QObject *Factory::createPlayer(QObject *parent)
 {
     if (!backend())
         return 0;
-    return registerQObject(interface()->createObject(BackendInterface::PlayerClass, parent));
+    return interface()->createObject(BackendInterface::PlayerClass, parent);
 }
 
 QObject *Factory::createEffect(int effectId, QObject *parent)
 {
     if (!backend())
         return 0;
-    return registerQObject(interface()->createObject(BackendInterface::EffectClass, parent, QList<QVariant>() << effectId));
+    return interface()->createObject(BackendInterface::EffectClass, parent, QList<QVariant>() << effectId);
 }
 
 QObject *Factory::createVolumeFaderEffect(QObject *parent)
 {
     if (!backend())
         return 0;
-    return registerQObject(interface()->createObject(BackendInterface::VolumeFaderEffectClass, parent));
+    return interface()->createObject(BackendInterface::VolumeFaderEffectClass, parent);
 }
 
 QObject *Factory::createAudioOutput(QObject *parent)
 {
     if (!backend())
         return 0;
-    return registerQObject(interface()->createObject(BackendInterface::AudioOutputClass, parent));
+    return interface()->createObject(BackendInterface::AudioOutputClass, parent);
 }
 
 QObject *Factory::createVideoWidget(QObject *parent)
 {
     if (!backend())
         return 0;
-    return registerQObject(interface()->createObject(BackendInterface::VideoWidgetClass, parent));
+    return interface()->createObject(BackendInterface::VideoWidgetClass, parent);
 }
 
 QObject *Factory::createAudioDataOutput(QObject *parent)
 {
     if (!backend())
         return 0;
-    return registerQObject(interface()->createObject(BackendInterface::AudioDataOutputClass, parent));
+    return interface()->createObject(BackendInterface::AudioDataOutputClass, parent);
 }
 
 PlatformPlugin *FactoryPrivate::platformPlugin()
@@ -378,17 +347,6 @@ BackendInterface *Factory::interface()
         return 0;
 
     return globalFactory->interface;
-}
-
-QObject *Factory::registerQObject(QObject *o)
-{
-    if (o) {
-        QObject::connect(o, SIGNAL(destroyed(QObject *)),
-                         globalFactory, SLOT(objectDestroyed(QObject *)),
-                         Qt::DirectConnection);
-        globalFactory->objects.append(o);
-    }
-    return o;
 }
 
 } // namespace Phonon
