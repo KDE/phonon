@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,17 +17,14 @@
 
     You should have received a copy of the GNU Lesser General Public
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef PHONONDEFS_H
 #define PHONONDEFS_H
 
-#include <QtCore/QtGlobal>
-#include "phonon_export.h"
-
 #warning phonondefs is nigh empty, remove it?
 
+#warning k_func k_ptr to p_?
 // the following inlines are correct - exclude per line doesn't work for multiline-macros so exclude
 // the whole file for inline checks
 //krazy:excludeall=inline
@@ -35,31 +32,5 @@
     inline Class##Private* k_func() { return reinterpret_cast<Class##Private *>(k_ptr); } \
     inline const Class##Private* k_func() const { return reinterpret_cast<const Class##Private *>(k_ptr); } \
     friend class Class##Private;
-
-//#define PHONON_ABSTRACTBASE(classname) \
-//protected: \
-//    /**
-//     * \internal
-//     * Constructor that is called from derived classes.
-//     *
-//     * \param parent Standard QObject parent.
-//     */ \
-//    classname(classname ## Private &dd, QObject *parent); \
-//private:
-
-//#define PHONON_OBJECT(classname) \
-//public: \
-//    /**
-//     * Constructs an object with the given \p parent.
-//     */ \
-//    classname(QObject *parent = 0); \
-//private:
-
-//#define PHONON_HEIR(classname) \
-//public: \
-//    /**
-//     * Constructs an object with the given \p parent.
-//     */ \
-//    classname(QObject *parent = 0); \
 
 #endif // PHONONDEFS_H
