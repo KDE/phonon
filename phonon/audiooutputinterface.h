@@ -40,6 +40,10 @@ public:
     virtual void setVolume(qreal) = 0;
     virtual int outputDevice() const = 0;
     virtual bool setOutputDevice(const Phonon::AudioOutputDevice &) = 0;
+
+Q_SIGNALS:
+    virtual void volumeChanged(qreal volume) = 0;
+    virtual void audioDeviceFailed() = 0;
 };
 
 } // namespace Phonon
