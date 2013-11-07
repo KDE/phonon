@@ -25,8 +25,6 @@
 #define PHONON_AUDIOOUTPUTINTERFACE_H
 
 #include "objectdescription.h"
-#include "phononnamespace.h"
-#include "phonondefs.h"
 
 #include <QtCore/QtGlobal>
 
@@ -37,7 +35,7 @@ class AudioOutputInterface
 public:
     virtual ~AudioOutputInterface() {}
     virtual qreal volume() const = 0;
-    virtual void setVolume(qreal) = 0;
+    virtual void setVolume(qreal volume) = 0;
     virtual int outputDevice() const = 0;
     virtual bool setOutputDevice(const Phonon::AudioOutputDevice &) = 0;
 
