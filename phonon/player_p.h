@@ -40,7 +40,6 @@ class PlayerPrivate : public FrontendPrivate
 protected:
     virtual bool aboutToDeleteBackendObject();
     virtual void createBackendObject();
-    virtual void phononObjectDestroyed(FrontendPrivate *);
     PHONON_EXPORT void setupBackendObject();
 
     void _k_resumePlay();

@@ -367,15 +367,6 @@ void PlayerPrivate::_k_metaDataChanged(const QMultiMap<MetaData, QString> &newMe
     emit q_func()->metaDataChanged();
 }
 
-void PlayerPrivate::phononObjectDestroyed(FrontendPrivate *bp)
-{
-    // this method is called from Phonon::Base::~Base(), meaning the AudioPath
-    // dtor has already been called, also virtual functions don't work anymore
-    // (therefore qobject_cast can only downcast from Base)
-    Q_ASSERT(bp);
-    Q_UNUSED(bp);
-}
-
 } //namespace Phonon
 
 #include "moc_player.cpp"
