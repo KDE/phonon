@@ -34,7 +34,7 @@ namespace Phonon {
 
 class AudioOutputPrivate;
 
-class PHONON_EXPORT AudioOutput : public AbstractAudioOutput
+class PHONON_EXPORT AudioOutput : public QObject, public AbstractAudioOutput
 {
     Q_OBJECT
 public:

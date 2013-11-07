@@ -22,31 +22,12 @@
 
 #include "abstractaudiooutput.h"
 #include "abstractaudiooutput_p.h"
-#include "factory_p.h"
 
 namespace Phonon {
 
-AbstractAudioOutput::AbstractAudioOutput(AbstractAudioOutputPrivate &dd,
-                                         QObject *parent)
-    : QObject(parent)
-    , Frontend(dd)
+AbstractAudioOutput::AbstractAudioOutput(AbstractAudioOutputPrivate &dd)
+    : Frontend(dd)
 {
 }
 
-AbstractAudioOutput::~AbstractAudioOutput()
-{
-}
-
-bool AbstractAudioOutputPrivate::aboutToDeleteBackendObject()
-{
-    return true;
-}
-
-void AbstractAudioOutputPrivate::setupBackendObject()
-{
-    Q_ASSERT(m_backendObject);
-}
-
-} //namespace Phonon
-
-#include "moc_abstractaudiooutput.cpp"
+} // namespace Phonon

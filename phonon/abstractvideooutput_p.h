@@ -29,16 +29,6 @@ namespace Phonon {
 
 class AbstractVideoOutputPrivate : public FrontendPrivate
 {
-protected:
-    /** \reimp */
-    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE {
-        return true;
-    }
-
-#warning technically that is not a reimp and its unclear why it is not virtual to begin with (also see AAOP etc.)
-    /** \reimp */
-    void setupBackendObject();
-
 private:
     P_DECLARE_PUBLIC(AbstractVideoOutput)
 };

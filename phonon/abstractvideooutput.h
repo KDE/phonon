@@ -22,10 +22,8 @@
 #ifndef PHONON_ABSTRACTVIDEOOUTPUT_H
 #define PHONON_ABSTRACTVIDEOOUTPUT_H
 
-#include "frontend.h"
 #include "phonon_export.h"
-
-class QString;
+#include "frontend.h"
 
 namespace Phonon {
 
@@ -33,11 +31,11 @@ class AbstractVideoOutputPrivate;
 
 class PHONON_EXPORT AbstractVideoOutput : public Frontend
 {
-#warning FRIEEEEEEEEEEEEEEEENDS
+#warning <3 Friends <3
     friend class Player;
-#warning virtual dtor... align with AAO
+#warning virtual dtor?
 protected:
-    AbstractVideoOutput(AbstractVideoOutputPrivate &d);
+    AbstractVideoOutput(AbstractVideoOutputPrivate &dd);
 
 private:
     P_DECLARE_PRIVATE(AbstractVideoOutput)

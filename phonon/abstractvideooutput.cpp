@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -17,21 +17,16 @@
 
     You should have received a copy of the GNU Lesser General Public 
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
+
 #include "abstractvideooutput.h"
 #include "abstractvideooutput_p.h"
 
-#ifndef QT_NO_PHONON_VIDEO
+namespace Phonon {
 
-namespace Phonon
-{
-
-AbstractVideoOutput::AbstractVideoOutput(AbstractVideoOutputPrivate &d)
-    : Frontend(d)
+AbstractVideoOutput::AbstractVideoOutput(AbstractVideoOutputPrivate &dd)
+    : Frontend(dd)
 {
 }
 
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_VIDEO

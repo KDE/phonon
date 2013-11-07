@@ -32,18 +32,6 @@ namespace Phonon {
 class AbstractAudioOutputPrivate : public FrontendPrivate
 {
     P_DECLARE_PUBLIC(AbstractAudioOutput)
-
-protected:
-    AbstractAudioOutputPrivate()
-        : FrontendPrivate()
-    {
-    }
-
-    /** \reimp */
-    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE;
-
-#warning why is setupBackendObject not in a base?
-    virtual void setupBackendObject();
 };
 
 } // namespace Phonon

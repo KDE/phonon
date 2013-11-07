@@ -20,40 +20,28 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_ABSTRACTAUDIOOUTPUTBASE_H
-#define PHONON_ABSTRACTAUDIOOUTPUTBASE_H
+#ifndef PHONON_ABSTRACTAUDIOOUTPUT_H
+#define PHONON_ABSTRACTAUDIOOUTPUT_H
 
-#include "phonondefs.h"
+#include "phonon_export.h"
 #include "frontend.h"
-
-#include <QtCore/QObject>
 
 namespace Phonon {
 
 class AbstractAudioOutputPrivate;
 
-/** \class AbstractAudioOutput abstractaudiooutput.h phonon/AbstractAudioOutput
- * Common base class for all audio outputs.
- *
- * \see AudioOutput
- */
-#warning why does AAO derive from QObject and not the specifics? certainly disaligned from AVO
-class PHONON_EXPORT AbstractAudioOutput : public QObject, public Frontend
+class PHONON_EXPORT AbstractAudioOutput : public Frontend
 {
-#warning friending P
+#warning <3 Friends <3
     friend class Player;
-    Q_OBJECT
-public:
-#warning virtual?
-    ~AbstractAudioOutput();
-
+#warning virtual dtor?
 protected:
-    AbstractAudioOutput(AbstractAudioOutputPrivate &dd, QObject *parent);
+    AbstractAudioOutput(AbstractAudioOutputPrivate &dd);
 
 private:
     P_DECLARE_PRIVATE(AbstractAudioOutput)
 };
 
-} //namespace Phonon
+} // namespace Phonon
 
-#endif // PHONON_ABSTRACTAUDIOOUTPUTBASE_H
+#endif // PHONON_ABSTRACTAUDIOOUTPUT_H

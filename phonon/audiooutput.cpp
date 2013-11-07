@@ -36,14 +36,16 @@
 namespace Phonon {
 
 AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
-    : AbstractAudioOutput(*new AudioOutputPrivate, parent)
+    : QObject(parent)
+    , AbstractAudioOutput(*new AudioOutputPrivate)
 {
     P_D(AudioOutput);
     d->init(category);
 }
 
 AudioOutput::AudioOutput(QObject *parent)
-    : AbstractAudioOutput(*new AudioOutputPrivate, parent)
+    : QObject(parent)
+    , AbstractAudioOutput(*new AudioOutputPrivate)
 {
     P_D(AudioOutput);
     d->init(NoCategory);
@@ -189,7 +191,6 @@ void AudioOutputPrivate::setupBackendObject()
 {
     P_Q(AudioOutput);
     Q_ASSERT(m_backendObject);
-    AbstractAudioOutputPrivate::setupBackendObject();
 
     QObject::connect(m_backendObject, SIGNAL(volumeChanged(qreal)), q, SLOT(_k_volumeChanged(qreal)));
     QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()), q, SLOT(_k_audioDeviceFailed()));
