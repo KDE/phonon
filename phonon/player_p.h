@@ -38,9 +38,10 @@ class PlayerPrivate : public FrontendPrivate
     friend class AbstractMediaStreamPrivate;
 
 protected:
-    virtual bool aboutToDeleteBackendObject();
-    virtual void createBackendObject();
-    PHONON_EXPORT void setupBackendObject();
+    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
+    virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
+#warning this really needs to become virtual in frontendprivate
+    void setupBackendObject();
 
     void _k_resumePlay();
     void _k_resumePause();
