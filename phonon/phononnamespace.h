@@ -51,7 +51,6 @@ enum MetaData {
     CopyrightMetaData,
     LicenseMetaData,
     OrganizationMetaData,
-    DateMetaData,
     LocationMetaData,
     ContactMetaData,
     IsrcMetaData,
