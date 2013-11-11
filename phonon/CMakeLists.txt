@@ -116,6 +116,7 @@ install(FILES
     objectdescription.h
     phonon_export.h
     phonondefs.h
+    ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
     platformplugin.h
     seekslider.h
     streaminterface.h
@@ -126,5 +127,5 @@ install(FILES
     volumefaderinterface.h
     volumeslider.h
     ${phonon_VGO_HDRS}
-    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
+    phononnamespace.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
