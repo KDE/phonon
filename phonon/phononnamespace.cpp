@@ -167,6 +167,12 @@ namespace Phonon
         return dbg.maybeSpace();
     }
 
+    QDebug operator <<(QDebug dbg, const Phonon::CaptureCategory &category)
+    {
+        dbg.space() << categoryToString(category);
+        return dbg.maybeSpace();
+    }
+
     QDebug operator <<(QDebug dbg, const Phonon::Capture::DeviceType &type)
     {
         switch (type) {
