@@ -23,10 +23,6 @@
 #ifndef PHONON_FRONTEND_P_H
 #define PHONON_FRONTEND_P_H
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QList>
-#include <QtCore/QObject>
-
 #include "phononpimpl_p.h"
 #include "phonon_export.h"
 
@@ -38,8 +34,6 @@ class Frontend;
 
 class PHONON_EXPORT FrontendPrivate
 {
-    friend class FactoryPrivate;
-
 public:
     /**
      * Returns the backend object. If the object does not exist it tries to
@@ -77,11 +71,10 @@ protected:
      */
     virtual void createBackendObject() = 0;
 
+#warning what is this function for exactly?
     virtual bool aboutToDeleteBackendObject();
 
-protected:
     Frontend *q_ptr;
-#warning this was public no one knows why
     QObject *m_backendObject;
 
 private:
