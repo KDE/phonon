@@ -23,7 +23,6 @@
 
 #include "frontend.h"
 #include "frontend_p.h"
-#include "factory_p.h"
 
 namespace Phonon {
 
@@ -40,9 +39,8 @@ FrontendPrivate::~FrontendPrivate()
 
 QObject *FrontendPrivate::backendObject()
 {
-    if (!m_backendObject && Factory::backend()) {
+    if (!m_backendObject)
         createBackendObject();
-    }
     return m_backendObject;
 }
 
