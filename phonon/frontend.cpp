@@ -46,15 +46,10 @@ QObject *FrontendPrivate::backendObject()
 
 void FrontendPrivate::deleteBackendObject()
 {
-    if (m_backendObject && aboutToDeleteBackendObject()) {
+    if (!m_backendObject) {
         delete m_backendObject;
         m_backendObject = 0;
     }
-}
-
-bool FrontendPrivate::aboutToDeleteBackendObject()
-{
-    return true;
 }
 
 Frontend::Frontend(FrontendPrivate &dd)

@@ -180,13 +180,6 @@ bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
     return d->safeSetOutputDevice(d->device);
 }
 
-bool AudioOutputPrivate::aboutToDeleteBackendObject()
-{
-    if (interface)
-        volume = interface->volume();
-    return AbstractAudioOutputPrivate::aboutToDeleteBackendObject();
-}
-
 void AudioOutputPrivate::setupBackendObject()
 {
     P_Q(AudioOutput);

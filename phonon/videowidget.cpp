@@ -212,13 +212,6 @@ void VideoWidget::enterFullScreen()
     setFullScreen(true);
 }
 
-bool VideoWidgetPrivate::aboutToDeleteBackendObject()
-{
-    aspectRatio = interface->aspectRatio();
-    scaleMode = interface->scaleMode();
-    return AbstractVideoOutputPrivate::aboutToDeleteBackendObject();
-}
-
 void VideoWidgetPrivate::setupBackendObject()
 {
     P_Q(VideoWidget);

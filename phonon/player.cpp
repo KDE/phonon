@@ -238,17 +238,6 @@ void Player::setSource(const Source &newSource)
     d->interface->setSource(d->mediaSource);
 }
 
-bool PlayerPrivate::aboutToDeleteBackendObject()
-{
-#warning why do we grab data from the backend when deleting? because of onthefly switching?
-    if (interface) {
-        state = interface->state();
-        currentTime = interface->currentTime();
-        tickInterval = interface->tickInterval();
-    }
-    return true;
-}
-
 void PlayerPrivate::createBackendObject()
 {
     if (m_backendObject)

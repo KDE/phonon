@@ -35,9 +35,6 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 {
 protected:
     /** \reimp */
-    virtual bool aboutToDeleteBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
-
-    /** \reimp */
     virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
     void setupBackendObject();

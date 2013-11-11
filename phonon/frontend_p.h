@@ -71,9 +71,6 @@ protected:
      */
     virtual void createBackendObject() = 0;
 
-#warning what is this function for exactly?
-    virtual bool aboutToDeleteBackendObject();
-
     Frontend *q_ptr;
     QObject *m_backendObject;
 
