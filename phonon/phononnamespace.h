@@ -70,9 +70,7 @@ enum MetaData {
 enum State {
     StoppedState,
     PlayingState,
-    BufferingState,
-    PausedState,
-    ErrorState
+    PausedState
 };
 
 enum Category {

@@ -136,22 +136,6 @@ void Player::seek(qint64 time)
         d->interface->seek(time);
 }
 
-QString Player::errorString() const
-{
-    P_D(const Player);
-    if (d->interface && state() == Phonon::ErrorState)
-        return d->interface->errorString();
-    return QString();
-}
-
-ErrorType Player::errorType() const
-{
-    P_D(const Player);
-    if (d->interface && state() == Phonon::ErrorState)
-        return d->interface->errorType();
-    return Phonon::NoError;
-}
-
 QStringList Player::metaData(MetaData f) const
 {
     P_D(const Player);
@@ -309,11 +293,9 @@ void PlayerPrivate::setupBackendObject()
     }
 
     const State backendState = interface->state();
-    if (state != backendState && state != ErrorState) {
-        // careful: if state is ErrorState we might be switching from a
-        // MediaObject to a ByteStream for KIO fallback. In that case the state
-        // change to ErrorState was already suppressed.
-        pDebug() << "emitting a state change because the backend object has been replaced";
+    if (state != backendState) {
+#warning do we really want this? ... shouldnt we force the frontend state on the backend instead?
+        pDebug() << "emitting a state change because the backend object has been created";
         emit q->stateChanged(backendState, state);
         state = backendState;
     }

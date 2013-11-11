@@ -132,14 +132,8 @@ QDebug operator <<(QDebug dbg, const Phonon::State &state)
     case Phonon::PlayingState:
         dbg.space() << "Phonon::PlayingState";
         break;
-    case Phonon::BufferingState:
-        dbg.space() << "Phonon::BufferingState";
-        break;
     case Phonon::PausedState:
         dbg.space() << "Phonon::PausedState";
-        break;
-    case Phonon::ErrorState:
-        dbg.space() << "Phonon::ErrorState";
         break;
     }
     return dbg.maybeSpace();

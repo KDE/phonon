@@ -44,8 +44,6 @@ public:
     qint32 tickInterval() const;
     QStringList metaData(MetaData key) const;
     QMultiMap<MetaData, QString> metaData() const;
-    QString errorString() const;
-    ErrorType errorType() const;
     Source source() const;
     void setSource(const Source &source);
     qint64 currentTime() const;
@@ -53,8 +51,8 @@ public:
     qint64 remainingTime() const;
 
 #warning error magic TBD
-    QString errorString() const;
-    ErrorType errorType() const;
+//    QString errorString() const;
+//    ErrorType errorType() const;
 
 #warning merge outputs?
     // Outputs are unordered.
