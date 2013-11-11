@@ -1232,7 +1232,7 @@ void PulseSupport::setupStreamEnvironment(QString streamUuid)
 {
     pDebug() << "Please note that your current Phonon backend is trying to force"
                 " stream dependent PulseAudio properties through envrionment variables."
-                " Slightly unprecise timing in doing so will prevent the first"
+                " Slightly unprecise timing in doing so will cause the first"
                 " of two subsequently started AudioOutputs to have disfunct volume"
                 " control. Also see https://bugs.kde.org/show_bug.cgi?id=321288";
 
@@ -1241,6 +1241,7 @@ void PulseSupport::setupStreamEnvironment(QString streamUuid)
     QHashIterator<QString, QString> it(properties);
     while (it.hasNext()) {
         it.next();
+        pDebug() << "PULSE_PROP_OVERRIDE_" <<  it.key() << " = " << it.value();
         qputenv(QString("PULSE_PROP_OVERRIDE_%1").arg(it.key()).toUtf8(), it.value().toUtf8());
     }
 }
