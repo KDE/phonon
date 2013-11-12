@@ -70,28 +70,6 @@ QString categoryToString(CaptureCategory c)
     return QString();
 }
 
-QDebug operator <<(QDebug dbg, const Phonon::DiscType &type)
-{
-    switch (type) {
-    case Phonon::NoDisc:
-        dbg.space() << "Phonon::NoDisc";
-        break;
-    case Phonon::Cd:
-        dbg.space() << "Phonon::Cd";
-        break;
-    case Phonon::Dvd:
-        dbg.space() << "Phonon::Dvd";
-        break;
-    case Phonon::Vcd:
-        dbg.space() << "Phonon::Vcd";
-        break;
-    case Phonon::BluRay:
-        dbg.space() << "Phonon::BluRay";
-        break;
-    }
-    return dbg.maybeSpace();
-}
-
 QDebug operator <<(QDebug dbg, const Phonon::MetaData &metaData)
 {
     switch (metaData) {

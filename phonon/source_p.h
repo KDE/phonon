@@ -20,76 +20,43 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SOURCE_P_H
-#define SOURCE_P_H
+#ifndef PHONON_SOURCE_P_H_
+#define PHONON_SOURCE_P_H_
 
-#include "abstractmediastream.h"
 #include "source.h"
-#include "objectdescription.h"
 
 #include <QtCore/QUrl>
-#include <QtCore/QString>
-#include <QtCore/QSharedData>
 #include <QtCore/QPointer>
-
-class QFile;
 
 namespace Phonon {
 
 class PHONON_EXPORT SourcePrivate : public QSharedData
 {
 public:
-    SourcePrivate(Source::Type t)
-        : type(t)
-        , discType(NoDisc)
-        , autoDelete(false)
-    #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        , stream(0)
-        , ioDevice(0)
-    #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
+    SourcePrivate()
+        : m_deviceType(Source::NoDevice)
+        , m_stream(0)
+        , m_ioDevice(0)
     {
     }
 
     virtual ~SourcePrivate();
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     void setStream(AbstractMediaStream *s);
-#endif
 
-    Source::Type type;
-    QUrl url;
-    Phonon::DiscType discType;
-    QString deviceName;                         // Used for discs
-    Phonon::DeviceAccessList audioDeviceAccessList;
-    Phonon::DeviceAccessList videoDeviceAccessList;
+    QUrl m_url;
+    Source::DeviceType m_deviceType;
+    QByteArray m_deviceName;
 
-    bool autoDelete;
-
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     // The AbstractMediaStream(2) may be deleted at any time by the application. If that happens
     // stream will be 0 automatically, but streamEventQueue will stay valid as we hold a
     // reference to it. This is necessary to avoid a races when setting the MediaSource while
     // another thread deletes the AbstractMediaStream2. StreamInterface(2) will then just get a
     // StreamEventQueue where nobody answers.
-    QPointer<AbstractMediaStream> stream;
-    QIODevice *ioDevice;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
-#if !defined(PHONON_NO_VIDEOCAPTURE) && !defined(PHONON_NO_AUDIOCAPTURE)
-    void setCaptureDevice(Capture::DeviceType deviceType, CaptureCategory category);
-    void setCaptureDevices(CaptureCategory category);
-    void setCaptureDevices(const AudioCaptureDevice &audioDevice, const VideoCaptureDevice &videoDevice);
-#endif // !PHONON_NO_VIDEOCAPTURE && !PHONON_NO_AUDIOCAPTURE
-
-#ifndef PHONON_NO_AUDIOCAPTURE
-    AudioCaptureDevice audioCaptureDevice;
-#endif
-
-#ifndef PHONON_NO_VIDEOCAPTURE
-    VideoCaptureDevice videoCaptureDevice;
-#endif
+    QPointer<AbstractMediaStream> m_stream;
+    QIODevice *m_ioDevice;
 };
 
 } // namespace Phonon
 
-#endif // SOURCE_P_H
+#endif // PHONON_SOURCE_P_H_

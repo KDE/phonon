@@ -24,9 +24,8 @@
 #define STREAMINTERFACE_P_H
 
 #include "streaminterface.h"
-#include "mediasource.h"
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+#include "source.h"
 
 namespace Phonon
 {
@@ -43,13 +42,11 @@ class StreamInterfacePrivate
         }
 
         StreamInterface *q;
-        MediaSource mediaSource;
+        Source mediaSource;
         bool connected;
 };
 
 } // namespace Phonon
-
-#endif // QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 #endif // STREAMINTERFACE_P_H
 // vim: sw=4 sts=4 et tw=100

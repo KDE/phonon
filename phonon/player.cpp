@@ -102,38 +102,29 @@ qint64 Player::currentTime() const
     return d->interface->currentTime();
 }
 
-static inline bool isPlayable(const Source::Type t)
-{
-    return t != Source::Invalid && t != Source::Empty;
-}
-
 void Player::play()
 {
     P_D(Player);
-    if (d->interface && isPlayable(d->mediaSource.type()))
-        d->interface->play();
+    d->interface->play();
 }
 
 void Player::pause()
 {
     P_D(Player);
-    if (d->interface && isPlayable(d->mediaSource.type()))
-        d->interface->pause();
+    d->interface->pause();
 }
 
 void Player::stop()
 {
 #warning stop needs to force a state reset including signals (i.e. stop should not only stop but cause the gui to reflect that...)
     P_D(Player);
-    if (d->interface && isPlayable(d->mediaSource.type()))
-        d->interface->stop();
+    d->interface->stop();
 }
 
 void Player::seek(qint64 time)
 {
     P_D(Player);
-    if (d->interface && isPlayable(d->mediaSource.type()))
-        d->interface->seek(time);
+    d->interface->seek(time);
 }
 
 QStringList Player::metaData(MetaData f) const
@@ -195,22 +186,16 @@ void Player::setSource(const Source &newSource)
         return;
     }
 
-    pDebug() << Q_FUNC_INFO << newSource.type() << newSource.url() << newSource.deviceName();
+    pDebug() << Q_FUNC_INFO << newSource.url() << newSource.deviceName();
 
     // first call stop as that often is the expected state for setting a new URL
     stop();
 
     d->mediaSource = newSource;
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     d->abstractStream = 0; // abstractStream auto-deletes
-    if (d->mediaSource.type() == Source::Stream) {
-        Q_ASSERT(d->mediaSource.stream());
-        d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
-    }
 
     d->playingQueuedSource = false;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     d->interface->setSource(d->mediaSource);
 }
@@ -227,18 +212,15 @@ void PlayerPrivate::createBackendObject()
         setupBackendObject();
 }
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 void PlayerPrivate::streamError(Phonon::ErrorType type, const QString &text)
 {
     P_Q(Player);
     State lastState = q->state();
     errorType = type;
-    errorString = text;
-    state = ErrorState;
-    QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::ErrorState), Q_ARG(Phonon::State, lastState));
+    state = StoppedState;
+    QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::StoppedState), Q_ARG(Phonon::State, lastState));
     //emit q->stateChanged(ErrorState, lastState);
 }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 void PlayerPrivate::setupBackendObject()
 {
@@ -280,16 +262,7 @@ void PlayerPrivate::setupBackendObject()
         state = backendState;
     }
 
-    // set up attributes
-    if (isPlayable(mediaSource.type())) {
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        if (mediaSource.type() == Source::Stream) {
-            Q_ASSERT(mediaSource.stream());
-            mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
-        }
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        interface->setSource(mediaSource);
-    }
+    interface->setSource(mediaSource);
 }
 
 #warning why are metadata cached instead of passing it through? also why is there no interface getter for it...

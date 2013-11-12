@@ -20,16 +20,13 @@
 
 */
 
-#ifndef PHONON_MEDIASOURCE_H
-#define PHONON_MEDIASOURCE_H
+#ifndef PHONON_SOURCE_H_
+#define PHONON_SOURCE_H_
 
 #include "phonon_export.h"
 #include "phononnamespace.h"
 
-#include "objectdescription.h"
-
 #include <QtCore/QSharedData>
-#include <QtCore/QString>
 
 class QUrl;
 class QIODevice;
@@ -42,55 +39,39 @@ class AbstractMediaStream;
 
 class PHONON_EXPORT Source
 {
-    friend class StreamInterface;
-    friend QDebug operator <<(QDebug dbg, const Phonon::Source &);
 public:
-    enum Type {
-        Invalid = -1,
-        LocalFile,
-        Url,
-        Disc,
-        Stream,
-        CaptureDevice,
-        Empty,
-        AudioVideoCapture
+    enum DeviceType {
+        NoDevice = -1,
+        AudioCd,
+        VideoCd,
+        Dvd,
+        BluRay,
+        AudioCapture,
+        VideoCapture
     };
-
+public:
     Source();
+    Source(const Source &other);
     Source(const QUrl &url);
-    Source(DiscType discType, const QString &deviceName = QString());
-    Source(const AudioCaptureDevice& device);
-    Source(const VideoCaptureDevice& device);
-    Source(Capture::DeviceType deviceType, CaptureCategory category = NoCaptureCategory);
-    Source(CaptureCategory category);
-
+    Source(DeviceType deviceType, const QByteArray &deviceName = QByteArray());
     Source(AbstractMediaStream *stream);
     Source(QIODevice *ioDevice);
-    ~Source();
-    Source(const Source &rhs);
-    Source &operator=(const Source &rhs);
-    bool operator==(const Source &rhs) const;
-    void setAutoDelete(bool enable);
-    bool autoDelete() const;
-    Type type() const;
-    QString fileName() const;
+
+    virtual ~Source();
+
+    Source &operator=(const Source &other);
+    bool operator==(const Source &other) const;
+
     QUrl url() const;
-    DiscType discType() const;
-    const DeviceAccessList& deviceAccessList() const;
-    const DeviceAccessList& videoDeviceAccessList() const;
-    const DeviceAccessList& audioDeviceAccessList() const;
-    QString deviceName() const;
+    DeviceType deviceType() const;
+    QByteArray deviceName() const;
     AbstractMediaStream *stream() const;
-    AudioCaptureDevice audioCaptureDevice() const;
-    VideoCaptureDevice videoCaptureDevice() const;
 
 protected:
     QExplicitlySharedDataPointer<SourcePrivate> d;
     Source(SourcePrivate &);
 };
 
-PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Source &);
-
 } // namespace Phonon
 
-#endif // PHONON_MEDIASOURCE_H
+#endif // PHONON_SOURCE_H_

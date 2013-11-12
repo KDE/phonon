@@ -28,19 +28,16 @@
 #include "player_p.h"
 #include "streaminterface.h"
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
 class MediaObjectPrivate;
 
 namespace Phonon
 {
-class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHandler
+class PHONON_EXPORT AbstractMediaStreamPrivate
 {
     friend class Player;
     P_DECLARE_PUBLIC(AbstractMediaStream)
     public:
         void setStreamInterface(StreamInterface *);
-        void setMediaObjectPrivate(PlayerPrivate *);
         ~AbstractMediaStreamPrivate();
 
     protected:
@@ -69,8 +66,6 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHan
         QString errorText;
 };
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 #endif // ABSTRACTMEDIASTREAM_P_H
 // vim: sw=4 sts=4 et tw=100

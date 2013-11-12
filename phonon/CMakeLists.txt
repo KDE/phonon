@@ -6,6 +6,7 @@ set(phonon_LIB_SRCS
     frontend.cpp
     player.cpp
     source.cpp
+    sourcecontrol.cpp
 
     # Abstracts
     abstractoutput.cpp
@@ -19,17 +20,19 @@ set(phonon_LIB_SRCS
     frontend_p.h
     player_p.h
     source_p.h
+    sourcecontrol_p.h
 
     # Interfaces (QTC Compat)
     backendinterface.h
     playerinterface.h
+    sourcecontrolinterface.h
 )
 
 # random plunder battlefield4 sources
 set(phonon_LIB_SRCS
 ${phonon_LIB_SRCS}
 #   abstractaudiooutput_p.cpp
-#   abstractmediastream.cpp
+   abstractmediastream.cpp
 #   audiodataoutput.cpp
    audiooutput.cpp
    backendcapabilities.cpp
@@ -37,13 +40,13 @@ ${phonon_LIB_SRCS}
 #    effectparameter.cpp
 #    effectwidget.cpp
    globalconfig.cpp
-#   iodevicestream.cpp
+   iodevicestream.cpp
    objectdescription.cpp
    phononnamespace.cpp
    platform.cpp
 #   pulsesupport.cpp
 #    seekslider.cpp
-#   streaminterface.cpp
+   streaminterface.cpp
 #    swiftslider.cpp
 #    volumefadereffect.cpp
 #    volumeslider.cpp
@@ -111,6 +114,8 @@ install(FILES
     player.h
     playerinterface.h
     source.h
+    sourcecontrol.h
+    sourcecontrolinterface.h
     objectdescription.h
     phonon_export.h
     phonondefs.h

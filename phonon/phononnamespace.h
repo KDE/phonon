@@ -29,14 +29,6 @@ class QString;
 
 namespace Phonon
 {
-enum DiscType {
-    NoDisc = -1, /** < No disc was selected. Only used as default value in
-                          \class MediaSource */
-    Cd = 0,      /** < Audio CD */
-    Dvd = 1,     /** < Video DVD (no arbitrary data DVDs) */
-    Vcd = 2,     /** < Video CD */
-    BluRay = 3   /** < BluRay video disc \since 4.7.0 */
-};
 
 // http://xiph.org/vorbis/doc/v-comment.html
 enum MetaData {
@@ -104,7 +96,6 @@ enum ErrorType {
 PHONON_EXPORT QString categoryToString(Category c);
 PHONON_EXPORT QString categoryToString(CaptureCategory c);
 
-PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::DiscType &);
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MetaData &);
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::State &);
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Category &);

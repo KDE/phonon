@@ -24,9 +24,6 @@
 #include "streaminterface_p.h"
 #include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
-#include "mediasource_p.h"
-
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 namespace Phonon
 {
@@ -46,7 +43,7 @@ StreamInterface::~StreamInterface()
     delete d;
 }
 
-void StreamInterface::connectToSource(const MediaSource &mediaSource)
+void StreamInterface::connectToSource(const Source &mediaSource)
 {
     Q_ASSERT(!d->connected);
     d->connected = true;
@@ -66,18 +63,14 @@ void StreamInterfacePrivate::disconnectMediaStream()
     Q_ASSERT(connected);
     connected = false;
 
-    // if mediaSource has autoDelete set then it will delete the AbstractMediaStream again who's
-    // destructor is calling us right now
-    mediaSource.setAutoDelete(false);
-
-    mediaSource = MediaSource();
+    mediaSource = Source();
     q->endOfData();
     q->setStreamSeekable(false);
 }
 
 void StreamInterface::needData()
 {
-    if (d->mediaSource.type() == MediaSource::Stream) {
+    if (d->mediaSource.stream()) {
         QMetaObject::invokeMethod(d->mediaSource.stream(), "needData", Qt::QueuedConnection);
     }
 }
@@ -85,7 +78,7 @@ void StreamInterface::needData()
 void StreamInterface::enoughData()
 {
     Q_ASSERT(d->connected);
-    if (d->mediaSource.type() == MediaSource::Stream) {
+    if (d->mediaSource.stream()) {
          QMetaObject::invokeMethod(d->mediaSource.stream(), "enoughData", Qt::QueuedConnection);
     }
 }
@@ -93,7 +86,7 @@ void StreamInterface::enoughData()
 void StreamInterface::seekStream(qint64 offset)
 {
     Q_ASSERT(d->connected);
-    if (d->mediaSource.type() == MediaSource::Stream) {
+    if (d->mediaSource.stream()) {
          QMetaObject::invokeMethod(d->mediaSource.stream(), "seekStream", Qt::QueuedConnection, Q_ARG(qint64, offset));
     }
 }
@@ -101,13 +94,10 @@ void StreamInterface::seekStream(qint64 offset)
 void StreamInterface::reset()
 {
     Q_ASSERT(d->connected);
-    if (d->mediaSource.type() == MediaSource::Stream) {
+    if (d->mediaSource.stream()) {
          QMetaObject::invokeMethod(d->mediaSource.stream(), "reset", Qt::QueuedConnection);
     }
 }
 
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
 

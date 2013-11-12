@@ -28,6 +28,9 @@
 #include "player.h"
 #include "playerinterface.h"
 
+#include <QtCore/QMultiMap>
+#include <QtCore/QString>
+
 namespace Phonon {
 
 class FrontendInterfacePrivate;
@@ -50,20 +53,16 @@ protected:
     void _k_aboutToFinish();
     void _k_currentSourceChanged(const Source &);
     PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     void streamError(Phonon::ErrorType, const QString &);
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     PlayerPrivate()
         : currentTime(0)
         , tickInterval(0)
         , metaData()
         , state(Phonon::StoppedState)
-    #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         , abstractStream(0)
         , playingQueuedSource(false)
         , errorType(Phonon::NormalError)
-    #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         , interface(0)
     {}
 
@@ -74,11 +73,9 @@ protected:
     qint32 tickInterval;
     QMultiMap<MetaData, QString> metaData;
     State state;
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
     AbstractMediaStream *abstractStream;
     bool playingQueuedSource;
     ErrorType errorType;
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
     Source mediaSource;
 
     QList<AbstractOutput *> outputs;

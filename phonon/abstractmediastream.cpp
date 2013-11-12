@@ -22,12 +22,8 @@
 
 #include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
-#include "mediaobjectinterface.h"
-#include "mediaobject_p.h"
 #include "phonondefs_p.h"
 #include "streaminterface_p.h"
-
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 namespace Phonon
 {
@@ -117,10 +113,6 @@ void AbstractMediaStream::error(Phonon::ErrorType type, const QString &text)
     Q_D(AbstractMediaStream);
     d->errorType = type;
     d->errorText = text;
-    if (d->mediaObjectPrivate) {
-        // TODO: MediaObject might be in a different thread
-        d->mediaObjectPrivate->streamError(type, text);
-    }
 }
 
 void AbstractMediaStream::enoughData()
@@ -134,10 +126,6 @@ void AbstractMediaStream::seekStream(qint64)
 
 AbstractMediaStreamPrivate::~AbstractMediaStreamPrivate()
 {
-    if (mediaObjectPrivate) {
-        // TODO: MediaObject might be in a different thread
-        mediaObjectPrivate->removeDestructionHandler(this);
-    }
     if (streamInterface) {
         // TODO: StreamInterface might be in a different thread
         streamInterface->d->disconnectMediaStream();
@@ -166,21 +154,9 @@ void AbstractMediaStreamPrivate::setStreamInterface(StreamInterface *iface)
     }
 }
 
-void AbstractMediaStreamPrivate::setMediaObjectPrivate(MediaObjectPrivate *mop)
-{
-    // TODO: MediaObject might be in a different thread
-    mediaObjectPrivate = mop;
-    mediaObjectPrivate->addDestructionHandler(this);
-    if (!errorText.isEmpty()) {
-        mediaObjectPrivate->streamError(errorType, errorText);
-    }
-}
-
 } // namespace Phonon
 
 
 #include "moc_abstractmediastream.cpp"
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 // vim: sw=4 sts=4 et tw=100

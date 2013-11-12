@@ -23,7 +23,7 @@
 #include "iodevicestream_p.h"
 #include "abstractmediastream_p.h"
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
+#include <QtCore/QIODevice>
 
 namespace Phonon
 {
@@ -83,8 +83,6 @@ void IODeviceStream::seekStream(qint64 offset)
 }
 
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 #include "moc_iodevicestream_p.cpp"
 

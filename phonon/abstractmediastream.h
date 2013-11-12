@@ -30,8 +30,6 @@
 
 class QByteArray;
 
-#ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-
 namespace Phonon
 {
 class Player;
@@ -216,8 +214,6 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
 };
 
 } // namespace Phonon
-
-#endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 
 #endif // PHONON_ABSTRACTMEDIASTREAM_H

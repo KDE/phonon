@@ -26,6 +26,8 @@
 #include "frontend.h"
 #include "source.h"
 
+#include <QtCore/QObject>
+
 namespace Phonon {
 
 class AbstractOutput;
