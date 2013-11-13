@@ -102,6 +102,7 @@ qreal AudioOutput::volume() const
     P_D(const AudioOutput);
     if (d->muted || !d->interface)
         return d->volume;
+#warning why
     return pow(d->interface->volume(), LOUDNESS_TO_VOLTAGE_EXPONENT);
 }
 
@@ -110,6 +111,7 @@ qreal AudioOutput::volume() const
 static const qreal log10over20 = qreal(0.1151292546497022842); // ln(10) / 20
 #endif // PHONON_LOG10OVER20
 
+#warning why
 qreal AudioOutput::volumeDecibel() const
 {
     P_D(const AudioOutput);
@@ -120,6 +122,7 @@ qreal AudioOutput::volumeDecibel() const
 
 void AudioOutput::setVolumeDecibel(qreal newVolumeDecibel)
 {
+#warning why
     setVolume(exp(newVolumeDecibel * log10over20));
 }
 
@@ -186,7 +189,6 @@ void AudioOutputPrivate::setupBackendObject()
     Q_ASSERT(m_backendObject);
 
     QObject::connect(m_backendObject, SIGNAL(volumeChanged(qreal)), q, SLOT(_k_volumeChanged(qreal)));
-    QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()), q, SLOT(_k_audioDeviceFailed()));
 
     // set up attributes
     interface->setVolume(pow(volume, VOLTAGE_TO_LOUDNESS_EXPONENT));
@@ -244,34 +246,6 @@ void AudioOutputPrivate::_k_revertFallback()
     emit q->outputDeviceChanged(device);
 }
 
-void AudioOutputPrivate::_k_audioDeviceFailed()
-{
-#warning used to abort on PA use
-
-#ifndef QT_NO_PHONON_SETTINGSGROUP
-
-    pDebug() << Q_FUNC_INFO;
-    // outputDeviceIndex identifies a failing device
-    // fall back in the preference list of output devices
-    const QList<int> deviceList = GlobalConfig().audioOutputDeviceListFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices);
-    for (int i = 0; i < deviceList.count(); ++i) {
-        const int devIndex = deviceList.at(i);
-        // if it's the same device as the one that failed, ignore it
-        if (device.index() != devIndex) {
-            const AudioOutputDevice &info = AudioOutputDevice::fromIndex(devIndex);
-            if (safeSetOutputDevice(info)) {
-                handleAutomaticDeviceChange(info, FallbackChange);
-                return; // found one that works
-            }
-        }
-    }
-#endif //QT_NO_PHONON_SETTINGSGROUP
-    // if we get here there is no working output device. Tell the backend.
-    const AudioOutputDevice none;
-    safeSetOutputDevice(none);
-    handleAutomaticDeviceChange(none, FallbackChange);
-}
-
 void AudioOutputPrivate::_k_deviceListChanged()
 {
 #warning used to abort on PA use
@@ -310,35 +284,7 @@ void AudioOutputPrivate::_k_deviceListChanged()
 #endif //QT_NO_PHONON_SETTINGSGROUP
 }
 
-void AudioOutputPrivate::_k_deviceChanged(int deviceIndex)
-{
-    // NB that this method is only used by PulseAudio at present.
-
-    // 1. Check to see if we are overridden. If we are, and devices do not match,
-    //    then try and apply our own device as the output device.
-    //    We only do this the first time
-    if (outputDeviceOverridden && forceMove) {
-        forceMove = false;
-        const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
-        if (currentDevice != device) {
-            if (!safeSetOutputDevice(device)) {
-                // What to do if we are overridden and cannot change to our preferred device?
-            }
-        }
-    }
-    // 2. If we are not overridden, then we need to update our perception of what
-    //    device we are using. If the devices do not match, something lower in the
-    //    stack is overriding our preferences (e.g. a per-application stream preference,
-    //    specific application move, priority list changed etc. etc.)
-    else if (!outputDeviceOverridden) {
-        const AudioOutputDevice &currentDevice = AudioOutputDevice::fromIndex(deviceIndex);
-        if (currentDevice != device) {
-            // The device is not what we think it is, so lets say what is happening.
-            handleAutomaticDeviceChange(currentDevice, SoundSystemChange);
-        }
-    }
-}
-
+#warning yay for non-local statics that are not threadsafe or anything
 static struct
 {
     int first;

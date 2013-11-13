@@ -38,6 +38,7 @@ class PHONON_EXPORT AudioOutput : public QObject, public AbstractAudioOutput
 {
     Q_OBJECT
 public:
+#warning we need a way to wire category to PA category...
     explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
     explicit AudioOutput(QObject *parent = 0);
     qreal volume() const;
@@ -62,9 +63,7 @@ private:
     Q_PRIVATE_SLOT(k_func(), void _k_volumeChanged(qreal))
     Q_PRIVATE_SLOT(k_func(), void _k_mutedChanged(bool))
     Q_PRIVATE_SLOT(k_func(), void _k_revertFallback())
-    Q_PRIVATE_SLOT(k_func(), void _k_audioDeviceFailed())
     Q_PRIVATE_SLOT(k_func(), void _k_deviceListChanged())
-    Q_PRIVATE_SLOT(k_func(), void _k_deviceChanged(int device))
 };
 
 } // namespace Phonon

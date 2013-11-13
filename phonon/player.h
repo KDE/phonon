@@ -55,6 +55,7 @@ public:
 //    ErrorType errorType() const;
 
 #warning merge outputs?
+#warning or at least make them addOutput
     // Outputs are unordered.
     void addAudioOutput(AbstractAudioOutput *audioOutput);
     void addVideoOutput(AbstractVideoOutput *videoOutput);
