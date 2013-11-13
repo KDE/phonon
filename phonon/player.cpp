@@ -67,6 +67,7 @@ Phonon::State Player::state() const
     return d->interface->state();
 }
 
+#warning tick interval is of questionable use
 void Player::setTickInterval(qint32 newTickInterval)
 {
     P_D(Player);
@@ -122,6 +123,7 @@ void Player::pause()
 
 void Player::stop()
 {
+#warning stop needs to force a state reset including signals (i.e. stop should not only stop but cause the gui to reflect that...)
     P_D(Player);
     if (d->interface && isPlayable(d->mediaSource.type()))
         d->interface->stop();

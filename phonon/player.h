@@ -31,6 +31,10 @@ namespace Phonon {
 class AbstractOutput;
 class PlayerPrivate;
 
+#warning ADD convenience statics for play() with limited control
+#warning time signals and properties need a name alignment ... tick vs. time vs. length
+#warning should effects be set on the player rather than on the output? vlc doesnt really support per-output
+
 class PHONON_EXPORT Player : public QObject, public Frontend
 {
     Q_OBJECT
@@ -56,30 +60,23 @@ public:
     // Outputs are unordered and all considered to be equal.
     void addOutput(AbstractOutput *output);
 
-#warning should effects be set on the player rather than on the output? vlc doesnt really support per-output
-
 public Q_SLOTS:
-#warning why do we need a tick interval again?
     void setTickInterval(qint32 newTickInterval);
     void play();
-#warning ADD convenience statics, no support for video, autodelete on finished()
     void pause();
-#warning stop needs to force a state reset including signals (i.e. stop should not only stop but cause the gui to reflect that...)
     void stop();
 #warning qslider - the supposed goto ui widget - uses int.... consider compat interface
     void seek(qint64 time);
 
 Q_SIGNALS:
     void stateChanged(Phonon::State newstate, Phonon::State oldstate);
-#warning terrible name
-    void tick(qint64 time);
     void metaDataChanged();
     void seekableChanged(bool isSeekable);
     // Caps at 100 == finished.
     void bufferStatus(int percentFilled);
 #warning terrible name and/or additional signal for queuing/playlist stuff needed
     void currentSourceChanged(const Source &newSource);
-#warning terrible name
+    void tick(qint64 time);
     void totalTimeChanged(qint64 newTotalTime);
 
 private:
