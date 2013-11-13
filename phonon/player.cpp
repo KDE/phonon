@@ -24,10 +24,8 @@
 #include "player.h"
 #include "player_p.h"
 
-#include "abstractaudiooutput.h"
-#include "abstractaudiooutput_p.h"
-#include "abstractvideooutput.h"
-#include "abstractvideooutput_p.h"
+#include "abstractoutput.h"
+#include "abstractoutput_p.h"
 #include "factory_p.h"
 
 #include <QtCore/QStringList>
@@ -169,7 +167,7 @@ qint64 Player::remainingTime() const
 }
 
 #warning bool and drop qwarning
-void Player::addAudioOutput(AbstractAudioOutput *audioOutput)
+void Player::addAudioOutput(AbstractOutput *audioOutput)
 {
     P_D(Player);
     d->audioOutputs.append(audioOutput);
@@ -179,7 +177,7 @@ void Player::addAudioOutput(AbstractAudioOutput *audioOutput)
     d->interface->addAudioOutput(audioOutput->k_func()->backendObject());
 }
 
-void Player::addVideoOutput(AbstractVideoOutput *videoOutput)
+void Player::addVideoOutput(AbstractOutput *videoOutput)
 {
     P_D(Player);
     d->videoOutputs.append(videoOutput);

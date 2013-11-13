@@ -37,7 +37,7 @@ namespace Phonon {
 
 AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
     : QObject(parent)
-    , AbstractAudioOutput(*new AudioOutputPrivate)
+    , AbstractOutput(*new AudioOutputPrivate)
 {
     P_D(AudioOutput);
     d->init(category);
@@ -45,7 +45,7 @@ AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
 
 AudioOutput::AudioOutput(QObject *parent)
     : QObject(parent)
-    , AbstractAudioOutput(*new AudioOutputPrivate)
+    , AbstractOutput(*new AudioOutputPrivate)
 {
     P_D(AudioOutput);
     d->init(NoCategory);

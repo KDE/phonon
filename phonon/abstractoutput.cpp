@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2006 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -19,20 +19,18 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_ABSTRACTVIDEOOUTPUT_P_H
-#define PHONON_ABSTRACTVIDEOOUTPUT_P_H
-
-#include "abstractvideooutput.h"
-#include "frontend_p.h"
+#include "abstractoutput.h"
+#include "abstractoutput_p.h"
 
 namespace Phonon {
 
-class AbstractVideoOutputPrivate : public FrontendPrivate
+AbstractOutput::~AbstractOutput()
 {
-private:
-    P_DECLARE_PUBLIC(AbstractVideoOutput)
-};
+}
 
-} //namespace Phonon
+AbstractOutput::AbstractOutput(AbstractOutputPrivate &dd)
+    : Frontend(dd)
+{
+}
 
-#endif // PHONON_ABSTRACTVIDEOOUTPUT_P_H
+} // namespace Phonon

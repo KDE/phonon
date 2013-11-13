@@ -81,8 +81,8 @@ protected:
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
     Source mediaSource;
 
-    QList<AbstractAudioOutput *> audioOutputs;
-    QList<AbstractVideoOutput *> videoOutputs;
+    QList<AbstractOutput *> audioOutputs;
+    QList<AbstractOutput *> videoOutputs;
 
     PlayerInterface *interface;
 

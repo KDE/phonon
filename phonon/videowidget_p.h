@@ -23,7 +23,7 @@
 #define PHONON_VIDEOWIDGET_P_H
 
 #include "videowidget.h"
-#include "abstractvideooutput_p.h"
+#include "abstractoutput_p.h"
 
 #include <QHBoxLayout>
 
@@ -31,7 +31,7 @@ namespace Phonon {
 
 class VideoWidgetInterface;
 
-class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
+class VideoWidgetPrivate : public AbstractOutputPrivate
 {
 protected:
     /** \reimp */

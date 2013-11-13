@@ -24,7 +24,7 @@
 #define PHONON_AUDIOOUTPUT_H
 
 #include "phonon_export.h"
-#include "abstractaudiooutput.h"
+#include "abstractoutput.h"
 #include "phononnamespace.h"
 #include "objectdescription.h"
 
@@ -34,7 +34,7 @@ namespace Phonon {
 
 class AudioOutputPrivate;
 
-class PHONON_EXPORT AudioOutput : public QObject, public AbstractAudioOutput
+class PHONON_EXPORT AudioOutput : public QObject, public AbstractOutput
 {
     Q_OBJECT
 public:

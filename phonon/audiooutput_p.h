@@ -23,18 +23,18 @@
 #ifndef PHONON_AUDIOOUTPUT_P_H
 #define PHONON_AUDIOOUTPUT_P_H
 
-#include "abstractaudiooutput_p.h"
+#include "abstractoutput_p.h"
 #include "audiooutput.h"
 
 namespace Phonon {
 
 class AudioOutputInterface;
 
-class AudioOutputPrivate : public AbstractAudioOutputPrivate
+class AudioOutputPrivate : public AbstractOutputPrivate
 {
 protected:
     AudioOutputPrivate()
-        : AbstractAudioOutputPrivate()
+        : AbstractOutputPrivate()
         , interface(0)
         , volume(1.0)
         , deviceBeforeFallback(-1)

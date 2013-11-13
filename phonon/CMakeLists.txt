@@ -7,10 +7,14 @@ set(phonon_LIB_SRCS
     player.cpp
     source.cpp
 
+    # Abstracts
+    abstractoutput.cpp
+
     # Librarians
     phononversion.cpp
 
     # Privates (QTC Compat)
+    abstractoutput_p.h
     factory_p.h
     frontend_p.h
     player_p.h
@@ -24,10 +28,8 @@ set(phonon_LIB_SRCS
 # random plunder battlefield4 sources
 set(phonon_LIB_SRCS
 ${phonon_LIB_SRCS}
-   abstractaudiooutput.cpp
 #   abstractaudiooutput_p.cpp
 #   abstractmediastream.cpp
-   abstractvideooutput.cpp
 #   audiodataoutput.cpp
    audiooutput.cpp
    backendcapabilities.cpp
@@ -49,8 +51,6 @@ ${phonon_LIB_SRCS}
     videowidget.cpp
 
 # QTC Compat
-    abstractaudiooutput_p.h
-    abstractvideooutput_p.h
     audiooutput_p.h
     globalconfig_p.h
     globalstatic_p.h
@@ -94,9 +94,8 @@ install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h)
 
 install(FILES
-    abstractaudiooutput.h
 #    abstractmediastream.h
-    abstractvideooutput.h
+    abstractoutput.h
     audiodataoutput.h
     audiodataoutputinterface.h
     audiooutput.h

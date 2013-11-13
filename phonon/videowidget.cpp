@@ -33,7 +33,7 @@ namespace Phonon {
 
 VideoWidget::VideoWidget(QWidget *parent)
     : QWidget(parent)
-    , Phonon::AbstractVideoOutput(*new VideoWidgetPrivate(this))
+    , AbstractOutput(*new VideoWidgetPrivate(this))
 {
     P_D(VideoWidget);
     d->init();
@@ -42,8 +42,8 @@ VideoWidget::VideoWidget(QWidget *parent)
 }
 
 VideoWidget::VideoWidget(VideoWidgetPrivate &dd, QWidget *parent)
-    : QWidget(parent),
-    Phonon::AbstractVideoOutput(dd)
+    : QWidget(parent)
+    , AbstractOutput(dd)
 {
     P_D(VideoWidget);
     d->init();

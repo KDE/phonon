@@ -28,8 +28,7 @@
 
 namespace Phonon {
 
-class AbstractAudioOutput;
-class AbstractVideoOutput;
+class AbstractOutput;
 class PlayerPrivate;
 
 class PHONON_EXPORT Player : public QObject, public Frontend
@@ -57,8 +56,8 @@ public:
 #warning merge outputs?
 #warning or at least make them addOutput
     // Outputs are unordered.
-    void addAudioOutput(AbstractAudioOutput *audioOutput);
-    void addVideoOutput(AbstractVideoOutput *videoOutput);
+    void addAudioOutput(AbstractOutput *audioOutput);
+    void addVideoOutput(AbstractOutput *videoOutput);
 
 #warning should effects be set on the player rather than on the output? vlc doesnt really support per-output
 

@@ -24,7 +24,7 @@
 
 #include "phonon_export.h"
 #include "phonondefs.h"
-#include "abstractvideooutput.h"
+#include "abstractoutput.h"
 
 #include <QWidget>
 
@@ -35,7 +35,7 @@ namespace Phonon {
 class AbstractVideoOutput;
 class VideoWidgetPrivate;
 
-class PHONON_EXPORT VideoWidget : public QWidget, public Phonon::AbstractVideoOutput
+class PHONON_EXPORT VideoWidget : public QWidget, public AbstractOutput
 {
     Q_OBJECT
     Q_ENUMS(AspectRatio ScaleMode)

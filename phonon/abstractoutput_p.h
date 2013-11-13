@@ -1,5 +1,4 @@
 /*
-    Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -20,28 +19,19 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_ABSTRACTAUDIOOUTPUT_H
-#define PHONON_ABSTRACTAUDIOOUTPUT_H
+#ifndef PHONON_ABSTRACTOUTPUT_P_H
+#define PHONON_ABSTRACTOUTPUT_P_H
 
-#include "phonon_export.h"
-#include "frontend.h"
+//#include "abstractoutput.h"
+#include "frontend_p.h"
 
 namespace Phonon {
 
-class AbstractAudioOutputPrivate;
-
-class PHONON_EXPORT AbstractAudioOutput : public Frontend
+class AbstractOutputPrivate : public FrontendPrivate
 {
-#warning <3 Friends <3
-    friend class Player;
-#warning virtual dtor?
-protected:
-    AbstractAudioOutput(AbstractAudioOutputPrivate &dd);
-
-private:
-    P_DECLARE_PRIVATE(AbstractAudioOutput)
+    P_DECLARE_PUBLIC(AbstractOutput)
 };
 
 } // namespace Phonon
 
-#endif // PHONON_ABSTRACTAUDIOOUTPUT_H
+#endif // PHONON_ABSTRACTOUTPUT_P_H
