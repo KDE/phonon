@@ -45,24 +45,20 @@ enum MetaData {
     TitleMetaData,
     DateMetaData,
     GenreMetaData,
-#warning TrackNumber or Tracknumber
-    TracknumberMetaData,
+    TrackNumberMetaData,
     DescriptionMetaData,
     CopyrightMetaData,
     LicenseMetaData,
     OrganizationMetaData,
     LocationMetaData,
     ContactMetaData,
-    IsrcMetaData,
-#warning this here field is ENOSTANDARD, what to do with it
-    MusicBrainzDiscIdMetaData
+    IsrcMetaData
 #warning VLC also has additional data though some of those may be video or something, needs investigation
 //    UrlMetaData, unknown, not the URL of the media though
 //    RatingMetaData,
 //    SettingMetaData, appears to be encoding settings " HAS_INDEX IS_INTERLEAVED"
 //    LanguageMetaData, may be video
 //    NowPlayingMetaData, when playing a stream contains album/title/whateverinfo
-//    PublisherMetaData, maps to organization
 //    EncodedByMetaData, who encoded this file
 //    ArtworkUrlMetaData, vlc specific cache (e.g. downloaded album cover)
 };

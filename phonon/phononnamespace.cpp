@@ -110,14 +110,11 @@ QDebug operator <<(QDebug dbg, const Phonon::MetaData &metaData)
     case Phonon::GenreMetaData:
         dbg.space() << "Phonon::GenreMetaData";
         break;
-    case Phonon::TracknumberMetaData:
+    case Phonon::TrackNumberMetaData:
         dbg.space() << "Phonon::TracknumberMetaData";
         break;
     case Phonon::DescriptionMetaData:
         dbg.space() << "Phonon::DescriptionMetaData";
-        break;
-    case Phonon::MusicBrainzDiscIdMetaData:
-        dbg.space() << "Phonon::MusicBrainzDiscIdMetaData";
         break;
     }
     return dbg.maybeSpace();
