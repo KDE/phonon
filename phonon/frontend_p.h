@@ -32,43 +32,22 @@ namespace Phonon {
 
 class Frontend;
 
-class PHONON_EXPORT FrontendPrivate
+class FrontendPrivate
 {
 public:
     /**
      * Returns the backend object. If the object does not exist it tries to
      * create it before returning.
      *
-     * \return the Iface object, might return \c 0
+     * \return the backing QObject, returns \c 0 when none could be created.
      */
     QObject *backendObject();
 
 protected:
     FrontendPrivate();
-
     virtual ~FrontendPrivate();
 
-    /**
-     * \internal
-     * This method cleanly deletes the Iface object. It is called on
-     * destruction and before a backend change.
-     */
-    void deleteBackendObject();
-
-    /**
-     * \internal
-     * Creates the Iface object belonging to this class. For most cases the
-     * implementation is
-     * \code
-     * Q_Q(ClassName);
-     * m_iface = Factory::createClassName(this);
-     * return m_iface;
-     * \endcode
-     *
-     * This function should not be called except from slotCreateIface.
-     *
-     * \see slotCreateIface
-     */
+    virtual void deleteBackendObject();
     virtual void createBackendObject() = 0;
 
     Frontend *q_ptr;
