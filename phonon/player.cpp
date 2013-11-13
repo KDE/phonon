@@ -167,23 +167,16 @@ qint64 Player::remainingTime() const
 }
 
 #warning bool and drop qwarning
-void Player::addAudioOutput(AbstractOutput *audioOutput)
+void Player::addOutput(AbstractOutput *output)
 {
     P_D(Player);
-    d->audioOutputs.append(audioOutput);
+    if (d->outputs.contains(output))
+        return;
+    d->outputs.append(output);
     d->createBackendObject();
-    if (!d->backendObject())
-        qWarning("No PrivateObject present");
-    d->interface->addAudioOutput(audioOutput->k_func()->backendObject());
-}
-
-void Player::addVideoOutput(AbstractOutput *videoOutput)
-{
-    P_D(Player);
-    d->videoOutputs.append(videoOutput);
     if (!d->interface)
-        d->createBackendObject();
-    d->interface->addVideoOutput(videoOutput->k_func()->backendObject());
+        qWarning("No PlayerInterface instance present.");
+    d->interface->addOutput(output->k_func()->backendObject());
 }
 
 Source Player::source() const

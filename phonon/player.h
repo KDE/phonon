@@ -53,11 +53,8 @@ public:
 //    QString errorString() const;
 //    ErrorType errorType() const;
 
-#warning merge outputs?
-#warning or at least make them addOutput
-    // Outputs are unordered.
-    void addAudioOutput(AbstractOutput *audioOutput);
-    void addVideoOutput(AbstractOutput *videoOutput);
+    // Outputs are unordered and all considered to be equal.
+    void addOutput(AbstractOutput *output);
 
 #warning should effects be set on the player rather than on the output? vlc doesnt really support per-output
 

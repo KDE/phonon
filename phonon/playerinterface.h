@@ -49,8 +49,7 @@ public:
 #warning.... in the interface... really Oo
     virtual qint64 remainingTime() const { return totalTime() - currentTime(); }
 
-    virtual void addAudioOutput(QObject *audioOutput) = 0;
-    virtual void addVideoOutput(QObject *videoOutput) = 0;
+    virtual void addOutput(QObject *output) = 0;
 
 Q_SIGNALS:
     virtual void metaDataChanged(QMultiMap<MetaData, QString>) = 0;
