@@ -270,17 +270,6 @@ void PlayerPrivate::setupBackendObject()
     // set up attributes
     interface->setTickInterval(tickInterval);
 
-    switch(state) {
-    case StoppedState:
-        break;
-    case PlayingState:
-        QTimer::singleShot(0, q, SLOT(_k_resumePlay()));
-        break;
-    case PausedState:
-        QTimer::singleShot(0, q, SLOT(_k_resumePause()));
-        break;
-    }
-
     const State backendState = interface->state();
     if (state != backendState) {
 #warning do we really want this? ... shouldnt we force the frontend state on the backend instead?
@@ -299,26 +288,6 @@ void PlayerPrivate::setupBackendObject()
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         interface->setSource(mediaSource);
     }
-}
-
-void PlayerPrivate::_k_resumePlay()
-{
-    if (!interface)
-        return; // Cannot happen short of bad eventloop timing.
-
-    interface->play();
-    if (currentTime > 0)
-        interface->seek(currentTime);
-}
-
-void PlayerPrivate::_k_resumePause()
-{
-    if (!interface)
-        return; // Cannot happen short of bad eventloop timing.
-
-    interface->pause();
-    if (currentTime > 0)
-        interface->seek(currentTime);
 }
 
 void PlayerPrivate::_k_metaDataChanged(const QMultiMap<MetaData, QString> &newMetaData)

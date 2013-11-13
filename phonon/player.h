@@ -84,8 +84,6 @@ Q_SIGNALS:
 
 private:
     P_DECLARE_PRIVATE(Player)
-    Q_PRIVATE_SLOT(k_func(), void _k_resumePlay())
-    Q_PRIVATE_SLOT(k_func(), void _k_resumePause())
     Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<MetaData, QString> &))
 };
 
