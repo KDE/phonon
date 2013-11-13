@@ -75,9 +75,8 @@ Q_SIGNALS:
     void tick(qint64 time);
     void metaDataChanged();
     void seekableChanged(bool isSeekable);
+    // Caps at 100 == finished.
     void bufferStatus(int percentFilled);
-#warning whats the purpose of finished if there is no builtin queue
-    void finished();
 #warning terrible name and/or additional signal for queuing/playlist stuff needed
     void currentSourceChanged(const Source &newSource);
 #warning terrible name

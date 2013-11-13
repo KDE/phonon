@@ -260,8 +260,6 @@ void PlayerPrivate::setupBackendObject()
                      q, SIGNAL(seekableChanged(bool)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(bufferStatus(int)),
                      q, SIGNAL(bufferStatus(int)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(finished()),
-                     q, SIGNAL(finished()), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
                      q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<MetaData, QString>)),

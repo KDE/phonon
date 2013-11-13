@@ -55,6 +55,10 @@ Q_SIGNALS:
     virtual void metaDataChanged(QMultiMap<MetaData, QString>) = 0;
     virtual void stateChanged(Phonon::State newState, Phonon::State oldState) = 0;
     virtual void tick(qint64 time) = 0;
+    virtual void seekableChanged(bool seekable) = 0;
+    virtual void bufferStatus(int percent) = 0;
+    virtual void totalTimeChanged(qint64 totalTime) = 0;
+    virtual void currentSourceChanged(const Source &source) = 0;
 };
 
 } // namespace Phonon
