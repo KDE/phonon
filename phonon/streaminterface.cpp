@@ -48,7 +48,6 @@ void StreamInterface::connectToSource(const Source &mediaSource)
     Q_ASSERT(!d->connected);
     d->connected = true;
     d->mediaSource = mediaSource;
-    Q_ASSERT(d->mediaSource.type() == MediaSource::Stream);
     Q_ASSERT(d->mediaSource.stream());
     AbstractMediaStreamPrivate *dd = d->mediaSource.stream()->d_func();
     dd->setStreamInterface(this);
