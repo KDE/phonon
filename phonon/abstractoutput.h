@@ -30,6 +30,8 @@ namespace Phonon {
 class AbstractOutputPrivate;
 class PHONON_EXPORT AbstractOutput : public Frontend
 {
+#warning perhaps find a way to avoid friending player
+    friend class Player;
 public:
     virtual ~AbstractOutput();
 
