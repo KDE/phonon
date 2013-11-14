@@ -255,8 +255,8 @@ void PlayerPrivate::setupBackendObject()
     QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<MetaData, QString>)),
                      q, SLOT(_k_metaDataChanged(QMultiMap<MetaData, QString>)),
                      Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(Source)),
-                     q, SIGNAL(currentSourceChanged(Source)),
+    QObject::connect(m_backendObject, SIGNAL(sourceChanged(Source)),
+                     q, SIGNAL(sourceChanged(Source)),
                      Qt::QueuedConnection);
 
     // set up attributes

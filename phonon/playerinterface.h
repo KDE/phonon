@@ -59,7 +59,7 @@ Q_SIGNALS:
     virtual void stateChanged(Phonon::State newState, Phonon::State oldState) = 0;
     virtual void seekableChanged(bool seekable) = 0;
     virtual void bufferStatus(int percent) = 0;
-    virtual void currentSourceChanged(const Source &source) = 0;
+    virtual void sourceChanged(const Source &source) = 0;
 
     // Time
     virtual void onTimeChanged(qint64 time) = 0;

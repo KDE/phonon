@@ -43,6 +43,7 @@ class PHONON_EXPORT Player : public QObject, public Frontend
     Q_PROPERTY(qint64 time READ time NOTIFY timeChanged)
     Q_PROPERTY(qint64 totalTime READ totalTime NOTIFY totalTimeChanged)
 #warning remainingTime needs signal
+    Q_PROPERTY(Source source READ source WRITE setSource NOTIFY sourceChanged)
 public:
     Player(QObject *parent = 0);
     ~Player();
@@ -84,8 +85,10 @@ Q_SIGNALS:
     void timeChanged(qreal time);
     void totalTimeChanged(qreal newTotalTime);
 
-#warning terrible name and/or additional signal for queuing/playlist stuff needed
-    void currentSourceChanged(const Source &newSource);
+    // We may not want this here at all and simply assume that changes via setSource are instant.
+    // Additionally source tracking would happen through the playlist then?
+    // For QML a sourceChanged would still be handy though.
+    void sourceChanged(const Source &newSource);
 
 private:
     P_DECLARE_PRIVATE(Player)
