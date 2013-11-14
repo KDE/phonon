@@ -42,7 +42,7 @@ class PHONON_EXPORT Player : public QObject, public Frontend
     Q_OBJECT
     Q_PROPERTY(qint64 time READ time NOTIFY timeChanged)
     Q_PROPERTY(qint64 totalTime READ totalTime NOTIFY totalTimeChanged)
-#warning remainingTime needs signal
+    Q_PROPERTY(qint64 remainingTime READ remainingtime NOTIFY remainingTimeChanged)
     Q_PROPERTY(Source source READ source WRITE setSource NOTIFY sourceChanged)
 public:
     Player(QObject *parent = 0);
@@ -82,8 +82,11 @@ Q_SIGNALS:
     void seekableChanged(bool isSeekable);
     // Caps at 100 == finished.
     void bufferStatus(int percentFilled);
-    void timeChanged(qreal time);
-    void totalTimeChanged(qreal newTotalTime);
+
+    void timeChanged(qint64 time);
+    void totalTimeChanged(qint64 newTotalTime);
+#warning not emitted by anything
+    void remainingTimeChanged(qint64 remainingTime);
 
     // We may not want this here at all and simply assume that changes via setSource are instant.
     // Additionally source tracking would happen through the playlist then?
