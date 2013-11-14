@@ -42,11 +42,8 @@ macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 ################################################################################
 
 add_definitions(${QT_DEFINITIONS} -DQT_NO_PHONON_ABSTRACTMEDIASTREAM)
-remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
 
-include_directories(${Qt5Core_INCLUDE_DIRS}
-                    ${Qt5Widgets_INCLUDE_DIRS}
-                    ${CMAKE_CURRENT_SOURCE_DIR}
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${CMAKE_CURRENT_SOURCE_DIR}/phonon
                     ${CMAKE_CURRENT_BINARY_DIR}/phonon)
