@@ -25,13 +25,11 @@
 
 #include "phonon_export.h"
 
-#include <QtCore/QObject>
+class QObject;
 
 namespace Phonon {
 
 class BackendInterface;
-class PlatformPlugin;
-class FrontendPrivate;
 
 namespace Factory {
 
@@ -45,8 +43,6 @@ QObject *createAudioDataOutput(QObject *parent = 0);
 
 QObject *backend();
 BackendInterface *interface();
-
-PlatformPlugin *platformPlugin();
 
 } // namespace Factory
 } // namespace Phonon

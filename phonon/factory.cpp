@@ -23,14 +23,12 @@
 #include "factory_p.h"
 
 #include "backendinterface.h"
-#include "frontend_p.h"
 #include "globalstatic_p.h"
 #include "phononnamespace_p.h"
 #include "phononversion.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
-#include <QtCore/QList>
 #include <QtCore/QPluginLoader>
 
 namespace Phonon {
@@ -152,7 +150,7 @@ FactoryPrivate::~FactoryPrivate()
     delete backendObject;
 }
 
-    QObject *Factory::createPlayer(QObject *parent)
+QObject *Factory::createPlayer(QObject *parent)
 {
     if (!backend())
         return 0;
@@ -217,6 +215,3 @@ BackendInterface *Factory::interface()
 }
 
 } // namespace Phonon
-
-#include "factory.moc"
-#include "moc_factory_p.cpp"
