@@ -36,29 +36,34 @@ public:
     virtual void pause() = 0;
     virtual void stop() = 0;
     virtual void seek(qint64 milliseconds) = 0;
-    virtual qint32 tickInterval() const = 0;
     virtual void setTickInterval(qint32 interval) = 0;
     virtual bool isSeekable() const = 0;
-    virtual qint64 currentTime() const = 0;
     virtual Phonon::State state() const = 0;
     virtual QString errorString() const = 0;
     virtual Phonon::ErrorType errorType() const = 0;
-    virtual qint64 totalTime() const = 0;
     virtual Source source() const = 0;
     virtual void setSource(const Source &) = 0;
-#warning.... in the interface... really Oo
-    virtual qint64 remainingTime() const { return totalTime() - currentTime(); }
 
+    // Output linking
     virtual void addOutput(QObject *output) = 0;
+
+    // Time
+    virtual qint32 tickInterval() const = 0;
+    virtual qint64 time() const = 0;
+    virtual qint64 totalTime() const = 0;
+#warning.... in the interface... really Oo
+    virtual qint64 remainingTime() const { return totalTime() - time(); }
 
 Q_SIGNALS:
     virtual void metaDataChanged(QMultiMap<MetaData, QString>) = 0;
     virtual void stateChanged(Phonon::State newState, Phonon::State oldState) = 0;
-    virtual void tick(qint64 time) = 0;
     virtual void seekableChanged(bool seekable) = 0;
     virtual void bufferStatus(int percent) = 0;
-    virtual void totalTimeChanged(qint64 totalTime) = 0;
     virtual void currentSourceChanged(const Source &source) = 0;
+
+    // Time
+    virtual void onTimeChanged(qint64 time) = 0;
+    virtual void totalTimeChanged(qint64 totalTime) = 0;
 };
 
 } // namespace Phonon

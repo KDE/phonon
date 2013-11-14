@@ -56,8 +56,7 @@ protected:
     void streamError(Phonon::ErrorType, const QString &);
 
     PlayerPrivate()
-        : currentTime(0)
-        , tickInterval(0)
+        : tickInterval(0)
         , metaData()
         , state(Phonon::StoppedState)
         , abstractStream(0)
@@ -69,7 +68,6 @@ protected:
     ~PlayerPrivate() {}
 
 #warning base uses m_ prefix, playerprivate does not....
-    qint64 currentTime;
     qint32 tickInterval;
     QMultiMap<MetaData, QString> metaData;
     State state;

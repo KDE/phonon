@@ -40,18 +40,22 @@ class PlayerPrivate;
 class PHONON_EXPORT Player : public QObject, public Frontend
 {
     Q_OBJECT
+    Q_PROPERTY(qint64 time READ time NOTIFY timeChanged)
+    Q_PROPERTY(qint64 totalTime READ totalTime NOTIFY totalTimeChanged)
+#warning remainingTime needs signal
 public:
     Player(QObject *parent = 0);
     ~Player();
 
     State state() const;
     bool isSeekable() const;
+#warning replace tick interval by static tick 100 whenever something is connected to timeChanged
     qint32 tickInterval() const;
     QStringList metaData(MetaData key) const;
     QMultiMap<MetaData, QString> metaData() const;
     Source source() const;
     void setSource(const Source &source);
-    qint64 currentTime() const;
+    qint64 time() const;
     qint64 totalTime() const;
     qint64 remainingTime() const;
 
@@ -60,6 +64,7 @@ public:
 //    ErrorType errorType() const;
 
     // Outputs are unordered and all considered to be equal.
+#warning need result ... bool? signal?
     void addOutput(AbstractOutput *output);
 
 public Q_SLOTS:
@@ -76,8 +81,8 @@ Q_SIGNALS:
     void seekableChanged(bool isSeekable);
     // Caps at 100 == finished.
     void bufferStatus(int percentFilled);
-    void tick(qint64 time);
-    void totalTimeChanged(qint64 newTotalTime);
+    void timeChanged(qreal time);
+    void totalTimeChanged(qreal newTotalTime);
 
 #warning terrible name and/or additional signal for queuing/playlist stuff needed
     void currentSourceChanged(const Source &newSource);

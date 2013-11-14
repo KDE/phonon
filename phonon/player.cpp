@@ -94,12 +94,12 @@ bool Player::isSeekable() const
     return d->interface->isSeekable();
 }
 
-qint64 Player::currentTime() const
+qint64 Player::time() const
 {
     P_D(const Player);
     if (!d->interface)
-        return d->currentTime;
-    return d->interface->currentTime();
+        return 0;
+    return d->interface->time();
 }
 
 void Player::play()
@@ -236,20 +236,28 @@ void PlayerPrivate::setupBackendObject()
     qRegisterMetaType<Source>("Source");
     qRegisterMetaType<QMultiMap<QString, QString> >("QMultiMap<QString, QString>");
 
+#warning we definitely need to cut down on queuing
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-                     q, SIGNAL(stateChanged(Phonon::State, Phonon::State)), Qt::QueuedConnection);
-    QObject::connect(m_backendObject, SIGNAL(tick(qint64)),
-                     q, SIGNAL(tick(qint64)), Qt::QueuedConnection);
+                     q, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+                     Qt::QueuedConnection);
+    QObject::connect(m_backendObject, SIGNAL(timeChanged(qint64)),
+                     q, SIGNAL(timeChanged(qint64)),
+                     Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(seekableChanged(bool)),
-                     q, SIGNAL(seekableChanged(bool)), Qt::QueuedConnection);
+                     q, SIGNAL(seekableChanged(bool)),
+                     Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(bufferStatus(int)),
-                     q, SIGNAL(bufferStatus(int)), Qt::QueuedConnection);
+                     q, SIGNAL(bufferStatus(int)),
+                     Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(totalTimeChanged(qint64)),
-                     q, SIGNAL(totalTimeChanged(qint64)), Qt::QueuedConnection);
+                     q, SIGNAL(totalTimeChanged(qint64)),
+                     Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<MetaData, QString>)),
-                     q, SLOT(_k_metaDataChanged(QMultiMap<MetaData, QString>)), Qt::QueuedConnection);
+                     q, SLOT(_k_metaDataChanged(QMultiMap<MetaData, QString>)),
+                     Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(currentSourceChanged(Source)),
-                     q, SIGNAL(currentSourceChanged(Source)), Qt::QueuedConnection);
+                     q, SIGNAL(currentSourceChanged(Source)),
+                     Qt::QueuedConnection);
 
     // set up attributes
     interface->setTickInterval(tickInterval);
