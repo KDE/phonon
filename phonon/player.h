@@ -42,7 +42,7 @@ class PHONON_EXPORT Player : public QObject, public Frontend
     Q_OBJECT
     Q_PROPERTY(qint64 time READ time NOTIFY timeChanged)
     Q_PROPERTY(qint64 totalTime READ totalTime NOTIFY totalTimeChanged)
-    Q_PROPERTY(qint64 remainingTime READ remainingtime NOTIFY remainingTimeChanged)
+    Q_PROPERTY(qint64 remainingTime READ remainingTime NOTIFY remainingTimeChanged)
     Q_PROPERTY(Source source READ source WRITE setSource NOTIFY sourceChanged)
 public:
     Player(QObject *parent = 0);
