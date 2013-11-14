@@ -76,8 +76,6 @@ public:
     qreal saturation() const;
     QImage snapshot() const;
 
-#warning what?
-    //TODO: bar colors property
 public Q_SLOTS:
     void setFullScreen(bool fullscreen);
     void exitFullScreen();

@@ -21,7 +21,6 @@
 */
 
 #include "globalconfig.h"
-#include "globalconfig_p.h"
 
 #include "factory_p.h"
 #include "phonondefs_p.h"
@@ -33,8 +32,18 @@
 
 #include <QtCore/QList>
 #include <QtCore/QVariant>
+#include <QtCore/QSettings>
 
 namespace Phonon {
+
+class GlobalConfigPrivate
+{
+public:
+    GlobalConfigPrivate();
+    virtual ~GlobalConfigPrivate() {}
+
+    QSettings config;
+};
 
 GlobalConfigPrivate::GlobalConfigPrivate() : config(QLatin1String("kde.org"), QLatin1String("libphonon"))
 {

@@ -74,10 +74,11 @@ Q_SIGNALS:
     void seekableChanged(bool isSeekable);
     // Caps at 100 == finished.
     void bufferStatus(int percentFilled);
-#warning terrible name and/or additional signal for queuing/playlist stuff needed
-    void currentSourceChanged(const Source &newSource);
     void tick(qint64 time);
     void totalTimeChanged(qint64 newTotalTime);
+
+#warning terrible name and/or additional signal for queuing/playlist stuff needed
+    void currentSourceChanged(const Source &newSource);
 
 private:
     P_DECLARE_PRIVATE(Player)

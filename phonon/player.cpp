@@ -292,6 +292,7 @@ void PlayerPrivate::setupBackendObject()
     }
 }
 
+#warning why are metadata cached instead of passing it through? also why is there no interface getter for it...
 void PlayerPrivate::_k_metaDataChanged(const QMultiMap<MetaData, QString> &newMetaData)
 {
     metaData = newMetaData;

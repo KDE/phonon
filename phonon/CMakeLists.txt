@@ -52,7 +52,6 @@ ${phonon_LIB_SRCS}
 
 # QTC Compat
     audiooutput_p.h
-    globalconfig_p.h
     globalstatic_p.h
     frontend_p.h
     phonondefs_p.h
