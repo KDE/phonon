@@ -25,7 +25,6 @@
 #include "backendinterface.h"
 #include "frontend_p.h"
 #include "globalstatic_p.h"
-#include "platformplugin.h"
 #include "phononnamespace_p.h"
 #include "phononversion.h"
 
@@ -43,17 +42,9 @@ public:
     ~FactoryPrivate();
 
     bool createBackend();
-#warning why is there a createBackend but no createPPlugin... why is it a gateway function....
-    PlatformPlugin *platformPlugin();
 
     QObject *backendObject;
     BackendInterface *interface;
-
-private:
-    // Note that platformPlugin members are private because one must use
-    // platformPlugin().
-    PlatformPlugin *m_platformPlugin;
-    bool m_noPlatformPluginFound; /* Set if initial creation failed. */
 };
 
 PHONON_GLOBAL_STATIC(Phonon::FactoryPrivate, globalFactory)
@@ -79,13 +70,6 @@ bool FactoryPrivate::createBackend()
     // platform plugin (because we cannot influence its lookup priority) and
     // consequently will try to find/load the defined backend manually.
     const QByteArray backendEnv = qgetenv("PHONON_BACKEND");
-
-    PlatformPlugin *f = globalFactory->platformPlugin();
-    if (f && backendEnv.isEmpty()) {
-        // TODO: it would be very groovy if we could add a param, so that the
-        // platform could also try to load the defined backend as preferred choice.
-        backendObject = f->createBackend();
-    }
 
     if (!backendObject) {
         ensureLibraryPathSet();
@@ -154,9 +138,7 @@ bool FactoryPrivate::createBackend()
 }
 
 FactoryPrivate::FactoryPrivate()
-    : m_platformPlugin(0)
-    , m_noPlatformPluginFound(false)
-    , backendObject(0)
+    : backendObject(0)
     , interface(0)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
@@ -168,7 +150,6 @@ FactoryPrivate::FactoryPrivate()
 FactoryPrivate::~FactoryPrivate()
 {
     delete backendObject;
-    delete m_platformPlugin;
 }
 
     QObject *Factory::createPlayer(QObject *parent)
@@ -211,87 +192,6 @@ QObject *Factory::createAudioDataOutput(QObject *parent)
     if (!backend())
         return 0;
     return interface()->createObject(BackendInterface::AudioDataOutputClass, parent);
-}
-
-PlatformPlugin *FactoryPrivate::platformPlugin()
-{
-    if (m_platformPlugin) {
-        return m_platformPlugin;
-    }
-    if (m_noPlatformPluginFound) {
-        return 0;
-    }
-    Q_ASSERT(QCoreApplication::instance());
-    const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
-    if (!platform_plugin_env.isEmpty()) {
-        pDebug() << Q_FUNC_INFO << "platform plugin path:" << platform_plugin_env;
-        QPluginLoader pluginLoader(QString::fromLocal8Bit(platform_plugin_env.constData()));
-        if (pluginLoader.load()) {
-            QObject *plInstance = pluginLoader.instance();
-            if (!plInstance) {
-                pDebug() << Q_FUNC_INFO << "unable to grab root component object for the platform plugin";
-            }
-
-            m_platformPlugin = qobject_cast<PlatformPlugin *>(plInstance);
-            if (m_platformPlugin) {
-                pDebug() << Q_FUNC_INFO << "platform plugin" << m_platformPlugin;
-                return m_platformPlugin;
-            } else {
-                pDebug() << Q_FUNC_INFO << "platform plugin cast fail" << plInstance;
-            }
-        }
-    }
-    const QString suffix(QLatin1String("/phonon_platform/"));
-    ensureLibraryPathSet();
-    QDir dir;
-    dir.setNameFilters(
-            !qgetenv("KDE_FULL_SESSION").isEmpty() ? QStringList(QLatin1String("kde.*")) :
-            (!qgetenv("GNOME_DESKTOP_SESSION_ID").isEmpty() ? QStringList(QLatin1String("gnome.*")) :
-             QStringList())
-            );
-    dir.setFilter(QDir::Files);
-    const QStringList libPaths = QCoreApplication::libraryPaths();
-    forever {
-        for (int i = 0; i < libPaths.count(); ++i) {
-            const QString libPath = libPaths.at(i) + suffix;
-            dir.setPath(libPath);
-            if (!dir.exists()) {
-                continue;
-            }
-            const QStringList files = dir.entryList(QDir::Files);
-            for (int i = 0; i < files.count(); ++i) {
-                QPluginLoader pluginLoader(libPath + files.at(i));
-                if (!pluginLoader.load()) {
-                    pDebug() << Q_FUNC_INFO << "  platform plugin load failed:"
-                        << pluginLoader.errorString();
-                    continue;
-                }
-                pDebug() << pluginLoader.instance();
-                QObject *qobj = pluginLoader.instance();
-                m_platformPlugin = qobject_cast<PlatformPlugin *>(qobj);
-                pDebug() << m_platformPlugin;
-                if (m_platformPlugin) {
-                    return m_platformPlugin;
-                } else {
-                    delete qobj;
-                    pDebug() << Q_FUNC_INFO << dir.absolutePath() << "exists but the platform plugin was not loadable:" << pluginLoader.errorString();
-                    pluginLoader.unload();
-                }
-            }
-        }
-        if (dir.nameFilters().isEmpty()) {
-            break;
-        }
-        dir.setNameFilters(QStringList());
-    }
-    pDebug() << Q_FUNC_INFO << "platform plugin could not be loaded";
-    m_noPlatformPluginFound = true;
-    return 0;
-}
-
-PlatformPlugin *Factory::platformPlugin()
-{
-    return globalFactory->platformPlugin();
 }
 
 QObject *Factory::backend()

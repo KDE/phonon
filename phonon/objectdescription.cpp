@@ -28,11 +28,9 @@
 #include "factory_p.h"
 #include <QtCore/QStringList>
 #include "backendinterface.h"
-#include "platformplugin.h"
 #include "phononpimpl_p.h"
 
-namespace Phonon
-{
+namespace Phonon {
 
 class DescriptionBasePrivate
 {
@@ -310,4 +308,4 @@ VideoCaptureDevice::~VideoCaptureDevice()
     qDebug() << Q_FUNC_INFO;
 }
 
-} //namespace Phonon
+} // namespace Phonon

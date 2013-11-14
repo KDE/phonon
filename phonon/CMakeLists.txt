@@ -41,7 +41,6 @@ ${phonon_LIB_SRCS}
    iodevicestream.cpp
    objectdescription.cpp
    phononnamespace.cpp
-   platform.cpp
 #   pulsesupport.cpp
 #    seekslider.cpp
    streaminterface.cpp
@@ -58,7 +57,6 @@ ${phonon_LIB_SRCS}
     phonondefs_p.h
     phononnamespace_p.h
     phononpimpl_p.h
-    platform_p.h
 #    pulsestream_p.h
 #    qsettingsgroup_p.h
     videowidget_p.h
@@ -66,13 +64,7 @@ ${phonon_LIB_SRCS}
     phonondefs.h
 
     audiooutputinterface.h
-    platformplugin.h
    )
-
-option(PHONON_NO_PLATFORMPLUGIN "Do not use any platform plugin")
-if (PHONON_NO_PLATFORMPLUGIN)
-    add_definitions(-DQT_NO_PHONON_PLATFORMPLUGIN)
-endif (PHONON_NO_PLATFORMPLUGIN)
 
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 
@@ -116,7 +108,6 @@ install(FILES
     phonon_export.h
     phonondefs.h
     ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
-    platformplugin.h
     seekslider.h
     streaminterface.h
     videoplayer.h
