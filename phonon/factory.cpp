@@ -36,9 +36,8 @@
 
 namespace Phonon {
 
-class FactoryPrivate : public Phonon::Factory::Sender
+class FactoryPrivate
 {
-    Q_OBJECT
 public:
     FactoryPrivate();
     ~FactoryPrivate();
@@ -49,9 +48,6 @@ public:
 
     QObject *backendObject;
     BackendInterface *interface;
-
-private Q_SLOTS:
-    void objectDescriptionChanged(ObjectDescriptionType);
 
 private:
     // Note that platformPlugin members are private because one must use
@@ -149,9 +145,6 @@ bool FactoryPrivate::createBackend()
              << backendObject->property("backendVersion").toString()
              << "loaded";
 
-    connect(backendObject, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
-            SLOT(objectDescriptionChanged(ObjectDescriptionType)));
-
     return true;
 #else //QT_NO_LIBRARY
     pWarning() << Q_FUNC_INFO << "Trying to use Phonon with QT_NO_LIBRARY defined. "
@@ -178,31 +171,7 @@ FactoryPrivate::~FactoryPrivate()
     delete m_platformPlugin;
 }
 
-void FactoryPrivate::objectDescriptionChanged(ObjectDescriptionType type)
-{
-    pDebug() << Q_FUNC_INFO << type;
-    switch (type) {
-    case AudioOutputDeviceType:
-        emit availableAudioOutputDevicesChanged();
-        break;
-    case AudioCaptureDeviceType:
-        emit availableAudioCaptureDevicesChanged();
-        break;
-    case VideoCaptureDeviceType:
-        emit availableVideoCaptureDevicesChanged();
-        break;
-    default:
-        break;
-    }
-    //emit capabilitiesChanged();
-}
-
-Factory::Sender *Factory::sender()
-{
-    return globalFactory;
-}
-
-QObject *Factory::createPlayer(QObject *parent)
+    QObject *Factory::createPlayer(QObject *parent)
 {
     if (!backend())
         return 0;
@@ -302,8 +271,6 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
                 m_platformPlugin = qobject_cast<PlatformPlugin *>(qobj);
                 pDebug() << m_platformPlugin;
                 if (m_platformPlugin) {
-                    connect(qobj, SIGNAL(objectDescriptionChanged(ObjectDescriptionType)),
-                            SLOT(objectDescriptionChanged(ObjectDescriptionType)));
                     return m_platformPlugin;
                 } else {
                     delete qobj;

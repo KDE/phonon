@@ -55,8 +55,6 @@ void AudioOutputPrivate::init(Phonon::Category c)
     P_Q(AudioOutput);
     category = c;
     createBackendObject();
-    q->connect(Factory::sender(), SIGNAL(availableAudioOutputDevicesChanged()),
-               SLOT(_k_deviceListChanged()));
 }
 
 void AudioOutputPrivate::createBackendObject()
