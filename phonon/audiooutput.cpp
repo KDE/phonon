@@ -22,8 +22,8 @@
 
 #include "audiooutput.h"
 #include "audiooutput_p.h"
-
 #include "audiooutputinterface.h"
+
 #include "factory_p.h"
 #include "globalconfig.h"
 #include "objectdescription.h"
@@ -67,10 +67,6 @@ void AudioOutputPrivate::createBackendObject()
     P_Q(AudioOutput);
     m_backendObject = Factory::createAudioOutput(q);
     interface = qobject_cast<AudioOutputInterface *>(m_backendObject);
-    // (cg) Is it possible that PulseAudio initialisation means that the device here is not valid?
-    // User reports seem to suggest this possibility but I can't see how :s.
-    // See other comment and check for isValid() in handleAutomaticDeviceChange()
-    device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
     if (m_backendObject && interface)
         setupBackendObject();
 }
@@ -167,6 +163,8 @@ void AudioOutputPrivate::setupBackendObject()
 {
     P_Q(AudioOutput);
     Q_ASSERT(m_backendObject);
+
+    device = AudioOutputDevice::fromIndex(GlobalConfig().audioOutputDeviceFor(category, GlobalConfig::AdvancedDevicesFromSettings | GlobalConfig::HideUnavailableDevices));
 
     QObject::connect(m_backendObject, SIGNAL(volumeChanged(qreal)), q, SLOT(_k_volumeChanged(qreal)));
 
