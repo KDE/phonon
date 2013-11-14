@@ -12,7 +12,6 @@
 
 get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
-
 # Imported from KDE4Defaults.cmake
 # Keep this portion copy'n'pastable for updatability.
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -40,21 +39,11 @@ include(${phonon_cmake_module_dir}/MacroOptionalFindPackage.cmake)
 include(CheckCXXCompilerFlag)
 include(${phonon_cmake_module_dir}/MacroEnsureVersion.cmake)
 
+message(WARNING "How does one patch KDE2 under FreeBSD?")
 
 # Check Requirements
 
 # - Qt
-
-# Store CMAKE_MODULE_PATH and then append the current dir to it, so we are sure
-# we get the FindQt4.cmake located next to us and not a different one.
-# The original CMAKE_MODULE_PATH is restored later on.
-set(_phonon_cmake_module_path_back ${CMAKE_MODULE_PATH})
-set(CMAKE_MODULE_PATH ${phonon_cmake_module_dir} ${CMAKE_MODULE_PATH} )
-
-# # Tell FindQt4.cmake to point the QT_QTFOO_LIBRARY targets at the imported targets
-# # for the Qt libraries, so we get full handling of release and debug versions of the
-# # Qt libs and are flexible regarding the install location of Qt under Windows:
-# set(QT_USE_IMPORTED_TARGETS TRUE)
 
 find_package(Qt5Core REQUIRED)
 macro_log_feature(Qt5Core_FOUND "Qt5 Core (qtbase)" "" "" TRUE)
@@ -66,11 +55,11 @@ find_package(Qt5Widgets REQUIRED)
 macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets (qtbase)" "" "" TRUE)
 
 if (Qt5_POSITION_INDEPENDENT_CODE)
-   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
 # Compat variables for plugins.
-function(_QT4_QUERY_QMAKE VAR RESULT)
+function(PHONON_QUERY_QMAKE VAR RESULT)
     get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} LOCATION)
     execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} "-query" ${VAR}
                     RESULT_VARIABLE return_code
@@ -80,19 +69,16 @@ function(_QT4_QUERY_QMAKE VAR RESULT)
         STRING(REGEX REPLACE "(\r?\n)+$" "" output "${output}")
         set(${RESULT} ${output} PARENT_SCOPE)
     endif(NOT return_code)
-endfunction(_QT4_QUERY_QMAKE)
+endfunction(PHONON_QUERY_QMAKE)
 
-_qt4_query_qmake(QT_INSTALL_IMPORTS QT_IMPORTS_DIR)
-_qt4_query_qmake(QT_HOST_DATA QT_MKSPECS_DIR)
-_qt4_query_qmake(QT_INSTALL_PLUGINS QT_PLUGINS_DIR)
+phonon_query_qmake(QT_INSTALL_IMPORTS QT_IMPORTS_DIR)
+phonon_query_qmake(QT_HOST_DATA QT_MKSPECS_DIR)
+phonon_query_qmake(QT_INSTALL_PLUGINS QT_PLUGINS_DIR)
 
 set(QT_MKSPECS_DIR "${QT_MKSPECS_DIR}/mkspecs")
 
 # - Automoc
 set(CMAKE_AUTOMOC TRUE)
-
-# restore the original CMAKE_MODULE_PATH
-set(CMAKE_MODULE_PATH ${_phonon_cmake_module_path_back})
 
 # Set Installation Directories - TODO, port to ECM's KDEInstallDirs!
 
@@ -105,8 +91,6 @@ set(LIB_INSTALL_DIR             "${CMAKE_INSTALL_LIBDIR}" ) #  CACHE PATH "The s
 set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/qt5"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
 set(ICON_INSTALL_DIR            "${SHARE_INSTALL_PREFIX}/icons"             CACHE PATH "The icon install dir (default ${SHARE_INSTALL_PREFIX}/share/icons/)")
 set(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde5/services"     CACHE PATH "The install dir for service (desktop, protocol, ...) files")
-set(DBUS_INTERFACES_INSTALL_DIR "${SHARE_INSTALL_PREFIX}/dbus-1/interfaces" CACHE PATH "The dbus interfaces install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/interfaces)")
-set(DBUS_SERVICES_INSTALL_DIR   "${SHARE_INSTALL_PREFIX}/dbus-1/services"   CACHE PATH "The dbus services install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/services)")
 
 set(INSTALL_TARGETS_DEFAULT_ARGS RUNTIME DESTINATION "${BIN_INSTALL_DIR}"
                                  LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
@@ -118,8 +102,7 @@ if(APPLE)
                                      BUNDLE DESTINATION "${BUNDLE_INSTALL_DIR}")
     set(CMAKE_SHARED_MODULE_CREATE_C_FLAGS   "${CMAKE_SHARED_MODULE_CREATE_C_FLAGS}   -flat_namespace -undefined dynamic_lookup")
     set(CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS "${CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS} -flat_namespace -undefined dynamic_lookup")
-
-   set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
+    set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 endif(APPLE)
 
 # RPATH Handling
@@ -134,17 +117,15 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH  TRUE)
 list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemPlatformLibDir)
 list(FIND CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}" _isSystemCxxLibDir)
 if("${_isSystemPlatformLibDir}" STREQUAL "-1" AND "${_isSystemCxxLibDir}" STREQUAL "-1")
-   set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+    set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
 endif("${_isSystemPlatformLibDir}" STREQUAL "-1" AND "${_isSystemCxxLibDir}" STREQUAL "-1")
-
 
 # Uninstall Target
 if (NOT _phonon_uninstall_target_created)
-   set(_phonon_uninstall_target_created TRUE)
-   configure_file("${phonon_cmake_module_dir}/cmake_uninstall.cmake.in" "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake" @ONLY)
-   add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
+    set(_phonon_uninstall_target_created TRUE)
+    configure_file("${phonon_cmake_module_dir}/cmake_uninstall.cmake.in" "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake" @ONLY)
+    add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
 endif (NOT _phonon_uninstall_target_created)
-
 
 # Imported from FindKDE4Internal.cmake
 # Keep this portion copy'n'pastable for updatability.
