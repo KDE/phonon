@@ -39,7 +39,6 @@ ${phonon_LIB_SRCS}
 #    effect.cpp
 #    effectparameter.cpp
 #    effectwidget.cpp
-   globalconfig.cpp
    iodevicestream.cpp
    objectdescription.cpp
    phononnamespace.cpp
@@ -109,7 +108,6 @@ install(FILES
     effectparameter.h
     effectwidget.h
     frontend.h
-    globalconfig.h
     globaldescriptioncontainer.h
     player.h
     playerinterface.h

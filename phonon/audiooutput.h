@@ -63,8 +63,6 @@ private:
     P_DECLARE_PRIVATE(AudioOutput)
     Q_PRIVATE_SLOT(k_func(), void _k_volumeChanged(qreal))
     Q_PRIVATE_SLOT(k_func(), void _k_mutedChanged(bool))
-    Q_PRIVATE_SLOT(k_func(), void _k_revertFallback())
-    Q_PRIVATE_SLOT(k_func(), void _k_deviceListChanged())
 };
 
 } // namespace Phonon

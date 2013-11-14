@@ -74,7 +74,6 @@ protected:
 
 private:
     AudioOutputInterface *interface;
-    Phonon::AudioOutputDevice device;
     qreal volume;
     Category category;
     int deviceBeforeFallback;
