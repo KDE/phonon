@@ -37,19 +37,20 @@ class AudioOutputPrivate;
 class PHONON_EXPORT AudioOutput : public QObject, public AbstractOutput
 {
     Q_OBJECT
+    Q_PROPERTY(qreal volume READ volume WRITE setVolume NOTIFY volumeChanged)
+    Q_PROPERTY(bool muted READ isMuted WRITE setMuted NOTIFY mutedChanged)
+    Q_PROPERTY(AudioOutputDevice outputDevice READ outputDevice WRITE setOutputDevice NOTIFY outputDeviceChanged)
 public:
 #warning we need a way to wire category to PA category...
     explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
     explicit AudioOutput(QObject *parent = 0);
     qreal volume() const;
-    qreal volumeDecibel() const;
     Phonon::Category category() const;
     AudioOutputDevice outputDevice() const;
     bool isMuted() const;
 
 public Q_SLOTS:
     void setVolume(qreal newVolume);
-    void setVolumeDecibel(qreal newVolumeDecibel);
     bool setOutputDevice(const Phonon::AudioOutputDevice &newAudioOutputDevice);
     void setMuted(bool mute);
 

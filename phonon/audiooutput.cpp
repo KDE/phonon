@@ -106,26 +106,6 @@ qreal AudioOutput::volume() const
     return pow(d->interface->volume(), LOUDNESS_TO_VOLTAGE_EXPONENT);
 }
 
-#ifndef PHONON_LOG10OVER20
-#define PHONON_LOG10OVER20
-static const qreal log10over20 = qreal(0.1151292546497022842); // ln(10) / 20
-#endif // PHONON_LOG10OVER20
-
-#warning why
-qreal AudioOutput::volumeDecibel() const
-{
-    P_D(const AudioOutput);
-    if (d->muted || !d->interface)
-        return log(d->volume) / log10over20;
-    return 0.67 * log(d->interface->volume()) / log10over20;
-}
-
-void AudioOutput::setVolumeDecibel(qreal newVolumeDecibel)
-{
-#warning why
-    setVolume(exp(newVolumeDecibel * log10over20));
-}
-
 bool AudioOutput::isMuted() const
 {
     P_D(const AudioOutput);
