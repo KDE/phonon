@@ -35,7 +35,6 @@ ${phonon_LIB_SRCS}
    abstractmediastream.cpp
 #   audiodataoutput.cpp
    audiooutput.cpp
-   backendcapabilities.cpp
 #    effect.cpp
 #    effectparameter.cpp
 #    effectwidget.cpp
@@ -101,7 +100,6 @@ install(FILES
     audiodataoutputinterface.h
     audiooutput.h
     audiooutputinterface.h
-    backendcapabilities.h
     backendinterface.h
     effect.h
     effectinterface.h
