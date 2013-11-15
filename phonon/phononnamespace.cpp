@@ -120,19 +120,6 @@ QDebug operator <<(QDebug dbg, const Phonon::Category &category)
     return dbg.maybeSpace();
 }
 
-QDebug operator <<(QDebug dbg, const Phonon::Capture::DeviceType &type)
-{
-    switch (type) {
-    case Phonon::Capture::AudioType:
-        dbg.space() << "Phonon::Capture::AudioType";
-        break;
-    case Phonon::Capture::VideoType:
-        dbg.space() << "Phonon::Capture::VideoType";
-        break;
-    }
-    return dbg.maybeSpace();
-}
-
 QDebug operator <<(QDebug dbg, const Phonon::ErrorType &errorType)
 {
     switch (errorType) {
@@ -161,11 +148,6 @@ static int registerPhononMetaTypes()
     // need those for QSettings
     qRegisterMetaType<QList<int> >();
     qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
-
-    qRegisterMetaType<Phonon::DeviceAccess>();
-    qRegisterMetaTypeStreamOperators<Phonon::DeviceAccess>("Phonon::DeviceAccess");
-    qRegisterMetaType<Phonon::DeviceAccessList>();
-    qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("Phonon::DeviceAccessList");
 
 #warning anything
     return 0; // something

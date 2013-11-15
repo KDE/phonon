@@ -38,11 +38,11 @@ namespace Phonon
     enum ObjectDescriptionType
     {
         AudioOutputDeviceType,
+        AudioCaptureDeviceType,
+        VideoCaptureDeviceType,
         EffectType,
         AudioChannelType,
-        SubtitleType,
-        AudioCaptureDeviceType,
-        VideoCaptureDeviceType
+        SubtitleType
 
         //VideoOutputDeviceType,
         //AudioCodecType,
@@ -156,58 +156,14 @@ class PHONON_EXPORT AudioChannelDescription : public DescriptionBase
 };
 
 
-
-/**
- * \short Information about how to access a device
- * \ingroup BackendInformation
- *
- * To access a device, one needs the driver name (alsa, oss, pulse for example),
- * and the device name (dependent on the driver name). This type is a pair of a
- * driver and a device name.
- *
- * \see DeviceAccessList
- */
-typedef QPair<QByteArray, QString> DeviceAccess;
-
-/**
- * \short Information about methods for accessing a device
- * \ingroup BackendInformation
- *
- * It is used by the platform plugin or the backend to provide information about how
- * to access a certain device. To access a device, one needs the driver name (alsa, oss,
- * pulse for example), and the device name (dependent on the driver name). This type
- * is essentialy a list of pairs of driver and device names.
- *
- * It can be put in an ObjectDescriptionData property list.
- *
- * \see DeviceAccess
- * \see AudioCaptureDevice
- */
-typedef QList<DeviceAccess> DeviceAccessList;
-
-
-
 } //namespace Phonon
 
 Q_DECLARE_METATYPE(Phonon::AudioOutputDevice)
 Q_DECLARE_METATYPE(QList<Phonon::AudioOutputDevice>)
 
-#ifndef PHONON_NO_AUDIOCAPTURE
-Q_DECLARE_METATYPE(Phonon::AudioCaptureDevice)
-Q_DECLARE_METATYPE(QList<Phonon::AudioCaptureDevice>)
-#endif //PHONON_NO_AUDIOCAPTURE
-
-#ifndef PHONON_NO_VIDEOCAPTURE
-Q_DECLARE_METATYPE(Phonon::VideoCaptureDevice)
-Q_DECLARE_METATYPE(QList<Phonon::VideoCaptureDevice>)
-#endif //PHONON_NO_VIDEOCAPTURE
-
 #ifndef QT_NO_PHONON_EFFECT
 Q_DECLARE_METATYPE(QList<Phonon::EffectDescription>)
 Q_DECLARE_METATYPE(Phonon::EffectDescription)
 #endif //QT_NO_PHONON_EFFECT
-
-Q_DECLARE_METATYPE(Phonon::DeviceAccess)
-Q_DECLARE_METATYPE(Phonon::DeviceAccessList)
 
 #endif // PHONON_OBJECTDESCRIPTION_H

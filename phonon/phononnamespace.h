@@ -79,14 +79,6 @@ enum CaptureCategory {
     ControlCaptureCategory = AccessibilityCategory
 };
 
-#warning why namespace?
-namespace Capture {
-enum DeviceType {
-    AudioType,
-    VideoType
-};
-} // namespace Capture
-
 enum ErrorType {
     NoError = 0,
     NormalError = 1,
@@ -100,7 +92,6 @@ PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MetaData &);
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::State &);
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Category &);
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::CaptureCategory &);
-PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::Capture::DeviceType &);
 PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::ErrorType &);
 
 } // namespace Phonon
