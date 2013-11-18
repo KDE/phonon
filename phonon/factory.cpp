@@ -37,12 +37,12 @@
 #include <QtCore/QList>
 #include <QtCore/QPluginLoader>
 #include <QtCore/QPointer>
+#include <QtCore/QSettings>
 #ifndef PHONON_NO_DBUS
 #include <QtDBus/QtDBus>
 #endif
 #include <QApplication>
 #include <QMessageBox>
-
 namespace Phonon
 {
 
