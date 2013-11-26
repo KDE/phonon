@@ -1,5 +1,4 @@
 /*
-    Copyright (C) 2004-2007 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2013 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -20,30 +19,34 @@
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHONON_FACTORY_P_H
-#define PHONON_FACTORY_P_H
+#ifndef PHONON_VIDEOITEM_H
+#define PHONON_VIDEOITEM_H
 
-class QObject;
+#include <QQuickItem>
+
+#include "abstractoutput.h"
 
 namespace Phonon {
 
-class BackendInterface;
+class VideoItemPrivate;
+class PHONON_EXPORT VideoItem : public QQuickItem, public AbstractOutput
+{
+    Q_OBJECT
+public:
+    explicit VideoItem(QQuickItem *parent = 0);
+    ~VideoItem();
 
-namespace Factory {
+#warning private class
+private slots:
+    void onFrameReady();
 
-#warning consider creating an int command...
-QObject *createPlayer(QObject *parent = 0);
-QObject *createEffect(int effectId, QObject *parent = 0);
-QObject *createVolumeFaderEffect(QObject *parent = 0);
-QObject *createAudioOutput(QObject *parent = 0);
-QObject *createVideoWidget(QObject *parent = 0);
-QObject *createAudioDataOutput(QObject *parent = 0);
-QObject *createVideoSurfaceOutput(QObject *parent = 0);
+protected:
+    virtual QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData);
 
-QObject *backend();
-BackendInterface *interface();
+private:
+    P_DECLARE_PRIVATE(VideoItem)
+};
 
-} // namespace Factory
 } // namespace Phonon
 
-#endif // PHONON_FACTORY_P_H
+#endif // PHONON_VIDEOITEM_H

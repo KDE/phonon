@@ -47,6 +47,7 @@ ${phonon_LIB_SRCS}
 #    volumeslider.cpp
 #    videoplayer.cpp
     videowidget.cpp
+    videoitem.cpp
 
 # QTC Compat
     audiooutput_p.h
@@ -60,12 +61,14 @@ ${phonon_LIB_SRCS}
     phonondefs.h
 
     audiooutputinterface.h
+    videosurfaceinterface.h
    )
 
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 
 add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
 qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets Quick)
+target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_LIBRARY})
 
 set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
                                            VERSION ${PHONON_LIB_VERSION}
@@ -114,4 +117,8 @@ install(FILES
     volumeslider.h
     ${phonon_VGO_HDRS}
     phononnamespace.h
+
+    videosurfaceinterface.h
+    videoitem.h
+
     DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)

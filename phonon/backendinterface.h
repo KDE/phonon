@@ -38,6 +38,7 @@ class BackendInterface
 public:
     virtual ~BackendInterface() {}
 
+#warning reorder maybe
     enum Class {
         PlayerClass,
         VolumeFaderEffectClass,
@@ -46,7 +47,8 @@ public:
         VisualizationClass,
         VideoDataOutputClass,
         EffectClass,
-        VideoWidgetClass
+        VideoWidgetClass,
+        VideoSurfaceOutputClass
     };
 
 #warning generic BS
