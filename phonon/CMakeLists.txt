@@ -31,7 +31,6 @@ set(phonon_LIB_SRCS
 # random plunder battlefield4 sources
 set(phonon_LIB_SRCS
 ${phonon_LIB_SRCS}
-#   abstractaudiooutput_p.cpp
    abstractmediastream.cpp
 #   audiodataoutput.cpp
    audiooutput.cpp
@@ -41,7 +40,6 @@ ${phonon_LIB_SRCS}
    iodevicestream.cpp
    objectdescription.cpp
    phononnamespace.cpp
-#   pulsesupport.cpp
 #    seekslider.cpp
    streaminterface.cpp
 #    swiftslider.cpp
@@ -57,8 +55,6 @@ ${phonon_LIB_SRCS}
     phonondefs_p.h
     phononnamespace_p.h
     phononpimpl_p.h
-#    pulsestream_p.h
-#    qsettingsgroup_p.h
     videowidget_p.h
     videowidgetinterface.h
     phonondefs.h
