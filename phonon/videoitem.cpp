@@ -43,7 +43,6 @@ public:
 
     virtual char const *const *attributeNames() const Q_DECL_OVERRIDE
     {
-            qDebug() << Q_FUNC_INFO;
         static const char *names[] = {
             "qt_VertexPosition",
             "qt_VertexTexCoord",
@@ -53,10 +52,8 @@ public:
     }
 
 protected:
-
     virtual const char *vertexShader() const Q_DECL_OVERRIDE
     {
-            qDebug() << Q_FUNC_INFO;
         const char *shader =
         "uniform highp mat4 qt_Matrix;                      \n"
         "attribute highp vec4 qt_VertexPosition;            \n"
@@ -71,7 +68,6 @@ protected:
 
     virtual const char *fragmentShader() const Q_DECL_OVERRIDE
     {
-            qDebug() << Q_FUNC_INFO;
         static const char *shader =
         "uniform sampler2D yTexture;"
         "uniform sampler2D uTexture;"
@@ -86,7 +82,7 @@ protected:
         "    mediump float Y = texture2D(yTexture, qt_TexCoord).r;"
         "    mediump float U = texture2D(uTexture, qt_TexCoord).r;"
         "    mediump float V = texture2D(vTexture, qt_TexCoord).r;"
-        "    mediump vec4 color = vec4(Y, U, V, 1.);"
+        "    mediump vec4 color = vec4(Y, V, U, 1.);"
         "    gl_FragColor = colorMatrix * color * opacity;"
         "}";
         return shader;
@@ -94,7 +90,6 @@ protected:
 
     virtual void initialize() Q_DECL_OVERRIDE
     {
-        qDebug() << Q_FUNC_INFO;
         m_id_matrix = program()->uniformLocation("qt_Matrix");
         m_id_yTexture = program()->uniformLocation("yTexture");
         m_id_uTexture = program()->uniformLocation("uTexture");
@@ -251,21 +246,26 @@ void VideoMaterial::bind()
                 m_textureSize = m_interface->frame()->size();
             }
 
-            functions->glActiveTexture(GL_TEXTURE1);
-            int i = 1;
-            bindTexture(m_textureIds[1],
-                    m_interface->frame()->visiblePitch[i],
-                    m_interface->frame()->visibleLines[i],
-                    m_interface->frame()->plane[i].data(),
-                    m_interface->frame()->pitch[i]);
+            const VideoFrame *frame = m_interface->frame();
+
             functions->glActiveTexture(GL_TEXTURE2);
-#warning two and one are inverted.....
-            i = 2;
+            int i = 2;
             bindTexture(m_textureIds[2],
                     m_interface->frame()->visiblePitch[i],
                     m_interface->frame()->visibleLines[i],
                     m_interface->frame()->plane[i].data(),
                     m_interface->frame()->pitch[i]);
+            qDebug() << "plane" << i << "pitch/lines" << frame->pitch[i] << "/" << frame->lines[i] << "size" << frame->plane[i].size();
+
+            functions->glActiveTexture(GL_TEXTURE1);
+            i = 1;
+            bindTexture(m_textureIds[1],
+                    m_interface->frame()->visiblePitch[i],
+                    m_interface->frame()->visibleLines[i],
+                    m_interface->frame()->plane[i].data(),
+                    m_interface->frame()->pitch[i]);
+            qDebug() << "plane" << i << "pitch/lines" << frame->pitch[i] << "/" << frame->lines[i] << "size" << frame->plane[i].size();
+
             functions->glActiveTexture(GL_TEXTURE0); // Finish with 0 as default texture unit
             i = 0;
             bindTexture(m_textureIds[0],
@@ -273,11 +273,7 @@ void VideoMaterial::bind()
                     m_interface->frame()->visibleLines[i],
                     m_interface->frame()->plane[i].data(),
                     m_interface->frame()->pitch[i]);
-
-//            m_interface->frame()->unmap();
-//        }
-#warning mooo
-//        m_frame = VideoFrame();
+            qDebug() << "plane" << i << "pitch/lines" << frame->pitch[i] << "/" << frame->lines[i] << "size" << frame->plane[i].size();
     } else {
         functions->glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, m_textureIds[1]);
@@ -350,11 +346,6 @@ public:
         Q_ASSERT(m_backendObject);
         interface = qobject_cast<VideoSurfaceOutputInterface *>(m_backendObject);
         Q_ASSERT(interface);
-//        if (!m_backendObject || !interface) {
-//            frame = new VideoFrame;
-//        } else
-//            frame = const_cast<VideoFrame *>(interface->frame());
-//        Q_ASSERT(frame);
     }
 
     VideoSurfaceOutputInterface *interface;
