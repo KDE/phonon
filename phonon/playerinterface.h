@@ -45,7 +45,7 @@ public:
     virtual void setSource(const Source &) = 0;
 
     // Output linking
-    virtual void addOutput(QObject *output) = 0;
+    virtual bool addOutput(QObject *output) = 0;
 
     // Time
     virtual qint32 tickInterval() const = 0;

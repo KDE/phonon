@@ -64,8 +64,7 @@ public:
 //    ErrorType errorType() const;
 
     // Outputs are unordered and all considered to be equal.
-#warning need result ... bool? signal?
-    void addOutput(AbstractOutput *output);
+    bool addOutput(AbstractOutput *output);
 
 public Q_SLOTS:
     void setTickInterval(qint32 newTickInterval);

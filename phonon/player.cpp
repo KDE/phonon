@@ -67,7 +67,6 @@ Phonon::State Player::state() const
     return d->interface->state();
 }
 
-#warning tick interval is of questionable use
 void Player::setTickInterval(qint32 newTickInterval)
 {
     P_D(Player);
@@ -159,17 +158,18 @@ qint64 Player::remainingTime() const
     return ret;
 }
 
-#warning bool and drop qwarning
-void Player::addOutput(AbstractOutput *output)
+bool Player::addOutput(AbstractOutput *output)
 {
     P_D(Player);
-    if (d->outputs.contains(output))
-        return;
-    d->outputs.append(output);
     d->createBackendObject();
-    if (!d->interface)
-        qWarning("No PlayerInterface instance present.");
-    d->interface->addOutput(output->k_func()->backendObject());
+    if (!d->interface) // Couldn't create object.
+        return false;
+    if (d->outputs.contains(output)) // Already linked.
+        return false;
+    const bool ret = d->interface->addOutput(output->k_func()->backendObject());
+    if (ret) // Only add to list iff linked by the backend.
+        d->outputs.append(output);
+    return ret;
 }
 
 Source Player::source() const
