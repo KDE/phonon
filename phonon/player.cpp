@@ -195,8 +195,6 @@ void Player::setSource(const Source &newSource)
 
     d->abstractStream = 0; // abstractStream auto-deletes
 
-    d->playingQueuedSource = false;
-
     d->interface->setSource(d->source);
 }
 

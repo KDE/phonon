@@ -60,7 +60,6 @@ protected:
         , metaData()
         , state(Phonon::StoppedState)
         , abstractStream(0)
-        , playingQueuedSource(false)
         , errorType(Phonon::NormalError)
         , interface(0)
     {}
@@ -72,7 +71,6 @@ protected:
     QMultiMap<MetaData, QString> metaData;
     State state;
     AbstractMediaStream *abstractStream;
-    bool playingQueuedSource;
     ErrorType errorType;
     Source source;
 
