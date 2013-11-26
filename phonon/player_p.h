@@ -74,7 +74,7 @@ protected:
     AbstractMediaStream *abstractStream;
     bool playingQueuedSource;
     ErrorType errorType;
-    Source mediaSource;
+    Source source;
 
     QList<AbstractOutput *> outputs;
 

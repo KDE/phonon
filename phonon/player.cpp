@@ -175,14 +175,14 @@ bool Player::addOutput(AbstractOutput *output)
 Source Player::source() const
 {
     P_D(const Player);
-    return d->mediaSource;
+    return d->source;
 }
 
 void Player::setSource(const Source &newSource)
 {
     P_D(Player);
     if (!d->interface) {
-        d->mediaSource = newSource;
+        d->source = newSource;
         return;
     }
 
@@ -191,13 +191,13 @@ void Player::setSource(const Source &newSource)
     // first call stop as that often is the expected state for setting a new URL
     stop();
 
-    d->mediaSource = newSource;
+    d->source = newSource;
 
     d->abstractStream = 0; // abstractStream auto-deletes
 
     d->playingQueuedSource = false;
 
-    d->interface->setSource(d->mediaSource);
+    d->interface->setSource(d->source);
 }
 
 void PlayerPrivate::createBackendObject()
@@ -270,7 +270,7 @@ void PlayerPrivate::setupBackendObject()
         state = backendState;
     }
 
-    interface->setSource(mediaSource);
+    interface->setSource(source);
 }
 
 #warning why are metadata cached instead of passing it through? also why is there no interface getter for it...
