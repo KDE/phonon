@@ -158,17 +158,18 @@ qint64 Player::remainingTime() const
     return ret;
 }
 
-bool Player::addOutput(AbstractOutput *output)
+bool Player::addOutput(QObject *output)
 {
     P_D(Player);
+    AbstractOutput *abstractOutput = dynamic_cast<AbstractOutput *>(output);
     d->createBackendObject();
-    if (!d->interface) // Couldn't create object.
+    if (!d->interface || !abstractOutput) // Couldn't create object or output is rubbish.
         return false;
-    if (d->outputs.contains(output)) // Already linked.
+    if (d->outputs.contains(abstractOutput)) // Already linked.
         return false;
-    const bool ret = d->interface->addOutput(output->k_func()->backendObject());
+    const bool ret = d->interface->addOutput(abstractOutput->k_func()->backendObject());
     if (ret) // Only add to list iff linked by the backend.
-        d->outputs.append(output);
+        d->outputs.append(abstractOutput);
     return ret;
 }
 

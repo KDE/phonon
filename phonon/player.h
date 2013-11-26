@@ -63,10 +63,11 @@ public:
 //    QString errorString() const;
 //    ErrorType errorType() const;
 
-    // Outputs are unordered and all considered to be equal.
-    bool addOutput(AbstractOutput *output);
-
 public Q_SLOTS:
+    // Outputs are unordered and all considered to be equal.
+#warning sigh. qml needs a qobject derivate or it cannot call the function............ type should be AbstractOutput
+    bool addOutput(QObject *output);
+
     void setTickInterval(qint32 newTickInterval);
     void play();
     void pause();
