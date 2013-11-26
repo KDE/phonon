@@ -23,8 +23,6 @@
 #ifndef PHONON_FACTORY_P_H
 #define PHONON_FACTORY_P_H
 
-#include "phonon_export.h"
-
 class QObject;
 
 namespace Phonon {

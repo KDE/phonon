@@ -34,7 +34,6 @@ class AbstractOutput;
 class PlayerPrivate;
 
 #warning ADD convenience statics for play() with limited control
-#warning time signals and properties need a name alignment ... tick vs. time vs. length
 #warning should effects be set on the player rather than on the output? vlc doesnt really support per-output
 
 class PHONON_EXPORT Player : public QObject, public Frontend

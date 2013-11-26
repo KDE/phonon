@@ -168,6 +168,6 @@ void AudioOutputPrivate::_k_mutedChanged(bool newMuted)
     emit q->mutedChanged(newMuted);
 }
 
-} //namespace Phonon
+} // namespace Phonon
 
 #include "moc_audiooutput.cpp"

@@ -33,7 +33,6 @@ class QString;
 namespace Phonon {
 
 class AudioOutputPrivate;
-
 class PHONON_EXPORT AudioOutput : public QObject, public AbstractOutput
 {
     Q_OBJECT
