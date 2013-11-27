@@ -28,7 +28,7 @@
 namespace Phonon
 {
 
-class PHONON_EXPORT SourceControlPrivate : public QSharedData
+class SourceControlPrivate : public QSharedData
 {
 public:
     explicit SourceControlPrivate(Source &source);
