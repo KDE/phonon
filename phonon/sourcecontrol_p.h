@@ -35,6 +35,7 @@ public:
     virtual ~SourceControlPrivate();
 
     Source m_source;
+    bool m_active;
 };
 
 } // Phonon namespace

@@ -37,6 +37,7 @@ public:
     virtual ~SourceControl();
 
     Source source() const;
+    bool isActive() const;
 
 protected:
     QExplicitlySharedDataPointer<SourceControlPrivate> d;

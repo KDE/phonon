@@ -48,8 +48,14 @@ Source SourceControl::source() const
     return d->m_source;
 }
 
+bool SourceControl::isActive() const
+{
+    return d->m_active;
+}
+
 SourceControlPrivate::SourceControlPrivate(Source &source)
     : m_source(source)
+    , m_active(false)
 {
 
 }
