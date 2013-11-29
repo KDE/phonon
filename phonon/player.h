@@ -44,6 +44,9 @@ class PHONON_EXPORT Player : public QObject, public Frontend
     Q_PROPERTY(qint64 totalTime READ totalTime NOTIFY totalTimeChanged)
     Q_PROPERTY(qint64 remainingTime READ remainingTime NOTIFY remainingTimeChanged)
     Q_PROPERTY(Source source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
+    Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged)
+    Q_PROPERTY(bool stopped READ isStopped NOTIFY stoppedChanged)
 #warning notify missing
     Q_PROPERTY(QUrl url READ url WRITE setUrl)
 public:
@@ -63,6 +66,10 @@ public:
     qint64 time() const;
     qint64 totalTime() const;
     qint64 remainingTime() const;
+
+    bool isPlaying() const;
+    bool isPaused() const;
+    bool isStopped() const;
 
 #warning error magic TBD
 //    QString errorString() const;
@@ -92,6 +99,10 @@ Q_SIGNALS:
 #warning not emitted by anything
     void remainingTimeChanged(qint64 remainingTime);
 
+    void playingChanged(bool playing);
+    void pausedChanged(bool paused);
+    void stoppedChanged(bool stopped);
+
     // We may not want this here at all and simply assume that changes via setSource are instant.
     // Additionally source tracking would happen through the playlist then?
     // For QML a sourceChanged would still be handy though.
@@ -99,7 +110,8 @@ Q_SIGNALS:
 
 private:
     P_DECLARE_PRIVATE(Player)
-    Q_PRIVATE_SLOT(k_func(), void _k_metaDataChanged(const QMultiMap<MetaData, QString> &))
+    Q_PRIVATE_SLOT(k_func(), void _p_metaDataChanged(const QMultiMap<MetaData, QString> &))
+    Q_PRIVATE_SLOT(k_func(), void _p_stateChanged(Phonon::State, Phonon::State))
 };
 
 } // namespace Phonon

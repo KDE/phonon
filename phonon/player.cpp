@@ -162,6 +162,24 @@ qint64 Player::remainingTime() const
     return ret;
 }
 
+bool Player::isPlaying() const
+{
+    P_D(const Player);
+    return state() == PlayingState;
+}
+
+bool Player::isPaused() const
+{
+    P_D(const Player);
+    return state() == PausedState;
+}
+
+bool Player::isStopped() const
+{
+    P_D(const Player);
+    return state() == StoppedState;
+}
+
 bool Player::addOutput(QObject *output)
 {
     P_D(Player);
@@ -241,7 +259,7 @@ void PlayerPrivate::setupBackendObject()
 
 #warning we definitely need to cut down on queuing
     QObject::connect(m_backendObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
-                     q, SIGNAL(stateChanged(Phonon::State, Phonon::State)),
+                     q, SLOT(_p_stateChanged(Phonon::State, Phonon::State)),
                      Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(timeChanged(qint64)),
                      q, SIGNAL(timeChanged(qint64)),
@@ -256,7 +274,7 @@ void PlayerPrivate::setupBackendObject()
                      q, SIGNAL(totalTimeChanged(qint64)),
                      Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(metaDataChanged(QMultiMap<MetaData, QString>)),
-                     q, SLOT(_k_metaDataChanged(QMultiMap<MetaData, QString>)),
+                     q, SLOT(_p_metaDataChanged(QMultiMap<MetaData, QString>)),
                      Qt::QueuedConnection);
     QObject::connect(m_backendObject, SIGNAL(sourceChanged(Source)),
                      q, SIGNAL(sourceChanged(Source)),
@@ -277,10 +295,46 @@ void PlayerPrivate::setupBackendObject()
 }
 
 #warning why are metadata cached instead of passing it through? also why is there no interface getter for it...
-void PlayerPrivate::_k_metaDataChanged(const QMultiMap<MetaData, QString> &newMetaData)
+void PlayerPrivate::_p_metaDataChanged(const QMultiMap<MetaData, QString> &newMetaData)
 {
     metaData = newMetaData;
     emit q_func()->metaDataChanged();
+}
+
+void PlayerPrivate::_p_stateChanged(State newState, State oldState)
+{
+    P_Q(Player);
+
+    if (newState == oldState)
+        return;
+
+    state = newState;
+
+    switch (newState) {
+    case PlayingState:
+        emit q->playingChanged(true);
+        break;
+    case PausedState:
+        emit q->pausedChanged(true);
+        break;
+    case StoppedState:
+        emit q->stoppedChanged(true);
+        break;
+    }
+
+    switch (oldState) {
+    case PlayingState:
+        emit q->playingChanged(false);
+        break;
+    case PausedState:
+        emit q->pausedChanged(false);
+        break;
+    case StoppedState:
+        emit q->stoppedChanged(false);
+        break;
+    }
+
+    emit q->stateChanged(newState, oldState);
 }
 
 } //namespace Phonon

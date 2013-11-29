@@ -47,12 +47,8 @@ protected:
 #warning this really needs to become virtual in frontendprivate
     void setupBackendObject();
 
-    void _k_resumePlay();
-    void _k_resumePause();
-    void _k_metaDataChanged(const QMultiMap<MetaData, QString> &);
-    void _k_aboutToFinish();
-    void _k_currentSourceChanged(const Source &);
-    PHONON_EXPORT void _k_stateChanged(Phonon::State, Phonon::State);
+    void _p_metaDataChanged(const QMultiMap<MetaData, QString> &);
+    void _p_stateChanged(Phonon::State newState, Phonon::State oldState);
     void streamError(Phonon::ErrorType, const QString &);
 
     PlayerPrivate()
