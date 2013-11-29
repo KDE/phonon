@@ -104,26 +104,30 @@ qint64 Player::time() const
 void Player::play()
 {
     P_D(Player);
-    d->interface->play();
+    if (d->interface)
+        d->interface->play();
 }
 
 void Player::pause()
 {
     P_D(Player);
-    d->interface->pause();
+    if (d->interface)
+        d->interface->pause();
 }
 
 void Player::stop()
 {
 #warning stop needs to force a state reset including signals (i.e. stop should not only stop but cause the gui to reflect that...)
     P_D(Player);
-    d->interface->stop();
+    if (d->interface)
+        d->interface->stop();
 }
 
 void Player::seek(qint64 time)
 {
     P_D(Player);
-    d->interface->seek(time);
+    if (d->interface)
+        d->interface->seek(time);
 }
 
 QStringList Player::metaData(MetaData f) const
