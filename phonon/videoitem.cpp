@@ -348,6 +348,8 @@ public:
         Q_ASSERT(interface);
     }
 
+    QRectF paintRect();
+
     VideoSurfaceOutputInterface *interface;
 
 private:
@@ -372,6 +374,36 @@ VideoItem::~VideoItem()
 void VideoItem::onFrameReady()
 {
     update();
+}
+
+QRectF VideoItemPrivate::paintRect()
+{
+    P_Q(VideoItem);
+
+    const QRectF rect(0, 0, q->width(), q->height());
+//    const QRectF absoluteRect(q->x(), q->y(), q->width(), q->height());
+
+//    if (!m_geometryDirty && m_lastRect == absoluteRect)
+//        return;
+
+//    if (m_nativeSize.isEmpty()) {
+//        //this is necessary for item to receive the
+//        //first paint event and configure video surface.
+//        m_contentRect = rect;
+//    } else if (m_fillMode == Stretch) {
+//        m_contentRect = rect;
+//    } else if (m_fillMode == PreserveAspectFit || m_fillMode == PreserveAspectCrop) {
+        QSizeF scaled = interface->frame()->size();
+        scaled.scale(rect.size(), /*m_fillMode == PreserveAspectFit ?*/
+                         Qt::KeepAspectRatio /*: Qt::KeepAspectRatioByExpanding*/);
+
+        QRectF m_contentRect = QRectF(QPointF(), scaled);
+        m_contentRect.moveCenter(rect.center());
+        return m_contentRect;
+//    }
+
+//    if (m_backend)
+//        m_backend->updateGeometry();
 }
 
 QSGNode *VideoItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeData *updatePaintNodeData)
@@ -402,14 +434,19 @@ QSGNode *VideoItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
 
     QSGGeometry::TexturedPoint2D *v = g->vertexDataAsTexturedPoint2D();
 
+    QRectF paintRect = d->paintRect();
     // top left
-    v->set(0, 0, 0, 0);
+    v->set(paintRect.topLeft().x(), paintRect.topLeft().y(),
+           0, 0);
     // bottom left
-    (++v)->set(0, height(), 0, 1);
+    (++v)->set(paintRect.bottomLeft().x(), paintRect.bottomLeft().y(),
+               0, 1);
     // top right
-    (++v)->set(width(), 0, 1, 0);
+    (++v)->set(paintRect.topRight().x(), paintRect.topRight().y(),
+               1, 0);
     // bottom right
-    (++v)->set(width(), height(), 1, 1);
+    (++v)->set(paintRect.bottomRight().x(), paintRect.bottomRight().y(),
+               1, 1);
 
     if (!n->geometry())
         n->setGeometry(g);
