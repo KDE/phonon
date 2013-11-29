@@ -27,6 +27,7 @@
 #include "source.h"
 
 #include <QtCore/QObject>
+#include <QtCore/QUrl>
 
 namespace Phonon {
 
@@ -43,6 +44,8 @@ class PHONON_EXPORT Player : public QObject, public Frontend
     Q_PROPERTY(qint64 totalTime READ totalTime NOTIFY totalTimeChanged)
     Q_PROPERTY(qint64 remainingTime READ remainingTime NOTIFY remainingTimeChanged)
     Q_PROPERTY(Source source READ source WRITE setSource NOTIFY sourceChanged)
+#warning notify missing
+    Q_PROPERTY(QUrl url READ url WRITE setUrl)
 public:
     Player(QObject *parent = 0);
     ~Player();
@@ -55,6 +58,8 @@ public:
     QMultiMap<MetaData, QString> metaData() const;
     Source source() const;
     void setSource(const Source &source);
+    QUrl url() const { return source().url(); }
+    void setUrl(const QUrl &url) { setSource(Source(url)); }
     qint64 time() const;
     qint64 totalTime() const;
     qint64 remainingTime() const;
