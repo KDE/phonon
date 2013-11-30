@@ -45,13 +45,49 @@ public:
 private:
     P_DECLARE_PUBLIC(SourceControl)
     Q_DISABLE_COPY(SourceControlPrivate);
+};
+
+class VideoSourceControlPrivate : public SourceControlPrivate
+{
+public:
+    explicit VideoSourceControlPrivate(Source &source);
+    virtual ~VideoSourceControlPrivate();
+
+    VideoSourceControlInterface *m_interface;
+
+    VideoSourceControl::Menu m_currentMenu;
+    int m_currentChapter;
+    int m_currentAngle;
+    int m_currentTitle;
+    bool m_autoplayTitlesEnabled;
+    int m_audioChannel;
 
 protected:
-    virtual void createBackendObject() = 0;
+    virtual void createBackendObject();
+    virtual void setupBackendObject();
 
 private:
-    P_DECLARE_PUBLIC(SourceControl)
-    Q_DISABLE_COPY(SourceControlPrivate)
+    P_DECLARE_PUBLIC(VideoSourceControl)
+    Q_DISABLE_COPY(VideoSourceControlPrivate);
+};
+
+class AudioSourceControlPrivate : public SourceControlPrivate
+{
+public:
+    explicit AudioSourceControlPrivate(Source &source);
+    virtual ~AudioSourceControlPrivate();
+
+    AudioSourceControlInterface *m_interface;
+
+    int m_currentTrack;
+
+protected:
+    virtual void createBackendObject();
+    virtual void setupBackendObject();
+
+private:
+    P_DECLARE_PUBLIC(AudioSourceControl)
+    Q_DISABLE_COPY(AudioSourceControlPrivate);
 };
 
 } // Phonon namespace

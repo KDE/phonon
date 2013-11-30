@@ -48,7 +48,9 @@ public:
         VideoDataOutputClass,
         EffectClass,
         VideoWidgetClass,
-        VideoSurfaceOutputClass
+        VideoSurfaceOutputClass,
+        VideoSourceControlClass,
+        AudioSourceControlClass
     };
 
 #warning generic BS

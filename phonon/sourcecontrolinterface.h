@@ -27,6 +27,8 @@
 
 #include "sourcecontrol.h"
 
+#include <QtCore/QSet>
+
 namespace Phonon
 {
 
@@ -40,8 +42,68 @@ public:
     virtual bool isActive() const = 0;
 };
 
+class VideoSourceControlInterface : public SourceControlInterface
+{
+public:
+    virtual bool supportsMenus() const = 0;
+    virtual QSet<VideoSourceControl::Menu> availableMenus() const = 0;
+    virtual VideoSourceControl::Menu currentMenu() const = 0;
+    virtual void setCurrentMenu(VideoSourceControl::Menu menu) = 0;
+
+    virtual bool supportsChapters() const = 0;
+    virtual int chapterCount() const = 0;
+    virtual int currentChapter() const = 0;
+    virtual void setCurrentChapter(int chapterNumber) = 0;
+
+    virtual bool supportsAngles() const = 0;
+    virtual int angleCount() const = 0;
+    virtual int currentAngle() = 0;
+    virtual void setCurrentAngle(int angleNumber) = 0;
+
+    virtual bool supportsTitles() const = 0;
+    virtual bool isAutoplayingTitles() const = 0;
+    virtual void setAutoplayTitles(bool enable) = 0;
+    virtual int titleCount() const = 0;
+    virtual int currentTitle() const = 0;
+    virtual void setCurrentTitle(int titleNumber) = 0;
+
+    virtual bool supportsAudioChannels() const = 0;
+    virtual int audioChannelCount() const = 0;
+    virtual int audioChannel() const = 0;
+    virtual void setAudioChannel(int channelNumber) = 0;
+
+Q_SIGNALS:
+    virtual void availableMenusChanged() = 0;
+    virtual void currentMenuChanged(VideoSourceControl::Menu menu) = 0;
+
+    virtual void chapterCountChanged(int count) = 0;
+    virtual void currentChapterChanged(int chapterNumber) = 0;
+
+    virtual void angleCountChanged(int count) = 0;
+    virtual void currentAngleChanged(int angleNumber) = 0;
+
+    virtual void titleCountChanged(int count) = 0;
+    virtual void currentTitleChanged(int titleNumber) = 0;
+
+    virtual void audioChannelCountChanged(int count) = 0;
+};
+
+class AudioSourceControlInterface : public SourceControlInterface
+{
+public:
+    virtual bool supportsTracks() const = 0;
+    virtual int trackCount() const = 0;
+    virtual int trackNumber() const = 0;
+    virtual void setTrackNumber(int trackNumber) = 0;
+
+Q_SIGNALS:
+    virtual void trackCountChanged(int count) = 0;
+    virtual void currentTrackChanged(int trackNumber) = 0;
+};
+
 } // namespace Phonon
 
-Q_DECLARE_INTERFACE(Phonon::SourceControlInterface, "0SourceControlInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::VideoSourceControlInterface, "0VideoSourceControlInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioSourceControlInterface, "0AudioSourceControlInterface.phonon.kde.org")
 
 #endif // PHONON_SOURCE_CONTROL_INTERFACE_H_

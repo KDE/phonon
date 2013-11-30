@@ -33,6 +33,8 @@ namespace Phonon
 {
 
 class SourceControlPrivate;
+class VideoSourceControlPrivate;
+class AudioSourceControlPrivate;
 
 class PHONON_EXPORT SourceControl : public QObject, public Frontend
 {
@@ -47,6 +49,91 @@ public:
 
 private:
     P_DECLARE_PRIVATE(SourceControl)
+};
+
+class PHONON_EXPORT VideoSourceControl : public SourceControl
+{
+    Q_OBJECT
+
+public:
+    enum Menu {
+        RootMenu,
+        TitleMenu,
+        AudioMenu,
+        SubtitleMenu,
+        ChapterMenu,
+        AngleMenu
+    };
+
+public:
+    explicit VideoSourceControl(Source &source, QObject *parent = 0);
+    virtual ~VideoSourceControl();
+
+    bool supportsMenus() const;
+    QSet<Menu> availableMenus() const;
+    Menu currentMenu() const;
+    void setCurrentMenu(Menu menu);
+
+    bool supportsChapters() const;
+    int chapterCount() const;
+    int currentChapter() const;
+    void setCurrentChapter(int chapterNumber);
+
+    bool supportsAngles() const;
+    int angleCount() const;
+    int currentAngle();
+    void setCurrentAngle(int angleNumber);
+
+    bool supportsTitles() const;
+    bool isAutoplayingTitles() const;
+    void setAutoplayTitles(bool enable);
+    int titleCount() const;
+    int currentTitle() const;
+    void setCurrentTitle(int titleNumber);
+
+    bool supportsAudioChannels() const;
+    int audioChannelCount() const;
+    int audioChannel() const;
+    void setAudioChannel(int channelNumber);
+
+Q_SIGNALS:
+    void availableMenusChanged();
+    void currentMenuChanged(Menu menu);
+
+    void chapterCountChanged(int count);
+    void currentChapterChanged(int chapterNumber);
+
+    void angleCountChanged(int count);
+    void currentAngleChanged(int angleNumber);
+
+    void titleCountChanged(int count);
+    void currentTitleChanged(int titleNumber);
+
+    void audioChannelCountChanged(int count);
+
+private:
+    P_DECLARE_PRIVATE(VideoSourceControl)
+};
+
+class PHONON_EXPORT AudioSourceControl : public SourceControl
+{
+    Q_OBJECT
+
+public:
+    explicit AudioSourceControl(Source &source, QObject *parent = 0);
+    virtual ~AudioSourceControl();
+
+    bool supportsTracks() const;
+    int trackCount() const;
+    int trackNumber() const;
+    void setTrackNumber(int trackNumber);
+
+Q_SIGNALS:
+    void trackCountChanged(int count);
+    void currentTrackChanged(int trackNumber);
+
+private:
+    P_DECLARE_PRIVATE(AudioSourceControl)
 };
 
 } // Phonon namespace

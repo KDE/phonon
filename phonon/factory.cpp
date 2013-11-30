@@ -199,6 +199,20 @@ QObject *Factory::createVideoSurfaceOutput(QObject *parent)
     return interface()->createObject(BackendInterface::VideoSurfaceOutputClass, parent);
 }
 
+QObject *Factory::createVideoSourceControl(QObject *parent)
+{
+    if (!backend())
+        return 0;
+    return interface()->createObject(BackendInterface::VideoSourceControlClass, parent);
+}
+
+QObject *Factory::createAudioSourceControl(QObject *parent)
+{
+    if (!backend())
+        return 0;
+    return interface()->createObject(BackendInterface::AudioSourceControlClass, parent);
+}
+
 QObject *Factory::backend()
 {
     if (globalFactory.isDestroyed())
