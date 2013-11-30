@@ -24,18 +24,34 @@
 #define PHONON_SOURCE_CONTROL_P_H_
 
 #include "sourcecontrol.h"
+#include "sourcecontrolinterface.h"
+
+#include "frontend_p.h"
+#include "phononpimpl_p.h"
 
 namespace Phonon
 {
 
-class SourceControlPrivate : public QSharedData
+class SourceControlPrivate : public FrontendPrivate
 {
 public:
     explicit SourceControlPrivate(Source &source);
     virtual ~SourceControlPrivate();
 
+    SourceControlInterface *m_scInterface;
+
     Source m_source;
-    bool m_active;
+
+private:
+    P_DECLARE_PUBLIC(SourceControl)
+    Q_DISABLE_COPY(SourceControlPrivate);
+
+protected:
+    virtual void createBackendObject() = 0;
+
+private:
+    P_DECLARE_PUBLIC(SourceControl)
+    Q_DISABLE_COPY(SourceControlPrivate)
 };
 
 } // Phonon namespace

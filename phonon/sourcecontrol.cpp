@@ -23,17 +23,19 @@
 #include "sourcecontrol.h"
 #include "sourcecontrol_p.h"
 
+#include "factory_p.h"
+
 namespace Phonon
 {
 
-SourceControl::SourceControl(Source &source)
-    : d(new SourceControlPrivate(source))
-{
 
-}
+/*
+ * SourceControl
+ */
 
-SourceControl::SourceControl(SourceControlPrivate &dd)
-    : d(&dd)
+SourceControl::SourceControl(SourceControlPrivate &pd, QObject *parent)
+    : QObject(parent)
+    , Frontend(pd)
 {
 
 }
@@ -43,19 +45,25 @@ SourceControl::~SourceControl()
 
 }
 
+bool SourceControl::isActive() const
+{
+    P_D(const SourceControl);
+    if (!d->m_scInterface)
+        return false;
+    return d->m_scInterface->isActive();
+}
+
 Source SourceControl::source() const
 {
+    P_D(const SourceControl);
     return d->m_source;
 }
 
-bool SourceControl::isActive() const
-{
-    return d->m_active;
-}
+// private
 
 SourceControlPrivate::SourceControlPrivate(Source &source)
-    : m_source(source)
-    , m_active(false)
+    : m_scInterface(0)
+    , m_source(source)
 {
 
 }

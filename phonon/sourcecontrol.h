@@ -23,25 +23,30 @@
 #ifndef PHONON_SOURCE_CONTROL_H_
 #define PHONON_SOURCE_CONTROL_H_
 
+#include "frontend.h"
+#include "phonondefs.h"
 #include "source.h"
+
+#include <QtCore/QObject>
 
 namespace Phonon
 {
 
 class SourceControlPrivate;
 
-class PHONON_EXPORT SourceControl
+class PHONON_EXPORT SourceControl : public QObject, public Frontend
 {
+    Q_OBJECT
+
 public:
-    explicit SourceControl(Source &source);
+    SourceControl(SourceControlPrivate &pd, QObject *parent = 0);
     virtual ~SourceControl();
 
     Source source() const;
     bool isActive() const;
 
-protected:
-    QExplicitlySharedDataPointer<SourceControlPrivate> d;
-    SourceControl(SourceControlPrivate &);
+private:
+    P_DECLARE_PRIVATE(SourceControl)
 };
 
 } // Phonon namespace

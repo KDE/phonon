@@ -23,6 +23,10 @@
 #ifndef PHONON_SOURCE_CONTROL_INTERFACE_H_
 #define PHONON_SOURCE_CONTROL_INTERFACE_H_
 
+#include "source.h"
+
+#include "sourcecontrol.h"
+
 namespace Phonon
 {
 
@@ -33,8 +37,7 @@ class SourceControlInterface
 public:
     virtual ~SourceControlInterface() {}
 
-    virtual SourceControl *frontendObject() const = 0;
-    virtual void setFrontendObject(SourceControl *) = 0;
+    virtual bool isActive() const = 0;
 };
 
 } // namespace Phonon
