@@ -40,15 +40,7 @@ namespace Phonon
         AudioOutputDeviceType,
         AudioCaptureDeviceType,
         VideoCaptureDeviceType,
-        EffectType,
-        AudioChannelType,
-        SubtitleType
-
-        //VideoOutputDeviceType,
-        //AudioCodecType,
-        //VideoCodecType,
-        //ContainerFormatType,
-        //VisualizationType,
+        EffectType
     };
 
 class DescriptionBasePrivate;
@@ -143,16 +135,6 @@ class PHONON_EXPORT EffectDescription : public DescriptionBase
 public:
     EffectDescription(); /* constructs invalid description */
     EffectDescription(int index, QString name, QString description);
-};
-
-#warning sub is a stub
-class PHONON_EXPORT SubtitleDescription : public DescriptionBase
-{
-};
-
-#warning audiochannel is a stub
-class PHONON_EXPORT AudioChannelDescription : public DescriptionBase
-{
 };
 
 
