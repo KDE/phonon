@@ -24,7 +24,6 @@
 #define PHONON_SOURCE_CONTROL_H_
 
 #include "frontend.h"
-#include "phonondefs.h"
 #include "source.h"
 
 #include <QtCore/QObject>

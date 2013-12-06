@@ -53,12 +53,10 @@ ${phonon_LIB_SRCS}
     audiooutput_p.h
     globalstatic_p.h
     frontend_p.h
-    phonondefs_p.h
     phononnamespace_p.h
     phononpimpl_p.h
     videowidget_p.h
     videowidgetinterface.h
-    phonondefs.h
 
     audiooutputinterface.h
     videosurfaceinterface.h
@@ -105,7 +103,6 @@ install(FILES
     sourcecontrolinterface.h
     objectdescription.h
     phonon_export.h
-    phonondefs.h
     ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
     seekslider.h
     streaminterface.h

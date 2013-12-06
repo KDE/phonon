@@ -23,8 +23,8 @@
 #ifndef PHONON_OBJECTDESCRIPTION_H
 #define PHONON_OBJECTDESCRIPTION_H
 
+#include "frontend.h"
 #include "phonon_export.h"
-#include "phonondefs.h"
 
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QDebug>

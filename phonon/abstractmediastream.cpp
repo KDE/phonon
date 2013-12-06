@@ -22,7 +22,6 @@
 
 #include "abstractmediastream.h"
 #include "abstractmediastream_p.h"
-#include "phonondefs_p.h"
 #include "streaminterface_p.h"
 
 namespace Phonon

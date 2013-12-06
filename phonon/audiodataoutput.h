@@ -24,7 +24,6 @@
 
 #include "phonon_export.h"
 #include "abstractaudiooutput.h"
-#include "phonondefs.h"
 
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

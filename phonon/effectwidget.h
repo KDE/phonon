@@ -24,7 +24,7 @@
 #define PHONON_UI_EFFECTWIDGET_H
 
 #include "phonon_export.h"
-#include "phonondefs.h"
+#include "frontend.h"
 #include <QWidget>
 
 

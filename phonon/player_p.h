@@ -24,7 +24,6 @@
 #define PHONON_PLAYER_P_H
 
 #include "frontend_p.h"
-#include "phonondefs_p.h"
 #include "player.h"
 #include "playerinterface.h"
 
