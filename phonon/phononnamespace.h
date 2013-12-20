@@ -25,6 +25,12 @@
 
 #include "phonon_export.h"
 
+#warning k_func k_ptr to p_?
+#define P_DECLARE_PRIVATE(Class) \
+    inline Class##Private* k_func() { return reinterpret_cast<Class##Private *>(k_ptr); } \
+    inline const Class##Private* k_func() const { return reinterpret_cast<const Class##Private *>(k_ptr); } \
+    friend class Class##Private;
+
 class QString;
 
 namespace Phonon
