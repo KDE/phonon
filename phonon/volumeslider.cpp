@@ -98,7 +98,7 @@ QSize VolumeSlider::iconSize() const
 
 void VolumeSlider::setIconSize(const QSize &iconSize)
 {
-    pDebug() << Q_FUNC_INFO << iconSize;
+    qDebug() << Q_FUNC_INFO << iconSize;
     k_ptr->muteButton.setIconSize(iconSize);
 }
 

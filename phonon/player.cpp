@@ -209,7 +209,7 @@ void Player::setSource(const Source &newSource)
         return;
     }
 
-    pDebug() << Q_FUNC_INFO << newSource.url() << newSource.deviceName();
+    qDebug() << Q_FUNC_INFO << newSource.url() << newSource.deviceName();
 
     // first call stop as that often is the expected state for setting a new URL
     stop();
@@ -286,7 +286,7 @@ void PlayerPrivate::setupBackendObject()
     const State backendState = interface->state();
     if (state != backendState) {
 #warning do we really want this? ... shouldnt we force the frontend state on the backend instead?
-        pDebug() << "emitting a state change because the backend object has been created";
+        qDebug() << "emitting a state change because the backend object has been created";
         emit q->stateChanged(backendState, state);
         state = backendState;
     }

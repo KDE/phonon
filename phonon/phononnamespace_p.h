@@ -32,14 +32,4 @@
 Q_DECLARE_METATYPE(QList<int>)
 #endif
 
-#if defined(QT_NO_DEBUG)
-#define pDebug if (true) {} else qDebug
-#else
-#warning debug always on
-#define pDebug /*if (qgetenv("PHONON_DEBUG").isEmpty()) {} else*/ qDebug
-#endif
-#define pWarning() qDebug() << "WARNING:"
-#define pError() qDebug() << "ERROR:"
-#define pFatal(message) qDebug() << "FATAL ERROR:" << message; ::abort()
-
 #endif // PHONONNAMESPACE_P_H
