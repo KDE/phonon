@@ -53,15 +53,16 @@ public:
         AudioSourceControlClass
     };
 
-#warning generic BS
     virtual QObject *createObject(Class c, QObject *parent, const QList<QVariant> &args = QList<QVariant>()) = 0;
-    virtual QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const = 0;
-    virtual QHash<QByteArray, QVariant> objectDescriptionProperties(ObjectDescriptionType type, int index) const = 0;
 
     virtual QList<AudioOutputDevice> audioOutputDevices() const = 0;
+    virtual QList<AudioCaptureDevice> audioCaptureDevices() const = 0;
+    virtual QList<VideoCaptureDevice> videoCaptureDevices() const = 0;
 
 Q_SIGNALS:
-    virtual void objectDescriptionChanged(ObjectDescriptionType) = 0;
+    virtual void audioOutputDevicesChanged() = 0;
+    virtual void audioCaptureDevicesChanged() = 0;
+    virtual void videoCaptureDevicesChanged() = 0;
 };
 
 } // namespace Phonon

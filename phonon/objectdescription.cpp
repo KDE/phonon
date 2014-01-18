@@ -226,48 +226,15 @@ AudioOutputDevice::~AudioOutputDevice()
 
 AudioOutputDevice AudioOutputDevice::fromIndex(int index)
 {
-    bool is_audio_device = true;
-
-//    PulseSupport *pulse = PulseSupport::getInstance();
-//    if (is_audio_device && pulse->isActive()) {
-//        QList<int> indexes = pulse->objectDescriptionIndexes(type);
-//        if (indexes.contains(index)) {
-//            QHash<QByteArray, QVariant> properties = pulse->objectDescriptionProperties(type, index);
-//            return new ObjectDescriptionData(index, properties);
-//        }
-
-//        // When Pulse is enabled, only try from the platform plugin or backend if it is about audio capture
-//        if (type != AudioCaptureDeviceType)
-//            return new ObjectDescriptionData(0); // invalid
-//    }
-
-//#ifndef QT_NO_PHONON_PLATFORMPLUGIN
-//    // prefer to get the ObjectDescriptionData from the platform plugin
-//    PlatformPlugin *platformPlugin = Factory::platformPlugin();
-//    if (platformPlugin) {
-//        QList<int> indexes = platformPlugin->objectDescriptionIndexes(type);
-//        if (indexes.contains(index)) {
-//            QHash<QByteArray, QVariant> properties = platformPlugin->objectDescriptionProperties(type, index);
-//            return new ObjectDescriptionData(index, properties);
-//        }
-//    }
-//#endif //QT_NO_PHONON_PLATFORMPLUGIN
-
     BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
     if (iface) {
-        QList<int> indexes = iface->objectDescriptionIndexes(AudioOutputDeviceType);
-        if (indexes.contains(index)) {
-            QHash<QByteArray, QVariant> properties = iface->objectDescriptionProperties(AudioOutputDeviceType, index);
-            AudioOutputDevice dev(index, properties.value("name").toString(), properties.value("description").toString());
-            dev.k_func()->available = properties.value("available").toBool();
-            dev.k_func()->properties = properties;
-            return dev;
-//            return new ObjectDescriptionData(index, properties);
+        const QList<AudioOutputDevice> devices = iface->audioOutputDevices();
+        if (index >= 0 && index < devices.count() && devices[index].isAvailable()) {
+            return devices[index];
         }
     }
 
     return AudioOutputDevice();
-//    return new ObjectDescriptionData(0); // invalid
 }
 
 AudioCaptureDevice::AudioCaptureDevice()

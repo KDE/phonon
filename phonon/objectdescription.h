@@ -35,13 +35,6 @@
 
 namespace Phonon
 {
-    enum ObjectDescriptionType
-    {
-        AudioOutputDeviceType,
-        AudioCaptureDeviceType,
-        VideoCaptureDeviceType,
-        EffectType
-    };
 
 class DescriptionBasePrivate;
 #warning drop base suffix? reads terribly...
