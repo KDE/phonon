@@ -24,7 +24,7 @@
 #define PHONON_PULSESUPPORT_H
 
 #include "phonon_export.h"
-#include "phononnamespace.h"
+#include "phononglobal.h"
 #include "objectdescription.h"
 
 #include <QtCore/QtGlobal>

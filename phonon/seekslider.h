@@ -25,7 +25,7 @@
 
 #include "frontend.h"
 #include "phonon_export.h"
-#include "phononnamespace.h"
+#include "phononglobal.h"
 #include <QWidget>
 
 

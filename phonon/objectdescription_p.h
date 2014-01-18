@@ -27,7 +27,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QString>
 #include <QtCore/QVariant>
-#include "phononnamespace_p.h"
+#include "phononglobal.h"
 
 namespace Phonon
 {

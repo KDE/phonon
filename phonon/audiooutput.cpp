@@ -26,7 +26,7 @@
 
 #include "factory_p.h"
 #include "objectdescription.h"
-#include "phononnamespace_p.h"
+#include "phononglobal.h"
 
 #include <QtCore/QUuid>
 #include <QtCore/qmath.h>

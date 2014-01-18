@@ -25,7 +25,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QTextStream>
-#include <phononnamespace.h>
+#include <phononglobal.h>
 
 namespace Phonon
 {

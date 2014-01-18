@@ -41,7 +41,7 @@
 #endif
 #endif // HAVE_PULSEAUDIO
 
-#include "phononnamespace_p.h"
+#include "phononglobal.h"
 #include "platform_p.h"
 
 namespace Phonon

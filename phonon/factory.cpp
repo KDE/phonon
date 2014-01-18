@@ -24,7 +24,7 @@
 
 #include "backendinterface.h"
 #include "globalstatic_p.h"
-#include "phononnamespace_p.h"
+#include "phononglobal.h"
 #include "phononversion.h"
 
 #include <QtCore/QCoreApplication>

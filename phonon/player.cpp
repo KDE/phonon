@@ -28,11 +28,12 @@
 #include "abstractoutput_p.h"
 #include "factory_p.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
 
-#include "phononnamespace_p.h"
+#include "phononglobal.h"
 
 namespace Phonon {
 

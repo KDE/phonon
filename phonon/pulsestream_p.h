@@ -27,7 +27,7 @@
 #include <pulse/pulseaudio.h>
 
 #include "phonon_export.h"
-#include "phononnamespace.h"
+#include "phononglobal.h"
 
 namespace Phonon
 {

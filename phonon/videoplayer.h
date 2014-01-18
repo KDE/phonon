@@ -24,7 +24,7 @@
 #define Phonon_VIDEOPLAYER_H
 
 #include "phonon_export.h"
-#include "phononnamespace.h"
+#include "phononglobal.h"
 #include "mediasource.h"
 #include <QWidget>
 

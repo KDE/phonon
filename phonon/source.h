@@ -24,7 +24,7 @@
 #define PHONON_SOURCE_H_
 
 #include "phonon_export.h"
-#include "phononnamespace.h"
+#include "phononglobal.h"
 
 #include <QtCore/QSharedData>
 

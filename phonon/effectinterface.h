@@ -23,7 +23,7 @@
 #ifndef PHONON_EFFECTINTERFACE_H
 #define PHONON_EFFECTINTERFACE_H
 
-#include "phononnamespace.h"
+#include "phononglobal.h"
 #include <QtCore/QVariant>
 
 

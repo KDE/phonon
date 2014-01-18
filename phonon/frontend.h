@@ -24,7 +24,7 @@
 #ifndef PHONON_FRONTEND_H
 #define PHONON_FRONTEND_H
 
-#include "phononnamespace.h"
+#include "phononglobal.h"
 
 namespace Phonon {
 

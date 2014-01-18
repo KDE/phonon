@@ -24,8 +24,9 @@
 #include "videowidget_p.h"
 #include "videowidgetinterface.h"
 #include "factory_p.h"
-#include "phononnamespace_p.h"
+#include "phononglobal.h"
 
+#include <QtCore/QDebug>
 #include <QAction>
 
 namespace Phonon {

@@ -26,7 +26,7 @@
 #include <QtDeclarative/QDeclarativeItem>
 #include <QtDeclarative/QDeclarativeParserStatus>
 
-#include <phonon/phononnamespace.h>
+#include <phonon/phononglobal.h>
 
 #include "abstractinitable.h"
 

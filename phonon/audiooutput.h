@@ -25,7 +25,7 @@
 
 #include "phonon_export.h"
 #include "abstractoutput.h"
-#include "phononnamespace.h"
+#include "phononglobal.h"
 #include "objectdescription.h"
 
 class QString;

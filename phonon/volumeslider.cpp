@@ -23,8 +23,7 @@
 #include "volumeslider.h"
 #include "volumeslider_p.h"
 #include "audiooutput.h"
-#include "phonondefs_p.h"
-#include "phononnamespace_p.h"
+#include "phononglobal.h"
 #include "factory_p.h"
 
 #ifndef QT_NO_PHONON_VOLUMESLIDER

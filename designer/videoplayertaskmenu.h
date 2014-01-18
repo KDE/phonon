@@ -67,7 +67,7 @@
 #include <QtDesigner/QDesignerTaskMenuExtension>
 #include <QtDesigner/QExtensionFactory>
 
-#include <phonon/phononnamespace.h>
+#include <phonon/phononglobal.h>
 
 namespace Phonon
 {

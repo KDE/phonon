@@ -23,7 +23,7 @@
 #ifndef PHONON_PLAYERINTERFACE_H
 #define PHONON_PLAYERINTERFACE_H
 
-#include "phononnamespace.h"
+#include "phononglobal.h"
 #include "source.h"
 
 namespace Phonon {

@@ -39,7 +39,7 @@ ${phonon_LIB_SRCS}
 #    effectwidget.cpp
    iodevicestream.cpp
    objectdescription.cpp
-   phononnamespace.cpp
+   phononglobal.cpp
 #    seekslider.cpp
    streaminterface.cpp
 #    swiftslider.cpp
@@ -53,7 +53,6 @@ ${phonon_LIB_SRCS}
     audiooutput_p.h
     globalstatic_p.h
     frontend_p.h
-    phononnamespace_p.h
     phononpimpl_p.h
     videowidget_p.h
     videowidgetinterface.h
@@ -113,7 +112,7 @@ install(FILES
     volumefaderinterface.h
     volumeslider.h
     ${phonon_VGO_HDRS}
-    phononnamespace.h
+    phononglobal.h
 
     videosurfaceinterface.h
     videoitem.h
