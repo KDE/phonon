@@ -38,19 +38,18 @@ class BackendInterface
 public:
     virtual ~BackendInterface() {}
 
-#warning reorder maybe
     enum Class {
-        PlayerClass,
-        VolumeFaderEffectClass,
-        AudioOutputClass,
         AudioDataOutputClass,
-        VisualizationClass,
-        VideoDataOutputClass,
+        AudioOutputClass,
+        AudioSourceControlClass,
         EffectClass,
-        VideoWidgetClass,
+        PlayerClass,
+        VideoDataOutputClass,
         VideoSurfaceOutputClass,
         VideoSourceControlClass,
-        AudioSourceControlClass
+        VideoWidgetClass,
+        VisualizationClass,
+        VolumeFaderEffectClass
     };
 
     virtual QObject *createObject(Class c, QObject *parent, const QList<QVariant> &args = QList<QVariant>()) = 0;
