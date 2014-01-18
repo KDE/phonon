@@ -36,8 +36,8 @@ public:
     virtual ~AudioOutputInterface() {}
     virtual qreal volume() const = 0;
     virtual void setVolume(qreal volume) = 0;
-    virtual int outputDevice() const = 0;
-    virtual bool setOutputDevice(const Phonon::AudioOutputDevice &) = 0;
+    virtual AudioOutputDevice outputDevice() const = 0;
+    virtual bool setOutputDevice(const AudioOutputDevice &) = 0;
 
 Q_SIGNALS:
     virtual void volumeChanged(qreal volume) = 0;

@@ -131,14 +131,14 @@ Category AudioOutput::category() const
 
 AudioOutputDevice AudioOutput::outputDevice() const
 {
-#warning no backing
-    return AudioOutputDevice();
+    P_D(const AudioOutput);
+    return d->interface->outputDevice();
 }
 
 bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
 {
-#warning nop backing
-    return false;
+    P_D(AudioOutput);
+    return d->interface->setOutputDevice(newAudioOutputDevice);
 }
 
 void AudioOutputPrivate::setupBackendObject()
