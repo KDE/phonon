@@ -23,7 +23,7 @@
 #ifndef PHONON_UI_VOLUMESLIDER_H
 #define PHONON_UI_VOLUMESLIDER_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "phonondefs.h"
 #include <QWidget>
 

@@ -23,7 +23,7 @@
 #ifndef PHONON_STREAMINTERFACE_H
 #define PHONON_STREAMINTERFACE_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include <QtCore/QObject>
 
 

@@ -23,7 +23,7 @@
 #ifndef PHONON_PULSESUPPORT_H
 #define PHONON_PULSESUPPORT_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "phononglobal.h"
 #include "objectdescription.h"
 

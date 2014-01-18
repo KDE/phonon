@@ -23,7 +23,7 @@
 #ifndef PHONON_VOLUMEFADEREFFECT_H
 #define PHONON_VOLUMEFADEREFFECT_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "effect.h"
 
 

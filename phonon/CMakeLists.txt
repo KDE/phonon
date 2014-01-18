@@ -101,7 +101,7 @@ install(FILES
     sourcecontrol.h
     sourcecontrolinterface.h
     objectdescription.h
-    phonon_export.h
+    phononexport.h
     ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
     seekslider.h
     streaminterface.h

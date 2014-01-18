@@ -23,7 +23,7 @@
 #ifndef PHONON_UI_EFFECTWIDGET_H
 #define PHONON_UI_EFFECTWIDGET_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "frontend.h"
 #include <QWidget>
 

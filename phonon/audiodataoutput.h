@@ -22,7 +22,7 @@
 #ifndef Phonon_AUDIODATAOUTPUT_H
 #define Phonon_AUDIODATAOUTPUT_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "abstractaudiooutput.h"
 
 

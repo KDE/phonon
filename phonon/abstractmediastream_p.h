@@ -23,7 +23,7 @@
 #ifndef ABSTRACTMEDIASTREAM_P_H
 #define ABSTRACTMEDIASTREAM_P_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "abstractmediastream.h"
 #include "player_p.h"
 #include "streaminterface.h"

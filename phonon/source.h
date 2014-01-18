@@ -23,7 +23,7 @@
 #ifndef PHONON_SOURCE_H_
 #define PHONON_SOURCE_H_
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "phononglobal.h"
 
 #include <QtCore/QSharedData>

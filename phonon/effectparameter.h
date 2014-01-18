@@ -23,7 +23,7 @@
 #ifndef PHONON_EFFECTPARAMETER_H
 #define PHONON_EFFECTPARAMETER_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 
 #include <QtCore/QExplicitlySharedDataPointer>
 #include <QtCore/QVariant>

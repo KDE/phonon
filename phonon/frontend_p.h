@@ -24,7 +24,7 @@
 #define PHONON_FRONTEND_P_H
 
 #include "phononpimpl_p.h"
-#include "phonon_export.h"
+#include "phononexport.h"
 
 class QObject;
 

@@ -22,7 +22,7 @@
 #ifndef PHONONVERSION_H
 #define PHONONVERSION_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 
 /**
  * Helper macro that can be used like

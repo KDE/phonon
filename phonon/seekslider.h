@@ -24,7 +24,7 @@
 #define PHONON_UI_SEEKSLIDER_H
 
 #include "frontend.h"
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "phononglobal.h"
 #include <QWidget>
 

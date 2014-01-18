@@ -23,7 +23,7 @@
 #ifndef PHONONNAMESPACE_H
 #define PHONONNAMESPACE_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 
 #warning k_func k_ptr to p_?
 #define P_DECLARE_PRIVATE(Class) \

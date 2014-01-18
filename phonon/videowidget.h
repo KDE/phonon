@@ -22,7 +22,7 @@
 #ifndef PHONON_VIDEOWIDGET_H
 #define PHONON_VIDEOWIDGET_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "abstractoutput.h"
 
 #include <QWidget>

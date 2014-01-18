@@ -23,7 +23,7 @@
 #ifndef PHONON_ABSTRACTMEDIASTREAM_H
 #define PHONON_ABSTRACTMEDIASTREAM_H
 
-#include "phonon_export.h"
+#include "phononexport.h"
 #include "phononglobal.h"
 #include <QtCore/QObject>
 
