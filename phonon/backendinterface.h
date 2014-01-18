@@ -23,13 +23,7 @@
 #ifndef PHONON_BACKENDINTERFACE_H
 #define PHONON_BACKENDINTERFACE_H
 
-#include "phonon_export.h"
 #include "objectdescription.h"
-
-#include <QtCore/QtGlobal>
-#include <QtCore/QSet>
-
-class QVariant;
 
 namespace Phonon {
 
