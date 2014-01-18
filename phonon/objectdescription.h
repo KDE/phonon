@@ -96,9 +96,6 @@ public:
 #warning possibly needs available param
     AudioOutputDevice(int index, QString name, QString description);
     ~AudioOutputDevice();
-
-#warning fromindex boogieman - why here why at all what is the beef with globalconfig...
-    static AudioOutputDevice fromIndex(int i);
 };
 
 class PHONON_EXPORT AudioCaptureDevice : public DeviceDescriptionBase
@@ -107,9 +104,6 @@ public:
     AudioCaptureDevice();
     AudioCaptureDevice(int index, QString name, QString description);
     ~AudioCaptureDevice();
-
-#warning fromindex boogieman
-    static AudioCaptureDevice fromIndex(int i) { return AudioCaptureDevice(0, "unknown ACD", "unknown ACD description"); }
 };
 
 class PHONON_EXPORT VideoCaptureDevice : public DeviceDescriptionBase
@@ -118,9 +112,6 @@ public:
     VideoCaptureDevice();
     VideoCaptureDevice(int index, QString name, QString description);
     ~VideoCaptureDevice();
-
-#warning fromindex boogieman
-    static VideoCaptureDevice fromIndex(int i) { return VideoCaptureDevice(0, "unknown VCD", "unknown VCD description"); }
 };
 
 class PHONON_EXPORT EffectDescription : public DescriptionBase

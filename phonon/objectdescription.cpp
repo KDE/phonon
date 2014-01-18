@@ -224,19 +224,6 @@ AudioOutputDevice::~AudioOutputDevice()
     qDebug() << Q_FUNC_INFO;
 }
 
-AudioOutputDevice AudioOutputDevice::fromIndex(int index)
-{
-    BackendInterface *iface = qobject_cast<BackendInterface *>(Factory::backend());
-    if (iface) {
-        const QList<AudioOutputDevice> devices = iface->audioOutputDevices();
-        if (index >= 0 && index < devices.count() && devices[index].isAvailable()) {
-            return devices[index];
-        }
-    }
-
-    return AudioOutputDevice();
-}
-
 AudioCaptureDevice::AudioCaptureDevice()
     : DeviceDescriptionBase()
 {
