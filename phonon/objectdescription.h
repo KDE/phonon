@@ -45,8 +45,6 @@ public:
     QString name() const;
     QString description() const;
 #warning need QString iconHint name of icon to use for this device
-#warning need Capabilities capabilities Video|Audio (in case a device can do both?)
-#warning need QString discoverer or Discoverer discoverer (indicating device of source... in 4 this was either backendname or kde)
 
     bool isValid() const; /* valid description */
 
