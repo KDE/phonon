@@ -37,18 +37,16 @@ class DescriptionBasePrivate
 public:
     DescriptionBasePrivate()
         : valid(false)
-        , index(-1)
         , name()
         , description()
     {
         qDebug() << Q_FUNC_INFO;
     }
 
-    void init(int _index, QString _name, QString _description)
+    void init(QString _name, QString _description)
     {
-        qDebug() << Q_FUNC_INFO << _index << _name << _description;
+        qDebug() << Q_FUNC_INFO << _name << _description;
         valid = true;
-        index = _index;
         name = _name;
         description = _description;
     }
@@ -57,7 +55,6 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         return (valid == other.valid) &&
-                (index == other.index) &&
                 (name == other.name) &&
                 (description == other.description);
     }
@@ -66,14 +63,12 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
         return (valid != other.valid) &&
-                (index != other.index) &&
                 (name != other.name) &&
                 (description != other.description);
     }
 
     bool valid;
 
-    int index;
     QString name;
     QString description;
 
@@ -85,12 +80,6 @@ DescriptionBase::DescriptionBase()
     : k_ptr(new DescriptionBasePrivate())
 {
     qDebug() << Q_FUNC_INFO;
-}
-
-int DescriptionBase::index() const
-{
-    P_D(const DescriptionBase);
-    return d->index;
 }
 
 QString DescriptionBase::name() const
@@ -153,12 +142,12 @@ EffectDescription::EffectDescription()
     qDebug() << Q_FUNC_INFO;
 }
 
-EffectDescription::EffectDescription(int index, QString name, QString description)
+EffectDescription::EffectDescription(QString name, QString description)
     : DescriptionBase()
 {
     qDebug() << Q_FUNC_INFO;
     P_D(DescriptionBase);
-    d->init(index, name, description);
+    d->init(name, description);
 }
 
 class DeviceDescriptionBasePrivate : public DescriptionBasePrivate
@@ -211,12 +200,12 @@ AudioOutputDevice::AudioOutputDevice()
     qDebug() << Q_FUNC_INFO;
 }
 
-AudioOutputDevice::AudioOutputDevice(int index, QString name, QString description)
+AudioOutputDevice::AudioOutputDevice(QString name, QString description)
     : DeviceDescriptionBase()
 {
     qDebug() << Q_FUNC_INFO;
     P_D(DeviceDescriptionBase);
-    d->init(index, name, description);
+    d->init(name, description);
 }
 
 AudioOutputDevice::~AudioOutputDevice()
@@ -230,12 +219,12 @@ AudioCaptureDevice::AudioCaptureDevice()
     qDebug() << Q_FUNC_INFO;
 }
 
-AudioCaptureDevice::AudioCaptureDevice(int index, QString name, QString description)
+AudioCaptureDevice::AudioCaptureDevice(QString name, QString description)
     : DeviceDescriptionBase()
 {
     qDebug() << Q_FUNC_INFO;
     P_D(DeviceDescriptionBase);
-    d->init(index, name, description);
+    d->init(name, description);
 }
 
 AudioCaptureDevice::~AudioCaptureDevice()
@@ -249,12 +238,12 @@ VideoCaptureDevice::VideoCaptureDevice()
     qDebug() << Q_FUNC_INFO;
 }
 
-VideoCaptureDevice::VideoCaptureDevice(int index, QString name, QString description)
+VideoCaptureDevice::VideoCaptureDevice(QString name, QString description)
     : DeviceDescriptionBase()
 {
     qDebug() << Q_FUNC_INFO;
     P_D(DeviceDescriptionBase);
-    d->init(index, name, description);
+    d->init(name, description);
 }
 
 VideoCaptureDevice::~VideoCaptureDevice()

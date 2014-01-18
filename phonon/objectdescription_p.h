@@ -34,9 +34,8 @@ namespace Phonon
     class ObjectDescriptionPrivate
     {
         public:
-            ObjectDescriptionPrivate(int _index, const QHash<QByteArray, QVariant> &_properties)
-                : index(_index),
-                name(_properties["name"].toString()),
+            ObjectDescriptionPrivate(const QHash<QByteArray, QVariant> &_properties)
+                : name(_properties["name"].toString()),
                 description(_properties["description"].toString()),
                 properties(_properties)
             {
@@ -44,13 +43,9 @@ namespace Phonon
 
             bool operator==(const ObjectDescriptionPrivate &rhs) const
             {
-                if (index == rhs.index && (name != rhs.name || description != rhs.description))
-                    pError() << "Same index (" << index <<
-                        "), but different name/description. This is a bug in the Phonon backend.";
-                return index == rhs.index;// && name == rhs.name && description == rhs.description;
+                return name == rhs.name && description == rhs.description;
             }
 
-            int index;
             QString name, description;
             QHash<QByteArray, QVariant> properties;
     };

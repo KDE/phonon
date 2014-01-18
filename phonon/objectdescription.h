@@ -42,7 +42,6 @@ class DescriptionBasePrivate;
 class PHONON_EXPORT DescriptionBase
 {
 public:
-    int index() const;
     QString name() const;
     QString description() const;
 #warning need QString iconHint name of icon to use for this device
@@ -94,7 +93,7 @@ class PHONON_EXPORT AudioOutputDevice : public DeviceDescriptionBase
 public:
     AudioOutputDevice();
 #warning possibly needs available param
-    AudioOutputDevice(int index, QString name, QString description);
+    AudioOutputDevice(QString name, QString description);
     ~AudioOutputDevice();
 };
 
@@ -102,7 +101,7 @@ class PHONON_EXPORT AudioCaptureDevice : public DeviceDescriptionBase
 {
 public:
     AudioCaptureDevice();
-    AudioCaptureDevice(int index, QString name, QString description);
+    AudioCaptureDevice(QString name, QString description);
     ~AudioCaptureDevice();
 };
 
@@ -110,7 +109,7 @@ class PHONON_EXPORT VideoCaptureDevice : public DeviceDescriptionBase
 {
 public:
     VideoCaptureDevice();
-    VideoCaptureDevice(int index, QString name, QString description);
+    VideoCaptureDevice(QString name, QString description);
     ~VideoCaptureDevice();
 };
 
@@ -118,7 +117,7 @@ class PHONON_EXPORT EffectDescription : public DescriptionBase
 {
 public:
     EffectDescription(); /* constructs invalid description */
-    EffectDescription(int index, QString name, QString description);
+    EffectDescription(QString name, QString description);
 };
 
 
