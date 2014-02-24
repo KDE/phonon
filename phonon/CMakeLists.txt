@@ -1,4 +1,10 @@
-include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
+include_directories(
+    ${CMAKE_BINARY_DIR}/includes/phonon
+    ${CMAKE_CURRENT_SOURCE_DIR}/audio
+    ${CMAKE_CURRENT_SOURCE_DIR}/pulse
+    ${CMAKE_CURRENT_SOURCE_DIR}/streaming
+    ${CMAKE_CURRENT_SOURCE_DIR}/video
+)
 
 # Mostly clean and refactored Phonon 5 sources
 set(phonon_LIB_SRCS
@@ -31,34 +37,34 @@ set(phonon_LIB_SRCS
 # random plunder battlefield4 sources
 set(phonon_LIB_SRCS
 ${phonon_LIB_SRCS}
-   abstractmediastream.cpp
+   streaming/abstractmediastream.cpp
 #   audiodataoutput.cpp
-   audiooutput.cpp
+   audio/audiooutput.cpp
 #    effect.cpp
 #    effectparameter.cpp
 #    effectwidget.cpp
-   iodevicestream.cpp
+   streaming/iodevicestream.cpp
    objectdescription.cpp
    phononglobal.cpp
 #    seekslider.cpp
-   streaminterface.cpp
+   streaming/streaminterface.cpp
 #    swiftslider.cpp
 #    volumefadereffect.cpp
 #    volumeslider.cpp
 #    videoplayer.cpp
-    videowidget.cpp
-    videoitem.cpp
+    video/videowidget.cpp
+    video/videoitem.cpp
 
 # QTC Compat
-    audiooutput_p.h
+    audio/audiooutput_p.h
     globalstatic_p.h
     frontend_p.h
     phononpimpl_p.h
-    videowidget_p.h
-    videowidgetinterface.h
+    video/videowidget_p.h
+    video/videowidgetinterface.h
 
-    audiooutputinterface.h
-    videosurfaceinterface.h
+    audio/audiooutputinterface.h
+    video/videosurfaceinterface.h
    )
 
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
@@ -84,15 +90,15 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononversion.h.in ${CMAKE_CURRENT_BI
 install(FILES
 #    abstractmediastream.h
     abstractoutput.h
-    audiodataoutput.h
-    audiodataoutputinterface.h
-    audiooutput.h
-    audiooutputinterface.h
+    audio/audiodataoutput.h
+    audio/audiodataoutputinterface.h
+    audio/audiooutput.h
+    audio/audiooutputinterface.h
     backendinterface.h
-    effect.h
-    effectinterface.h
-    effectparameter.h
-    effectwidget.h
+    effects/effect.h
+    effects/effectinterface.h
+    effects/effectparameter.h
+    effects/effectwidget.h
     frontend.h
     globaldescriptioncontainer.h
     player.h
@@ -103,18 +109,18 @@ install(FILES
     objectdescription.h
     phononexport.h
     ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
-    seekslider.h
-    streaminterface.h
-    videoplayer.h
-    videowidget.h
-    videowidgetinterface.h
-    volumefadereffect.h
-    volumefaderinterface.h
-    volumeslider.h
+    widgets/seekslider.h
+    streaming/streaminterface.h
+    video/videoplayer.h
+    video/videowidget.h
+    video/videowidgetinterface.h
+    effects/volumefadereffect.h
+    effects/volumefaderinterface.h
+    widgets/volumeslider.h
     ${phonon_VGO_HDRS}
     phononglobal.h
 
-    videosurfaceinterface.h
-    videoitem.h
+    video/videosurfaceinterface.h
+    video/videoitem.h
 
     DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
