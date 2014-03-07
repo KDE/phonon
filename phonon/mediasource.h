@@ -62,7 +62,7 @@ class AbstractMediaStream;
 class PHONON_EXPORT MediaSource
 {
     friend class StreamInterface;
-    friend QDebug operator <<(QDebug dbg, const Phonon::MediaSource &);
+    friend PHONON_EXPORT QDebug operator <<(QDebug dbg, const Phonon::MediaSource &);
     public:
         /**
          * Identifies the type of media described by the MediaSource object.
