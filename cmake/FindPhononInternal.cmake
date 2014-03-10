@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2008, Matthias Kretz <kretz@kde.org>
 # Copyright (c) 2010, Mark Kretschmann <kretschmann@kde.org>
-# Copyright (c) 2010, Harald Sitter <sitter@kde.org>
+# Copyright (c) 2010-2014, Harald Sitter <sitter@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -12,6 +12,16 @@
 
 get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
+# Force old LINK_INTERFACE_LIBRARIES policy.
+# We set LINK_INTERFACE_LIBRARIES to an empty list as we don't want applications
+# linking against us also linking against the components we are hiding.
+# Whether that is still necessary or appropriate I'll leave out of the question
+# for now, but I have no intention to change this nor increase the required
+# cmake version (current one is ancient) which makes the policy warning not
+# very useful for Phonon 4, so we force the old behavior to silence cmake.
+# For more information see `cmake --help-policy CMP0022`
+#                                                       ~ Harald Sitter 2014
+cmake_policy(SET CMP0022 OLD)
 
 # Imported from KDE4Defaults.cmake
 # Keep this portion copy'n'pastable for updatability.
