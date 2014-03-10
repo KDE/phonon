@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2005 Matthias Kretz <kretz@kde.org>
-    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2013-2014 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -40,73 +40,90 @@ class PlayerPrivate;
 class PHONON_EXPORT Player : public QObject, public Frontend
 {
     Q_OBJECT
-    Q_PROPERTY(qint64 time READ time NOTIFY timeChanged)
+    // FIXME: maybe there should be a conveience function setTime to align names?
+    // FIXME: the go to class QSlider uses int, so one runs into signal mismatches
+    //        possibly we will want a compat interface.
+    Q_PROPERTY(qint64 time READ time WRITE seek NOTIFY timeChanged)
     Q_PROPERTY(qint64 totalTime READ totalTime NOTIFY totalTimeChanged)
+    // FIXME: needs executive decision on whether we want remaining time at all.
     Q_PROPERTY(qint64 remainingTime READ remainingTime NOTIFY remainingTimeChanged)
     Q_PROPERTY(Source source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
-    Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged)
-    Q_PROPERTY(bool stopped READ isStopped NOTIFY stoppedChanged)
-#warning notify missing
+    // FIXME: notify missing
+    // FIXME: needs executive decision whether we really want this in the core class
+    //        seeing as this is a convenience function for QML it might be better
+    //        suitable for the actual qml module.
     Q_PROPERTY(QUrl url READ url WRITE setUrl)
+    Q_PROPERTY(State state READ state NOTIFY stateChanged)
+    Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged)
+    Q_PROPERTY(bool stopped READ isStopped NOTIFY stoppedChanged)
+    Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged)
 public:
     Player(QObject *parent = 0);
     ~Player();
 
-    State state() const;
-    bool isSeekable() const;
-#warning replace tick interval by static tick 100 whenever something is connected to timeChanged
+    // FIXME: replace tick interval by static tick 100 whenever something is connected to timeChanged
     qint32 tickInterval() const;
+
+    State state() const;
+
     QStringList metaData(MetaData key) const;
     QMultiMap<MetaData, QString> metaData() const;
-    Source source() const;
-    void setSource(const Source &source);
-    QUrl url() const { return source().url(); }
-    void setUrl(const QUrl &url) { setSource(Source(url)); }
+
     qint64 time() const;
     qint64 totalTime() const;
     qint64 remainingTime() const;
 
+    Source source() const;
+    void setSource(const Source &source);
+
+    QUrl url() const;
+    void setUrl(const QUrl &url);
+
+    bool isSeekable() const;
     bool isPlaying() const;
-    bool isPaused() const;
     bool isStopped() const;
+    bool isPaused() const;
 
 #warning error magic TBD
-//    QString errorString() const;
-//    ErrorType errorType() const;
+    //    QString errorString() const;
+    //    ErrorType errorType() const;
 
 public Q_SLOTS:
     // Outputs are unordered and all considered to be equal.
-#warning sigh. qml needs a qobject derivate or it cannot call the function............ type should be AbstractOutput
+    // FIXME: QML wants a qobject interface or it won't call it...
     bool addOutput(QObject *output);
 
     void setTickInterval(qint32 newTickInterval);
+
+    void seek(qint64 time);
+
     void play();
     void pause();
     void stop();
-#warning qslider - the supposed goto ui widget - uses int.... consider compat interface
-    void seek(qint64 time);
 
 Q_SIGNALS:
     void stateChanged(Phonon::State newstate, Phonon::State oldstate);
+
     void metaDataChanged();
+
     void seekableChanged(bool isSeekable);
+
     // Caps at 100 == finished.
     void bufferStatus(int percentFilled);
 
     void timeChanged(qint64 time);
     void totalTimeChanged(qint64 newTotalTime);
-#warning not emitted by anything
+    // FIXME: noop right now.
     void remainingTimeChanged(qint64 remainingTime);
-
-    void playingChanged(bool playing);
-    void pausedChanged(bool paused);
-    void stoppedChanged(bool stopped);
 
     // We may not want this here at all and simply assume that changes via setSource are instant.
     // Additionally source tracking would happen through the playlist then?
     // For QML a sourceChanged would still be handy though.
     void sourceChanged(const Source &newSource);
+
+    void playingChanged(bool playing);
+    void pausedChanged(bool paused);
+    void stoppedChanged(bool stopped);
 
 private:
     P_DECLARE_PRIVATE(Player)

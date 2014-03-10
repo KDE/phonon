@@ -222,6 +222,16 @@ void Player::setSource(const Source &newSource)
     d->interface->setSource(d->source);
 }
 
+QUrl Player::url() const
+{
+    return source().url();
+}
+
+void Player::setUrl(const QUrl &url)
+{
+    setSource(Source(url));
+}
+
 void PlayerPrivate::createBackendObject()
 {
     if (m_backendObject)
