@@ -94,10 +94,10 @@ bool FactoryPrivate::createBackend()
             }
 
             foreach (const QString &plugin, plugins) {
+                qDebug() << "Loading" << libPath + plugin;
                 QPluginLoader pluginLoader(libPath + plugin);
                 if (!pluginLoader.load()) {
-                    qDebug() << Q_FUNC_INFO << "  load failed:"
-                             << pluginLoader.errorString();
+                    qDebug() << Q_FUNC_INFO << "  load failed:" << pluginLoader.errorString();
                     continue;
                 }
                 qDebug() << pluginLoader.instance();
