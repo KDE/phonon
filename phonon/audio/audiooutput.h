@@ -26,8 +26,6 @@
 #include "abstractoutput.h"
 #include "objectdescription.h"
 
-class QString;
-
 namespace Phonon {
 
 class AudioOutputPrivate;
@@ -42,19 +40,21 @@ public:
     // FIXME: we need a way to wire category to PA category...
     explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
 
-    qreal volume() const;
     Phonon::Category category() const;
-    AudioOutputDevice outputDevice() const;
+
+    qreal volume() const;
     bool isMuted() const;
+    AudioOutputDevice outputDevice() const;
+
 
 public Q_SLOTS:
     void setVolume(qreal newVolume);
-    bool setOutputDevice(const Phonon::AudioOutputDevice &newAudioOutputDevice);
     void setMuted(bool mute);
+    bool setOutputDevice(const Phonon::AudioOutputDevice &newAudioOutputDevice);
 
 Q_SIGNALS:
     void volumeChanged(qreal newVolume);
-    void mutedChanged(bool);
+    void mutedChanged(bool muted);
     void outputDeviceChanged(const Phonon::AudioOutputDevice &newAudioOutputDevice);
 
 private:
