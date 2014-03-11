@@ -40,9 +40,10 @@ class PHONON_EXPORT AudioOutput : public QObject, public AbstractOutput
     Q_PROPERTY(bool muted READ isMuted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(AudioOutputDevice outputDevice READ outputDevice WRITE setOutputDevice NOTIFY outputDeviceChanged)
 public:
-#warning we need a way to wire category to PA category...
+    AudioOutput(QObject *parent = 0);
+    // FIXME: we need a way to wire category to PA category...
     explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
-    explicit AudioOutput(QObject *parent = 0);
+
     qreal volume() const;
     Phonon::Category category() const;
     AudioOutputDevice outputDevice() const;

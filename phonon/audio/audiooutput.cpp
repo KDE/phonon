@@ -25,41 +25,30 @@
 #include "audiooutputinterface.h"
 
 #include "factory_p.h"
-#include "objectdescription.h"
-#include "phononglobal.h"
 
-#include <QtCore/QUuid>
 #include <QtCore/qmath.h>
 
 namespace Phonon {
+
+AudioOutput::AudioOutput(QObject *parent)
+    : AudioOutput(NoCategory, parent)
+{
+}
 
 AudioOutput::AudioOutput(Phonon::Category category, QObject *parent)
     : QObject(parent)
     , AbstractOutput(*new AudioOutputPrivate)
 {
     P_D(AudioOutput);
-    d->init(category);
-}
-
-AudioOutput::AudioOutput(QObject *parent)
-    : QObject(parent)
-    , AbstractOutput(*new AudioOutputPrivate)
-{
-    P_D(AudioOutput);
-    d->init(NoCategory);
-}
-
-void AudioOutputPrivate::init(Phonon::Category c)
-{
-    P_Q(AudioOutput);
-    category = c;
-    createBackendObject();
+    d->category = category;
+    d->createBackendObject();
 }
 
 void AudioOutputPrivate::createBackendObject()
 {
     if (m_backendObject)
         return;
+
     P_Q(AudioOutput);
     m_backendObject = Factory::createAudioOutput(q);
     interface = qobject_cast<AudioOutputInterface *>(m_backendObject);
