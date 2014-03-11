@@ -18,10 +18,12 @@ set(phonon_LIB_SRCS
     abstractoutput.cpp
 
     # Librarians
+    debug.cpp
     phononversion.cpp
 
     # Privates (QTC Compat)
     abstractoutput_p.h
+    debug_p.h
     factory_p.h
     frontend_p.h
     player_p.h
