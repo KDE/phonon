@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2005-2007 Matthias Kretz <kretz@kde.org>
+    Copyright (C) 2013-2014 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,16 +23,12 @@
 #ifndef PHONON_VIDEOWIDGET_H
 #define PHONON_VIDEOWIDGET_H
 
-#include "phononexport.h"
 #include "abstractoutput.h"
 
 #include <QWidget>
 
-class QString;
-
 namespace Phonon {
 
-class AbstractVideoOutput;
 class VideoWidgetPrivate;
 
 class PHONON_EXPORT VideoWidget : public QWidget, public AbstractOutput
@@ -73,6 +70,7 @@ public:
     qreal contrast() const;
     qreal hue() const;
     qreal saturation() const;
+
     QImage snapshot() const;
 
 public Q_SLOTS:
@@ -90,9 +88,6 @@ public Q_SLOTS:
 
 protected:
     VideoWidget(VideoWidgetPrivate &d, QWidget *parent);
-
-    void mouseMoveEvent(QMouseEvent *);
-    bool event(QEvent *);
 
 private:
     P_DECLARE_PRIVATE(VideoWidget)

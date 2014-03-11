@@ -55,11 +55,6 @@ void VideoWidgetPrivate::init()
     changeFlags = q->windowFlags() & (Qt::SubWindow | Qt::Window);
 }
 
-void VideoWidget::mouseMoveEvent(QMouseEvent *e)
-{
-    QWidget::mouseMoveEvent(e);
-}
-
 void VideoWidgetPrivate::createBackendObject()
 {
     if (m_backendObject)
@@ -227,11 +222,6 @@ void VideoWidgetPrivate::setupBackendObject()
         q->setSizePolicy(w->sizePolicy());
         w->setMouseTracking(true);
     }
-}
-
-bool VideoWidget::event(QEvent *e)
-{
-    return QWidget::event(e);
 }
 
 } // namespace Phonon
