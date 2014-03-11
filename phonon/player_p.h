@@ -43,8 +43,8 @@ protected:
     /** \reimp */
     virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
-#warning this really needs to become virtual in frontendprivate
-    void setupBackendObject();
+    /** \reimp */
+    virtual void setupBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
     void _p_metaDataChanged(const QMultiMap<MetaData, QString> &);
     void _p_stateChanged(Phonon::State newState, Phonon::State oldState);

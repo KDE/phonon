@@ -47,8 +47,9 @@ protected:
     FrontendPrivate();
     virtual ~FrontendPrivate();
 
-    virtual void deleteBackendObject();
     virtual void createBackendObject() = 0;
+    virtual void deleteBackendObject();
+    virtual void setupBackendObject();
 
     Frontend *q_ptr;
     QObject *m_backendObject;

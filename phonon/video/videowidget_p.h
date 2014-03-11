@@ -37,7 +37,8 @@ protected:
     /** \reimp */
     virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
-    void setupBackendObject();
+    /** \reimp */
+    virtual void setupBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
     VideoWidgetPrivate(VideoWidget *parent)
         : layout(parent)

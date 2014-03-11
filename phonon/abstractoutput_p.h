@@ -22,7 +22,6 @@
 #ifndef PHONON_ABSTRACTOUTPUT_P_H
 #define PHONON_ABSTRACTOUTPUT_P_H
 
-//#include "abstractoutput.h"
 #include "frontend_p.h"
 
 namespace Phonon {

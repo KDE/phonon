@@ -63,8 +63,8 @@ public:
     int m_audioChannel;
 
 protected:
-    virtual void createBackendObject();
-    virtual void setupBackendObject();
+    virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
+    virtual void setupBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
 private:
     P_DECLARE_PUBLIC(VideoSourceControl)
@@ -82,8 +82,8 @@ public:
     int m_currentTrack;
 
 protected:
-    virtual void createBackendObject();
-    virtual void setupBackendObject();
+    virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
+    virtual void setupBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
 
 private:
     P_DECLARE_PUBLIC(AudioSourceControl)

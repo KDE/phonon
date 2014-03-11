@@ -52,6 +52,10 @@ void FrontendPrivate::deleteBackendObject()
     }
 }
 
+void FrontendPrivate::setupBackendObject()
+{
+}
+
 Frontend::Frontend(FrontendPrivate &dd)
     : k_ptr(&dd)
 {
