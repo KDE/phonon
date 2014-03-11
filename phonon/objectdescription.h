@@ -1,6 +1,5 @@
 /*
-    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
-    Copyright (C) 2011 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2011-2014 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -24,17 +23,10 @@
 #define PHONON_OBJECTDESCRIPTION_H
 
 #include "frontend.h"
-#include "phononexport.h"
 
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <QtCore/QSharedData>
-#include <QtCore/QString>
 #include <QtCore/QVariant>
 
-namespace Phonon
-{
+namespace Phonon {
 
 class DescriptionBasePrivate;
 #warning drop base suffix? reads terribly...

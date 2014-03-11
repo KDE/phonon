@@ -1,5 +1,5 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2014 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,6 @@
 
     You should have received a copy of the GNU Lesser General Public 
     License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #include "objectdescription.h"
@@ -25,8 +24,10 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>
-#include "factory_p.h"
 #include <QtCore/QStringList>
+
+#include "debug_p.h"
+#include "factory_p.h"
 #include "backendinterface.h"
 #include "phononpimpl_p.h"
 
@@ -40,12 +41,12 @@ public:
         , name()
         , description()
     {
-        qDebug() << Q_FUNC_INFO;
+        pDebug() << Q_FUNC_INFO;
     }
 
     void init(QString _name, QString _description)
     {
-        qDebug() << Q_FUNC_INFO << _name << _description;
+        pDebug() << Q_FUNC_INFO << _name << _description;
         valid = true;
         name = _name;
         description = _description;
@@ -53,7 +54,7 @@ public:
 
     bool operator==(const DescriptionBasePrivate &other) const
     {
-        qDebug() << Q_FUNC_INFO;
+        pDebug() << Q_FUNC_INFO;
         return (valid == other.valid) &&
                 (name == other.name) &&
                 (description == other.description);
@@ -61,7 +62,7 @@ public:
 
     bool operator!=(const DescriptionBasePrivate &other) const
     {
-        qDebug() << Q_FUNC_INFO;
+        pDebug() << Q_FUNC_INFO;
         return (valid != other.valid) &&
                 (name != other.name) &&
                 (description != other.description);
@@ -79,7 +80,7 @@ public:
 DescriptionBase::DescriptionBase()
     : k_ptr(new DescriptionBasePrivate())
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 QString DescriptionBase::name() const
@@ -102,27 +103,27 @@ bool DescriptionBase::isValid() const
 
 DescriptionBase &DescriptionBase::operator=(const DescriptionBase &other)
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
     *(this->k_ptr) = *(other.k_ptr);
     return *this;
 }
 
 bool DescriptionBase::operator==(const DescriptionBase &other) const
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
     return *(this->k_ptr) == *(other.k_ptr);
 }
 
 bool DescriptionBase::operator!=(const DescriptionBase &other) const
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
     return *(this->k_ptr) != *(other.k_ptr);
 }
 
 DescriptionBase::DescriptionBase(const DescriptionBase &other)
     : k_ptr(new DescriptionBasePrivate(*other.k_ptr))
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 DescriptionBase::~DescriptionBase()
@@ -133,19 +134,19 @@ DescriptionBase::~DescriptionBase()
 DescriptionBase::DescriptionBase(DescriptionBasePrivate &dd)
     : k_ptr(&dd)
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 EffectDescription::EffectDescription()
     : DescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 EffectDescription::EffectDescription(QString name, QString description)
     : DescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
     P_D(DescriptionBase);
     d->init(name, description);
 }
@@ -164,12 +165,12 @@ public:
 DeviceDescriptionBase::DeviceDescriptionBase()
     : DescriptionBase(*new DeviceDescriptionBasePrivate())
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 DeviceDescriptionBase::~DeviceDescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 bool DeviceDescriptionBase::isAvailable() const
@@ -197,58 +198,58 @@ QList<QByteArray> DeviceDescriptionBase::propertyNames() const
 AudioOutputDevice::AudioOutputDevice()
     : DeviceDescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 AudioOutputDevice::AudioOutputDevice(QString name, QString description)
     : DeviceDescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
     P_D(DeviceDescriptionBase);
     d->init(name, description);
 }
 
 AudioOutputDevice::~AudioOutputDevice()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 AudioCaptureDevice::AudioCaptureDevice()
     : DeviceDescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 AudioCaptureDevice::AudioCaptureDevice(QString name, QString description)
     : DeviceDescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
     P_D(DeviceDescriptionBase);
     d->init(name, description);
 }
 
 AudioCaptureDevice::~AudioCaptureDevice()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 VideoCaptureDevice::VideoCaptureDevice()
     : DeviceDescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 VideoCaptureDevice::VideoCaptureDevice(QString name, QString description)
     : DeviceDescriptionBase()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
     P_D(DeviceDescriptionBase);
     d->init(name, description);
 }
 
 VideoCaptureDevice::~VideoCaptureDevice()
 {
-    qDebug() << Q_FUNC_INFO;
+    pDebug() << Q_FUNC_INFO;
 }
 
 } // namespace Phonon

@@ -21,15 +21,16 @@
 */
 
 #include "factory_p.h"
-
 #include "backendinterface.h"
-#include "globalstatic_p.h"
-#include "phononglobal.h"
-#include "phononversion.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QPluginLoader>
+
+#include "debug_p.h"
+#include "globalstatic_p.h"
+#include "phononglobal.h"
+#include "phononversion.h"
 
 namespace Phonon {
 
@@ -60,7 +61,7 @@ static inline void ensureLibraryPathSet()
 
 bool FactoryPrivate::createBackend()
 {
-    qDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STR << "trying to create backend...";
+    pDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STR << "trying to create backend...";
 #ifndef QT_NO_LIBRARY
     Q_ASSERT(backendObject == 0);
 
@@ -80,27 +81,27 @@ bool FactoryPrivate::createBackend()
             const QString libPath = paths.at(i) + suffix;
             const QDir dir(libPath);
             if (!dir.exists()) {
-                qDebug() << Q_FUNC_INFO << dir.absolutePath() << "does not exist";
+                pDebug() << Q_FUNC_INFO << dir.absolutePath() << "does not exist";
                 continue;
             }
 
             QStringList plugins(dir.entryList(QDir::Files));
 
             if (!backendEnv.isEmpty()) {
-                qDebug() << "trying to load:" << backendEnv << "as first choice";
+                pDebug() << "trying to load:" << backendEnv << "as first choice";
                 const int backendIndex = plugins.indexOf(QRegExp(backendEnv + ".*"));
                 if (backendIndex != -1)
                     plugins.move(backendIndex, 0);
             }
 
             foreach (const QString &plugin, plugins) {
-                qDebug() << "Loading" << libPath + plugin;
+                pDebug() << "Loading" << libPath + plugin;
                 QPluginLoader pluginLoader(libPath + plugin);
                 if (!pluginLoader.load()) {
-                    qDebug() << Q_FUNC_INFO << "  load failed:" << pluginLoader.errorString();
+                    pDebug() << Q_FUNC_INFO << "  load failed:" << pluginLoader.errorString();
                     continue;
                 }
-                qDebug() << pluginLoader.instance();
+                pDebug() << pluginLoader.instance();
                 backendObject = pluginLoader.instance();
                 if (backendObject) {
                     break;
@@ -120,7 +121,7 @@ bool FactoryPrivate::createBackend()
         }
     }
 
-    qDebug() << Q_FUNC_INFO
+    pDebug() << Q_FUNC_INFO
              << "Phonon backend"
              << backendObject->property("backendName").toString()
              << "version"

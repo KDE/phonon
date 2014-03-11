@@ -26,6 +26,7 @@
 #include "factory_p.h"
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDebug>
 #include <QtCore/QStringList>
 
 namespace Phonon {

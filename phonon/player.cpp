@@ -26,13 +26,8 @@
 
 #include "abstractoutput.h"
 #include "abstractoutput_p.h"
+#include "debug_p.h"
 #include "factory_p.h"
-
-#include <QtCore/QDebug>
-#include <QtCore/QStringList>
-#include <QtCore/QTimer>
-#include <QtCore/QUrl>
-
 #include "phononglobal.h"
 
 namespace Phonon {
@@ -210,7 +205,7 @@ void Player::setSource(const Source &newSource)
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << newSource.url() << newSource.deviceName();
+    pDebug() << Q_FUNC_INFO << newSource.url() << newSource.deviceName();
 
     // first call stop as that often is the expected state for setting a new URL
     stop();
@@ -297,7 +292,7 @@ void PlayerPrivate::setupBackendObject()
     const State backendState = interface->state();
     if (state != backendState) {
 #warning do we really want this? ... shouldnt we force the frontend state on the backend instead?
-        qDebug() << "emitting a state change because the backend object has been created";
+        pDebug() << "emitting a state change because the backend object has been created";
         emit q->stateChanged(backendState, state);
         state = backendState;
     }

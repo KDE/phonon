@@ -21,4 +21,4 @@
 
 #include "debug_p.h"
 
-Q_LOGGING_CATEGORY(PHONON_DEBUG_CATEGORY, "phonon")
+Q_LOGGING_CATEGORY(PHONON_DEBUG_CATEGORY, "phonon.core")
