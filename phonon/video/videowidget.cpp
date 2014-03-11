@@ -38,7 +38,6 @@ VideoWidget::VideoWidget(QWidget *parent)
     P_D(VideoWidget);
     d->init();
     d->createBackendObject();
-    setMouseTracking(true);
 }
 
 VideoWidget::VideoWidget(VideoWidgetPrivate &dd, QWidget *parent)
@@ -53,6 +52,7 @@ void VideoWidgetPrivate::init()
 {
     P_Q(VideoWidget);
     changeFlags = q->windowFlags() & (Qt::SubWindow | Qt::Window);
+    q->setMouseTracking(true);
 }
 
 void VideoWidgetPrivate::createBackendObject()
