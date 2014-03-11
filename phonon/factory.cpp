@@ -572,7 +572,9 @@ QObject *Factory::backend(bool createWhenNull)
         // XXX: might create "reentrancy" problems:
         // a method calls this method and is called again because the
         // backendChanged signal is emitted
-        emit globalFactory->backendChanged();
+        if (globalFactory->m_backendObject) {
+            emit globalFactory->backendChanged();
+        }
     }
     return globalFactory->m_backendObject;
 }
