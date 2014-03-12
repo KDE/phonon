@@ -67,6 +67,9 @@ public:
     QByteArray deviceName() const;
     AbstractMediaStream *stream() const;
 
+    // FIXME: are we sure that autodeteletion is no longer needed to be controlled
+    //        ... previously there was setAutodelete(bool)
+
 protected:
     QExplicitlySharedDataPointer<SourcePrivate> d;
     Source(SourcePrivate &);
