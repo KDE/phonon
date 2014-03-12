@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
-    Copyright (C) 2013 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2013-2014 Harald Sitter <sitter@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,8 @@
 #define PHONON_AUDIOOUTPUT_H
 
 #include "abstractoutput.h"
-#include "objectdescription.h"
+
+#include <QtCore/QObject>
 
 namespace Phonon {
 
@@ -34,7 +35,7 @@ class PHONON_EXPORT AudioOutput : public QObject, public AbstractOutput
     Q_OBJECT
     Q_PROPERTY(qreal volume READ volume WRITE setVolume NOTIFY volumeChanged)
     Q_PROPERTY(bool muted READ isMuted WRITE setMuted NOTIFY mutedChanged)
-    Q_PROPERTY(AudioOutputDevice outputDevice READ outputDevice WRITE setOutputDevice NOTIFY outputDeviceChanged)
+    Q_PROPERTY(Category category READ category)
 public:
     AudioOutput(QObject *parent = 0);
     // FIXME: we need a way to wire category to PA category...
@@ -44,18 +45,14 @@ public:
 
     qreal volume() const;
     bool isMuted() const;
-    AudioOutputDevice outputDevice() const;
-
 
 public Q_SLOTS:
     void setVolume(qreal newVolume);
     void setMuted(bool mute);
-    bool setOutputDevice(const Phonon::AudioOutputDevice &newAudioOutputDevice);
 
 Q_SIGNALS:
     void volumeChanged(qreal newVolume);
     void mutedChanged(bool muted);
-    void outputDeviceChanged(const Phonon::AudioOutputDevice &newAudioOutputDevice);
 
 private:
     P_DECLARE_PRIVATE(AudioOutput)

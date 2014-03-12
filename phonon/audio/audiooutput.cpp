@@ -118,18 +118,6 @@ Category AudioOutput::category() const
     return d->category;
 }
 
-AudioOutputDevice AudioOutput::outputDevice() const
-{
-    P_D(const AudioOutput);
-    return d->interface->outputDevice();
-}
-
-bool AudioOutput::setOutputDevice(const AudioOutputDevice &newAudioOutputDevice)
-{
-    P_D(AudioOutput);
-    return d->interface->setOutputDevice(newAudioOutputDevice);
-}
-
 void AudioOutputPrivate::setupBackendObject()
 {
     P_Q(AudioOutput);

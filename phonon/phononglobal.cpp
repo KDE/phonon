@@ -21,8 +21,6 @@
 
 #include "phononglobal.h"
 
-#include "objectdescription.h"
-
 #include "factory_p.h"
 
 #include <QtCore/QCoreApplication>

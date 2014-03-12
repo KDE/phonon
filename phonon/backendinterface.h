@@ -23,7 +23,8 @@
 #ifndef PHONON_BACKENDINTERFACE_H
 #define PHONON_BACKENDINTERFACE_H
 
-#include "objectdescription.h"
+#include <QtCore/QList>
+#include <QtCore/QVariant>
 
 namespace Phonon {
 
@@ -47,15 +48,6 @@ public:
     };
 
     virtual QObject *createObject(Class c, QObject *parent, const QList<QVariant> &args = QList<QVariant>()) = 0;
-
-    virtual QList<AudioOutputDevice> audioOutputDevices() const = 0;
-    virtual QList<AudioCaptureDevice> audioCaptureDevices() const = 0;
-    virtual QList<VideoCaptureDevice> videoCaptureDevices() const = 0;
-
-Q_SIGNALS:
-    virtual void audioOutputDevicesChanged() = 0;
-    virtual void audioCaptureDevicesChanged() = 0;
-    virtual void videoCaptureDevicesChanged() = 0;
 };
 
 } // namespace Phonon

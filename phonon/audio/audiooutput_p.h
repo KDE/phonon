@@ -55,21 +55,9 @@ protected:
         HigherPreferenceChange,
         SoundSystemChange
     };
-    void handleAutomaticDeviceChange(const AudioOutputDevice &newDev, DeviceChangeType type);
-
-    /**
-     * \brief Checks if interface is null and sets output device.
-     * \param dev Device to set
-     * \return \c false if interface==0
-     */
-    bool safeSetOutputDevice(const AudioOutputDevice &dev);
 
     void _k_volumeChanged(qreal);
     void _k_mutedChanged(bool);
-    void _k_revertFallback();
-    void _k_audioDeviceFailed();
-    void _k_deviceListChanged();
-    void _k_deviceChanged(int deviceIndex);
 
 private:
     AudioOutputInterface *interface;

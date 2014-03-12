@@ -46,7 +46,6 @@ ${phonon_LIB_SRCS}
 #    effectparameter.cpp
 #    effectwidget.cpp
    streaming/iodevicestream.cpp
-   objectdescription.cpp
    phononglobal.cpp
 #    seekslider.cpp
    streaming/streaminterface.cpp
@@ -108,7 +107,6 @@ install(FILES
     source.h
     sourcecontrol.h
     sourcecontrolinterface.h
-    objectdescription.h
     phononexport.h
     ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
     widgets/seekslider.h
