@@ -35,6 +35,7 @@ class PHONON_EXPORT VideoWidget : public QWidget, public AbstractOutput
 {
     Q_OBJECT
     Q_ENUMS(AspectRatio ScaleMode)
+    // FIXME: all of these need notifiers
     Q_PROPERTY(bool fullScreen READ isFullScreen WRITE setFullScreen)
     Q_PROPERTY(AspectRatio aspectRatio READ aspectRatio WRITE setAspectRatio)
     Q_PROPERTY(ScaleMode scaleMode READ scaleMode WRITE setScaleMode)
