@@ -20,10 +20,9 @@
 
 */
 
-#ifndef PHONON_SOURCE_H_
-#define PHONON_SOURCE_H_
+#ifndef PHONON_SOURCE_H
+#define PHONON_SOURCE_H
 
-#include "phononexport.h"
 #include "phononglobal.h"
 
 #include <QtCore/QSharedData>
@@ -57,6 +56,7 @@ public:
     Source(AbstractMediaStream *stream);
     Source(QIODevice *ioDevice);
 
+    // FIXME: why is the dtor virtual?
     virtual ~Source();
 
     Source &operator=(const Source &other);
@@ -74,4 +74,4 @@ protected:
 
 } // namespace Phonon
 
-#endif // PHONON_SOURCE_H_
+#endif // PHONON_SOURCE_H
