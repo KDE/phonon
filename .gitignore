@@ -1,3 +1,6 @@
 *.swp
+*.user
 build
+buildn
+build5
 apidocs
