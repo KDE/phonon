@@ -64,7 +64,7 @@ void AudioOutput::setVolume(qreal volume)
     P_D(AudioOutput);
     d->volume = volume;
 
-    if (d->interface) { // Fake property change.
+    if (!d->interface) { // Fake property change.
         emit volumeChanged(volume);
         return;
     }
