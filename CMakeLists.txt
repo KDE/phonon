@@ -98,11 +98,12 @@ install(
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     COMPONENT Devel)
 
-message(WARNING "PhononLibs should be renamed to PhononTargets")
-install(EXPORT PhononLibs DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PhononTargets.cmake NAMESPACE Phonon:: )
-
-#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sonnet_version.h
-#        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+install(
+    EXPORT PhononTargets
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    FILE PhononTargets.cmake
+    NAMESPACE Phonon::
+)
 
 ################################### QT PRI #####################################
 

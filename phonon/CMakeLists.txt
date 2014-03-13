@@ -21,6 +21,13 @@ set(phonon_LIB_SRCS
     debug.cpp
     phononversion.cpp
 
+    # Specifics
+    audio/audiooutput.cpp
+    streaming/abstractmediastream.cpp
+    streaming/iodevicestream.cpp
+    streaming/streaminterface.cpp
+    video/videowidget.cpp
+
     # Privates (QTC Compat)
     abstractoutput_p.h
     debug_p.h
@@ -39,21 +46,16 @@ set(phonon_LIB_SRCS
 # random plunder battlefield4 sources
 set(phonon_LIB_SRCS
 ${phonon_LIB_SRCS}
-   streaming/abstractmediastream.cpp
 #   audiodataoutput.cpp
-   audio/audiooutput.cpp
 #    effect.cpp
 #    effectparameter.cpp
 #    effectwidget.cpp
-   streaming/iodevicestream.cpp
    phononglobal.cpp
 #    seekslider.cpp
-   streaming/streaminterface.cpp
 #    swiftslider.cpp
 #    volumefadereffect.cpp
 #    volumeslider.cpp
 #    videoplayer.cpp
-    video/videowidget.cpp
     video/videoitem.cpp
 
 # QTC Compat
@@ -72,9 +74,15 @@ message(WARNING "WTF")
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}")
 
 add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
-message(WARNING "kf5 doesn't use qt5_use_modules, perhaps we shouldn't either")
-qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets Quick)
-target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_LIBRARY})
+
+target_link_libraries(${PHONON_LIB_SONAME}
+    LINK_PUBLIC
+        Qt5::Core
+    LINK_PRIVATE
+        Qt5::Widgets
+        Qt5::Quick
+        ${OPENGL_LIBRARY}
+)
 
 set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
     VERSION ${PHONON_VERSION_STRING}
@@ -102,7 +110,7 @@ message(WARNING "probably want a macro for generate_headers")
 #    RELATIVE video
 #)
 
-install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
 #    abstractmediastream.h
