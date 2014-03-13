@@ -9,7 +9,6 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_S
 
 set(PHONON_LIB_SONAME phonon5)
 set(PHONON_LIB_SONAME_CAMEL Phonon5)
-set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 ################################# Requirements #################################
 
@@ -51,11 +50,6 @@ set(INSTALL_TARGETS_DEFAULT_ARGS  RUNTIME DESTINATION  "${CMAKE_INSTALL_BINDIR}"
 message(WARNING "plugininstalldir is possibly a bit fugly")
 set(PLUGIN_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/qt5/plugins/")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/includes
-                    ${CMAKE_CURRENT_SOURCE_DIR}/phonon
-                    ${CMAKE_CURRENT_BINARY_DIR}/phonon)
-
 message(WARNING "phonon buildsystem currently not used")
 #add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
@@ -73,16 +67,6 @@ endif(PHONON_BUILD_DOC)
 add_subdirectory(phonon)
 #add_subdirectory(includes)
 
-message(WARNING "pkgconfig deactivated")
-#if(NOT WIN32) # pkgconfig file
-#    make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
-#    make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
-#    make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
-#
-#    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc @ONLY)
-#    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-#endif(NOT WIN32)
-
 ################################# CMake Config #################################
 
 set(CMAKECONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PHONON_LIB_SONAME})
@@ -96,7 +80,8 @@ install(
     FILES "${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake"
           "${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake"
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    COMPONENT Devel)
+    COMPONENT Devel
+)
 
 install(
     EXPORT PhononTargets
@@ -104,6 +89,13 @@ install(
     FILE PhononTargets.cmake
     NAMESPACE Phonon::
 )
+
+################################# PKG Config #################################
+
+if(NOT WIN32) # pkgconfig file
+    configure_file(phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+endif(NOT WIN32)
 
 ################################### QT PRI #####################################
 

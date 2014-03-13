@@ -1,9 +1,11 @@
 include_directories(
-    ${CMAKE_BINARY_DIR}/includes/phonon
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/audio
     ${CMAKE_CURRENT_SOURCE_DIR}/pulse
     ${CMAKE_CURRENT_SOURCE_DIR}/streaming
     ${CMAKE_CURRENT_SOURCE_DIR}/video
+
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 # Mostly clean and refactored Phonon 5 sources
