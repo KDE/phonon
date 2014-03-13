@@ -71,7 +71,6 @@ if(PHONON_BUILD_DOC)
 endif(PHONON_BUILD_DOC)
 
 add_subdirectory(src)
-#add_subdirectory(includes)
 
 ################################# CMake Config #################################
 
