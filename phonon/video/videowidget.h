@@ -25,7 +25,7 @@
 
 #include "abstractoutput.h"
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Phonon {
 

@@ -61,7 +61,7 @@ static inline void ensureLibraryPathSet()
 
 bool FactoryPrivate::createBackend()
 {
-    pDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STR << "trying to create backend...";
+    pDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STRING << "trying to create backend...";
 #ifndef QT_NO_LIBRARY
     Q_ASSERT(backendObject == 0);
 

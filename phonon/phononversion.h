@@ -23,6 +23,7 @@
 #define PHONONVERSION_H
 
 #include "phononexport.h"
+#include "phononversiondata.h"
 
 /**
  * Helper macro that can be used like
@@ -31,16 +32,6 @@
  * \endcode
  */
 #define PHONON_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
-
-/**
- * PHONON_VERSION is (major << 16) + (minor << 8) + patch.
- */
-#define PHONON_VERSION PHONON_VERSION_CHECK(@PHONON_LIB_MAJOR_VERSION@, @PHONON_LIB_MINOR_VERSION@, @PHONON_LIB_PATCH_VERSION@)
-
-/**
- * PHONON_VERSION_STR is "major.minor.patch". E.g. "5.1.2"
- */
-#define PHONON_VERSION_STR "@PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONON_LIB_PATCH_VERSION@"
 
 namespace Phonon
 {

@@ -25,7 +25,7 @@ namespace Phonon {
 
 PHONON_EXPORT const char *phononVersion()
 {
-    return PHONON_VERSION_STR;
+    return PHONON_VERSION_STRING;
 }
 
 } // namespace Phonon

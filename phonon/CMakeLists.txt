@@ -68,25 +68,41 @@ ${phonon_LIB_SRCS}
     video/videosurfaceinterface.h
    )
 
-add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
+message(WARNING "WTF")
+add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}")
 
 add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
+message(WARNING "kf5 doesn't use qt5_use_modules, perhaps we shouldn't either")
 qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets Quick)
 target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_LIBRARY})
 
 set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
-                                           VERSION ${PHONON_LIB_VERSION}
-                                           SOVERSION ${PHONON_LIB_SOVERSION}
-                                           DEFINE_SYMBOL MAKE_PHONON_LIB
-                                           LINK_INTERFACE_LIBRARIES "")
-# LINK_INTERFACE_LIBRARIES: By default don't add any linked libraries to the "exported"
-# link interfaces, so that executables linking against this library
-# will not automatically add implicit dependencies to their link list.
-# This reduces inter-package dependencies and makes it easier to remove
-# dependencies of shared libraries without breaking binary compatibility.
+    VERSION ${PHONON_VERSION_STRING}
+    SOVERSION ${PHONON_SOVERSION}
+    DEFINE_SYMBOL MAKE_PHONON_LIB
+    EXPORT_NAME Core
+)
 
-install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phononversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h)
+message(WARNING "probably want a macro for generate_headers")
+#ecm_generate_headers(Phonon_CamelCase_HEADERS
+#    HEADER_NAMES
+#        Player
+#        Source
+#)
+
+#ecm_generate_headers(Phonon_CamelCase_HEADERS
+#    HEADER_NAMES
+#        AudioOutput
+#    RELATIVE audio
+#)
+
+#ecm_generate_headers(Phonon_CamelCase_HEADERS
+#    HEADER_NAMES
+#        VideoWidget
+#    RELATIVE video
+#)
+
+install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
 #    abstractmediastream.h
@@ -108,7 +124,8 @@ install(FILES
     sourcecontrol.h
     sourcecontrolinterface.h
     phononexport.h
-    ${CMAKE_CURRENT_BINARY_DIR}/phononversion.h
+    phononversion.h
+    ${CMAKE_CURRENT_BINARY_DIR}/phononversiondata.h
     widgets/seekslider.h
     streaming/streaminterface.h
     video/videoplayer.h
@@ -123,4 +140,6 @@ install(FILES
     video/videosurfaceinterface.h
     video/videoitem.h
 
-    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
+    DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${PHONON_LIB_SONAME}/phonon
+    COMPONENT Devel
+)

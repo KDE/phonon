@@ -24,6 +24,8 @@
 #include "frontend.h"
 #include "frontend_p.h"
 
+#include <QtCore/QObject>
+
 namespace Phonon {
 
 FrontendPrivate::FrontendPrivate()

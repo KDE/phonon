@@ -1,136 +1,63 @@
 project(Phonon5)
 
-cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-option(PHONON_BUILD_DEMOS "Build the demos" OFF)
+set(CMAKE_AUTOMOC ON)
+
+find_package(ECM 0.0.11 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+set(PHONON_LIB_SONAME phonon5)
+set(PHONON_LIB_SONAME_CAMEL Phonon5)
+set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+
+################################# Requirements #################################
+
+include(FeatureSummary)
+include(GNUInstallDirs)
+#include(GenerateExportHeader)
+
+include(ECMGenerateHeaders)
+include(ECMGeneratePriFile)
+include(ECMPackageConfigHelpers)
+include(ECMSetupVersion)
+
+find_package(Qt5 5.2.0 CONFIG REQUIRED Core Gui Quick Widgets)
+find_package(OpenGL REQUIRED)
+
+ecm_setup_version("4.50.0"
+    VARIABLE_PREFIX PHONON
+    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/phonon/phononversiondata.h"
+    PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake"
+    SOVERSION 4)
+
+################################### Options ####################################
+
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 
-option(PHONON_NO_CAPTURE "Disable the capture capabilities")
-
-# The following variables directly influence the library's soname version.
-# It is highly advised to think twice before changing those.
-# If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
-set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
-set(PHONON_LIB_MINOR_VERSION "50") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "0") # Bump whenever you feel like it :P
-set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
-set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
-set(PHONON_LIB_SONAME phonon5)
-set(PHONON_LIB_SONAME_CAMEL Phonon5)
-
-set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-################################# Requirements #################################
-# Core Requirements and CFlag Magic
-include(cmake/FindPhononInternal.cmake)
-
-# Designer Plugin
-find_package(Qt5Designer)
-macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" "" "" FALSE)
-set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
-
-# VideoGraphicsObject GL Painting
-find_package(Qt5OpenGL)
-macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" "" "" FALSE)
-set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
-
-find_package(OpenGL)
-macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
 ################################################################################
 
-add_definitions(${QT_DEFINITIONS} -DQT_NO_PHONON_ABSTRACTMEDIASTREAM)
+# Using relative pathery everywhere is crucial for cmake's targets file to
+# contain an include directory definition for the target, which in turn makes
+# Phonon much easier to use when using cmake to build the consumer.
+message(WARNING "includes definition is partially duplicated in actual install command")
+set(INSTALL_TARGETS_DEFAULT_ARGS  RUNTIME DESTINATION  "${CMAKE_INSTALL_BINDIR}"
+                                  LIBRARY DESTINATION  "${CMAKE_INSTALL_LIBDIR}"
+                                  ARCHIVE DESTINATION  "${CMAKE_INSTALL_LIBDIR}" COMPONENT Devel
+                                  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PHONON_LIB_SONAME}"
+)
+message(WARNING "plugininstalldir is possibly a bit fugly")
+set(PLUGIN_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/qt5/plugins/")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${CMAKE_CURRENT_SOURCE_DIR}/phonon
                     ${CMAKE_CURRENT_BINARY_DIR}/phonon)
 
-# Convenience variable to hold target link libraries we always need.
-set(PHONON_LIBS ${PHONON_LIB_SONAME})
-
-# helper macro to make the install paths absolute
-macro(MAKE_ABS_INSTALL_PATH _absVar _path)
-    if (IS_ABSOLUTE "${_path}")
-        set(${_absVar} "${_path}")
-    else()
-        set(${_absVar} "${CMAKE_INSTALL_PREFIX}/${_path}")
-    endif()
-endmacro(MAKE_ABS_INSTALL_PATH)
-
-
-set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/${PHONON_LIB_SONAME}/buildsystem/)
-
-include(GNUInstallDirs)
-
-# Provide a cmake option, which, if set, force the Qt stuff to be installed into the
-# system Qt directories, which may be outside CMAKE_INSTALL_PREFIX.
-# By default always install inside CMAKE_INSTALL_PREFIX.
-option(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT "Install Qt designer plugins, QML plugins and mkspecs into the system Qt install directory or not"
-       FALSE)
-
-if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
-    # in this case, the values have to be FORCED into the cache
-    set(PHONON_QT_IMPORTS_INSTALL_DIR ${QT_IMPORTS_DIR} CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to." FORCE)
-    set(PHONON_QT_MKSPECS_INSTALL_DIR  ${QT_MKSPECS_DIR}/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to." FORCE)
-    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to." FORCE)
-else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
-    # in this case, the values can be adjusted by the user e.g. via cmake-gui, so no FORCE
-    set(PHONON_QT_IMPORTS_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/qt5/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
-    set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt5/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
-    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${CMAKE_INSTALL_LIBDIR}/qt5/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
-endif(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
-
-
-# Check whether the QML plugins will be installed into the system Qt dir, and warn if not:
-make_abs_install_path(absImportsDir "${PHONON_QT_IMPORTS_INSTALL_DIR}")
-
-if(NOT "${absImportsDir}" STREQUAL "${QT_IMPORTS_DIR}")
-    message(STATUS "PHONON_QT_IMPORTS_DIR is set to ${absImportsDir}.
-      The QML plugins for Phonon will not be installed into the Qt system installation directory,
-      which is ${QT_IMPORTS_DIR} .
-      This means the QML plugins file will not be found by default.
-      You can:
-       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
-       * set PHONON_QT_IMPORTS_INSTALL_DIR manually to the system Qt location
-       * at runtime, set the QML_IMPORT_PATH environment variable")
-endif(NOT "${absImportsDir}" STREQUAL "${QT_IMPORTS_DIR}")
-
-
-# Check whether the mkspecs file will be installed into the system Qt dir, and warn if not:
-make_abs_install_path(absMkspecsDir "${PHONON_QT_MKSPECS_INSTALL_DIR}")
-
-if(NOT "${absMkspecsDir}" STREQUAL "${QT_MKSPECS_DIR}/modules")
-    message(STATUS "PHONON_QT_MKSPECS_INSTALL_DIR is set to ${absMkspecsDir}.
-      The Qt mkspecs file for Phonon will not be installed into the Qt system installation directory,
-      which is ${QT_MKSPECS_DIR}/modules .
-      This means the qt_phonon.pri file will not be found by default.
-      You can:
-       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
-       * set PHONON_QT_MKSPECS_INSTALL_DIR manually to the system Qt location
-       * at runtime, with Qt >= 4.8, set the QMAKEPATH environment variable")
-endif(NOT "${absMkspecsDir}" STREQUAL "${QT_MKSPECS_DIR}/modules")
-
-
-# Check whether the designer plugins will be installed into the system Qt dir, and warn if not:
-make_abs_install_path(absPluginDir "${PHONON_QT_PLUGIN_INSTALL_DIR}")
-
-if(NOT "${absPluginDir}" STREQUAL "${QT_PLUGINS_DIR}/designer")
-    message(STATUS "PHONON_QT_PLUGIN_INSTALL_DIR is set to ${absPluginDir}.
-      The Qt designer plugins for Phonon will not be installed into the Qt system installation directory,
-      which is ${QT_PLUGINS_DIR}/designer .
-      This means the designer plugins file will not be found by default.
-      You can:
-       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
-       * set PHONON_QT_PLUGINS_INSTALL_DIR manually to the system Qt location
-       * at runtime, set the QT_PLUGIN_PATH environment variable")
-endif(NOT "${absPluginDir}" STREQUAL "${QT_PLUGINS_DIR}/designer")
-
-
-
-add_subdirectory(cmake)
+message(WARNING "phonon buildsystem currently not used")
+#add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
@@ -144,44 +71,45 @@ if(PHONON_BUILD_DOC)
 endif(PHONON_BUILD_DOC)
 
 add_subdirectory(phonon)
-add_subdirectory(includes)
+#add_subdirectory(includes)
 
-if(PHONON_BUILD_DEMOS)
-    message(STATUS "Building demos.")
-    #Allows find_package(Phonon) to not die in the demos
-    set(PHONON_BUILDSYSTEM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-    set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/includes/)
-    set(PHONON_LIBRARY ${PHONON_LIB_SONAME})
-    #Lets the demos find the headers
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})
-    add_subdirectory(demos)
-endif(PHONON_BUILD_DEMOS)
+message(WARNING "pkgconfig deactivated")
+#if(NOT WIN32) # pkgconfig file
+#    make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
+#    make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
+#    make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
+#
+#    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc @ONLY)
+#    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+#endif(NOT WIN32)
 
-if(NOT WIN32) # pkgconfig file
-    make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
-    make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
-    make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
+################################# CMake Config #################################
 
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-endif(NOT WIN32)
+set(CMAKECONFIG_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PHONON_LIB_SONAME})
 
-set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/${PHONON_LIB_SONAME} )
+ecm_configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake"
+    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR})
 
-# figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
-# runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
-# This relative path will be configured into the PhononConfig.cmake
-file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
+install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake"
+          "${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    COMPONENT Devel)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake @ONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake @ONLY)
+message(WARNING "PhononLibs should be renamed to PhononTargets")
+install(EXPORT PhononLibs DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PhononTargets.cmake NAMESPACE Phonon:: )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
-        DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
+#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/sonnet_version.h
+#        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
-install(EXPORT PhononLibs DESTINATION ${CMAKECONFIG_INSTALL_DIR} NAMESPACE Phonon:: FILE PhononTargets.cmake )
+################################### QT PRI #####################################
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
+message(WARNING "ecm_generate_pri uses kf5 include path...")
+ecm_generate_pri_file(BASE_NAME ${PHONON_LIB_SONAME} LIB_NAME ${PHONON_LIB_SONAME_CAMEL} DEPS "widgets" FILENAME_VAR PRI_FILENAME)
+install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
-macro_display_feature_log()
+################################################################################
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
