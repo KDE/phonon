@@ -25,7 +25,7 @@
 
 #include "phononexport.h"
 
-#warning k_func k_ptr to p_?
+// FIXME: k_func k_ptr to p_?
 #define P_DECLARE_PRIVATE(Class) \
     inline Class##Private* k_func() { return reinterpret_cast<Class##Private *>(k_ptr); } \
     inline const Class##Private* k_func() const { return reinterpret_cast<const Class##Private *>(k_ptr); } \
@@ -51,7 +51,7 @@ enum MetaData {
     LocationMetaData,
     ContactMetaData,
     IsrcMetaData
-#warning VLC also has additional data though some of those may be video or something, needs investigation
+// FIXME: VLC also has additional data though some of those may be video or something, needs investigation
 //    UrlMetaData, unknown, not the URL of the media though
 //    RatingMetaData,
 //    SettingMetaData, appears to be encoding settings " HAS_INDEX IS_INTERLEAVED"

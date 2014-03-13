@@ -66,7 +66,6 @@ Phonon::State Player::state() const
 void Player::setTickInterval(qint32 newTickInterval)
 {
     P_D(Player);
-#warning caching is inconsistent and semi broken ...
     if (d->interface)
         d->interface->setTickInterval(newTickInterval);
     else
@@ -239,16 +238,6 @@ void PlayerPrivate::createBackendObject()
         setupBackendObject();
 }
 
-void PlayerPrivate::streamError(Phonon::ErrorType type, const QString &text)
-{
-    P_Q(Player);
-    State lastState = q->state();
-    errorType = type;
-    state = StoppedState;
-    QMetaObject::invokeMethod(q, "stateChanged", Qt::QueuedConnection, Q_ARG(Phonon::State, Phonon::StoppedState), Q_ARG(Phonon::State, lastState));
-    //emit q->stateChanged(ErrorState, lastState);
-}
-
 void PlayerPrivate::setupBackendObject()
 {
     P_Q(Player);
@@ -300,7 +289,13 @@ void PlayerPrivate::setupBackendObject()
     interface->setSource(source);
 }
 
-#warning why are metadata cached instead of passing it through? also why is there no interface getter for it...
+// MetaData in the backend may be cached, or it may not be cached.
+// Since the map construction however almost always requires excessive construction
+// and conversion of data types it generally makes sense to have arbitrary
+// data queries go into an always present cache in libphonon rather than hoping
+// that the backend implements a cache for it.
+// Additionally this in theory allows discarding data changes when there is no
+// difference, which ought to prevent excessive GUI redraws/updates.
 void PlayerPrivate::_p_metaDataChanged(const QMultiMap<MetaData, QString> &newMetaData)
 {
     metaData = newMetaData;

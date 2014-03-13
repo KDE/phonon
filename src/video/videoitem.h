@@ -36,7 +36,7 @@ public:
     explicit VideoItem(QQuickItem *parent = 0);
     ~VideoItem();
 
-#warning private class
+// FIXME: move to a private class
 private slots:
     void onFrameReady();
 

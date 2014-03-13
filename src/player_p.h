@@ -48,14 +48,12 @@ protected:
 
     void _p_metaDataChanged(const QMultiMap<MetaData, QString> &);
     void _p_stateChanged(Phonon::State newState, Phonon::State oldState);
-    void streamError(Phonon::ErrorType, const QString &);
 
     PlayerPrivate()
         : tickInterval(0)
         , metaData()
         , state(Phonon::StoppedState)
         , abstractStream(0)
-        , errorType(Phonon::NormalError)
         , interface(0)
     {}
 
@@ -67,7 +65,6 @@ protected:
     QMultiMap<MetaData, QString> metaData;
     State state;
     AbstractMediaStream *abstractStream;
-    ErrorType errorType;
     Source source;
 
     QList<AbstractOutput *> outputs;

@@ -34,8 +34,8 @@ namespace Phonon {
 class AbstractOutput;
 class PlayerPrivate;
 
-#warning ADD convenience statics for play() with limited control
-#warning should effects be set on the player rather than on the output? vlc doesnt really support per-output
+// FIXME: ADD convenience statics for play() with limited control
+// FIXME: should effects be set on the player rather than on the output? vlc doesnt really support per-output
 
 class PHONON_EXPORT Player : public QObject, public Frontend
 {
@@ -84,7 +84,7 @@ public:
     bool isStopped() const;
     bool isPaused() const;
 
-#warning error magic TBD
+// NOTE: error magic TBD
     //    QString errorString() const;
     //    ErrorType errorType() const;
 

@@ -170,7 +170,6 @@ public:
             return m_textureIds[2] - m->m_textureIds[2];
     }
 
-#warning dafuq
     virtual QSGMaterialType *type() const Q_DECL_OVERRIDE
     {
         static QSGMaterialType theType;
@@ -283,7 +282,6 @@ void VideoMaterial::bind()
         glBindTexture(GL_TEXTURE_2D, m_textureIds[0]);
     }
 
-#warning lock release here!!
     m_interface->unlock();
     qDebug() << Q_FUNC_INFO << "END";
 }
@@ -451,9 +449,6 @@ QSGNode *VideoItem::updatePaintNode(QSGNode *node, QQuickItem::UpdatePaintNodeDa
     if (!n->geometry())
         n->setGeometry(g);
     n->markDirty(QSGNode::DirtyGeometry);
-
-#warning rect calc missing entirely
-
     n->markDirty(QSGNode::DirtyGeometry | QSGNode::DirtyMaterial);
 
     return n;
