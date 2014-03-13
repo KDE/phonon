@@ -144,7 +144,6 @@ install(FILES
     effects/volumefadereffect.h
     effects/volumefaderinterface.h
     widgets/volumeslider.h
-    ${phonon_VGO_HDRS}
     phononglobal.h
 
     video/videosurfaceinterface.h

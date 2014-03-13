@@ -26,7 +26,7 @@ find_package(OpenGL REQUIRED)
 
 ecm_setup_version("4.50.0"
     VARIABLE_PREFIX PHONON
-    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/phonon/phononversiondata.h"
+    VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/src/phononversiondata.h"
     PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake"
     SOVERSION 4)
 
@@ -64,7 +64,7 @@ if(PHONON_BUILD_DOC)
     add_subdirectory(doc)
 endif(PHONON_BUILD_DOC)
 
-add_subdirectory(phonon)
+add_subdirectory(src)
 #add_subdirectory(includes)
 
 ################################# CMake Config #################################
@@ -92,7 +92,7 @@ install(
 
 ################################# PKG Config #################################
 
-if(NOT WIN32) # pkgconfig file
+if(NOT WIN32)
     configure_file(phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
