@@ -21,6 +21,8 @@ include(ECMGeneratePriFile)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 
+include(PhononUninstall)
+
 find_package(Qt5 5.2.0 CONFIG REQUIRED Core Gui Quick Widgets)
 find_package(OpenGL REQUIRED)
 
@@ -42,16 +44,20 @@ option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 # contain an include directory definition for the target, which in turn makes
 # Phonon much easier to use when using cmake to build the consumer.
 message(WARNING "includes definition is partially duplicated in actual install command")
-set(INSTALL_TARGETS_DEFAULT_ARGS  RUNTIME DESTINATION  "${CMAKE_INSTALL_BINDIR}"
-                                  LIBRARY DESTINATION  "${CMAKE_INSTALL_LIBDIR}"
-                                  ARCHIVE DESTINATION  "${CMAKE_INSTALL_LIBDIR}" COMPONENT Devel
-                                  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PHONON_LIB_SONAME}"
+set(INSTALL_TARGETS_DEFAULT_ARGS RUNTIME  DESTINATION "${CMAKE_INSTALL_BINDIR}"
+                                 LIBRARY  DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+                                 ARCHIVE  DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT Devel
+                                 INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PHONON_LIB_SONAME}"
 )
+
+set(PHONON_INSTALL_BUILDDIR "${CMAKE_INSTALL_DATADIR}/${PHONON_LIB_SONAME}/cmake-modules")
+set(PHONON_INSTALL_FULL_BUILDDIR "${CMAKE_INSTALL_PREFIX}/${PHONON_INSTALL_BUILDDIR}")
+
 message(WARNING "plugininstalldir is possibly a bit fugly")
 set(PLUGIN_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/qt5/plugins/")
 
 message(WARNING "phonon buildsystem currently not used")
-#add_subdirectory(cmake)
+add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)

@@ -1,0 +1,5 @@
+if (NOT _phonon_uninstall_target_created)
+   set(_phonon_uninstall_target_created TRUE)
+   configure_file("${CMAKE_CURRENT_LIST_DIR}/cmake_uninstall.cmake.in" "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake" @ONLY)
+   add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake")
+endif (NOT _phonon_uninstall_target_created)
