@@ -234,6 +234,25 @@ set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/${PHONON_LIB_SONAME} )
 # runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
 # This relative path will be configured into the PhononConfig.cmake
 file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
+make_abs_install_path(absInstallDir ${CMAKECONFIG_INSTALL_DIR})
+
+# Exciting code copy from CMakePackageConfigHelpers to avoid the pain from porting
+# to it for the 4.x series.
+# The set variable is used by the PhononConfig.cmake.in to use a refined rootDir
+# resolution when installed to /usr/lib
+if("${absInstallDir}" MATCHES "^(/usr)?/lib(64)?/.+")
+    # Handle "/usr move" symlinks created by some Linux distros.
+    set(USR_SYMLINK_RESOLVER "
+        # Use original install prefix when loaded through a \"/usr move\"
+        # cross-prefix symbolic link such as /lib -> /usr/lib.
+        get_filename_component(_realCurr \"\${CMAKE_CURRENT_LIST_DIR}\" REALPATH)
+        get_filename_component(_realOrig \"${absInstallDir}\" REALPATH)
+        if(_realCurr STREQUAL _realOrig)
+            set(rootDir \"${CMAKE_INSTALL_PREFIX}\")
+        endif()
+        unset(_realOrig)
+        unset(_realCurr)")
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake @ONLY)
