@@ -525,6 +525,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
             }
             const QStringList files = dir.entryList(QDir::Files);
             for (int i = 0; i < files.count(); ++i) {
+                pDebug() << "attempting to load" << libPath + files.at(i);
                 QPluginLoader pluginLoader(libPath + files.at(i));
                 if (!pluginLoader.load()) {
                     pDebug() << Q_FUNC_INFO << "  platform plugin load failed:"
