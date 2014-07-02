@@ -3,6 +3,9 @@
 # FIXME: this appears to be necessary because we do public linkage against quick
 find_dependency(Qt5Quick @REQUIRED_QT_VERSION@)
 
+set(PHONON_LIBRARIES phonon5)
+set(PHONON_INCLUDES "@PACKAGE_PREFIX_DIR@/include/phonon5")
+
 set(PHONON_PLUGIN_INSTALL_DIR "@PLUGIN_INSTALL_DIR@/phonon_backend/")
 # FIXME: not relocatable
 set(PHONON_MODULE_DIR "@PHONON_INSTALL_FULL_BUILDDIR@")
