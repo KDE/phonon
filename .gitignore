@@ -4,3 +4,7 @@ build
 buildn
 build5
 apidocs
+phonon.config
+phonon.creator.*
+phonon.files
+phonon.includes
