@@ -99,6 +99,8 @@ qint64 Player::time() const
 void Player::play()
 {
     P_D(Player);
+    if (!d->m_backendObject)
+        d->createBackendObject();
     if (d->interface)
         d->interface->play();
 }

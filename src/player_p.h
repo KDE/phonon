@@ -50,7 +50,8 @@ protected:
     void _p_stateChanged(Phonon::State newState, Phonon::State oldState);
 
     PlayerPrivate()
-        : tickInterval(0)
+        : FrontendPrivate()
+        , tickInterval(0)
         , metaData()
         , state(Phonon::StoppedState)
         , abstractStream(0)
