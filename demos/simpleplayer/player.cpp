@@ -26,20 +26,15 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include <phonon/AudioOutput>
-#include <phonon/MediaObject>
-#include <phonon/SeekSlider>
-#include <phonon/VideoWidget>
+#include <phonon/audiooutput.h>
+#include <phonon/player.h>
+#include <phonon/seekslider.h>
+#include <phonon/videowidget.h>
 
 Player::Player(QWidget* parent, Qt::WindowFlags flags)
     : QWidget(parent, flags)
 {
-    m_media = new Phonon::MediaObject(this);
-
-    //Some platforms (i.e. Linux) provide a mechanism for a user to view a system-wide
-    //history of content interactions. This is opt-in, and done via setting the
-    //PlaybackTracking property to true.
-    m_media->setProperty("PlaybackTracking", true);
+    m_player = new Phonon::Player(this);
 
     Phonon::AudioOutput* audioOut = new Phonon::AudioOutput(Phonon::VideoCategory, this);
     Phonon::VideoWidget* videoOut = new Phonon::VideoWidget(this);
@@ -53,7 +48,7 @@ Player::Player(QWidget* parent, Qt::WindowFlags flags)
 
     //After a MediaSource is loaded, this signal will be emitted to let us know
     //if a video stream was found.
-    connect(m_media, SIGNAL(hasVideoChanged(bool)), videoOut, SLOT(setVisible(bool)));
+    connect(m_player, SIGNAL(hasVideoChanged(bool)), videoOut, SLOT(setVisible(bool)));
 
     //This widget will contain the stop/pause buttons
     QWidget *buttonBar = new QWidget(this);
@@ -61,12 +56,13 @@ Player::Player(QWidget* parent, Qt::WindowFlags flags)
     m_playPause = new QPushButton(tr("Play"), buttonBar);
     m_stop = new QPushButton(tr("Stop"), buttonBar);
 
-    Phonon::SeekSlider *seekSlider = new Phonon::SeekSlider(this);
-    seekSlider->setMediaObject(m_media);
+    // FIXME seek slider
+//    Phonon::SeekSlider *seekSlider = new Phonon::SeekSlider(this);
+//    seekSlider->setMediaObject(m_player);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(videoOut);
-    layout->addWidget(seekSlider);
+//    layout->addWidget(seekSlider);
     layout->addWidget(buttonBar);
     setLayout(layout);
 
@@ -77,32 +73,32 @@ Player::Player(QWidget* parent, Qt::WindowFlags flags)
 
     m_stop->setEnabled(false);
 
-    connect(m_stop, SIGNAL(clicked(bool)), m_media, SLOT(stop()));
+    connect(m_stop, SIGNAL(clicked(bool)), m_player, SLOT(stop()));
     connect(m_playPause, SIGNAL(clicked(bool)), this, SLOT(playPause()));
 
     //The mediaStateChanged slot will update the GUI elements to reflect what
     //the user can do next
-    connect(m_media, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
+    connect(m_player, SIGNAL(stateChanged(Phonon::State, Phonon::State)), this, SLOT(mediaStateChanged(Phonon::State, Phonon::State)));
 }
 
 void Player::playPause()
 {
-    if (m_media->state() == Phonon::PlayingState) {
-        m_media->pause();
+    if (m_player->state() == Phonon::PlayingState) {
+        m_player->pause();
     } else {
-        if (m_media->currentSource().type() == Phonon::MediaSource::Empty)
+        if (m_player->source().deviceType() == Phonon::Source::NoDevice)
             load();
-        m_media->play();
+        m_player->play();
     }
 }
 
 void Player::load(const QUrl &mrl)
 {
     if (mrl.scheme().isEmpty())
-        m_media->setCurrentSource(QUrl::fromLocalFile(mrl.toString()));
+        m_player->setSource(QUrl::fromLocalFile(mrl.toString()));
     else
-        m_media->setCurrentSource(mrl);
-    m_media->play();
+        m_player->setSource(mrl);
+    m_player->play();
 }
 
 void Player::load()
@@ -117,8 +113,6 @@ void Player::mediaStateChanged(Phonon::State newState, Phonon::State oldState)
 {
     Q_UNUSED(oldState);
     switch(newState) {
-    case Phonon::LoadingState:
-        break;
     case Phonon::StoppedState:
         m_playPause->setText(tr("Play"));
         m_stop->setEnabled(false);
@@ -127,13 +121,8 @@ void Player::mediaStateChanged(Phonon::State newState, Phonon::State oldState)
         m_playPause->setText(tr("Pause"));
         m_stop->setEnabled(true);
         break;
-    case Phonon::BufferingState:
-        break;
     case Phonon::PausedState:
         m_playPause->setText(tr("Play"));
-        break;
-    case Phonon::ErrorState:
-        QMessageBox::critical(this, tr("Error"), tr("Error while playing media: ") + m_media->errorString());
         break;
     }
 }

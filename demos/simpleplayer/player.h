@@ -21,13 +21,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <phonon/phononglobal.h>
+
 #include <QWidget>
 #include <QUrl>
-#include <phonon/Global>
 
 class QPushButton;
 namespace Phonon {
-    class MediaObject;
+    class Player;
     class Mrl;
 }
 
@@ -66,7 +67,7 @@ private slots:
     void playPause();
 
 private:
-    Phonon::MediaObject *m_media;
+    Phonon::Player *m_player;
     QPushButton *m_playPause;
     QPushButton *m_stop;
 
