@@ -86,8 +86,7 @@ void Player::playPause()
     if (m_player->state() == Phonon::PlayingState) {
         m_player->pause();
     } else {
-        if (m_player->source().deviceType() == Phonon::Source::NoDevice)
-            load();
+        load();
         m_player->play();
     }
 }
