@@ -35,6 +35,7 @@ ecm_setup_version("4.50.0"
 ################################### Options ####################################
 
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
+option(PHONON_BUILD_DEMOS "Build the demo applications" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" OFF)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 
@@ -61,6 +62,10 @@ add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
+
+if(PHONON_BUILD_DEMOS)
+    add_subdirectory(demos)
+endif(PHONON_BUILD_DEMOS)
 
 if(QT_QTDECLARATIVE_FOUND AND PHONON_BUILD_DECLARATIVE_PLUGIN)
     add_subdirectory(declarative)
