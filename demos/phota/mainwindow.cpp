@@ -23,9 +23,8 @@
 #include "mediacontroller.h"
 #include "videoeffects.h"
 
-#include <phonon/MediaObject>
-#include <phonon/MediaSource>
-#include <phonon/VideoWidget>
+#include <phonon/player.h>
+#include <phonon/videowidget.h>
 
 #include <QContextMenuEvent>
 #include <QFileDialog>
@@ -37,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     m_videoWidget = new Phonon::VideoWidget();
     setCentralWidget(m_videoWidget);
     m_mediaControl = new MediaController(this);
-    Phonon::createPath(m_mediaControl->mediaObject(), m_videoWidget);
     resize(600, 400);
 }
 

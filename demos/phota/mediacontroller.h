@@ -26,8 +26,8 @@
 
 namespace Phonon
 {
-class MediaObject;
-class MediaSource;
+class Player;
+class Source;
 }
 
 class MediaController : public QObject
@@ -36,16 +36,16 @@ class MediaController : public QObject
 public:
     explicit MediaController(QObject *parent = 0);
     
-    Phonon::MediaObject *mediaObject() const;
+    Phonon::Player *player() const;
 
 public slots:
     void openFile();
     void openURL();
 
 private:
-    Phonon::MediaObject *m_media;
+    Phonon::Player *m_player;
 
-    void playSource(const Phonon::MediaSource &);
+    void playSource(const Phonon::Source &);
 };
 
 #endif // MEDIACONTROLLER_H
