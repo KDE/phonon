@@ -42,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::contextMenuEvent(QContextMenuEvent *e)
 {
     QMenu menu(tr("Control Menu"), this);
-    menu.addAction(tr("Open a file"), m_mediaControl, SLOT(openFile()));
     menu.addAction(tr("Open a URL"), m_mediaControl, SLOT(openURL()));
     menu.addSeparator();
     menu.addAction(tr("Video Effects"), this, SLOT(effectsDialog()));

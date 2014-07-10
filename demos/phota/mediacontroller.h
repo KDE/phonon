@@ -39,7 +39,6 @@ public:
     Phonon::Player *player() const;
 
 public slots:
-    void openFile();
     void openURL();
 
 private:

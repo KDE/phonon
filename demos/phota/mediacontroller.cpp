@@ -37,22 +37,20 @@ Phonon::Player *MediaController::player() const
     return m_player;
 }
 
-void MediaController::openFile()
+void MediaController::openURL()
 {
-    QString file = QFileDialog::getOpenFileName(0, tr("Open a new file to play"), "");
-    if (!file.isEmpty()) {
-        Phonon::Source s(file);
-        playSource(s);
+    QUrl homeDirUrl = QUrl::fromLocalFile(QDir::homePath());
+    QUrl url = QFileDialog::getOpenFileUrl(
+                qobject_cast<QWidget*>(parent()),
+                tr("Open a new file to play"), homeDirUrl);
+    if (!url.isEmpty()) {
+        Phonon::Source source(url);
+        playSource(source);
     }
 }
 
-void MediaController::openURL()
+void MediaController::playSource(const Phonon::Source &source)
 {
-
-}
-
-void MediaController::playSource(const Phonon::Source &s)
-{
-    m_player->setSource(s);
+    m_player->setSource(source);
     m_player->play();
 }
