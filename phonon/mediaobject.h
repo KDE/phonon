@@ -442,10 +442,13 @@ namespace Phonon
 
             /**
              * Requests playback to pause. If it was paused before nothing changes.
+             * If the media cannot be paused, some backends will internally call
+             * stop instead of pause.
              *
              * \par Possible states right after this call:
              * \li PlayingState
              * \li PausedState
+             * \li StoppedState
              * \li ErrorState
              */
             void pause();
