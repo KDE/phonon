@@ -38,7 +38,20 @@ namespace Phonon
     {
         Q_OBJECT
         public:
-            static PulseSupport* getInstance();
+            /**
+             * \returns the instance pointer or null, see note.
+             * \note If \param allowNull is \c true and the instance was already
+             *       shut down this function instead returns to indicate that
+             *       the instance was already shut down.
+             *       If \param allowNull is \c false and the instance was already
+             *       shut down a dummy instance is returned instead. This case
+             *       will furthermore result in a qWarning being printed, so
+             *       when possible and sensible null handling should be done
+             *       to prevent this.
+             */
+            static PulseSupport *getInstanceOrNull(bool allowNull = false);
+            /** This function behaves like getInstanceOrNull(false). \see getInstanceOrNull */
+            static PulseSupport *getInstance();
             static void shutdown();
 
             bool isActive();

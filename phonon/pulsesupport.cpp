@@ -51,6 +51,7 @@ namespace Phonon
 
 QMutex probeMutex;
 static PulseSupport *s_instance = NULL;
+static bool s_wasShutDown = false;
 
 #ifdef HAVE_PULSEAUDIO
 /***
@@ -771,9 +772,12 @@ static void context_state_callback(pa_context *c, void *)
 }
 #endif // HAVE_PULSEAUDIO
 
-
-PulseSupport *PulseSupport::getInstance()
+PulseSupport *PulseSupport::getInstanceOrNull(bool allowNull)
 {
+    if (s_wasShutDown && allowNull) {
+        return NULL;
+    }
+
     if (NULL == s_instance) {
         /*
          * In order to prevent the instance being used from multiple threads
@@ -789,11 +793,17 @@ PulseSupport *PulseSupport::getInstance()
     return s_instance;
 }
 
+PulseSupport *PulseSupport::getInstance()
+{
+    return getInstanceOrNull(false);
+}
+
 void PulseSupport::shutdown()
 {
     if (NULL != s_instance) {
         delete s_instance;
         s_instance = NULL;
+        s_wasShutDown = true;
     }
 }
 
