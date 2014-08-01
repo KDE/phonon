@@ -53,11 +53,11 @@ Source::Source(const QUrl &url)
             QString path(QLatin1Char(':') + url.path());
 
             if (QFile::exists(path)) {
-                d->m_ioDevice = new QFile(path);
-                d->setStream(new IODeviceStream(d->m_ioDevice, d->m_ioDevice));
+                d->ioDevice = new QFile(path);
+                d->setStream(new IODeviceStream(d->ioDevice, d->ioDevice));
             }
         }
-        d->m_url = url;
+        d->url = url;
     }
 }
 
@@ -67,8 +67,8 @@ Source::Source(DeviceType deviceType, const QByteArray &deviceName)
     if (deviceType == NoDevice) {
         return;
     }
-    d->m_deviceType = deviceType;
-    d->m_deviceName = deviceName;
+    d->deviceType = deviceType;
+    d->deviceName = deviceName;
 }
 
 Source::Source(AbstractMediaStream *stream)
@@ -84,7 +84,7 @@ Source::Source(QIODevice *ioDevice)
 {
     if (ioDevice) {
         d->setStream(new IODeviceStream(ioDevice, ioDevice));
-        d->m_ioDevice = ioDevice;
+        d->ioDevice = ioDevice;
     }
 }
 
@@ -96,10 +96,10 @@ SourcePrivate::~SourcePrivate()
 {
     //here we use deleteLater because this object
     //might be destroyed from another thread
-    if (m_stream)
-        m_stream->deleteLater();
-    if (m_ioDevice)
-        m_ioDevice->deleteLater();
+    if (stream)
+        stream->deleteLater();
+    if (ioDevice)
+        ioDevice->deleteLater();
 }
 
 Source &Source::operator=(const Source &other)
@@ -115,27 +115,27 @@ bool Source::operator==(const Source &other) const
 
 QUrl Source::url() const
 {
-    return d->m_url;
+    return d->url;
 }
 
 Source::DeviceType Source::deviceType() const
 {
-    return d->m_deviceType;
+    return d->deviceType;
 }
 
 QByteArray Source::deviceName() const
 {
-    return d->m_deviceName;
+    return d->deviceName;
 }
 
 AbstractMediaStream *Source::stream() const
 {
-    return d->m_stream;
+    return d->stream;
 }
 
 void SourcePrivate::setStream(AbstractMediaStream *s)
 {
-    m_stream = s;
+    stream = s;
 }
 
 } // namespace Phonon

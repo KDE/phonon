@@ -34,9 +34,9 @@ class PHONON_EXPORT SourcePrivate : public QSharedData
 {
 public:
     SourcePrivate()
-        : m_deviceType(Source::NoDevice)
-        , m_stream(0)
-        , m_ioDevice(0)
+        : deviceType(Source::NoDevice)
+        , stream(0)
+        , ioDevice(0)
     {
     }
 
@@ -44,17 +44,17 @@ public:
 
     void setStream(AbstractMediaStream *s);
 
-    QUrl m_url;
-    Source::DeviceType m_deviceType;
-    QByteArray m_deviceName;
+    QUrl url;
+    Source::DeviceType deviceType;
+    QByteArray deviceName;
 
     // The AbstractMediaStream(2) may be deleted at any time by the application. If that happens
     // stream will be 0 automatically, but streamEventQueue will stay valid as we hold a
     // reference to it. This is necessary to avoid a races when setting the MediaSource while
     // another thread deletes the AbstractMediaStream2. StreamInterface(2) will then just get a
     // StreamEventQueue where nobody answers.
-    QPointer<AbstractMediaStream> m_stream;
-    QIODevice *m_ioDevice;
+    QPointer<AbstractMediaStream> stream;
+    QIODevice *ioDevice;
 };
 
 } // namespace Phonon

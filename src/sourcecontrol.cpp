@@ -48,22 +48,22 @@ SourceControl::~SourceControl()
 bool SourceControl::isActive() const
 {
     P_D(const SourceControl);
-    if (!d->m_scInterface)
+    if (!d->scInterface)
         return false;
-    return d->m_scInterface->isActive();
+    return d->scInterface->isActive();
 }
 
 Source SourceControl::source() const
 {
     P_D(const SourceControl);
-    return d->m_source;
+    return d->source;
 }
 
 // private
 
 SourceControlPrivate::SourceControlPrivate(Source &source)
-    : m_scInterface(0)
-    , m_source(source)
+    : scInterface(0)
+    , source(source)
 {
 
 }
@@ -92,189 +92,189 @@ VideoSourceControl::~VideoSourceControl()
 bool VideoSourceControl::supportsMenus() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return false;
-    return d->m_interface->supportsMenus();
+    return d->interface->supportsMenus();
 }
 
 QSet<VideoSourceControl::Menu> VideoSourceControl::availableMenus() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return QSet<Menu>();
-    return d->m_interface->availableMenus();
+    return d->interface->availableMenus();
 }
 
 VideoSourceControl::Menu VideoSourceControl::currentMenu() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return RootMenu;
-    return d->m_interface->currentMenu();
+    return d->interface->currentMenu();
 }
 
 void VideoSourceControl::setCurrentMenu(Menu menu)
 {
     P_D(VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return;
-    d->m_interface->setCurrentMenu(menu);
+    d->interface->setCurrentMenu(menu);
 }
 
 bool VideoSourceControl::supportsChapters() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return false;
-    return d->m_interface->supportsChapters();
+    return d->interface->supportsChapters();
 }
 
 int VideoSourceControl::chapterCount() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->chapterCount();
+    return d->interface->chapterCount();
 }
 
 int VideoSourceControl::currentChapter() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->currentChapter();
+    return d->interface->currentChapter();
 }
 
 void VideoSourceControl::setCurrentChapter(int chapterNumber)
 {
     P_D(VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return;
-    d->m_interface->setCurrentChapter(chapterNumber);
+    d->interface->setCurrentChapter(chapterNumber);
 }
 
 bool VideoSourceControl::supportsAngles() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return false;
-    return d->m_interface->supportsAngles();
+    return d->interface->supportsAngles();
 }
 
 int VideoSourceControl::angleCount() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->angleCount();
+    return d->interface->angleCount();
 }
 
 int VideoSourceControl::currentAngle()
 {
     P_D(VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->currentAngle();
+    return d->interface->currentAngle();
 }
 
 void VideoSourceControl::setCurrentAngle(int angleNumber)
 {
     P_D(VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return;
-    d->m_interface->setCurrentAngle(angleNumber);
+    d->interface->setCurrentAngle(angleNumber);
 }
 
 bool VideoSourceControl::supportsTitles() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return false;
-    return d->m_interface->supportsTitles();
+    return d->interface->supportsTitles();
 }
 
 bool VideoSourceControl::isAutoplayingTitles() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return false;
-    return d->m_interface->isAutoplayingTitles();
+    return d->interface->isAutoplayingTitles();
 }
 
 void VideoSourceControl::setAutoplayTitles(bool enable)
 {
     P_D(VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return;
-    d->m_interface->setAutoplayTitles(enable);
+    d->interface->setAutoplayTitles(enable);
 }
 
 int VideoSourceControl::titleCount() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->titleCount();
+    return d->interface->titleCount();
 }
 
 int VideoSourceControl::currentTitle() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->currentTitle();
+    return d->interface->currentTitle();
 }
 
 void VideoSourceControl::setCurrentTitle(int titleNumber)
 {
     P_D(VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return;
-    d->m_interface->setCurrentTitle(titleNumber);
+    d->interface->setCurrentTitle(titleNumber);
 }
 
 bool VideoSourceControl::supportsAudioChannels() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return false;
-    return d->m_interface->supportsAudioChannels();
+    return d->interface->supportsAudioChannels();
 }
 
 int VideoSourceControl::audioChannelCount() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->audioChannelCount();
+    return d->interface->audioChannelCount();
 }
 
 int VideoSourceControl::audioChannel() const
 {
     P_D(const VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->audioChannel();
+    return d->interface->audioChannel();
 }
 
 void VideoSourceControl::setAudioChannel(int channelNumber)
 {
     P_D(VideoSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return;
-    return d->m_interface->setAudioChannel(channelNumber);
+    return d->interface->setAudioChannel(channelNumber);
 }
 
 // private
 
 VideoSourceControlPrivate::VideoSourceControlPrivate(Source &source)
     : SourceControlPrivate(source)
-    , m_currentMenu(VideoSourceControl::RootMenu)
-    , m_currentChapter(0)
-    , m_currentAngle(0)
-    , m_currentTitle(0)
-    , m_autoplayTitlesEnabled(false)
-    , m_audioChannel(0)
+    , currentMenu(VideoSourceControl::RootMenu)
+    , currentChapter(0)
+    , currentAngle(0)
+    , currentTitle(0)
+    , autoplayTitlesEnabled(false)
+    , audioChannel(0)
 {
 
 }
@@ -291,9 +291,9 @@ void VideoSourceControlPrivate::createBackendObject()
 
     P_Q(VideoSourceControl);
     m_backendObject = Factory::createVideoSourceControl(q);
-    m_interface = qobject_cast<VideoSourceControlInterface *>(m_backendObject);
-    m_scInterface = static_cast<SourceControlInterface *>(m_interface);
-    if (m_backendObject && m_interface)
+    interface = qobject_cast<VideoSourceControlInterface *>(m_backendObject);
+    scInterface = static_cast<SourceControlInterface *>(interface);
+    if (m_backendObject && interface)
         setupBackendObject();
 }
 
@@ -354,40 +354,40 @@ AudioSourceControl::~AudioSourceControl()
 bool AudioSourceControl::supportsTracks() const
 {
     P_D(const AudioSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return false;
-    return d->m_interface->supportsTracks();
+    return d->interface->supportsTracks();
 }
 
 int AudioSourceControl::trackCount() const
 {
     P_D(const AudioSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->trackCount();
+    return d->interface->trackCount();
 }
 
 int AudioSourceControl::trackNumber() const
 {
     P_D(const AudioSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return -1;
-    return d->m_interface->trackNumber();
+    return d->interface->trackNumber();
 }
 
 void AudioSourceControl::setTrackNumber(int trackNumber)
 {
     P_D(AudioSourceControl);
-    if (!d->m_interface)
+    if (!d->interface)
         return;
-    d->m_interface->setTrackNumber(trackNumber);
+    d->interface->setTrackNumber(trackNumber);
 }
 
 // private
 
 AudioSourceControlPrivate::AudioSourceControlPrivate(Source &source)
     : SourceControlPrivate(source)
-    , m_currentTrack(0)
+    , currentTrack(0)
 {
 
 }
@@ -404,9 +404,9 @@ void AudioSourceControlPrivate::createBackendObject()
 
     P_Q(AudioSourceControl);
     m_backendObject = Factory::createAudioSourceControl(q);
-    m_interface = qobject_cast<AudioSourceControlInterface *>(m_backendObject);
-    m_scInterface = static_cast<SourceControlInterface *>(m_interface);
-    if (m_backendObject && m_interface)
+    interface = qobject_cast<AudioSourceControlInterface *>(m_backendObject);
+    scInterface = static_cast<SourceControlInterface *>(interface);
+    if (m_backendObject && interface)
        setupBackendObject();
 }
 

@@ -60,7 +60,6 @@ protected:
 
     ~PlayerPrivate() {}
 
-    // FIXME: need executive descision whether privates should use m_ prefix.
     qint32 tickInterval;
     // FIXME: why multimap?
     QMultiMap<MetaData, QString> metaData;

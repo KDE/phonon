@@ -38,9 +38,9 @@ public:
     explicit SourceControlPrivate(Source &source);
     virtual ~SourceControlPrivate();
 
-    SourceControlInterface *m_scInterface;
+    SourceControlInterface *scInterface;
 
-    Source m_source;
+    Source source;
 
 private:
     P_DECLARE_PUBLIC(SourceControl)
@@ -53,14 +53,14 @@ public:
     explicit VideoSourceControlPrivate(Source &source);
     virtual ~VideoSourceControlPrivate();
 
-    VideoSourceControlInterface *m_interface;
+    VideoSourceControlInterface *interface;
 
-    VideoSourceControl::Menu m_currentMenu;
-    int m_currentChapter;
-    int m_currentAngle;
-    int m_currentTitle;
-    bool m_autoplayTitlesEnabled;
-    int m_audioChannel;
+    VideoSourceControl::Menu currentMenu;
+    int currentChapter;
+    int currentAngle;
+    int currentTitle;
+    bool autoplayTitlesEnabled;
+    int audioChannel;
 
 protected:
     virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
@@ -77,9 +77,9 @@ public:
     explicit AudioSourceControlPrivate(Source &source);
     virtual ~AudioSourceControlPrivate();
 
-    AudioSourceControlInterface *m_interface;
+    AudioSourceControlInterface *interface;
 
-    int m_currentTrack;
+    int currentTrack;
 
 protected:
     virtual void createBackendObject() Q_DECL_OVERRIDE Q_DECL_FINAL;
