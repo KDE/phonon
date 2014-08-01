@@ -532,7 +532,10 @@ void AudioOutputPrivate::handleAutomaticDeviceChange(const AudioOutputDevice &de
 
 AudioOutputPrivate::~AudioOutputPrivate()
 {
-    PulseSupport::getInstance()->clearStreamCache(streamUuid);
+    PulseSupport *pulse = PulseSupport::getInstanceOrNull(true);
+    if (pulse) {
+        pulse->clearStreamCache(streamUuid);
+    }
 #ifndef PHONON_NO_DBUS
     if (adaptor) {
         emit adaptor->outputDestroyed();
