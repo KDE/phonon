@@ -57,7 +57,6 @@ ${phonon_LIB_SRCS}
 #    swiftslider.cpp
 #    volumefadereffect.cpp
 #    volumeslider.cpp
-#    videoplayer.cpp
     video/videoitem.cpp
 
 # QTC Compat
