@@ -241,7 +241,7 @@ endif (NOT _phonon_uninstall_target_created)
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 if (CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
-   if (CMAKE_COMPILER_IS_GNUCXX)
+   if (CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
       set ( _KDE4_PLATFORM_DEFINITIONS -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -D_GNU_SOURCE)
       set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined -lc ${CMAKE_SHARED_LINKER_FLAGS}")
       set ( CMAKE_MODULE_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined -lc ${CMAKE_MODULE_LINKER_FLAGS}")
@@ -255,7 +255,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
         set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
         set (CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
       endif(CMAKE_BUILD_TYPE_TOLOWER MATCHES profile)
-   endif (CMAKE_COMPILER_IS_GNUCXX)
+   endif (CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
    if (CMAKE_C_COMPILER MATCHES "icc")
       set ( _KDE4_PLATFORM_DEFINITIONS -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -D_GNU_SOURCE)
       set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined -lc ${CMAKE_SHARED_LINKER_FLAGS}")
@@ -309,11 +309,11 @@ macro(_DETERMINE_GCC_SYSTEM_INCLUDE_DIRS _lang _result)
   ENDIF( "${_gccOutput}" MATCHES "> search starts here[^\n]+\n *(.+) *\n *End of (search) list" )
 ENDMACRO(_DETERMINE_GCC_SYSTEM_INCLUDE_DIRS _lang)
 
-if (CMAKE_COMPILER_IS_GNUCC)
+if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES Clang)
    _DETERMINE_GCC_SYSTEM_INCLUDE_DIRS(c _dirs)
    set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
        ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES} ${_dirs})
-endif (CMAKE_COMPILER_IS_GNUCC)
+endif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES Clang)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
    _DETERMINE_GCC_SYSTEM_INCLUDE_DIRS(c++ _dirs)
@@ -424,6 +424,67 @@ if (CMAKE_COMPILER_IS_GNUCXX)
    endif (__KDE_HAVE_GCC_VISIBILITY AND GCC_IS_NEWER_THAN_4_1 AND NOT _GCC_COMPILED_WITH_BAD_ALLOCATOR AND NOT WIN32)
 
 endif (CMAKE_COMPILER_IS_GNUCXX)
+
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+   _DETERMINE_GCC_SYSTEM_INCLUDE_DIRS(c++ _dirs)
+   set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
+       ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES} ${_dirs})
+
+   # Note that exceptions are enabled by default when building with clang. That
+   # is, -fno-exceptions is not set in CMAKE_CXX_FLAGS below. This is because a
+   # lot of code in different KDE modules ends up including code that throws
+   # exceptions. Most (or all) of the occurrences are in template code that
+   # never gets instantiated. Contrary to GCC, ICC and MSVC, clang (most likely
+   # rightfully) complains about that. Trying to work around the issue by
+   # passing -fdelayed-template-parsing brings other problems, as noted in
+   # http://lists.kde.org/?l=kde-core-devel&m=138157459706783&w=2.
+   # The generated code will be slightly bigger, but there is no way to avoid
+   # it.
+   set(KDE4_ENABLE_EXCEPTIONS "-fexceptions -UQT_NO_EXCEPTIONS")
+
+   # Select flags.
+   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_CXX_FLAGS_DEBUG          "-g -O2 -fno-inline")
+   set(CMAKE_CXX_FLAGS_DEBUGFULL      "-g3 -fno-inline")
+   set(CMAKE_CXX_FLAGS_PROFILE        "-g3 -fno-inline -ftest-coverage -fprofile-arcs")
+   set(CMAKE_C_FLAGS_RELWITHDEBINFO   "-O2 -g -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_C_FLAGS_RELEASE          "-O2 -DNDEBUG -DQT_NO_DEBUG")
+   set(CMAKE_C_FLAGS_DEBUG            "-g -O2 -fno-inline")
+   set(CMAKE_C_FLAGS_DEBUGFULL        "-g3 -fno-inline")
+   set(CMAKE_C_FLAGS_PROFILE          "-g3 -fno-inline -ftest-coverage -fprofile-arcs")
+
+   set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -Woverloaded-virtual -fno-common -fvisibility=hidden -Werror=return-type -fvisibility-inlines-hidden")
+   set(KDE4_C_FLAGS    "-fvisibility=hidden")
+
+   # At least kdepim exports one function with C linkage that returns a
+   # QString in a plugin, but clang does not like that.
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-return-type-c-linkage")
+
+   set(KDE4_CXX_FPIE_FLAGS "-fPIE")
+   set(KDE4_PIE_LDFLAGS    "-pie")
+
+   if (CMAKE_SYSTEM_NAME STREQUAL GNU)
+      set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pthread")
+      set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -pthread")
+   endif (CMAKE_SYSTEM_NAME STREQUAL GNU)
+
+   set(__KDE_HAVE_GCC_VISIBILITY TRUE)
+
+   # check that Qt defines Q_DECL_EXPORT as __attribute__ ((visibility("default")))
+   # if it doesn't and KDE compiles with hidden default visibiltiy plugins will break
+   set(_source "#include <QtCore/QtGlobal>\n int main()\n {\n #ifndef QT_VISIBILITY_AVAILABLE \n #error QT_VISIBILITY_AVAILABLE is not available\n #endif \n }\n")
+   set(_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/check_qt_visibility.cpp)
+   file(WRITE "${_source_file}" "${_source}")
+   set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${QT_INCLUDES}")
+   try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${_include_dirs}" OUTPUT_VARIABLE _compile_output_var)
+   if(NOT _compile_result)
+       message("${_compile_output_var}")
+       message(FATAL_ERROR "Qt compiled without support for -fvisibility=hidden. This will break plugins and linking of some applications. Please fix your Qt installation (try passing --reduce-exports to configure).")
+   endif(NOT _compile_result)
+endif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 
 
 if (CMAKE_C_COMPILER MATCHES "icc")
