@@ -137,7 +137,6 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/phononversiondata.h
     widgets/seekslider.h
     streaming/streaminterface.h
-    video/videoplayer.h
     video/videowidget.h
     video/videowidgetinterface.h
     effects/volumefadereffect.h
