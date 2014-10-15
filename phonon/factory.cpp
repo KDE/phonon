@@ -199,12 +199,16 @@ bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<Q
         QList<BackendDescriptor>::iterator it;
         for (it = foundBackends.begin(); it != foundBackends.end(); ++it) {
             const BackendDescriptor &descriptor = *it;
-            if (descriptor.iid != iid)
+            if (descriptor.iid != iid) {
                 continue;
-            if (tryCreateBackend(descriptor.pluginPath))
+            }
+            if (tryCreateBackend(descriptor.pluginPath)) {
                 return true;
-            else // Drop backends that failed to construct.
-                foundBackends.erase(it);
+            } else { // Drop backends that failed to construct.
+                it = foundBackends.erase(it);
+                if (it == foundBackends.end())
+                    break;
+            }
         }
     }
 
