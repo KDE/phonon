@@ -22,12 +22,13 @@
 
 #include "pulsesupport.h"
 
-#include <QtCore/QAbstractEventDispatcher>
-#include <QtCore/QDebug>
-#include <QtCore/QStringList>
-#include <QtCore/QTimer>
-#include <QtCore/QMutex>
+#include <QAbstractEventDispatcher>
 #include <QApplication>
+#include <QDebug>
+#include <QIcon>
+#include <QMutex>
+#include <QStringList>
+#include <QTimer>
 
 #ifdef HAVE_PULSEAUDIO
 #include "pulsestream_p.h"
@@ -1148,9 +1149,21 @@ static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString str
     if (!qApp->applicationVersion().isEmpty())
         qputenv(QString("PULSE_PROP_OVERRIDE_%1").arg(PA_PROP_APPLICATION_VERSION).toUtf8(),
                 qApp->applicationVersion().toUtf8());
-    if (!qApp->applicationName().isEmpty())
+    if (!qApp->applicationName().isEmpty()) {
+        QString icon;
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
+        if (!qApp->windowIcon().isNull()){
+            // Try to get the fromTheme() name of the QIcon.
+            icon = qApp->windowIcon().name();
+        }
+#endif
+        if (icon.isEmpty()) {
+            // If we failed to get a proper icon name, use the appname instead.
+            icon = qApp->applicationName().toLower();
+        }
         qputenv(QString("PULSE_PROP_OVERRIDE_%1").arg(PA_PROP_APPLICATION_ICON_NAME).toUtf8(),
-                qApp->applicationName().toUtf8());
+                icon.toUtf8());
+    }
 
     return stream;
 }
