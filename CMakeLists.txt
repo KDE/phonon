@@ -11,6 +11,8 @@ option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be u
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 
+option(PHONON_INSTALL_QT_COMPAT_HEADERS "Install QtPhonon compatibility headers" OFF)
+
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 

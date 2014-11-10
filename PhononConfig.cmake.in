@@ -10,6 +10,7 @@ get_filename_component(rootDir ${currentDir}/@relInstallDir@ ABSOLUTE) # get the
 set(PHONON_NO_GRAPHICSVIEW @PHONON_NO_GRAPHICSVIEW@)
 set(PHONON_PULSESUPPORT @PHONON_PULSESUPPORT@)
 set(PHONON_FOUND_EXPERIMENTAL @PHONON_BUILD_EXPERIMENTAL@)
+set(PHONON_QT_COMPAT_HEADERS @PHONON_INSTALL_QT_COMPAT_HEADERS@)
 
 # install locations
 set(PHONON_INCLUDE_DIR "${rootDir}/@INCLUDE_INSTALL_DIR@")
@@ -30,7 +31,11 @@ set(PHONON_LIBRARIES ${PHONON_LIBRARY} ${PHONON_EXPERIMENTAL_LIBRARY})
 # The following one is only for compatiblity
 set(PHONON_LIBS ${PHONON_LIBRARIES})
 
-set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR} ${PHONON_INCLUDE_DIR}/KDE )
+set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR} ${PHONON_INCLUDE_DIR}/KDE)
+
+if (PHONON_QT_COMPAT_HEADERS)
+    list(APPEND PHONON_INCLUDES ${PHONON_INCLUDE_DIR}/Phonon)
+endif()
 
 # Find Internal is included in the backends' finders rather than here.
 # http://lists.kde.org/?l=kde-multimedia&m=135934335320148&w=2
