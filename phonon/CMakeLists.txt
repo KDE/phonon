@@ -172,6 +172,8 @@ set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
 # This reduces inter-package dependencies and makes it easier to remove
 # dependencies of shared libraries without breaking binary compatibility.
 
+target_include_directories(${PHONON_LIB_SONAME}
+    INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 
 install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

@@ -53,45 +53,49 @@ install( FILES
     phonon/VolumeSlider
 DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
-
-install( FILES
-  old/Phonon/AbstractAudioOutput
-  old/Phonon/AbstractMediaStream
-  old/Phonon/AbstractVideoOutput
-  old/Phonon/AddonInterface
-  old/Phonon/AudioDevice
-  old/Phonon/AudioDeviceEnumerator
-  old/Phonon/AudioOutput
-  old/Phonon/AudioOutputDevice
-  old/Phonon/AudioOutputDeviceModel
-  old/Phonon/AudioOutputInterface
-  old/Phonon/BackendCapabilities
-  old/Phonon/BackendInterface
-  old/Phonon/Effect
-  old/Phonon/EffectDescription
-  old/Phonon/EffectDescriptionModel
-  old/Phonon/EffectInterface
-  old/Phonon/EffectParameter
-  old/Phonon/EffectWidget
-  old/Phonon/Global
-  old/Phonon/MediaController
-  old/Phonon/MediaNode
-  old/Phonon/MediaObject
-  old/Phonon/MediaObjectInterface
-  old/Phonon/MediaSource
-  old/Phonon/ObjectDescription
-  old/Phonon/ObjectDescriptionModel
-  old/Phonon/Path
-  old/Phonon/PlatformPlugin
-  old/Phonon/SeekSlider
-  old/Phonon/StreamInterface
-  old/Phonon/VideoPlayer
-  old/Phonon/VideoWidget
-  old/Phonon/VideoWidgetInterface
-  old/Phonon/VolumeFaderEffect
-  old/Phonon/VolumeFaderInterface
-  old/Phonon/VolumeSlider
-DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon COMPONENT Devel)
+set(COMPAT_HEADERS
+    old/Phonon/AbstractAudioOutput
+    old/Phonon/AbstractMediaStream
+    old/Phonon/AbstractVideoOutput
+    old/Phonon/AddonInterface
+    old/Phonon/AudioDevice
+    old/Phonon/AudioDeviceEnumerator
+    old/Phonon/AudioOutput
+    old/Phonon/AudioOutputDevice
+    old/Phonon/AudioOutputDeviceModel
+    old/Phonon/AudioOutputInterface
+    old/Phonon/BackendCapabilities
+    old/Phonon/BackendInterface
+    old/Phonon/Effect
+    old/Phonon/EffectDescription
+    old/Phonon/EffectDescriptionModel
+    old/Phonon/EffectInterface
+    old/Phonon/EffectParameter
+    old/Phonon/EffectWidget
+    old/Phonon/Global
+    old/Phonon/MediaController
+    old/Phonon/MediaNode
+    old/Phonon/MediaObject
+    old/Phonon/MediaObjectInterface
+    old/Phonon/MediaSource
+    old/Phonon/ObjectDescription
+    old/Phonon/ObjectDescriptionModel
+    old/Phonon/Path
+    old/Phonon/PlatformPlugin
+    old/Phonon/SeekSlider
+    old/Phonon/StreamInterface
+    old/Phonon/VideoPlayer
+    old/Phonon/VideoWidget
+    old/Phonon/VideoWidgetInterface
+    old/Phonon/VolumeFaderEffect
+    old/Phonon/VolumeFaderInterface
+    old/Phonon/VolumeSlider
+)
+install(FILES ${COMPAT_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon COMPONENT Devel)
+if (PHONON_INSTALL_QT_COMPAT_HEADERS)
+    install(FILES ${COMPAT_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/phonon/Phonon COMPONENT Devel) # <Phonon/Foo>
+    install(FILES old/phonon DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel) # <phonon/phonon> meta-include
+endif()
 
 if (PHONON_BUILD_EXPERIMENTAL)
     install(FILES
@@ -104,4 +108,5 @@ if (PHONON_BUILD_EXPERIMENTAL)
         old/Phonon/Experimental/VideoFrame2
         old/Phonon/Experimental/Visualization
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon/Experimental COMPONENT Devel)
+    # Qt4.x never included the experimental library, so no need for compat headers.
 endif (PHONON_BUILD_EXPERIMENTAL)

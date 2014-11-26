@@ -29,6 +29,8 @@ set_target_properties(${PHONON_LIB_SONAME}experimental PROPERTIES
                                          LINK_INTERFACE_LIBRARIES ""
                                          )
 install(TARGETS ${PHONON_LIB_SONAME}experimental EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_include_directories(${PHONON_LIB_SONAME}experimental
+    INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 
 ########### install headers ###############
 install(FILES
