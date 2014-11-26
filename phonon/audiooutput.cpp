@@ -54,6 +54,9 @@ static inline bool callSetOutputDevice(AudioOutputPrivate *const d, const AudioO
     if (pulse->isActive())
         return pulse->setOutputDevice(d->getStreamUuid(), dev.index());
 
+    if (!d->backendObject())
+        return false;
+
     Iface<IFACES2> iface(d);
     if (iface) {
         return iface->setOutputDevice(dev);
