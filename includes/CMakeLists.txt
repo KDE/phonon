@@ -91,10 +91,22 @@ set(COMPAT_HEADERS
     old/Phonon/VolumeFaderInterface
     old/Phonon/VolumeSlider
 )
-install(FILES ${COMPAT_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon COMPONENT Devel)
+
+install(FILES ${COMPAT_HEADERS}
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon
+    COMPONENT Devel)
+# FIXME: phonon/Phonon (dir) and phonon/phonon (file) conflict on case-insensitive
+#        systems if one enables this
 if (PHONON_INSTALL_QT_COMPAT_HEADERS)
-    install(FILES ${COMPAT_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/phonon/Phonon COMPONENT Devel) # <Phonon/Foo>
-    install(FILES old/phonon DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel) # <phonon/phonon> meta-include
+    # <Phonon/Foo>
+    install(FILES ${COMPAT_HEADERS}
+        DESTINATION ${INCLUDE_INSTALL_DIR}/phonon/Phonon
+        COMPONENT Devel)
+    # <phonon/phonon> meta-include
+    install(FILES old/phonon_meta_include
+        DESTINATION ${INCLUDE_INSTALL_DIR}/phonon
+        COMPONENT Devel
+        RENAME phonon)
 endif()
 
 if (PHONON_BUILD_EXPERIMENTAL)
