@@ -113,10 +113,10 @@ macro(MAKE_ABS_INSTALL_PATH _absVar _path)
     endif()
 endmacro(MAKE_ABS_INSTALL_PATH)
 
-
-set(BUILDSYSTEM_INSTALL_DIR ${SHARE_INSTALL_PREFIX}/${PHONON_LIB_SONAME}/buildsystem/)
-
 include(GNUInstallDirs)
+
+set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
+
 
 # Provide a cmake option, which, if set, force the Qt stuff to be installed into the
 # system Qt directories, which may be outside CMAKE_INSTALL_PREFIX.

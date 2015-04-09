@@ -171,7 +171,7 @@ set(CMAKE_MODULE_PATH ${_phonon_cmake_module_path_back})
 
 include(GNUInstallDirs)
 
-set(SHARE_INSTALL_PREFIX        "${CMAKE_INSTALL_DATAROOTDIR}")  #              CACHE PATH "Base directory for files which go to share/")
+set(SHARE_INSTALL_PREFIX        "${CMAKE_INSTALL_FULL_DATAROOTDIR}")  #              CACHE PATH "Base directory for files which go to share/")
 set(INCLUDE_INSTALL_DIR         "include" ) #           CACHE PATH "The subdirectory to the header prefix")
 if (PHONON_BUILD_PHONON4QT5)
     set(INCLUDE_INSTALL_DIR         "include/${PHONON_LIB_SONAME}" ) #           CACHE PATH "The subdirectory to the header prefix")
