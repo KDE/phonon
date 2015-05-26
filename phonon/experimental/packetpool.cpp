@@ -35,7 +35,7 @@ int PacketPool::unusedPackets() const { return d_ptr->ringBufferSize; }
 
 PacketPoolPrivate::PacketPoolPrivate(int _packetSize, int _poolSize)
     : freePackets(new PacketPrivate *[_poolSize]),
-    packetMemory(new char[packetSize * _poolSize]),
+    packetMemory(new char[_packetSize * _poolSize]),
     readPosition(0), writePosition(0),
     ringBufferSize(_poolSize),
     packetSize(_packetSize),
