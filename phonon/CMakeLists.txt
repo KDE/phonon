@@ -136,7 +136,7 @@ endif (PHONON_NO_PLATFORMPLUGIN)
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 add_definitions(-DPHONON_BACKEND_DIR_SUFFIX="/${PHONON_LIB_SONAME}_backend/")
 
-automoc4_add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
+add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
 qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets)
 
 if(QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)

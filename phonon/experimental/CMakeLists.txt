@@ -19,7 +19,7 @@ set(phononexperimental_LIB_SRCS
     ../abstractaudiooutput_p.cpp
     ../abstractvideooutput_p.cpp
    )
-automoc4_add_library(${PHONON_LIB_SONAME}experimental SHARED ${phononexperimental_LIB_SRCS})
+add_library(${PHONON_LIB_SONAME}experimental SHARED ${phononexperimental_LIB_SRCS})
 qt5_use_modules(${PHONON_LIB_SONAME}experimental Core Widgets)
 target_link_libraries(${PHONON_LIB_SONAME}experimental ${PHONON_LIBS})
 set_target_properties(${PHONON_LIB_SONAME}experimental PROPERTIES
