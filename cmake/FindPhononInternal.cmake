@@ -394,9 +394,8 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       set(_source "#include <QtCore/QtGlobal>\n int main()\n {\n #ifndef QT_VISIBILITY_AVAILABLE \n #error QT_VISIBILITY_AVAILABLE is not available\n #endif \n }\n")
       set(_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/check_qt_visibility.cpp)
       file(WRITE "${_source_file}" "${_source}")
-      set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${QT_INCLUDES}")
 
-      try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${CMAKE_CXX_FLAGS}" COMPILE_DEFINITIONS "${_include_dirs}" OUTPUT_VARIABLE _compile_output_var)
+      try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${CMAKE_CXX_FLAGS}" INCLUDE_DIRECTORIES "${QT_INCLUDES}" OUTPUT_VARIABLE _compile_output_var)
 
       if(NOT _compile_result)
          message("${_compile_output_var}")
