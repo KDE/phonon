@@ -396,7 +396,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
       file(WRITE "${_source_file}" "${_source}")
       set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${QT_INCLUDES}")
 
-      try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${CMAKE_CXX_FLAGS}" INCLUDE_DIRECTORIES "${_include_dirs}" OUTPUT_VARIABLE _compile_output_var)
+      try_compile(_compile_result ${CMAKE_BINARY_DIR} ${_source_file} CMAKE_FLAGS "${CMAKE_CXX_FLAGS}" COMPILE_DEFINITIONS "${_include_dirs}" OUTPUT_VARIABLE _compile_output_var)
 
       if(NOT _compile_result)
          message("${_compile_output_var}")
