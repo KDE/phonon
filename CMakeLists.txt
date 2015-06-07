@@ -256,14 +256,39 @@ if("${absInstallDir}" MATCHES "^(/usr)?/lib(64)?/.+")
         unset(_realCurr)")
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake @ONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
+               @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in
+               ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
+               @ONLY)
 
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
         DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
 
-install(EXPORT PhononLibs DESTINATION ${CMAKECONFIG_INSTALL_DIR} NAMESPACE Phonon:: FILE PhononTargets.cmake )
+install(EXPORT PhononLibs
+        DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+        NAMESPACE Phonon::
+        FILE PhononTargets.cmake )
+
+if(PHONON_BUILD_EXPERIMENTAL)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononExperimentalConfig.cmake.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfig.cmake
+                   @ONLY)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononExperimentalConfigVersion.cmake.in
+                   ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfigVersion.cmake
+                   @ONLY)
+
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfig.cmake
+                  ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfigVersion.cmake
+            DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+
+    install(EXPORT PhononExperimentalLibs
+            DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+            NAMESPACE Phonon::
+            FILE PhononExperimentalTargets.cmake )
+endif()
 
 if (NOT PHONON_BUILD_PHONON4QT5)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)

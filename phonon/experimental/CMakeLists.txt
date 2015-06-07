@@ -28,7 +28,7 @@ set_target_properties(${PHONON_LIB_SONAME}experimental PROPERTIES
                                          DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
                                          LINK_INTERFACE_LIBRARIES ""
                                          )
-install(TARGETS ${PHONON_LIB_SONAME}experimental EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ${PHONON_LIB_SONAME}experimental EXPORT PhononExperimentalLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_include_directories(${PHONON_LIB_SONAME}experimental
     INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 

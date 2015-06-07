@@ -9,7 +9,7 @@ get_filename_component(rootDir ${currentDir}/@relInstallDir@ ABSOLUTE) # get the
 
 set(PHONON_NO_GRAPHICSVIEW @PHONON_NO_GRAPHICSVIEW@)
 set(PHONON_PULSESUPPORT @PHONON_PULSESUPPORT@)
-set(PHONON_FOUND_EXPERIMENTAL @PHONON_BUILD_EXPERIMENTAL@)
+set(PHONON_FIND_EXPERIMENTAL @PHONON_BUILD_EXPERIMENTAL@)
 set(PHONON_QT_COMPAT_HEADERS @PHONON_INSTALL_QT_COMPAT_HEADERS@)
 
 # install locations
@@ -24,15 +24,31 @@ if(NOT TARGET Phonon::@PHONON_LIB_SONAME@)
 endif()
 
 set(PHONON_LIBRARY Phonon::@PHONON_LIB_SONAME@)
-if(PHONON_FOUND_EXPERIMENTAL)
-    set(PHONON_EXPERIMENTAL_LIBRARY Phonon::@PHONON_LIB_SONAME@experimental)
-endif(PHONON_FOUND_EXPERIMENTAL)
+
+# Find Experimental.
+# Iff it was specified as component we require it.
+# Else if we built with it we try to find it quietly.
+# The latter part is to provide backwards compatibility as a simple finding of
+# Phonon would also drag in experimental. To simulate this we'll look for it
+# silenetly while not failing if it was not found. Ultimately it was the
+# config consumer's responsibility to check if experimental was actually found.
+# So nothing changes there. Config consumers can however now use it as a
+# component to force an error when it isn't available.
+if("${@PHONON_LIB_SONAME_CAMEL@_FIND_COMPONENTS}" MATCHES ".*(Experimental|experimental).*")
+    find_package(@PHONON_LIB_SONAME_CAMEL@Experimental ${PHONON_VERSION} EXACT CONFIG REQUIRED
+                 PATHS ${currentDir}
+                 NO_DEFAULT_PATH)
+elseif(PHONON_FIND_EXPERIMENTAL)
+    find_package(@PHONON_LIB_SONAME_CAMEL@Experimental ${PHONON_VERSION} EXACT CONFIG QUIET
+                 PATHS ${currentDir}
+                 NO_DEFAULT_PATH)
+endif()
+
+# Convenience.
 set(PHONON_LIBRARIES ${PHONON_LIBRARY} ${PHONON_EXPERIMENTAL_LIBRARY})
 # The following one is only for compatiblity
 set(PHONON_LIBS ${PHONON_LIBRARIES})
-
 set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR} ${PHONON_INCLUDE_DIR}/KDE)
-
 if (PHONON_QT_COMPAT_HEADERS)
     list(APPEND PHONON_INCLUDES ${PHONON_INCLUDE_DIR}/Phonon)
 endif()
