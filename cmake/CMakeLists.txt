@@ -7,4 +7,6 @@ install(FILES cmake_uninstall.cmake.in
               MacroOptionalFindPackage.cmake
               MacroPushRequiredVars.cmake
               PhononMacros.cmake
+              PhononQt4.cmake
+              PhononQt5.cmake
         DESTINATION ${BUILDSYSTEM_INSTALL_DIR})
