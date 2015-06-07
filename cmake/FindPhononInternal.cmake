@@ -140,6 +140,9 @@ else (NOT PHONON_BUILD_PHONON4QT5) # Qt5
 endif (NOT PHONON_BUILD_PHONON4QT5)
 
 # - Automoc (using builtin introduced in 2.8.5)
+# NOTE: the compatiibility macros are actively used by the backends, so they
+#       cannot be dropped unless the backends get a major release removing all
+#       use of them first.
 
 message(STATUS "Using CMake automoc builtin")
 set(CMAKE_AUTOMOC TRUE)
