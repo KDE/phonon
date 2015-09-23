@@ -146,7 +146,7 @@ namespace Phonon
 
             /**
              * This signal is emitted when the muted property has changed. As
-             * this property can change by IPC (DBus) calls a UI element showing
+             * this property can change by outside sources, a UI element showing
              * the muted property should listen to this signal.
              */
             void mutedChanged(bool);

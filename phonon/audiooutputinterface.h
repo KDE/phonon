@@ -161,6 +161,17 @@ public:
     /**
      * SIGNAL emitted when the muteness of the output changes.
      *
+     * \warning When implementing the 4.9 interface this signal MUST be emitted
+     *          from all relevant sources.
+     *
+     * This signal must be emitted whenever muteness is reached. Presently
+     * Phonon has a fallback mechanic which for example forces muteness on
+     * setVolume(0.0) on the frontend side, assuming that the backend enforces
+     * this.
+     * Whenever muteness is reached in the backend this signal
+     * must be emitted, regardless of whether it was reached by
+     * volume=0.0 or mute=true or device=dead or digital-passthrough=true...
+     *
      * \param mute \c true when the output is mute, \c false if it is not mute
      *
      * \since 4.9.0
