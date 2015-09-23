@@ -236,7 +236,7 @@ namespace Phonon
      *
      * \author Matthias Kretz <kretz@kde.org>
      */
-    template<class T0, class T1 = NoIface, class T2 = NoIface>
+    template<class T0, class T1 = NoIface, class T2 = NoIface, class T3 = NoIface>
     class Iface
     {
     public:
@@ -247,6 +247,10 @@ namespace Phonon
                 if (IsValid<T2>::Result) {
                     ret = reinterpret_cast<T0 *>(my_cast<T2 *>(d->m_backendObject));
                     if (ret) return ret;
+                    if (IsValid<T3>::Result) {
+                        ret = reinterpret_cast<T0 *>(my_cast<T3 *>(d->m_backendObject));
+                        if (ret) return ret;
+                    }
                 }
                 ret = reinterpret_cast<T0 *>(my_cast<T1 *>(d->m_backendObject));
                 if (ret) return ret;
@@ -261,6 +265,10 @@ namespace Phonon
                 if (IsValid<T2>::Result) {
                     ret = reinterpret_cast<const T0 *>(my_cast<T2 *>(d->m_backendObject));
                     if (ret) return ret;
+                    if (IsValid<T3>::Result) {
+                        ret = reinterpret_cast<const T0 *>(my_cast<T3 *>(d->m_backendObject));
+                        if (ret) return ret;
+                    }
                 }
                 ret = reinterpret_cast<const T0 *>(my_cast<T1 *>(d->m_backendObject));
                 if (ret) return ret;
@@ -277,11 +285,11 @@ namespace Phonon
         T0 *const iface;
     };
 
-    template<class T0, class T1 = NoIface, class T2 = NoIface>
+    template<class T0, class T1 = NoIface, class T2 = NoIface, class T3 = NoIface>
     class ConstIface
     {
     public:
-        inline ConstIface(const MediaNodePrivate *const d) : iface(Iface<T0, T1, T2>::cast(d)) {}
+        inline ConstIface(const MediaNodePrivate *const d) : iface(Iface<T0, T1, T2, T3>::cast(d)) {}
         inline operator const T0 *() const { return iface; }
         inline const T0 *operator->() const { Q_ASSERT(iface); return iface; }
     private:
