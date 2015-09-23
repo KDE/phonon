@@ -1,4 +1,5 @@
-/*  This file is part of the KDE project
+/*
+    Copyright (C) 2015 Harald Sitter <sitter@kde.org>
     Copyright (C) 2007-2008 Matthias Kretz <kretz@kde.org>
 
     This library is free software; you can redistribute it and/or
@@ -154,23 +155,45 @@ public:
     virtual void setStreamUuid(QString uuid) = 0;
 };
 
+class AudioOutputInterface49 : public AudioOutputInterface47
+{
+public:
+    /**
+     * SIGNAL emitted when the muteness of the output changes.
+     *
+     * \param mute \c true when the output is mute, \c false if it is not mute
+     *
+     * \since 4.9.0
+     */
+    virtual void mutedChanged(bool mute) = 0;
+};
+
 } // namespace Phonon
 
-#ifdef PHONON_BACKEND_VERSION_4_7
+#ifdef PHONON_BACKEND_VERSION_4_9
+namespace Phonon { typedef AudioOutputInterface49 AudioOutputInterface; }
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface40, "AudioOutputInterface2.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface47, "4AudioOutputInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "5AudioOutputInterface.phonon.kde.org")
+#elif defined PHONON_BACKEND_VERSION_4_7
 namespace Phonon { typedef AudioOutputInterface47 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface40, "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "4AudioOutputInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface49, "5AudioOutputInterface.phonon.kde.org")
 #elif defined PHONON_BACKEND_VERSION_4_2
 namespace Phonon { typedef AudioOutputInterface42 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface40, "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "3AudioOutputInterface.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface47, "4AudioOutputInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface49, "5AudioOutputInterface.phonon.kde.org")
 #else
 namespace Phonon { typedef AudioOutputInterface40 AudioOutputInterface; }
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface,   "AudioOutputInterface2.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface42, "3AudioOutputInterface.phonon.kde.org")
 Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface47, "4AudioOutputInterface.phonon.kde.org")
+Q_DECLARE_INTERFACE(Phonon::AudioOutputInterface49, "5AudioOutputInterface.phonon.kde.org")
 #endif
 
 

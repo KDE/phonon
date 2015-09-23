@@ -39,6 +39,7 @@
 #include <QtCore/qmath.h>
 
 #define PHONON_CLASSNAME AudioOutput
+#define IFACES9 AudioOutputInterface49
 #define IFECES7 AudioOutputInterface47
 #define IFACES2 AudioOutputInterface42
 #define IFACES1 IFACES2
@@ -246,7 +247,9 @@ void AudioOutput::setMuted(bool mute)
             }
             d->muted = mute;
         }
-        emit mutedChanged(mute);
+        if (!Iface<IFACES9>(d)) {
+            emit mutedChanged(mute);
+        }
     }
 }
 
@@ -301,6 +304,10 @@ void AudioOutputPrivate::setupBackendObject()
 
     QObject::connect(m_backendObject, SIGNAL(volumeChanged(qreal)), q, SLOT(_k_volumeChanged(qreal)));
     QObject::connect(m_backendObject, SIGNAL(audioDeviceFailed()), q, SLOT(_k_audioDeviceFailed()));
+    if (Iface<IFACES9>(this)) {
+        QObject::connect(m_backendObject, SIGNAL(mutedChanged(bool)),
+                         q, SLOT(_k_mutedChanged(bool)));
+    }
 
     if (!PulseSupport::getInstance()->isActive()) {
         // set up attributes
