@@ -46,6 +46,8 @@ VolumeSlider::VolumeSlider(QWidget *parent)
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_sliderChanged(int)));
     connect(&d->slider, SIGNAL(sliderPressed()), this, SLOT(_k_sliderPressed()));
     connect(&d->slider, SIGNAL(sliderReleased()), this, SLOT(_k_sliderReleased()));
+    connect(&d->slider, SIGNAL(scrollStart()), this, SLOT(_k_sliderPressed()));
+    connect(&d->slider, SIGNAL(scrollEnd()), this, SLOT(_k_sliderReleased()));
     connect(&d->muteButton, SIGNAL(clicked()), SLOT(_k_buttonClicked()));
 
     setFocusProxy(&d->slider);
@@ -66,6 +68,8 @@ VolumeSlider::VolumeSlider(AudioOutput *output, QWidget *parent)
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_sliderChanged(int)));
     connect(&d->slider, SIGNAL(sliderPressed()), this, SLOT(_k_sliderPressed()));
     connect(&d->slider, SIGNAL(sliderReleased()), this, SLOT(_k_sliderReleased()));
+    connect(&d->slider, SIGNAL(scrollStart()), this, SLOT(_k_sliderPressed()));
+    connect(&d->slider, SIGNAL(scrollEnd()), this, SLOT(_k_sliderReleased()));
     connect(&d->muteButton, SIGNAL(clicked()), SLOT(_k_buttonClicked()));
 
     if (output) {

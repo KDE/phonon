@@ -33,7 +33,11 @@ namespace Phonon
 
 SwiftSlider::SwiftSlider(Qt::Orientation orientation, QWidget * parent)
 	: QSlider(orientation, parent)
+    , m_wheelTimer(this)
 {
+    m_wheelTimer.setInterval(100);
+    m_wheelTimer.setSingleShot(true);
+    connect(&m_wheelTimer, SIGNAL(timeout()), this, SIGNAL(scrollEnd()));
 }
 
 SwiftSlider::~SwiftSlider()
@@ -90,6 +94,12 @@ void SwiftSlider::mousePressEvent(QMouseEvent *event)
     } else {
         QSlider::mousePressEvent(event);
     }
+}
+
+void SwiftSlider::wheelEvent(QWheelEvent *event)
+{
+    m_wheelTimer.start();
+    QSlider::wheelEvent(event);
 }
 
 } // namespace Phonon

@@ -24,6 +24,7 @@
 #define SWIFTSLIDER_H
 
 #include <QSlider>
+#include <QTimer>
 
 #if !defined(QT_NO_PHONON_SEEKSLIDER) && !defined(QT_NO_PHONON_VOLUMESLIDER)
 
@@ -51,10 +52,17 @@ public:
 	SwiftSlider(Qt::Orientation orientation, QWidget * parent);
 	~SwiftSlider();
 
+signals:
+        void scrollStart();
+        void scrollEnd();
+
 private:
 	void mousePressEvent(QMouseEvent *event);
+        void wheelEvent(QWheelEvent *event);
 	inline int pick(const QPoint &pt) const;
-	int pixelPosToRangeValue(int pos) const;
+        int pixelPosToRangeValue(int pos) const;
+
+        QTimer m_wheelTimer;
 };
 
 } // namespace Phonon
