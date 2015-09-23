@@ -44,6 +44,8 @@ VolumeSlider::VolumeSlider(QWidget *parent)
 #endif
 
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_sliderChanged(int)));
+    connect(&d->slider, SIGNAL(sliderPressed()), this, SLOT(_k_sliderPressed()));
+    connect(&d->slider, SIGNAL(sliderReleased()), this, SLOT(_k_sliderReleased()));
     connect(&d->muteButton, SIGNAL(clicked()), SLOT(_k_buttonClicked()));
 
     setFocusProxy(&d->slider);
@@ -62,6 +64,8 @@ VolumeSlider::VolumeSlider(AudioOutput *output, QWidget *parent)
 #endif
 
     connect(&d->slider, SIGNAL(valueChanged(int)), SLOT(_k_sliderChanged(int)));
+    connect(&d->slider, SIGNAL(sliderPressed()), this, SLOT(_k_sliderPressed()));
+    connect(&d->slider, SIGNAL(sliderReleased()), this, SLOT(_k_sliderReleased()));
     connect(&d->muteButton, SIGNAL(clicked()), SLOT(_k_buttonClicked()));
 
     if (output) {
@@ -172,6 +176,19 @@ void VolumeSliderPrivate::_k_buttonClicked()
     }
 }
 
+void VolumeSliderPrivate::_k_sliderPressed()
+{
+    sliderPressed = true;
+}
+
+void VolumeSliderPrivate::_k_sliderReleased()
+{
+    sliderPressed = false;
+    if (output) {
+        _k_volumeChanged(output->volume());
+    }
+}
+
 void VolumeSliderPrivate::_k_mutedChanged(bool muted)
 {
 #ifndef QT_NO_TOOLTIP
@@ -218,6 +235,10 @@ void VolumeSliderPrivate::_k_sliderChanged(int value)
 
 void VolumeSliderPrivate::_k_volumeChanged(qreal value)
 {
+    if (sliderPressed) {
+        return;
+    }
+
     int newslidervalue = qRound(100 * value);
     if (!ignoreVolumeChangeAction && slider.value() != newslidervalue) {
         ignoreVolumeChangeObserve = true;

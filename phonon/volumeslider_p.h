@@ -53,7 +53,8 @@ class VolumeSliderPrivate
             mutedIcon(Platform::icon(QLatin1String("player-volume-muted"), parent->style())),
             output(0),
             ignoreVolumeChangeAction(false),
-            ignoreVolumeChangeObserve(true)
+            ignoreVolumeChangeObserve(true),
+            sliderPressed(false)
         {
             slider.setRange(0, 100);
             slider.setPageStep(5);
@@ -80,6 +81,8 @@ class VolumeSliderPrivate
         void _k_volumeChanged(qreal);
         void _k_mutedChanged(bool);
         void _k_buttonClicked();
+        void _k_sliderPressed();
+        void _k_sliderReleased();
 
     private:
         QBoxLayout layout;
@@ -91,6 +94,7 @@ class VolumeSliderPrivate
         QPointer<AudioOutput> output;
         bool ignoreVolumeChangeAction;
         bool ignoreVolumeChangeObserve;
+        bool sliderPressed;
 };
 } // namespace Phonon
 

@@ -140,6 +140,8 @@ class PHONON_EXPORT VolumeSlider : public QWidget
         Q_PRIVATE_SLOT(k_ptr, void _k_volumeChanged(qreal))
         Q_PRIVATE_SLOT(k_ptr, void _k_mutedChanged(bool))
         Q_PRIVATE_SLOT(k_ptr, void _k_buttonClicked())
+        Q_PRIVATE_SLOT(k_ptr, void _k_sliderPressed())
+        Q_PRIVATE_SLOT(k_ptr, void _k_sliderReleased())
 };
 
 } // namespace Phonon
