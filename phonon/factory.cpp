@@ -43,6 +43,8 @@
 #endif
 #include <QApplication>
 #include <QMessageBox>
+#include <QString>
+
 namespace Phonon
 {
 
