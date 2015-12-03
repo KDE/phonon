@@ -64,12 +64,11 @@ QByteArray Mrl::toEncoded(FormattingOptions options) const
 {
     QByteArray encodedMrl;
 
-    QString url = toString(options);
     static QByteArray encodingExclude(":/\\?=&,@");
     if (scheme() == QLatin1String("")) {
-        encodedMrl = QFile::encodeName("file://" + url).toPercentEncoding(encodingExclude);
+        encodedMrl = QFile::encodeName("file://" + toLocalFile()).toPercentEncoding(encodingExclude);
     } else if (scheme() == QLatin1String("file")) {
-        encodedMrl = QFile::encodeName(url).toPercentEncoding(encodingExclude);
+        encodedMrl = QFile::encodeName("file://" + toLocalFile()).toPercentEncoding(encodingExclude);
     } else {
         encodedMrl = QUrl::toEncoded(options);
     }
