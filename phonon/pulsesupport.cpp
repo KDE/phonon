@@ -820,7 +820,9 @@ void PulseSupport::debug()
 }
 
 PulseSupport::PulseSupport()
- : QObject(), mEnabled(false)
+    : QObject()
+    , mEnabled(false)
+    , m_requested(false)
 {
 #ifdef HAVE_PULSEAUDIO
 
@@ -928,15 +930,36 @@ void PulseSupport::connectToDaemon()
 bool PulseSupport::isActive()
 {
 #ifdef HAVE_PULSEAUDIO
-    return mEnabled && s_pulseActive;
+    return mEnabled && isUsed();
 #else
     return false;
 #endif
 }
 
+bool PulseSupport::isUsed()
+{
+   return isRequested() && isUsable();
+}
+
+bool PulseSupport::isUsable() const
+{
+    return s_pulseActive;
+}
+
+bool PulseSupport::isRequested() const
+{
+    return m_requested;
+}
+
+void PulseSupport::request(bool requested)
+{
+    m_requested = requested;
+}
+
 void PulseSupport::enable(bool enabled)
 {
     mEnabled = enabled;
+    request(enabled); // compat, enable needs to imply request.
 #ifdef HAVE_PULSEAUDIO
     logMessage(QString::fromLocal8Bit("Enabled Breakdown: mEnabled: %1, s_pulseActive %2").arg(mEnabled ? "Yes" : "No" ).arg(s_pulseActive ? "Yes" : "No"));
 #endif
@@ -1271,7 +1294,7 @@ void PulseSupport::setupStreamEnvironment(QString streamUuid)
 
 void PulseSupport::emitObjectDescriptionChanged(ObjectDescriptionType type)
 {
-    if (mEnabled)
+    if (isUsed())
         emit objectDescriptionChanged(type);
 }
 

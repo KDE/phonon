@@ -110,7 +110,7 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
     bool is_audio_device = (AudioOutputDeviceType == type || AudioCaptureDeviceType == type);
 
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (is_audio_device && pulse->isActive()) {
+    if (is_audio_device && pulse->isUsed()) {
         QList<int> indexes = pulse->objectDescriptionIndexes(type);
         if (indexes.contains(index)) {
             QHash<QByteArray, QVariant> properties = pulse->objectDescriptionProperties(type, index);

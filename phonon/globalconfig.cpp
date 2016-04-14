@@ -117,7 +117,7 @@ static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, cons
 
     QList<int> deviceList;
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
+    if (pulse->isUsed()) {
         deviceList = pulse->objectIndexesByCategory(type, category);
     } else {
         QString categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(category));
@@ -172,7 +172,7 @@ static QList<int> sortDevicesByCategoryPriority(const GlobalConfig *config, cons
 
     QList<int> deviceList;
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
+    if (pulse->isUsed()) {
         deviceList = pulse->objectIndexesByCategory(type, category);
     } else {
         QString categoryKey = QLatin1String("Category_") + QString::number(static_cast<int>(category));
@@ -391,7 +391,7 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
 void GlobalConfig::setAudioOutputDeviceListFor(Category category, QList<int> order)
 {
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
+    if (pulse->isUsed()) {
         pulse->setOutputDevicePriorityForCategory(category, order);
         return;
     }
@@ -426,7 +426,7 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Category category, int overrid
     QList<int> defaultList;
 
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
+    if (pulse->isUsed()) {
         defaultList = pulse->objectDescriptionIndexes(AudioOutputDeviceType);
         if (hide || (override & HideUnavailableDevices)) {
             filter(AudioOutputDeviceType, NULL, &defaultList,
@@ -501,7 +501,7 @@ void GlobalConfig::setAudioCaptureDeviceListFor(CaptureCategory category, QList<
 {
 
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
+    if (pulse->isUsed()) {
         pulse->setCaptureDevicePriorityForCategory(category, order);
         return;
     }
@@ -536,7 +536,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(CaptureCategory category, int
     QList<int> defaultList;
 
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
+    if (pulse->isUsed()) {
         defaultList = pulse->objectDescriptionIndexes(AudioCaptureDeviceType);
         if (hide || (override & HideUnavailableDevices)) {
             filter(AudioCaptureDeviceType, NULL, &defaultList,
@@ -740,7 +740,7 @@ QHash<QByteArray, QVariant> GlobalConfig::deviceProperties(ObjectDescriptionType
 
     // Try a pulseaudio device
     PulseSupport *pulse = PulseSupport::getInstance();
-    if (pulse->isActive()) {
+    if (pulse->isUsed()) {
         // Check the index before passing it to PulseSupport
         indices = pulse->objectDescriptionIndexes(deviceType);
         if (indices.contains(index))

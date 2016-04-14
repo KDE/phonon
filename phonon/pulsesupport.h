@@ -54,7 +54,72 @@ namespace Phonon
             static PulseSupport *getInstance();
             static void shutdown();
 
+            /**
+             * Whether or not PulseSupport is actively able to intercept calls.
+             *
+             * This is:
+             *   - isUsable()
+             *   - isRequested()
+             *   - has been enabled by the backend
+             *
+             * @return \c true if usable, requested and enabled
+             */
             bool isActive();
+
+            /**
+             * Whether or not pulseaudio is used. This does not mean it is
+             * meant to intercept calls meant for the backend. It simply
+             * indicates that the backend is using pulseaudio.
+             *
+             * This is:
+             *   - isUsable()
+             *   - isRequested()
+             *
+             * @return \c true if pulesaudio can be used, \c false otherwise
+             *
+             * @since 4.9.0
+             */
+            bool isUsed();
+
+            /**
+             * Whether or not pulseaudio can be used.
+             *
+             * This is
+             *   - pulseaudiod is running
+             *   - pulseaudiod can be connected to
+             *
+             * @return \c true if pulseaudio can be used
+             */
+            bool isUsable() const;
+
+            /**
+             * Whether or not the backend has requested that it wants to use
+             * pulseaudio. This does *not* mean the backend wants pulseaudio
+             * support to intercept calls.
+             *
+             * @return \c true if the backend has requested to use pulseaudio.
+             *
+             * @since 4.9.0
+             */
+            bool isRequested() const;
+
+            /**
+             * Backends can use this to request pulseaudio usage, without
+             * enabling the interception.
+             *
+             * @see enable for requesting pulseaudio and forcing interception
+             *
+             * @param requested whether or not the backend would like the
+             *                  frontend to use pulseaudio (e.g. list devices)
+             *
+             * @since 4.9.0
+             */
+            void request(bool requested);
+
+            /**
+             * Enable pulse support. This implies a backend request.
+             * @param enabled
+             */
             void enable(bool enabled = true);
 
             QList<int> objectDescriptionIndexes(ObjectDescriptionType type) const;
@@ -128,6 +193,7 @@ namespace Phonon
             ~PulseSupport();
 
             bool mEnabled;
+            bool m_requested;
     };
 } // namespace Phonon
 
