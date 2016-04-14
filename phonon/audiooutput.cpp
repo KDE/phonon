@@ -228,29 +228,32 @@ bool AudioOutput::isMuted() const
 void AudioOutput::setMuted(bool mute)
 {
     P_D(AudioOutput);
-    if (d->muted != mute) {
-        PulseSupport *pulse = PulseSupport::getInstance();
-        if (mute) {
-            d->muted = mute;
-            if (k_ptr->backendObject()) {
-                if (pulse->isActive())
-                    pulse->setOutputMute(d->getStreamUuid(), mute);
-                else
-                    INTERFACE_CALL(setVolume(0.0));
-            }
-        } else {
-            if (k_ptr->backendObject()) {
-                if (pulse->isActive())
-                    pulse->setOutputMute(d->getStreamUuid(), mute);
-                else
-                    INTERFACE_CALL(setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
-            }
-            d->muted = mute;
-        }
-        if (!Iface<IFACES9>(d)) {
-            emit mutedChanged(mute);
-        }
+
+    if (d->muted == mute) {
+        return;
     }
+
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (mute) {
+        d->muted = mute;
+        if (k_ptr->backendObject()) {
+            if (pulse->isActive()) {
+                pulse->setOutputMute(d->getStreamUuid(), mute);
+            } else {
+                INTERFACE_CALL(setVolume(0.0));
+            }
+        }
+    } else {
+        if (k_ptr->backendObject()) {
+            if (pulse->isActive()) {
+                pulse->setOutputMute(d->getStreamUuid(), mute);
+            } else {
+                INTERFACE_CALL(setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
+            }
+        }
+        d->muted = mute;
+    }
+    emit mutedChanged(mute);
 }
 
 Category AudioOutput::category() const
