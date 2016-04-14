@@ -233,6 +233,16 @@ void AudioOutput::setMuted(bool mute)
         return;
     }
 
+    // When interface 9 is implemented we always default to it.
+    if (k_ptr->backendObject()) {
+        Iface<IFACES9> iface9(d);
+        if (iface9) {
+            iface9->setMuted(mute);
+            // iface9 is fully async, we let the backend emit the state change.
+            return;
+        }
+    }
+
     PulseSupport *pulse = PulseSupport::getInstance();
     if (mute) {
         d->muted = mute;

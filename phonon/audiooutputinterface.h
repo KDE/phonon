@@ -159,6 +159,14 @@ class AudioOutputInterface49 : public AudioOutputInterface47
 {
 public:
     /**
+     * Mutes the output.
+     *
+     * \param mute \c true if it is supposed to get muted \c false if not
+     *
+     * \since 4.9.0
+     */
+    virtual void setMuted(bool mute) = 0;
+
     /**
      * SIGNAL emitted when the muteness of the output changes.
      *
