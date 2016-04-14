@@ -232,36 +232,29 @@ void AudioOutput::setMuted(bool mute)
     if (d->muted == mute) {
         return;
     }
+    d->muted = mute;
 
-    // When interface 9 is implemented we always default to it.
-    if (k_ptr->backendObject()) {
+    if (!k_ptr->backendObject()) {
+        return;
+    }
+
+    PulseSupport *pulse = PulseSupport::getInstance();
+    if (pulse->isActive()) {
+        pulse->setOutputMute(d->getStreamUuid(), mute);
+    } else {
+        // When interface 9 is implemented we always default to it.
         Iface<IFACES9> iface9(d);
         if (iface9) {
             iface9->setMuted(mute);
             // iface9 is fully async, we let the backend emit the state change.
             return;
         }
-    }
 
-    PulseSupport *pulse = PulseSupport::getInstance();
-    if (mute) {
-        d->muted = mute;
-        if (k_ptr->backendObject()) {
-            if (pulse->isActive()) {
-                pulse->setOutputMute(d->getStreamUuid(), mute);
-            } else {
-                INTERFACE_CALL(setVolume(0.0));
-            }
+        if (mute) {
+            INTERFACE_CALL(setVolume(0.0));
+        } else {
+            INTERFACE_CALL(setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
         }
-    } else {
-        if (k_ptr->backendObject()) {
-            if (pulse->isActive()) {
-                pulse->setOutputMute(d->getStreamUuid(), mute);
-            } else {
-                INTERFACE_CALL(setVolume(pow(d->volume, VOLTAGE_TO_LOUDNESS_EXPONENT)));
-            }
-        }
-        d->muted = mute;
     }
     emit mutedChanged(mute);
 }
