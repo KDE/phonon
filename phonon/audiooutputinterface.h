@@ -159,18 +159,15 @@ class AudioOutputInterface49 : public AudioOutputInterface47
 {
 public:
     /**
+    /**
      * SIGNAL emitted when the muteness of the output changes.
      *
      * \warning When implementing the 4.9 interface this signal MUST be emitted
      *          from all relevant sources.
      *
-     * This signal must be emitted whenever muteness is reached. Presently
-     * Phonon has a fallback mechanic which for example forces muteness on
-     * setVolume(0.0) on the frontend side, assuming that the backend enforces
-     * this.
-     * Whenever muteness is reached in the backend this signal
-     * must be emitted, regardless of whether it was reached by
-     * volume=0.0 or mute=true or device=dead or digital-passthrough=true...
+     * This signal must be emitted whenever muteness is reached.
+     * The signal must only be emitted if setMuted was called, reaching mutness
+     * through other means (such as volume==0.0) does not count as muteness.
      *
      * \param mute \c true when the output is mute, \c false if it is not mute
      *
