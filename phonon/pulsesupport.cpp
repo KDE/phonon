@@ -53,6 +53,7 @@ namespace Phonon
 QMutex probeMutex;
 static PulseSupport *s_instance = NULL;
 static bool s_wasShutDown = false;
+static bool s_pulseActive = false;
 
 #ifdef HAVE_PULSEAUDIO
 /***
@@ -142,8 +143,6 @@ class PulseUserData
         QMap<QString, AudioDevice> newCaptureDevices;
         QMap<Phonon::CaptureCategory, QMap<int, int> > newCaptureDevicePriorities; // prio, device
 };
-
-static bool s_pulseActive = false;
 
 static pa_glib_mainloop *s_mainloop = NULL;
 static pa_context *s_context = NULL;
