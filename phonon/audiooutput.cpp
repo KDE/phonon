@@ -44,7 +44,7 @@
 #define IFECES7 AudioOutputInterface47
 #define IFACES2 AudioOutputInterface42
 #define IFACES1 IFACES2
-#define IFACES0 AudioOutputInterface40, IFACES1, IFECES7, IFACES9
+#define IFACES0 AudioOutputInterface40, IFACES1, IFECES7, IFACES9, IFACES10
 #define PHONON_INTERFACENAME IFACES0
 
 namespace Phonon
