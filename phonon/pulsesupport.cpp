@@ -437,11 +437,12 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         // our device info and can exit and reconnect
         if (s_context != c)
             pa_context_disconnect(c);
+
+        return; // eol
     }
 
-    if (!info)
-        return;
-
+    // If we aren't at eol we expect info to be valid!
+    Q_ASSERT(info);
     Q_ASSERT(info->name);
     Q_ASSERT(info->description);
     Q_ASSERT(info->icon);
