@@ -39,6 +39,7 @@
 #include <QtCore/qmath.h>
 
 #define PHONON_CLASSNAME AudioOutput
+#define IFACES10 AudioOutputInterface410
 #define IFACES9 AudioOutputInterface49
 #define IFECES7 AudioOutputInterface47
 #define IFACES2 AudioOutputInterface42
@@ -313,6 +314,11 @@ void AudioOutputPrivate::setupBackendObject()
     if (Iface<IFACES9>(this)) {
         QObject::connect(m_backendObject, SIGNAL(mutedChanged(bool)),
                          q, SLOT(_k_mutedChanged(bool)));
+    }
+
+    Iface<IFACES10> iface10(this);
+    if (iface10) {
+        iface10->setCategory(category);
     }
 
     if (!PulseSupport::getInstance()->isActive()) {
