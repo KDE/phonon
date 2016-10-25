@@ -12,7 +12,7 @@ endif (PHONON_BUILD_EXPERIMENTAL)
 
 # ------------------------ Configure File QMake Style ------------------------ #
 
-if (PHONON_NO_DBUS)
+if (PHONON_NO_DBUS OR NOT QT_QTDBUS_FOUND)
     set(PHONON_NO_DBUS_DEFINE "#define PHONON_NO_DBUS")
 else()
     set(PHONON_NO_DBUS_DEFINE "/* #undef PHONON_NO_DBUS */")
