@@ -35,6 +35,17 @@ find_package(Qt5Widgets)
 macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets (qtbase)" "" "" TRUE)
 
 #---- compat
+# Qt 5.11 dropped this. We rely on it to enable joint Qt4+5 dep mapping.
+if(NOT COMMAND qt5_use_modules)
+    macro (qt5_use_modules target)
+        set(_deps "")
+        foreach (arg ${ARGN})
+            list(APPEND _deps Qt5::${arg})
+        endforeach ()
+        target_link_libraries(${target} ${_deps})
+    endmacro (qt5_use_modules target args)
+endif()
+
 # Compat variables for plugins.
 function(_QT4_QUERY_QMAKE VAR RESULT)
     get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} LOCATION)
