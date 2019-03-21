@@ -186,7 +186,7 @@ bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<Q
 
     // Find physical backend plugins.
     QList<BackendDescriptor> foundBackends;
-    foreach (const QString &plugin, plugins) {
+    for (const QString &plugin : plugins) {
         BackendDescriptor descriptor(libPath + plugin);
         if (!descriptor.isValid)
             continue;
@@ -195,7 +195,7 @@ bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<Q
     qSort(foundBackends);
 
     // Try to pick a preferred backend.
-    foreach (const QString &iid, iidPreference) {
+    for (const QString &iid : qAsConst(iidPreference)) {
         // This is slightly inefficient but we only have 2 backends :P
         // Also using a list requires less overall code than QMap<iid,desc>.
         QList<BackendDescriptor>::iterator it;
@@ -217,7 +217,7 @@ bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<Q
     // No Preferred backend could be constructed. Try all remaining backends
     // in order of initial preference.
     // Note that unconstructable backends have been dropped previously.
-    foreach (const BackendDescriptor &descriptor, foundBackends) {
+    for (const BackendDescriptor &descriptor : qAsConst(foundBackends)) {
         if (tryCreateBackend(descriptor.pluginPath))
             return true;
     }
