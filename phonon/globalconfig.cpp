@@ -287,7 +287,7 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
 
     QList<int> newList;
 
-    for (int i : qAsConst(newOrder)) {
+    foreach (int i, newOrder) {
         int found = currentList.indexOf(i);
         if (found < 0) {
             // It's not in the list, so something is odd (e.g. client error). Ignore it.
@@ -344,7 +344,7 @@ static QList<int> reindexList(const GlobalConfig *config, ObjectDescriptionType 
 
     QList<int> newList;
 
-    for (int i : qAsConst(newOrder)) {
+    foreach (int i, newOrder) {
         int found = currentList.indexOf(i);
         if (found < 0) {
             // It's not in the list, so something is odd (e.g. client error). Ignore it.

@@ -414,7 +414,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             if (s_outputDevicePriorities.contains(cat)) {
                 logMessage(QString("  Phonon Category %1").arg(cat));
                 int count = 0;
-                for (int j : qAsConst(s_outputDevicePriorities[cat])) {
+                foreach (int j, s_outputDevicePriorities[cat]) {
                     QHash<QByteArray, QVariant> &props = s_outputDevices[j].properties;
                     logMessage(QString("    %1. %2 (Available: %3)").arg(++count).arg(props["name"].toString()).arg(props["available"].toBool()));
                 }
@@ -426,7 +426,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
             if (s_captureDevicePriorities.contains(cat)) {
                 logMessage(QString("  Phonon Category %1").arg(cat));
                 int count = 0;
-                for (int j : qAsConst(s_captureDevicePriorities[cat])) {
+                foreach (int j, s_captureDevicePriorities[cat]) {
                     QHash<QByteArray, QVariant> &props = s_captureDevices[j].properties;
                     logMessage(QString("    %1. %2 (Available: %3)").arg(++count).arg(props["name"].toString()).arg(props["available"].toBool()));
                 }
@@ -1078,7 +1078,7 @@ static void setDevicePriority(QString role, QStringList list)
     char **devices;
     devices = pa_xnew(char *, list.size()+1);
     int i = 0;
-    for (const QString &str : qAsConst(list)) {
+    foreach (const QString &str, list) {
         devices[i++] = pa_xstrdup(str.toUtf8().constData());
     }
     devices[list.size()] = NULL;

@@ -40,7 +40,7 @@ MediaSource::MediaSource(const QList<Phonon::MediaSource> &mediaList)
 {
     S_D(MediaSource);
     d->linkedSources = mediaList;
-    for (const Phonon::MediaSource &ms : mediaList) {
+    foreach (const Phonon::MediaSource &ms, mediaList) {
         Q_ASSERT(static_cast<MediaSource::Type>(ms.type()) != Link);
         Q_UNUSED(ms);
     }

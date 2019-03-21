@@ -31,10 +31,11 @@ namespace Experimental
 #ifndef PHONON_NO_VIDEOCAPTURE
 QList<VideoCaptureDevice> BackendCapabilities::availableVideoCaptureDevices()
 {
+    QList<Phonon::VideoCaptureDevice> phononList;
     QList<VideoCaptureDevice> experimentalList;
 
-    const QList<Phonon::VideoCaptureDevice> phononList = Phonon::BackendCapabilities::availableVideoCaptureDevices();
-    for (const Phonon::VideoCaptureDevice &vcd : phononList) {
+    phononList = Phonon::BackendCapabilities::availableVideoCaptureDevices();
+    foreach (const Phonon::VideoCaptureDevice &vcd, phononList) {
         experimentalList << phononVcdToExperimentalVcd(vcd);
     }
 
