@@ -36,10 +36,10 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
 {
     P_DECLARE_PUBLIC(VideoWidget)
     public:
-        virtual QObject *qObject() { return q_func(); }
+        virtual QObject *qObject() override { return q_func(); }
     protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
+        virtual bool aboutToDeleteBackendObject() override;
+        virtual void createBackendObject() override;
         void setupBackendObject();
 
         VideoWidgetPrivate(VideoWidget *parent)

@@ -32,8 +32,8 @@
 
 #define PHONON_PRIVATECLASS \
 protected: \
-    virtual bool aboutToDeleteBackendObject(); \
-    virtual void createBackendObject(); \
+    virtual bool aboutToDeleteBackendObject() override; \
+    virtual void createBackendObject() override; \
     /**
      * \internal
      * After construction of the Iface object this method is called
@@ -51,7 +51,7 @@ protected: \
 
 #define PHONON_PRIVATEABSTRACTCLASS \
 protected: \
-    virtual bool aboutToDeleteBackendObject(); \
+    virtual bool aboutToDeleteBackendObject() override; \
     /**
      * \internal
      * After construction of the Iface object this method is called

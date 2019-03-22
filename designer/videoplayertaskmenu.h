@@ -80,7 +80,7 @@ class VideoPlayerTaskMenu: public QObject, public QDesignerTaskMenuExtension
     Q_INTERFACES(QDesignerTaskMenuExtension)
 public:
     explicit VideoPlayerTaskMenu(Phonon::VideoPlayer *object, QObject *parent = 0);
-    virtual QList<QAction*> taskActions() const;
+    virtual QList<QAction*> taskActions() const override;
 
 private slots:
     void slotLoad();
@@ -106,7 +106,7 @@ public:
 
 protected:
     QObject *createExtension(QObject *object,
-                             const QString &iid, QObject *parent) const;
+                             const QString &iid, QObject *parent) const override;
 };
 
 #endif // VIDEOPLAYERTASKMENU_H

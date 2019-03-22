@@ -31,17 +31,17 @@ class VideoWidgetPlugin: public QObject, public QDesignerCustomWidgetInterface
 public:
     explicit VideoWidgetPlugin(const QString &group, QObject *parent = 0);
 
-    virtual QString name() const;
-    virtual QString group() const;
-    virtual QString toolTip() const;
-    virtual QString whatsThis() const;
-    virtual QString includeFile() const;
-    virtual QIcon icon() const;
-    virtual bool isContainer() const;
-    virtual QWidget *createWidget(QWidget *parent);
-    virtual bool isInitialized() const;
-    virtual void initialize(QDesignerFormEditorInterface *core);
-    virtual QString domXml() const;
+    virtual QString name() const override;
+    virtual QString group() const override;
+    virtual QString toolTip() const override;
+    virtual QString whatsThis() const override;
+    virtual QString includeFile() const override;
+    virtual QIcon icon() const override;
+    virtual bool isContainer() const override;
+    virtual QWidget *createWidget(QWidget *parent) override;
+    virtual bool isInitialized() const override;
+    virtual void initialize(QDesignerFormEditorInterface *core) override;
+    virtual QString domXml() const override;
 
 private:
     const QString m_group;

@@ -78,7 +78,7 @@ class PhononCollection: public QObject, public QDesignerCustomWidgetCollectionIn
 public:
     explicit PhononCollection(QObject *parent = 0);
 
-    virtual QList<QDesignerCustomWidgetInterface*> customWidgets() const;
+    virtual QList<QDesignerCustomWidgetInterface*> customWidgets() const override;
 
 private:
     QList<QDesignerCustomWidgetInterface*> m_plugins;

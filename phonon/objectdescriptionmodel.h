@@ -196,9 +196,9 @@ and existing builds. */
             /** \internal */
             static PHONON_TEMPLATE_CLASS_MEMBER_EXPORT const QMetaObject staticMetaObject;
             /** \internal */
-            PHONON_TEMPLATE_CLASS_MEMBER_EXPORT const QMetaObject *metaObject() const;
+            PHONON_TEMPLATE_CLASS_MEMBER_EXPORT const QMetaObject *metaObject() const override;
             /** \internal */
-            PHONON_TEMPLATE_CLASS_MEMBER_EXPORT void *qt_metacast(const char *_clname);
+            PHONON_TEMPLATE_CLASS_MEMBER_EXPORT void *qt_metacast(const char *_clname) override;
             //int qt_metacall(QMetaObject::Call _c, int _id, void **_a);
 
             /**
@@ -213,7 +213,7 @@ and existing builds. */
              *
              * \see QAbstractItemModel::rowCount
              */
-            inline int rowCount(const QModelIndex &parent = QModelIndex()) const { return d->rowCount(parent); } //krazy:exclude=inline
+            inline int rowCount(const QModelIndex &parent = QModelIndex()) const override { return d->rowCount(parent); } //krazy:exclude=inline
 
             /**
              * Returns data from the item with the given \p index for the specified
@@ -226,13 +226,13 @@ and existing builds. */
              * \see QAbstractItemModel::data
              * \see Qt::ItemDataRole
              */
-            inline QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const { return d->data(index, role); } //krazy:exclude=inline
+            inline QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override { return d->data(index, role); } //krazy:exclude=inline
 
             /**
              * Reimplemented to show unavailable devices as disabled (but still
              * selectable).
              */
-            inline Qt::ItemFlags flags(const QModelIndex &index) const { return d->flags(index); } //krazy:exclude=inline
+            inline Qt::ItemFlags flags(const QModelIndex &index) const override { return d->flags(index); } //krazy:exclude=inline
 
             /**
              * Returns a list of indexes in the same order as they are in the
@@ -259,7 +259,7 @@ and existing builds. */
              * Returns the MIME data that dropMimeData() can use to create new
              * items.
              */
-            inline QMimeData *mimeData(const QModelIndexList &indexes) const { return d->mimeData(type, indexes); } //krazy:exclude=inline
+            inline QMimeData *mimeData(const QModelIndexList &indexes) const override { return d->mimeData(type, indexes); } //krazy:exclude=inline
 
             /**
              * Moves the item at the given \p index up. In the resulting list
@@ -327,7 +327,7 @@ and existing builds. */
              * This model supports drag and drop to copy or move
              * items.
              */
-            inline Qt::DropActions supportedDropActions() const { return d->supportedDropActions(); } //krazy:exclude=inline
+            inline Qt::DropActions supportedDropActions() const override { return d->supportedDropActions(); } //krazy:exclude=inline
 
             /**
              * Accept drops from other models of the same ObjectDescriptionType.
@@ -335,7 +335,7 @@ and existing builds. */
              * If a valid \p parent is given the dropped items will be inserted
              * above that item.
              */
-            inline bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) { //krazy:exclude=inline
+            inline bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override { //krazy:exclude=inline
                 return d->dropMimeData(type, data, action, row, column, parent);
             }
 
@@ -347,7 +347,7 @@ and existing builds. */
              *
              * Returns true if the rows were successfully removed; otherwise returns false.
              */
-            inline bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) { //krazy:exclude=inline
+            inline bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override { //krazy:exclude=inline
                 return d->removeRows(row, count, parent);
             }
 
@@ -355,7 +355,7 @@ and existing builds. */
              * Returns a list of supported drag and drop MIME types. Currently
              * it only supports one type used internally.
              */
-            inline QStringList mimeTypes() const { return d->mimeTypes(type); } //krazy:exclude=inline
+            inline QStringList mimeTypes() const override { return d->mimeTypes(type); } //krazy:exclude=inline
 
         protected:
             ObjectDescriptionModelData *const d;

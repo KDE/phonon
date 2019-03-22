@@ -37,7 +37,7 @@ class VisualizationPrivate : public MediaNodePrivate, private MediaNodeDestructi
     P_DECLARE_PUBLIC(Visualization)
     PHONON_PRIVATECLASS
     public:
-        virtual QObject *qObject() { return q_func(); }
+        virtual QObject *qObject() override { return q_func(); }
     protected:
         VisualizationDescription description;
 

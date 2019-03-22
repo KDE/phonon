@@ -57,8 +57,8 @@ signals:
         void scrollEnd();
 
 private:
-	void mousePressEvent(QMouseEvent *event);
-        void wheelEvent(QWheelEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
+        void wheelEvent(QWheelEvent *event) override;
 	inline int pick(const QPoint &pt) const;
         int pixelPosToRangeValue(int pos) const;
 

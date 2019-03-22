@@ -48,7 +48,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
     friend class AbstractMediaStreamPrivate;
     P_DECLARE_PUBLIC(MediaObject)
     public:
-        virtual QObject *qObject() { return q_func(); }
+        virtual QObject *qObject() override { return q_func(); }
 
         /**
          * Sends the metadata for this media file to the Zeitgeist tracker
@@ -78,9 +78,9 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
 
     QList<FrontendInterfacePrivate *> interfaceList;
     protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
-        virtual void phononObjectDestroyed(MediaNodePrivate *);
+        virtual bool aboutToDeleteBackendObject() override;
+        virtual void createBackendObject() override;
+        virtual void phononObjectDestroyed(MediaNodePrivate *) override;
         PHONON_EXPORT void setupBackendObject();
 
         void _k_resumePlay();

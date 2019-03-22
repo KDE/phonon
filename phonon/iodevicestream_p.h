@@ -42,9 +42,9 @@ class IODeviceStream : public AbstractMediaStream
         explicit IODeviceStream(QIODevice *ioDevice, QObject *parent = 0);
         ~IODeviceStream();
 
-        void reset();
-        void needData();
-        void seekStream(qint64);
+        void reset() override;
+        void needData() override;
+        void seekStream(qint64) override;
 };
 } // namespace Phonon
 
