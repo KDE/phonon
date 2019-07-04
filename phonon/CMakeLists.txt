@@ -116,6 +116,10 @@ set(phonon_LIB_SRCS
    ${phonon_VGO_SRCS}
    )
 
+if(ECM_FOUND)
+    ecm_create_qm_loader(phonon_LIB_SRCS libphonon_qt)
+endif()
+
 if (PHONON_PULSESUPPORT)
    list(APPEND phonon_LIB_SRCS
       pulsestream.cpp

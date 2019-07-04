@@ -313,4 +313,8 @@ if(PHONON_BUILD_DESCRIPTOR)
     install(FILES ${DESCRIPTOR_FILE_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX})
 endif(PHONON_BUILD_DESCRIPTOR)
 
+if(ECM_FOUND AND IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+    ecm_install_po_files_as_qm(po)
+endif()
+
 macro_display_feature_log()
