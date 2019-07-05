@@ -75,5 +75,6 @@ set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
 find_package(ECM 1.7.0 NO_MODULE REQUIRED)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+include(ECMPoQmTools)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
