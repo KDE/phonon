@@ -267,8 +267,12 @@ QDebug operator<<(QDebug dbg, const ObjectDescription<T> &d)
 {
     dbg.nospace() << "\n{\n";
     dbg.nospace() << "  index: " << d.index() << "\n";
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     const QList<QByteArray> propertyNames = d.propertyNames();
     for (const QByteArray &propertyName : propertyNames) {
+#else
+    Q_FOREACH (const QByteArray &propertyName, d.propertyNames()) {
+#endif
         dbg.nospace() << "  " << propertyName << ": " <<
                          d.property(propertyName).toString() << "\n";
     }
