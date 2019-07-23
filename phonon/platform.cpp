@@ -93,7 +93,6 @@ QIcon Platform::icon(const QString &name, QStyle *style)
         }
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0) // QIcon::fromTheme was introduced in 4.6.0.
     // Still no icon set. Use QIcon to access the platform theme.
     if (ret.isNull())
         ret = QIcon::fromTheme(name);
@@ -108,7 +107,6 @@ QIcon Platform::icon(const QString &name, QStyle *style)
         choppedName.resize(choppedName.lastIndexOf(QChar('-')));
         ret = QIcon::fromTheme(choppedName);
     }
-#endif
 
     return ret;
 }

@@ -71,9 +71,7 @@
 class PhononCollection: public QObject, public QDesignerCustomWidgetCollectionInterface
 {
     Q_OBJECT
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     Q_PLUGIN_METADATA(IID "org.kde.phonon.PhononCollection")
-#endif
     Q_INTERFACES(QDesignerCustomWidgetCollectionInterface)
 public:
     explicit PhononCollection(QObject *parent = 0);
@@ -98,9 +96,5 @@ QList<QDesignerCustomWidgetInterface*> PhononCollection::customWidgets() const
 {
     return m_plugins;
 }
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-Q_EXPORT_PLUGIN(PhononCollection)
-#endif
 
 #include "phononcollection.moc"

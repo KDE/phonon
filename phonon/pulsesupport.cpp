@@ -1175,12 +1175,10 @@ static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString str
                 qApp->applicationVersion().toUtf8());
     if (!qApp->applicationName().isEmpty()) {
         QString icon;
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
         if (!qApp->windowIcon().isNull()){
             // Try to get the fromTheme() name of the QIcon.
             icon = qApp->windowIcon().name();
         }
-#endif
         if (icon.isEmpty()) {
             // If we failed to get a proper icon name, use the appname instead.
             icon = qApp->applicationName().toLower();

@@ -65,17 +65,6 @@ else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-if (PHONON_BUILD_PHONON4QT5)
-    message(WARNING "QZeitgeist has not been ported to Qt5, support is disabled.")
-else ()
-    macro_optional_find_package(QZeitgeist 0.8)
-    macro_log_feature(QZEITGEIST_FOUND "QZeitgeist" "Qt bindings for Zeitgeist" "http://projects.kde.org/kdesupport/libqzeitgeist/" FALSE "0.8")
-    if (QZEITGEIST_FOUND)
-      add_definitions(-DHAVE_QZEITGEIST)
-      include_directories(${QZEITGEIST_INCLUDE_DIR})
-    endif(QZEITGEIST_FOUND)
-endif()
-
 include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
 
 set(phonon_LIB_SRCS
@@ -155,15 +144,6 @@ if(NOT PHONON_NO_GRAPHICSVIEW)
     qt5_use_modules(${PHONON_LIB_SONAME} OpenGL)
     target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_gl_LIBRARY})
 endif()
-
-if (QZEITGEIST_FOUND)
-    target_link_libraries(${PHONON_LIB_SONAME} ${QZEITGEIST_LIBRARY})
-endif(QZEITGEIST_FOUND)
-
-if (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
-  # We need to explicitly link libm to phonon in Solaris
-  target_link_libraries(${PHONON_LIB_SONAME} m)
-endif (${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
 
 set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
                                            VERSION ${PHONON_LIB_VERSION}

@@ -101,11 +101,7 @@ if(APPLE)
    set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 endif(APPLE)
 
-if (NOT PHONON_BUILD_PHONON4QT5) # Qt4
-    include(${phonon_cmake_module_dir}/PhononQt4.cmake)
-else (NOT PHONON_BUILD_PHONON4QT5) # Qt5
-    include(${phonon_cmake_module_dir}/PhononQt5.cmake)
-endif (NOT PHONON_BUILD_PHONON4QT5)
+include(${phonon_cmake_module_dir}/PhononQt5.cmake)
 
 # - Automoc (using builtin introduced in 2.8.5)
 # NOTE: the compatiibility macros are actively used by the backends, so they

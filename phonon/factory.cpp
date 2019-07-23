@@ -126,7 +126,6 @@ bool FactoryPrivate::tryCreateBackend(const QString &path)
     return false;
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 struct BackendDescriptor {
     explicit BackendDescriptor(const QString &path)
         : isValid(false)
@@ -223,16 +222,6 @@ bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<Q
     }
     return false;
 }
-#else // Qt 4
-bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<QString> &plugins)
-{
-    foreach (const QString &plugin, plugins) {
-        if (tryCreateBackend(libPath + plugin))
-            return true;
-    }
-    return false;
-}
-#endif
 
 // This entire function is so terrible to read I hope it implodes some day.
 bool FactoryPrivate::createBackend()

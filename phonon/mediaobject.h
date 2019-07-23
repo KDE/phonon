@@ -75,9 +75,6 @@ namespace Phonon
      * }
      * \endcode
      *
-     * Some platforms support system-wide tracking of a user's activities. For
-     * instance, the zeitgeist project (http://zeitgeist-project.com) on Linux.
-     *
      * This integration is opt-in only and can be enabled by setting the
      * PlaybackTracking property to true:
      * \code

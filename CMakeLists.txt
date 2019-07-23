@@ -16,8 +16,6 @@ option(PHONON_INSTALL_QT_COMPAT_HEADERS "Install QtPhonon compatibility headers"
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
-option(PHONON_BUILD_PHONON4QT5 "Build Phonon 4 transitional library for Qt5 (API compatible with regular Phonon4)" OFF)
-
 # The following variables directly influence the library's soname version.
 # It is highly advised to think twice before changing those.
 # If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
@@ -26,14 +24,8 @@ set(PHONON_LIB_MINOR_VERSION "10") # Only change on binary compatible changes wi
 set(PHONON_LIB_PATCH_VERSION "3") # Bump whenever you feel like it :P
 set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
 set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
-set(PHONON_LIB_SONAME phonon)
-set(PHONON_LIB_SONAME_CAMEL Phonon)
-
-if(PHONON_BUILD_PHONON4QT5)
-    set(PHONON_LIB_SONAME phonon4qt5)
-    set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
-endif(PHONON_BUILD_PHONON4QT5)
-
+set(PHONON_LIB_SONAME phonon4qt5)
+set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
 if (PHONON_ASSERT_STATES)
     message(STATUS "Enabling backend state machine validation.")
     add_definitions(-DPHONON_ASSERT_STATES)
@@ -55,36 +47,27 @@ set(DESIGNER_DESC "Needed to build the Qt Designer plugin.")
 set(GL_DESC "Only recommended when bulding the super experimental QML support.")
 set(DECL_DESC "Only recommended when bulding the super experimental QML support.")
 
-if (NOT PHONON_BUILD_PHONON4QT5) # Qt 4
-    macro_log_feature(QT_QTDBUS_FOUND "Qt4 DBus" ${DBUS_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
-    macro_log_feature(QT_QTDESIGNER_FOUND "Qt4 Designer" ${DESIGNER_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
-    macro_log_feature(QT_QTOPENGL_FOUND "Qt4 OpenGL" ${GL_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
-    macro_log_feature(QT_QTDECLARATIVE_FOUND "Qt4 Declarative" ${DECL_DESC} "http://www.qt.gitorious.net/qt/qt" FALSE)
-    set(PHONON_PKG_DEPENDENCIES "QtCore QtGui QtDBus")
-else (NOT PHONON_BUILD_PHONON4QT5) # Qt 5
-    # DBus Audio Output Introspection
-    find_package(Qt5DBus)
-    macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" ${DBUS_DESC} "http://www.qt.gitorious.net/qt/qtbase" FALSE)
-    set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
+# DBus Audio Output Introspection
+find_package(Qt5DBus)
+macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" ${DBUS_DESC} "http://www.qt.gitorious.net/qt/qtbase" FALSE)
+set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 
-    # Designer Plugin
-    find_package(Qt5Designer)
-    macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" ${DESIGNER_DESC} "http://www.qt.gitorious.net/qt/qttools" FALSE)
-    set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
+# Designer Plugin
+find_package(Qt5Designer)
+macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" ${DESIGNER_DESC} "http://www.qt.gitorious.net/qt/qttools" FALSE)
+set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
 
-    # VideoGraphicsObject GL Painting
-    find_package(Qt5OpenGL)
-    macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" ${GL_DESC} "http://www.qt.gitorious.net/qt/qtbase" FALSE)
-    set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
+# VideoGraphicsObject GL Painting
+find_package(Qt5OpenGL)
+macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" ${GL_DESC} "http://www.qt.gitorious.net/qt/qtbase" FALSE)
+set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 
-    # Declarative/QML1
-    find_package(Qt5Declarative)
-    macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" ${DECL_DESC} "http://www.qt.gitorious.net/qt/qtquick1" FALSE)
-    set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
+# Declarative/QML1
+find_package(Qt5Declarative)
+macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" ${DECL_DESC} "http://www.qt.gitorious.net/qt/qtquick1" FALSE)
+set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 
-    set(PHONON_PKG_DEPENDENCIES "Qt5Core Qt5Gui Qt5DBus")
-endif (NOT PHONON_BUILD_PHONON4QT5)
-################################################################################
+set(PHONON_PKG_DEPENDENCIES "Qt5Core Qt5Gui Qt5DBus")
 
 if(NOT PHONON_BUILD_DECLARATIVE_PLUGIN OR NOT QT_QTOPENGL_FOUND OR NOT OPENGL_FOUND OR NOT QT_QTDECLARATIVE_FOUND)
     set(PHONON_NO_GRAPHICSVIEW true)
@@ -92,10 +75,7 @@ else()
     set(PHONON_NO_GRAPHICSVIEW false)
 endif()
 
-add_definitions(${QT_DEFINITIONS})
-remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
-
-include_directories(${QT_INCLUDES}
+include_directories(
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${CMAKE_CURRENT_SOURCE_DIR}/phonon
@@ -134,15 +114,9 @@ else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
 
     # Please do note that these paths are most likely random nonensense depending on what OS and distribution is used, they most likely
     # need manual adjustment for the actual envrionment.
-    if(PHONON_BUILD_PHONON4QT5)
-        set(PHONON_QT_IMPORTS_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/qt5/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
-        set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt5/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
-        set(PHONON_QT_PLUGIN_INSTALL_DIR   ${CMAKE_INSTALL_LIBDIR}/qt5/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
-    else()
-        set(PHONON_QT_IMPORTS_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/qt4/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
-        set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt4/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
-        set(PHONON_QT_PLUGIN_INSTALL_DIR   ${CMAKE_INSTALL_LIBDIR}/qt4/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
-    endif()
+    set(PHONON_QT_IMPORTS_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/qt5/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
+    set(PHONON_QT_MKSPECS_INSTALL_DIR  share/qt5/mkspecs/modules  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
+    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${CMAKE_INSTALL_LIBDIR}/qt5/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
 endif(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
 
 
@@ -290,13 +264,8 @@ if(PHONON_BUILD_EXPERIMENTAL)
             FILE PhononExperimentalTargets.cmake )
 endif()
 
-if (NOT PHONON_BUILD_PHONON4QT5)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
-else (NOT PHONON_BUILD_PHONON4QT5)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt5_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
-endif (NOT PHONON_BUILD_PHONON4QT5)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
 
 # This generates a nice library descriptor to use with [1]. It also spits out
 # a script that makes installing various versions for an ABI check a lot easier.

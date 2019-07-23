@@ -37,14 +37,6 @@
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
 
-#ifdef HAVE_QZEITGEIST
-#include <QZeitgeist/DataModel/Event>
-#include <QZeitgeist/Interpretation>
-#include <QZeitgeist/Log>
-#include <QZeitgeist/Manifestation>
-#include <QZeitgeist/QZeitgeist>
-#endif
-
 #include "phononnamespace_p.h"
 #include "platform_p.h"
 #include "statesvalidator_p.h"
@@ -278,9 +270,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
 
     d->playingQueuedSource = false;
 
-    d->sendToZeitgeist(StoppedState);
     INTERFACE_CALL(setSource(d->mediaSource));
-    d->sendToZeitgeist();
 }
 
 void MediaObject::clear()
@@ -341,154 +331,6 @@ void MediaObject::clearQueue()
     d->sourceQueue.clear();
 }
 
-void MediaObjectPrivate::sendToZeitgeist(const QString &event_interpretation,
-                                         const QString &event_manifestation,
-                                         const QString &event_actor,
-                                         const QDateTime &subject_timestamp,
-                                         const QUrl &subject_uri,
-                                         const QString &subject_text,
-                                         const QString &subject_interpretation,
-                                         const QString &subject_manifestation,
-                                         const QString &subject_mimetype)
-{
-#ifdef HAVE_QZEITGEIST
-    QZeitgeist::DataModel::Subject subject;
-    QString url = subject_uri.toString();
-    QString path = url.left(url.lastIndexOf(QLatin1Char('/')));
-    subject.setUri(url);
-    subject.setText(subject_text);
-    subject.setInterpretation(subject_interpretation);
-    subject.setManifestation(subject_manifestation);
-    subject.setOrigin(path);
-    subject.setMimeType(subject_mimetype);
-
-    QZeitgeist::DataModel::SubjectList subjects;
-    subjects << subject;
-
-    QZeitgeist::DataModel::Event event;
-    event.setTimestamp(subject_timestamp);
-    event.setInterpretation(event_interpretation);
-    event.setManifestation(event_manifestation);
-    event.setActor(event_actor);
-    event.setSubjects(subjects);
-
-    QZeitgeist::DataModel::EventList events;
-    events << event;
-
-    QDBusPendingReply<QZeitgeist::DataModel::EventIdList> reply =
-        log->insertEvents(events);
-#else
-    Q_UNUSED(event_interpretation)
-    Q_UNUSED(event_manifestation)
-    Q_UNUSED(event_actor)
-    Q_UNUSED(subject_timestamp)
-    Q_UNUSED(subject_uri)
-    Q_UNUSED(subject_text)
-    Q_UNUSED(subject_interpretation)
-    Q_UNUSED(subject_manifestation)
-    Q_UNUSED(subject_mimetype)
-#endif
-}
-
-void MediaObjectPrivate::sendToZeitgeist(State eventState)
-{
-#ifdef HAVE_QZEITGEIST
-    P_Q(MediaObject);
-    if (readyForZeitgeist && q->property("PlaybackTracking").toBool()) {
-        pDebug() << "Current state:" << eventState;
-        QString eventInterpretation;
-        switch (eventState) {
-        case PlayingState:
-            eventInterpretation = QZeitgeist::Interpretation::Event::ZGAccessEvent;
-            break;
-        case ErrorState:
-        case StoppedState:
-            eventInterpretation = QZeitgeist::Interpretation::Event::ZGLeaveEvent;
-            break;
-        //These states are not signifigant events.
-        case LoadingState:
-        case BufferingState:
-        case PausedState:
-            return;
-            break;
-        }
-
-        QStringList titles = q->metaData(TitleMetaData);
-        QStringList artists = q->metaData(ArtistMetaData);
-        QString title;
-        if (titles.empty()) {
-            QString file = mediaSource.url().toString();
-            title = file.right(file.length()-file.lastIndexOf("/")-1);
-        } else {
-            if (artists.empty()) {
-                title = titles[0];
-            } else {
-                title = QString(QObject::tr("%0 by %1")).arg(titles[0]).arg(artists[0]);
-            }
-        }
-        pDebug() << "Sending" << title << "to zeitgeist";
-
-        QString mime;
-        QString subjectInterpretation;
-        if (q->hasVideo()) {
-            subjectInterpretation = QZeitgeist::Interpretation::Subject::NFOVideo;
-            mime = "video/raw";
-        } else {
-            subjectInterpretation = QZeitgeist::Interpretation::Subject::NFOAudio;
-            mime = "audio/raw";
-        }
-        pDebug() << "Zeitgeist mime type:" << mime;
-        pDebug() << "Zeitgeist URL:" << mediaSource.url();
-        pDebug() << "mediasource type:" << mediaSource.type();
-
-        QString subjectType;
-        switch (mediaSource.type()) {
-        case MediaSource::Empty:
-        case MediaSource::Invalid:
-            return;
-        case MediaSource::Url:
-            subjectType = QZeitgeist::Manifestation::Subject::NFORemoteDataObject;
-            break;
-        case MediaSource::CaptureDevice:
-        case MediaSource::Disc:
-        case MediaSource::Stream:
-            subjectType = QZeitgeist::Manifestation::Subject::NFOMediaStream;
-            break;
-        case MediaSource::LocalFile:
-            subjectType = QZeitgeist::Manifestation::Subject::NFOFileDataObject;
-            break;
-        }
-
-        QString eventManifestation;
-        if (playingQueuedSource)
-            eventManifestation = QZeitgeist::Manifestation::Event::ZGScheduledActivity;
-        else
-            eventManifestation = QZeitgeist::Manifestation::Event::ZGUserActivity;
-
-        sendToZeitgeist(eventInterpretation,
-                        eventManifestation,
-                        QLatin1Literal("application://" ) % Platform::applicationName() % QLatin1Literal(".desktop"),
-                        QDateTime::currentDateTime(),
-                        mediaSource.url(),
-                        title,
-                        subjectInterpretation,
-                        subjectType,
-                        mime);
-    }
-    // Unset this so we don't send it again after a pause+play
-    readyForZeitgeist = false;
-    playingQueuedSource = false;
-#else
-    Q_UNUSED(eventState)
-#endif
-}
-
-void MediaObjectPrivate::sendToZeitgeist()
-{
-    P_Q(MediaObject);
-    sendToZeitgeist(q->state());
-}
-
 bool MediaObjectPrivate::aboutToDeleteBackendObject()
 {
     //pDebug() << Q_FUNC_INFO;
@@ -521,13 +363,6 @@ void MediaObjectPrivate::streamError(Phonon::ErrorType type, const QString &text
 void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State oldstate)
 {
     P_Q(MediaObject);
-
-    // Zeitgeist ---------------------------------------------------------------
-    if (newstate == StoppedState) {
-        readyForZeitgeist = true;
-    }
-    pDebug() << "State changed from" << oldstate << "to" << newstate << "-> sending to zeitgeist.";
-    sendToZeitgeist(newstate);
 
     // AbstractMediaStream fallback stuff --------------------------------------
     if (errorOverride) {
@@ -574,9 +409,7 @@ void MediaObjectPrivate::_k_stateChanged(Phonon::State newstate, Phonon::State o
         abstractStream->d_func()->setMediaObjectPrivate(this);
         MediaSource mediaSource(abstractStream);
         mediaSource.setAutoDelete(true);
-        sendToZeitgeist(StoppedState);
         pINTERFACE_CALL(setSource(mediaSource));
-        sendToZeitgeist();
         if (oldstate == Phonon::BufferingState) {
             q->play();
         }
@@ -615,7 +448,6 @@ void MediaObjectPrivate::_k_aboutToFinish()
     }
 
     mediaSource = sourceQueue.head();
-    readyForZeitgeist = false;
     playingQueuedSource = true;
     pINTERFACE_CALL(setNextSource(mediaSource));
 
@@ -719,16 +551,13 @@ void MediaObjectPrivate::setupBackendObject()
 
     // set up attributes
     if (isPlayable(mediaSource.type())) {
-        readyForZeitgeist = false;
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
         if (mediaSource.type() == MediaSource::Stream) {
             Q_ASSERT(mediaSource.stream());
             mediaSource.stream()->d_func()->setMediaObjectPrivate(this);
         }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
-        sendToZeitgeist(StoppedState);
         pINTERFACE_CALL(setSource(mediaSource));
-        sendToZeitgeist();
     }
 }
 
@@ -752,9 +581,6 @@ void MediaObjectPrivate::_k_metaDataChanged(const QMultiMap<QString, QString> &n
 {
     metaData = newMetaData;
     emit q_func()->metaDataChanged();
-    pDebug() << "Metadata ready, sending to zeitgeist";
-    readyForZeitgeist = true;
-    sendToZeitgeist();
 }
 
 void MediaObjectPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
