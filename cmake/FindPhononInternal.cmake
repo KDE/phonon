@@ -25,35 +25,17 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# CMake Defaults
-
-get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
-
-# Imported from KDE4Defaults.cmake
-# Keep this portion copy'n'pastable for updatability.
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-# Always include srcdir and builddir in include path
-# This saves typing ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} in about every subdir
-# since cmake 2.4.0
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# put the include dirs which are in the source or build tree
-# before all other include dirs, so the headers in the sources
-# are prefered over the already installed ones
-# since cmake 2.4.1
-set(CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE ON)
-
 #-------------------------------------------------------------------------------
 
 # Include Additional Magic
 
-include(${phonon_cmake_module_dir}/PhononMacros.cmake)
+include(CheckCXXCompilerFlag)
 
+get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
+
+include(${phonon_cmake_module_dir}/PhononMacros.cmake)
 include(${phonon_cmake_module_dir}/MacroLogFeature.cmake)
 include(${phonon_cmake_module_dir}/MacroOptionalFindPackage.cmake)
-
-include(CheckCXXCompilerFlag)
 include(${phonon_cmake_module_dir}/MacroEnsureVersion.cmake)
 
 # ECM
@@ -120,8 +102,6 @@ set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
 #       cannot be dropped unless the backends get a major release removing all
 #       use of them first.
 
-message(STATUS "Using CMake automoc builtin")
-set(CMAKE_AUTOMOC TRUE)
 # Compatiblity Macros for old automoc nonesense
 macro(AUTOMOC4_ADD_EXECUTABLE _target_NAME)
     add_executable(${_target_NAME} ${ARGN})
