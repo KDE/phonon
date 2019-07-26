@@ -47,10 +47,8 @@ include(KDEInstallDirs)
 include(ECMPoQmTools)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
-include(ECMGeneratePriFile)
 
 set(QT_IMPORTS_DIR "${KDE_INSTALL_QTQUICKIMPORTSDIR}")
-set(QT_MKSPECS_DIR "${ECM_MKSPECS_INSTALL_DIR}")
 set(QT_PLUGINS_DIR "${KDE_INSTALL_QTPLUGINDIR}")
 
 set(SHARE_INSTALL_PREFIX "${KDE_INSTALL_DATAROOTDIR}")

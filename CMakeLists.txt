@@ -18,6 +18,8 @@ option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and 
 find_package(ECM 1.7.0 NO_MODULE REQUIRED)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+include(ECMGeneratePriFile)
+
 set(PHONON_LIB_SONAME phonon4qt5)
 set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
 include(ECMSetupVersion)
@@ -117,7 +119,6 @@ option(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT "Install Qt designer plugins,
 if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     # in this case, the values have to be FORCED into the cache
     set(PHONON_QT_IMPORTS_INSTALL_DIR ${QT_IMPORTS_DIR} CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to." FORCE)
-    set(PHONON_QT_MKSPECS_INSTALL_DIR  ${QT_MKSPECS_DIR}  CACHE PATH "The directory where Phonon mkspecs will be installed to." FORCE)
     set(PHONON_QT_PLUGIN_INSTALL_DIR   ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to." FORCE)
 else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     # in this case, the values can be adjusted by the user e.g. via cmake-gui, so no FORCE
@@ -125,7 +126,6 @@ else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     # Please do note that these paths are most likely random nonensense depending on what OS and distribution is used, they most likely
     # need manual adjustment for the actual envrionment.
     set(PHONON_QT_IMPORTS_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/qt5/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
-    set(PHONON_QT_MKSPECS_INSTALL_DIR  ${QT_MKSPECS_DIR}  CACHE PATH "The directory where Phonon mkspecs will be installed to.")
     set(PHONON_QT_PLUGIN_INSTALL_DIR   ${CMAKE_INSTALL_LIBDIR}/qt5/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
 endif(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
 
@@ -143,22 +143,6 @@ if(NOT "${absImportsDir}" STREQUAL "${QT_IMPORTS_DIR}")
        * set PHONON_QT_IMPORTS_INSTALL_DIR manually to the system Qt location
        * at runtime, set the QML_IMPORT_PATH environment variable")
 endif(NOT "${absImportsDir}" STREQUAL "${QT_IMPORTS_DIR}")
-
-
-# Check whether the mkspecs file will be installed into the system Qt dir, and warn if not:
-make_abs_install_path(absMkspecsDir "${PHONON_QT_MKSPECS_INSTALL_DIR}")
-
-if(NOT "${absMkspecsDir}" STREQUAL "${QT_MKSPECS_DIR}/modules")
-    message(STATUS "PHONON_QT_MKSPECS_INSTALL_DIR is set to ${absMkspecsDir}.
-      The Qt mkspecs file for Phonon will not be installed into the Qt system installation directory,
-      which is ${QT_MKSPECS_DIR}/modules .
-      This means the qt_phonon.pri file will not be found by default.
-      You can:
-       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
-       * set PHONON_QT_MKSPECS_INSTALL_DIR manually to the system Qt location
-       * at runtime, with Qt >= 4.8, set the QMAKEPATH environment variable")
-endif(NOT "${absMkspecsDir}" STREQUAL "${QT_MKSPECS_DIR}/modules")
-
 
 # Check whether the designer plugins will be installed into the system Qt dir, and warn if not:
 make_abs_install_path(absPluginDir "${PHONON_QT_PLUGIN_INSTALL_DIR}")
@@ -222,24 +206,6 @@ set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/${PHONON_LIB_SONAME} )
 file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
 make_abs_install_path(absInstallDir ${CMAKECONFIG_INSTALL_DIR})
 
-# Exciting code copy from CMakePackageConfigHelpers to avoid the pain from porting
-# to it for the 4.x series.
-# The set variable is used by the PhononConfig.cmake.in to use a refined rootDir
-# resolution when installed to /usr/lib
-if("${absInstallDir}" MATCHES "^(/usr)?/lib(64)?/.+")
-    # Handle "/usr move" symlinks created by some Linux distros.
-    set(USR_SYMLINK_RESOLVER "
-        # Use original install prefix when loaded through a \"/usr move\"
-        # cross-prefix symbolic link such as /lib -> /usr/lib.
-        get_filename_component(_realCurr \"\${CMAKE_CURRENT_LIST_DIR}\" REALPATH)
-        get_filename_component(_realOrig \"${absInstallDir}\" REALPATH)
-        if(_realCurr STREQUAL _realOrig)
-            set(rootDir \"${CMAKE_INSTALL_PREFIX}\")
-        endif()
-        unset(_realOrig)
-        unset(_realCurr)")
-endif()
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
                @ONLY)
@@ -268,8 +234,14 @@ if(PHONON_BUILD_EXPERIMENTAL)
             FILE PhononExperimentalTargets.cmake )
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
+ecm_generate_pri_file(
+   BASE_NAME ${PHONON_LIB_SONAME}
+   LIB_NAME ${PHONON_LIB_SONAME}
+   DEPS "core widgets"
+   FILENAME_VAR pri_filename
+   INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/phonon
+)
+install(FILES ${pri_filename} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
 if(ECM_FOUND AND IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
     ecm_install_po_files_as_qm(po)
