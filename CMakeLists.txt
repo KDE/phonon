@@ -182,7 +182,7 @@ ecm_generate_pri_file(
 )
 install(FILES ${pri_filename} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
-if(ECM_FOUND AND IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
     ecm_install_po_files_as_qm(po)
 endif()
 
