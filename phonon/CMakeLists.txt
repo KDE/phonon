@@ -18,10 +18,16 @@ configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.
 message(AUTHOR_WARNING "TODO: use internal target and set include dirs on target")
 configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h @ONLY)
 
-macro_optional_find_package(PulseAudio 0.9.15)
-macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
-macro_optional_find_package(GLIB2)
-macro_log_feature(GLIB2_FOUND "GLib2" "GLib 2 is required to compile the pulseaudio for Phonon" "http://www.gtk.org/download/" FALSE)
+find_package(PulseAudio 0.9.15)
+set_package_properties(PulseAudio PROPERTIES
+    TYPE RECOMMENDED
+    DESCRIPTION "A cross-platform, networked sound server"
+    URL "http://www.pulseaudio.org")
+find_package(GLIB2)
+set_package_properties(GLIB2 PROPERTIES
+    TYPE RECOMMENDED
+    DESCRIPTION "GLib 2 is required to compile the pulseaudio for Phonon"
+    URL "http://www.gtk.org/download/")
 
 if (GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PHONON_PULSESUPPORT TRUE CACHE BOOL "Has Phonon pulseaudio support ?")

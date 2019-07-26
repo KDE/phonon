@@ -1,6 +1,6 @@
 project(Phonon)
-
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
+include(FeatureSummary)
 
 option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
@@ -20,7 +20,12 @@ if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     set(KDE_INSTALL_USE_QT_SYS_PATHS ON)
 endif()
 
-find_package(ECM 5.60 NO_MODULE REQUIRED)
+find_package(ECM 5.60 NO_MODULE)
+set_package_properties(ECM PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Extra CMake Modules"
+    URL "https://api.kde.org/frameworks/extra-cmake-modules/html/index.html")
+feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 include(ECMGeneratePriFile)
@@ -59,31 +64,41 @@ include(cmake/FindPhononInternal.cmake)
 
 # Internal is shared with backends, so continue specific finders here...
 find_package(OpenGL)
-macro_log_feature(OPENGL_FOUND "OpenGL" "" "" FALSE)
-
-set(DBUS_DESC "Needed to enable control of AudioOutputs via DBus")
-set(DESIGNER_DESC "Needed to build the Qt Designer plugin.")
-set(GL_DESC "Only recommended when bulding the super experimental QML support.")
-set(DECL_DESC "Only recommended when bulding the super experimental QML support.")
+set_package_properties(OpenGL PROPERTIES
+    TYPE RECOMMENDED
+    URL "https://mesa3d.org")
 
 # DBus Audio Output Introspection
 find_package(Qt5DBus)
-macro_log_feature(Qt5DBus_FOUND "Qt5 DBus (qtbase)" ${DBUS_DESC} "http://www.qt.gitorious.net/qt/qtbase" FALSE)
+set_package_properties(Qt5DBus PROPERTIES
+    TYPE RECOMMENDED
+    DESCRIPTION "Needed to enable control of AudioOutputs via DBus"
+    URL "https://www.qt.io/download")
+message(AUTHOR_WARNING "TODO: port everything from deprecated names")
 set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
 
 # Designer Plugin
 find_package(Qt5Designer)
-macro_log_feature(Qt5Designer_FOUND "Qt5 Designer (qttools)" ${DESIGNER_DESC} "http://www.qt.gitorious.net/qt/qttools" FALSE)
+set_package_properties(Qt5Designer PROPERTIES
+    TYPE RECOMMENDED
+    DESCRIPTION "Needed to build the Qt Designer plugin"
+    URL "https://www.qt.io/download")
 set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
 
 # VideoGraphicsObject GL Painting
 find_package(Qt5OpenGL)
-macro_log_feature(Qt5OpenGL_FOUND "Qt5 OpenGL (qtbase)" ${GL_DESC} "http://www.qt.gitorious.net/qt/qtbase" FALSE)
+set_package_properties(Qt5OpenGL PROPERTIES
+    TYPE RECOMMENDED
+    DESCRIPTION "Only recommended when bulding the super experimental QML support"
+    URL "https://www.qt.io/download")
 set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 
 # Declarative/QML1
 find_package(Qt5Declarative)
-macro_log_feature(Qt5Declarative_FOUND "Qt5 Declarative (qtquick1)" ${DECL_DESC} "http://www.qt.gitorious.net/qt/qtquick1" FALSE)
+set_package_properties(Qt5Declarative PROPERTIES
+    TYPE RECOMMENDED
+    DESCRIPTION "Only recommended when bulding the super experimental QML support"
+    URL "https://www.qt.io/download")
 set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 
 set(PHONON_PKG_DEPENDENCIES "Qt5Core Qt5Gui Qt5DBus")
@@ -102,8 +117,6 @@ include_directories(
 
 # Convenience variable to hold target link libraries we always need.
 set(PHONON_LIBS ${PHONON_LIB_SONAME})
-
-include(GNUInstallDirs)
 
 set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
 
@@ -185,4 +198,4 @@ if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
     ecm_install_po_files_as_qm(po)
 endif()
 
-macro_display_feature_log()
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

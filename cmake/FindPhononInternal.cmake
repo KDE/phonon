@@ -35,8 +35,7 @@ get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
 message(AUTHOR_WARNING "TODO: review need")
 include(${phonon_cmake_module_dir}/PhononMacros.cmake)
-include(${phonon_cmake_module_dir}/MacroLogFeature.cmake)
-include(${phonon_cmake_module_dir}/MacroOptionalFindPackage.cmake)
+message(AUTHOR_WARNING "TODO: port backends from logfeature to featuresummary")
 include(${phonon_cmake_module_dir}/MacroEnsureVersion.cmake)
 
 # ECM
@@ -74,13 +73,22 @@ set(INSTALL_TARGETS_DEFAULT_ARGS ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 #---- essential deps
 
 find_package(Qt5Core)
-macro_log_feature(Qt5Core_FOUND "Qt5 Core (qtbase)" "" "" TRUE)
+set_package_properties(Qt5Core PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt5 core module"
+    URL "https://www.qt.io/download")
 
 find_package(Qt5Gui)
-macro_log_feature(Qt5Gui_FOUND "Qt5 Gui (qtbase)" "" "" TRUE)
+set_package_properties(Qt5Gui PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt5 GUI module"
+    URL "https://www.qt.io/download")
 
 find_package(Qt5Widgets)
-macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets (qtbase)" "" "" TRUE)
+set_package_properties(Qt5Widgets PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt5 widgets module"
+    URL "https://www.qt.io/download")
 
 #---- compat
 # Qt 5.11 dropped this. We rely on it to enable joint Qt4+5 dep mapping.

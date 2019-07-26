@@ -13,6 +13,7 @@
 # Copyright (c) 2008, Matthias Kretz, <kretz@kde.org>
 # Copyright (c) 2009, Marcus Hufgard, <Marcus.Hufgard@hufgard.de>
 # Copyright (c) 2011, Colin Guthrie, <colin@mageia.org>
+# Copyright (c) 2019, Harald Sitter, <sitter@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -28,7 +29,7 @@ if(NOT PULSEAUDIO_FIND_VERSION)
 endif(NOT PULSEAUDIO_FIND_VERSION)
 
 # Newer PA's ship a PackageConfig.cmake file, so lets try and use it.
-macro_optional_find_package(PulseAudio ${PULSEAUDIO_FIND_VERSION} QUIET NO_MODULE)
+find_package(PulseAudio ${PULSEAUDIO_FIND_VERSION} QUIET NO_MODULE)
 if (NOT PULSEAUDIO_FOUND)
 
 if (NOT WIN32)
