@@ -33,6 +33,7 @@ include(CheckCXXCompilerFlag)
 
 get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
+message(AUTHOR_WARNING "TODO: review need")
 include(${phonon_cmake_module_dir}/PhononMacros.cmake)
 include(${phonon_cmake_module_dir}/MacroLogFeature.cmake)
 include(${phonon_cmake_module_dir}/MacroOptionalFindPackage.cmake)
@@ -55,8 +56,11 @@ set(SHARE_INSTALL_PREFIX "${KDE_INSTALL_DATAROOTDIR}")
 set(INCLUDE_INSTALL_DIR "${KDE_INSTALL_INCLUDEDIR}/${PHONON_LIB_SONAME}")
 set(BIN_INSTALL_DIR "${KDE_INSTALL_BINDIR}")
 set(LIB_INSTALL_DIR "${KDE_INSTALL_LIBDIR}")
+message(AUTHOR_WARNING "TODO: this could be moved to the actual plugins dir, needs review for use tho")
 set(PLUGIN_INSTALL_DIR "${LIB_INSTALL_DIR}/qt5")
+message(AUTHOR_WARNING "TODO: this used plugin_install_dir but is now relying on ECM")
 set(BACKEND_INSTALL_DIR "${KDE_INSTALL_QTPLUGINDIR}/${PHONON_LIB_SONAME}_backend")
+message(AUTHOR_WARNING "TODO: do we need this with ecm?")
 if(WIN32) # Imported from Phonon VLC
     set(BACKEND_INSTALL_DIR "bin/${PHONON_LIB_SONAME}_backend")
 endif()
@@ -95,7 +99,6 @@ set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
                 ${Qt5Widgets_INCLUDE_DIRS}
                 ${Qt5DBus_INCLUDE_DIRS})
 
-# - Automoc (using builtin introduced in 2.8.5)
 # NOTE: the compatiibility macros are actively used by the backends, so they
 #       cannot be dropped unless the backends get a major release removing all
 #       use of them first.
