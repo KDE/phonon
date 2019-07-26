@@ -102,15 +102,6 @@ include_directories(
 # Convenience variable to hold target link libraries we always need.
 set(PHONON_LIBS ${PHONON_LIB_SONAME})
 
-# helper macro to make the install paths absolute
-macro(MAKE_ABS_INSTALL_PATH _absVar _path)
-    if (IS_ABSOLUTE "${_path}")
-        set(${_absVar} "${_path}")
-    else()
-        set(${_absVar} "${CMAKE_INSTALL_PREFIX}/${_path}")
-    endif()
-endmacro(MAKE_ABS_INSTALL_PATH)
-
 include(GNUInstallDirs)
 
 set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
@@ -144,6 +135,14 @@ if(PHONON_BUILD_DEMOS)
 endif(PHONON_BUILD_DEMOS)
 
 if(NOT WIN32) # pkgconfig file
+    # helper macro to make the install paths absolute
+    macro(MAKE_ABS_INSTALL_PATH _absVar _path)
+        if (IS_ABSOLUTE "${_path}")
+            set(${_absVar} "${_path}")
+        else()
+            set(${_absVar} "${CMAKE_INSTALL_PREFIX}/${_path}")
+        endif()
+    endmacro(MAKE_ABS_INSTALL_PATH)
 
     make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
     make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
@@ -153,13 +152,7 @@ if(NOT WIN32) # pkgconfig file
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 endif(NOT WIN32)
 
-set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/${PHONON_LIB_SONAME} )
-
-# figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
-# runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
-# This relative path will be configured into the PhononConfig.cmake
-file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
-make_abs_install_path(absInstallDir ${CMAKECONFIG_INSTALL_DIR})
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/${PHONON_LIB_SONAME}")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
