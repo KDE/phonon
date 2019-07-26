@@ -24,6 +24,7 @@
 #define PHONONNAMESPACE_H
 
 #include \"phonon_export.h\"
+#include \"phonon_version.h\"
 
 /**
  * Helper macro that can be used like
@@ -34,14 +35,10 @@
 #define PHONON_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch))
 
 /**
- * PHONON_VERSION is (major << 16) + (minor << 8) + patch.
- */
-#define PHONON_VERSION PHONON_VERSION_CHECK($${PHONON_LIB_MAJOR_VERSION}, $${PHONON_LIB_MINOR_VERSION}, $${PHONON_LIB_PATCH_VERSION})
-
-/**
  * PHONON_VERSION_STR is "major.minor.patch". E.g. "4.2.1"
+ * @deprecated Use PHONON_VERSION_STRING
  */
-#define PHONON_VERSION_STR \"$${PHONON_LIB_MAJOR_VERSION}.$${PHONON_LIB_MINOR_VERSION}.$${PHONON_LIB_PATCH_VERSION}\"
+#define PHONON_VERSION_STR PHONON_VERSION_STRING
 
 /**
  * Definitions to disable capture - should end up in the backends and

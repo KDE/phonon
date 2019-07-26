@@ -34,9 +34,9 @@ set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${CMAKE_CURRENT_
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in PHONONNAMESPACE_FILE)
 string(REGEX REPLACE "\\#include( )+\\\\\"([A-Za-z_]+\\.h)\\\\\"" "#include \"\\2\"" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
 string(REGEX REPLACE "\\#define( )+([A-Za-z_]+)( )+\\\\\"(.+)\\\\\"" "#define \\2 \"\\4\"" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
-string(REGEX REPLACE "\\$\\$\\{PHONON_LIB_MAJOR_VERSION\\}" "${PHONON_LIB_MAJOR_VERSION}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
-string(REGEX REPLACE "\\$\\$\\{PHONON_LIB_MINOR_VERSION\\}" "${PHONON_LIB_MINOR_VERSION}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
-string(REGEX REPLACE "\\$\\$\\{PHONON_LIB_PATCH_VERSION\\}" "${PHONON_LIB_PATCH_VERSION}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
+string(REGEX REPLACE "\\$\\$\\{PHONON_VERSION_MAJOR\\}" "${PHONON_VERSION_MAJOR}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
+string(REGEX REPLACE "\\$\\$\\{PHONON_VERSION_MINOR\\}" "${PHONON_VERSION_MINOR}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
+string(REGEX REPLACE "\\$\\$\\{PHONON_VERSION_PATCH\\}" "${PHONON_VERSION_PATCH}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
 string(REGEX REPLACE "\\$\\$\\{PHONON_NO_CAPTURE_DEFINE\\}" "${PHONON_NO_CAPTURE_DEFINE}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
 # We write these to a strange place so the demos can find them properly
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h "${PHONONNAMESPACE_FILE}")
@@ -146,8 +146,8 @@ if(NOT PHONON_NO_GRAPHICSVIEW)
 endif()
 
 set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
-                                           VERSION ${PHONON_LIB_VERSION}
-                                           SOVERSION ${PHONON_LIB_SOVERSION}
+                                           VERSION ${PHONON_VERSION}
+                                           SOVERSION ${PHONON_SOVERSION}
                                            DEFINE_SYMBOL MAKE_PHONON_LIB
                                            LINK_INTERFACE_LIBRARIES "")
 # LINK_INTERFACE_LIBRARIES: By default don't add any linked libraries to the "exported"
@@ -201,6 +201,7 @@ install(FILES
    volumeslider.h
    ${phonon_VGO_HDRS}
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
+   ${CMAKE_CURRENT_BINARY_DIR}/phonon_version.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
 if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)

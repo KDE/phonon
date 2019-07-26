@@ -1,7 +1,7 @@
 # config file for phonon library
 
 # known at buildtime
-set(PHONON_VERSION "@PHONON_LIB_MAJOR_VERSION@.@PHONON_LIB_MINOR_VERSION@.@PHONON_LIB_PATCH_VERSION@")
+set(PHONON_VERSION @PHONON_VERSION@)
 
 get_filename_component(currentDir ${CMAKE_CURRENT_LIST_FILE} PATH) # get the directory where I myself am
 get_filename_component(rootDir ${currentDir}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix

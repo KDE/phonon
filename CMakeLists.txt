@@ -15,16 +15,27 @@ option(PHONON_INSTALL_QT_COMPAT_HEADERS "Install QtPhonon compatibility headers"
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
-# The following variables directly influence the library's soname version.
-# It is highly advised to think twice before changing those.
-# If you are unsure about the this: http://plan99.net/~mike/writing-shared-libraries.html
-set(PHONON_LIB_MAJOR_VERSION "4") # Only change on binary incompatible changes
-set(PHONON_LIB_MINOR_VERSION "10") # Only change on binary compatible changes with new interfaces
-set(PHONON_LIB_PATCH_VERSION "3") # Bump whenever you feel like it :P
-set(PHONON_LIB_VERSION "${PHONON_LIB_MAJOR_VERSION}.${PHONON_LIB_MINOR_VERSION}.${PHONON_LIB_PATCH_VERSION}")
-set(PHONON_LIB_SOVERSION ${PHONON_LIB_MAJOR_VERSION})
+find_package(ECM 1.7.0 NO_MODULE REQUIRED)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
 set(PHONON_LIB_SONAME phonon4qt5)
 set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
+include(ECMSetupVersion)
+ecm_setup_version("4.10.3"
+    VARIABLE_PREFIX PHONON
+    SOVERSION 4
+    VERSION_HEADER phonon/phonon_version.h
+    PACKAGE_VERSION_FILE ${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
+)
+
+# Glorified write_basic_package_version_file call for experimental. Experimental
+# inherits the versions from Phonon proper, so we technically don't need this.
+ecm_setup_version(${PHONON_VERSION}
+    VARIABLE_PREFIX PHONON_EXPERIMENTAL
+    SOVERSION ${PHONON_SOVERSION}
+    PACKAGE_VERSION_FILE ${PHONON_LIB_SONAME_CAMEL}ExperimentalConfigVersion.cmake
+)
+
 if (PHONON_ASSERT_STATES)
     message(STATUS "Enabling backend state machine validation.")
     add_definitions(-DPHONON_ASSERT_STATES)
@@ -232,9 +243,6 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in
                ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
                @ONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfigVersion.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
-               @ONLY)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
@@ -248,9 +256,6 @@ install(EXPORT PhononLibs
 if(PHONON_BUILD_EXPERIMENTAL)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononExperimentalConfig.cmake.in
                    ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfig.cmake
-                   @ONLY)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononExperimentalConfigVersion.cmake.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfigVersion.cmake
                    @ONLY)
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfig.cmake

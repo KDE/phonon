@@ -23,8 +23,8 @@ add_library(${PHONON_LIB_SONAME}experimental SHARED ${phononexperimental_LIB_SRC
 qt5_use_modules(${PHONON_LIB_SONAME}experimental Core Widgets)
 target_link_libraries(${PHONON_LIB_SONAME}experimental ${PHONON_LIBS})
 set_target_properties(${PHONON_LIB_SONAME}experimental PROPERTIES
-                                         VERSION ${PHONON_LIB_VERSION}
-                                         SOVERSION ${PHONON_LIB_SOVERSION}
+                                         VERSION ${PHONON_VERSION}
+                                         SOVERSION ${PHONON_SOVERSION}
                                          DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
                                          LINK_INTERFACE_LIBRARIES ""
                                          )
