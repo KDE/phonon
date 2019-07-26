@@ -24,13 +24,13 @@ Additionally if you are building against a qt-project provided binary build of Q
 you may have to define the CMAKE_PREFIX_PATH to make CMake find Qt5. If you are
 using QMake for your application you will additionally have to instruct cmake to
 install Qt extensions into the actual Qt directory using
-PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT.
+KDE_INSTALL_USE_QT_SYS_PATHS.
 
 For example:
 \verbatim
 mkdir build5
 cd build5
-cmake .. -DPHONON_BUILD_PHONON4QT5=ON -DCMAKE_PREFIX_PATH=/opt/Qt5.0.0/5.0.0/gcc_64 -DPHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT=ON
+cmake .. -DPHONON_BUILD_PHONON4QT5=ON -DCMAKE_PREFIX_PATH=/opt/Qt5.0.0/5.0.0/gcc_64 -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
 \endverbatim
 
 Phonon4Qt5 installation does not conflict with regular Phonon installations in
@@ -40,7 +40,7 @@ any way; It uses different file and folder names for everything installed.
 
 Since Phonon4Qt5 uses isolated paths from regular Phonon, the backends also need
 to be built specifically in Phonon4Qt5 mode using the PHONON_BUILD_PHONON4QT5
-option for CMake. Defining PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT
+option for CMake. Defining KDE_INSTALL_USE_QT_SYS_PATHS
 however is not necessary as Phonon has internal logic for backend plugin lookup.
 
 \section phonon4qt5_using Usage
@@ -80,7 +80,7 @@ QT += phonon4qt5
 
 QMake will take care of everything else. Except in certain situations QMake will
 not be able to find the files necessary to enable a phonon4qt5 build, building
-phono4qt5 with PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT, as explained above,
+phono4qt5 with KDE_INSTALL_USE_QT_SYS_PATHS, as explained above,
 should prevent this from happening.
 
 \subsection phonon4qt5_using_cpp C++

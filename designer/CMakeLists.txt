@@ -17,4 +17,4 @@ target_link_libraries(phononwidgets
     ${PHONON_LIBS}
 )
 
-install(TARGETS phononwidgets DESTINATION ${PHONON_QT_PLUGIN_INSTALL_DIR})
+install(TARGETS phononwidgets DESTINATION ${KDE_INSTALL_QTPLUGINDIR})

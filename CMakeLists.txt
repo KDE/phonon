@@ -15,6 +15,12 @@ option(PHONON_INSTALL_QT_COMPAT_HEADERS "Install QtPhonon compatibility headers"
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
+# Compat: we used to have our own option, now we defer to KDEInstallDirs
+if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
+    message(DEPRECATION "PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT is deprecated! use KDE_INSTALL_USE_QT_SYS_PATHS")
+    set(KDE_INSTALL_USE_QT_SYS_PATHS ON)
+endif()
+
 find_package(ECM 1.7.0 NO_MODULE REQUIRED)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
@@ -108,57 +114,6 @@ endmacro(MAKE_ABS_INSTALL_PATH)
 include(GNUInstallDirs)
 
 set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
-
-
-# Provide a cmake option, which, if set, force the Qt stuff to be installed into the
-# system Qt directories, which may be outside CMAKE_INSTALL_PREFIX.
-# By default always install inside CMAKE_INSTALL_PREFIX.
-option(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT "Install Qt designer plugins, QML plugins and mkspecs into the system Qt install directory or not"
-       FALSE)
-
-if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
-    # in this case, the values have to be FORCED into the cache
-    set(PHONON_QT_IMPORTS_INSTALL_DIR ${QT_IMPORTS_DIR} CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to." FORCE)
-    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${QT_PLUGINS_DIR}/designer CACHE PATH "The directory where Phonon Qt plugins will be installed to." FORCE)
-else(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
-    # in this case, the values can be adjusted by the user e.g. via cmake-gui, so no FORCE
-
-    # Please do note that these paths are most likely random nonensense depending on what OS and distribution is used, they most likely
-    # need manual adjustment for the actual envrionment.
-    set(PHONON_QT_IMPORTS_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/qt5/imports CACHE PATH "The directory where Phonon Qt imports (QML) will be installed to.")
-    set(PHONON_QT_PLUGIN_INSTALL_DIR   ${CMAKE_INSTALL_LIBDIR}/qt5/plugins/designer   CACHE PATH "The directory where Phonon Qt plugins will be installed to." )
-endif(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
-
-
-# Check whether the QML plugins will be installed into the system Qt dir, and warn if not:
-make_abs_install_path(absImportsDir "${PHONON_QT_IMPORTS_INSTALL_DIR}")
-
-if(NOT "${absImportsDir}" STREQUAL "${QT_IMPORTS_DIR}")
-    message(STATUS "PHONON_QT_IMPORTS_DIR is set to ${absImportsDir}.
-      The QML plugins for Phonon will not be installed into the Qt system installation directory,
-      which is ${QT_IMPORTS_DIR} .
-      This means the QML plugins file will not be found by default.
-      You can:
-       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
-       * set PHONON_QT_IMPORTS_INSTALL_DIR manually to the system Qt location
-       * at runtime, set the QML_IMPORT_PATH environment variable")
-endif(NOT "${absImportsDir}" STREQUAL "${QT_IMPORTS_DIR}")
-
-# Check whether the designer plugins will be installed into the system Qt dir, and warn if not:
-make_abs_install_path(absPluginDir "${PHONON_QT_PLUGIN_INSTALL_DIR}")
-
-if(NOT "${absPluginDir}" STREQUAL "${QT_PLUGINS_DIR}/designer")
-    message(STATUS "PHONON_QT_PLUGIN_INSTALL_DIR is set to ${absPluginDir}.
-      The Qt designer plugins for Phonon will not be installed into the Qt system installation directory,
-      which is ${QT_PLUGINS_DIR}/designer .
-      This means the designer plugins file will not be found by default.
-      You can:
-       * switch the cmake option PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT to TRUE
-       * set PHONON_QT_PLUGINS_INSTALL_DIR manually to the system Qt location
-       * at runtime, set the QT_PLUGIN_PATH environment variable")
-endif(NOT "${absPluginDir}" STREQUAL "${QT_PLUGINS_DIR}/designer")
-
-
 
 add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)

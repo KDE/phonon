@@ -25,5 +25,5 @@ target_link_libraries(phononqmlplugin
 
 qt5_use_modules(phononqmlplugin Core Gui Declarative)
 
-install(TARGETS phononqmlplugin DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
-install(FILES ${phonon_QMLS} DESTINATION ${PHONON_QT_IMPORTS_INSTALL_DIR}/Phonon)
+install(TARGETS phononqmlplugin DESTINATION ${KDE_INSTALL_QTQUICKIMPORTSDIR}/Phonon)
+install(FILES ${phonon_QMLS} DESTINATION ${KDE_INSTALL_QTQUICKIMPORTSDIR}/Phonon)
