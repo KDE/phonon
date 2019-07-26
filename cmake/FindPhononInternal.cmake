@@ -1,9 +1,6 @@
-# Defines marcos:
-#   TODO doc
-#
 # Copyright (c) 2008, Matthias Kretz <kretz@kde.org>
 # Copyright (c) 2010, Mark Kretschmann <kretschmann@kde.org>
-# Copyright (c) 2010-2015, Harald Sitter <sitter@kde.org>
+# Copyright (c) 2010-2019, Harald Sitter <sitter@kde.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -32,7 +29,6 @@
 
 get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
-
 # Imported from KDE4Defaults.cmake
 # Keep this portion copy'n'pastable for updatability.
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -60,48 +56,64 @@ include(${phonon_cmake_module_dir}/MacroOptionalFindPackage.cmake)
 include(CheckCXXCompilerFlag)
 include(${phonon_cmake_module_dir}/MacroEnsureVersion.cmake)
 
-# Set Installation Directories - TODO, port to ECM's KDEInstallDirs!
+# ECM
 
-include(GNUInstallDirs)
+find_package(ECM 1.7.0 NO_MODULE REQUIRED)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-set(SHARE_INSTALL_PREFIX        "${CMAKE_INSTALL_FULL_DATAROOTDIR}")  #              CACHE PATH "Base directory for files which go to share/")
-set(INCLUDE_INSTALL_DIR         "include" ) #           CACHE PATH "The subdirectory to the header prefix")
-if (PHONON_BUILD_PHONON4QT5)
-    set(INCLUDE_INSTALL_DIR         "include/${PHONON_LIB_SONAME}" ) #           CACHE PATH "The subdirectory to the header prefix")
-endif (PHONON_BUILD_PHONON4QT5)
-set(BIN_INSTALL_DIR             "bin"     ) #         CACHE PATH "The install dir for executables (default ${EXEC_INSTALL_PREFIX}/bin)")
-set(LIB_INSTALL_DIR             "${CMAKE_INSTALL_LIBDIR}" ) #  CACHE PATH "The subdirectory relative to the install prefix where libraries will be installed"
-set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/kde4"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/kde4)")
-if (PHONON_BUILD_PHONON4QT5)
-    set(PLUGIN_INSTALL_DIR          "${LIB_INSTALL_DIR}/qt5"                   CACHE PATH "The subdirectory relative to the install prefix where plugins will be installed (default is ${LIB_INSTALL_DIR}/qt5)" FORCE)
-endif(PHONON_BUILD_PHONON4QT5)
-set(BACKEND_INSTALL_DIR "${PLUGIN_INSTALL_DIR}/plugins/${PHONON_LIB_SONAME}_backend")
+include(KDEInstallDirs)
+include(ECMPoQmTools)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+include(ECMGeneratePriFile)
+
+set(QT_IMPORTS_DIR "${KDE_INSTALL_QTQUICKIMPORTSDIR}")
+set(QT_MKSPECS_DIR "${ECM_MKSPECS_INSTALL_DIR}")
+set(QT_PLUGINS_DIR "${KDE_INSTALL_QTPLUGINDIR}")
+
+set(SHARE_INSTALL_PREFIX "${KDE_INSTALL_DATAROOTDIR}")
+set(INCLUDE_INSTALL_DIR "${KDE_INSTALL_INCLUDEDIR}/${PHONON_LIB_SONAME}")
+set(BIN_INSTALL_DIR "${KDE_INSTALL_BINDIR}")
+set(LIB_INSTALL_DIR "${KDE_INSTALL_LIBDIR}")
+set(PLUGIN_INSTALL_DIR "${LIB_INSTALL_DIR}/qt5")
+set(BACKEND_INSTALL_DIR "${KDE_INSTALL_QTPLUGINDIR}/${PHONON_LIB_SONAME}_backend")
 if(WIN32) # Imported from Phonon VLC
     set(BACKEND_INSTALL_DIR "bin/${PHONON_LIB_SONAME}_backend")
 endif()
-set(ICON_INSTALL_DIR            "${SHARE_INSTALL_PREFIX}/icons"             CACHE PATH "The icon install dir (default ${SHARE_INSTALL_PREFIX}/share/icons/)")
-set(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde4/services"     CACHE PATH "The install dir for service (desktop, protocol, ...) files")
-if (PHONON_BUILD_PHONON4QT5)
-    set(SERVICES_INSTALL_DIR        "${SHARE_INSTALL_PREFIX}/kde5/services"     CACHE PATH "The install dir for service (desktop, protocol, ...) files")
-endif(PHONON_BUILD_PHONON4QT5)
-set(DBUS_INTERFACES_INSTALL_DIR "${SHARE_INSTALL_PREFIX}/dbus-1/interfaces" CACHE PATH "The dbus interfaces install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/interfaces)")
-set(DBUS_SERVICES_INSTALL_DIR   "${SHARE_INSTALL_PREFIX}/dbus-1/services"   CACHE PATH "The dbus services install dir (default: ${SHARE_INSTALL_PREFIX}/dbus-1/services)")
+set(ICON_INSTALL_DIR "${KDE_INSTALL_ICONDIR}")
+# removed service: was only used for kde4 desktop file installation
+set(DBUS_INTERFACES_INSTALL_DIR "${KDE_INSTALL_DBUSINTERFACEDIR}")
+set(DBUS_SERVICES_INSTALL_DIR "${KDE_INSTALL_DBUSSERVICEDIR}")
 
-set(INSTALL_TARGETS_DEFAULT_ARGS RUNTIME DESTINATION "${BIN_INSTALL_DIR}"
-                                 LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
-                                 ARCHIVE DESTINATION "${LIB_INSTALL_DIR}" COMPONENT Devel)
+set(INSTALL_TARGETS_DEFAULT_ARGS ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-# on the Mac support an extra install directory for application bundles
-if(APPLE)
-    set(INSTALL_TARGETS_DEFAULT_ARGS ${INSTALL_TARGETS_DEFAULT_ARGS}
-                                     BUNDLE DESTINATION "${BUNDLE_INSTALL_DIR}")
-    set(CMAKE_SHARED_MODULE_CREATE_C_FLAGS   "${CMAKE_SHARED_MODULE_CREATE_C_FLAGS}   -flat_namespace -undefined dynamic_lookup")
-    set(CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS "${CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS} -flat_namespace -undefined dynamic_lookup")
+#---- essential deps
 
-   set(CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
-endif(APPLE)
+find_package(Qt5Core)
+macro_log_feature(Qt5Core_FOUND "Qt5 Core (qtbase)" "" "" TRUE)
 
-include(${phonon_cmake_module_dir}/PhononQt5.cmake)
+find_package(Qt5Gui)
+macro_log_feature(Qt5Gui_FOUND "Qt5 Gui (qtbase)" "" "" TRUE)
+
+find_package(Qt5Widgets)
+macro_log_feature(Qt5Widgets_FOUND "Qt5 Widgets (qtbase)" "" "" TRUE)
+
+#---- compat
+# Qt 5.11 dropped this. We rely on it to enable joint Qt4+5 dep mapping.
+if(NOT COMMAND qt5_use_modules)
+    macro (qt5_use_modules target)
+        set(_deps "")
+        foreach (arg ${ARGN})
+            list(APPEND _deps Qt5::${arg})
+        endforeach ()
+        target_link_libraries(${target} ${_deps})
+    endmacro (qt5_use_modules target args)
+endif()
+
+# ---- more compat
+set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
+                ${Qt5Widgets_INCLUDE_DIRS}
+                ${Qt5DBus_INCLUDE_DIRS})
 
 # - Automoc (using builtin introduced in 2.8.5)
 # NOTE: the compatiibility macros are actively used by the backends, so they
