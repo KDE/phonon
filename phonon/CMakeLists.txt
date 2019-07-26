@@ -104,21 +104,28 @@ endif (PHONON_NO_PLATFORMPLUGIN)
 add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
 add_definitions(-DPHONON_BACKEND_DIR_SUFFIX="/${PHONON_LIB_SONAME}_backend/")
 
-add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
-qt5_use_modules(${PHONON_LIB_SONAME} Core Widgets)
+set(optional_link_libraries)
 
 if(QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-    qt5_use_modules(${PHONON_LIB_SONAME} DBus)
-endif(QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
+    list(APPEND optional_link_libraries Qt5::DBus)
+endif()
 
 if (PHONON_PULSESUPPORT)
-    target_link_libraries(${PHONON_LIB_SONAME} ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
+    list(APPEND optional_link_libraries ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif (PHONON_PULSESUPPORT)
 
 if(NOT PHONON_NO_GRAPHICSVIEW)
-    qt5_use_modules(${PHONON_LIB_SONAME} OpenGL)
-    target_link_libraries(${PHONON_LIB_SONAME} ${OPENGL_gl_LIBRARY})
+    list(APPEND optional_link_libraries OpenGL Qt5::OpenGl)
 endif()
+
+add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
+target_link_libraries(${PHONON_LIB_SONAME}
+    PUBLIC
+        Qt5::Core
+        Qt5::Widgets
+    PRIVATE
+        ${optional_link_libraries}
+)
 
 set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
                                            VERSION ${PHONON_VERSION}

@@ -21,9 +21,10 @@ phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})
 
 target_link_libraries(phononqmlplugin
     ${PHONON_LIBS}
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Declarative
 )
-
-qt5_use_modules(phononqmlplugin Core Gui Declarative)
 
 install(TARGETS phononqmlplugin DESTINATION ${KDE_INSTALL_QTQUICKIMPORTSDIR}/Phonon)
 install(FILES ${phonon_QMLS} DESTINATION ${KDE_INSTALL_QTQUICKIMPORTSDIR}/Phonon)

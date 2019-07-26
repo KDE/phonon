@@ -12,6 +12,4 @@ set(metadatareader_SRCS
 )
 
 phonon_add_executable(metadatareader ${metadatareader_SRCS})
-
-qt5_use_modules(metadatareader Core Widgets)
-target_link_libraries(metadatareader ${PHONON_LIBRARY})
+target_link_libraries(metadatareader ${PHONON_LIBRARY} Qt5::Core Qt5::Widgets)

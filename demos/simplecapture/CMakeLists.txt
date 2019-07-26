@@ -12,6 +12,4 @@ set(simplecapture_SRCS
 )
 
 phonon_add_executable(simplecapture ${simplecapture_SRCS})
-
-qt5_use_modules(simplecapture Core Widgets)
-target_link_libraries(simplecapture ${PHONON_LIBRARY})
+target_link_libraries(simplecapture ${PHONON_LIBRARY} Qt5::Core Qt5::Widgets)

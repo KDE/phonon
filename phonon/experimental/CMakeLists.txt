@@ -20,8 +20,7 @@ set(phononexperimental_LIB_SRCS
     ../abstractvideooutput_p.cpp
    )
 add_library(${PHONON_LIB_SONAME}experimental SHARED ${phononexperimental_LIB_SRCS})
-qt5_use_modules(${PHONON_LIB_SONAME}experimental Core Widgets)
-target_link_libraries(${PHONON_LIB_SONAME}experimental ${PHONON_LIBS})
+target_link_libraries(${PHONON_LIB_SONAME}experimental ${PHONON_LIBS} Qt5::Core Qt5::Widgets)
 set_target_properties(${PHONON_LIB_SONAME}experimental PROPERTIES
                                          VERSION ${PHONON_VERSION}
                                          SOVERSION ${PHONON_SOVERSION}

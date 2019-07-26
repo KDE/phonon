@@ -12,6 +12,4 @@ set(simpleplayer_SRCS
 )
 
 phonon_add_executable(simpleplayer ${simpleplayer_SRCS})
-
-qt5_use_modules(simpleplayer Core Widgets)
-target_link_libraries(simpleplayer ${PHONON_LIBRARY})
+target_link_libraries(simpleplayer ${PHONON_LIBRARY} Qt5::Core Qt5::Widgets)

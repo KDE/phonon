@@ -10,11 +10,12 @@ set(phononwidgetsplugin_SRCS
 )
 
 phonon_add_designer_plugin(phononwidgets phononwidgets.qrc ${phononwidgetsplugin_SRCS})
-
-qt5_use_modules(phononwidgets Core Gui Widgets Designer)
-
 target_link_libraries(phononwidgets
     ${PHONON_LIBS}
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Widgets
+    Qt5::Designer
 )
 
 install(TARGETS phononwidgets DESTINATION ${KDE_INSTALL_QTPLUGINDIR})
