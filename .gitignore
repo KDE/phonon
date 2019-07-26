@@ -1,4 +1,7 @@
+.gitignore
 *.swp
 build
 build5
 apidocs
+b1
+po

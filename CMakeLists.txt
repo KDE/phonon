@@ -21,13 +21,15 @@ if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     set(KDE_INSTALL_USE_QT_SYS_PATHS ON)
 endif()
 
-find_package(ECM 1.7.0 NO_MODULE REQUIRED)
+find_package(ECM 5.60 NO_MODULE REQUIRED)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 include(ECMGeneratePriFile)
+include(ECMGeneratePkgConfigFile)
 
 set(PHONON_LIB_SONAME phonon4qt5)
 set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
+
 include(ECMSetupVersion)
 ecm_setup_version("4.10.3"
     VARIABLE_PREFIX PHONON
@@ -134,24 +136,6 @@ if(PHONON_BUILD_DEMOS)
     add_subdirectory(demos)
 endif(PHONON_BUILD_DEMOS)
 
-if(NOT WIN32) # pkgconfig file
-    # helper macro to make the install paths absolute
-    macro(MAKE_ABS_INSTALL_PATH _absVar _path)
-        if (IS_ABSOLUTE "${_path}")
-            set(${_absVar} "${_path}")
-        else()
-            set(${_absVar} "${CMAKE_INSTALL_PREFIX}/${_path}")
-        endif()
-    endmacro(MAKE_ABS_INSTALL_PATH)
-
-    make_abs_install_path(ABS_LIB_INSTALL_DIR "${LIB_INSTALL_DIR}")
-    make_abs_install_path(ABS_INCLUDE_INSTALL_DIR "${INCLUDE_INSTALL_DIR}")
-    make_abs_install_path(ABS_BUILDSYSTEM_INSTALL_DIR "${BUILDSYSTEM_INSTALL_DIR}")
-
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/phonon.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME}.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-endif(NOT WIN32)
-
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/${PHONON_LIB_SONAME}")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in
@@ -181,6 +165,13 @@ if(PHONON_BUILD_EXPERIMENTAL)
             NAMESPACE Phonon::
             FILE PhononExperimentalTargets.cmake )
 endif()
+
+ecm_generate_pkgconfig_file(
+    BASE_NAME ${PHONON_LIB_SONAME}
+    INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}
+    DESCRIPTION "Phonon library needed to build applications"
+    INSTALL
+)
 
 ecm_generate_pri_file(
    BASE_NAME ${PHONON_LIB_SONAME}
