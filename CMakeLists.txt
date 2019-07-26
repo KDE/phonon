@@ -7,7 +7,6 @@ option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
-option(PHONON_BUILD_DESCRIPTOR "Builds and installs a library descriptor to be used for ABI checks" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 
@@ -266,21 +265,6 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/qt_phonon.pri ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_${PHONON_LIB_SONAME}.pri DESTINATION  ${PHONON_QT_MKSPECS_INSTALL_DIR})
-
-# This generates a nice library descriptor to use with [1]. It also spits out
-# a script that makes installing various versions for an ABI check a lot easier.
-# Basically the script ends up in your build dir and by running it you will
-# get phonon installed to MAIN_SOURCE_DIR/../abi/VERSION/prefix.
-# You can then invoke the ABI check with something like:
-#   abi-compliance-checker.pl -l phonon -d1  4.4.4/usr/4.4.4.xml -d2 4.4.57/usr/4.4.57.xml
-# [1] http://ispras.linux-foundation.org/index.php/ABI_compliance_checker
-if(PHONON_BUILD_DESCRIPTOR)
-    set(DESCRIPTOR_FILE_PATH ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_VERSION}.xml)
-    set(ABI_SCRIPT_FILE_PATH ${CMAKE_CURRENT_BINARY_DIR}/abi-check-install.sh)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/lib-descriptor.xml.cmake ${DESCRIPTOR_FILE_PATH} @ONLY)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/abi-check-install.sh.cmake ${ABI_SCRIPT_FILE_PATH} @ONLY)
-    install(FILES ${DESCRIPTOR_FILE_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX})
-endif(PHONON_BUILD_DESCRIPTOR)
 
 if(ECM_FOUND AND IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
     ecm_install_po_files_as_qm(po)
