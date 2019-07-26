@@ -23,8 +23,8 @@
 #ifndef PHONONNAMESPACE_H
 #define PHONONNAMESPACE_H
 
-#include \"phonon_export.h\"
-#include \"phonon_version.h\"
+#include "phonon_export.h"
+#include "phonon_version.h"
 
 /**
  * Helper macro that can be used like
@@ -44,7 +44,9 @@
  * Definitions to disable capture - should end up in the backends and
  * platform plugins, too
  */
-$${PHONON_NO_CAPTURE_DEFINE}
+
+#cmakedefine PHONON_NO_CAPTURE
+
 #ifdef PHONON_NO_CAPTURE
 #define PHONON_NO_VIDEOCAPTURE
 #define PHONON_NO_AUDIOCAPTURE

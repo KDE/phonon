@@ -10,42 +10,13 @@ if (PHONON_BUILD_EXPERIMENTAL)
     add_subdirectory(experimental)
 endif (PHONON_BUILD_EXPERIMENTAL)
 
-# ------------------------ Configure File QMake Style ------------------------ #
+configure_file(phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h @ONLY)
 
-if (PHONON_NO_DBUS OR NOT QT_QTDBUS_FOUND)
-    set(PHONON_NO_DBUS_DEFINE "#define PHONON_NO_DBUS")
-else()
-    set(PHONON_NO_DBUS_DEFINE "/* #undef PHONON_NO_DBUS */")
-endif()
-
-if (PHONON_NO_CAPTURE)
-    set(PHONON_NO_CAPTURE_DEFINE "#define PHONON_NO_CAPTURE")
-else()
-    set(PHONON_NO_CAPTURE_DEFINE "/* #undef PHONON_NO_CAPTURE */")
-endif()
-
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/phononconfig_p.h.in PHONONCONFIG_FILE)
-string(REGEX REPLACE "\\#include( )+\\\\\"([A-Za-z_]+\\.h)\\\\\"" "#include \"\\2\"" PHONONCONFIG_FILE "${PHONONCONFIG_FILE}")
-string(REGEX REPLACE "\\#define( )+([A-Za-z_]+)( )+\\\\\"(.+)\\\\\"" "#define \\2 \"\\4\"" PHONONCONFIG_FILE "${PHONONCONFIG_FILE}")
-string(REGEX REPLACE "\\$\\$\\{(PHONON_NO_DBUS_DEFINE)\\}" "${PHONON_NO_DBUS_DEFINE}" PHONONCONFIG_FILE "${PHONONCONFIG_FILE}")
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h "${PHONONCONFIG_FILE}")
-set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h)
-
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/phononnamespace.h.in PHONONNAMESPACE_FILE)
-string(REGEX REPLACE "\\#include( )+\\\\\"([A-Za-z_]+\\.h)\\\\\"" "#include \"\\2\"" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
-string(REGEX REPLACE "\\#define( )+([A-Za-z_]+)( )+\\\\\"(.+)\\\\\"" "#define \\2 \"\\4\"" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
-string(REGEX REPLACE "\\$\\$\\{PHONON_VERSION_MAJOR\\}" "${PHONON_VERSION_MAJOR}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
-string(REGEX REPLACE "\\$\\$\\{PHONON_VERSION_MINOR\\}" "${PHONON_VERSION_MINOR}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
-string(REGEX REPLACE "\\$\\$\\{PHONON_VERSION_PATCH\\}" "${PHONON_VERSION_PATCH}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
-string(REGEX REPLACE "\\$\\$\\{PHONON_NO_CAPTURE_DEFINE\\}" "${PHONON_NO_CAPTURE_DEFINE}" PHONONNAMESPACE_FILE "${PHONONNAMESPACE_FILE}")
+message(AUTHOR_WARNING "TODO: we configure for phonon_capture cmakedefine but its unclear why this needs to be in a public header")
+configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h @ONLY)
 # We write these to a strange place so the demos can find them properly
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h "${PHONONNAMESPACE_FILE}")
-# Required for demos/cmake/FindPhonon.cmake
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h "${PHONONNAMESPACE_FILE}")
-set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h)
-set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h )
-
-# ---------------------------------------------------------------------------- #
+message(AUTHOR_WARNING "TODO: use internal target and set include dirs on target")
+configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h @ONLY)
 
 macro_optional_find_package(PulseAudio 0.9.15)
 macro_log_feature(PULSEAUDIO_FOUND "PulseAudio" "A cross-platform, networked sound server." "http://www.pulseaudio.org" FALSE "" "Allows audio playback via the PulseAudio soundserver when it is running")
