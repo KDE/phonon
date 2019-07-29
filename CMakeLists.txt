@@ -1,5 +1,6 @@
-project(Phonon)
-cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+project(Phonon VERSION "4.10.3")
+
 include(FeatureSummary)
 
 option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
@@ -36,7 +37,7 @@ set(PHONON_LIB_SONAME phonon4qt5)
 set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
 
 include(ECMSetupVersion)
-ecm_setup_version("4.10.3"
+ecm_setup_version(PROJECT
     VARIABLE_PREFIX PHONON
     SOVERSION 4
     VERSION_HEADER phonon/phonon_version.h

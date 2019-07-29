@@ -19,14 +19,20 @@ set(phononexperimental_LIB_SRCS
     ../abstractaudiooutput_p.cpp
     ../abstractvideooutput_p.cpp
    )
+
 add_library(${PHONON_LIB_SONAME}experimental SHARED ${phononexperimental_LIB_SRCS})
-target_link_libraries(${PHONON_LIB_SONAME}experimental ${PHONON_LIBS} Qt5::Core Qt5::Widgets)
-set_target_properties(${PHONON_LIB_SONAME}experimental PROPERTIES
-                                         VERSION ${PHONON_VERSION}
-                                         SOVERSION ${PHONON_SOVERSION}
-                                         DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
-                                         LINK_INTERFACE_LIBRARIES ""
-                                         )
+target_link_libraries(${PHONON_LIB_SONAME}experimental
+    PUBLIC
+        Qt5::Core
+        Qt5::Widgets
+        ${PHONON_LIB_SONAME}
+)
+set_target_properties(${PHONON_LIB_SONAME}experimental
+    PROPERTIES
+        VERSION ${PHONON_VERSION}
+        SOVERSION ${PHONON_SOVERSION}
+        DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
+)
 install(TARGETS ${PHONON_LIB_SONAME}experimental EXPORT PhononExperimentalLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
 target_include_directories(${PHONON_LIB_SONAME}experimental
     INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")

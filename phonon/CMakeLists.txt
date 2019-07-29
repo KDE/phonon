@@ -127,16 +127,11 @@ target_link_libraries(${PHONON_LIB_SONAME}
         ${optional_link_libraries}
 )
 
-set_target_properties(${PHONON_LIB_SONAME} PROPERTIES
-                                           VERSION ${PHONON_VERSION}
-                                           SOVERSION ${PHONON_SOVERSION}
-                                           DEFINE_SYMBOL MAKE_PHONON_LIB
-                                           LINK_INTERFACE_LIBRARIES "")
-# LINK_INTERFACE_LIBRARIES: By default don't add any linked libraries to the "exported"
-# link interfaces, so that executables linking against this library
-# will not automatically add implicit dependencies to their link list.
-# This reduces inter-package dependencies and makes it easier to remove
-# dependencies of shared libraries without breaking binary compatibility.
+set_target_properties(${PHONON_LIB_SONAME}
+    PROPERTIES
+        VERSION ${PHONON_VERSION}
+        SOVERSION ${PHONON_SOVERSION}
+        DEFINE_SYMBOL MAKE_PHONON_LIB)
 
 target_include_directories(${PHONON_LIB_SONAME}
     INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
