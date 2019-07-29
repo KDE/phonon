@@ -36,7 +36,6 @@ get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 message(AUTHOR_WARNING "TODO: review need")
 include(${phonon_cmake_module_dir}/PhononMacros.cmake)
 message(AUTHOR_WARNING "TODO: port backends from logfeature to featuresummary")
-include(${phonon_cmake_module_dir}/MacroEnsureVersion.cmake)
 
 # ECM
 
