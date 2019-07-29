@@ -111,12 +111,6 @@ else()
     set(PHONON_NO_GRAPHICSVIEW false)
 endif()
 
-include_directories(
-                    ${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/includes
-                    ${CMAKE_CURRENT_SOURCE_DIR}/phonon
-                    ${CMAKE_CURRENT_BINARY_DIR}/phonon)
-
 # Convenience variable to hold target link libraries we always need.
 set(PHONON_LIBS ${PHONON_LIB_SONAME})
 
@@ -125,7 +119,7 @@ set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAM
 add_subdirectory(cmake)
 if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
-endif(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
+endif()
 
 if(NOT PHONON_NO_GRAPHICSVIEW)
     message(STATUS "Not building declarative plugin.")
@@ -134,7 +128,7 @@ endif()
 
 if(PHONON_BUILD_DOC)
     add_subdirectory(doc)
-endif(PHONON_BUILD_DOC)
+endif()
 
 add_subdirectory(phonon)
 add_subdirectory(includes)
@@ -147,10 +141,8 @@ if(PHONON_BUILD_DEMOS)
     set(PHONON_LIBRARY ${PHONON_LIB_SONAME})
     # Demos may also be built standalone, so we need to skip their find_package call!
     set(PHONON_FOUND TRUE)
-    #Lets the demos find the headers
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})
     add_subdirectory(demos)
-endif(PHONON_BUILD_DEMOS)
+endif()
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/${PHONON_LIB_SONAME}")
 

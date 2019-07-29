@@ -1,5 +1,3 @@
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/../) # For phonon/ includes.
-
 add_subdirectory(qml)
 
 set(declarative_SRCS

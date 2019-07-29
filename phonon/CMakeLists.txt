@@ -42,8 +42,6 @@ else(GLIB2_FOUND AND PULSEAUDIO_FOUND)
    set(PULSEAUDIO_MAINLOOP_LIBRARY "")
 endif(GLIB2_FOUND AND PULSEAUDIO_FOUND)
 
-include_directories(${CMAKE_BINARY_DIR}/includes/phonon)
-
 set(phonon_LIB_SRCS
    abstractaudiooutput.cpp
    abstractaudiooutput_p.cpp
@@ -134,9 +132,14 @@ set_target_properties(${PHONON_LIB_SONAME}
         DEFINE_SYMBOL MAKE_PHONON_LIB)
 
 target_include_directories(${PHONON_LIB_SONAME}
-    INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
+    INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>"
+    PUBLIC
+        # snake header <phonon/foo.h>
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"
+        # camel header <phonon/Foo>
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../includes;${CMAKE_CURRENT_SOURCE_DIR}/../includes>")
 
-install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
    abstractaudiooutput.h

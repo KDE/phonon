@@ -1,5 +1,3 @@
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/../) # For phonon/ includes.
-
 set(phononwidgetsplugin_SRCS
     phononcollection.cpp
     seeksliderplugin.cpp
