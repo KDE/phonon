@@ -3,13 +3,10 @@ project(metadatareader)
 
 find_package(Phonon REQUIRED)
 
-add_definitions(${QT_DEFINITIONS} ${PHONON_DEFINITIONS})
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR} ${PHONON_INCLUDES})
-
 set(metadatareader_SRCS
     main.cpp
     metadatareader.cpp
 )
 
 add_executable(metadatareader ${metadatareader_SRCS})
-target_link_libraries(metadatareader ${PHONON_LIBRARY} Qt5::Core Qt5::Widgets)
+target_link_libraries(metadatareader Phonon::${PHONON_LIB_SONAME} Qt5::Core Qt5::Widgets)

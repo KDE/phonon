@@ -14,9 +14,6 @@ configure_file(phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h 
 
 message(AUTHOR_WARNING "TODO: we configure for phonon_capture cmakedefine but its unclear why this needs to be in a public header")
 configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h @ONLY)
-# We write these to a strange place so the demos can find them properly
-message(AUTHOR_WARNING "TODO: use internal target and set include dirs on target")
-configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/../includes/phonon/phononnamespace.h @ONLY)
 
 find_package(PulseAudio 0.9.15)
 set_package_properties(PulseAudio PROPERTIES
@@ -117,6 +114,8 @@ if(NOT PHONON_NO_GRAPHICSVIEW)
 endif()
 
 add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
+add_library(Phonon::${PHONON_LIB_SONAME} ALIAS ${PHONON_LIB_SONAME})
+
 target_link_libraries(${PHONON_LIB_SONAME}
     PUBLIC
         Qt5::Core
@@ -135,9 +134,9 @@ target_include_directories(${PHONON_LIB_SONAME}
     INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>"
     PUBLIC
         # snake header <phonon/foo.h>
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../;${CMAKE_CURRENT_BINARY_DIR}/../>"
         # camel header <phonon/Foo>
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../includes;${CMAKE_CURRENT_SOURCE_DIR}/../includes>")
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../includes;${CMAKE_CURRENT_BINARY_DIR}/../includes>")
 
 install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
 
