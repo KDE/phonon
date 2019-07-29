@@ -28,6 +28,7 @@ set_package_properties(ECM PROPERTIES
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+include(CMakePackageConfigHelpers)
 include(ECMGeneratePriFile)
 include(ECMGeneratePkgConfigFile)
 
@@ -150,32 +151,41 @@ endif(PHONON_BUILD_DEMOS)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/${PHONON_LIB_SONAME}")
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononConfig.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
-               @ONLY)
+configure_package_config_file(
+    PhononConfig.cmake.in
+    ${PHONON_LIB_SONAME_CAMEL}Config.cmake
+    PATH_VARS INCLUDE_INSTALL_DIR BUILDSYSTEM_INSTALL_DIR LIB_INSTALL_DIR
+    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ConfigVersion.cmake
-        DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
+        DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+        COMPONENT Devel)
 
 install(EXPORT PhononLibs
         DESTINATION ${CMAKECONFIG_INSTALL_DIR}
         NAMESPACE Phonon::
-        FILE PhononTargets.cmake )
+        FILE PhononTargets.cmake)
 
 if(PHONON_BUILD_EXPERIMENTAL)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/PhononExperimentalConfig.cmake.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfig.cmake
-                   @ONLY)
+    configure_package_config_file(
+        PhononExperimentalConfig.cmake.in
+        ${PHONON_LIB_SONAME_CAMEL}ExperimentalConfig.cmake
+        PATH_VARS INCLUDE_INSTALL_DIR BUILDSYSTEM_INSTALL_DIR LIB_INSTALL_DIR
+        INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+    )
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfig.cmake
                   ${CMAKE_CURRENT_BINARY_DIR}/${PHONON_LIB_SONAME_CAMEL}ExperimentalConfigVersion.cmake
-            DESTINATION ${CMAKECONFIG_INSTALL_DIR})
+            DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+            COMPONENT Devel
+    )
 
     install(EXPORT PhononExperimentalLibs
             DESTINATION ${CMAKECONFIG_INSTALL_DIR}
             NAMESPACE Phonon::
-            FILE PhononExperimentalTargets.cmake )
+            FILE PhononExperimentalTargets.cmake)
 endif()
 
 ecm_generate_pkgconfig_file(

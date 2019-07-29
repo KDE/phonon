@@ -1,11 +1,10 @@
 # config file for phonon library
 
-# known at buildtime
-set(PHONON_VERSION @PHONON_VERSION@)
+@PACKAGE_INIT@
 
-get_filename_component(currentDir ${CMAKE_CURRENT_LIST_FILE} PATH) # get the directory where I myself am
-get_filename_component(rootDir ${currentDir}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix
-@USR_SYMLINK_RESOLVER@
+# known at buildtime
+set(PHONON_LIB_SONAME "@PHONON_LIB_SONAME@")
+set(PHONON_VERSION @PHONON_VERSION@)
 
 set(PHONON_NO_GRAPHICSVIEW @PHONON_NO_GRAPHICSVIEW@)
 set(PHONON_PULSESUPPORT @PHONON_PULSESUPPORT@)
@@ -13,16 +12,11 @@ set(PHONON_FIND_EXPERIMENTAL @PHONON_BUILD_EXPERIMENTAL@)
 set(PHONON_QT_COMPAT_HEADERS @PHONON_INSTALL_QT_COMPAT_HEADERS@)
 
 # install locations
-set(PHONON_INCLUDE_DIR "${rootDir}/@INCLUDE_INSTALL_DIR@")
+set(PHONON_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+set(PHONON_LIBRARY_DIR "@PACKAGE_LIB_INSTALL_DIR@")
+set(PHONON_BUILDSYSTEM_DIR "@PACKAGE_BUILDSYSTEM_INSTALL_DIR@")
 
-set(PHONON_LIBRARY_DIR "${rootDir}/@LIB_INSTALL_DIR@")
-set(PHONON_BUILDSYSTEM_DIR "@BUILDSYSTEM_INSTALL_DIR@")
-set(PHONON_LIB_SONAME "@PHONON_LIB_SONAME@")
-
-if(NOT TARGET Phonon::@PHONON_LIB_SONAME@)
-  include(${currentDir}/PhononTargets.cmake)
-endif()
-
+include("${CMAKE_CURRENT_LIST_DIR}/PhononTargets.cmake")
 set(PHONON_LIBRARY Phonon::@PHONON_LIB_SONAME@)
 
 # Find Experimental.
@@ -36,11 +30,11 @@ set(PHONON_LIBRARY Phonon::@PHONON_LIB_SONAME@)
 # component to force an error when it isn't available.
 if("${@PHONON_LIB_SONAME_CAMEL@_FIND_COMPONENTS}" MATCHES ".*(Experimental|experimental).*")
     find_package(@PHONON_LIB_SONAME_CAMEL@Experimental ${PHONON_VERSION} EXACT CONFIG REQUIRED
-                 PATHS ${currentDir}
+                 PATHS ${CMAKE_CURRENT_LIST_DIR}
                  NO_DEFAULT_PATH)
 elseif(PHONON_FIND_EXPERIMENTAL)
     find_package(@PHONON_LIB_SONAME_CAMEL@Experimental ${PHONON_VERSION} EXACT CONFIG QUIET
-                 PATHS ${currentDir}
+                 PATHS ${CMAKE_CURRENT_LIST_DIR}
                  NO_DEFAULT_PATH)
 endif()
 
