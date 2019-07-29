@@ -17,7 +17,7 @@ set(declarative_SRCS
     ${phonon_QMLS}
 )
 
-phonon_add_declarative_plugin(phononqmlplugin ${declarative_SRCS})
+add_library(phononqmlplugin MODULE ${declarative_SRCS})
 
 target_link_libraries(phononqmlplugin
     ${PHONON_LIBS}

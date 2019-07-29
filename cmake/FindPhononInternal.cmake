@@ -29,13 +29,8 @@
 
 # Include Additional Magic
 
-include(CheckCXXCompilerFlag)
-
-get_filename_component(phonon_cmake_module_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
-
-message(AUTHOR_WARNING "TODO: review need")
-include(${phonon_cmake_module_dir}/PhononMacros.cmake)
 message(AUTHOR_WARNING "TODO: port backends from logfeature to featuresummary")
+message(AUTHOR_WARNING "TODO: port backends from icon macros")
 
 # ECM
 
@@ -117,3 +112,14 @@ endmacro(AUTOMOC4_ADD_EXECUTABLE _target_NAME)
 macro(AUTOMOC4_ADD_LIBRARY _target_NAME _add_executable_param)
     add_library(${_target_NAME} ${_add_executable_param} ${ARGN})
 endmacro(AUTOMOC4_ADD_LIBRARY)
+
+# Compat for older backends
+macro(PHONON_UPDATE_ICONCACHE)
+    message(DEPRECATION "PHONON_UPDATE_ICONCACHE is deprecated use ECMInstallIcons;"
+        " It updates the cache automatically")
+endmacro()
+macro(PHONON_INSTALL_ICONS _defaultpath)
+    message(DEPRECATION "PHONON_INSTALL_ICONS is deprecated use ECMInstallIcons")
+    include(ECMInstallIcons)
+    ecm_install_icons(${_defaultpath})
+endmacro()

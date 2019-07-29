@@ -8,8 +8,9 @@ set(phononwidgetsplugin_SRCS
     videowidgetplugin.cpp
     volumesliderplugin.cpp
 )
+qt5_add_resources(phononwidgetsplugin_SRCS phononwidgets.qrc)
 
-phonon_add_designer_plugin(phononwidgets phononwidgets.qrc ${phononwidgetsplugin_SRCS})
+add_library(phononwidgets MODULE ${phononwidgetsplugin_SRCS})
 target_link_libraries(phononwidgets
     ${PHONON_LIBS}
     Qt5::Core

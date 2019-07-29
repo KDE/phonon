@@ -145,6 +145,8 @@ if(PHONON_BUILD_DEMOS)
     set(PHONON_BUILDSYSTEM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
     set(PHONON_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/includes/)
     set(PHONON_LIBRARY ${PHONON_LIB_SONAME})
+    # Demos may also be built standalone, so we need to skip their find_package call!
+    set(PHONON_FOUND TRUE)
     #Lets the demos find the headers
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes ${CMAKE_CURRENT_SOURCE_DIR})
     add_subdirectory(demos)

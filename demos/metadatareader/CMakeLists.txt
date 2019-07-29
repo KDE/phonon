@@ -1,5 +1,5 @@
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(metadatareader)
-cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 
 find_package(Phonon REQUIRED)
 
@@ -11,5 +11,5 @@ set(metadatareader_SRCS
     metadatareader.cpp
 )
 
-phonon_add_executable(metadatareader ${metadatareader_SRCS})
+add_executable(metadatareader ${metadatareader_SRCS})
 target_link_libraries(metadatareader ${PHONON_LIBRARY} Qt5::Core Qt5::Widgets)

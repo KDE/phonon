@@ -1,5 +1,5 @@
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(simpleplayer)
-cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 
 find_package(Phonon REQUIRED)
 
@@ -11,5 +11,5 @@ set(simpleplayer_SRCS
     player.cpp
 )
 
-phonon_add_executable(simpleplayer ${simpleplayer_SRCS})
+add_executable(simpleplayer ${simpleplayer_SRCS})
 target_link_libraries(simpleplayer ${PHONON_LIBRARY} Qt5::Core Qt5::Widgets)

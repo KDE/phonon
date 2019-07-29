@@ -1,5 +1,5 @@
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(simplecapture)
-cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 
 find_package(Phonon REQUIRED)
 
@@ -11,5 +11,5 @@ set(simplecapture_SRCS
     capture.cpp
 )
 
-phonon_add_executable(simplecapture ${simplecapture_SRCS})
+add_executable(simplecapture ${simplecapture_SRCS})
 target_link_libraries(simplecapture ${PHONON_LIBRARY} Qt5::Core Qt5::Widgets)

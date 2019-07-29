@@ -1,5 +1,5 @@
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(phota)
-cmake_minimum_required(VERSION 2.6.9 FATAL_ERROR)
 
 find_package(Phonon REQUIRED)
 
@@ -15,5 +15,5 @@ set(phota_SRCS
 
 qt5_wrap_ui(phota_SRCS videoeffects.ui)
 
-phonon_add_executable(phota ${phota_SRCS})
+add_executable(phota ${phota_SRCS})
 target_link_libraries(phota ${PHONON_LIBRARY} Qt5::Core Qt5::Widgets)
