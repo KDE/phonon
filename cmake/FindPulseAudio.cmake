@@ -30,7 +30,9 @@ endif(NOT PULSEAUDIO_FIND_VERSION)
 
 # Newer PA's ship a PackageConfig.cmake file, so lets try and use it.
 find_package(PulseAudio ${PULSEAUDIO_FIND_VERSION} QUIET NO_MODULE)
-if (NOT PULSEAUDIO_FOUND)
+if (PULSEAUDIO_FOUND)
+    return()
+endif()
 
 if (NOT WIN32)
    include(FindPkgConfig)
@@ -103,5 +105,3 @@ else (PULSEAUDIO_FOUND)
 endif (PULSEAUDIO_FOUND)
 
 mark_as_advanced(PULSEAUDIO_INCLUDE_DIR PULSEAUDIO_LIBRARY PULSEAUDIO_MAINLOOP_LIBRARY)
-
-endif (NOT PULSEAUDIO_FOUND)
