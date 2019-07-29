@@ -17,10 +17,7 @@ either version of Qt.
 
 \section phonon4qt5_building Building
 
-To build Phonon4Qt5 you will have to pass PHONON_BUILD_PHONON4QT5 to CMake to
-switch it into Qt5 build mode.
-
-Additionally if you are building against a qt-project provided binary build of Qt5
+If you are building against a qt-project provided binary build of Qt5
 you may have to define the CMAKE_PREFIX_PATH to make CMake find Qt5. If you are
 using QMake for your application you will additionally have to instruct cmake to
 install Qt extensions into the actual Qt directory using
@@ -36,17 +33,10 @@ cmake .. -DPHONON_BUILD_PHONON4QT5=ON -DCMAKE_PREFIX_PATH=/opt/Qt5.0.0/5.0.0/gcc
 Phonon4Qt5 installation does not conflict with regular Phonon installations in
 any way; It uses different file and folder names for everything installed.
 
-\subsection phonon4qt5_building_backends Backends
-
-Since Phonon4Qt5 uses isolated paths from regular Phonon, the backends also need
-to be built specifically in Phonon4Qt5 mode using the PHONON_BUILD_PHONON4QT5
-option for CMake. Defining KDE_INSTALL_USE_QT_SYS_PATHS
-however is not necessary as Phonon has internal logic for backend plugin lookup.
-
 \section phonon4qt5_using Usage
 
 Except for a couple of lines in CMake, using Phonon4Qt5 is identical to using
-Phonon.
+the (old) Qt4 Phonon.
 
 \subsection phonon4qt5_using_cmake CMake
 To check for Phonon4Qt5 in your CMake project simply use find_package. Variables
