@@ -138,7 +138,7 @@ target_include_directories(${PHONON_LIB_SONAME}
         # camel header <phonon/Foo>
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../includes;${CMAKE_CURRENT_BINARY_DIR}/../includes>")
 
-install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
    abstractaudiooutput.h
@@ -184,7 +184,10 @@ install(FILES
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
 if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.kde.Phonon.AudioOutput.xml ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml DESTINATION  ${DBUS_INTERFACES_INSTALL_DIR})
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.kde.Phonon.AudioOutput.xml
+        ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml
+        @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml
+        DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
 endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
 

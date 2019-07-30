@@ -29,4 +29,4 @@ add_custom_target("qch" ALL DEPENDS "html")
 
 add_custom_target("doc" ALL DEPENDS "html" "qch")
 
-INSTALL(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html/" DESTINATION "${SHARE_INSTALL_PREFIX}/libphonon/" )
+INSTALL(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html/" DESTINATION "${KDE_INSTALL_DATAROOTDIR}/libphonon/" )

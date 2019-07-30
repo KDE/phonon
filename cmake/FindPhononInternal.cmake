@@ -32,27 +32,15 @@
 message(AUTHOR_WARNING "TODO: port backends from logfeature to featuresummary")
 message(AUTHOR_WARNING "TODO: port backends from icon macros")
 
-set(QT_IMPORTS_DIR "${KDE_INSTALL_QTQUICKIMPORTSDIR}")
-set(QT_PLUGINS_DIR "${KDE_INSTALL_QTPLUGINDIR}")
-
-set(SHARE_INSTALL_PREFIX "${KDE_INSTALL_DATAROOTDIR}")
 set(INCLUDE_INSTALL_DIR "${KDE_INSTALL_INCLUDEDIR}/${PHONON_LIB_SONAME}")
-set(BIN_INSTALL_DIR "${KDE_INSTALL_BINDIR}")
-set(LIB_INSTALL_DIR "${KDE_INSTALL_LIBDIR}")
 message(AUTHOR_WARNING "TODO: this could be moved to the actual plugins dir, needs review for use tho")
-set(PLUGIN_INSTALL_DIR "${LIB_INSTALL_DIR}/qt5")
+set(PLUGIN_INSTALL_DIR "${KDE_INSTALL_LIBDIR}/qt5")
 message(AUTHOR_WARNING "TODO: this used plugin_install_dir but is now relying on ECM")
 set(BACKEND_INSTALL_DIR "${KDE_INSTALL_QTPLUGINDIR}/${PHONON_LIB_SONAME}_backend")
 message(AUTHOR_WARNING "TODO: do we need this with ecm?")
 if(WIN32) # Imported from Phonon VLC
     set(BACKEND_INSTALL_DIR "bin/${PHONON_LIB_SONAME}_backend")
 endif()
-set(ICON_INSTALL_DIR "${KDE_INSTALL_ICONDIR}")
-# removed service: was only used for kde4 desktop file installation
-set(DBUS_INTERFACES_INSTALL_DIR "${KDE_INSTALL_DBUSINTERFACEDIR}")
-set(DBUS_SERVICES_INSTALL_DIR "${KDE_INSTALL_DBUSSERVICEDIR}")
-
-set(INSTALL_TARGETS_DEFAULT_ARGS ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 #---- essential deps
 
