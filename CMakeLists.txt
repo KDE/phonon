@@ -61,13 +61,19 @@ if (PHONON_ASSERT_STATES)
     add_definitions(-DPHONON_ASSERT_STATES)
 endif (PHONON_ASSERT_STATES)
 
+set(INCLUDE_INSTALL_DIR "${KDE_INSTALL_INCLUDEDIR}/${PHONON_LIB_SONAME}")
+set(PLUGIN_INSTALL_DIR ${KDE_INSTALL_QTPLUGINDIR})
+if(WIN32) # Imported from Phonon VLC
+    set(PLUGIN_INSTALL_DIR ${KDE_INSTALL_BINDIR})
+endif()
+set(BACKEND_DIR_SUFFIX "${PHONON_LIB_SONAME}_backend")
+set(BACKEND_INSTALL_DIR "${PLUGIN_INSTALL_DIR}/${BACKEND_DIR_SUFFIX}")
+
 set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 ################################# Requirements #################################
-# Core Requirements and CFlag Magic
-include(cmake/FindPhononInternal.cmake)
-
+# Core Requirements
 find_package(Qt5Core)
 set_package_properties(Qt5Core PROPERTIES
     TYPE REQUIRED
