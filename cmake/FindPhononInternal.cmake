@@ -41,31 +41,3 @@ message(AUTHOR_WARNING "TODO: do we need this with ecm?")
 if(WIN32) # Imported from Phonon VLC
     set(BACKEND_INSTALL_DIR "bin/${PHONON_LIB_SONAME}_backend")
 endif()
-
-# ---- more compat
-set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
-                ${Qt5Widgets_INCLUDE_DIRS}
-                ${Qt5DBus_INCLUDE_DIRS})
-
-# NOTE: the compatiibility macros are actively used by the backends, so they
-#       cannot be dropped unless the backends get a major release removing all
-#       use of them first.
-
-# Compatiblity Macros for old automoc nonesense
-macro(AUTOMOC4_ADD_EXECUTABLE _target_NAME)
-    add_executable(${_target_NAME} ${ARGN})
-endmacro(AUTOMOC4_ADD_EXECUTABLE _target_NAME)
-macro(AUTOMOC4_ADD_LIBRARY _target_NAME _add_executable_param)
-    add_library(${_target_NAME} ${_add_executable_param} ${ARGN})
-endmacro(AUTOMOC4_ADD_LIBRARY)
-
-# Compat for older backends
-macro(PHONON_UPDATE_ICONCACHE)
-    message(DEPRECATION "PHONON_UPDATE_ICONCACHE is deprecated use ECMInstallIcons;"
-        " It updates the cache automatically")
-endmacro()
-macro(PHONON_INSTALL_ICONS _defaultpath)
-    message(DEPRECATION "PHONON_INSTALL_ICONS is deprecated use ECMInstallIcons")
-    include(ECMInstallIcons)
-    ecm_install_icons(${_defaultpath})
-endmacro()
