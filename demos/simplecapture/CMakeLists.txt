@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project(simplecapture)
 
-find_package(Phonon REQUIRED)
+set(CMAKE_AUTOMOC TRUE)
+
+find_package(Phonon4Qt5 REQUIRED)
 
 set(simplecapture_SRCS
     main.cpp
