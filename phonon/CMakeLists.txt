@@ -11,8 +11,6 @@ if (PHONON_BUILD_EXPERIMENTAL)
 endif (PHONON_BUILD_EXPERIMENTAL)
 
 configure_file(phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h @ONLY)
-
-message(AUTHOR_WARNING "TODO: we configure for phonon_capture cmakedefine but its unclear why this needs to be in a public header")
 configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h @ONLY)
 
 find_package(PulseAudio 0.9.15)
