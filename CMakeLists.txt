@@ -104,8 +104,9 @@ set_package_properties(Qt5DBus PROPERTIES
     TYPE RECOMMENDED
     DESCRIPTION "Needed to enable control of AudioOutputs via DBus"
     URL "https://www.qt.io/download")
-message(AUTHOR_WARNING "TODO: port everything from deprecated names")
-set(QT_QTDBUS_FOUND ${Qt5DBus_FOUND})
+if(Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
+    set(WITH_DBUS TRUE)
+endif()
 
 # Designer Plugin
 find_package(Qt5Designer)
@@ -113,7 +114,6 @@ set_package_properties(Qt5Designer PROPERTIES
     TYPE RECOMMENDED
     DESCRIPTION "Needed to build the Qt Designer plugin"
     URL "https://www.qt.io/download")
-set(QT_QTDESIGNER_FOUND ${Qt5Designer_FOUND})
 
 # VideoGraphicsObject GL Painting
 find_package(Qt5OpenGL)
@@ -121,7 +121,6 @@ set_package_properties(Qt5OpenGL PROPERTIES
     TYPE RECOMMENDED
     DESCRIPTION "Only recommended when bulding the super experimental QML support"
     URL "https://www.qt.io/download")
-set(QT_QTOPENGL_FOUND ${Qt5OpenGL_FOUND})
 
 # Declarative/QML1
 find_package(Qt5Declarative)
@@ -129,23 +128,17 @@ set_package_properties(Qt5Declarative PROPERTIES
     TYPE RECOMMENDED
     DESCRIPTION "Only recommended when bulding the super experimental QML support"
     URL "https://www.qt.io/download")
-set(QT_QTDECLARATIVE_FOUND ${Qt5Declarative_FOUND})
 
-set(PHONON_PKG_DEPENDENCIES "Qt5Core Qt5Gui Qt5DBus")
-
-if(NOT PHONON_BUILD_DECLARATIVE_PLUGIN OR NOT QT_QTOPENGL_FOUND OR NOT OPENGL_FOUND OR NOT QT_QTDECLARATIVE_FOUND)
-    set(PHONON_NO_GRAPHICSVIEW true)
-else()
+if(PHONON_BUILD_DECLARATIVE_PLUGIN AND OpenGL_FOUND AND Qt5OpenGL_FOUND AND Qt5Declarative_FOUND)
     set(PHONON_NO_GRAPHICSVIEW false)
+else()
+    set(PHONON_NO_GRAPHICSVIEW true)
 endif()
-
-# Convenience variable to hold target link libraries we always need.
-set(PHONON_LIBS ${PHONON_LIB_SONAME})
 
 set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
 
 add_subdirectory(cmake)
-if(QT_QTDESIGNER_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
+if(Qt5Designer_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
 endif()
 

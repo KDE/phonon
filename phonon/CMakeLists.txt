@@ -1,14 +1,6 @@
-if(NOT PHONON_NO_GRAPHICSVIEW)
-    message(STATUS "Building graphicsview.")
-    add_subdirectory(graphicsview)
-else()
-    message(STATUS "Not Building graphicsview.")
-    add_definitions(-DPHONON_NO_GRAPHICSVIEW)
-endif()
-
-if (PHONON_BUILD_EXPERIMENTAL)
+if(PHONON_BUILD_EXPERIMENTAL)
     add_subdirectory(experimental)
-endif (PHONON_BUILD_EXPERIMENTAL)
+endif()
 
 configure_file(phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h @ONLY)
 configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h @ONLY)
@@ -77,18 +69,6 @@ set(phonon_LIB_SRCS
 
 ecm_create_qm_loader(phonon_LIB_SRCS libphonon_qt)
 
-if (PHONON_PULSESUPPORT)
-   list(APPEND phonon_LIB_SRCS
-      pulsestream.cpp
-   )
-endif (PHONON_PULSESUPPORT)
-
-if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-   list(APPEND phonon_LIB_SRCS
-      audiooutputadaptor.cpp
-   )
-endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-
 option(PHONON_NO_PLATFORMPLUGIN "Do not use any platform plugin")
 if (PHONON_NO_PLATFORMPLUGIN)
     add_definitions(-DQT_NO_PHONON_PLATFORMPLUGIN)
@@ -99,15 +79,29 @@ add_definitions(-DPHONON_BACKEND_DIR_SUFFIX="/${BACKEND_DIR_SUFFIX}/")
 
 set(optional_link_libraries)
 
-if(QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
+if(WITH_DBUS)
+    list(APPEND phonon_LIB_SRCS audiooutputadaptor.cpp)
     list(APPEND optional_link_libraries Qt5::DBus)
+
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.kde.Phonon.AudioOutput.xml
+        ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml
+        @ONLY)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml
+        DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
 endif()
 
-if (PHONON_PULSESUPPORT)
+if(PHONON_PULSESUPPORT)
+    list(APPEND phonon_LIB_SRCS pulsestream.cpp)
     list(APPEND optional_link_libraries ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
-endif (PHONON_PULSESUPPORT)
+endif()
 
-if(NOT PHONON_NO_GRAPHICSVIEW)
+if(PHONON_NO_GRAPHICSVIEW)
+    message(STATUS "Not Building graphicsview.")
+    add_definitions(-DPHONON_NO_GRAPHICSVIEW)
+else()
+    message(STATUS "Building graphicsview.")
+    add_subdirectory(graphicsview)
+
     list(APPEND optional_link_libraries OpenGL Qt5::OpenGl)
 endif()
 
@@ -180,12 +174,3 @@ install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
    ${CMAKE_CURRENT_BINARY_DIR}/phonon_version.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
-
-if (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.kde.Phonon.AudioOutput.xml
-        ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml
-        @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml
-        DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
-endif (QT_QTDBUS_FOUND AND NOT PHONON_NO_DBUS)
-
