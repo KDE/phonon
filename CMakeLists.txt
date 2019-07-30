@@ -32,6 +32,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_D
 include(CMakePackageConfigHelpers)
 include(ECMGeneratePriFile)
 include(ECMGeneratePkgConfigFile)
+include(KDEInstallDirs)
+include(ECMPoQmTools)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
 
 set(PHONON_LIB_SONAME phonon4qt5)
 set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)

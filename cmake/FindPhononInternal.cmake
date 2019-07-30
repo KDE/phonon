@@ -32,16 +32,6 @@
 message(AUTHOR_WARNING "TODO: port backends from logfeature to featuresummary")
 message(AUTHOR_WARNING "TODO: port backends from icon macros")
 
-# ECM
-
-find_package(ECM 1.7.0 NO_MODULE REQUIRED)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
-
-include(KDEInstallDirs)
-include(ECMPoQmTools)
-include(KDECMakeSettings)
-include(KDECompilerSettings)
-
 set(QT_IMPORTS_DIR "${KDE_INSTALL_QTQUICKIMPORTSDIR}")
 set(QT_PLUGINS_DIR "${KDE_INSTALL_QTPLUGINDIR}")
 
