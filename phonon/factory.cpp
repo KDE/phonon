@@ -91,13 +91,13 @@ PHONON_GLOBAL_STATIC(Phonon::FactoryPrivate, globalFactory)
 
 static inline void ensureLibraryPathSet()
 {
-#ifdef PHONON_LIBRARY_PATH
+#ifdef PHONON_PLUGIN_PATH
     static bool done = false;
     if (!done) {
         done = true;
-        QCoreApplication::addLibraryPath(QLatin1String(PHONON_LIBRARY_PATH));
+        QCoreApplication::addLibraryPath(QLatin1String(PHONON_PLUGIN_PATH));
     }
-#endif // PHONON_LIBRARY_PATH
+#endif // PHONON_PLUGIN_PATH
 }
 
 void Factory::setBackend(QObject *b)

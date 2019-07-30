@@ -96,8 +96,8 @@ if (PHONON_NO_PLATFORMPLUGIN)
     add_definitions(-DQT_NO_PHONON_PLATFORMPLUGIN)
 endif (PHONON_NO_PLATFORMPLUGIN)
 
-add_definitions(-DPHONON_LIBRARY_PATH="${CMAKE_INSTALL_PREFIX}/${PLUGIN_INSTALL_DIR}/plugins")
-add_definitions(-DPHONON_BACKEND_DIR_SUFFIX="/${PHONON_LIB_SONAME}_backend/")
+add_definitions(-DPHONON_PLUGIN_PATH="${PLUGIN_INSTALL_DIR}")
+add_definitions(-DPHONON_BACKEND_DIR_SUFFIX="/${BACKEND_DIR_SUFFIX}/")
 
 set(optional_link_libraries)
 
