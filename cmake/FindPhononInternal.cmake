@@ -42,38 +42,6 @@ if(WIN32) # Imported from Phonon VLC
     set(BACKEND_INSTALL_DIR "bin/${PHONON_LIB_SONAME}_backend")
 endif()
 
-#---- essential deps
-
-find_package(Qt5Core)
-set_package_properties(Qt5Core PROPERTIES
-    TYPE REQUIRED
-    DESCRIPTION "Qt5 core module"
-    URL "https://www.qt.io/download")
-
-find_package(Qt5Gui)
-set_package_properties(Qt5Gui PROPERTIES
-    TYPE REQUIRED
-    DESCRIPTION "Qt5 GUI module"
-    URL "https://www.qt.io/download")
-
-find_package(Qt5Widgets)
-set_package_properties(Qt5Widgets PROPERTIES
-    TYPE REQUIRED
-    DESCRIPTION "Qt5 widgets module"
-    URL "https://www.qt.io/download")
-
-#---- compat
-# Qt 5.11 dropped this. We rely on it to enable joint Qt4+5 dep mapping.
-if(NOT COMMAND qt5_use_modules)
-    macro (qt5_use_modules target)
-        set(_deps "")
-        foreach (arg ${ARGN})
-            list(APPEND _deps Qt5::${arg})
-        endforeach ()
-        target_link_libraries(${target} ${_deps})
-    endmacro (qt5_use_modules target args)
-endif()
-
 # ---- more compat
 set(QT_INCLUDES ${Qt5Core_INCLUDE_DIRS}
                 ${Qt5Widgets_INCLUDE_DIRS}

@@ -68,6 +68,24 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Core Requirements and CFlag Magic
 include(cmake/FindPhononInternal.cmake)
 
+find_package(Qt5Core)
+set_package_properties(Qt5Core PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt5 core module"
+    URL "https://www.qt.io/download")
+
+find_package(Qt5Gui)
+set_package_properties(Qt5Gui PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt5 GUI module"
+    URL "https://www.qt.io/download")
+
+find_package(Qt5Widgets)
+set_package_properties(Qt5Widgets PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt5 widgets module"
+    URL "https://www.qt.io/download")
+
 # Internal is shared with backends, so continue specific finders here...
 find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES
