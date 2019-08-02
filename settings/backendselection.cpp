@@ -1,6 +1,6 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2004-2007 Matthias Kretz <kretz@kde.org>
-    Copyright (C) 2011-2014 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2011-2019 Harald Sitter <sitter@kde.org>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -20,46 +20,49 @@
 
 #include "backendselection.h"
 
-#include <KConfig>
-#include <KIconLoader>
-#include <KRun>
-#include <KLocalizedString>
-
-#include "phonon_debug.h"
-#include <QDir>
-#include <QFileInfo>
+#include <QList>
+#include <QStringList>
 #include <QListWidget>
+
+#include <QDebug>
+#include <QDesktopServices>
+#include <QDir>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QPluginLoader>
 #include <QSettings>
+#include <QUrl>
 
 BackendDescriptor::BackendDescriptor(const QString &path)
     : isValid(false)
 {
     QPluginLoader loader(path);
 
-    iid = loader.metaData().value(QLatin1Literal("IID")).toString();
+    iid = loader.metaData().value(QLatin1String("IID")).toString();
 
-    const QJsonObject metaData = loader.metaData().value(QLatin1Literal("MetaData")).toObject();
-    name = metaData.value(QLatin1Literal("Name")).toString();
-    icon = metaData.value(QLatin1Literal("Icon")).toString();
-    version = metaData.value(QLatin1Literal("Version")).toString();
-    website = metaData.value(QLatin1Literal("Website")).toString();
-    preference = metaData.value(QLatin1Literal("InitialPreference")).toDouble();
+    const QJsonObject metaData = loader.metaData().value(QLatin1String("MetaData")).toObject();
+    name = metaData.value(QLatin1String("Name")).toString();
+    icon = metaData.value(QLatin1String("Icon")).toString();
+    version = metaData.value(QLatin1String("Version")).toString();
+    website = metaData.value(QLatin1String("Website")).toString();
+    preference = metaData.value(QLatin1String("InitialPreference")).toInt();
 
     pluginPath = path;
 
-    if (name.isEmpty())
+    if (name.isEmpty()) {
         name = QFileInfo(path).baseName();
+    }
 
-    if (iid.isEmpty())
+    if (iid.isEmpty()) {
         return; // Not valid.
+    }
 
     isValid = true;
 }
 
 bool BackendDescriptor::operator <(const BackendDescriptor &rhs) const
 {
-    return this->preference < rhs.preference;
+    return rhs.preference < this->preference;
 }
 
 BackendSelection::BackendSelection(QWidget *parent)
@@ -67,22 +70,21 @@ BackendSelection::BackendSelection(QWidget *parent)
 {
     setupUi(this);
 
-    m_messageWidget->setVisible(false);
-    m_messageWidget->setCloseButtonVisible(false);
-    m_messageWidget->setMessageType(KMessageWidget::Information);
-    m_messageWidget->setText(i18nc("@info User changed Phonon backend",
-                                   "To apply the backend change you will have "
-                                   "to log out and back in again."));
-
-    m_down->setIcon(QIcon::fromTheme(QStringLiteral("go-down")));
-    m_up->setIcon(QIcon::fromTheme(QStringLiteral("go-up")));
+    m_down->setIcon(QIcon::fromTheme("go-down"));
+    m_up->setIcon(QIcon::fromTheme("go-up"));
     m_comment->setWordWrap(true);
 
     m_emptyPage = stackedWidget->addWidget(new QWidget());
 
-    connect(m_select, &QListWidget::itemSelectionChanged, this, &BackendSelection::selectionChanged);
-    connect(m_up, &QToolButton::clicked, this, &BackendSelection::up);
-    connect(m_down, &QToolButton::clicked, this, &BackendSelection::down);
+    connect(m_select, &QListWidget::itemSelectionChanged,
+            this, &BackendSelection::selectionChanged);
+    connect(m_up, &QToolButton::clicked,
+            this, &BackendSelection::up);
+    connect(m_down, &QToolButton::clicked,
+            this, &BackendSelection::down);
+
+    connect(m_website, &QLabel::linkActivated,
+            this, [=](const QString &url) { QDesktopServices::openUrl(QUrl(url)); });
 }
 
 void BackendSelection::load()
@@ -94,24 +96,23 @@ void BackendSelection::load()
     QList<QString> iidPreference;
     QSettings settings("kde.org", "libphonon");
     const int size = settings.beginReadArray("Backends");
-    qCDebug(KCM_PHONON_LOG) << settings.fileName();
     for (int i = 0; i < size; ++i) {
         settings.setArrayIndex(i);
-        iidPreference.append(settings.value(QLatin1String("iid")).toString());
+        iidPreference.append(settings.value("iid").toString());
     }
     settings.endArray();
 
-    const QLatin1Literal suffix("/" PHONON_LIB_SONAME "_backend/");
+    // the offers are already sorted for preference
+    const QLatin1String suffix("/" PHONON_LIB_SONAME "_backend/");
     const QStringList paths = QCoreApplication::libraryPaths();
-    qCDebug(KCM_PHONON_LOG) << "libpaths" << paths;
 
     QList<struct BackendDescriptor> backendList;
 
-    foreach (const QString &path, paths) {
+    for (const QString &path : paths) {
         const QString libPath = path + suffix;
         const QDir dir(libPath);
         if (!dir.exists()) {
-            qCDebug(KCM_PHONON_LOG) << Q_FUNC_INFO << dir.absolutePath() << "does not exist";
+            qDebug() << Q_FUNC_INFO << dir.absolutePath() << "does not exist";
             continue;
         }
 
@@ -121,30 +122,27 @@ void BackendSelection::load()
             BackendDescriptor bd = BackendDescriptor(libPath + plugin);
             if (bd.isValid) {
                 int preference = iidPreference.indexOf(bd.iid);
-                if (preference != -1)
+                if (preference != -1) {
                     bd.preference = preference;
+                }
                 backendList.append(bd);
             }
         }
 
-        std::sort(backendList.begin(), backendList.end());
+        qSort(backendList);
     }
-
-    /// -------------- LOAD
 
     m_select->clear();
 
-    foreach (const struct BackendDescriptor &bd, backendList) {
+    for (const struct BackendDescriptor &bd : backendList) {
         m_select->addItem(bd.name);
         m_backends.insert(bd.name, bd);
     }
-    m_select->item(0)->setSelected(true);
+    m_select->setItemSelected(m_select->item(0), true);
 }
 
 void BackendSelection::save()
 {
-    qCDebug(KCM_PHONON_LOG) << Q_FUNC_INFO;
-    qCDebug(KCM_PHONON_LOG) << "~~~~~~~~~~~~~~";
     QSettings settings("kde.org", "libphonon");
     settings.beginWriteArray("Backends", m_select->count());
     for (int i = 0; i < m_select->count(); ++i) {
@@ -155,73 +153,50 @@ void BackendSelection::save()
     }
     settings.endArray();
     settings.sync();
-
-    qCDebug(KCM_PHONON_LOG) << settings.fileName();
-}
-
-void BackendSelection::defaults()
-{
-    load();
 }
 
 void BackendSelection::selectionChanged()
 {
-    qCDebug(KCM_PHONON_LOG) << "qooooooooo";
     if (m_select->selectedItems().isEmpty()) {
         m_up->setEnabled(false);
         m_down->setEnabled(false);
-    } else {
-        const QListWidgetItem *const item = m_select->selectedItems().first();
-        m_up->setEnabled(m_select->row(item) > 0);
-        m_down->setEnabled(m_select->row(item) < m_select->count() - 1);
-        BackendDescriptor backend = m_backends[item->text()];
-
-        // Have some icon other than "unknown" for backends which don't install an icon.
-        QIcon icon = QIcon::fromTheme(backend.icon);
-        if (icon.isNull()) {
-            QPixmap iconPixmap = KIconLoader::global()->loadIcon("preferences-desktop-sound", KIconLoader::NoGroup, 128);
-            m_icon->setPixmap(iconPixmap);
-        } else {
-            m_icon->setPixmap(icon.pixmap(128, 128));
-        }
-
-        m_name->setText(backend.name);
-        m_website->setText(QString("<a href=\"%1\">%1</a>").arg(backend.website));
-        connect(m_website, &QLabel::linkActivated, this, &BackendSelection::openWebsite, Qt::UniqueConnection);
-        m_version->setText(backend.version);
+        return;
     }
-}
 
-void BackendSelection::openWebsite(const QString &url)
-{
-    new KRun(QUrl(url), window());
+    const QListWidgetItem *const item = m_select->selectedItems().first();
+    m_up->setEnabled(m_select->row(item) > 0);
+    m_down->setEnabled(m_select->row(item) < m_select->count() - 1);
+    BackendDescriptor backend = m_backends[item->text()];
+    m_icon->setPixmap(QIcon::fromTheme(backend.icon).pixmap(128, 128));
+    m_name->setText(backend.name);
+    m_website->setText(QString("<a href=\"%1\">%1</a>").arg(backend.website));
+    m_version->setText(backend.version);
 }
 
 void BackendSelection::up()
 {
-    QList<QListWidgetItem *> selectedList = m_select->selectedItems();
-    foreach (QListWidgetItem *selected, selectedList) {
+    const QList<QListWidgetItem *> selectedList = m_select->selectedItems();
+    for (const QListWidgetItem *selected : selectedList) {
         const int row = m_select->row(selected);
-        if (row > 0) {
-            QListWidgetItem *taken = m_select->takeItem(row - 1);
-            m_select->insertItem(row, taken);
-            emit changed();
-            selectionChanged();
+        if (row <= 0) {
+            continue;
         }
+        QListWidgetItem *taken = m_select->takeItem(row - 1);
+        m_select->insertItem(row, taken);
+        selectionChanged();
     }
 }
 
 void BackendSelection::down()
 {
-    QList<QListWidgetItem *> selectedList = m_select->selectedItems();
-    foreach (QListWidgetItem *selected, selectedList) {
+    const QList<QListWidgetItem *> selectedList = m_select->selectedItems();
+    for (const QListWidgetItem *selected : selectedList) {
         const int row = m_select->row(selected);
-        if (row + 1 < m_select->count()) {
-            QListWidgetItem *taken = m_select->takeItem(row + 1);
-            m_select->insertItem(row, taken);
-            emit changed();
-            selectionChanged();
+        if (row + 1 >= m_select->count()) {
+            continue;
         }
+        QListWidgetItem *taken = m_select->takeItem(row + 1);
+        m_select->insertItem(row, taken);
+        selectionChanged();
     }
 }
-

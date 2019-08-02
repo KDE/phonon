@@ -1,5 +1,5 @@
-/*  This file is part of the KDE project
-    Copyright (C) 2006-2007 Matthias Kretz <kretz@kde.org>
+/*
+    Copyright (C) 2014-2019 Harald Sitter <sitter@kde.org>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,32 +17,28 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
-#include <KCModule>
+#include <QDialog>
 
-namespace Phonon {
-class DevicePreference;
+namespace Ui {
+class Settings;
 }
-class BackendSelection;
 
-class QTabWidget;
-
-class PhononKcm : public KCModule
+class Settings : public QDialog
 {
     Q_OBJECT
-public:
-    PhononKcm(QWidget *parent, const QVariantList &);
 
-    void load() override;
-    void save() override;
-    void defaults() override;
+public:
+    explicit Settings(QWidget *parent = nullptr);
+    ~Settings();
+
+private slots:
+    void save();
 
 private:
-    QTabWidget* m_tabs;
-    Phonon::DevicePreference *m_devicePreferenceWidget;
-    BackendSelection *m_backendSelection;
+    Ui::Settings *ui;
 };
 
-#endif // MAIN_H
+#endif // SETTINGS_H

@@ -1,4 +1,4 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2011 Casian Andrei <skeletk13@gmail.com>
 

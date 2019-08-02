@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Settings</class>
+ <widget class="QDialog" name="Settings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>618</width>
+    <height>549</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabs">
+     <property name="windowTitle">
+      <string>Multimedia Settings</string>
+     </property>
+     <property name="windowIcon">
+      <iconset theme="preferences-desktop-sound">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="Phonon::DevicePreference" name="devicePreference">
+      <attribute name="title">
+       <string>De&amp;vice Priority</string>
+      </attribute>
+     </widget>
+     <widget class="BackendSelection" name="backendSelection">
+      <attribute name="title">
+       <string>Backend</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Phonon::DevicePreference</class>
+   <extends>QWidget</extends>
+   <header location="global">devicepreference.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BackendSelection</class>
+   <extends>QWidget</extends>
+   <header location="global">backendselection.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/phononsettings">
+        <file>listview-background.png</file>
+    </qresource>
+</RCC>

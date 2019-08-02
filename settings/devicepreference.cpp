@@ -1,7 +1,7 @@
-/*  This file is part of the KDE project
+/*
     Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
     Copyright (C) 2011 Casian Andrei <skeletk13@gmail.com>
-    Copyright (C) 2014 Harald Sitter <sitter@kde.org>
+    Copyright (C) 2014-2019 Harald Sitter <sitter@kde.org>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include <QDialogButtonBox>
 #include <QListWidget>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPointer>
 #include <QStandardPaths>
 
@@ -33,9 +34,6 @@
 #include <phonon/VideoWidget>
 #include <phonon/globalconfig.h>
 #include <phonon/phononnamespace.h>
-
-#include <KLocalizedString>
-#include <KMessageBox>
 
 #ifndef METATYPE_QLIST_INT_DEFINED
 #define METATYPE_QLIST_INT_DEFINED
@@ -89,7 +87,7 @@ public:
           m_odtype(AudioOutputDeviceType)
     {
         if (cat == NoCategory) {
-            setText(i18n("Audio Playback"));
+            setText(QObject::tr("Audio Playback"));
         } else {
             setText(categoryToString(cat));
         }
@@ -103,13 +101,13 @@ public:
         if (cat == NoCaptureCategory) {
             switch(t) {
             case AudioCaptureDeviceType:
-                setText(i18n("Audio Recording"));
+                setText(QObject::tr("Audio Recording"));
                 break;
             case VideoCaptureDeviceType:
-                setText(i18n("Video Recording"));
+                setText(QObject::tr("Video Recording"));
                 break;
             default:
-                setText(i18n("Invalid"));
+                setText(QObject::tr("Invalid"));
             }
         } else {
             setText(categoryToString(cat));
@@ -149,7 +147,7 @@ DevicePreference::DevicePreference(QWidget *parent)
     // Setup the buttons
     testPlaybackButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
     testPlaybackButton->setEnabled(false);
-    testPlaybackButton->setToolTip(i18n("Test the selected device"));
+    testPlaybackButton->setToolTip(tr("Test the selected device"));
     deferButton->setIcon(QIcon::fromTheme(QStringLiteral("go-down")));
     preferButton->setIcon(QIcon::fromTheme(QStringLiteral("go-up")));
 
@@ -157,13 +155,12 @@ DevicePreference::DevicePreference(QWidget *parent)
     deviceList->setDragDropMode(QAbstractItemView::InternalMove);
     deviceList->setStyleSheet(QStringLiteral("QTreeView {"
                                       "background-color: palette(base);"
-                                      "background-image: url(%1);"
+                                      "background-image: url(:/phononsettings/listview-background.png);"
                                       "background-position: bottom left;"
                                       "background-attachment: fixed;"
                                       "background-repeat: no-repeat;"
                                       "background-clip: padding;"
-                                      "}")
-                              .arg(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "kcm_phonon/listview-background.png")));
+                                      "}"));
     deviceList->setAlternatingRowColors(false);
 
     // The root item for the categories
@@ -173,21 +170,21 @@ DevicePreference::DevicePreference(QWidget *parent)
     QStandardItem *aOutputItem = new CategoryItem(NoCategory);
     m_audioOutputModel[NoCategory] = new AudioOutputDeviceModel(this);
     aOutputItem->setEditable(false);
-    aOutputItem->setToolTip(i18n("Defines the default ordering of devices which can be overridden by individual categories."));
+    aOutputItem->setToolTip(tr("Defines the default ordering of devices which can be overridden by individual categories."));
     parentItem->appendRow(aOutputItem);
 
     // Audio Capture Parent
     QStandardItem *aCaptureItem = new CategoryItem(NoCaptureCategory, AudioCaptureDeviceType);
     m_audioCaptureModel[NoCaptureCategory] = new AudioCaptureDeviceModel(this);
     aCaptureItem->setEditable(false);
-    aCaptureItem->setToolTip(i18n("Defines the default ordering of devices which can be overridden by individual categories."));
+    aCaptureItem->setToolTip(tr("Defines the default ordering of devices which can be overridden by individual categories."));
     parentItem->appendRow(aCaptureItem);
 
     // Video Capture Parent
     QStandardItem *vCaptureItem = new CategoryItem(NoCaptureCategory, VideoCaptureDeviceType);
     m_videoCaptureModel[NoCaptureCategory] = new VideoCaptureDeviceModel(this);
     vCaptureItem->setEditable(false);
-    vCaptureItem->setToolTip(i18n("Defines the default ordering of devices which can be overridden by individual categories."));
+    vCaptureItem->setToolTip(tr("Defines the default ordering of devices which can be overridden by individual categories."));
     parentItem->appendRow(vCaptureItem);
 
     // Audio Output Children
@@ -303,28 +300,28 @@ void DevicePreference::updateDeviceList()
         if (cap ? capcat == NoCaptureCategory : cat == NoCategory) {
             switch (catItem->odtype()) {
             case AudioOutputDeviceType:
-                m_headerModel.setHeaderData(0, Qt::Horizontal, i18n("Default Audio Playback Device Preference"), Qt::DisplayRole);
+                m_headerModel.setHeaderData(0, Qt::Horizontal, tr("Default Audio Playback Device Preference"), Qt::DisplayRole);
                 break;
             case AudioCaptureDeviceType:
-                m_headerModel.setHeaderData(0, Qt::Horizontal, i18n("Default Audio Recording Device Preference"), Qt::DisplayRole);
+                m_headerModel.setHeaderData(0, Qt::Horizontal, tr("Default Audio Recording Device Preference"), Qt::DisplayRole);
                 break;
             case VideoCaptureDeviceType:
-                m_headerModel.setHeaderData(0, Qt::Horizontal, i18n("Default Video Recording Device Preference"), Qt::DisplayRole);
+                m_headerModel.setHeaderData(0, Qt::Horizontal, tr("Default Video Recording Device Preference"), Qt::DisplayRole);
                 break;
             default: ;
             }
         } else {
             switch (catItem->odtype()) {
             case AudioOutputDeviceType:
-                m_headerModel.setHeaderData(0, Qt::Horizontal, i18n("Audio Playback Device Preference for the '%1' Category",
+                m_headerModel.setHeaderData(0, Qt::Horizontal, tr("Audio Playback Device Preference for the '%1' Category").arg(
                                                                     categoryToString(cat)), Qt::DisplayRole);
                 break;
             case AudioCaptureDeviceType:
-                m_headerModel.setHeaderData(0, Qt::Horizontal, i18n("Audio Recording Device Preference for the '%1' Category",
+                m_headerModel.setHeaderData(0, Qt::Horizontal, tr("Audio Recording Device Preference for the '%1' Category").arg(
                                                                     categoryToString(capcat)), Qt::DisplayRole);
                 break;
             case VideoCaptureDeviceType:
-                m_headerModel.setHeaderData(0, Qt::Horizontal, i18n("Video Recording Device Preference for the '%1' Category ",
+                m_headerModel.setHeaderData(0, Qt::Horizontal, tr("Video Recording Device Preference for the '%1' Category ").arg(
                                                                     categoryToString(capcat)), Qt::DisplayRole);
                 break;
             default: ;
@@ -677,7 +674,6 @@ void DevicePreference::on_deferButton_clicked()
     }
 }
 
-
 DevicePreference::DeviceType DevicePreference::shownModelType() const
 {
     const QStandardItem *item = m_categoryModel.itemFromIndex(categoryTree->currentIndex());
@@ -749,7 +745,7 @@ void DevicePreference::on_applyPreferencesButton_clicked()
     QPointer<QDialog> dialog = new QDialog(this);
 
     QLabel *label = new QLabel(dialog);
-    label->setText(i18n("Apply the currently shown device preference list to the following other "
+    label->setText(tr("Apply the currently shown device preference list to the following other "
                         "audio playback categories:"));
     label->setWordWrap(true);
 
@@ -762,13 +758,13 @@ void DevicePreference::on_applyPreferencesButton_clicked()
         QListWidgetItem *item = nullptr;
         if (cap) {
             if (capcat == NoCaptureCategory) {
-                item = new QListWidgetItem(i18n("Default/Unspecified Category"), list, capcat);
+                item = new QListWidgetItem(tr("Default/Unspecified Category"), list, capcat);
             } else {
                 item = new QListWidgetItem(categoryToString(capcat), list, capcat);
             }
         } else {
             if (cat == NoCategory) {
-                item = new QListWidgetItem(i18n("Default/Unspecified Category"), list, cat);
+                item = new QListWidgetItem(tr("Default/Unspecified Category"), list, cat);
             } else {
                 item = new QListWidgetItem(categoryToString(cat), list, cat);
             }
@@ -866,7 +862,7 @@ void DevicePreference::on_testPlaybackButton_toggled(bool down)
             const AudioOutputDevice &device = model->modelData(idx);
             m_audioOutput = new AudioOutput(this);
             if (!m_audioOutput->setOutputDevice(device)) {
-                KMessageBox::error(this, i18n("Failed to set the selected audio output device"));
+                QMessageBox::critical(this, tr("Failed to set the selected audio output device"),  tr("Failed to set the selected audio output device"));
                 break;
             }
 
@@ -896,7 +892,7 @@ void DevicePreference::on_testPlaybackButton_toggled(bool down)
 
             // Try to create a path
             if (!createPath(m_media, m_audioOutput).isValid()) {
-                KMessageBox::error(this, i18n("Your backend may not support audio recording"));
+                QMessageBox::critical(this, tr("Your backend may not support audio recording"), tr("Your backend may not support audio recording"));
                 break;
             }
 
@@ -917,7 +913,7 @@ void DevicePreference::on_testPlaybackButton_toggled(bool down)
 
             // Try to create a path
             if (!createPath(m_media, m_videoWidget).isValid()) {
-                KMessageBox::error(this, i18n("Your backend may not support video recording"));
+                QMessageBox::critical(this, tr("Your backend may not support video recording"), tr("Your backend may not support video recording"));
                 break;
             }
 
@@ -927,7 +923,7 @@ void DevicePreference::on_testPlaybackButton_toggled(bool down)
             m_media->setCurrentSource(device);
 
             // Set up the testing video widget
-            m_videoWidget->setWindowTitle(i18n("Testing %1", device.name()));
+            m_videoWidget->setWindowTitle(tr("Testing %1").arg(device.name()));
             m_videoWidget->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
             if (device.property("icon").canConvert(QVariant::String))
                 m_videoWidget->setWindowIcon(QIcon::fromTheme(device.property("icon").toString()));
