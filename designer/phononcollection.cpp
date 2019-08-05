@@ -74,7 +74,7 @@ class PhononCollection: public QObject, public QDesignerCustomWidgetCollectionIn
     Q_PLUGIN_METADATA(IID "org.kde.phonon.PhononCollection")
     Q_INTERFACES(QDesignerCustomWidgetCollectionInterface)
 public:
-    explicit PhononCollection(QObject *parent = 0);
+    explicit PhononCollection(QObject *parent = nullptr);
 
     virtual QList<QDesignerCustomWidgetInterface*> customWidgets() const override;
 

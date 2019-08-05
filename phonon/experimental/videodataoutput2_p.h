@@ -36,7 +36,7 @@ class VideoDataOutput2Private : public AbstractVideoDataOutputPrivate
     P_DECLARE_PUBLIC(VideoDataOutput2)
     PHONON_PRIVATECLASS
     public:
-        virtual QObject *qObject() { return q_func(); }
+        QObject *qObject() override { return q_func(); }
 };
 
 } // namespace Experimental

@@ -27,7 +27,7 @@ namespace Phonon
 
 class PacketPool;
 
-struct PacketPrivate;
+class PacketPrivate;
 /** \class Packet packetpool.h phonon/Packet
  * \brief Class to access memory preallocated by PacketPool
  *

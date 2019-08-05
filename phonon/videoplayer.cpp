@@ -37,9 +37,9 @@ class VideoPlayerPrivate
 {
     public:
         VideoPlayerPrivate()
-            : player(0)
-            , aoutput(0)
-            , voutput(0)
+            : player(nullptr)
+            , aoutput(nullptr)
+            , voutput(nullptr)
             , category(Phonon::NoCategory)
             , initialized(false) {}
 

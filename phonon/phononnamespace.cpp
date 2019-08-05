@@ -71,9 +71,9 @@ namespace Phonon
     {
         switch(c)
         {
-        case Phonon::NoCategory:
+        case Phonon::NoCaptureCategory:
             break;
-        case Phonon::CommunicationCategory:
+        case Phonon::CommunicationCaptureCategory:
             return QCoreApplication::translate("Phonon::", "Communication");
         case Phonon::RecordingCaptureCategory:
             return QCoreApplication::translate("Phonon::", "Recording");

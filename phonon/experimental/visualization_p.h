@@ -42,7 +42,7 @@ class VisualizationPrivate : public MediaNodePrivate, private MediaNodeDestructi
         VisualizationDescription description;
 
     private:
-        void phononObjectDestroyed(MediaNodePrivate *);
+        void phononObjectDestroyed(MediaNodePrivate *) override;
 };
 } // namespace Experimental
 } // namespace Phonon
