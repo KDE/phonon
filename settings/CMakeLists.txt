@@ -21,3 +21,4 @@ target_link_libraries(phononsettings
     Qt5::Widgets
 )
 
+install(TARGETS phononsettings ${INSTALL_TARGETS_DEFAULT_ARGS})
