@@ -3,7 +3,7 @@ project(metadatareader)
 
 set(CMAKE_AUTOMOC TRUE)
 
-find_package(Phonon4Qt5 REQUIRED)
+find_package(Phonon4Qt5 NO_MODULE) # Not required so it builds within phonon as well
 
 set(metadatareader_SRCS
     main.cpp

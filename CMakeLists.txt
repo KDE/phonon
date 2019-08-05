@@ -162,7 +162,7 @@ add_subdirectory(includes)
 if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
     # Demos may also be built standalone, so we need to skip their find_package call!
-    set(Phonon4Qt5_FOUND TRUE)
+    set(CMAKE_DISABLE_FIND_PACKAGE_Phonon4Qt5 TRUE)
     add_subdirectory(demos)
 endif()
 
