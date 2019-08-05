@@ -25,9 +25,10 @@
 
 #include "phonon_export.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
-
+#include <QObject>
+#include <QFileInfo>
+#include <QPluginLoader>
+#include <QStringList>
 
 class QUrl;
 class QIcon;
@@ -37,6 +38,70 @@ namespace Phonon
     class PlatformPlugin;
     class MediaNodePrivate;
     class AbstractMediaStream;
+
+    /**
+     * \internal
+     */
+    struct Q_DECL_HIDDEN BackendDescriptor {
+        explicit BackendDescriptor(const QString &path = QString())
+            : isValid(false)
+        {
+            QFileInfo info(path);
+            if (!info.exists()) {
+                return;
+            }
+
+            QPluginLoader loader(path);
+
+            iid = loader.metaData().value(QLatin1String("IID")).toString();
+
+            const QJsonObject metaData = loader.metaData().value(QLatin1String("MetaData")).toObject();
+            name = metaData.value(QLatin1String("Name")).toString();
+            icon = metaData.value(QLatin1String("Icon")).toString();
+            version = metaData.value(QLatin1String("Version")).toString();
+            website = metaData.value(QLatin1String("Website")).toString();
+            initialPreference = metaData.value(QLatin1String("InitialPreference")).toInt();
+
+            pluginPath = path;
+            pluginName = info.baseName();
+
+            if (name.isEmpty()) {
+                name = pluginName;
+            }
+
+            if (iid.isEmpty()) {
+                return; // Not valid.
+            }
+
+            isValid = true;
+        }
+
+        bool isValid;
+
+        QString iid;
+
+        QString name;
+        QString icon;
+        QString version;
+        QString website;
+        int initialPreference; // Initial preference declared by the backend; larger is better
+        int weight = -1; // Weight assinged by user configuration
+
+        QString pluginPath;
+        QString pluginName; // basename of the file. "legacy" name used for PHONON_BACKEND
+
+        /** Implemented for sorting */
+        bool operator <(const BackendDescriptor &rhs) const
+        {
+            if (weight >= 0) {
+                // If we have a weight the preference doesn't matter.
+                // User configured weight always wins against initial preference.
+                return (weight < rhs.weight);
+            }
+
+            return this->initialPreference < rhs.initialPreference;
+        }
+    };
 
 /**
  * \internal
@@ -79,6 +144,8 @@ namespace Factory
              */
             void availableVideoCaptureDevicesChanged();
     };
+
+    PHONON_EXPORT QList<BackendDescriptor> findBackends();
 
     /**
      * Returns a pointer to the object emitting the signals.

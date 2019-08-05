@@ -25,24 +25,7 @@
 #include <QWidget>
 #include <QHash>
 
-struct BackendDescriptor {
-    explicit BackendDescriptor(const QString &path = QString());
-
-    bool isValid;
-
-    QString iid;
-
-    QString name;
-    QString icon;
-    QString version;
-    QString website;
-    int preference;
-
-    QString pluginPath;
-
-    /** Implemented for qSort(QList) so we can easily sort by preference */
-    bool operator <(const BackendDescriptor &rhs) const;
-};
+#include "phonon/factory_p.h"
 
 class BackendSelection : public QWidget, private Ui::BackendSelection
 {
@@ -59,7 +42,7 @@ private slots:
     void down();
 
 private:
-    QHash<QString, struct BackendDescriptor> m_backends;
+    QHash<QString, Phonon::BackendDescriptor> m_backends;
     int m_emptyPage;
 };
 

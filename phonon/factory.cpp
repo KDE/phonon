@@ -57,8 +57,6 @@ class FactoryPrivate : public Phonon::Factory::Sender
         FactoryPrivate();
         ~FactoryPrivate();
         bool tryCreateBackend(const QString &path);
-        // Implementation depends on Qt version.
-        bool createSuitableBackend(const QString &libPath, const QList<QString> &plugins);
         bool createBackend();
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
         PlatformPlugin *platformPlugin();
@@ -126,109 +124,12 @@ bool FactoryPrivate::tryCreateBackend(const QString &path)
     return false;
 }
 
-struct BackendDescriptor {
-    explicit BackendDescriptor(const QString &path)
-        : isValid(false)
-    {
-        QPluginLoader loader(path);
-
-        iid = loader.metaData().value(QLatin1String("IID")).toString();
-
-        const QJsonObject metaData = loader.metaData().value(QLatin1String("MetaData")).toObject();
-        name = metaData.value(QLatin1String("Name")).toString();
-        icon = metaData.value(QLatin1String("Icon")).toString();
-        version = metaData.value(QLatin1String("Version")).toString();
-        website = metaData.value(QLatin1String("Website")).toString();
-        preference = metaData.value(QLatin1String("InitialPreference")).toDouble();
-
-        pluginPath = path;
-
-        if (name.isEmpty())
-            name = QFileInfo(path).baseName();
-
-        if (iid.isEmpty())
-            return; // Not valid.
-
-        isValid = true;
-    }
-
-    bool isValid;
-
-    QString iid;
-
-    QString name;
-    QString icon;
-    QString version;
-    QString website;
-    int preference;
-
-    QString pluginPath;
-
-    /** Implemented for qSort(QList) */
-    bool operator <(const BackendDescriptor &rhs) const
-    {
-        return this->preference < rhs.preference;
-    }
-};
-
-bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<QString> &plugins)
-{
-    // User configured preference.
-    QList<QString> iidPreference;
-    QSettings settings("kde.org", "libphonon");
-    const int size = settings.beginReadArray("Backends");
-    for (int i = 0; i < size; ++i) {
-        settings.setArrayIndex(i);
-        iidPreference.append(settings.value("iid").toString());
-    }
-    settings.endArray();
-
-    // Find physical backend plugins.
-    QList<BackendDescriptor> foundBackends;
-    foreach (const QString &plugin, plugins) {
-        BackendDescriptor descriptor(libPath + plugin);
-        if (!descriptor.isValid)
-            continue;
-        foundBackends.append(descriptor);
-    }
-    std::sort(foundBackends.rbegin(), foundBackends.rend());
-
-    // Try to pick a preferred backend.
-    foreach (const QString &iid, iidPreference) {
-        // This is slightly inefficient but we only have 2 backends :P
-        // Also using a list requires less overall code than QMap<iid,desc>.
-        QList<BackendDescriptor>::iterator it;
-        for (it = foundBackends.begin(); it != foundBackends.end(); ++it) {
-            const BackendDescriptor &descriptor = *it;
-            if (descriptor.iid != iid) {
-                continue;
-            }
-            if (tryCreateBackend(descriptor.pluginPath)) {
-                return true;
-            } else { // Drop backends that failed to construct.
-                it = foundBackends.erase(it);
-                if (it == foundBackends.end())
-                    break;
-            }
-        }
-    }
-
-    // No Preferred backend could be constructed. Try all remaining backends
-    // in order of initial preference.
-    // Note that unconstructable backends have been dropped previously.
-    foreach (const BackendDescriptor &descriptor, foundBackends) {
-        if (tryCreateBackend(descriptor.pluginPath))
-            return true;
-    }
-    return false;
-}
-
 // This entire function is so terrible to read I hope it implodes some day.
 bool FactoryPrivate::createBackend()
 {
     pDebug() << Q_FUNC_INFO << "Phonon" << PHONON_VERSION_STR << "trying to create backend...";
 #ifndef QT_NO_LIBRARY
-    Q_ASSERT(m_backendObject == 0);
+    Q_ASSERT(m_backendObject == nullptr);
 
     // If the user defines a backend with PHONON_BACKEND this overrides the
     // platform plugin (because we cannot influence its lookup priority) and
@@ -243,57 +144,16 @@ bool FactoryPrivate::createBackend()
         m_backendObject = f->createBackend();
     }
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
+
     if (!m_backendObject) {
-        ensureLibraryPathSet();
+        const auto backends = Factory::findBackends();
 
-        // could not load a backend through the platform plugin. Falling back to the default
-        // (finding the first loadable backend).
-        const QStringList paths = QCoreApplication::libraryPaths();
-        for (int i = 0; i < paths.count(); ++i) {
-#ifndef PHONON_BACKEND_DIR_SUFFIX
-#ifdef __GNUC__
-#error PHONON_BACKEND_DIR_SUFFIX must be defined.
-#endif
-#endif
-            const QString libPath = paths.at(i) + PHONON_BACKEND_DIR_SUFFIX;
-            const QDir dir(libPath);
-            if (!dir.exists()) {
-                pDebug() << Q_FUNC_INFO << dir.absolutePath() << "does not exist";
-                continue;
-            }
-
-            QStringList plugins(dir.entryList(QDir::Files));
-
-#ifdef Q_OS_SYMBIAN
-            /* On Symbian OS we might have two plugins, one which uses Symbian
-             * MMF framework("mmf"), and one which uses Real Networks's
-             * Helix("hxphonon"). We prefer the latter because it's more
-             * sophisticated, so we make sure the Helix backend is attempted
-             * to be loaded first, and the MMF backend is used for backup. */
-            {
-                const int helix = plugins.indexof(QLatin1String("hxphonon"));
-                if (helix != -1)
-                    plugins.move(helix, 0);
-            }
-#endif
-
-            if (!backendEnv.isEmpty()) {
-                pDebug() << "trying to load:" << backendEnv << "as first choice";
-                const int backendIndex = plugins.indexOf(QRegExp(backendEnv + ".*"));
-                if (backendIndex != -1)
-                    plugins.move(backendIndex, 0);
-            }
-
-            // This function implements a very simple trial-and-error loader for
-            // Qt 4 and on top of that a preference system for Qt 5. Therefore
-            // in Qt 5 we have backend preference independent of a platform
-            // plugin.
-            createSuitableBackend(libPath, plugins);
-
-            if (m_backendObject) {
+        for (const auto &backend : backends) {
+            if (tryCreateBackend(backend.pluginPath)) {
                 break;
             }
         }
+
         if (!m_backendObject) {
             pWarning() << Q_FUNC_INFO << "phonon backend plugin could not be loaded";
             return false;
@@ -321,10 +181,10 @@ bool FactoryPrivate::createBackend()
 FactoryPrivate::FactoryPrivate()
     :
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
-    m_platformPlugin(0),
+    m_platformPlugin(nullptr),
     m_noPlatformPlugin(false),
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
-    m_backendObject(0)
+    m_backendObject(nullptr)
 {
     // Add the post routine to make sure that all other global statics (especially the ones from Qt)
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
@@ -596,6 +456,68 @@ QObject *Factory::registerQObject(QObject *o)
         globalFactory->objects.append(o);
     }
     return o;
+}
+
+QList<BackendDescriptor> Factory::findBackends()
+{
+    static QList<Phonon::BackendDescriptor> backendList;
+    if (!backendList.isEmpty()) {
+        return backendList;
+    }
+    ensureLibraryPathSet();
+
+    QList<QString> iidPreference;
+    QSettings settings("kde.org", "libphonon");
+    const int size = settings.beginReadArray("Backends");
+    for (int i = 0; i < size; ++i) {
+        settings.setArrayIndex(i);
+        iidPreference.append(settings.value("iid").toString());
+    }
+    settings.endArray();
+
+    // Load default preference list.
+    const QStringList paths = QCoreApplication::libraryPaths();
+    for (const QString &path : paths) {
+        const QString libPath = path + PHONON_BACKEND_DIR_SUFFIX;
+        const QDir dir(libPath);
+        if (!dir.exists()) {
+            pDebug() << Q_FUNC_INFO << dir.absolutePath() << "does not exist";
+            continue;
+        }
+
+        const QStringList plugins(dir.entryList(QDir::Files));
+        for (const QString &plugin : plugins) {
+            Phonon::BackendDescriptor bd(libPath + plugin);
+            if (!bd.isValid) {
+                continue;
+            }
+
+            const auto index = iidPreference.indexOf(bd.iid);
+            if (index >= 0) {
+                // Apply a weight. Weight strongly influences sort order.
+                bd.weight = iidPreference.size() - index;
+            }
+            backendList.append(bd);
+        }
+
+        std::sort(backendList.rbegin(), backendList.rend());
+    }
+
+    // Apply PHONON_BACKEND override if set.
+    const QString backendEnv = qEnvironmentVariable("PHONON_BACKEND");
+    if (backendEnv.isEmpty()) {
+        return backendList;
+    }
+
+    for (int i = 0; i < backendList.size(); ++i) {
+        const auto &backend = backendList.at(i);
+        if (backendEnv == backend.pluginName) {
+            backendList.move(i, 0);
+            break;
+        }
+    }
+
+    return backendList;
 }
 
 } //namespace Phonon
