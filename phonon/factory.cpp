@@ -191,7 +191,7 @@ bool FactoryPrivate::createSuitableBackend(const QString &libPath, const QList<Q
             continue;
         foundBackends.append(descriptor);
     }
-    qSort(foundBackends);
+    std::sort(foundBackends.rbegin(), foundBackends.rend());
 
     // Try to pick a preferred backend.
     foreach (const QString &iid, iidPreference) {
