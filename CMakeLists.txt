@@ -9,6 +9,7 @@ option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
+option(PHONON_BUILD_SETTINGS "Build the settings GUI" OFF)
 
 option(PHONON_INSTALL_QT_COMPAT_HEADERS "Install QtPhonon compatibility headers" OFF)
 
@@ -20,6 +21,10 @@ if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
     message(DEPRECATION "PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT is deprecated! use KDE_INSTALL_USE_QT_SYS_PATHS")
     set(KDE_INSTALL_USE_QT_SYS_PATHS ON)
 endif()
+
+# Not set by ECM (yet)
+set(CMAKE_AUTOUIC TRUE)
+set(CMAKE_AUTORCC TRUE)
 
 find_package(ECM 5.60 NO_MODULE)
 set_package_properties(ECM PROPERTIES
@@ -159,6 +164,10 @@ if(PHONON_BUILD_DEMOS)
     # Demos may also be built standalone, so we need to skip their find_package call!
     set(Phonon4Qt5_FOUND TRUE)
     add_subdirectory(demos)
+endif()
+
+if(PHONON_BUILD_SETTINGS)
+    add_subdirectory(settings)
 endif()
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/${PHONON_LIB_SONAME}")
