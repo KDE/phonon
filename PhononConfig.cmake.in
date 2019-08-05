@@ -56,6 +56,3 @@ set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR} ${PHONON_INCLUDE_DIR}/KDE)
 if (PHONON_QT_COMPAT_HEADERS)
     list(APPEND PHONON_INCLUDES ${PHONON_INCLUDE_DIR}/Phonon)
 endif()
-
-# Find Internal is included in the backends' finders rather than here.
-# http://lists.kde.org/?l=kde-multimedia&m=135934335320148&w=2
