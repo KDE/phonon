@@ -18,6 +18,8 @@ set(PHONON_LIBRARY_DIR "@PACKAGE_KDE_INSTALL_LIBDIR@")
 #   this technically depends on ECM. since this is only useful to backends we
 #   we'll not want to drag ECM in automatically though.
 set(PHONON_BACKEND_DIR "${KDE_INSTALL_QTPLUGINDIR}/${PHONON_BACKEND_DIR_SUFFIX}")
+#   Do not use! Only here for trivial compatibility with old backends.
+set(PHONON_BUILDSYSTEM_DIR "@PACKAGE_BUILDSYSTEM_INSTALL_DIR@")
 
 # dependencies
 include(CMakeFindDependencyMacro)
