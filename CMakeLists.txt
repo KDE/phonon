@@ -95,6 +95,7 @@ set_package_properties(Qt5Widgets PROPERTIES
     URL "https://www.qt.io/download")
 
 # DBus Audio Output Introspection
+# TODO P6: drop dbus support, it's exhaustively ifdeffy and not used anywhere
 find_package(Qt5DBus)
 set_package_properties(Qt5DBus PROPERTIES
     TYPE RECOMMENDED
