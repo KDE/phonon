@@ -22,7 +22,6 @@
 #include "audiooutput.h"
 #include "audiooutput_p.h"
 
-#include "audiooutputadaptor_p.h"
 #include "audiooutputinterface.h"
 #include "factory_p.h"
 #include "globalconfig.h"
