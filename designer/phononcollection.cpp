@@ -65,8 +65,8 @@
 #include "videowidgetplugin.h"
 #include "volumesliderplugin.h"
 
-#include <QtDesigner/QDesignerCustomWidgetCollectionInterface>
-#include <QtCore/qplugin.h>
+#include <QDesignerCustomWidgetCollectionInterface>
+#include <qplugin.h>
 
 class PhononCollection: public QObject, public QDesignerCustomWidgetCollectionInterface
 {

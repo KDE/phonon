@@ -21,11 +21,7 @@
 
 #include "videowidgetplugin.h"
 
-#include <QtDesigner/QExtensionFactory>
-#include <QtDesigner/QExtensionManager>
-#include <QtDesigner/QDesignerFormEditorInterface>
-
-#include <QtCore/qplugin.h>
+#include <qplugin.h>
 
 #include <phonon/videowidget.h>
 

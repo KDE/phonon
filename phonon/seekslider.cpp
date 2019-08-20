@@ -65,7 +65,7 @@ void SeekSlider::setMediaObject(MediaObject *media)
 {
     P_D(SeekSlider);
     if (d->media) {
-        disconnect(d->media, 0, this, 0);
+        disconnect(d->media, nullptr, this, nullptr);
     }
     d->media = media;
 
@@ -124,6 +124,7 @@ void SeekSliderPrivate::_k_seekableChanged(bool isSeekable)
                 // set the tickInterval to some common value
                 media->setTickInterval(350);
             }
+            break;
         case Phonon::BufferingState:
         case Phonon::PausedState:
             setEnabled(true);
@@ -143,7 +144,7 @@ void SeekSliderPrivate::_k_seekableChanged(bool isSeekable)
 void SeekSliderPrivate::_k_currentSourceChanged()
 {
     //this releases the mouse and makes the seek slider stop seeking if the current source has changed
-    QMouseEvent event(QEvent::MouseButtonRelease, QPoint(), Qt::LeftButton, 0, 0);
+    QMouseEvent event(QEvent::MouseButtonRelease, QPoint(), Qt::LeftButton, nullptr, nullptr);
     QApplication::sendEvent(&slider, &event);
 }
 
@@ -166,6 +167,7 @@ void SeekSliderPrivate::_k_stateChanged(State newstate)
             // set the tickInterval to some common value
             media->setTickInterval(350);
         }
+        break;
     case Phonon::BufferingState:
     case Phonon::PausedState:
         setEnabled(true);

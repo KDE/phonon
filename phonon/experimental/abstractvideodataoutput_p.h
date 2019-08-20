@@ -35,8 +35,8 @@ class AbstractVideoDataOutputPrivate : public Phonon::AbstractVideoOutputPrivate
 {
     P_DECLARE_PUBLIC(AbstractVideoDataOutput)
     protected:
-        virtual bool aboutToDeleteBackendObject();
-        virtual void createBackendObject();
+        bool aboutToDeleteBackendObject() override;
+        void createBackendObject() override;
         void setupBackendObject();
 
     private:

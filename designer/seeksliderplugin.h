@@ -42,7 +42,7 @@
 #ifndef SEEKSLIDER_PLUGIN_H
 #define SEEKSLIDER_PLUGIN_H
 
-#include <QtDesigner/QDesignerCustomWidgetInterface>
+#include <QDesignerCustomWidgetInterface>
 
 class SeekSliderPlugin: public QObject, public QDesignerCustomWidgetInterface
 {

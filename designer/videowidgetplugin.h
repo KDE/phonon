@@ -22,7 +22,7 @@
 #ifndef VIDEOWIDGET_PLUGIN_H
 #define VIDEOWIDGET_PLUGIN_H
 
-#include <QtDesigner/QDesignerCustomWidgetInterface>
+#include <QDesignerCustomWidgetInterface>
 
 class VideoWidgetPlugin: public QObject, public QDesignerCustomWidgetInterface
 {
