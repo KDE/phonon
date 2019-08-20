@@ -9,7 +9,7 @@ option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
-option(PHONON_BUILD_SETTINGS "Build the settings GUI" OFF)
+option(PHONON_BUILD_SETTINGS "Build the settings GUI" ON)
 
 option(PHONON_INSTALL_QT_COMPAT_HEADERS "Install QtPhonon compatibility headers" OFF)
 
