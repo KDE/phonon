@@ -11,7 +11,6 @@ option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 option(PHONON_BUILD_SETTINGS "Build the settings GUI" ON)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
-option(PHONON_NO_DBUS "Deactivate DBus support (used to expose AudioOutputs and for deprecated runtime backend switching)" OFF)
 
 # Compat: we used to have our own option, now we defer to KDEInstallDirs
 if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
@@ -93,17 +92,6 @@ set_package_properties(Qt5Widgets PROPERTIES
     TYPE REQUIRED
     DESCRIPTION "Qt5 widgets module"
     URL "https://www.qt.io/download")
-
-# DBus Audio Output Introspection
-# TODO P6: drop dbus support, it's exhaustively ifdeffy and not used anywhere
-find_package(Qt5DBus)
-set_package_properties(Qt5DBus PROPERTIES
-    TYPE RECOMMENDED
-    DESCRIPTION "Needed to enable control of AudioOutputs via DBus"
-    URL "https://www.qt.io/download")
-if(Qt5DBus_FOUND AND NOT PHONON_NO_DBUS)
-    set(WITH_DBUS TRUE)
-endif()
 
 # Designer Plugin
 find_package(Qt5Designer)

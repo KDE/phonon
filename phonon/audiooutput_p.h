@@ -53,9 +53,6 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
             : AbstractAudioOutputPrivate(castId),
             name(Platform::applicationName()),
             volume(Platform::loadVolume(name)),
-#ifndef PHONON_NO_DBUS
-            adaptor(0),
-#endif
             deviceBeforeFallback(-1),
             outputDeviceOverridden(false),
             forceMove(false),
@@ -84,9 +81,6 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         Phonon::AudioOutputDevice device;
         qreal volume;
         QString streamUuid;
-#ifndef PHONON_NO_DBUS
-        Phonon::AudioOutputAdaptor *adaptor;
-#endif
         Category category;
         int deviceBeforeFallback;
         bool outputDeviceOverridden;

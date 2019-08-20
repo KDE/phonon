@@ -79,17 +79,6 @@ add_definitions(-DPHONON_BACKEND_DIR_SUFFIX="/${BACKEND_DIR_SUFFIX}/")
 
 set(optional_link_libraries)
 
-if(WITH_DBUS)
-    list(APPEND phonon_LIB_SRCS audiooutputadaptor.cpp)
-    list(APPEND optional_link_libraries Qt5::DBus)
-
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/org.kde.Phonon.AudioOutput.xml
-        ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml
-        @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.${PHONON_LIB_SONAME_CAMEL}.AudioOutput.xml
-        DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
-endif()
-
 if(PHONON_PULSESUPPORT)
     list(APPEND phonon_LIB_SRCS pulsestream.cpp)
     list(APPEND optional_link_libraries ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})

@@ -3,7 +3,4 @@
 #ifndef PHONONCONFIG_H_P
 #define PHONONCONFIG_H_P
 
-/** Whether to build with D-Bus support */
-#cmakedefine PHONON_NO_DBUS
-
 #endif // PHONONCONFIG_H_P

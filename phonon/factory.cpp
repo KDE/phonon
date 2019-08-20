@@ -38,9 +38,6 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QPointer>
 #include <QtCore/QSettings>
-#ifndef PHONON_NO_DBUS
-#include <QtDBus/QtDBus>
-#endif
 #include <QApplication>
 #include <QMessageBox>
 #include <QString>
@@ -70,13 +67,6 @@ class FactoryPrivate : public Phonon::Factory::Sender
         QList<MediaNodePrivate *> mediaNodePrivateList;
 
     private Q_SLOTS:
-        /**
-         * This is called via DBUS when the user changes the Phonon Backend.
-         */
-#ifndef PHONON_NO_DBUS
-        void phononBackendChanged();
-#endif //PHONON_NO_DBUS
-
         /**
          * unregisters the backend object
          */
@@ -190,10 +180,6 @@ FactoryPrivate::FactoryPrivate()
     // are still available. If the FactoryPrivate dtor is called too late many bad things can happen
     // as the whole backend might still be alive.
     qAddPostRoutine(globalFactory.destroy);
-#ifndef PHONON_NO_DBUS
-    QDBusConnection::sessionBus().connect(QString(), QString(), QLatin1String("org.kde.Phonon.Factory"),
-        QLatin1String("phononBackendChanged"), this, SLOT(phononBackendChanged()));
-#endif
 }
 
 FactoryPrivate::~FactoryPrivate()
@@ -266,18 +252,6 @@ void Factory::deregisterFrontendObject(MediaNodePrivate *bp)
     }
 }
 
-#ifndef PHONON_NO_DBUS
-void FactoryPrivate::phononBackendChanged()
-{
-    QMessageBox::information(qApp->activeWindow(),
-                             tr("Restart Application"),
-                             tr("You changed the backend of the Phonon multimedia system.\n\n"
-                                "To apply this change you will need to"
-                                " restart '%1'.").arg(qAppName()));
-    emit backendChanged();
-}
-#endif //PHONON_NO_DBUS
-
 //X void Factory::freeSoundcardDevices()
 //X {
 //X     if (globalFactory->backend) {
@@ -334,11 +308,6 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     if (m_noPlatformPlugin) {
         return 0;
     }
-#ifndef PHONON_NO_DBUS
-    if (!QCoreApplication::instance() || QCoreApplication::applicationName().isEmpty()) {
-        pWarning() << "Phonon needs QCoreApplication::applicationName to be set to export audio output names through the DBUS interface";
-    }
-#endif
     Q_ASSERT(QCoreApplication::instance());
     const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
     if (!platform_plugin_env.isEmpty()) {

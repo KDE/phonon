@@ -138,8 +138,7 @@ namespace Phonon
         Q_SIGNALS:
             /**
              * This signal is emitted whenever the volume has changed. As the
-             * volume can change without a call to setVolume (calls over dbus)
-             * this is important
+             * volume can change without a call to setVolume this is important
              * to keep a widget showing the current volume up to date.
              */
             void volumeChanged(qreal newVolume);
