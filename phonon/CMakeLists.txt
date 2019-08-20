@@ -95,16 +95,6 @@ if(PHONON_PULSESUPPORT)
     list(APPEND optional_link_libraries ${GOBJECT_LIBRARIES} ${PULSEAUDIO_LIBRARY} ${PULSEAUDIO_MAINLOOP_LIBRARY})
 endif()
 
-if(PHONON_NO_GRAPHICSVIEW)
-    message(STATUS "Not Building graphicsview.")
-    add_definitions(-DPHONON_NO_GRAPHICSVIEW)
-else()
-    message(STATUS "Building graphicsview.")
-    add_subdirectory(graphicsview)
-
-    list(APPEND optional_link_libraries OpenGL Qt5::OpenGl)
-endif()
-
 add_library(${PHONON_LIB_SONAME} SHARED ${phonon_LIB_SRCS})
 add_library(Phonon::${PHONON_LIB_SONAME} ALIAS ${PHONON_LIB_SONAME})
 

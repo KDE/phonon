@@ -211,7 +211,7 @@ class BackendInterface
              * Request to return a %VideoWidget object.
              */
             VideoWidgetClass,
-            VideoGraphicsObjectClass /* < Request to return a %VideoGraphicsObject */
+            VideoGraphicsObjectClass /* < No longer needs implementing; legacy */
         };
 
         /**

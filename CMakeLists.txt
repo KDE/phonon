@@ -6,7 +6,6 @@ include(FeatureSummary)
 option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
-option(PHONON_BUILD_DECLARATIVE_PLUGIN "Build the Qt Declarative (QML) plugin" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 option(PHONON_BUILD_SETTINGS "Build the settings GUI" ON)
@@ -97,12 +96,6 @@ set_package_properties(Qt5Widgets PROPERTIES
     DESCRIPTION "Qt5 widgets module"
     URL "https://www.qt.io/download")
 
-# Internal is shared with backends, so continue specific finders here...
-find_package(OpenGL)
-set_package_properties(OpenGL PROPERTIES
-    TYPE RECOMMENDED
-    URL "https://mesa3d.org")
-
 # DBus Audio Output Introspection
 find_package(Qt5DBus)
 set_package_properties(Qt5DBus PROPERTIES
@@ -120,36 +113,11 @@ set_package_properties(Qt5Designer PROPERTIES
     DESCRIPTION "Needed to build the Qt Designer plugin"
     URL "https://www.qt.io/download")
 
-# VideoGraphicsObject GL Painting
-find_package(Qt5OpenGL)
-set_package_properties(Qt5OpenGL PROPERTIES
-    TYPE RECOMMENDED
-    DESCRIPTION "Only recommended when bulding the super experimental QML support"
-    URL "https://www.qt.io/download")
-
-# Declarative/QML1
-find_package(Qt5Declarative)
-set_package_properties(Qt5Declarative PROPERTIES
-    TYPE RECOMMENDED
-    DESCRIPTION "Only recommended when bulding the super experimental QML support"
-    URL "https://www.qt.io/download")
-
-if(PHONON_BUILD_DECLARATIVE_PLUGIN AND OpenGL_FOUND AND Qt5OpenGL_FOUND AND Qt5Declarative_FOUND)
-    set(PHONON_NO_GRAPHICSVIEW false)
-else()
-    set(PHONON_NO_GRAPHICSVIEW true)
-endif()
-
 set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
 
 add_subdirectory(cmake)
 if(Qt5Designer_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)
     add_subdirectory(designer)
-endif()
-
-if(NOT PHONON_NO_GRAPHICSVIEW)
-    message(STATUS "Not building declarative plugin.")
-    add_subdirectory(declarative)
 endif()
 
 if(PHONON_BUILD_DOC)

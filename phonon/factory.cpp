@@ -318,6 +318,7 @@ FACTORY_IMPL(VolumeFaderEffect)
 FACTORY_IMPL(AudioOutput)
 #ifndef QT_NO_PHONON_VIDEO
 FACTORY_IMPL(VideoWidget)
+// TODO P6: remove left overs from VGO. was removed except for factory references.
 FACTORY_IMPL(VideoGraphicsObject)
 #endif //QT_NO_PHONON_VIDEO
 FACTORY_IMPL(AudioDataOutput)
