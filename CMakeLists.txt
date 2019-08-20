@@ -3,7 +3,6 @@ project(Phonon VERSION "4.10.60")
 
 include(FeatureSummary)
 
-option(PHONON_ASSERT_STATES "Enable code to assert backend state transitions" ON)
 option(PHONON_BUILD_EXPERIMENTAL "Build the experimental library" ON)
 option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
@@ -11,12 +10,6 @@ option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 option(PHONON_BUILD_SETTINGS "Build the settings GUI" ON)
 
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
-
-# Compat: we used to have our own option, now we defer to KDEInstallDirs
-if(PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT)
-    message(DEPRECATION "PHONON_INSTALL_QT_EXTENSIONS_INTO_SYSTEM_QT is deprecated! use KDE_INSTALL_USE_QT_SYS_PATHS")
-    set(KDE_INSTALL_USE_QT_SYS_PATHS ON)
-endif()
 
 # Not set by ECM (yet)
 set(CMAKE_AUTOUIC TRUE)
@@ -56,11 +49,6 @@ ecm_setup_version(${PHONON_VERSION}
     SOVERSION ${PHONON_SOVERSION}
     PACKAGE_VERSION_FILE ${PHONON_LIB_SONAME_CAMEL}ExperimentalConfigVersion.cmake
 )
-
-if (PHONON_ASSERT_STATES)
-    message(STATUS "Enabling backend state machine validation.")
-    add_definitions(-DPHONON_ASSERT_STATES)
-endif (PHONON_ASSERT_STATES)
 
 set(INCLUDE_INSTALL_DIR "${KDE_INSTALL_INCLUDEDIR}/${PHONON_LIB_SONAME}")
 set(PLUGIN_INSTALL_DIR ${KDE_INSTALL_QTPLUGINDIR})

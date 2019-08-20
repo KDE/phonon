@@ -25,11 +25,7 @@
 #include "mediaobject.h"
 #include "phononnamespace_p.h"
 
-#ifdef PHONON_ASSERT_STATES
 #define P_INVALID_STATE(msg) Q_ASSERT_X(0, __FILE__, msg)
-#else
-#define P_INVALID_STATE(msg) pDebug() << "State assert failed:" << msg
-#endif
 
 namespace Phonon
 {
