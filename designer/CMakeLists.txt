@@ -36,4 +36,4 @@ target_link_libraries(phononwidgets
     Qt5::Designer
 )
 
-install(TARGETS phononwidgets DESTINATION ${KDE_INSTALL_QTPLUGINDIR})
+install(TARGETS phononwidgets DESTINATION ${KDE_INSTALL_QTPLUGINDIR}/designer)
