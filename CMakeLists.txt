@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
-project(Phonon VERSION "4.10.90")
+project(Phonon VERSION "4.11.0")
 
 include(FeatureSummary)
 
