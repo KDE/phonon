@@ -23,13 +23,13 @@ set_package_properties(ECM PROPERTIES
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
 include(CMakePackageConfigHelpers)
 include(ECMGeneratePriFile)
 include(ECMGeneratePkgConfigFile)
-include(KDEInstallDirs)
 include(ECMPoQmTools)
-include(KDECMakeSettings)
-include(KDECompilerSettings)
 
 set(PHONON_LIB_SONAME phonon4qt5)
 set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
