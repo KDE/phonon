@@ -170,7 +170,7 @@ ecm_generate_pri_file(
    LIB_NAME ${PHONON_LIB_SONAME}
    DEPS "core widgets"
    FILENAME_VAR pri_filename
-   INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}/phonon
+   INCLUDE_INSTALL_DIR ${INCLUDE_INSTALL_DIR}
 )
 install(FILES ${pri_filename} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
