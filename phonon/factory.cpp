@@ -52,7 +52,7 @@ class FactoryPrivate : public Phonon::Factory::Sender
     Q_OBJECT
     public:
         FactoryPrivate();
-        ~FactoryPrivate();
+        ~FactoryPrivate() override;
         bool tryCreateBackend(const QString &path);
         bool createBackend();
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN

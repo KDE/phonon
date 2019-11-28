@@ -39,7 +39,7 @@ class EffectPrivate : public MediaNodePrivate
     P_DECLARE_PUBLIC(Effect)
     PHONON_PRIVATECLASS
     public:
-        virtual QObject *qObject() override { return q_func(); }
+        QObject *qObject() override { return q_func(); }
     protected:
         EffectPrivate()
         {

@@ -51,17 +51,17 @@ class SeekSliderPlugin: public QObject, public QDesignerCustomWidgetInterface
 public:
     explicit SeekSliderPlugin(const QString &group, QObject *parent = 0);
 
-    virtual QString name() const override;
-    virtual QString group() const override;
-    virtual QString toolTip() const override;
-    virtual QString whatsThis() const override;
-    virtual QString includeFile() const override;
-    virtual QIcon icon() const override;
-    virtual bool isContainer() const override;
-    virtual QWidget *createWidget(QWidget *parent) override;
-    virtual bool isInitialized() const override;
-    virtual void initialize(QDesignerFormEditorInterface *core) override;
-    virtual QString domXml() const override;
+    QString name() const override;
+    QString group() const override;
+    QString toolTip() const override;
+    QString whatsThis() const override;
+    QString includeFile() const override;
+    QIcon icon() const override;
+    bool isContainer() const override;
+    QWidget *createWidget(QWidget *parent) override;
+    bool isInitialized() const override;
+    void initialize(QDesignerFormEditorInterface *core) override;
+    QString domXml() const override;
 
 private:
     const QString m_group;

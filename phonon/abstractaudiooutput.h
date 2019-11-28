@@ -44,7 +44,7 @@ namespace Phonon
     protected:
         AbstractAudioOutput(AbstractAudioOutputPrivate &dd, QObject *parent);
     public:
-        ~AbstractAudioOutput();
+        ~AbstractAudioOutput() override;
     };
 } //namespace Phonon
 

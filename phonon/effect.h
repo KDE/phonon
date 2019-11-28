@@ -66,7 +66,7 @@ namespace Phonon
         P_DECLARE_PRIVATE(Effect)
 
         public:
-            ~Effect();
+            ~Effect() override;
 
 //X             enum Type {
 //X                 AudioEffect,

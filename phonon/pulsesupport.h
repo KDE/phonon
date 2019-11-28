@@ -190,7 +190,7 @@ namespace Phonon
 
         private:
             PulseSupport();
-            ~PulseSupport();
+            ~PulseSupport() override;
 
             bool mEnabled;
             bool m_requested;

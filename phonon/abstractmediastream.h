@@ -106,7 +106,7 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
     friend class MediaObjectPrivate;
     friend class StreamInterface;
     public:
-        virtual ~AbstractMediaStream();
+        ~AbstractMediaStream() override;
 
     protected:
         /**

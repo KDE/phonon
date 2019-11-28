@@ -85,7 +85,7 @@ class PHONON_EXPORT VideoPlayer : public QWidget
          * anymore. If you need a persistent audio output don't use
          * %VideoPlayer but MediaObject, VideoPath and VideoOutput.
          */
-        ~VideoPlayer();
+        ~VideoPlayer() override;
 
         /**
          * Get the total time (in milliseconds) of the file currently being played.

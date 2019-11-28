@@ -37,7 +37,7 @@ class FactoryPrivate : public Phonon::Experimental::Factory::Sender
 {
     public:
         FactoryPrivate();
-        ~FactoryPrivate();
+        ~FactoryPrivate() override;
         //QPointer<QObject> m_backendObject;
 
     private Q_SLOTS:

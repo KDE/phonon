@@ -60,7 +60,7 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
         {
         }
 
-        ~AudioOutputPrivate();
+        ~AudioOutputPrivate() override;
 
         enum DeviceChangeType {
             FallbackChange,

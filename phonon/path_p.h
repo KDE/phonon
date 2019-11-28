@@ -51,7 +51,7 @@ class PathPrivate : public QSharedData, private MediaNodeDestructionHandler
         {
         }
 
-        ~PathPrivate();
+        ~PathPrivate() override;
 
         MediaNode *sourceNode;
         MediaNode *sinkNode;

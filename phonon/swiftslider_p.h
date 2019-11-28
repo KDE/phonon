@@ -50,7 +50,7 @@ class SwiftSlider : public QSlider
 	Q_OBJECT
 public:
 	SwiftSlider(Qt::Orientation orientation, QWidget * parent);
-	~SwiftSlider();
+	~SwiftSlider() override;
 
 signals:
         void scrollStart();

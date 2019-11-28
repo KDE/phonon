@@ -39,7 +39,7 @@ namespace Phonon
         Q_OBJECT
         public:
             PulseStream(QString streamUuid, QString role);
-            ~PulseStream();
+            ~PulseStream() override;
 
             QString uuid() const;
 

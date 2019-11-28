@@ -79,7 +79,7 @@ class PHONONEXPERIMENTAL_EXPORT Visualization : public QObject, public MediaNode
     Q_PROPERTY(VisualizationDescription visualization READ visualization WRITE setVisualization)
 
     public:
-        ~Visualization();
+        ~Visualization() override;
 
         VisualizationDescription visualization() const;
         void setVisualization(const VisualizationDescription &newVisualization);

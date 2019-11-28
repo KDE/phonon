@@ -41,7 +41,7 @@ class MediaControllerPrivate : public FrontendInterfacePrivate
     public:
         MediaControllerPrivate(MediaObject *mp) : FrontendInterfacePrivate(mp) {}
 
-        virtual void backendObjectChanged(QObject *) override;
+        void backendObjectChanged(QObject *) override;
         MediaController *q;
 };
 

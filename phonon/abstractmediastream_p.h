@@ -43,7 +43,7 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHan
     public:
         void setStreamInterface(StreamInterface *);
         void setMediaObjectPrivate(MediaObjectPrivate *);
-        ~AbstractMediaStreamPrivate();
+        ~AbstractMediaStreamPrivate() override;
 
     protected:
         AbstractMediaStreamPrivate()

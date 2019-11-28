@@ -55,7 +55,7 @@ class PHONONEXPERIMENTAL_EXPORT AbstractAudioDataOutput : public Phonon::MediaNo
          * Constructs an AbstractAudioDataOutput
          */
         AbstractAudioDataOutput();
-        ~AbstractAudioDataOutput();
+        ~AbstractAudioDataOutput() override;
 
         /**
          * Lists the formats this output is allowed to pass via frameReady.

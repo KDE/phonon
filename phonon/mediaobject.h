@@ -165,7 +165,7 @@ namespace Phonon
             /**
              * Destroys the MediaObject.
              */
-            ~MediaObject();
+            ~MediaObject() override;
 
             /**
              * Get the current state.

@@ -52,9 +52,9 @@ class PHONONEXPERIMENTAL_EXPORT VideoDataOutput2 : public QObject, public Abstra
     PHONON_HEIR(VideoDataOutput2)
 
     protected:
-        virtual void frameReady(const VideoFrame2 &) override;
+        void frameReady(const VideoFrame2 &) override;
 
-        virtual void endOfMedia() override;
+        void endOfMedia() override;
 
     Q_SIGNALS:
         /**

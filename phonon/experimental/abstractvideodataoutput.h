@@ -62,7 +62,7 @@ class PHONONEXPERIMENTAL_EXPORT AbstractVideoDataOutput : public AbstractVideoOu
          * Constructs an AbstractVideoDataOutput
          */
         AbstractVideoDataOutput();
-        ~AbstractVideoDataOutput();
+        ~AbstractVideoDataOutput() override;
 
         /**
          * Lists the formats this output is allowed to pass via frameReady.

@@ -36,8 +36,8 @@ class AbstractAudioDataOutputPrivate : public Phonon::MediaNodePrivate
 {
     P_DECLARE_PUBLIC(AbstractAudioDataOutput)
     protected:
-        virtual bool aboutToDeleteBackendObject() override { return true; }
-        virtual void createBackendObject() override;
+        bool aboutToDeleteBackendObject() override { return true; }
+        void createBackendObject() override;
         void setupBackendObject();
 
     private:

@@ -99,7 +99,7 @@ class PHONON_EXPORT MediaController : public QObject
         };
 
         MediaController(MediaObject *parent);
-        ~MediaController();
+        ~MediaController() override;
 
         Features supportedFeatures() const;
 

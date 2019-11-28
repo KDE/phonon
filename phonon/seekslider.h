@@ -109,7 +109,7 @@ class PHONON_EXPORT SeekSlider : public QWidget
         /**
          * Destroys the seek slider.
          */
-        ~SeekSlider();
+        ~SeekSlider() override;
 
         bool hasTracking() const;
         void setTracking(bool tracking);

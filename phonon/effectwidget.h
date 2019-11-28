@@ -49,7 +49,7 @@ class Effect;
         P_DECLARE_PRIVATE(EffectWidget)
         public:
             explicit EffectWidget(Effect *effect, QWidget *parent = 0);
-            ~EffectWidget();
+            ~EffectWidget() override;
 
         protected:
             //EffectWidget(EffectWidgetPrivate &dd, QWidget *parent);
