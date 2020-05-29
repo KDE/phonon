@@ -1,14 +1,19 @@
 maintainer: sitter
 description: Phonon, the Qt multimedia abstraction library.
 platforms:
-  - name: All
+    - name: Linux
+    - name: FreeBSD
+    - name: Windows
+#    - name: MacOSX
+#    - name: Android
 release: true
 public_lib: true
 public_source_dirs:
   - phonon
-public_doc_dir:
-  - doc
-public_example_dir:
-  - demos
+public_doc_dir: doc
+libraries:
+ - qmake: phonon4qt5
+   cmake: "Phonon::phonon4qt5"
+cmakename: Phonon4Qt5
 irc: kde-multimedia
 mailinglist: kde-multimedia
