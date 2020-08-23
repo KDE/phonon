@@ -317,14 +317,14 @@ void MediaController::setCurrentAudioChannel(const Phonon::AudioChannelDescripti
 {
     IFACE;
     iface->interfaceCall(AddonInterface::AudioChannelInterface,
-        AddonInterface::setCurrentAudioChannel, QList<QVariant>() << qVariantFromValue(stream));
+        AddonInterface::setCurrentAudioChannel, QList<QVariant>() << QVariant::fromValue(stream));
 }
 
 void MediaController::setCurrentSubtitle(const Phonon::SubtitleDescription &stream)
 {
     IFACE;
     iface->interfaceCall(AddonInterface::SubtitleInterface,
-        AddonInterface::setCurrentSubtitle, QList<QVariant>() << qVariantFromValue(stream));
+        AddonInterface::setCurrentSubtitle, QList<QVariant>() << QVariant::fromValue(stream));
 }
 
 void MediaController::setCurrentSubtitle(const QUrl &url)
