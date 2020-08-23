@@ -234,7 +234,11 @@ void ObjectDescriptionModelData::moveUp(const QModelIndex &index)
 
     emit d->model->layoutAboutToBeChanged();
     QModelIndex above = index.sibling(index.row() - 1, index.column());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    d->data.swapItemsAt(index.row(), above.row());
+#else
     d->data.swap(index.row(), above.row());
+#endif
     QModelIndexList from, to;
     from << index << above;
     to << above << index;
@@ -249,7 +253,11 @@ void ObjectDescriptionModelData::moveDown(const QModelIndex &index)
 
     emit d->model->layoutAboutToBeChanged();
     QModelIndex below = index.sibling(index.row() + 1, index.column());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
+    d->data.swapItemsAt(index.row(), below.row());
+#else
     d->data.swap(index.row(), below.row());
+#endif
     QModelIndexList from, to;
     from << index << below;
     to << below << index;
