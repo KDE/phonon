@@ -155,7 +155,7 @@ class PHONON_EXPORT ObjectDescriptionData : public QSharedData //krazy:exclude=d
 
         ~ObjectDescriptionData();
 
-        ObjectDescriptionData(ObjectDescriptionPrivate * = 0);
+        ObjectDescriptionData(ObjectDescriptionPrivate * = nullptr);
         ObjectDescriptionData(int index, const QHash<QByteArray, QVariant> &properties);
 
     protected:
@@ -253,7 +253,7 @@ class ObjectDescription
          */
         inline int index() const { return d->index(); } //krazy:exclude=inline
 
-        ObjectDescription() : d(new ObjectDescriptionData(0)) {}
+        ObjectDescription() : d(new ObjectDescriptionData(nullptr)) {}
         ObjectDescription(int index, const QHash<QByteArray, QVariant> &properties) : d(new ObjectDescriptionData(index, properties)) {}
 
     protected:

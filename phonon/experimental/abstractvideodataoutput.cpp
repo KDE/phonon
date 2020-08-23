@@ -74,7 +74,7 @@ void AbstractVideoDataOutput::setRunning(bool running)
         if (running) {
             iface->setFrontendObject(this);
         } else {
-            iface->setFrontendObject(0);
+            iface->setFrontendObject(nullptr);
         }
     }
 }
@@ -112,7 +112,7 @@ void AbstractVideoDataOutputPrivate::createBackendObject()
     if (m_backendObject)
         return;
     //P_Q(AbstractVideoDataOutput);
-    m_backendObject = Factory::createVideoDataOutput(0);
+    m_backendObject = Factory::createVideoDataOutput(nullptr);
     if (m_backendObject) {
         setupBackendObject();
     }

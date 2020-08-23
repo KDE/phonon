@@ -60,8 +60,8 @@ class PlatformPlugin
          * Shows a notification popup
          */
         virtual void notification(const char *notificationName, const QString &text,
-                const QStringList &actions = QStringList(), QObject *receiver = 0,
-                const char *actionSlot = 0) const = 0;
+                const QStringList &actions = QStringList(), QObject *receiver = nullptr,
+                const char *actionSlot = nullptr) const = 0;
 
         /**
          * Returns the name of the application. For most Qt application this is

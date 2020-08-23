@@ -41,7 +41,7 @@ StreamInterface::~StreamInterface()
 {
     if (d->connected) {
         AbstractMediaStreamPrivate *dd = d->mediaSource.stream()->d_func();
-        dd->setStreamInterface(0);
+        dd->setStreamInterface(nullptr);
     }
     delete d;
 }

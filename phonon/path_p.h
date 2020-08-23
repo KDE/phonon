@@ -44,9 +44,9 @@ class PathPrivate : public QSharedData, private MediaNodeDestructionHandler
     friend class Path;
     public:
         PathPrivate()
-            : sourceNode(0), sinkNode(0)
+            : sourceNode(nullptr), sinkNode(nullptr)
 #ifndef QT_NO_PHONON_EFFECT
-            , effectsParent(0)
+            , effectsParent(nullptr)
 #endif //QT_NO_PHONON_EFFECT
         {
         }

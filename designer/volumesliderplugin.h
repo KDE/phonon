@@ -49,7 +49,7 @@ class VolumeSliderPlugin: public QObject, public QDesignerCustomWidgetInterface
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
-    explicit VolumeSliderPlugin(const QString &group, QObject *parent = 0);
+    explicit VolumeSliderPlugin(const QString &group, QObject *parent = nullptr);
 
     QString name() const override;
     QString group() const override;

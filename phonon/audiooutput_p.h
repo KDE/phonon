@@ -42,7 +42,7 @@ class AudioOutputPrivate : public AbstractAudioOutputPrivate
             if (x && x->castId == MediaNodePrivate::AudioOutputType) {
                 return static_cast<AudioOutputPrivate *>(x);
             }
-            return 0;
+            return nullptr;
         }
         void init(Phonon::Category c);
         QString getStreamUuid();

@@ -119,7 +119,7 @@ class PHONON_EXPORT Path
          * \see removeEffect
          * \see effects
          */
-        Effect *insertEffect(const EffectDescription &desc, Effect *insertBefore = 0);
+        Effect *insertEffect(const EffectDescription &desc, Effect *insertBefore = nullptr);
 
         /**
          * Inserts an effect into the path.
@@ -142,7 +142,7 @@ class PHONON_EXPORT Path
          * \see removeEffect
          * \see effects
          */
-        bool insertEffect(Effect *newEffect, Effect *insertBefore = 0);
+        bool insertEffect(Effect *newEffect, Effect *insertBefore = nullptr);
 
         /**
          * Removes an effect from the path.

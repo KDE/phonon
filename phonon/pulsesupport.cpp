@@ -51,7 +51,7 @@ namespace Phonon
 {
 
 QMutex probeMutex;
-static PulseSupport *s_instance = NULL;
+static PulseSupport *s_instance = nullptr;
 static bool s_wasShutDown = false;
 static bool s_pulseActive = false;
 
@@ -75,7 +75,7 @@ static int debugLevel() {
     return level;
 }
 
-static void logMessage(const QString &message, int priority = 2, QObject *obj=0);
+static void logMessage(const QString &message, int priority = 2, QObject *obj=nullptr);
 static void logMessage(const QString &message, int priority, QObject *obj)
 {
     if (debugLevel() > 0) {
@@ -144,8 +144,8 @@ class PulseUserData
         QMap<Phonon::CaptureCategory, QMap<int, int> > newCaptureDevicePriorities; // prio, device
 };
 
-static pa_glib_mainloop *s_mainloop = NULL;
-static pa_context *s_context = NULL;
+static pa_glib_mainloop *s_mainloop = nullptr;
+static pa_context *s_context = nullptr;
 
 
 
@@ -176,7 +176,7 @@ static PulseStream* findStreamByPulseIndex(QMap<QString, PulseStream*> map, uint
   for (it = map.begin(); it != map.end(); ++it)
     if ((*it)->index() == index)
       return *it;
-  return NULL;
+  return nullptr;
 }
 
 static Phonon::Category pulseRoleToPhononCategory(const char *role, bool *success)
@@ -450,9 +450,9 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
     // QString wrapper
     QString name(info->name);
     int index;
-    QMap<Phonon::Category, QMap<int, int> > *new_prio_map_cats = NULL; // prio, device
-    QMap<Phonon::CaptureCategory, QMap<int, int> > *new_prio_map_capcats = NULL; // prio, device
-    QMap<QString, AudioDevice> *new_devices = NULL;
+    QMap<Phonon::Category, QMap<int, int> > *new_prio_map_cats = nullptr; // prio, device
+    QMap<Phonon::CaptureCategory, QMap<int, int> > *new_prio_map_capcats = nullptr; // prio, device
+    QMap<QString, AudioDevice> *new_devices = nullptr;
 
     bool isSink = false;
     bool isSource = false;
@@ -625,7 +625,7 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
                 }
             } else {
                 pa_operation *o;
-                if (!(o = pa_context_get_sink_input_info(c, index, sink_input_cb, NULL))) {
+                if (!(o = pa_context_get_sink_input_info(c, index, sink_input_cb, nullptr))) {
                     logMessage(QString::fromLatin1("pa_context_get_sink_input_info() failed"));
                     return;
                 }
@@ -642,7 +642,7 @@ static void subscribe_cb(pa_context *c, pa_subscription_event_type_t t, uint32_t
                 }
             } else {
                 pa_operation *o;
-                if (!(o = pa_context_get_source_output_info(c, index, source_output_cb, NULL))) {
+                if (!(o = pa_context_get_source_output_info(c, index, source_output_cb, nullptr))) {
                     logMessage(QString::fromLatin1("pa_context_get_sink_input_info() failed"));
                     return;
                 }
@@ -684,11 +684,11 @@ static void context_state_callback(pa_context *c, void *)
 
         // 1. Register for the stream changes (except during probe)
         if (s_context == c) {
-            pa_context_set_subscribe_callback(c, subscribe_cb, NULL);
+            pa_context_set_subscribe_callback(c, subscribe_cb, nullptr);
 
             if (!(o = pa_context_subscribe(c, (pa_subscription_mask_t)
                                               (PA_SUBSCRIPTION_MASK_SINK_INPUT|
-                                               PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT), NULL, NULL))) {
+                                               PA_SUBSCRIPTION_MASK_SOURCE_OUTPUT), nullptr, nullptr))) {
                 logMessage(QLatin1String("pa_context_subscribe() failed"));
                 return;
             }
@@ -702,7 +702,7 @@ static void context_state_callback(pa_context *c, void *)
               logMessage(QString::fromLatin1("Phonon Output Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(stream->uuid()));
               stream->setIndex(PA_INVALID_INDEX);
             }
-            if (!(o = pa_context_get_sink_input_info_list(c, sink_input_cb, NULL))) {
+            if (!(o = pa_context_get_sink_input_info_list(c, sink_input_cb, nullptr))) {
               logMessage(QString::fromLatin1("pa_context_get_sink_input_info_list() failed"));
               return;
             }
@@ -713,7 +713,7 @@ static void context_state_callback(pa_context *c, void *)
               logMessage(QString::fromLatin1("Phonon Capture Stream %1 is gone at the PA end. Marking it as invalid in our cache as we may reuse it.").arg(stream->uuid()));
               stream->setIndex(PA_INVALID_INDEX);
             }
-            if (!(o = pa_context_get_source_output_info_list(c, source_output_cb, NULL))) {
+            if (!(o = pa_context_get_source_output_info_list(c, source_output_cb, nullptr))) {
               logMessage(QString::fromLatin1("pa_context_get_source_output_info_list() failed"));
               return;
             }
@@ -723,8 +723,8 @@ static void context_state_callback(pa_context *c, void *)
 #if HAVE_PULSEAUDIO_DEVICE_MANAGER
         // 2a. Attempt to initialise Device Manager info (except during probe)
         if (s_context == c) {
-            pa_ext_device_manager_set_subscribe_cb(c, ext_device_manager_subscribe_cb, NULL);
-            if (!(o = pa_ext_device_manager_subscribe(c, 1, NULL, NULL))) {
+            pa_ext_device_manager_set_subscribe_cb(c, ext_device_manager_subscribe_cb, nullptr);
+            if (!(o = pa_ext_device_manager_subscribe(c, 1, nullptr, nullptr))) {
                 logMessage(QString::fromLatin1("pa_ext_device_manager_subscribe() failed"));
                 return;
             }
@@ -766,7 +766,7 @@ static void context_state_callback(pa_context *c, void *)
             pa_context_disconnect(c);
         else {
             pa_context_unref(s_context);
-            s_context = NULL;
+            s_context = nullptr;
             QTimer::singleShot(50, PulseSupport::getInstance(), SLOT(connectToDaemon()));
         }
     }
@@ -776,10 +776,10 @@ static void context_state_callback(pa_context *c, void *)
 PulseSupport *PulseSupport::getInstanceOrNull(bool allowNull)
 {
     if (s_wasShutDown && allowNull) {
-        return NULL;
+        return nullptr;
     }
 
-    if (NULL == s_instance) {
+    if (nullptr == s_instance) {
         /*
          * In order to prevent the instance being used from multiple threads
          * prior to it being contructed fully, we need to ensure we obtain a
@@ -787,7 +787,7 @@ PulseSupport *PulseSupport::getInstanceOrNull(bool allowNull)
          * if the object is created again before proceeding.
          */
         probeMutex.lock();
-        if (NULL == s_instance)
+        if (nullptr == s_instance)
             s_instance = new PulseSupport();
         probeMutex.unlock();
     }
@@ -801,9 +801,9 @@ PulseSupport *PulseSupport::getInstance()
 
 void PulseSupport::shutdown()
 {
-    if (NULL != s_instance) {
+    if (nullptr != s_instance) {
         delete s_instance;
-        s_instance = NULL;
+        s_instance = nullptr;
         s_wasShutDown = true;
     }
 }
@@ -863,7 +863,7 @@ PulseSupport::PulseSupport()
 
     logMessage(QLatin1String("Probing for PulseAudio..."));
     // (cg) Convert to PA_CONTEXT_NOFLAGS when PulseAudio 0.9.19 is required
-    if (pa_context_connect(p_test_context, NULL, static_cast<pa_context_flags_t>(0), NULL) < 0) {
+    if (pa_context_connect(p_test_context, nullptr, static_cast<pa_context_flags_t>(0), nullptr) < 0) {
         logMessage(QString::fromLatin1("PulseAudio support disabled: %1").arg(QString::fromLocal8Bit(pa_strerror(pa_context_errno(p_test_context)))));
         pa_context_disconnect(p_test_context);
         pa_context_unref(p_test_context);
@@ -871,9 +871,9 @@ PulseSupport::PulseSupport()
         return;
     }
 
-    pa_context_set_state_callback(p_test_context, &context_state_callback, NULL);
+    pa_context_set_state_callback(p_test_context, &context_state_callback, nullptr);
     for (;;) {
-        pa_mainloop_iterate(p_test_mainloop, 1, NULL);
+        pa_mainloop_iterate(p_test_mainloop, 1, nullptr);
 
         if (!PA_CONTEXT_IS_GOOD(pa_context_get_state(p_test_context))) {
             logMessage(QLatin1String("PulseAudio probe complete."));
@@ -894,7 +894,7 @@ PulseSupport::PulseSupport()
 
     // Now we connect for real using a proper main loop that we can forget
     // all about processing.
-    s_mainloop = pa_glib_mainloop_new(NULL);
+    s_mainloop = pa_glib_mainloop_new(nullptr);
     Q_ASSERT(s_mainloop);
 
     connectToDaemon();
@@ -906,12 +906,12 @@ PulseSupport::~PulseSupport()
 #ifdef HAVE_PULSEAUDIO
     if (s_context) {
         pa_context_disconnect(s_context);
-        s_context = NULL;
+        s_context = nullptr;
     }
 
     if (s_mainloop) {
         pa_glib_mainloop_free(s_mainloop);
-        s_mainloop = NULL;
+        s_mainloop = nullptr;
     }
 #endif
 }
@@ -923,8 +923,8 @@ void PulseSupport::connectToDaemon()
     pa_mainloop_api *api = pa_glib_mainloop_get_api(s_mainloop);
 
     s_context = pa_context_new(api, "libphonon");
-    if (pa_context_connect(s_context, NULL, PA_CONTEXT_NOFAIL, 0) >= 0)
-        pa_context_set_state_callback(s_context, &context_state_callback, NULL);
+    if (pa_context_connect(s_context, nullptr, PA_CONTEXT_NOFAIL, nullptr) >= 0)
+        pa_context_set_state_callback(s_context, &context_state_callback, nullptr);
 #endif
 }
 
@@ -1081,11 +1081,11 @@ static void setDevicePriority(QString role, QStringList list)
     foreach (const QString &str, list) {
         devices[i++] = pa_xstrdup(str.toUtf8().constData());
     }
-    devices[list.size()] = NULL;
+    devices[list.size()] = nullptr;
 
 #if HAVE_PULSEAUDIO_DEVICE_MANAGER
     pa_operation *o;
-    if (!(o = pa_ext_device_manager_reorder_devices_for_role(s_context, role.toUtf8().constData(), (const char**)devices, NULL, NULL)))
+    if (!(o = pa_ext_device_manager_reorder_devices_for_role(s_context, role.toUtf8().constData(), (const char**)devices, nullptr, nullptr)))
         logMessage(QString::fromLatin1("pa_ext_device_manager_reorder_devices_for_role() failed"));
     else
         pa_operation_unref(o);
@@ -1242,7 +1242,7 @@ QHash<QString, QString> PulseSupport::streamProperties(QString streamUuid) const
     QHash<QString, QString> properties;
 
 #ifdef HAVE_PULSEAUDIO
-    PulseStream *stream = 0;
+    PulseStream *stream = nullptr;
 
     // Try to find the stream among the known output streams.
     if (!stream)
@@ -1337,7 +1337,7 @@ bool PulseSupport::setOutputDevice(QString streamUuid, int device) {
 
         /// @todo Find a way to move the stream without saving it... We don't want to pollute the stream restore db.
         pa_operation* o;
-        if (!(o = pa_context_move_sink_input_by_index(s_context, pulse_stream_index, pulse_device_index, NULL, NULL))) {
+        if (!(o = pa_context_move_sink_input_by_index(s_context, pulse_stream_index, pulse_device_index, nullptr, nullptr))) {
             logMessage(QString::fromLatin1("pa_context_move_sink_input_by_index() failed"));
             return false;
         }
@@ -1372,7 +1372,7 @@ bool PulseSupport::setOutputVolume(QString streamUuid, qreal volume) {
 
         logMessage(QString::fromLatin1("Found PA index %1. Calling pa_context_set_sink_input_volume()").arg(stream->index()));
         pa_operation* o;
-        if (!(o = pa_context_set_sink_input_volume(s_context, stream->index(), &vol, NULL, NULL))) {
+        if (!(o = pa_context_set_sink_input_volume(s_context, stream->index(), &vol, nullptr, nullptr))) {
             logMessage(QString::fromLatin1("pa_context_set_sink_input_volume() failed"));
             return false;
         }
@@ -1400,7 +1400,7 @@ bool PulseSupport::setOutputMute(QString streamUuid, bool mute) {
 
         logMessage(QString::fromLatin1("Found PA index %1. Calling pa_context_set_sink_input_mute()").arg(stream->index()));
         pa_operation* o;
-        if (!(o = pa_context_set_sink_input_mute(s_context, stream->index(), (mute ? 1 : 0), NULL, NULL))) {
+        if (!(o = pa_context_set_sink_input_mute(s_context, stream->index(), (mute ? 1 : 0), nullptr, nullptr))) {
             logMessage(QString::fromLatin1("pa_context_set_sink_input_mute() failed"));
             return false;
         }
@@ -1437,7 +1437,7 @@ bool PulseSupport::setCaptureDevice(QString streamUuid, int device) {
 
         /// @todo Find a way to move the stream without saving it... We don't want to pollute the stream restore db.
         pa_operation* o;
-        if (!(o = pa_context_move_source_output_by_index(s_context, pulse_stream_index, pulse_device_index, NULL, NULL))) {
+        if (!(o = pa_context_move_source_output_by_index(s_context, pulse_stream_index, pulse_device_index, nullptr, nullptr))) {
             logMessage(QString::fromLatin1("pa_context_move_source_output_by_index() failed"));
             return false;
         }

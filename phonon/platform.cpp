@@ -69,7 +69,7 @@ AbstractMediaStream *Platform::createMediaStream(const QUrl &url, QObject *paren
     Q_UNUSED(url);
     Q_UNUSED(parent);
 #endif //QT_NO_PHONON_PLATFORMPLUGIN
-    return 0;
+    return nullptr;
 }
 
 QIcon Platform::icon(const QString &name, QStyle *style)

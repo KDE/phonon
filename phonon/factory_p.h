@@ -159,14 +159,14 @@ namespace Factory
      *
      * \return a pointer to the MediaObject the backend provides.
      */
-    QObject *createMediaObject(QObject *parent = 0);
+    QObject *createMediaObject(QObject *parent = nullptr);
     /**
      * Create a new backend object for a Effect.
      *
      * \return a pointer to the Effect the backend provides.
      */
 #ifndef QT_NO_PHONON_EFFECT
-    QObject *createEffect(int effectId, QObject *parent = 0);
+    QObject *createEffect(int effectId, QObject *parent = nullptr);
 #endif //QT_NO_PHONON_EFFECT
     /**
      * Create a new backend object for a VolumeFaderEffect.
@@ -174,22 +174,22 @@ namespace Factory
      * \return a pointer to the VolumeFaderEffect the backend provides.
      */
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT
-    QObject *createVolumeFaderEffect(QObject *parent = 0);
+    QObject *createVolumeFaderEffect(QObject *parent = nullptr);
 #endif //QT_NO_PHONON_VOLUMEFADEREFFECT
     /**
      * Create a new backend object for a AudioOutput.
      *
      * \return a pointer to the AudioOutput the backend provides.
      */
-    QObject *createAudioOutput(QObject *parent = 0);
+    QObject *createAudioOutput(QObject *parent = nullptr);
     /**
      * Create a new backend object for a VideoWidget.
      *
      * \return a pointer to the VideoWidget the backend provides.
      */
 #ifndef QT_NO_PHONON_VIDEO
-    QObject *createVideoWidget(QObject *parent = 0);
-    QObject *createVideoGraphicsObject(QObject *parent = 0);
+    QObject *createVideoWidget(QObject *parent = nullptr);
+    QObject *createVideoGraphicsObject(QObject *parent = nullptr);
 #endif //QT_NO_PHONON_VIDEO
 
     /**
@@ -197,7 +197,7 @@ namespace Factory
     *
     * \return a pointer to the AudioDataOutput the backend provides.
     */
-    PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
+    PHONON_EXPORT QObject *createAudioDataOutput(QObject *parent = nullptr);
 
     /**
      * \return a pointer to the backend interface.

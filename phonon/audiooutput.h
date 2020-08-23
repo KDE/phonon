@@ -112,8 +112,8 @@ namespace Phonon
              * \see Phonon::categoryToString
              * \see outputDevice
              */
-            explicit AudioOutput(Phonon::Category category, QObject *parent = 0);
-            explicit AudioOutput(QObject *parent = 0);
+            explicit AudioOutput(Phonon::Category category, QObject *parent = nullptr);
+            explicit AudioOutput(QObject *parent = nullptr);
 
             QString name() const;
             qreal volume() const;

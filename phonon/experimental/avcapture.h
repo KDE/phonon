@@ -80,7 +80,7 @@ namespace Experimental
              *
              * @see CaptureCategory
              */
-            AvCapture(Phonon::CaptureCategory category, QObject *parent = NULL);
+            AvCapture(Phonon::CaptureCategory category, QObject *parent = nullptr);
 
             /**
              * Returns the current state of the capture.

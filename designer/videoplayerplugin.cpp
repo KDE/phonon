@@ -130,7 +130,7 @@ void VideoPlayerPlugin::initialize(QDesignerFormEditorInterface *formEditor)
         return;
 
     QExtensionManager *manager = formEditor->extensionManager();
-    Q_ASSERT(manager != 0);
+    Q_ASSERT(manager != nullptr);
 
     manager->registerExtensions(new VideoPlayerTaskMenuFactory(manager),
                                 Q_TYPEID(QDesignerTaskMenuExtension));

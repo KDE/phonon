@@ -429,7 +429,7 @@ QList<int> GlobalConfig::audioOutputDeviceListFor(Category category, int overrid
     if (pulse->isUsed()) {
         defaultList = pulse->objectDescriptionIndexes(AudioOutputDeviceType);
         if (hide || (override & HideUnavailableDevices)) {
-            filter(AudioOutputDeviceType, NULL, &defaultList,
+            filter(AudioOutputDeviceType, nullptr, &defaultList,
                     (hide ? FilterAdvancedDevices : 0)
                     | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
                     );
@@ -539,7 +539,7 @@ QList<int> GlobalConfig::audioCaptureDeviceListFor(CaptureCategory category, int
     if (pulse->isUsed()) {
         defaultList = pulse->objectDescriptionIndexes(AudioCaptureDeviceType);
         if (hide || (override & HideUnavailableDevices)) {
-            filter(AudioCaptureDeviceType, NULL, &defaultList,
+            filter(AudioCaptureDeviceType, nullptr, &defaultList,
                     (hide ? FilterAdvancedDevices : 0)
                     | ((override & HideUnavailableDevices) ? FilterUnavailableDevices : 0)
                     );

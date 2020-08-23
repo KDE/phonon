@@ -112,7 +112,7 @@ class PHONON_EXPORT AbstractMediaStream : public QObject
         /**
          * Constructs an AbstractMediaStream object with a \p parent.
          */
-        explicit AbstractMediaStream(QObject *parent = 0);
+        explicit AbstractMediaStream(QObject *parent = nullptr);
 
         /**
          * Returns the stream size that was set with \ref setStreamSize.

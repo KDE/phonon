@@ -32,7 +32,7 @@ class PacketPrivate
 public:
     inline PacketPrivate(char *_data, PacketPoolPrivate *_pool)
         : ref(0), m_size(0), m_data(_data), m_pool(_pool) {}
-    inline PacketPrivate() : ref(1), m_size(0), m_data(0), m_pool(0) {}
+    inline PacketPrivate() : ref(1), m_size(0), m_data(nullptr), m_pool(nullptr) {}
 
     QAtomicInt ref;
 

@@ -44,8 +44,8 @@ class PHONON_EXPORT MediaSourcePrivate : public QSharedData
         MediaSourcePrivate(MediaSource::Type t)
             : type(t), discType(NoDisc),
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            stream(0),
-            ioDevice(0),
+            stream(nullptr),
+            ioDevice(nullptr),
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             autoDelete(false)
         {

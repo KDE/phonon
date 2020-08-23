@@ -83,7 +83,7 @@
 class MimeTypeDialog : public QDialog {
     Q_DISABLE_COPY(MimeTypeDialog)
 public:
-    explicit MimeTypeDialog(QWidget *parent = 0);
+    explicit MimeTypeDialog(QWidget *parent = nullptr);
 
     void setMimeTypes(const QStringList &);
 
@@ -181,10 +181,10 @@ QObject *VideoPlayerTaskMenuFactory::createExtension(QObject *object,
                          const QString &iid, QObject *parent) const
 {
     if (iid != Q_TYPEID(QDesignerTaskMenuExtension))
-        return 0;
+        return nullptr;
 
     if (Phonon::VideoPlayer *widget = qobject_cast<Phonon::VideoPlayer *>(object))
         return new VideoPlayerTaskMenu(widget, parent);
 
-    return 0;
+    return nullptr;
 }

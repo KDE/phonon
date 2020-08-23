@@ -144,7 +144,7 @@ void SeekSliderPrivate::_k_seekableChanged(bool isSeekable)
 void SeekSliderPrivate::_k_currentSourceChanged()
 {
     //this releases the mouse and makes the seek slider stop seeking if the current source has changed
-    QMouseEvent event(QEvent::MouseButtonRelease, QPoint(), Qt::LeftButton, nullptr, nullptr);
+    QMouseEvent event(QEvent::MouseButtonRelease, QPoint(), Qt::LeftButton, {}, {});
     QApplication::sendEvent(&slider, &event);
 }
 

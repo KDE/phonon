@@ -29,7 +29,7 @@ class VideoWidgetPlugin: public QObject, public QDesignerCustomWidgetInterface
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
-    explicit VideoWidgetPlugin(const QString &group, QObject *parent = 0);
+    explicit VideoWidgetPlugin(const QString &group, QObject *parent = nullptr);
 
     QString name() const override;
     QString group() const override;

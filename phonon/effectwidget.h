@@ -48,7 +48,7 @@ class Effect;
         Q_OBJECT
         P_DECLARE_PRIVATE(EffectWidget)
         public:
-            explicit EffectWidget(Effect *effect, QWidget *parent = 0);
+            explicit EffectWidget(Effect *effect, QWidget *parent = nullptr);
             ~EffectWidget() override;
 
         protected:

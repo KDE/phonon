@@ -79,7 +79,7 @@ Path::Path(const Path &rhs)
 
 bool Path::isValid() const
 {
-    return d->sourceNode != 0 && d->sinkNode != 0;
+    return d->sourceNode != nullptr && d->sinkNode != nullptr;
 }
 
 #ifndef QT_NO_PHONON_EFFECT
@@ -91,25 +91,25 @@ Effect *Path::insertEffect(const EffectDescription &desc, Effect *insertBefore)
     Effect *e = new Effect(desc, d->effectsParent);
     if (!e->isValid()) {
         delete e;
-        return 0;
+        return nullptr;
     }
     bool success = insertEffect(e, insertBefore);
     if (!success) {
         delete e;
-        return 0;
+        return nullptr;
     }
     return e;
 }
 
 bool Path::insertEffect(Effect *newEffect, Effect *insertBefore)
 {
-    QObject *newEffectBackend = newEffect ? newEffect->k_ptr->backendObject() : 0;
+    QObject *newEffectBackend = newEffect ? newEffect->k_ptr->backendObject() : nullptr;
     if (!isValid() || !newEffectBackend || d->effects.contains(newEffect) ||
             (insertBefore && (!d->effects.contains(insertBefore) || !insertBefore->k_ptr->backendObject()))) {
         return false;
     }
-    QObject *leftNode = 0;
-    QObject *rightNode = 0;
+    QObject *leftNode = nullptr;
+    QObject *rightNode = nullptr;
     const int insertIndex = insertBefore ? d->effects.indexOf(insertBefore) : d->effects.size();
     if (insertIndex == 0) {
         //prepend
@@ -162,8 +162,8 @@ bool Path::reconnect(MediaNode *source, MediaNode *sink)
     //backend objects
     QObject *bnewSource = source->k_ptr->backendObject();
     QObject *bnewSink = sink->k_ptr->backendObject();
-    QObject *bcurrentSource = d->sourceNode ? d->sourceNode->k_ptr->backendObject() : 0;
-    QObject *bcurrentSink = d->sinkNode ? d->sinkNode->k_ptr->backendObject() : 0;
+    QObject *bcurrentSource = d->sourceNode ? d->sourceNode->k_ptr->backendObject() : nullptr;
+    QObject *bcurrentSink = d->sinkNode ? d->sinkNode->k_ptr->backendObject() : nullptr;
 
     if (bnewSource != bcurrentSource) {
         //we need to change the source
@@ -255,7 +255,7 @@ bool Path::disconnect()
             d->sourceNode->k_ptr->removeOutputPath(*this);
             d->sourceNode->k_ptr->removeDestructionHandler(d.data());
         }
-        d->sourceNode = 0;
+        d->sourceNode = nullptr;
 
 #ifndef QT_NO_PHONON_EFFECT
         for (int i = 0; i < d->effects.count(); ++i) {
@@ -268,7 +268,7 @@ bool Path::disconnect()
             d->sinkNode->k_ptr->removeInputPath(*this);
             d->sinkNode->k_ptr->removeDestructionHandler(d.data());
         }
-        d->sinkNode = 0;
+        d->sinkNode = nullptr;
         return true;
     } else {
         return false;
@@ -358,8 +358,8 @@ bool PathPrivate::removeEffect(Effect *effect)
     if (!effects.contains(effect))
         return false;
 
-    QObject *leftNode = 0;
-    QObject *rightNode = 0;
+    QObject *leftNode = nullptr;
+    QObject *rightNode = nullptr;
     const int index = effects.indexOf(effect);
     if (index == 0) {
         leftNode = sourceNode->k_ptr->backendObject(); //append
@@ -414,8 +414,8 @@ void PathPrivate::phononObjectDestroyed(MediaNodePrivate *mediaNodePrivate)
             sinkNode->k_ptr->removeInputPath(p);
             sinkNode->k_ptr->removeDestructionHandler(this);
         }
-        sourceNode = 0;
-        sinkNode = 0;
+        sourceNode = nullptr;
+        sinkNode = nullptr;
     } else {
 #ifndef QT_NO_PHONON_EFFECT
         for (int i = 0; i < effects.count(); ++i) {
@@ -436,12 +436,12 @@ Path createPath(MediaNode *source, MediaNode *sink)
 #ifndef QT_NO_DYNAMIC_CAST
                 ? source->k_ptr->qObject() : dynamic_cast<QObject *>(source)
 #endif
-                ) : 0;
+                ) : nullptr;
         const QObject *const snk = sink ? (sink->k_ptr->qObject()
 #ifndef QT_NO_DYNAMIC_CAST
                 ? sink->k_ptr->qObject() : dynamic_cast<QObject *>(sink)
 #endif
-                ) : 0;
+                ) : nullptr;
         pWarning() << "Phonon::createPath: Cannot connect "
             << (src ? src->metaObject()->className() : "")
             << '(' << (src ? (src->objectName().isEmpty() ? "no objectName" : qPrintable(src->objectName())) : "null") << ") to "

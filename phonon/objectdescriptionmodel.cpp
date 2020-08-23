@@ -77,7 +77,7 @@ static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
         &QAbstractListModel::staticMetaObject, \
         qt_meta_stringdata_Phonon__ObjectDescriptionModel_##X.data, \
         qt_meta_data_Phonon__ObjectDescriptionModel, \
-        0, 0, 0 }
+        nullptr, nullptr, nullptr }
 
 namespace Phonon
 {
@@ -112,7 +112,7 @@ void *ObjectDescriptionModel<type>::qt_metacast(const char *_clname)
 {
     qWarning("WARNING: Phonon4Qt5 has not been verified to successfully qt_metacast ObjectDescriptionModels.");
     if (!_clname) {
-        return 0;
+        return nullptr;
     }
     if (!strcmp(_clname, ObjectDescriptionModel<type>::staticMetaObject.className())) {
         return static_cast<void *>(const_cast<ObjectDescriptionModel<type> *>(this));
@@ -282,7 +282,7 @@ QList<QExplicitlySharedDataPointer<ObjectDescriptionData> > ObjectDescriptionMod
 QExplicitlySharedDataPointer<ObjectDescriptionData> ObjectDescriptionModelData::modelData(const QModelIndex &index) const
 {
     if (!index.isValid() || index.row() >= d->data.size() || index.column() != 0) {
-        return QExplicitlySharedDataPointer<ObjectDescriptionData>(new ObjectDescriptionData(0));
+        return QExplicitlySharedDataPointer<ObjectDescriptionData>(new ObjectDescriptionData(nullptr));
     }
     return d->data.at(index.row());
 }

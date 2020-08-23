@@ -51,7 +51,7 @@ class VolumeSliderPrivate
             muteButton(parent),
             volumeIcon(Platform::icon(QLatin1String("player-volume"), parent->style())),
             mutedIcon(Platform::icon(QLatin1String("player-volume-muted"), parent->style())),
-            output(0),
+            output(nullptr),
             ignoreVolumeChangeAction(false),
             ignoreVolumeChangeObserve(true),
             sliderPressed(false)

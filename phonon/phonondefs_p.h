@@ -147,8 +147,8 @@ namespace Phonon
         template<class T> inline T my_cast(QObject *o) { return qobject_cast<T>(o); }
         template<class T> inline T my_cast(const QObject *o) { return qobject_cast<T>(o); }
 
-        template<> inline NoIface *my_cast<NoIface *>(QObject *) { return 0; }
-        template<> inline NoIface *my_cast<NoIface *>(const QObject *) { return 0; }
+        template<> inline NoIface *my_cast<NoIface *>(QObject *) { return nullptr; }
+        template<> inline NoIface *my_cast<NoIface *>(const QObject *) { return nullptr; }
     } // anonymous namespace
 
     /**

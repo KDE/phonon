@@ -150,7 +150,7 @@ void VolumeSlider::setAudioOutput(AudioOutput *output)
 {
     P_D(VolumeSlider);
     if (d->output) {
-        disconnect(d->output, 0, this, 0);
+        disconnect(d->output, nullptr, this, nullptr);
     }
     d->output = output;
     if (output) {

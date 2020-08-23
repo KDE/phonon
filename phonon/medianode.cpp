@@ -37,7 +37,7 @@ namespace Phonon
 
 bool MediaNode::isValid() const
 {
-    return const_cast<MediaNodePrivate *>(k_ptr)->backendObject() != 0;
+    return const_cast<MediaNodePrivate *>(k_ptr)->backendObject() != nullptr;
 }
 
     QList<Path> MediaNode::inputPaths() const
@@ -70,19 +70,19 @@ bool MediaNode::isValid() const
         }
         Factory::deregisterFrontendObject(this);
         delete m_backendObject;
-        m_backendObject = 0;
+        m_backendObject = nullptr;
     }
 
 void MediaNodePrivate::deleteBackendObject()
 {
     if (m_backendObject && aboutToDeleteBackendObject()) {
         delete m_backendObject;
-        m_backendObject = 0;
+        m_backendObject = nullptr;
     }
 }
 
     MediaNodePrivate::MediaNodePrivate(MediaNodePrivate::CastId _castId) : castId(_castId),
-        m_backendObject(0)
+        m_backendObject(nullptr)
     {
         Factory::registerFrontendObject(this);
     }

@@ -181,7 +181,7 @@ void AbstractMediaStreamPrivate::phononObjectDestroyed(MediaNodePrivate *bp)
     // TODO: MediaObject might be in a different thread
     Q_ASSERT(bp == mediaObjectPrivate);
     Q_UNUSED(bp);
-    mediaObjectPrivate = 0;
+    mediaObjectPrivate = nullptr;
 }
 
 } // namespace Phonon

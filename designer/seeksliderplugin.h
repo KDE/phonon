@@ -49,7 +49,7 @@ class SeekSliderPlugin: public QObject, public QDesignerCustomWidgetInterface
     Q_OBJECT
     Q_INTERFACES(QDesignerCustomWidgetInterface)
 public:
-    explicit SeekSliderPlugin(const QString &group, QObject *parent = 0);
+    explicit SeekSliderPlugin(const QString &group, QObject *parent = nullptr);
 
     QString name() const override;
     QString group() const override;

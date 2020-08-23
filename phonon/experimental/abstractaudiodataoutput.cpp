@@ -70,7 +70,7 @@ void AbstractAudioDataOutput::setRunning(bool running)
         if (running) {
             iface->setFrontendObject(this);
         } else {
-            iface->setFrontendObject(0);
+            iface->setFrontendObject(nullptr);
         }
     }
 }
@@ -103,7 +103,7 @@ void AbstractAudioDataOutputPrivate::createBackendObject()
     if (m_backendObject)
         return;
     //P_Q(AbstractAudioDataOutput);
-    m_backendObject = Factory::createAudioDataOutput(0);
+    m_backendObject = Factory::createAudioDataOutput(nullptr);
     if (m_backendObject) {
         setupBackendObject();
     }

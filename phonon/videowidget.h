@@ -161,7 +161,7 @@ class AbstractVideoOutput;
             /**
              * Constructs a new video widget with a \p parent.
              */
-            VideoWidget(QWidget *parent = 0);
+            VideoWidget(QWidget *parent = nullptr);
 
             AspectRatio aspectRatio() const;
             ScaleMode scaleMode() const;

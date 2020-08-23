@@ -241,7 +241,7 @@ bool MediaSource::autoDelete() const
 MediaSource::Type MediaSource::type() const
 {
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    if (d->type == Stream && d->stream == 0) {
+    if (d->type == Stream && d->stream == nullptr) {
         return Invalid;
     }
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM

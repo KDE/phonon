@@ -102,7 +102,7 @@ QList<QByteArray> ObjectDescriptionData::propertyNames() const
 
 bool ObjectDescriptionData::isValid() const
 {
-    return d != 0;
+    return d != nullptr;
 }
 
 ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType type, int index)
@@ -119,7 +119,7 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
 
         // When Pulse is enabled, only try from the platform plugin or backend if it is about audio capture
         if (type != AudioCaptureDeviceType)
-            return new ObjectDescriptionData(0); // invalid
+            return new ObjectDescriptionData(nullptr); // invalid
     }
 
 #ifndef QT_NO_PHONON_PLATFORMPLUGIN
@@ -143,7 +143,7 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
         }
     }
 
-    return new ObjectDescriptionData(0); // invalid
+    return new ObjectDescriptionData(nullptr); // invalid
 }
 
 } //namespace Phonon

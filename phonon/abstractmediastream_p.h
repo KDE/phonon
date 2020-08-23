@@ -50,8 +50,8 @@ class PHONON_EXPORT AbstractMediaStreamPrivate : private MediaNodeDestructionHan
             : streamSize(0),
             streamSeekable(false),
             ignoreWrites(false),
-            streamInterface(0),
-            mediaObjectPrivate(0),
+            streamInterface(nullptr),
+            mediaObjectPrivate(nullptr),
             errorType(NoError)
         {
         }

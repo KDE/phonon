@@ -49,23 +49,23 @@ namespace Factory
      *
      * \return a pointer to the AudioDataOutput the backend provides.
      */
-    PHONONEXPERIMENTAL_EXPORT QObject *createAudioDataOutput(QObject *parent = 0);
+    PHONONEXPERIMENTAL_EXPORT QObject *createAudioDataOutput(QObject *parent = nullptr);
 
     /**
      * Create a new backend object for a VideoDataOutput.
      *
      * \return a pointer to the VideoDataOutput the backend provides.
      */
-    QObject *createVideoDataOutput(QObject *parent = 0);
+    QObject *createVideoDataOutput(QObject *parent = nullptr);
 
-    QObject *createAvCapture(QObject *parent = 0);
+    QObject *createAvCapture(QObject *parent = nullptr);
 
     /**
      * Create a new backend object for a Visualization.
      *
      * \return a pointer to the Visualization the backend provides.
      */
-    PHONONEXPERIMENTAL_EXPORT QObject *createVisualization(QObject *parent = 0);
+    PHONONEXPERIMENTAL_EXPORT QObject *createVisualization(QObject *parent = nullptr);
 
 } // namespace Factory
 } // namespace Experimental

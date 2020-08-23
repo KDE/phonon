@@ -35,7 +35,7 @@ class VideoWidget : public Phonon::VideoWidget
     P_DECLARE_PRIVATE(VideoWidget)
     Q_OBJECT
     public:
-        VideoWidget(QWidget *parent = 0);
+        VideoWidget(QWidget *parent = nullptr);
 
         QImage snapshot() const;
 };

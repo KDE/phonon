@@ -39,7 +39,7 @@ class IODeviceStream : public AbstractMediaStream
     Q_OBJECT
     Q_DECLARE_PRIVATE(IODeviceStream)
     public:
-        explicit IODeviceStream(QIODevice *ioDevice, QObject *parent = 0);
+        explicit IODeviceStream(QIODevice *ioDevice, QObject *parent = nullptr);
         ~IODeviceStream() override;
 
         void reset() override;

@@ -71,7 +71,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             prefinishMark(0),
             transitionTime(0), // gapless playback
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-            abstractStream(0),
+            abstractStream(nullptr),
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
             state(Phonon::LoadingState),
             playingQueuedSource(false)
@@ -81,7 +81,7 @@ class MediaObjectPrivate : public MediaNodePrivate, private MediaNodeDestruction
             ignoreLoadingToBufferingStateChange(false),
             ignoreErrorToLoadingStateChange(false),
             validateStates(!(qgetenv("PHONON_ASSERT_STATES").isEmpty())),
-            validator(0)
+            validator(nullptr)
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
         {
         }

@@ -244,7 +244,7 @@ class CleanUpGlobalStatic
  * @ingroup KDEMacros
  */
     #define PHONON_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                            \
-    static QBasicAtomicPointer<TYPE > _k_static_##NAME = Q_BASIC_ATOMIC_INITIALIZER(0); \
+    static QBasicAtomicPointer<TYPE > _k_static_##NAME = Q_BASIC_ATOMIC_INITIALIZER(nullptr); \
     static bool _k_static_##NAME##_destroyed;                                           \
     static struct PHONON_GLOBAL_STATIC_STRUCT_NAME(NAME)                                \
     {                                                                                   \
@@ -254,7 +254,7 @@ class CleanUpGlobalStatic
         }                                                                               \
         inline bool exists() const                                                      \
         {                                                                               \
-            return _k_static_##NAME.load() != 0;                                        \
+            return _k_static_##NAME.load() != nullptr;                                  \
         }                                                                               \
         inline operator TYPE*()                                                         \
         {                                                                               \
@@ -268,7 +268,7 @@ class CleanUpGlobalStatic
                           "Defined at %s:%d", #TYPE, #NAME, __FILE__, __LINE__);       \
                 }                                                                       \
                 TYPE *x = new TYPE ARGS;                                                \
-                if (!_k_static_##NAME.testAndSetOrdered(0, x)                           \
+                if (!_k_static_##NAME.testAndSetOrdered(nullptr, x)                     \
                     && _k_static_##NAME.load() != x ) {                                 \
                     delete x;                                                           \
                 } else {                                                                \
@@ -285,7 +285,7 @@ class CleanUpGlobalStatic
         {                                                                               \
             _k_static_##NAME##_destroyed = true;                                        \
             TYPE *x = _k_static_##NAME.load();                                          \
-            _k_static_##NAME.store(0);                                                  \
+            _k_static_##NAME.store(nullptr);                                            \
             delete x;                                                                   \
         }                                                                               \
     } NAME;

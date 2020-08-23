@@ -90,7 +90,7 @@ static inline void ensureLibraryPathSet()
 
 void Factory::setBackend(QObject *b)
 {
-    Q_ASSERT(globalFactory->m_backendObject == 0);
+    Q_ASSERT(globalFactory->m_backendObject == nullptr);
     globalFactory->m_backendObject = b;
 }
 
@@ -271,7 +271,7 @@ QObject *Factory::create ## classname(QObject *parent) \
     if (backend()) { \
         return registerQObject(qobject_cast<BackendInterface *>(backend())->createObject(BackendInterface::classname##Class, parent)); \
     } \
-    return 0; \
+    return nullptr; \
 }
 #define FACTORY_IMPL_1ARG(classname) \
 QObject *Factory::create ## classname(int arg1, QObject *parent) \
@@ -279,7 +279,7 @@ QObject *Factory::create ## classname(int arg1, QObject *parent) \
     if (backend()) { \
         return registerQObject(qobject_cast<BackendInterface *>(backend())->createObject(BackendInterface::classname##Class, parent, QList<QVariant>() << arg1)); \
     } \
-    return 0; \
+    return nullptr; \
 }
 
 FACTORY_IMPL(MediaObject)
@@ -306,7 +306,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
         return m_platformPlugin;
     }
     if (m_noPlatformPlugin) {
-        return 0;
+        return nullptr;
     }
     Q_ASSERT(QCoreApplication::instance());
     const QByteArray platform_plugin_env = qgetenv("PHONON_PLATFORMPLUGIN");
@@ -376,7 +376,7 @@ PlatformPlugin *FactoryPrivate::platformPlugin()
     }
     pDebug() << Q_FUNC_INFO << "platform plugin could not be loaded";
     m_noPlatformPlugin = true;
-    return 0;
+    return nullptr;
 }
 
 PlatformPlugin *Factory::platformPlugin()
@@ -388,9 +388,9 @@ PlatformPlugin *Factory::platformPlugin()
 QObject *Factory::backend(bool createWhenNull)
 {
     if (globalFactory.isDestroyed()) {
-        return 0;
+        return nullptr;
     }
-    if (createWhenNull && globalFactory->m_backendObject == 0) {
+    if (createWhenNull && globalFactory->m_backendObject == nullptr) {
         globalFactory->createBackend();
         // XXX: might create "reentrancy" problems:
         // a method calls this method and is called again because the

@@ -281,13 +281,13 @@ and existing builds. */
              * Constructs a ObjectDescription model with the
              * given \p parent.
              */
-            explicit inline ObjectDescriptionModel(QObject *parent = 0) : QAbstractListModel(parent), d(new ObjectDescriptionModelData(this)) {} //krazy:exclude=inline
+            explicit inline ObjectDescriptionModel(QObject *parent = nullptr) : QAbstractListModel(parent), d(new ObjectDescriptionModelData(this)) {} //krazy:exclude=inline
 
             /**
              * Constructs a ObjectDescription model with the
              * given \p parent and the given \p data.
              */
-            explicit inline ObjectDescriptionModel(const QList<ObjectDescription<type> > &data, QObject *parent = 0) //krazy:exclude=inline
+            explicit inline ObjectDescriptionModel(const QList<ObjectDescription<type> > &data, QObject *parent = nullptr) //krazy:exclude=inline
                 : QAbstractListModel(parent), d(new ObjectDescriptionModelData(this)) { setModelData(data); }
 
             /**

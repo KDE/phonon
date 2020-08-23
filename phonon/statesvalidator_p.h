@@ -36,7 +36,7 @@ class StatesValidator : public QObject
 {
     Q_OBJECT
 public:
-    explicit StatesValidator(MediaObject *parent = 0);
+    explicit StatesValidator(MediaObject *parent = nullptr);
     ~StatesValidator() override;
 
     inline void sourceQueued() { m_sourceQueued = true; }

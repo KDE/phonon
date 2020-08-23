@@ -109,7 +109,7 @@ void EffectWidgetPrivate::autogenerateUi()
         label->setToolTip(para.description());
 #endif
 
-        QWidget *control = 0;
+        QWidget *control = nullptr;
         switch (int(para.type())) {
         case QVariant::String:
             {

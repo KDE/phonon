@@ -43,7 +43,7 @@ class QSettingsGroup
         }
 
         inline QSettingsGroup(const QSettings *settings, const QString &name)
-            : m_mutableSettings(0),
+            : m_mutableSettings(nullptr),
             m_settings(settings),
             m_group(name + QLatin1Char('/'))
         {

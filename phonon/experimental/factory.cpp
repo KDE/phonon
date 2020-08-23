@@ -88,7 +88,7 @@ QObject *Factory::createAudioDataOutput(QObject *parent)
                     static_cast<Phonon::BackendInterface::Class>(Phonon::BackendInterface::AudioDataOutputClass),
                     parent));
     }
-    return 0;
+    return nullptr;
 }
 
 QObject *Factory::createVideoDataOutput(QObject *parent)
@@ -99,7 +99,7 @@ QObject *Factory::createVideoDataOutput(QObject *parent)
                     static_cast<Phonon::BackendInterface::Class>(Phonon::BackendInterface::VideoDataOutputClass),
                     parent));
     }
-    return 0;
+    return nullptr;
 }
 
 QObject *Factory::createAvCapture(QObject *parent)
@@ -110,7 +110,7 @@ QObject *Factory::createAvCapture(QObject *parent)
                     static_cast<Phonon::BackendInterface::Class>(Phonon::Experimental::BackendInterface::AvCaptureClass),
                     parent));
     }
-    return 0;
+    return nullptr;
 }
 
 QObject *Factory::createVisualization(QObject *parent)
@@ -121,7 +121,7 @@ QObject *Factory::createVisualization(QObject *parent)
                     static_cast<Phonon::BackendInterface::Class>(Phonon::Experimental::BackendInterface::VisualizationClass),
                     parent));
     }
-    return 0;
+    return nullptr;
 }
 
 } // namespace Experimental

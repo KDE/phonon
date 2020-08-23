@@ -50,7 +50,7 @@ Packet::~Packet()
 }
 bool Packet::operator==(const Packet &rhs) const { return d_ptr == rhs.d_ptr; }
 bool Packet::operator!=(const Packet &rhs) const { return d_ptr != rhs.d_ptr; }
-bool Packet::isNull() const { return d_ptr->m_pool == 0; }
+bool Packet::isNull() const { return d_ptr->m_pool == nullptr; }
 const char *Packet::data() const { return d_ptr->m_data; }
 char *Packet::data() { return d_ptr->m_data; }
 int Packet::size() const { return d_ptr->m_size; }

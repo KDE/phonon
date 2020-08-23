@@ -242,7 +242,7 @@ void MediaObject::setCurrentSource(const MediaSource &newSource)
     d->mediaSource = newSource;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    d->abstractStream = 0; // abstractStream auto-deletes
+    d->abstractStream = nullptr; // abstractStream auto-deletes
     if (d->mediaSource.type() == MediaSource::Stream) {
         Q_ASSERT(d->mediaSource.stream());
         d->mediaSource.stream()->d_func()->setMediaObjectPrivate(d);
@@ -418,7 +418,7 @@ void MediaObjectPrivate::_k_aboutToFinish()
     pDebug() << Q_FUNC_INFO;
 
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
-    abstractStream = 0; // abstractStream auto-deletes
+    abstractStream = nullptr; // abstractStream auto-deletes
 #endif //QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
     if (sourceQueue.isEmpty()) {
