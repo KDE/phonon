@@ -23,7 +23,7 @@
 #ifndef PHONON_STATESVALIDATOR_P_H
 #define PHONON_STATESVALIDATOR_P_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "phononnamespace.h"
 

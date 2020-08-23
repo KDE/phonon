@@ -23,7 +23,7 @@
 #ifndef PHONONDEFS_H
 #define PHONONDEFS_H
 
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 #include "phonon_export.h"
 
 #ifdef PHONON_BACKEND_VERSION_4_7

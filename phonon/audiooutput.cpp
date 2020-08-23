@@ -34,8 +34,8 @@
 #  include "pulsestream_p.h"
 #endif
 
-#include <QtCore/QUuid>
-#include <QtCore/qmath.h>
+#include <QUuid>
+#include <qmath.h>
 
 #define PHONON_CLASSNAME AudioOutput
 #define IFACES10 AudioOutputInterface410

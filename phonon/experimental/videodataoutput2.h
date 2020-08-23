@@ -24,7 +24,7 @@
 #define PHONON_VIDEODATAOUTPUT2_H
 
 #include "export.h"
-#include <QtCore/QObject>
+#include <QObject>
 #include "abstractvideodataoutput.h"
 
 namespace Phonon

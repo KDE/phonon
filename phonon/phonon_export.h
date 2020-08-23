@@ -23,7 +23,7 @@
 #ifndef PHONON_EXPORT_H
 #define PHONON_EXPORT_H
 
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 #ifndef PHONON_EXPORT
 # if defined Q_WS_WIN

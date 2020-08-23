@@ -22,7 +22,7 @@
 
 #include "pulsestream_p.h"
 
-#include <QtCore/qmath.h>
+#include <qmath.h>
 
 #include "pulsesupport.h"
 

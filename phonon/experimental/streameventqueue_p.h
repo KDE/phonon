@@ -23,7 +23,7 @@
 #ifndef PHONON_STREAMEVENTQUEUE_P_H
 #define PHONON_STREAMEVENTQUEUE_P_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 #include "lockfreequeue_p.h"
 
 namespace Phonon

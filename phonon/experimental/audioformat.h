@@ -23,7 +23,7 @@
 #ifndef PHONON_X_AUDIOFORMAT_H
 #define PHONON_X_AUDIOFORMAT_H
 
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 #include "phononnamespace.h"
 
 namespace Phonon

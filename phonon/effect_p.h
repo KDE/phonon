@@ -26,8 +26,8 @@
 #include "effect.h"
 #include "effectparameter.h"
 #include "medianode_p.h"
-#include <QtCore/QHash>
-#include <QtCore/QVariant>
+#include <QHash>
+#include <QVariant>
 #include "phonondefs_p.h"
 
 #ifndef QT_NO_PHONON_EFFECT

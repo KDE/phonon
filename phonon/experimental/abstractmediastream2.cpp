@@ -26,8 +26,8 @@
 #include "mediaobject_p.h"
 #include "phononnamespace_p.h"
 
-#include <QtCore/QAbstractEventDispatcher>
-#include <QtCore/QEvent>
+#include <QAbstractEventDispatcher>
+#include <QEvent>
 
 namespace Phonon
 {

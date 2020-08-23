@@ -24,7 +24,7 @@
 
 #include "abstractvideodataoutput.h"
 #include "../abstractvideooutput_p.h"
-#include <QtCore/QSet>
+#include <QSet>
 
 namespace Phonon
 {

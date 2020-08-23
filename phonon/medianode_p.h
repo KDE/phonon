@@ -23,9 +23,9 @@ Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 #ifndef PHONON_MEDIANODE_P_H
 #define PHONON_MEDIANODE_P_H
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QList>
-#include <QtCore/QObject>
+#include <QtGlobal>
+#include <QList>
+#include <QObject>
 
 #include "path.h"
 #include "phononpimpl_p.h"

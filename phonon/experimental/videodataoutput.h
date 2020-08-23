@@ -26,7 +26,7 @@
 #include "export.h"
 #include "../abstractvideooutput.h"
 #include "../phonondefs.h"
-#include <QtCore/QObject>
+#include <QObject>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 template<typename T> class QVector;

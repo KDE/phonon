@@ -25,7 +25,7 @@
 
 #include "export.h"
 #include "../phonondefs.h"
-#include <QtCore/QObject>
+#include <QObject>
 #include "../objectdescription.h"
 #include "../objectdescriptionmodel.h"
 #include "../medianode.h"

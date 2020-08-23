@@ -28,10 +28,10 @@
 #include "objectdescription.h"
 #include "mrl.h"
 
-#include <QtCore/QUrl>
-#include <QtCore/QString>
-#include <QtCore/QSharedData>
-#include <QtCore/QPointer>
+#include <QUrl>
+#include <QString>
+#include <QSharedData>
+#include <QPointer>
 
 class QFile;
 

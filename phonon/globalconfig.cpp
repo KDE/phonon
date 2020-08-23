@@ -32,8 +32,8 @@
 #include "phononnamespace.h"
 #include "pulsesupport.h"
 
-#include <QtCore/QList>
-#include <QtCore/QVariant>
+#include <QList>
+#include <QVariant>
 
 namespace Phonon
 {

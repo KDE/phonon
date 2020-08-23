@@ -23,7 +23,7 @@
 #ifndef LOCKFREEQUEUE_P_H
 #define LOCKFREEQUEUE_P_H
 
-#include <QtCore/QVector>
+#include <QVector>
 
 class LockFreeQueueBasePrivate;
 struct MemoryPool;

@@ -26,8 +26,8 @@
 
 #include "phononnamespace.h"
 
-#include <QtCore/QList>
-#include <QtCore/QVariant>
+#include <QList>
+#include <QVariant>
 
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER

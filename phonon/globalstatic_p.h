@@ -22,7 +22,7 @@
 #ifndef PHONON_GLOBALSTATIC_P_H
 #define PHONON_GLOBALSTATIC_P_H
 
-#include <QtCore/QAtomicPointer>
+#include <QAtomicPointer>
 
 //
 // WARNING!!

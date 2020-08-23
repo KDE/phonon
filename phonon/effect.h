@@ -25,7 +25,7 @@
 #define PHONON_EFFECT_H
 
 #include "phonondefs.h"
-#include <QtCore/QObject>
+#include <QObject>
 #include "objectdescription.h"
 #include "medianode.h"
 

@@ -22,7 +22,7 @@
 #ifndef PHONON_MRL_H
 #define PHONON_MRL_H
 
-#include <QtCore/QUrl>
+#include <QUrl>
 
 #include "phonon_export.h"
 

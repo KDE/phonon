@@ -25,7 +25,7 @@
 #include "volumefaderinterface.h"
 #include "factory_p.h"
 
-#include <QtCore/qmath.h>
+#include <qmath.h>
 
 #define PHONON_CLASSNAME VolumeFaderEffect
 #define PHONON_INTERFACENAME VolumeFaderInterface

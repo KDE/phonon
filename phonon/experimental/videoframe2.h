@@ -26,7 +26,7 @@
 #include "export.h"
 #include "videodataoutput.h"
 #include <QImage>
-#include <QtCore/QByteRef>
+#include <QByteRef>
 
 namespace Phonon
 {

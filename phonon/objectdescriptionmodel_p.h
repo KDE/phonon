@@ -24,7 +24,7 @@
 #define PHONON_OBJECTDESCRIPTIONMODEL_P_H
 
 #include "objectdescriptionmodel.h"
-#include <QtCore/QList>
+#include <QList>
 #include "objectdescription.h"
 
 #ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL

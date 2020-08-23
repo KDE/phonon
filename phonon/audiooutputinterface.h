@@ -27,7 +27,7 @@
 #include "phononnamespace.h"
 #include "objectdescription.h"
 #include "phonondefs.h"
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 namespace Phonon
 {

@@ -26,7 +26,7 @@
 #include "videowidget.h"
 #include "path.h"
 #include <QBoxLayout>
-#include <QtCore/QEvent>
+#include <QEvent>
 
 #ifndef QT_NO_PHONON_VIDEOPLAYER
 

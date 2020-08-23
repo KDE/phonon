@@ -26,7 +26,7 @@
 #include "../globalstatic_p.h"
 #include "../backendinterface.h"
 #include "backendinterface.h"
-#include <QtCore/QtDebug>
+#include <QtDebug>
 
 namespace Phonon
 {

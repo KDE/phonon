@@ -21,7 +21,7 @@
 
 #include "mrl.h"
 
-#include <QtCore/QFile>
+#include <QFile>
 
 namespace Phonon
 {

@@ -22,7 +22,7 @@
 
 #include "streameventqueue_p.h"
 #include "phononnamespace_p.h"
-#include <QtCore/QtDebug>
+#include <QtDebug>
 
 namespace Phonon
 {

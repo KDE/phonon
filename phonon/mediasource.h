@@ -29,8 +29,8 @@
 #include "mrl.h"
 #include "objectdescription.h"
 
-#include <QtCore/QSharedData>
-#include <QtCore/QString>
+#include <QSharedData>
+#include <QString>
 
 
 class QUrl;

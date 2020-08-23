@@ -24,14 +24,14 @@
 #include "objectdescriptionmodel_p.h"
 #include "phonondefs_p.h"
 #include "platform_p.h"
-#include <QtCore/QList>
 #include "objectdescription.h"
 #include "phononnamespace_p.h"
-#include <QtCore/QMimeData>
-#include <QtCore/QStringList>
+#include "factory_p.h"
 #include <QIcon>
 #include <QPainter>
-#include "factory_p.h"
+#include <QList>
+#include <QMimeData>
+#include <QStringList>
 
 #ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL
 

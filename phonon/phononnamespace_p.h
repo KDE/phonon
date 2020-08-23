@@ -24,7 +24,7 @@
 
 #include "phononnamespace.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #if defined(QT_NO_DEBUG)
 #define pDebug if (true) {} else qDebug

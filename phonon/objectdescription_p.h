@@ -23,10 +23,10 @@
 #ifndef PHONON_OBJECTDESCRIPTION_P_H
 #define PHONON_OBJECTDESCRIPTION_P_H
 
-#include <QtCore/QByteRef>
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
+#include <QByteRef>
+#include <QHash>
+#include <QString>
+#include <QVariant>
 #include "phononnamespace_p.h"
 
 namespace Phonon

@@ -21,9 +21,9 @@
 */
 
 #include "lockfreequeue_p.h"
-#include <QtCore/QHash>
-#include <QtCore/QWriteLocker>
-#include <QtCore/QReadWriteLock>
+#include <QHash>
+#include <QWriteLocker>
+#include <QReadWriteLock>
 #include <stdlib.h>
 #include "globalstatic_p.h"
 

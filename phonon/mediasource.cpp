@@ -26,8 +26,8 @@
 #include "abstractmediastream_p.h"
 #include "globalconfig.h"
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QFile>
+#include <QFileInfo>
+#include <QFile>
 
 namespace Phonon
 {

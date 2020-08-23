@@ -23,8 +23,8 @@
 #include "effectwidget.h"
 #include "effectwidget_p.h"
 
-#include <QtCore/QtAlgorithms>
-#include <QtCore/QList>
+#include <QtAlgorithms>
+#include <QList>
 
 #include "effect.h"
 #include "effectparameter.h"

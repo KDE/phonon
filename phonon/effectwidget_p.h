@@ -23,7 +23,7 @@
 #ifndef PHONON_UI_EFFECTWIDGET_P_H
 #define PHONON_UI_EFFECTWIDGET_P_H
 
-#include <QtCore/QHash>
+#include <QHash>
 
 #include "effectparameter.h"
 #include "effectwidget.h"

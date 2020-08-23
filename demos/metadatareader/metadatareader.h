@@ -23,8 +23,8 @@
 #define METADATAREADER_H
 
 
-#include <QtCore/QObject>
-#include <QtCore/QTextStream>
+#include <QObject>
+#include <QTextStream>
 #include <phononnamespace.h>
 
 namespace Phonon

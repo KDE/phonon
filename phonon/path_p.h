@@ -24,9 +24,9 @@
 #define PATH_P_H
 
 #include "path.h"
-#include <QtCore/QPair>
-#include <QtCore/QList>
-#include <QtCore/QSharedData>
+#include <QPair>
+#include <QList>
+#include <QSharedData>
 #include "effect.h"
 #include "medianodedestructionhandler_p.h"
 

@@ -24,7 +24,7 @@
 #define PHONON_VOLUMEFADERINTERFACE_H
 
 #include "volumefadereffect.h"
-#include <QtCore/QObject>
+#include <QObject>
 
 
 #ifndef QT_NO_PHONON_VOLUMEFADEREFFECT

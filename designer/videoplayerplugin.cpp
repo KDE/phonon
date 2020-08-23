@@ -67,7 +67,7 @@
 #include <QtDesigner/QExtensionManager>
 #include <QtDesigner/QDesignerFormEditorInterface>
 
-#include <QtCore/qplugin.h>
+#include <qplugin.h>
 #include <phonon/videoplayer.h>
 
 static const char *toolTipC = "Phonon Video Player";

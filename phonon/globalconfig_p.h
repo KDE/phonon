@@ -23,7 +23,7 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #ifndef PHONON_GLOBALCONFIG_P_H
 #define PHONON_GLOBALCONFIG_P_H
 
-#include <QtCore/QSettings>
+#include <QSettings>
 
 #include "phonon_export.h"
 

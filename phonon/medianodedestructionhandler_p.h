@@ -23,7 +23,7 @@
 #ifndef MEDIANODEDESTRUCTIONHANDLER_P_H
 #define MEDIANODEDESTRUCTIONHANDLER_P_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 
 namespace Phonon

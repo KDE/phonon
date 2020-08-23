@@ -26,9 +26,9 @@
 #include "phonon_export.h"
 #include "phonondefs.h"
 #include "objectdescription.h"
-#include <QtCore/QList>
-#include <QtCore/QModelIndex>
-#include <QtCore/QStringList>
+#include <QList>
+#include <QModelIndex>
+#include <QStringList>
 
 
 #ifndef QT_NO_PHONON_OBJECTDESCRIPTIONMODEL

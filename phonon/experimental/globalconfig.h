@@ -23,8 +23,8 @@ Copyright (C) 2006-2008 Matthias Kretz <kretz@kde.org>
 #ifndef PHONON_EXPERIMENTAL_GLOBALCONFIG_P_H
 #define PHONON_EXPERIMENTAL_GLOBALCONFIG_P_H
 
-#include <QtCore/QObject>
-#include <QtCore/QSettings>
+#include <QObject>
+#include <QSettings>
 
 #include "export.h"
 #include "../globalconfig.h"

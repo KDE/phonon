@@ -26,7 +26,7 @@
 #include "export.h"
 #include "../abstractvideooutput.h"
 #include "../phonondefs.h"
-#include <QtCore/QObject>
+#include <QObject>
 #include "videoframe2.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

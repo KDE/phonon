@@ -23,7 +23,7 @@
 #ifndef SEEKSLIDER_P_H
 #define SEEKSLIDER_P_H
 
-#include <QtCore/QPointer>
+#include <QPointer>
 #include <QBoxLayout>
 #include <QIcon>
 #include <QLabel>

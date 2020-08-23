@@ -26,7 +26,7 @@
 #include "phonon_export.h"
 #include "objectdescription.h"
 
-#include <QtCore/QObject>
+#include <QObject>
 
 
 #ifdef __QT_SYNCQT__

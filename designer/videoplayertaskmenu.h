@@ -63,7 +63,7 @@
 #ifndef VIDEOPLAYERTASKMENU_H
 #define VIDEOPLAYERTASKMENU_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QtDesigner/QDesignerTaskMenuExtension>
 #include <QtDesigner/QExtensionFactory>
 

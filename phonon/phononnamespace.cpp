@@ -28,8 +28,8 @@
 
 #include "factory_p.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QList>
+#include <QCoreApplication>
+#include <QList>
 
 namespace Phonon
 {

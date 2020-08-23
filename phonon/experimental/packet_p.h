@@ -21,7 +21,7 @@
 #ifndef PHONON_PACKET_P_H
 #define PHONON_PACKET_P_H
 
-#include <QtCore/QAtomicInt>
+#include <QAtomicInt>
 
 namespace Phonon
 {

@@ -30,9 +30,9 @@
 #include "globalstatic_p.h"
 #include "objectdescription.h"
 
-#include <QtCore/QList>
-#include <QtCore/QSet>
-#include <QtCore/QStringList>
+#include <QList>
+#include <QSet>
+#include <QStringList>
 
 PHONON_GLOBAL_STATIC(Phonon::BackendCapabilitiesPrivate, globalBCPrivate)
 

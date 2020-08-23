@@ -23,8 +23,8 @@
 #include "videodataoutput2.h"
 #include "videodataoutput2_p.h"
 #include "../factory_p.h"
-#include <QtCore/QSize>
-#include <QtCore/QThread>
+#include <QSize>
+#include <QThread>
 
 #define PHONON_CLASSNAME VideoDataOutput2
 

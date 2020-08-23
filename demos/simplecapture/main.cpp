@@ -22,7 +22,7 @@
 #include "capture.h"
 
 #include <QApplication>
-#include <QtCore/QUrl>
+#include <QUrl>
 
 int main(int argc, char** argv)
 {

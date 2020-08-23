@@ -23,9 +23,9 @@
 #ifndef PHONON_QSETTINGSGROUP_P_H
 #define PHONON_QSETTINGSGROUP_P_H
 
-#include <QtCore/QSettings>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
+#include <QSettings>
+#include <QString>
+#include <QVariant>
 
 #ifndef QT_NO_PHONON_SETTINGSGROUP
 

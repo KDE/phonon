@@ -312,7 +312,7 @@ namespace Phonon
 //Q_DECLARE_OPERATORS_FOR_FLAGS(MediaStreamTypes)
 } // namespace Phonon
 
-#include <QtCore/QMetaType>
+#include <QMetaType>
 
 Q_DECLARE_METATYPE(Phonon::State)
 Q_DECLARE_METATYPE(Phonon::ErrorType)

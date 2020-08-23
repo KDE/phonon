@@ -25,10 +25,10 @@
 #include "mediacontroller.h"
 #include "mediaobject.h"
 #include "addoninterface.h"
-#include <QtCore/QList>
-#include <QtCore/QVariant>
-#include <QtCore/QTextCodec>
-#include <QtGui/QFont>
+#include <QList>
+#include <QVariant>
+#include <QTextCodec>
+#include <QFont>
 #include "frontendinterface_p.h"
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER

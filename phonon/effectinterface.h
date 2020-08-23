@@ -24,7 +24,7 @@
 #define PHONON_EFFECTINTERFACE_H
 
 #include "phononnamespace.h"
-#include <QtCore/QVariant>
+#include <QVariant>
 
 
 #ifndef QT_NO_PHONON_EFFECT

@@ -22,7 +22,7 @@
 #ifndef PHONON_EXPERIMENTAL_FACTORY_P_H
 #define PHONON_EXPERIMENTAL_FACTORY_P_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include "export.h"
 
 namespace Phonon

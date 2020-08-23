@@ -26,7 +26,7 @@
 #include "phonon_export.h"
 #include "objectdescription.h"
 
-#include <QtCore/QExplicitlySharedDataPointer>
+#include <QExplicitlySharedDataPointer>
 
 
 template<class T> class QList;

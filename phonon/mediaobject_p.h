@@ -23,8 +23,8 @@
 #ifndef MEDIAOBJECT_P_H
 #define MEDIAOBJECT_P_H
 
-#include <QtCore/QString>
-#include <QtCore/QQueue>
+#include <QString>
+#include <QQueue>
 
 #include "medianode_p.h"
 #include "medianodedestructionhandler_p.h"

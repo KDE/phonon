@@ -23,10 +23,10 @@
 #include "objectdescription.h"
 #include "objectdescription_p.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QSet>
+#include <QObject>
+#include <QSet>
+#include <QStringList>
 #include "factory_p.h"
-#include <QtCore/QStringList>
 #include "backendinterface.h"
 #include "platformplugin.h"
 #include "pulsesupport.h"

@@ -27,8 +27,8 @@
 #include "phonon_export.h"
 #include "objectdescription.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QtGlobal>
+#include <QObject>
+#include <QtGlobal>
 
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER

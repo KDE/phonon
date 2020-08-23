@@ -25,7 +25,7 @@
 
 #include "phonon_export.h"
 #include "phononnamespace.h"
-#include <QtCore/QObject>
+#include <QObject>
 
 
 class QByteArray;

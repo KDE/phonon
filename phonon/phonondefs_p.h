@@ -23,7 +23,7 @@
 #ifndef PHONONDEFS_P_H
 #define PHONONDEFS_P_H
 
-#include <QtCore/QMetaType>
+#include <QMetaType>
 #include "medianode_p.h"
 #include "phononpimpl_p.h"
 

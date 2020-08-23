@@ -22,7 +22,7 @@
 #ifndef MEDIACONTROLLER_H
 #define MEDIACONTROLLER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace Phonon
 {

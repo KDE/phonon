@@ -25,12 +25,12 @@
 
 #include "phonon_export.h"
 
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QtDebug>
-#include <QtCore/QList>
-#include <QtCore/QSharedData>
-#include <QtCore/QString>
-#include <QtCore/QVariant>
+#include <QExplicitlySharedDataPointer>
+#include <QtDebug>
+#include <QList>
+#include <QSharedData>
+#include <QString>
+#include <QVariant>
 
 
 namespace Phonon

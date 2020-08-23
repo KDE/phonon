@@ -20,9 +20,9 @@
 
 */
 #include "audiooutputinterface.h"
-#include <QtCore/QList>
-#include <QtCore/QStringList>
-#include <QtCore/QPair>
+#include <QList>
+#include <QStringList>
+#include <QPair>
 #include "platform_p.h"
 
 namespace Phonon

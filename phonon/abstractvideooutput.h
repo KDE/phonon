@@ -25,7 +25,7 @@
 #include "phonondefs.h"
 #include "phonon_export.h"
 #include "medianode.h"
-#include <QtCore/QObject>
+#include <QObject>
 
 
 #ifndef QT_NO_PHONON_VIDEO

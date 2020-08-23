@@ -23,9 +23,9 @@
 #ifndef PHONON_PLATFORMPLUGIN_H
 #define PHONON_PLATFORMPLUGIN_H
 
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
-#include <QtCore/QPair>
+#include <QObject>
+#include <QStringList>
+#include <QPair>
 #include "phonon_export.h"
 #include "objectdescription.h"
 

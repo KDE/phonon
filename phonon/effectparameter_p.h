@@ -24,7 +24,7 @@
 #define EFFECTPARAMETER_P_H
 
 #include "effectparameter.h"
-#include <QtCore/QSharedData>
+#include <QSharedData>
 
 #ifndef QT_NO_PHONON_EFFECT
 

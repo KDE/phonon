@@ -31,11 +31,11 @@
 #include "abstractmediastream_p.h"
 #include "frontendinterface_p.h"
 
-#include <QtCore/QStringBuilder>
-#include <QtCore/QStringList>
-#include <QtCore/QDateTime>
-#include <QtCore/QTimer>
-#include <QtCore/QUrl>
+#include <QStringBuilder>
+#include <QStringList>
+#include <QDateTime>
+#include <QTimer>
+#include <QUrl>
 
 #include "phononnamespace_p.h"
 #include "platform_p.h"

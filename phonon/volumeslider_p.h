@@ -23,7 +23,7 @@
 #ifndef VOLUMESLIDER_P_H
 #define VOLUMESLIDER_P_H
 
-#include <QtCore/QPointer>
+#include <QPointer>
 #include <QBoxLayout>
 #include <QIcon>
 #include <QLabel>

@@ -25,8 +25,8 @@
 
 #include "phonon_export.h"
 
-#include <QtCore/QExplicitlySharedDataPointer>
-#include <QtCore/QVariant>
+#include <QExplicitlySharedDataPointer>
+#include <QVariant>
 
 
 #ifndef QT_NO_PHONON_EFFECT

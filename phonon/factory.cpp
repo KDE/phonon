@@ -32,12 +32,12 @@
 #include "phononconfig_p.h"
 #include "phononnamespace_p.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDir>
-#include <QtCore/QList>
-#include <QtCore/QPluginLoader>
-#include <QtCore/QPointer>
-#include <QtCore/QSettings>
+#include <QCoreApplication>
+#include <QDir>
+#include <QList>
+#include <QPluginLoader>
+#include <QPointer>
+#include <QSettings>
 #include <QApplication>
 #include <QMessageBox>
 #include <QString>

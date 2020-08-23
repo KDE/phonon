@@ -26,8 +26,8 @@
 #include "phonon_export.h"
 #include "objectdescription.h"
 
-#include <QtCore/QtGlobal>
-#include <QtCore/QSet>
+#include <QtGlobal>
+#include <QSet>
 
 
 class QVariant;

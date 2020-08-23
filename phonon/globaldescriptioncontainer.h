@@ -22,9 +22,9 @@
 #ifndef PHONON_GLOBALDESCRIPTIONCONTAINER_H
 #define PHONON_GLOBALDESCRIPTIONCONTAINER_H
 
-#include <QtCore/QMap>
-#include <QtCore/QDebug>
-#include <QtCore/QtGlobal>
+#include <QMap>
+#include <QDebug>
+#include <QtGlobal>
 
 #include <phonon/objectdescription.h>
 

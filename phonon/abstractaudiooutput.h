@@ -25,7 +25,7 @@ Copyright (C) 2005-2006 Matthias Kretz <kretz@kde.org>
 #include "phonondefs.h"
 #include "phonon_export.h"
 #include "medianode.h"
-#include <QtCore/QObject>
+#include <QObject>
 
 
 namespace Phonon

@@ -24,7 +24,7 @@
 #define PHONON_EXPERIMENTAL_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
-#include <QtCore/QtGlobal>
+#include <QtGlobal>
 
 #ifndef PHONONEXPERIMENTAL_EXPORT
 # if defined(MAKE_PHONONEXPERIMENTAL_LIB)

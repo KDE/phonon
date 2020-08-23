@@ -26,7 +26,7 @@
 #include "addoninterface.h"
 #include "mediaobject_p.h"
 #include "phononnamespace_p.h"
-#include <QtCore/QPointer>
+#include <QPointer>
 
 #ifndef QT_NO_PHONON_MEDIACONTROLLER
 
