@@ -215,6 +215,8 @@ class PHONON_EXPORT EffectParameter
         QExplicitlySharedDataPointer<EffectParameterPrivate> d;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(EffectParameter::Hints)
+
 uint PHONON_EXPORT qHash(const Phonon::EffectParameter &param);
 
 } // namespace Phonon
@@ -224,7 +226,6 @@ uint PHONON_EXPORT qHash(const Phonon::EffectParameter &param);
 //it also a workaround for some compilers
 inline uint qHash(const Phonon::EffectParameter &param) { return Phonon::qHash(param); } //krazy:exclude=inline
 #endif
-Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::EffectParameter::Hints)
 
 #endif //QT_NO_PHONON_EFFECT
 

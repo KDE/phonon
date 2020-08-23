@@ -372,9 +372,9 @@ class PHONON_EXPORT MediaController : public QObject
         MediaControllerPrivate *const d;
 };
 
-} // namespace Phonon
+Q_DECLARE_OPERATORS_FOR_FLAGS(MediaController::Features)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Phonon::MediaController::Features)
+} // namespace Phonon
 
 Q_DECLARE_METATYPE(Phonon::MediaController::NavigationMenu)
 Q_DECLARE_METATYPE(QList<Phonon::MediaController::NavigationMenu>)
