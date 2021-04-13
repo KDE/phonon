@@ -254,7 +254,7 @@ class CleanUpGlobalStatic
         }                                                                               \
         inline bool exists() const                                                      \
         {                                                                               \
-            return _k_static_##NAME.load() != nullptr;                                  \
+            return _k_static_##NAME.loadRelaxed() != nullptr;                           \
         }                                                                               \
         inline operator TYPE*()                                                         \
         {                                                                               \
@@ -262,20 +262,20 @@ class CleanUpGlobalStatic
         }                                                                               \
         inline TYPE *operator->()                                                       \
         {                                                                               \
-            if (!_k_static_##NAME.load()) {                                             \
+            if (!_k_static_##NAME.loadRelaxed()) {                                      \
                 if (isDestroyed()) {                                                    \
                     qFatal("Fatal Error: Accessed global static '%s *%s()' after destruction. " \
                           "Defined at %s:%d", #TYPE, #NAME, __FILE__, __LINE__);       \
                 }                                                                       \
                 TYPE *x = new TYPE ARGS;                                                \
                 if (!_k_static_##NAME.testAndSetOrdered(nullptr, x)                     \
-                    && _k_static_##NAME.load() != x ) {                                 \
+                    && _k_static_##NAME.loadRelaxed() != x ) {                          \
                     delete x;                                                           \
                 } else {                                                                \
                     static Phonon::CleanUpGlobalStatic cleanUpObject = { destroy };     \
                 }                                                                       \
             }                                                                           \
-            return _k_static_##NAME.load();                                             \
+            return _k_static_##NAME.loadRelaxed();                                      \
         }                                                                               \
         inline TYPE &operator*()                                                        \
         {                                                                               \
@@ -284,8 +284,8 @@ class CleanUpGlobalStatic
         static void destroy()                                                           \
         {                                                                               \
             _k_static_##NAME##_destroyed = true;                                        \
-            TYPE *x = _k_static_##NAME.load();                                          \
-            _k_static_##NAME.store(nullptr);                                            \
+            TYPE *x = _k_static_##NAME.loadRelaxed();                                   \
+            _k_static_##NAME.storeRelaxed(nullptr);                                     \
             delete x;                                                                   \
         }                                                                               \
     } NAME;

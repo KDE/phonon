@@ -63,27 +63,30 @@ set(PHONON_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 ################################# Requirements #################################
+
+set(REQUIRED_QT_VERSION 5.15.0)
+
 # Core Requirements
-find_package(Qt5Core)
+find_package(Qt5Core ${REQUIRED_QT_VERSION})
 set_package_properties(Qt5Core PROPERTIES
     TYPE REQUIRED
     DESCRIPTION "Qt5 core module"
     URL "https://www.qt.io/download")
 
-find_package(Qt5Gui)
+find_package(Qt5Gui ${REQUIRED_QT_VERSION})
 set_package_properties(Qt5Gui PROPERTIES
     TYPE REQUIRED
     DESCRIPTION "Qt5 GUI module"
     URL "https://www.qt.io/download")
 
-find_package(Qt5Widgets)
+find_package(Qt5Widgets ${REQUIRED_QT_VERSION})
 set_package_properties(Qt5Widgets PROPERTIES
     TYPE REQUIRED
     DESCRIPTION "Qt5 widgets module"
     URL "https://www.qt.io/download")
 
 # Designer Plugin
-find_package(Qt5Designer)
+find_package(Qt5Designer ${REQUIRED_QT_VERSION})
 set_package_properties(Qt5Designer PROPERTIES
     TYPE RECOMMENDED
     DESCRIPTION "Needed to build the Qt Designer plugin"

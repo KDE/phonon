@@ -255,7 +255,7 @@ DevicePreference::DevicePreference(QWidget *parent)
     connect(BackendCapabilities::notifier(), SIGNAL(capabilitiesChanged()), SLOT(updateVideoCaptureDevices()));
 
     if (!categoryTree->currentIndex().isValid()) {
-        categoryTree->setCurrentIndex(m_categoryModel.index(0, 0).child(1, 0));
+        categoryTree->setCurrentIndex(m_categoryModel.index(1, 0, m_categoryModel.index(0, 0)));
     }
 }
 
