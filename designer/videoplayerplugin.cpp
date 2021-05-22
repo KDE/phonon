@@ -70,7 +70,7 @@
 #include <qplugin.h>
 #include <phonon/videoplayer.h>
 
-static const char *toolTipC = "Phonon Video Player";
+static const char *videoPlayerToolTipC = "Phonon Video Player";
 
 VideoPlayerPlugin::VideoPlayerPlugin(const QString &group, QObject *parent) :
     QObject(parent),
@@ -91,12 +91,12 @@ QString VideoPlayerPlugin::group() const
 
 QString VideoPlayerPlugin::toolTip() const
 {
-    return QString(QLatin1String(toolTipC));
+    return QString(QLatin1String(videoPlayerToolTipC));
 }
 
 QString VideoPlayerPlugin::whatsThis() const
 {
-    return QString(QLatin1String(toolTipC));
+    return QString(QLatin1String(videoPlayerToolTipC));
 }
 
 QString VideoPlayerPlugin::includeFile() const

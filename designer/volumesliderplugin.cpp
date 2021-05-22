@@ -43,7 +43,7 @@
 
 #include <phonon/volumeslider.h>
 
-static const char *toolTipC = "Phonon Volume Slider";
+static const char *volumeSliderToolTipC = "Phonon Volume Slider";
 
 VolumeSliderPlugin::VolumeSliderPlugin(const QString &group, QObject *parent) :
     QObject(parent),
@@ -64,12 +64,12 @@ QString VolumeSliderPlugin::group() const
 
 QString VolumeSliderPlugin::toolTip() const
 {
-    return QString(QLatin1String(toolTipC));
+    return QString(QLatin1String(volumeSliderToolTipC));
 }
 
 QString VolumeSliderPlugin::whatsThis() const
 {
-    return QString(QLatin1String(toolTipC));
+    return QString(QLatin1String(volumeSliderToolTipC));
 }
 
 QString VolumeSliderPlugin::includeFile() const

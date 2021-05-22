@@ -43,7 +43,7 @@
 
 #include <phonon/seekslider.h>
 
-static const char *toolTipC = "Phonon Seek Slider";
+static const char *seekSliderToolTipC = "Phonon Seek Slider";
 
 SeekSliderPlugin::SeekSliderPlugin(const QString &group, QObject *parent) :
     QObject(parent),
@@ -64,12 +64,12 @@ QString SeekSliderPlugin::group() const
 
 QString SeekSliderPlugin::toolTip() const
 {
-    return QString(QLatin1String(toolTipC));
+    return QString(QLatin1String(seekSliderToolTipC));
 }
 
 QString SeekSliderPlugin::whatsThis() const
 {
-    return QString(QLatin1String(toolTipC));
+    return QString(QLatin1String(seekSliderToolTipC));
 }
 
 QString SeekSliderPlugin::includeFile() const

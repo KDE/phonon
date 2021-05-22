@@ -25,7 +25,7 @@
 
 #include <phonon/videowidget.h>
 
-static const char *toolTipC = "Phonon Video Widget";
+static const char *videoWidgetToolTipC = "Phonon Video Widget";
 
 VideoWidgetPlugin::VideoWidgetPlugin(const QString &group, QObject *parent) :
     QObject(parent),
@@ -46,12 +46,12 @@ QString VideoWidgetPlugin::group() const
 
 QString VideoWidgetPlugin::toolTip() const
 {
-    return QString(QLatin1String(toolTipC));
+    return QString(QLatin1String(videoWidgetToolTipC));
 }
 
 QString VideoWidgetPlugin::whatsThis() const
 {
-    return QString(QLatin1String(toolTipC));
+    return QString(QLatin1String(videoWidgetToolTipC));
 }
 
 QString VideoWidgetPlugin::includeFile() const
