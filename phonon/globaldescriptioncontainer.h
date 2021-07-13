@@ -49,7 +49,7 @@ class MediaController;
  * objects to register (using object address) with the container (which is a
  * singleton).
  * The object hands its locally unique ObjectDescriptions to the container, which
- * turns it into a globally unqiue description and maps the global id to the
+ * turns it into a globally unique description and maps the global id to the
  * local id.
  *
  * That way it is possible to easily map local to global description objects.

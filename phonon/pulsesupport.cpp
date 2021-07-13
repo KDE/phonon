@@ -301,7 +301,7 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         logMessage(QString::fromLatin1("Failed to initialize device manager extension: %1").arg(pa_strerror(pa_context_errno(c))));
         if (s_context != c) {
             logMessage(QLatin1String("Falling back to single device mode"));
-            // Only create our gerneric devices during the probe phase.
+            // Only create our generic devices during the probe phase.
             createGenericDevices();
             // As this is our probe phase, exit immediately
             pa_context_disconnect(c);
@@ -396,8 +396,8 @@ static void ext_device_manager_read_cb(pa_context *c, const pa_ext_device_manage
         }
 
         if (s_instance) {
-            // This wont be emitted during the connection probe phase
-            // which is intensional
+            // This won't be emitted during the connection probe phase
+            // which is intentional
             if (output_changed)
                 s_instance->emitObjectDescriptionChanged(AudioOutputDeviceType);
             if (capture_changed)
@@ -548,7 +548,7 @@ static void sink_input_cb(pa_context *c, const pa_sink_input_info *i, int eol, v
     if ((t = pa_proplist_gets(i->proplist, PA_PROP_PHONON_STREAMID))) {
         logMessage(QString::fromLatin1("Found PulseAudio stream index %1 for Phonon Output Stream %2").arg(i->index).arg(QLatin1String(t)));
 
-        // We only care about our own streams (other phonon processes are irrelevent)
+        // We only care about our own streams (other phonon processes are irrelevant)
         if (s_outputStreams.contains(QLatin1String(t))) {
             PulseStream *stream = s_outputStreams[QString(t)];
             stream->setIndex(i->index);
@@ -591,7 +591,7 @@ static void source_output_cb(pa_context *c, const pa_source_output_info *i, int 
     if ((t = pa_proplist_gets(i->proplist, PA_PROP_PHONON_STREAMID))) {
         logMessage(QString::fromLatin1("Found PulseAudio stream index %1 for Phonon Capture Stream %2").arg(i->index).arg(QLatin1String(t)));
 
-        // We only care about our own streams (other phonon processes are irrelevent)
+        // We only care about our own streams (other phonon processes are irrelevant)
         if (s_captureStreams.contains(QLatin1String(t))) {
             PulseStream *stream = s_captureStreams[QString(t)];
             stream->setIndex(i->index);
@@ -736,7 +736,7 @@ static void context_state_callback(pa_context *c, void *)
         if (!(o = pa_ext_device_manager_read(c, ext_device_manager_read_cb, u))) {
             if (s_context != c) {
                 logMessage(QString::fromLatin1("pa_ext_device_manager_read() failed. Attempting to continue without device manager support"));
-                // Only create our gerneric devices during the probe phase.
+                // Only create our generic devices during the probe phase.
                 createGenericDevices();
                 // As this is our probe phase, exit immediately
                 pa_context_disconnect(c);
@@ -750,7 +750,7 @@ static void context_state_callback(pa_context *c, void *)
 #else
         // If we know do not have Device Manager support, we just create our dummy devices now
         if (s_context != c) {
-            // Only create our gerneric devices during the probe phase.
+            // Only create our generic devices during the probe phase.
             createGenericDevices();
             // As this is our probe phase, exit immediately
             pa_context_disconnect(c);
@@ -782,7 +782,7 @@ PulseSupport *PulseSupport::getInstanceOrNull(bool allowNull)
     if (nullptr == s_instance) {
         /*
          * In order to prevent the instance being used from multiple threads
-         * prior to it being contructed fully, we need to ensure we obtain a
+         * prior to it being constructed fully, we need to ensure we obtain a
          * lock prior to creating it. After we acquire the lock, check to see
          * if the object is created again before proceeding.
          */
@@ -846,7 +846,7 @@ PulseSupport::PulseSupport()
         return;
     }
 
-    // First of all conenct to PA via simple/blocking means and if that succeeds,
+    // First of all connect to PA via simple/blocking means and if that succeeds,
     // use a fully async integrated mainloop method to connect and get proper support.
     pa_mainloop *p_test_mainloop;
     if (!(p_test_mainloop = pa_mainloop_new())) {
@@ -1165,7 +1165,7 @@ static PulseStream* register_stream(QMap<QString,PulseStream*> &map, QString str
     PulseStream *stream = new PulseStream(streamUuid, role);
     map[streamUuid] = stream;
 
-    // Setup envrionment...
+    // Setup environment...
     // These values are considered static, so we force property overrides for them.
     if (!Platform::applicationName().isEmpty())
         qputenv(QString("PULSE_PROP_OVERRIDE_%1").arg(PA_PROP_APPLICATION_NAME).toUtf8(),
@@ -1276,8 +1276,8 @@ QHash<QString, QString> PulseSupport::streamProperties(QString streamUuid) const
 void PulseSupport::setupStreamEnvironment(QString streamUuid)
 {
     pDebug() << "Please note that your current Phonon backend is trying to force"
-                " stream dependent PulseAudio properties through envrionment variables."
-                " Slightly unprecise timing in doing so will cause the first"
+                " stream dependent PulseAudio properties through environment variables."
+                " Slightly imprecise timing in doing so will cause the first"
                 " of two subsequently started AudioOutputs to have disfunct volume"
                 " control. Also see https://bugs.kde.org/show_bug.cgi?id=321288";
 

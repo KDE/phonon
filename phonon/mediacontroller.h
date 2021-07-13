@@ -89,11 +89,11 @@ class PHONON_EXPORT MediaController : public QObject
                                 The title menu is usually where one would select
                                 the episode of a TV series DVD. It can be equal to
                                 the main menu but does not need to be. */
-            AudioMenu,    /** < Audio menu for language (and somtimes also subtitle)
+            AudioMenu,    /** < Audio menu for language (and sometimes also subtitle)
                                 settings etc. */
             SubtitleMenu, /** < Subtitle menu. Usually this represents the same menu
                                 as AudioMenu or is not present at all (in which case
-                                subtitle settings are propably also in the AudioMenu). */
+                                subtitle settings are probably also in the AudioMenu). */
             ChapterMenu,  /** < Chapter menu for chapter selection. */
             AngleMenu     /** < Angle menu. Rarely supported on any media source. */
         };

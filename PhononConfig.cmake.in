@@ -48,6 +48,6 @@ endif()
 
 # Convenience.
 set(PHONON_LIBRARIES ${PHONON_LIBRARY} ${PHONON_EXPERIMENTAL_LIBRARY})
-# The following one is only for compatiblity
+# The following one is only for compatibility
 set(PHONON_LIBS ${PHONON_LIBRARIES})
 set(PHONON_INCLUDES ${PHONON_INCLUDE_DIR} ${PHONON_INCLUDE_DIR}/KDE)

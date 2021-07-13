@@ -7,7 +7,7 @@
 Phonon4Qt5
 </b></p>
 
-Phonon4Qt5, as the name suggets, is a version of the Phonon 4 library built
+Phonon4Qt5, as the name suggests, is a version of the Phonon 4 library built
 against Qt5 rather than Qt4.
 
 It has the same API as a Phonon built against Qt4, but differs in ABI and file

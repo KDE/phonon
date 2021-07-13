@@ -55,7 +55,7 @@ namespace Experimental
      *
      * This class gives you access to the capture capabilities of the backend.
      * There might be more than only one possible capture source, for audio, as
-     * well as for video. A prefferable device may easily be obtained by providing
+     * well as for video. A preferable device may easily be obtained by providing
      * a capture category.
      *
      * @ingroup Recording

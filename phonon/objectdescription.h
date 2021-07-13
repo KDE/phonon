@@ -344,7 +344,7 @@ typedef QPair<QByteArray, QString> DeviceAccess;
  * It is used by the platform plugin or the backend to provide information about how
  * to access a certain device. To access a device, one needs the driver name (alsa, oss,
  * pulse for example), and the device name (dependent on the driver name). This type
- * is essentialy a list of pairs of driver and device names.
+ * is essentially a list of pairs of driver and device names.
  *
  * It can be put in an ObjectDescriptionData property list.
  *

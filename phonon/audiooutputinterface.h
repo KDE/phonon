@@ -135,16 +135,16 @@ class AudioOutputInterface47 : public AudioOutputInterface42
 {
 public:
     /**
-     * This function is meant to be used in conjuction with PulseSupport
+     * This function is meant to be used in conjunction with PulseSupport
      * to either get the property set for the associated PulseAudio straem or
-     * to automatically apply them to the envrionment.
+     * to automatically apply them to the environment.
      *
      * If a backend subsystem supports actively setting arbitrary properties
      * this method should be preferred and PulseSupport::streamProperties()
      * should be used.
      * If a backend subsystem does not support setting arbitrary properties
      * PulseSupport::setupStreamEnvironment() should be called as close to
-     * stream creation as possible to manipulate the process envrionment
+     * stream creation as possible to manipulate the process environment
      * such that PulseAudio will pick up the properties.
      *
      * \param uuid the UUID used by PulseSupport to identify the associated stream

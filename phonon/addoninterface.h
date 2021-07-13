@@ -78,7 +78,7 @@ class AddonInterface
             availableTitles, /**< \returns \c int representing the amount of
                                   available titles on the media source */
             title,           /**< \returns \c int representing the current title */
-            setTitle,        /**< Sets the current tittle to the first \c int in the QList */
+            setTitle,        /**< Sets the current title to the first \c int in the QList */
             autoplayTitles,  /**< \returns \c bool whether autoplay of titles is on */
             setAutoplayTitles /**< Sets autoplay to \c true or \c false as
                                    indicated in the first \c bool in the QList */

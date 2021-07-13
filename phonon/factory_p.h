@@ -85,7 +85,7 @@ namespace Phonon
         QString version;
         QString website;
         int initialPreference; // Initial preference declared by the backend; larger is better
-        int weight = -1; // Weight assinged by user configuration
+        int weight = -1; // Weight assigned by user configuration
 
         QString pluginPath;
         QString pluginName; // basename of the file. "legacy" name used for PHONON_BACKEND

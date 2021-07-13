@@ -10,7 +10,7 @@ qt5_add_resources(phononwidgetsplugin_SRCS phononwidgets.qrc)
 
 add_library(phononwidgets MODULE ${phononwidgetsplugin_SRCS})
 
-# Techincally since 5.9 we should only need uiplugins and not designer,
+# Technically since 5.9 we should only need uiplugins and not designer,
 # in the interest of simplicity we still look for and use the designer
 # target though so things definitely build on <5.9
 

@@ -18,7 +18,7 @@ set up everything correctly for the next "file" in the queue.
     Allow the user to set preference of devices: If device USB-Headset is
     available use that, else use builtin speakers.
 
- device info persistance
+ device info persistence
 =========================
 On device selections: should the user be presented with options that are
 currently not available? It might actually be confusing to select a device that

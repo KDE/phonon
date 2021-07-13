@@ -140,7 +140,7 @@ namespace Phonon
              * Whenever possible this function should be used to get Phonon
              * specific PulseAudio stream properties and set them on specific
              * streams. When precisely setting them per stream is not possible
-             * the envrionment setup function PulseSupport::setupStreamEnvironment
+             * the environment setup function PulseSupport::setupStreamEnvironment
              * should be called as close to stream creation as possible. The
              * more time passes between setup and stream creation the more
              * likely race conditions between setup of more than one AudioOutput
@@ -157,9 +157,9 @@ namespace Phonon
             QHash<QString, QString> streamProperties(QString streamUuid) const;
 
             /**
-             * Sets PulseAudio override properties in the process' envrionment.
+             * Sets PulseAudio override properties in the process' environment.
              * Manually setting the properties on a per-stream basis is
-             * preferred as envrionment overrides are subject to race conditions
+             * preferred as environment overrides are subject to race conditions
              * when creating more than one stream around the same time.
              *
              * \param streamUuid the AudioOutputs' stream UUID set by the frontend
