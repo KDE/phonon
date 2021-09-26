@@ -5,3 +5,6 @@ build5
 apidocs
 b1
 po
+compile_commands.json
+.clangd
+.cache
