@@ -60,7 +60,7 @@ void VideoPlayerPrivate::ensureCreated() const
     if (!initialized) {
         initialized = true;
         QVBoxLayout *layout = new QVBoxLayout(q_ptr);
-        layout->setMargin(0);
+        layout->setContentsMargins(QMargins());
 
         aoutput = new AudioOutput(category, q_ptr);
         voutput = new VideoWidget(q_ptr);

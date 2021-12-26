@@ -93,6 +93,10 @@ set_package_properties(Qt5Designer PROPERTIES
     URL "https://www.qt.io/download")
 
 set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
+add_definitions(
+    -DQT_DISABLE_DEPRECATED_BEFORE=0x050F00
+    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
+)
 
 add_subdirectory(cmake)
 if(Qt5Designer_FOUND AND PHONON_BUILD_DESIGNER_PLUGIN)

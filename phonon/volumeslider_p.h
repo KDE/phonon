@@ -62,7 +62,7 @@ class VolumeSliderPrivate
 
             muteButton.setIcon(volumeIcon);
             muteButton.setAutoRaise(true);
-            layout.setMargin(0);
+            layout.setContentsMargins(QMargins());
             layout.setSpacing(2);
             layout.addWidget(&muteButton, 0, Qt::AlignVCenter);
             layout.addWidget(&slider, 0, Qt::AlignVCenter);

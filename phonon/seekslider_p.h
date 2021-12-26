@@ -60,7 +60,7 @@ class SeekSliderPrivate
             slider.setPageStep(5000); // 5 sec
             slider.setSingleStep(500); // 0.5 sec
 
-            layout.setMargin(0);
+            layout.setContentsMargins(QMargins());
             layout.setSpacing(2);
             layout.addWidget(&iconLabel, 0, Qt::AlignVCenter);
             layout.addWidget(&slider, 0, Qt::AlignVCenter);

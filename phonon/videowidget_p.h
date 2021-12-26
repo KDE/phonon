@@ -51,7 +51,7 @@ class VideoWidgetPrivate : public Phonon::AbstractVideoOutputPrivate
               hue(0),
               saturation(0)
         {
-            layout.setMargin(0);
+            layout.setContentsMargins(QMargins());
         }
 
         QHBoxLayout layout;

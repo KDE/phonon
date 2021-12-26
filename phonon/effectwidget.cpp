@@ -94,7 +94,7 @@ void EffectWidgetPrivate::autogenerateUi()
 {
     P_Q(EffectWidget);
     QVBoxLayout *mainLayout = new QVBoxLayout(q);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(QMargins());
     const QList<Phonon::EffectParameter> parameters = effect->parameters();
     for (int i = 0; i < parameters.count(); ++i) {
         const EffectParameter &para = parameters.at(i);
