@@ -23,7 +23,6 @@
 #ifndef PHONON_OBJECTDESCRIPTION_P_H
 #define PHONON_OBJECTDESCRIPTION_P_H
 
-#include <QByteRef>
 #include <QHash>
 #include <QString>
 #include <QVariant>

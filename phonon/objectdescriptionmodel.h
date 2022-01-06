@@ -191,8 +191,6 @@ and existing builds. */
     class PHONON_TEMPLATE_CLASS_EXPORT ObjectDescriptionModel : public QAbstractListModel
     {
         public:
-            Q_OBJECT_CHECK
-
             /** \internal */
             static PHONON_TEMPLATE_CLASS_MEMBER_EXPORT const QMetaObject staticMetaObject;
             /** \internal */

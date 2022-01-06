@@ -27,7 +27,7 @@
 #include "objectdescription.h"
 
 #include <QObject>
-
+#include <QStringList>
 
 #ifdef __QT_SYNCQT__
 // Tell syncqt that the BackendCapabilities namespace should be treated like a class
@@ -36,7 +36,6 @@
 #endif
 
 template<class T> class QList;
-class QStringList;
 
 namespace Phonon
 {

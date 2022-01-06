@@ -212,14 +212,19 @@ static int registerPhononMetaTypes()
 
     // need those for QSettings
     qRegisterMetaType<QList<int> >();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qRegisterMetaTypeStreamOperators<QList<int> >("QList<int>");
+#endif
     qRegisterMetaType<Phonon::Experimental::VideoFrame2>();
 
     qRegisterMetaType<Phonon::DeviceAccess>();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qRegisterMetaTypeStreamOperators<Phonon::DeviceAccess>("Phonon::DeviceAccess");
+#endif
     qRegisterMetaType<Phonon::DeviceAccessList>();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qRegisterMetaTypeStreamOperators<Phonon::DeviceAccessList>("Phonon::DeviceAccessList");
-
+#endif
     return 0; // something
 }
 

@@ -38,9 +38,8 @@
 #else
 #include "phonon/phononnamespace.h"
 #endif
-
+#include <QStringList>
 class QString;
-class QStringList;
 
 namespace Phonon
 {

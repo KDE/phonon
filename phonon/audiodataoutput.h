@@ -26,9 +26,12 @@
 #include "abstractaudiooutput.h"
 #include "phonondefs.h"
 
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 template<typename T> class QVector;
+#else
+template<typename T> class QList;
+#endif
 template<typename Key, typename T> class QMap;
 #endif
 

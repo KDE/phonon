@@ -22,7 +22,7 @@
 
 #include "iodevicestream_p.h"
 #include "abstractmediastream_p.h"
-
+#include <QIODevice>
 #ifndef QT_NO_PHONON_ABSTRACTMEDIASTREAM
 
 namespace Phonon
