@@ -89,11 +89,15 @@ add_library(Phonon::${PHONON_LIB_SONAME} ALIAS ${PHONON_LIB_SONAME})
 
 target_link_libraries(${PHONON_LIB_SONAME}
     PUBLIC
-        Qt5::Core
-        Qt5::Widgets
+        Qt${QT_MAJOR_VERSION}::Core
+        Qt${QT_MAJOR_VERSION}::Widgets
     PRIVATE
         ${optional_link_libraries}
 )
+
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(${PHONON_LIB_SONAME} PRIVATE Qt6::Core5Compat)
+endif()
 
 set_target_properties(${PHONON_LIB_SONAME}
     PROPERTIES

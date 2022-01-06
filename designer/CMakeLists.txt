@@ -6,7 +6,7 @@ set(phononwidgetsplugin_SRCS
     videowidgetplugin.cpp
     volumesliderplugin.cpp
 )
-qt5_add_resources(phononwidgetsplugin_SRCS phononwidgets.qrc)
+qt_add_resources(phononwidgetsplugin_SRCS phononwidgets.qrc)
 
 add_library(phononwidgets MODULE ${phononwidgetsplugin_SRCS})
 
@@ -17,7 +17,7 @@ add_library(phononwidgets MODULE ${phononwidgetsplugin_SRCS})
 # To bypass warnings about using the wrong/deprecated headers make
 # sure to prefer UiPlugins whenever available.
 if(Qt5UiPlugin_VERSION AND NOT Qt5UiPlugin_VERSION VERSION_LESS "5.9.0")
-    target_link_libraries(phononwidgets Qt5::UiPlugin)
+    target_link_libraries(phononwidgets Qt${QT_MAJOR_VERSION}::UiPlugin)
 else()
     # In <5.9 one would ordinarily include QtDesigner/Foo to
     # get unified code we'll manually inject the include dir
@@ -30,10 +30,10 @@ endif()
 
 target_link_libraries(phononwidgets
     Phonon::${PHONON_LIB_SONAME}
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::Designer
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Gui
+    Qt${QT_MAJOR_VERSION}::Widgets
+    Qt${QT_MAJOR_VERSION}::Designer
 )
 
 install(TARGETS phononwidgets DESTINATION ${KDE_INSTALL_QTPLUGINDIR}/designer)

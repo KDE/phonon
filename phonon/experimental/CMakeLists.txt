@@ -23,8 +23,8 @@ set(phononexperimental_LIB_SRCS
 add_library(${PHONON_LIB_SONAME}experimental SHARED ${phononexperimental_LIB_SRCS})
 target_link_libraries(${PHONON_LIB_SONAME}experimental
     PUBLIC
-        Qt5::Core
-        Qt5::Widgets
+        Qt${QT_MAJOR_VERSION}::Core
+        Qt${QT_MAJOR_VERSION}::Widgets
         ${PHONON_LIB_SONAME}
 )
 set_target_properties(${PHONON_LIB_SONAME}experimental

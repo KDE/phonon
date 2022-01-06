@@ -21,8 +21,8 @@ set(PHONON_BUILDSYSTEM_DIR "@PACKAGE_BUILDSYSTEM_INSTALL_DIR@")
 
 # dependencies
 include(CMakeFindDependencyMacro)
-find_dependency(Qt5Core)
-find_dependency(Qt5Widgets)
+find_dependency(Qt@QT_MAJOR_VERSION@Core)
+find_dependency(Qt@QT_MAJOR_VERSION@Widgets)
 
 include("${CMAKE_CURRENT_LIST_DIR}/PhononTargets.cmake")
 set(PHONON_LIBRARY Phonon::@PHONON_LIB_SONAME@)

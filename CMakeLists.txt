@@ -67,30 +67,34 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(REQUIRED_QT_VERSION 5.15.0)
 
 # Core Requirements
-find_package(Qt5Core ${REQUIRED_QT_VERSION})
-set_package_properties(Qt5Core PROPERTIES
+find_package(Qt${QT_MAJOR_VERSION}Core ${REQUIRED_QT_VERSION})
+set_package_properties(Qt${QT_MAJOR_VERSION}Core PROPERTIES
     TYPE REQUIRED
-    DESCRIPTION "Qt5 core module"
+    DESCRIPTION "Qt${QT_MAJOR_VERSION} core module"
     URL "https://www.qt.io/download")
 
-find_package(Qt5Gui ${REQUIRED_QT_VERSION})
-set_package_properties(Qt5Gui PROPERTIES
+find_package(Qt${QT_MAJOR_VERSION}Gui ${REQUIRED_QT_VERSION})
+set_package_properties(Qt${QT_MAJOR_VERSION}Gui PROPERTIES
     TYPE REQUIRED
-    DESCRIPTION "Qt5 GUI module"
+    DESCRIPTION "Qt${QT_MAJOR_VERSION} GUI module"
     URL "https://www.qt.io/download")
 
-find_package(Qt5Widgets ${REQUIRED_QT_VERSION})
-set_package_properties(Qt5Widgets PROPERTIES
+find_package(Qt${QT_MAJOR_VERSION}Widgets ${REQUIRED_QT_VERSION})
+set_package_properties(Qt${QT_MAJOR_VERSION}Widgets PROPERTIES
     TYPE REQUIRED
-    DESCRIPTION "Qt5 widgets module"
+    DESCRIPTION "Qt${QT_MAJOR_VERSION} widgets module"
     URL "https://www.qt.io/download")
 
 # Designer Plugin
-find_package(Qt5Designer ${REQUIRED_QT_VERSION})
-set_package_properties(Qt5Designer PROPERTIES
+find_package(Qt${QT_MAJOR_VERSION}Designer ${REQUIRED_QT_VERSION})
+set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
     TYPE RECOMMENDED
     DESCRIPTION "Needed to build the Qt Designer plugin"
     URL "https://www.qt.io/download")
+
+if (QT_MAJOR_VERSION STREQUAL "6")
+    find_package(Qt6Core5Compat)
+endif()
 
 set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
 add_definitions(
