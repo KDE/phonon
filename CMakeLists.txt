@@ -32,8 +32,8 @@ include(ECMGeneratePriFile)
 include(ECMGeneratePkgConfigFile)
 include(ECMPoQmTools)
 
-set(PHONON_LIB_SONAME phonon4qt5)
-set(PHONON_LIB_SONAME_CAMEL Phonon4Qt5)
+set(PHONON_LIB_SONAME phonon4qt${QT_MAJOR_VERSION})
+set(PHONON_LIB_SONAME_CAMEL Phonon4Qt${QT_MAJOR_VERSION})
 
 include(ECMSetupVersion)
 ecm_setup_version(PROJECT

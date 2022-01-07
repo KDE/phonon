@@ -1,5 +1,5 @@
 # config file for phonon experimental library
-# This config can not be used directly. Instead find Phonon or Phonon4Qt5.
+# This config can not be used directly. Instead find Phonon or Phonon4@QT_MAJOR_VERSION@.
 # If the experimental config is present it will be automatically included.
 # If you want to make sure it is present you can specify Experimental as a
 # COMPONENT in find_package.
