@@ -15,14 +15,14 @@ option(PHONON_NO_CAPTURE "Disable the capture capabilities")
 set(CMAKE_AUTOUIC TRUE)
 set(CMAKE_AUTORCC TRUE)
 
-find_package(ECM 5.60 NO_MODULE)
+find_package(ECM 5.90 NO_MODULE)
 set_package_properties(ECM PROPERTIES
     TYPE REQUIRED
     DESCRIPTION "Extra CMake Modules"
     URL "https://api.kde.org/frameworks/extra-cmake-modules/html/index.html")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
-
+set(KDE_COMPILERSETTINGS_LEVEL "5.82")
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
@@ -92,7 +92,7 @@ set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
     DESCRIPTION "Needed to build the Qt Designer plugin"
     URL "https://www.qt.io/download")
 
-if (QT_MAJOR_VERSION STREQUAL "6")
+if(QT_MAJOR_VERSION STREQUAL "6")
     find_package(Qt6Core5Compat)
 endif()
 
