@@ -55,6 +55,7 @@ static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
        0        // eod
 };
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #define P_STATIC_META_STRINGDATA(name, string, stringlen, stringlenplustwo) \
         struct qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name##_t { QByteArrayData data[1]; char stringdata[stringlenplustwo]; }; \
         static const qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name##_t qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name = { \
@@ -63,6 +64,16 @@ static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
             }, \
             string \
         };
+#else
+    #define P_STATIC_META_STRINGDATA(name, string, stringlen, stringlenplustwo) \
+        struct qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name##_t { const uint offsetsAndSize[2]; char stringdata[stringlenplustwo]; }; \
+        static const qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name##_t qt_meta_stringdata_Phonon__ObjectDescriptionModel_##name = { \
+            { \
+                uint(offsetof(qt_meta_stringdata_Phonon__ObjectDescriptionModel_ ## name ## _t, stringdata)), stringlen \
+            }, \
+            string \
+        };
+#endif
 
     P_STATIC_META_STRINGDATA(AudioOutputDeviceType,     "Phonon::AudioOutputDeviceModel\0",  30, 32)
     P_STATIC_META_STRINGDATA(AudioCaptureDeviceType,    "Phonon::AudioCaptureDeviceModel\0", 31, 33)
@@ -73,11 +84,19 @@ static const uint qt_meta_data_Phonon__ObjectDescriptionModel[] = {
 
     #undef P_STATIC_META_STRINGDATA
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
         &QAbstractListModel::staticMetaObject, \
         qt_meta_stringdata_Phonon__ObjectDescriptionModel_##X.data, \
         qt_meta_data_Phonon__ObjectDescriptionModel, \
         nullptr, nullptr, nullptr }
+#else
+    #define OBJECT_DESCRIPTION_MODEL_STATIC_META_OBJECT(X) { \
+        &QAbstractListModel::staticMetaObject, \
+        qt_meta_stringdata_Phonon__ObjectDescriptionModel_##X.offsetsAndSize, \
+        qt_meta_data_Phonon__ObjectDescriptionModel, \
+        nullptr, nullptr, nullptr }
+#endif
 
 namespace Phonon
 {
