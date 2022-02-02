@@ -270,7 +270,7 @@ QDebug operator<<(QDebug dbg, const ObjectDescription<T> &d)
     const QList<QByteArray> propertyNames = d.propertyNames();
     for (const QByteArray &propertyName : propertyNames) {
         dbg.nospace() << "  " << propertyName << ": " <<
-                         d.property(propertyName).toString() << "\n";
+                         d.property(propertyName.constData()).toString() << "\n";
     }
     dbg.nospace() << "}\n";
 
