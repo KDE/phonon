@@ -149,9 +149,11 @@ ObjectDescriptionData *ObjectDescriptionData::fromIndex(ObjectDescriptionType ty
 } //namespace Phonon
 
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void Phonon::registerMetaTypes()
 {
     // Deprecated, does nothing
 }
+#endif
 
 // vim: sw=4 ts=4
