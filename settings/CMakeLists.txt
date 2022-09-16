@@ -21,4 +21,4 @@ target_link_libraries(phononsettings
     Qt${QT_MAJOR_VERSION}::Widgets
 )
 
-install(TARGETS phononsettings ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS phononsettings ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
