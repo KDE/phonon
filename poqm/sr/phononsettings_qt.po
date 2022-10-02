@@ -1,0 +1,312 @@
+# Translation of kcm5_phonon.po into Serbian.
+# Chusslove Illich <caslav.ilic@gmx.net>, 2007, 2008, 2009, 2010, 2011, 2012, 2017.
+# Dalibor Djuric <daliborddjuric@gmail.com>, 2009, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm5_phonon\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2018-08-16 09:15+0200\n"
+"PO-Revision-Date: 2017-09-28 17:58+0200\n"
+"Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
+"Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: qtrich\n"
+"X-Environment: kde\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Списак позадина знаних Фонону на систему. Фонон ће покушати да их употреби "
+"овде наведеним редоследом."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Пожељан"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Нежељен"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Аудио пуштање"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Аудио снимање"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Видео снимање"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Лоше"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Испробај изабрани уређај"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Одређује подразумевани редослед уређаја, који се може потиснути по појединим "
+"категоријама."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Пожељни подразумевани уређај за аудио пуштање"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Пожељни подразумевани уређај за аудио снимање"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Пожељни подразумевани уређај за видео снимање"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Пожељни уређај за аудио пуштање за категорију „%1“"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Пожељни уређај за аудио снимање за категорију „%1“"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Пожељни уређај за видео снимање за категорију „%1“"
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Примени тренутно приказан списак пожељних уређаја на следеће друге "
+"категорије аудио пуштања:"
+
+# >> @item:inlistbox
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "подразумевана/неодређена категорија"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Неуспело постављање изабраног уређаја за аудио излаз"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Позадина можда не подржава аудио снимање"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Позадина можда не подржава видео снимање"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Испробавам %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Разне категорије употребе медијума. За сваку од њих можете одабрати уређај "
+"који желите да користе програми над Фононом."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Напредни уређаји"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Примените тренутно приказани списак уређаја на више категорија."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Примени списак уређаја на..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Уређаји нађени на систему који су подесни за изабрану категорију. Изаберите "
+"уређај који желите да користе програми."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Редослед одређује пожељност уређаја. Ако из неког разлог Фонон не може да "
+"употреби први, покушаће са другим, итд."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Проба"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "изабрани уређај је пожељан"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Пожељан"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "изабрани уређај нема одређену пожељност"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Нежељен"
+
+#: main.cpp:28
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Пожељни уређаји"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Позадина"

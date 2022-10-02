@@ -1,0 +1,414 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Victor Ibragimov <victor.ibragimov@gmail.com>, 2009, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2019-09-29 12:28+0500\n"
+"Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
+"Language-Team: Tajik <kde-i18n-doc@kde.org>\n"
+"Language: tg\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.04.3\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Рӯйхати пуштибонии Phonon дар низоми шумо ёфт шуд.  Тартиботи рӯйхат "
+"истифодабарии Phonon муайян мекунад."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Мақбул"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Қатъ"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Воспроизведение звука"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Запись звука"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Запись видео"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Ошибка"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Проверить выбранное устройство"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Муайянкунии тартиботи дастгоҳҳои стандартие, ки метавонанд бо интихоби шахси "
+"ба кор дароварда шаванд."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Приоритет устройств воспроизведения звука по умолчанию"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Приоритет устройств записи звука по умолчанию"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Приоритет устройств записи видео по умолчанию"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Приоритет устройств воспроизведения звука для категории «%1»"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Приоритет устройств записи звука для категории «%1»"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Приоритет устройств записи видео для категории «%1»"
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Использовать приоритет использования устройств для следующих категорий "
+"воспроизведения звука:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Категорияи стандартӣ/номуайян"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Проверить выбранное устройство"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Выбранный механизм вероятно не поддерживает запись звука"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Выбранный механизм вероятно не поддерживает запись видео"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Тестирование %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Различные категории работы с мультимедиа. Для каждой категории вы можете "
+"назначить отдельное устройство."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Намоиши дастгоҳҳои иловагӣ"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Использовать текущий список устройств для некоторых других категорий."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Қабул кардани рӯйхати дастгоҳ ба..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Обнаруженные в системе устройства, подходящие для выбранной категории. "
+"Выберите устройство, которое будет использоваться приложениями."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Приоритет определяет порядок использования устройств: если невозможно "
+"вывести звук на первое устройство, будет предпринята попытка вывода на "
+"следующем устройстве и так далее."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Санҷиш"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "имконоти дастгоҳи интихобшуда"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Мақбул"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "имконоти дастгоҳи интихобшуда маҷуд нест"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Қатъ"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Хусусиятҳои дастгоҳ"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Пуштибонӣ"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Виктор Ибрагимов"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "victor.ibragimov@gmail.com"
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Барномаи танзимоти Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Воспроизведение (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Запись (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Независимые устройства"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "Настройка звукового оборудования KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "Оборудование"
+
+#~ msgid "Profile"
+#~ msgstr "Профиль"
+
+#~ msgid "Sound Card"
+#~ msgstr "Звуковая плата"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Настройка устройства"
+
+#~ msgid "Connector"
+#~ msgstr "Разъём"
+
+#~ msgid "Sound Device"
+#~ msgstr "Звуковое устройство"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Проверка конфигурации динамиков"
+
+#~ msgid "Input Levels"
+#~ msgstr "Уровни на входе"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Настройка звукового оборудования"
+
+#~ msgid "Front Left"
+#~ msgstr "Левый фронтальный"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Фронтальный левее центра"
+
+#~ msgid "Front Center"
+#~ msgstr "Центральный фронтальный"
+
+#~ msgid "Mono"
+#~ msgstr "Моно"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Фронтальный правее центра"
+
+#~ msgid "Front Right"
+#~ msgstr "Правый фронтальный"
+
+#~ msgid "Side Left"
+#~ msgstr "Левый боковой"
+
+#~ msgid "Side Right"
+#~ msgstr "Правый боковой"
+
+#~ msgid "Rear Left"
+#~ msgstr "Левый тыловой"
+
+#~ msgid "Rear Center"
+#~ msgstr "Центральный тыловой"
+
+#~ msgid "Rear Right"
+#~ msgstr "Правый тыловой"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Сабвуфер"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Неизвестный канал"
+
+#~ msgid "Audio Output"
+#~ msgstr "Хуруҷи аудиоӣ"
+
+#~ msgid "Audio Capture"
+#~ msgstr "Сабти аудиоӣ"

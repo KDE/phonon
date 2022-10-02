@@ -1,0 +1,178 @@
+# Translation of libphonon_qt.po to Ukrainian
+# Copyright (C) 2008-2019 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: libphonon_qt\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2019-07-04 07:36+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
+"X-Generator: Lokalize 19.07.70\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>Пристрій відтворення <b>%1</b> не працює.<br/>Повертаємося до "
+"використання <b>%2</b>.</html>"
+
+#: audiooutput.cpp:494
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>Перемикання на пристрій відтворення <b>%1</b><br/>, який щойно став "
+"наявним і має вищий пріоритет.</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "Повернутися назад до пристрою «%1»"
+
+#: audiooutput.cpp:512
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>Перемикання на пристрій відтворення <b>%1</b><br/>, який має вищий "
+"пріоритет або спеціально налаштований на відтворення цього потоку.</html>"
+
+#: mediacontroller.cpp:158
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr "Головне меню"
+
+#: mediacontroller.cpp:160
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr "Меню заголовка"
+
+#: mediacontroller.cpp:162
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr "Меню звуку"
+
+#: mediacontroller.cpp:164
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr "Меню субтитрів"
+
+#: mediacontroller.cpp:166
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr "Меню частин"
+
+#: mediacontroller.cpp:168
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr "Меню кута"
+
+#: phononnamespace.cpp:55
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "Сповіщення"
+
+#: phononnamespace.cpp:57
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "Музика"
+
+#: phononnamespace.cpp:59
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "Відео"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "Обмін інформацією"
+
+#: phononnamespace.cpp:63
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "Ігри"
+
+#: phononnamespace.cpp:65
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "Доступність"
+
+#: phononnamespace.cpp:79
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr "Запис"
+
+#: phononnamespace.cpp:81
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "Керування"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "Звуковий сервер PulseAudio"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "Гучність: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"Скористайтеся цим повзунком для зміни гучності. Крайня ліва позиція - 0%, "
+"крайня права — %1%"
+
+#: volumeslider.cpp:203
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "Заглушено"
+
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid "Restart Application"
+#~ msgstr "Перезапуск програми"
+
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid ""
+#~ "You changed the backend of the Phonon multimedia system.\n"
+#~ "\n"
+#~ "To apply this change you will need to restart '%1'."
+#~ msgstr ""
+#~ "Ви змінили серверну частину мультимедійної системи Phonon.\n"
+#~ "\n"
+#~ "Щоб зміни набули чинності, вам слід перезапустити «%1»."
+
+#~ msgctxt "QObject|"
+#~ msgid "%0 by %1"
+#~ msgstr "%0 від %1"
+
+#~ msgctxt "Phonon::"
+#~ msgid "CaptureCommunication"
+#~ msgstr "Перехоплення обміну інформацією"

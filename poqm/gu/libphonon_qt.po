@@ -1,0 +1,201 @@
+# translation of libphonon.po to Gujarati
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Kartik Mistry <kartik.mistry@gmail.com>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libphonon.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2008-03-21 14:57+0530\n"
+"Last-Translator: Kartik Mistry <kartik.mistry@gmail.com>\n"
+"Language-Team: Gujarati <kde-i18n-doc@kde.org>\n"
+"Language: gu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back "
+#| "to <b>%2</b>.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>ધ્વનિ ઉપકરણ <b>%1</b> કાર્ય કરશે નહી.<br/><b>%2</b> પર પાછા જઇ રહ્યા છીએ.</"
+"html>"
+
+#: audiooutput.cpp:494
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>ધ્વનિ ઉપકરણ પર જઇ રહ્યા છીએ <b>%1</b><br/>જે પ્રાપ્ત છે અને ઉંચી પસંદગી ધરાવે છે."
+"</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, fuzzy, qt-format
+#| msgid "Revert back to device '%1'"
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "ઉપકરણ પર પાછા આવો '%1'"
+
+#: audiooutput.cpp:512
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>ધ્વનિ ઉપકરણ પર જઇ રહ્યા છીએ <b>%1</b><br/>જે પ્રાપ્ત છે અને ઉંચી પસંદગી ધરાવે છે."
+"</html>"
+
+#: mediacontroller.cpp:158
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr ""
+
+#: mediacontroller.cpp:160
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr ""
+
+#: mediacontroller.cpp:162
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr ""
+
+#: mediacontroller.cpp:164
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr ""
+
+#: mediacontroller.cpp:166
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr ""
+
+#: mediacontroller.cpp:168
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr ""
+
+#: phononnamespace.cpp:55
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Notifications"
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "નોંધો"
+
+#: phononnamespace.cpp:57
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Music"
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "સંગીત"
+
+#: phononnamespace.cpp:59
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Video"
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "વિડીઓ"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "સંદેશાવ્યવહાર"
+
+#: phononnamespace.cpp:63
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Games"
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "રમતો"
+
+#: phononnamespace.cpp:65
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Accessibility"
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "ઉપયોગિતા"
+
+#: phononnamespace.cpp:79
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr ""
+
+#: phononnamespace.cpp:81
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr ""
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr ""
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, fuzzy, qt-format
+#| msgid "Volume: %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "અવાજ: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, fuzzy, qt-format
+#| msgid ""
+#| "Use this slider to adjust the volume. The leftmost position is 0%, the "
+#| "rightmost is %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"આ સ્લાઇડરનો ઉપયોગ અવાજને નિયંત્રિત કરવા કરો. ડાબી બાજુની સ્થિતિ 0%, જમણી બાજુની "
+"સ્થિતિ %1% છે"
+
+#: volumeslider.cpp:203
+#, fuzzy
+#| msgid "Muted"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "બંધ"
+
+#, fuzzy
+#~| msgctxt "Phonon::"
+#~| msgid "Communication"
+#~ msgctxt "Phonon::"
+#~ msgid "CaptureCommunication"
+#~ msgstr "સંદેશાવ્યવહાર"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "કાર્તિક મિસ્ત્રી"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kartik.mistry@gmail.com"

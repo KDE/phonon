@@ -1,0 +1,235 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Jan Holíček <jan.holicek@gmail.com>, 2010.
+# Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2014, 2019.
+# Lukáš Tinkl <ltinkl@redhat.com>, 2010.
+# Tomáš Chvátal <tomas.chvatal@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2019-08-14 16:51+0200\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 19.04.3\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Seznam nalezených podpůrných vrstev Phononu ve vašem systému. Toto pořadí "
+"určuje pořadí, v jakém je Phonon použije."
+
+#: backendselection.ui:170
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Preferovat"
+
+#: backendselection.ui:183
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Nepreferovat"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Přehrávání zvuku"
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Nahrávání zvuku"
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Nahrávání videa"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Neplatný"
+
+#: devicepreference.cpp:150
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Otestovat vybrané zařízení"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Definuje výchozí řazení zařízení, které lze předefinovat v individuálních "
+"kategoriích."
+
+#: devicepreference.cpp:303
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Výchozí pořadí zařízení pro přehrávání zvuku"
+
+#: devicepreference.cpp:306
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Výchozí pořadí zařízení pro nahrávání zvuku"
+
+#: devicepreference.cpp:309
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Výchozí pořadí zařízení pro nahrávání videa"
+
+#: devicepreference.cpp:316
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Preference zařízení pro přehrávání videa pro kategorii '%1'"
+
+#: devicepreference.cpp:320
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Preference zařízení pro nahrávaní zvuku pro kategorii '%1'"
+
+#: devicepreference.cpp:324
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Preference zařízení pro nahrávání videa pro kategorii '%1'"
+
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Aplikovat právě zobrazený seznam upřednostňovaných zařízení na následující "
+"kategorie přehrávání zvuku:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Výchozí/nezadaná kategorie"
+
+#: devicepreference.cpp:865
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Nepovedlo se nastavit vybrané vybrané zařízení"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Vaše podpůrná vrstva nemusí podporovat nahrávání zvuku"
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Vaše podpůrná vrstva nemusí podporovat nahrávání videa"
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Testování %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Různé kategorie užití multimédií. Pro každou kategorii můžete zvolit, jaké "
+"zařízení upřednostňujete pro použití v aplikacích užívajících Phonon."
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Zobrazit pokročilá zařízení"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Použít právě zobrazený seznam zařízení pro více kategorií."
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Použít seznam zařízení na..."
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Vhodná zařízení nalezená ve vašem systému pro danou kategorii. Zvolte "
+"zařízení, které má být používáno aplikacemi."
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Toto pořadí představuje prioritu zařízení. Pokud nemůže být z jakéhokoliv "
+"důvodu použito zařízení první, Phonon se pokusí použít druhé a tak dále."
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Test"
+
+#: devicepreference.ui:187
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "preferovat vybrané zařízení"
+
+#: devicepreference.ui:190
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Preferovat"
+
+#: devicepreference.ui:203
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "vybrané zařízení bez preference"
+
+#: devicepreference.ui:206
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Nepreferovat"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr "Nastavení Phononu"
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr "Dialog"
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr "Nastavení multimédií"
+
+#: settings.ui:31
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Priorita zaříz&ení"
+
+#: settings.ui:36
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Podpůrná vrstva"

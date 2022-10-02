@@ -1,0 +1,448 @@
+# translation of kcm_phonon.po to Karakh
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sairan Kikkarin <sairan@computer.org>, 2007, 2008, 2011.
+# Sairan Kikkarin <sairan(at)computer.org>, 2010, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2012-07-04 04:30+0600\n"
+"Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
+"Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Жүйеңізде Phonon тетіктер тізімі табылды.  Осында табылған ретімен Phonon "
+"оларды пайдаланады."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Артықтығын көтеру"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Артықтығын төмендету"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Аудио ойнату"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Дыбысты жазу"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Бейнені жазу"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Жарамсыз"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Таңдалған құрылғыны сынау"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr "Дербес санаттарымен ауыстыруға болатын құрылғылардың әдетті кезегі."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Әдетті дыбыс ойнатқыш құрылғының баптауы"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Әдетті дыбыс жазғыш құрылғының баптауы"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Әдетті бейне жазғыш құрылғының баптауы"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "'%1' санаттағы әдетті дыбыс ойнатқыш құрылғысы"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "'%1' санаттағы әдетті дыбыс жазғыш құрылғысы"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "'%1' санаттағы әдетті бейне жазғыш құрылғысы "
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Көрсетілген құрылғы басымдылықтар тізімі келесі өзге дыбыс ойнатқыш "
+"сантатарына қолданылсын:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Әдетті/Көрсетілмеген санаты"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Таңдалған аудио шығыс құрылғысы орнатылмады"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Тетік бағдарламаңыз дыбыс жазбайтын сияқты"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Тетік бағдарламаңыз бейне жазбайтын сияқты"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "%1 дегенді сынау"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Түрлі медиа қолдану санаттары.  Әрбір санат үшін қай құрылғы Phonon "
+"қолданбасы пайдаланатынын таңдауға болады."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Үздік құрылғыларын көрсету"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Назардағы құрылғылар тізімін өзге саннтатарына қолдану."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Құрылғылар тізімін қолдану..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Жүйеңізде табылған құрылғылар таңдаған санатқа жарайды. Қолданбада "
+"пайдаланатын құрылғыны таңдаңыз."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Реті құрылғылардың басымдылықтарын анықтайды. Бір себеппен Phonon бірінші "
+"құрылғыны қолдана алмай қалса, екіншісіне көшеді, солай тізім бойынша."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Сынақ"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "таңдалғаны - артығы"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Артықтығын көтеру"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "таңдалғаны - артығы емес"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Артықтығын төмендету"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Құрылғы баптауы"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Тетігі"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Сайран Киккарин"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "sairan@computer.org"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr "Тетігінің өзгертуін іске асыру үшін жүйеден шығып қайта кіру керек."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Phonon баптау модулі"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Ойнату (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Жазу (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Жеке құрылғылар"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE аудио жабдықтарын баптау"
+
+#~ msgid "Hardware"
+#~ msgstr "бдық"
+
+#~ msgid "Profile"
+#~ msgstr "Профилі"
+
+#~ msgid "Sound Card"
+#~ msgstr "Дыбыстық тақша"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Құрылғы конфигурациясы"
+
+#~ msgid "Connector"
+#~ msgstr "Түйістіргіш"
+
+#~ msgid "Sound Device"
+#~ msgstr "Дыбыс құрылғысы"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Динамигін орналастыру және сынау"
+
+#~ msgid "Input Levels"
+#~ msgstr "Кіріс деңгейлері"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Аудио жабдықты баптау"
+
+#~ msgid "Front Left"
+#~ msgstr "Сол жақ - қарсы"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Ортадан сол жақ - қарсыда"
+
+#~ msgid "Front Center"
+#~ msgstr "Қарсы - ортада"
+
+#~ msgid "Mono"
+#~ msgstr "Моно"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Ортадан оң жақ - қарсыда"
+
+#~ msgid "Front Right"
+#~ msgstr "Оң жақ - қарсы"
+
+#~ msgid "Side Left"
+#~ msgstr "Сол жағында"
+
+#~ msgid "Side Right"
+#~ msgstr "Оң жағында"
+
+#~ msgid "Rear Left"
+#~ msgstr "Сол жақ - артта"
+
+#~ msgid "Rear Center"
+#~ msgstr "Арт жақ - ортада"
+
+#~ msgid "Rear Right"
+#~ msgstr "Оң жақ - артта"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Сабвуфер"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Беймәлім арна"
+
+#~ msgid "Speaker Setup"
+#~ msgstr "Динамикті орнату"
+
+#~ msgid "Audio Output"
+#~ msgstr "Дыбысты шығару"
+
+#~ msgid "Audio Capture"
+#~ msgstr "Дыбысты қармау"
+
+#, fuzzy
+#~| msgid "Audio Capture"
+#~ msgid "Video Capture"
+#~ msgstr "Дыбысты қармау"
+
+#, fuzzy
+#~| msgid "Default Output Device Preference"
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "Әдетті шығыс құрылғысы"
+
+#, fuzzy
+#~| msgid "Output Device Preference for the '%1' Category"
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "'%1' санаттағы әдетті шығыс құрылғысы"
+
+#~ msgid "Remove"
+#~ msgstr "Кетіру"
+
+#~ msgid "Output"
+#~ msgstr "Шығыс"
+
+#~ msgid "Sound Output"
+#~ msgstr "Дыбыс шығысы"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "Таңдалған құрылғыда сынақ дыбысты ойнау"

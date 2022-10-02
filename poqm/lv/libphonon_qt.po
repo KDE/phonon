@@ -1,0 +1,200 @@
+# translation of libphonon.po to Latvian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Maris Nartiss <maris.kde@gmail.com>, 2007, 2010.
+# Viesturs Zarins <viesturs.zarins@mii.lu.lv>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: libphonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2010-03-20 19:52+0200\n"
+"Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
+"Language-Team: Latvian\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back "
+#| "to <b>%2</b>.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>Audio atskaņošanas ierīce <b>%1</b> nedarbojas.<br/>Atkāpjās uz <b>%2</"
+"b>.</html>"
+
+#: audiooutput.cpp:494
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>Pārslēdz audio atskaņošanu uz <b>%1</b> ierīci<br/>, kas nupat kļuva "
+"pieejama un kura ir vēlamāka.</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, fuzzy, qt-format
+#| msgid "Revert back to device '%1'"
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "Atgriezt atpakaļ uz '%1' ierīci"
+
+#: audiooutput.cpp:512
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which has "
+#| "higher preference or is specifically configured for this stream.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>Pārslēdz audio atskaņošanu uz <b>%1</b> ierīci<br/>, kura ir vēlamāka "
+"vai speciāli pielāgota šai plūsmai.</html>"
+
+#: mediacontroller.cpp:158
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr ""
+
+#: mediacontroller.cpp:160
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr ""
+
+#: mediacontroller.cpp:162
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr ""
+
+#: mediacontroller.cpp:164
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr ""
+
+#: mediacontroller.cpp:166
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr ""
+
+#: mediacontroller.cpp:168
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr ""
+
+#: phononnamespace.cpp:55
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Notifications"
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "Brīdināšana"
+
+#: phononnamespace.cpp:57
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Music"
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "Mūzika"
+
+#: phononnamespace.cpp:59
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Video"
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "Video"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "Komunikācijas"
+
+#: phononnamespace.cpp:63
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Games"
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "Spēles"
+
+#: phononnamespace.cpp:65
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Accessibility"
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "Pieejamība"
+
+#: phononnamespace.cpp:79
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr ""
+
+#: phononnamespace.cpp:81
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "Komunikācijas"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+#, fuzzy
+#| msgid "PulseAudio Sound Server"
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "PulseAudio skaņas serveris"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, fuzzy, qt-format
+#| msgid "Volume: %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "Skaļums: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, fuzzy, qt-format
+#| msgid ""
+#| "Use this slider to adjust the volume. The leftmost position is 0%, the "
+#| "rightmost is %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"Izmantojiet šo slīdni skaļuma regulēšanai. Kreisā pozīcija ir 0%, labā - %1%"
+
+#: volumeslider.cpp:203
+#, fuzzy
+#| msgid "Muted"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "Apklusināts"
+
+#, fuzzy
+#~| msgctxt "Phonon::"
+#~| msgid "Communication"
+#~ msgctxt "Phonon::"
+#~ msgid "CaptureCommunication"
+#~ msgstr "Komunikācijas"

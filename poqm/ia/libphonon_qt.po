@@ -1,0 +1,147 @@
+# giovanni <g.sora@tiscali.it>, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2021-04-10 22:34+0100\n"
+"Last-Translator: Giovanni Sora <g.sora@tiscali.it>\n"
+"Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
+"Language: ia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>Le dispositivo de reproduction audio <b>%1</b> non functiona.<br/>Il "
+"retorna a <b>%2</b>.</html>"
+
+#: audiooutput.cpp:494
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>Commutar al dispositivo de reproduction audio <b>%1</b><br/> que justo "
+"deveni disponibile e ha un preferentia major.</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "Reverte retro a dispositivo '%1'"
+
+#: audiooutput.cpp:512
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>Commutar al dispositivo de reproduction audio <b>%1</b><br/> que justo "
+"deveni disponibile e ha un preferentia major.</html>"
+
+#: mediacontroller.cpp:158
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr "Menu principal"
+
+#: mediacontroller.cpp:160
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr "Menu de titulo"
+
+#: mediacontroller.cpp:162
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr "Menu de Audio"
+
+#: mediacontroller.cpp:164
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr "Menu de subtitulo"
+
+#: mediacontroller.cpp:166
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr "Menu de Capitulo"
+
+#: mediacontroller.cpp:168
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr "Menu de Angulo"
+
+#: phononnamespace.cpp:55
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "Notificationes"
+
+#: phononnamespace.cpp:57
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "Musica"
+
+#: phononnamespace.cpp:59
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "Video"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "Communication"
+
+#: phononnamespace.cpp:63
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "Jocos"
+
+#: phononnamespace.cpp:65
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "Accessibilitate"
+
+#: phononnamespace.cpp:79
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr "Registrante"
+
+#: phononnamespace.cpp:81
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "Controlo"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "Servitor de sono PulseAudio"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "Volumine: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"Usa iste glissator per accomodar le volume. Le position plus a sinistra es "
+"0%, le plus a dextera es %1%"
+
+#: volumeslider.cpp:203
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "Silentiate"

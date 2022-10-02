@@ -1,0 +1,187 @@
+# Vietnamese translation for LibPhonon.
+# Copyright © 2007 KDE i18n Project for Vietnamese.
+#
+# Clytie Siddall <clytie@riverland.net.au>, 2007.
+# Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: libphonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2008-01-05 22:44+0700\n"
+"Last-Translator: Hoàng Đức Hiếu <hieu.d.hoang@gmail.com>\n"
+"Language-Team: Vietnamese <kde-l10n-vi@lists.kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: KAider 0.1\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back "
+#| "to <b>%2</b>.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>Thiết bị phát lại âm thanh <b>%1</b> không hoạt động được<br/>nên trở "
+"về <b>%2</b>.</html>"
+
+#: audiooutput.cpp:494
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>Đang chuyển đổi sang thiết bị phát lại âm thanh <b>%1</b><br/>mới sẵn "
+"sàng và có ưu tiên cao hơn.</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, fuzzy, qt-format
+#| msgid "Revert back to device '%1'"
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "Trở về thiết bị « %1 »"
+
+#: audiooutput.cpp:512
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>Đang chuyển đổi sang thiết bị phát lại âm thanh <b>%1</b><br/>mới sẵn "
+"sàng và có ưu tiên cao hơn.</html>"
+
+#: mediacontroller.cpp:158
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr ""
+
+#: mediacontroller.cpp:160
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr ""
+
+#: mediacontroller.cpp:162
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr ""
+
+#: mediacontroller.cpp:164
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr ""
+
+#: mediacontroller.cpp:166
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr ""
+
+#: mediacontroller.cpp:168
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr ""
+
+#: phononnamespace.cpp:55
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Notifications"
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "Thông báo"
+
+#: phononnamespace.cpp:57
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Music"
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "Âm nhạc"
+
+#: phononnamespace.cpp:59
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Video"
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "Ảnh động"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "Liên lạc"
+
+#: phononnamespace.cpp:63
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Games"
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "Trò chơi"
+
+#: phononnamespace.cpp:65
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Accessibility"
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "Khả năng truy cập"
+
+#: phononnamespace.cpp:79
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr ""
+
+#: phononnamespace.cpp:81
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr ""
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr ""
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, fuzzy, qt-format
+#| msgid "Volume: %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "Âm lượng: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, fuzzy, qt-format
+#| msgid ""
+#| "Use this slider to adjust the volume. The leftmost position is 0%, the "
+#| "rightmost is %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"Sử dụng con trượt này để điều chỉnh âm lượng. Vị trí ở cuối bên trái là 0%, "
+"còn vị trí ở cuối bên phải là %1%."
+
+#: volumeslider.cpp:203
+#, fuzzy
+#| msgid "Muted"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "Câm"

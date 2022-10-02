@@ -1,0 +1,344 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# G.Sora <g.sora@tiscali.it>, 2014, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2021-04-06 22:20+0100\n"
+"Last-Translator: Giovanni Sora <g.sora@tiscali.it>\n"
+"Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
+"Language: ia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Un lista de retro-administration de Phonon trovava se sur tu systema. Le "
+"ordine hic determina le ordine que Phonon usara."
+
+#: backendselection.ui:170
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Prefere"
+
+#: backendselection.ui:183
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Postpone..."
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Reproduction audio"
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Registration Audio"
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Registration video"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Invalide"
+
+#: devicepreference.cpp:150
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Essaya le dispositivo seligite"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Il defini le ordine predefinite de dispositivos que pote esser supplantate "
+"per categorias individual."
+
+#: devicepreference.cpp:303
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Preferentia de dispositivo de reproduction audio predefinite"
+
+#: devicepreference.cpp:306
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Preferentia de dispositivo de registration audio predefinite"
+
+#: devicepreference.cpp:309
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Preferentia de dispositivo de registration video predefinite"
+
+#: devicepreference.cpp:316
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr ""
+"Preferentia de dispositivo de reproduction audio  per le categoria '%1'"
+
+#: devicepreference.cpp:320
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr ""
+"Preferentia de dispositivo de registration audio  per le categoria '%1'"
+
+#: devicepreference.cpp:324
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Preferentia de dispositivo de registration video per le categoria '%1'"
+
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Applica le lista de preferentias currentemente monstrate al sequente altere "
+"categorias de reproduction audio:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Categoria Predefinite/Non specificate"
+
+#: devicepreference.cpp:865
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Il falleva fixar le seligite dispositivo de exito"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr ""
+"Tu retro-administration poterea non supportar registration de sono (audio)"
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Tu retro-administration poterea non supportar registration de video"
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Provante, %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Varie categorias de casos de uso de media.  Pro cata categoria tu pote "
+"seliger a qual dispositivo tu prefere que es usate per applicationes de "
+"Phonon."
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Monstra dispositivos avantiate"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr ""
+"Usa le lista de dispositivo monstrate currentemente pro ulterior categorias. "
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Applica lista de dispositivos a ..."
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"On trovava dispositivos sur tu systema, convenibile per le categoria "
+"seligite. Tu selige le dispositivo que tu vole esser usate per le "
+"applicationes."
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Le ordine determina le preferentias de dispositivos. Si pro alcun ration le "
+"prime dispositivo non pote esser usate Phonon tentara de usar le secunde, e "
+"assi il continuara."
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Essaya"
+
+#: devicepreference.ui:187
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "prefere le dispositivo seligite"
+
+#: devicepreference.ui:190
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Prefere"
+
+#: devicepreference.ui:203
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "Nulle preferentia pro le dispositivo seligite"
+
+#: devicepreference.ui:206
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Postpone"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr "Preferentias de Phonon"
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr "Dialogo"
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr "Preferentias de multimedia"
+
+#: settings.ui:31
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Prioritate de Dispositi&vo"
+
+#: settings.ui:36
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Retro-Administration"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Giovanni Sora"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "g.sora@tiscali.it"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Pro applical le modification de retro administration tu debe abandonar e "
+#~ "identificar te de nove."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Modulo de configuration de Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Reproduce (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Registration (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Dispositivos independente"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "Configuration Hardware de Audio de KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "Hardware"
+
+#~ msgid "Profile"
+#~ msgstr "Profilo"
+
+#~ msgid "Sound Card"
+#~ msgstr "Carta de sono "
+
+#~ msgid "Device Configuration"
+#~ msgstr "Configuration de dispositivo"
+
+#~ msgid "Connector"
+#~ msgstr "Connector"
+
+#~ msgid "Sound Device"
+#~ msgstr "Dispositivo de sono"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Position e essayo de altoparlator"
+
+#~ msgid "Input Levels"
+#~ msgstr "Nivellos de ingresso"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Configuration Hardware de audio"
+
+#~ msgid "Front Left"
+#~ msgstr "Fronte sinistre"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Fronte sinistre de centro"
+
+#~ msgid "Front Center"
+#~ msgstr "Fronte centro"
+
+#~ msgid "Mono"
+#~ msgstr "Mono"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Fronte dextere de centro"
+
+#~ msgid "Front Right"
+#~ msgstr "Fronte dextere"
+
+#~ msgid "Side Left"
+#~ msgstr "Latere sinistre"
+
+#~ msgid "Side Right"
+#~ msgstr "Latere dextere"
+
+#~ msgid "Rear Left"
+#~ msgstr "Posterior sinistre"
+
+#~ msgid "Rear Center"
+#~ msgstr "Posterior centro"
+
+#~ msgid "Rear Right"
+#~ msgstr "Posterior dextere"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Subwoofer"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Canal Incognite"

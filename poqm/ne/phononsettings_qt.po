@@ -1,0 +1,350 @@
+# translation of kcm_phonon.po to Nepali
+# Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>, 2007.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2007-08-24 14:24+0545\n"
+"Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
+"Language-Team: Nepali <info@mpp.org.np>\n"
+"Language: ne\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n !=1\n"
+"X-Generator: KBabel 1.11.4\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"फोनोन ब्याकइन्डको सूची तपाईँको प्रणालीमा फेला पर्यो । यहाँको क्रमले फोनोनले प्रयोग गर्ने "
+"क्रमलाई निर्धारण गर्दछ ।"
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "रूचाउनुहोस्"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "रूचिबाट हटाउनुहोस्"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr ""
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr ""
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr ""
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr ""
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "चयन गरिएका यन्त्र रूचाउनुहोस्"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "यन्त्र प्राथमिकता"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "यन्त्र प्राथमिकता"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "यन्त्र प्राथमिकता"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "यन्त्र प्राथमिकता"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "यन्त्र प्राथमिकता"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "यन्त्र प्राथमिकता"
+
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr ""
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "चयन गरिएका यन्त्र रूचाउनुहोस्"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr ""
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr ""
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr ""
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of outputs.  For each category you may choose what "
+#| "device you wish to output to."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"निर्गातहरूको विभिन्न कोटिहरू । हरेक कोटिका लागि तपाईँले निर्गात गर्न चाहनुभएको यन्त्र "
+"रोज्न सक्नुहुन्छ ।"
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr ""
+
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr ""
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr ""
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Audio Outputs found on your system.  Choose the device that you wish "
+#| "sound to come out of."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"अडियो निर्गात तपाईँको प्रणालीमा फेला पर्यो । तपाईँले राम्रोसँग ध्वनि बाहिर आउने यन्त्र "
+"रोज्नुहोस् ।"
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the output devices. If for some "
+#| "reason the first device cannot be used Phonon will try to use the second, "
+#| "and\n"
+#| "so on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"क्रमले निर्गात यन्त्रको प्राथमिकतालाई निर्धारण गर्दछ । यदि केही भएर पहिलो यन्त्र प्रयोग "
+"गर्न सकिएन भने फोनोनले दोस्रो र वा अन्य प्रयोग गर्न प्रयास\n"
+"गर्नेछ ।"
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr ""
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "चयन गरिएका यन्त्र रूचाउनुहोस्"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "रूचाउनुहोस्"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "चयन गरिएका यन्त्रका लागि कुनै प्राथमिकता छैन"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "रूचिबाट हटाउनुहोस्"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "यन्त्र प्राथमिकता"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "ब्याकइन्ड"
+
+#, fuzzy
+#~| msgid "Your names"
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "श्यामकृष्ण बल"
+
+#, fuzzy
+#~| msgid "Your emails"
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "shyamkrishna_bal@yahoo.com"
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "फोनोन कन्फिगरेसन मोड्युल"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "प्रतिलिपिअधिकार २००६ माथियस क्रेज"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "माथियस क्रेज"
+
+#, fuzzy
+#~| msgid "prefer"
+#~ msgid "Profile"
+#~ msgstr "रूचाउनुहोस्"
+
+#~ msgid "Audio Output"
+#~ msgstr "अडियो निर्गात"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Audio Capture"
+#~ msgstr "अडियो निर्गात"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Video Capture"
+#~ msgstr "अडियो निर्गात"
+
+#, fuzzy
+#~| msgid "Device Preference"
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "यन्त्र प्राथमिकता"
+
+#, fuzzy
+#~| msgid "Device Preference"
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "यन्त्र प्राथमिकता"
+
+#, fuzzy
+#~| msgid "remove"
+#~ msgid "Remove"
+#~ msgstr "हटाउनुहोस्"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Output"
+#~ msgstr "अडियो निर्गात"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Sound Output"
+#~ msgstr "अडियो निर्गात"
+
+#, fuzzy
+#~| msgid "prefer the selected device"
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "चयन गरिएका यन्त्र रूचाउनुहोस्"
+
+#, fuzzy
+#~| msgid "Device Preference"
+#~ msgid "Default %1 Preference:"
+#~ msgstr "यन्त्र प्राथमिकता"

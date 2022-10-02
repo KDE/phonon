@@ -1,0 +1,190 @@
+# translation of libphonon.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2010.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2013, 2015, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: libphonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2019-07-28 05:50+0200\n"
+"Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
+"Language-Team: Polish <kde-i18n-doc@kde.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.07.70\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>Urządzenie do odtwarzania dźwięku <b>%1</b> nie działa.<br/"
+">Przełączono na <b>%2</b>.</html>"
+
+#: audiooutput.cpp:494
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>Przełączono na urządzenie do odtwarzania dźwięku <b>%1</b><br/>które "
+"właśnie stało się dostępne i jest wyżej na liście wybieranych urządzeń.</"
+"html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "Wróć do urządzenia '%1'"
+
+#: audiooutput.cpp:512
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>Przełączono na urządzenie do odtwarzania dźwięku <b>%1</b><br/>które "
+"jest wyżej na liście wybieranych urządzeń lub jest jednoznacznie ustawione "
+"dla tego strumienia.</html>"
+
+#: mediacontroller.cpp:158
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr "Menu główne"
+
+#: mediacontroller.cpp:160
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr "Menu tytułu"
+
+#: mediacontroller.cpp:162
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr "Menu dźwięku"
+
+#: mediacontroller.cpp:164
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr "Menu napisów"
+
+#: mediacontroller.cpp:166
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr "Menu rozdziałów"
+
+#: mediacontroller.cpp:168
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr "Menu kątów"
+
+#: phononnamespace.cpp:55
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "Powiadomienia"
+
+#: phononnamespace.cpp:57
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "Muzyka"
+
+#: phononnamespace.cpp:59
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "Obraz"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "Łączność"
+
+#: phononnamespace.cpp:63
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "Gry"
+
+#: phononnamespace.cpp:65
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "Dostępność"
+
+#: phononnamespace.cpp:79
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr "Nagrywanie"
+
+#: phononnamespace.cpp:81
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "Sterownie"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "Serwer dźwięku PulseAudio"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "Głośność: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"Przesuwaj tym wskaźnikiem, aby dostosować głośność. Najdalej w lewo to 0%, a "
+"najdalej w prawo to %1%1"
+
+#: volumeslider.cpp:203
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "Wyciszony"
+
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid "Restart Application"
+#~ msgstr "Uruchom program ponownie"
+
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid ""
+#~ "You changed the backend of the Phonon multimedia system.\n"
+#~ "\n"
+#~ "To apply this change you will need to restart '%1'."
+#~ msgstr ""
+#~ "Silnik systemu multimedialnego Phonon uległ zmianie.\n"
+#~ "\n"
+#~ "Aby je zastosować należy ponownie uruchomić '%1'."
+
+#~ msgctxt "QObject|"
+#~ msgid "%0 by %1"
+#~ msgstr "%0 autorstwa %1"
+
+#, fuzzy
+#~| msgctxt "Phonon::"
+#~| msgid "Communication"
+#~ msgctxt "Phonon::"
+#~ msgid "CaptureCommunication"
+#~ msgstr "Komunikacja"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marta Rybczyńska"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-i18n@rybczynska.net"

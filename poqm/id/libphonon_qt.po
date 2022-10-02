@@ -1,0 +1,179 @@
+# Indonesian translations for libphonon package.
+# Copyright (C) 2010 This_file_is_part_of_KDE
+# This file is distributed under the same license as the libphonon package.
+# A. Akbar Hidayat <keripix@gmail.com>, 2010.
+# Wantoyo <wantoyek@gmail.com>, 2017, 2018, 2019, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libphonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2022-08-26 23:44+0700\n"
+"Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
+"Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 21.12.3\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>Perangkat pemutaran audio <b>%1</b> tidak bekerja.<br/>Kembali ke <b>"
+"%2</b>.</html>"
+
+#: audiooutput.cpp:494
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>Beralih ke peranti pemutaran audio <b>%1</b><br/>yang sekarang sudah "
+"tersedia dan yang lebih disukai.</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "Balik kembali ke peranti '%1'"
+
+#: audiooutput.cpp:512
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>Beralih ke peranti pemutaran audio <b>%1</b><br/>yang paling disukai "
+"atau yang dikonfigurasi secara khusus untuk stream ini.</html>"
+
+#: mediacontroller.cpp:158
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr "Menu Utama"
+
+#: mediacontroller.cpp:160
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr "Menu Judul"
+
+#: mediacontroller.cpp:162
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr "Menu Audio"
+
+#: mediacontroller.cpp:164
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr "Menu Subtitle"
+
+#: mediacontroller.cpp:166
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr "Menu Bab"
+
+#: mediacontroller.cpp:168
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr "Menu Sudutpandang"
+
+#: phononnamespace.cpp:55
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "Notifikasi"
+
+#: phononnamespace.cpp:57
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "Musik"
+
+#: phononnamespace.cpp:59
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "Video"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "Komunikasi"
+
+#: phononnamespace.cpp:63
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "Permainan"
+
+#: phononnamespace.cpp:65
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "Aksesibilitas"
+
+#: phononnamespace.cpp:79
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr "Perekaman"
+
+#: phononnamespace.cpp:81
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "Kendali"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "Server Suara PulseAudio"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "Volume: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"Gunakan penggeser ini untuk menyesuaikan volume. Posisi paling kiri adalah "
+"0%, dan yang paling kanan adalah %1%"
+
+#: volumeslider.cpp:203
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr " Dibungkam"
+
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid "Restart Application"
+#~ msgstr "Mulaikan ulang Aplikasi"
+
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid ""
+#~ "You changed the backend of the Phonon multimedia system.\n"
+#~ "\n"
+#~ "To apply this change you will need to restart '%1'."
+#~ msgstr ""
+#~ "Kamu mengubah backend-nya sistem multimedia Phonon.\n"
+#~ "\n"
+#~ "Untuk menerapkan perubahan ini kamu perlu memulaikan ulang '%1'."
+
+#~ msgctxt "QObject|"
+#~ msgid "%0 by %1"
+#~ msgstr "%0 berdasarkan %1"
+
+#, fuzzy
+#~| msgctxt "Phonon::"
+#~| msgid "Communication"
+#~ msgctxt "Phonon::"
+#~ msgid "CaptureCommunication"
+#~ msgstr "Komunikasi"

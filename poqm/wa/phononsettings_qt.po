@@ -1,0 +1,456 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Jean Cayron <jean.cayron@gmail.com>, 2008, 2010.
+# Jean Cayron <jean.cayron@base.be>, 2011, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2012-07-04 14:48+0200\n"
+"Last-Translator: Jean Cayron <jean.cayron@base.be>\n"
+"Language-Team: Walloon <linux-wa@walon.org>\n"
+"Language: wa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Ene djivêye des bouyes di fond Phonon trovêyes so vosse sistinme. L' ôre "
+"cial dit ké est l' ôre ki Phonon ls eployrè."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Pus rade"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Moens rade"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Djouwaedje odio"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Eredjistraedje odio"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Eredjistraedje videyo"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Nén valåbe"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Sayî l' éndjin tchoezi"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Defini l' prémetou ôre des éndjins ki pout esse candjî pas des mierseulès "
+"categoreyes."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Prémetowès preferinces di l' éndjin å djouwaedje odio"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Prémetowès preferinces di l' éndjin a l' eredjistraedje odio"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Prémetowès preferinces di l' éndjin a l' eredjistraedje videyo"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Prémetowès preferinces di djouwaedje odio pol categoreye « %1 »"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Prémetowès preferinces d' eredjistraedje odio pol categoreye « %1 »"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Prémetowès preferinces d' eredjistraedje videyo pol categoreye « %1 » "
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Mete en ouve li djivêye des preferinces di l' éndjin mostrêye pol moumint po "
+"ls ôtès categoreyes di djouwaedje odio ki shuvèt :"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Prémetowe/nén specifieye categoreye"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Li tchoes di l' éndjin odio d' rexhowe a fwait berwete"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Vosse bouye di fond pôreut n' nén saveur fé d' l' eredjistraedje odio"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr ""
+"Vosse bouye di fond pôreut n' nén saveur fé d' l' eredjistraedje videyo"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Dji saye %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Sacwantès categoreyes di façon d' si siervi des medias. Po tchaeke "
+"categoreye, vos savoz tchoezi kén éndjin vos eployrîz pus voltî dins les "
+"programes ki s' siervèt d' Phonon."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Mostrer spepieus éndjins"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr ""
+"Si siervi del djivêye des éndjins mostrés pol moumint po pus di categoreyes."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Mete en ouve l' djivêye des éndjins po..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Éndjins trovés so vosse sistinme, bon pol categoreye di tchoezeye. "
+"Tchoezixhoz l' éndjin k' vos vloz k' les programes eployexhe."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"L' ôre dite li preferince inte les éndjins. Si po ene råjhon, li prumî "
+"éndjin n' sait nén esse eployî, Phonon sayrè d' si siervi do deujhinme et "
+"vos nd åroz."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Sayî"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "pus rade l' éndjin tchoezi"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Pus rade"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "pont d' preferince po l' éndjin tchoezi"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Moens rade"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Preferince di l' éndjin"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Bouye di fond"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Djan Cayron"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "jean.cayron@gmail.com"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Po mete en ouve li candjmint d' bouye di fond, vos vs duvroz elodjî eyet "
+#~ "s' relodjî."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Module d' apontiaedje di Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Djouwaedje (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Eredjistraedje (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Éndjins dislaxhîs"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "Apontiaedje di l' éndjolreye odio po KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "Éndjolreye"
+
+#~ msgid "Profile"
+#~ msgstr "Profil"
+
+#~ msgid "Sound Card"
+#~ msgstr "Cåte son"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Apontiaedje di l' éndjin"
+
+#~ msgid "Connector"
+#~ msgstr "Raloyeu"
+
+#~ msgid "Sound Device"
+#~ msgstr "Éndjin d' son"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Plaece do hôt-pårloe eyet sayaedje"
+
+#~ msgid "Input Levels"
+#~ msgstr "Liveas d' intrêye"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Apontiaedje di l' éndjolreye odio"
+
+#~ msgid "Front Left"
+#~ msgstr "Pa dvant a hintche"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Pa dvant a hintche då mitan"
+
+#~ msgid "Front Center"
+#~ msgstr "Pa dvant å mitan"
+
+#~ msgid "Mono"
+#~ msgstr "Mono"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Pa dvant a droete då mitan"
+
+#~ msgid "Front Right"
+#~ msgstr "Pa dvant a droete"
+
+#~ msgid "Side Left"
+#~ msgstr "Sol costé a hintche"
+
+#~ msgid "Side Right"
+#~ msgstr "Sol costé a droete"
+
+#~ msgid "Rear Left"
+#~ msgstr "Pa drî a hintche"
+
+#~ msgid "Rear Center"
+#~ msgstr "Pa drî å mitan"
+
+#~ msgid "Rear Right"
+#~ msgstr "Pa drî a droete"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Basse di pa dzo (subwoofer)"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Canå nén cnoxhou"
+
+#~ msgid "Audio Output"
+#~ msgstr "Rexhowe do son"
+
+#~ msgid "Audio Capture"
+#~ msgstr "Egaloyaedje do son"
+
+#, fuzzy
+#~| msgid "Audio Capture"
+#~ msgid "Video Capture"
+#~ msgstr "Egaloyaedje do son"
+
+#, fuzzy
+#~| msgid "Default Output Device Preference"
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "Prémetowès preferinces di l' endjin e rexhowe"
+
+#, fuzzy
+#~| msgid "Output Device Preference for the '%1' Category"
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "Prémetowès preferinces di rexhowe pol categoreye « %1 »"
+
+#~ msgid "Remove"
+#~ msgstr "Oister"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Output"
+#~ msgstr "Rexhowe do son"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Sound Output"
+#~ msgstr "Rexhowe do son"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "Djouwer on son d' asprouvaedje so l' éndjin tchoezi"

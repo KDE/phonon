@@ -1,0 +1,456 @@
+# translation of kcm_phonon.po to Persian
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Nazanin Kazemi <kazemi@itland.ir>, 2007.
+# Mohamad Reza Mirdamadi <mohi@linuxshop.ir>, 2011, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2012-06-22 10:12+0430\n"
+"Last-Translator: Mohammad Reza Mirdamadi <mohi@linuxshop.ir>\n"
+"Language-Team: Farsi (Persian) <kde-i18n-fa@kde.org>\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"فهرستی از پایانه‌های پشتیبانی  Phonon که روی سیستمتان یافت شد.  ترتیب اینجا "
+"تعیین می‌کند ترتیب Phonon آنها را استفاده می‌کند."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "ترجیح"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "تعویق"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "پخش صدا"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "ضبط صدا"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "ضبط تصویر"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "نامعتبر"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "امتحان دستگاه برگزیده"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"اولویت پیش‌فرض دستگاه‌ها را تعریف می‌کند که می‌تواند توسط بخش‌های جداگانه "
+"بازنویسی شود"
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "تنظیم دستگاه پیش‌فرض پخش صدا"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "تنظیم دستگاه پیش‌فرض ضبط صدا"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "تنظیم دستگاه پیش‌فرض ضبط تصویر"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "تنظیم دستگاه پخش صدا برای بخش «%1»"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "تنظیم دستگاه ضبط صدا برای بخش «%1»"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "تنظیم دستگاه ضبط تصویر برای بخش «%1»"
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr "اعمال تنظیمات نشان داده شده‌ی جاری به بخش‌های پخش صدای دیگر در زیر:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "بخش پیش‌فرض/مشخص‌نشده"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "تنتظیم دستگاه صدای انتخابی شکست خورد"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "پایانه‌ي پشتیبانی شما ممکن است از ضبط صدا پشتیبانی نکند."
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "پایانه‌ي پشتیبانی شما ممکن است از ضبط تصویر پشتیبانی نکند."
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "در حال امتحان %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"دسته های گوناگون استفاده‌های رسانه. برای هر دسته ممکن است دستگاهی که می‌خواهید "
+"خروجی از آن باشد را انتخاب کنید."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "نمایش دستگاه‌های پیشرفته"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "از لیست دستگاه‌های نشان داده شده برای بخش‌های بیشتر استفاده کن."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "اعمال لیست دستگاه‌ها به..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"دستگاه‌هایی متناسب برای بخش‌های انتخاب شده روی سیستمتان یافت شد.  دستگاهی را "
+"انتخاب کنید که می‌خواهید توسط نرم‌افزارها استفاده شود."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"ترتیب، تنظیم دستگاههای خروجی را تعیین می‌کند. اگر به دلایلی دستگاه اول "
+"نتوانست استفاده شود، Phonon سعی در استفاده از دستگاه دوم می‌کند و به همین "
+"ترتیب."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "آزمون"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "ترجیح دستگاه برگزیده"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "ترجیح"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "تنظیمی برای دستگاه برگزیده وجود ندارد"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "تعویق"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "تنظیم دستگاه"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "پایانه‌ی پشتیبانی"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "محمدرضا میردامادی , نازنین کاظمی , وحید فضل الله زاده"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "mohi@linuxshop.ir , kazemi@itland.ir , vahid.fazl2000@gmail.com"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "برای اعمال تغییرات پایانه پشتیبانی شما باید از این نشست خارج شده و دوباره "
+#~ "وارد شوید."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "پیمانه‌ی پیکربندی Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "حق نشر ۲۰۰۶ Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "پخش (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "ضبط (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "دستگاه‌های مستقل"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "تنظیمات سخت‌افزار صدای KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "سخت‌افزار"
+
+#~ msgid "Profile"
+#~ msgstr "مجموعه تنظیمات"
+
+#~ msgid "Sound Card"
+#~ msgstr "کارت صدا"
+
+#~ msgid "Device Configuration"
+#~ msgstr "پیکربندی دستگاه"
+
+#~ msgid "Connector"
+#~ msgstr "متصل کننده"
+
+#~ msgid "Sound Device"
+#~ msgstr "دستگاه صدا"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "قرارگیری بلندگو و امتحان آن"
+
+#~ msgid "Input Levels"
+#~ msgstr "سطوح ورودی"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "تنظیمات سخت‌افزار صدا"
+
+#~ msgid "Front Left"
+#~ msgstr "جلو جپ"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "جلو چپ یا وسط"
+
+#~ msgid "Front Center"
+#~ msgstr "جلو وسط"
+
+#~ msgid "Mono"
+#~ msgstr "تک"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "جلو راست یا وسط"
+
+#~ msgid "Front Right"
+#~ msgstr "جلو راست"
+
+#~ msgid "Side Left"
+#~ msgstr "کنار چپ"
+
+#~ msgid "Side Right"
+#~ msgstr "کنار راست"
+
+#~ msgid "Rear Left"
+#~ msgstr "عقب چپ"
+
+#~ msgid "Rear Center"
+#~ msgstr "عقب وسط"
+
+#~ msgid "Rear Right"
+#~ msgstr "عقب راست"
+
+#~ msgid "Subwoofer"
+#~ msgstr "ساب ووفر"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "کانال ناشناخته"
+
+#~ msgid "Audio Output"
+#~ msgstr "خروجی صوتی"
+
+#~ msgid "Audio Capture"
+#~ msgstr "گیراندازی صوتی"
+
+#, fuzzy
+#~| msgid "Audio Capture"
+#~ msgid "Video Capture"
+#~ msgstr "گیراندازی صوتی"
+
+#, fuzzy
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "تنظیم دستگاه"
+
+#, fuzzy
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "تنظیم دستگاه"
+
+#~ msgid "Remove"
+#~ msgstr "حذف"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Output"
+#~ msgstr "خروجی صوتی"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Sound Output"
+#~ msgstr "خروجی صوتی"
+
+#, fuzzy
+#~| msgid "prefer the selected device"
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "ترجیح دستگاه برگزیده"
+
+#, fuzzy
+#~ msgid "Default %1 Preference:"
+#~ msgstr "تنظیم دستگاه"

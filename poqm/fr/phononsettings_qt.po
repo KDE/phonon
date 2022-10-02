@@ -1,0 +1,369 @@
+# translation of kcm_phonon.po to Français
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
+# Guillaume Pujol <guill.p@gmail.com>, 2008.
+# Jean-Jacques Finazzi <mrjay01@users.sourceforge.net>, 2007, 2008, 2010, 2011, 2012.
+# Sébastien Renard <renard@kde.org>, 2012.
+# xavier <xavier.besnard@neuf.fr>, 2012, 2013, 2021.
+# Simon Depiets <sdepiets@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2021-01-13 17:47+0100\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
+"Language-Team: French <kde-francophone@kde.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 20.12.0\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Une liste des moteurs pour Phonon trouvés sur votre système. Phonon les "
+"utilisera dans l'ordre indiqué ici."
+
+#: backendselection.ui:170
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Monter"
+
+#: backendselection.ui:183
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Descendre"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Lecture audio"
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Enregistrement audio"
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Enregistrement vidéo"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Non valable"
+
+#: devicepreference.cpp:150
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Test du périphérique sélectionné"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Définit l'ordre par défaut des périphériques pouvant être outrepassé par des "
+"catégories individuelles."
+
+# unreviewed-context
+#: devicepreference.cpp:303
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Préférences du périphérique de lecture audio par défaut"
+
+# unreviewed-context
+#: devicepreference.cpp:306
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Préférences du périphérique d'enregistrement audio par défaut"
+
+# unreviewed-context
+#: devicepreference.cpp:309
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Préférences du périphérique d'enregistrement vidéo par défaut"
+
+# unreviewed-context
+#: devicepreference.cpp:316
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Préférences du périphérique de lecture audio pour la catégorie « %1 »"
+
+# unreviewed-context
+#: devicepreference.cpp:320
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr ""
+"Préférences du périphérique d'enregistrement audio pour la catégorie « %1 »"
+
+# unreviewed-context
+#: devicepreference.cpp:324
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr ""
+"Préférences du périphérique d'enregistrement vidéo pour la catégorie « %1 »"
+
+# unreviewed-context
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Appliquer la liste actuellement affichée de préférences de périphériques aux "
+"autres catégories de lecture audio ci-dessous :"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Catégorie par défaut / non spécifiée"
+
+#: devicepreference.cpp:865
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Impossible de sélectionner le périphérique de sortie audio"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Votre moteur peut ne pas prendre en charge l'enregistrement audio"
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Votre moteur peut ne pas prendre en charge l'enregistrement vidéo"
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "%1 en cours de test"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Différentes catégories d'usages de média. Pour chaque catégorie, vous pouvez "
+"choisir le périphérique que vous préférez que les applications Phonon "
+"utilisent."
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Afficher les périphériques avancés"
+
+# unreviewed-context
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr ""
+"Utiliser la liste actuellement affichée de périphériques pour plus de "
+"catégories."
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Appliquer la liste de périphériques à..."
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Périphériques trouvés sur votre système, utilisables pour la catégorie "
+"sélectionnée. Choisissez le périphérique que vous souhaitez que les "
+"applications utilisent."
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"L'ordre détermine la précédence des périphériques. Si, pour une raison "
+"quelconque, le premier périphérique ne peut être utilisé, Phonon essaiera "
+"d'utiliser le second et ainsi de suite."
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Tester"
+
+#: devicepreference.ui:187
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "monter le périphérique sélectionné"
+
+#: devicepreference.ui:190
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Monter"
+
+#: devicepreference.ui:203
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "pas de préférence pour le périphérique sélectionné"
+
+#: devicepreference.ui:206
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Descendre"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr "Configuration de Phonon"
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr "Boîte de dialogue"
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr "Configuration multimédia"
+
+#: settings.ui:31
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Priorités des &périphériques"
+
+#: settings.ui:36
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Moteur"
+
+#, fuzzy
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Xavier Besnard, Jean-Jacques Finazzi, Guillaume Pujol"
+
+#, fuzzy
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "xavier.besnard@neuf.fr, mrjay01@users.sourceforge.net, guill.p@gmail.com"
+
+#, fuzzy
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Pour appliquer le changement de moteur, vous devrez vous déconnecter puis "
+#~ "vous reconnecter."
+
+#, fuzzy
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Module de configuration de Phonon"
+
+#, fuzzy
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#, fuzzy
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#, fuzzy
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Lecture (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Enregistrement (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Périphériques indépendants"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "Configuration des périphériques audio de KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "Matériel"
+
+#~ msgid "Profile"
+#~ msgstr "Profil"
+
+#~ msgid "Sound Card"
+#~ msgstr "Carte son"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Configuration du périphérique"
+
+#~ msgid "Connector"
+#~ msgstr "Connecteur"
+
+#~ msgid "Sound Device"
+#~ msgstr "Périphérique audio"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Emplacement et test du haut-parleur"
+
+#~ msgid "Input Levels"
+#~ msgstr "Niveaux d'entrée"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Configuration des périphériques audio"
+
+#~ msgid "Front Left"
+#~ msgstr "Avant gauche"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Avant gauche du centre"
+
+#~ msgid "Front Center"
+#~ msgstr "Avant centre"
+
+#~ msgid "Mono"
+#~ msgstr "Mono"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Avant droit du centre"
+
+#~ msgid "Front Right"
+#~ msgstr "Avant droit"
+
+#~ msgid "Side Left"
+#~ msgstr "Latéral gauche"
+
+#~ msgid "Side Right"
+#~ msgstr "Latéral droit"
+
+#~ msgid "Rear Left"
+#~ msgstr "Arrière gauche"
+
+#~ msgid "Rear Center"
+#~ msgstr "Arrière centre"
+
+#~ msgid "Rear Right"
+#~ msgstr "Arrière droit"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Caisson de basses"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Canal inconnu"

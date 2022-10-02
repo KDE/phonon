@@ -1,0 +1,404 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Danishka Navin, 2010, 2011.
+# Danishka Navin <danishka@gmail.com>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2011-07-26 23:17+0530\n"
+"Last-Translator: Danishka Navin <danishka@gmail.com>\n"
+"Language-Team: Sinhala <info@hanthana.org>\n"
+"Language: si\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 1.1\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"ඔබේ පද්ධතිය මත හමුවූ Phonon පසුඉම් ලැයිස්තුවක්. Phonon විසින් ඒවා භාවිතකරන පිළිවෙළට පෙලගස්වා "
+"ඇත."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "නිර්දේශ"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "නිර්දේශ නොකරන"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "ශ්‍රව්‍ය ප්‍රතිවාදනය"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "ශ්‍රව්‍ය පටිගතකිරීම"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "දෘශ්‍ය පටිගතකිරීම"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "වැරදි"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "තෝරාගත් උපකරණය පිරික්සන්න"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr "තනි තනි ප්‍රවර්ග මගින් අතික්‍රමණය කල හැකි පෙරනිමි උපකරණ පෙළගැසම දක්වයි"
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "පෙරනිමි ශ්‍රව්‍ය වාදන උපකරණ අභිප්‍රේත"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "පෙරනිමි ශ්‍රව්‍ය පටිගත උපකරණ අභිප්‍රේත"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "පෙරනිමි දෘශ්‍ය පටිගත උපකරණ අභිප්‍රේත"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "'%1' ප්‍රවර්ගය සඳහා වන ශ්‍රව්‍ය වාදන උපකරණ අභිප්‍රේතය"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "'%1' ප්‍රවර්ගය සඳහා වන ශ්‍රව්‍ය පටිගත උපකරණ අභිප්‍රේතය"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "'%1' ප්‍රවර්ගය සඳහා වන දෘශ්‍ය පටිගත උපකරණ අභිප්‍රේතය "
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr "පහත දැක්වෙන වෙනත් ශ්‍රව්‍ය වාදන ප්‍රවර්ග සඳහා දැනට පෙනෙන උපකරණ අභිප්‍රේත ඇතුළත් කරයි:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "පෙරනිමි/ඇතුළත් නොකල ප්‍රවර්ගය"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "තෝරාගත් උපකරණය පිරික්සන්න"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "ඔබේ පසුඉම ශ්‍රව්‍ය පටිගත කිරීම සඳහා සහාය නොදක්වනවා විය හැක"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "ඔබේ පසුඉම දෘශ්‍ය පටිගත කිරීම සඳහා සහාය නොදක්වනවා විය හැක"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "පිරික්සමින් %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"මාධ්‍ය භාවිතයේ විවිධ ප්‍රවර්ග ඇත. එක් එක් ප්‍රවර්ගය සඳහා, ඔබට Phonon මගින් භාවිත කල යුතු "
+"උපකරණය නිර්දේශ කල හැක."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "උසස් උපකරණ පෙන්වන්න"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "තවත් ප්‍රවර්ග සඳහා දැනට පෙන්වන උපකරණ ලැයිස්තුව භාවිත කරන්න."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "වෙත උපකරණ ලැයිස්තුව ඇතුළත් කරයි..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"තෝරාගත් ප්‍රවර්ගයට ගැලපෙන උපකරණ ඔබේ පද්ධතියෙන් හමුවිය. ඔබට යෙදුම් මගින් භාවිත කරවීමට ඇවැසි "
+"උපකරණය තෝරන්න."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"පෙළගැස්ම උපකරණයන්ගේ අභිප්‍රේත දක්වයි. කිසියම් හේතුවක් මත ප්‍රථම උපකරණය Phonon මගින් භාවිත "
+"කරවීමට නොහැකි වුවහොත් දෙවැන්න භාවිත කරනු ඇත. එලෙස ඉදිරියට යයි."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "පිරික්සන්න"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "තෝරාගත් උපකරණය නිර්දේශ කරයි"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "නිර්දේශ"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "තෝරාගත් උපකරණයට අභිප්‍රේත නොමැත"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "නිර්දේශ නොකරන"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "උපකරණ අභිප්‍රේත"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "පසුඉම"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Danishka Navin"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "danishka@gmail.com"
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "පෝනොන් සැකසුම් මොඩියුලය"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "වාදනය (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "පටිගතකිරීම (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "නිදහස් උපකරණ"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE ශ්‍රව්‍ය දෘඩාංග ස්ථාපනය"
+
+#~ msgid "Hardware"
+#~ msgstr "දෘඩාංග"
+
+#~ msgid "Profile"
+#~ msgstr "පැතිකඩ"
+
+#~ msgid "Sound Card"
+#~ msgstr "ශබ්ද කාඩ්පත"
+
+#~ msgid "Device Configuration"
+#~ msgstr "උපකරණ සැකසීම"
+
+#~ msgid "Connector"
+#~ msgstr "සම්බන්ධකය"
+
+#~ msgid "Sound Device"
+#~ msgstr "ශබ්ද උපකරණය"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "ශබ්ද විකාශක ස්ථානගතකිරීම හා පිරික්සීම"
+
+#~ msgid "Input Levels"
+#~ msgstr "ආදාන මට්ටම්"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "ශ්‍රව්‍ය දෘඩාංග ස්ථාපනය"
+
+#~ msgid "Front Left"
+#~ msgstr "ඉදිරි වම"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "මධ්‍යයේ ඉදිරි වම"
+
+#~ msgid "Front Center"
+#~ msgstr "ඉදිරි මධ්‍යය"
+
+#~ msgid "Mono"
+#~ msgstr "මොනෝ"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "මධ්‍යයේ ඉදිරි දකුණ"
+
+#~ msgid "Front Right"
+#~ msgstr "ඉදිරි දකුණ"
+
+#~ msgid "Side Left"
+#~ msgstr "පැති වම"
+
+#~ msgid "Side Right"
+#~ msgstr "පැති දකුණ"
+
+#~ msgid "Rear Left"
+#~ msgstr "පසුපස වම"
+
+#~ msgid "Rear Center"
+#~ msgstr "පසුපස මධ්‍යය"
+
+#~ msgid "Rear Right"
+#~ msgstr "පසුපස දකුණ"
+
+#~ msgid "Subwoofer"
+#~ msgstr "සබ්වූෆරය"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "නොදන්නා නාලිකාවක්"

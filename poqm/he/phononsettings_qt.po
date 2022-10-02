@@ -1,0 +1,410 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Diego Iastrubni <elcuco@kde.org>, 2008, 2009, 2012.
+# Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm5_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2017-05-16 06:52-0400\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Zanata 3.9.6\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"רשימה של מנועי Phonon שנמצאו במערכת שלך. הסדר כאן קובע את הסדר ש־Phonon "
+"ישתמש בהם."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "העדף"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "אל תעדיף"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "שמע"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "הקלטת שמע"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "הקלטת וידאו"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "לא תקין"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "בדוק את ההתקן הנבחר"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"מגדיר את סידור ברירת המחדל של התקנים, שאותם ניתן לאכוף בקטגוריות ייחודיות."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "עדיפות התקן שמע המוגדר כברירת־מחדל"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "עדיפות התקן לכידת שמע המוגדר כברירת־מחדל"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "עדיפות התקן לכידת וידאו המוגדר כברירת־מחדל"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "העדפת התקן שמע עבור הקטגוריה \"%1\""
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "העדפת התקן לכידת שמע עבור הקטגוריה \"%1\""
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "העדפת התקן לכידת וידאו עבור הקטגוריה \"%1\" "
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr "החל את רשימת עדיפות ההתקן לקטגוריות שמע אחרות:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "קטגוריית ברירת מחדל, או קטגוריה לא מוגדרת"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "קביעת התקן השמע נכשלה"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "המנוע שלך לא תומך בלכידת שמע"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "המנוע שלך לא תומך בלכידת וידאו"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "בודק את %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"קטגוריות שונות של פלט. עבור כל קטגוריה באפשרותך לבחור איזה התקן אתה מעדיף "
+"שיישומים ישתמשו בו."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "הצג התקנים מתקדמים"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "החל את רשימת עדיפות ההתקן לקטגוריות אחרות"
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "החל את רשימת ההתקנים אל..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"התקנים שנמצאו במערכת שלך, מתאימים לקטגוריה הנבחרת. בחר את ההתקן שברצונך "
+"שיהיה בשימוש על ידי האפליקציות."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"הסדר קובע את ההעדפה של ההתקנים. אם מסיבה כלשהי אין אפשרות להשתמש בהתקן "
+"הראשון ברשימה, Phonon ינסה להשתמש בהתקן השני וכך הלאה."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "בדיקה"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "העדף את ההתקן הנבחר"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "העדף"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "אין העדפה עבור ההתקן הנבחר"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "אל תעדיף"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "עדיפות התקנים"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "מנוע"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "צוות התרגום של KDE ישראל"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde-l10n-he@kde.org"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr "בכדי להחיל את שינוי המנוע יש להפעיל מחדש את המערכת הגרפית."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "מודול התצורה של Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "כל הזכויות שמורות 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "השמעה (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "לכידה (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "התקנים בלתי־תלויים"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "תצורת חומרת השמע של KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "חומרה"
+
+#~ msgid "Profile"
+#~ msgstr "פרופיל"
+
+#~ msgid "Sound Card"
+#~ msgstr "כרטיס קול"
+
+#~ msgid "Device Configuration"
+#~ msgstr "העדפות התקן"
+
+#~ msgid "Connector"
+#~ msgstr "מחבר"
+
+#~ msgid "Sound Device"
+#~ msgstr "התקן שמע"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "מיקום רמקולים ובדיקה"
+
+#~ msgid "Input Levels"
+#~ msgstr "רמות קלט"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "תצורת חומרת שמע"
+
+#~ msgid "Front Left"
+#~ msgstr "קדמי שמאלי"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "קדמי שמלא מהמרכז"
+
+#~ msgid "Front Center"
+#~ msgstr "קדמי מרכזי"
+
+#~ msgid "Mono"
+#~ msgstr "מונו"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "קדמי ימני מהמרכז"
+
+#~ msgid "Front Right"
+#~ msgstr "קדמי ימני"
+
+#~ msgid "Side Left"
+#~ msgstr "שמאלי מהצד"
+
+#~ msgid "Side Right"
+#~ msgstr "ימני מהצד"
+
+#~ msgid "Rear Left"
+#~ msgstr "שמאלי אחורי"
+
+#~ msgid "Rear Center"
+#~ msgstr "אחורי מרכזי"
+
+#~ msgid "Rear Right"
+#~ msgstr "אחורי ימני"
+
+#~ msgid "Subwoofer"
+#~ msgstr "סאב וופר"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "ערוץ לא ידוע"

@@ -1,0 +1,200 @@
+# Translation of libphonon.po to Malayalam
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the ibphonon package.
+# Nishan Naseer, nishan.naseer@gmail.com, 2008
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ibphonon trunk\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2008-05-08 23:03-0800\n"
+"Last-Translator: Nishan Naseer <nishan.naseer@gmail.com>\n"
+"Language-Team: Malayalam <Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|"
+"കമ്പ്യൂട്ടിങ്ങ് <smcdiscuss@googlegroups.com\n"
+"Language: ml\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back "
+#| "to <b>%2</b>.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>ശബ്ദം കേള്‍പ്പിയ്ക്കുന്നതിനുള്ള <b>%1</b> എന്ന ഉപകരണം പ്രവര്‍ത്തിയ്ക്കുന്നില്ല.  <b>%2</"
+"b>  - ലേയ്ക്കു് തിരിച്ചു് പോകുന്നു.</html>"
+
+#: audiooutput.cpp:494
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>മുന്‍ഗണനയുള്ള ശബ്ദം കേള്‍പ്പിയ്ക്കുന്നതിനുള്ള <b>%1</b> എന്ന ഉപകരണം ഇപ്പോള്‍ "
+"ലഭ്യമായിരിയ്ക്കുന്നു. അതിലേയ്ക്കു് മാറുന്നു.</html> "
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, fuzzy, qt-format
+#| msgid "Revert back to device '%1'"
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "%1 എന്ന ഉപകരണത്തിലേയ്ക്കു് മടങ്ങുക."
+
+#: audiooutput.cpp:512
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>മുന്‍ഗണനയുള്ള ശബ്ദം കേള്‍പ്പിയ്ക്കുന്നതിനുള്ള <b>%1</b> എന്ന ഉപകരണം ഇപ്പോള്‍ "
+"ലഭ്യമായിരിയ്ക്കുന്നു. അതിലേയ്ക്കു് മാറുന്നു.<html> "
+
+#: mediacontroller.cpp:158
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr ""
+
+#: mediacontroller.cpp:160
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr ""
+
+#: mediacontroller.cpp:162
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr ""
+
+#: mediacontroller.cpp:164
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr ""
+
+#: mediacontroller.cpp:166
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr ""
+
+#: mediacontroller.cpp:168
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr ""
+
+#: phononnamespace.cpp:55
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Notifications"
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "അറിയിപ്പുകള്‍"
+
+#: phononnamespace.cpp:57
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Music"
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "സംഗീതം"
+
+#: phononnamespace.cpp:59
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Video"
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "ചലച്ചിത്രം"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "ആശയവിനിമയം"
+
+#: phononnamespace.cpp:63
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Games"
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "കളികള്‍"
+
+#: phononnamespace.cpp:65
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Accessibility"
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "സാമീപ്യത"
+
+#: phononnamespace.cpp:79
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr ""
+
+#: phononnamespace.cpp:81
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr ""
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr ""
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, fuzzy, qt-format
+#| msgid "Volume: %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "ശബ്ദം: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, fuzzy, qt-format
+#| msgid ""
+#| "Use this slider to adjust the volume. The leftmost position is 0%, the "
+#| "rightmost is %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr "ശബ്ദം ക്രമീകരിക്കുന്നതിനു് ഈ സ്ളൈഡര്‍ ഉപയോഗിയ്ക്കുക. ഇടത്തേ അറ്റം 0%, വലത്തേ അറ്റം %1%"
+
+#: volumeslider.cpp:203
+#, fuzzy
+#| msgid "Muted"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "നിശബ്ദമാക്കി."
+
+#, fuzzy
+#~| msgctxt "Phonon::"
+#~| msgid "Communication"
+#~ msgctxt "Phonon::"
+#~ msgid "CaptureCommunication"
+#~ msgstr "ആശയവിനിമയം"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "നിഷാന്‍ നസീര്‍"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "nishan.naseerATgmailDOTcom"

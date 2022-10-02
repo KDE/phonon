@@ -1,0 +1,341 @@
+# translation of kcm_phonon.po to Icelandic
+# Icelandic translation of kcm_phonon
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Richard Allen <ra@ra.is>, 2007.
+# Sveinn í Felli <sveinki@nett.is>, 2008, 2010, 2011, 2012, 2016, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2022-08-24 11:11+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
+"Language-Team: Icelandic\n"
+"Language: is\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 21.12.3\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Listi af Phonon bakendum sem fundist í vélinni þinni. Röðin hér sýnir í "
+"hvaða röð Phonon mun nota þær."
+
+#: backendselection.ui:170
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Gefa forgang"
+
+#: backendselection.ui:183
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Gefa minni forgang"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Afspilun hljóðs"
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Upptaka á hljóði"
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Upptaka myndskeiðs"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Ógilt"
+
+#: devicepreference.cpp:150
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Prófa valið tæki"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Skilgreinir sjálfgefna röð tækja sem getur síðan verið breytt af hverjum "
+"flokki."
+
+#: devicepreference.cpp:303
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Sjálfgefnar stillingar hljóðspilunartækis"
+
+#: devicepreference.cpp:306
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Sjálfgefnar stillingar hljóðupptökutækis"
+
+#: devicepreference.cpp:309
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Sjálfgefnar stillingar myndupptökutækis"
+
+#: devicepreference.cpp:316
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Stillingar hljóðspilunartækis fyrir '%1' flokkinn"
+
+#: devicepreference.cpp:320
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Stillingar hljóðupptökutækis fyrir '%1' flokkinn"
+
+#: devicepreference.cpp:324
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Stillingar myndupptökutækis fyrir '%1' flokkinn"
+
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Beita þessum forgangslista yfir stillingar tækja á aðra eftirfarandi flokka "
+"hljóðspilunar:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Sjálfgefinn/óskilgreindur flokkur"
+
+#: devicepreference.cpp:865
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Mistókst að setja valið hljóðúttakstæki"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Bakvinnslukerfið styður liklega ekki hljóðupptöku"
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Bakvinnslukerfið styður liklega ekki upptöku myndskeiða"
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Prófa %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Ýmsar gerðir notkunar á margmiðlun. Fyrir hvern flokk getur þú valið hvaða "
+"hljóðtæki Phonon-forrit ættu að nota."
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Sýna ítarlegra um tæki"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Nota þennan tækjalista fyrir fleiri flokka:"
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Beita tækjalistanum á..."
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Hljóðtæki sem fundust á vélinni þinni, sem henta tilteknum flokki. Veldu það "
+"tæki sem þú vilt að forritin noti."
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Röðin stýrir hvernig þú vilt nota tækin. Ef það er einhverra hluta vegna "
+"ekki hægt að nota fyrsta tækið mun Phonon reyna að nota næsta og svo koll af "
+"kolli."
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Prófa"
+
+#: devicepreference.ui:187
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "velja helst valið tæki"
+
+#: devicepreference.ui:190
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Gefa forgang"
+
+#: devicepreference.ui:203
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "enginn forgangur fyrir valda tækið"
+
+#: devicepreference.ui:206
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Gefa minni forgang"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr "Stillingar Phonon"
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr "Samskiptagluggi"
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr "Margmiðlunarstillingar"
+
+#: settings.ui:31
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Forgangur tæ&kis"
+
+#: settings.ui:36
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Bakendi"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Richard Allen, Sveinn í Felli"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "ra@ra.is, sv1@fellsnet.is"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Til að breyting á bakvinnslukerfi verði virk þarftu að skrá þig út og svo "
+#~ "inn aftur."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Stillingaeining Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Höfundarréttur 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Afspilun (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Upptaka (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Sjálfstæð tæki"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "Uppsetning hljóðtækja í KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "Vélbúnaður"
+
+#~ msgid "Profile"
+#~ msgstr "Snið"
+
+#~ msgid "Sound Card"
+#~ msgstr "Hljóðkort"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Stillingar tækis"
+
+#~ msgid "Connector"
+#~ msgstr "Tenging"
+
+#~ msgid "Sound Device"
+#~ msgstr "Hljóðtæki"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Staðsetning og prófanir hátalara"
+
+#~ msgid "Input Levels"
+#~ msgstr "Inntaksstyrkur"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Uppsetning hljóðtækja"
+
+#~ msgid "Front Left"
+#~ msgstr "Framan vinstri"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Framan vinstra megin við miðju"
+
+#~ msgid "Front Center"
+#~ msgstr "Framan fyrir miðju"
+
+#~ msgid "Mono"
+#~ msgstr "Einóma"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Framan hægra megin við miðju"
+
+#~ msgid "Front Right"
+#~ msgstr "Framan hægri"
+
+#~ msgid "Side Left"
+#~ msgstr "Hliðar vinstri"
+
+#~ msgid "Side Right"
+#~ msgstr "Hliðar hægri"
+
+#~ msgid "Rear Left"
+#~ msgstr "Aftan vinstri"
+
+#~ msgid "Rear Center"
+#~ msgstr "Aftan miðja"
+
+#~ msgid "Rear Right"
+#~ msgstr "Aftan hægri"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Bassabox"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Óþekkt rás"

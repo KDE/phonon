@@ -1,0 +1,347 @@
+# Slovenian translation of kcm_phonon
+# Slovenian translations for PACKAGE package
+# Slovenski prevodi paketa PACKAGE.
+# Copyright (C) 2007 This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marko Burjek <email4marko@gmail.com>, 2007.
+# Jure Repinc <jlp@holodeck1.com>, 2008, 2009, 2010, 2011, 2012.
+# Andrej Vernekar <andrej.vernekar@gmail.com>, 2012.
+# Andrej Mernik <andrejm@ubuntu.si>, 2013.
+# Matjaž Jeran <matjaz.jeran@amis.net>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2020-01-23 16:27+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"Language-Team: Slovenian <lugos-slo@lugos.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Seznam najdenih zaledij za Phonon na vašem sistemu. Prikazan vrstni red "
+"določa tudi v kakšnem vrstnem redu jih bo uporabljal Phonon."
+
+#: backendselection.ui:170
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Bolj zaželeno"
+
+#: backendselection.ui:183
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Manj zaželeno"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Predvajanje zvoka"
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Snemanje zvoka"
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Snemanje videa"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Neveljavno"
+
+#: devicepreference.cpp:150
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Preizkusi izbrano napravo"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Določa privzeti vrstni red naprav, ki pa ga posamezne kategorije lahko "
+"spremenijo.."
+
+#: devicepreference.cpp:303
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Privzete zaželenosti naprav za predvajanje zvoka"
+
+#: devicepreference.cpp:306
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Privzete zaželenosti naprav za snemanje zvoka"
+
+#: devicepreference.cpp:309
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Privzete zaželenosti naprav za snemanje videa"
+
+#: devicepreference.cpp:316
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Zaželenosti naprav za predvajanje zvoka za kategorijo '%1'"
+
+#: devicepreference.cpp:320
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Zaželenost naprav za snemanje zvoka za kategorijo '%1'"
+
+#: devicepreference.cpp:324
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Zaželenosti naprav za snemanje videa za kategorijo '%1' "
+
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Uveljavi trenutno prikazan seznam zaželenosti naprav za naslednje kategorije "
+"predvajanja zvoka:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Privzeta/nedoločena kategorija"
+
+#: devicepreference.cpp:865
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Izbrane naprave za predvajanje zvoka ni bilo mogoče nastaviti"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Vaše zaledje morda ne podpira snemanja zvoka"
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Vaše zaledje morda ne podpira snemanja videa"
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Preizkušanje %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Primeri različnih kategorij uporab predstavnosti. Za vsako kategorijo lahko "
+"izberete, katero napravo želite uporabljati pri Phonon aplikacijah."
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Prikaži napredne naprave"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Uporabi trenutno prikazan seznam naprav za več kategorij."
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Uveljavi seznam naprav za..."
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Naprave najdene na vašem sistemu, ki so primerne za izbrano kategorijo. "
+"Izberite napravo, ki jo želite uporabljati pri aplikacijah."
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Vrstni red določa prednost naprav pri njihovi izbiri. Če iz kakršnegakoli "
+"razloga ne more biti uporabljena prva naprava, bo Phonon poskusil uporabiti "
+"drugo, in tako naprej."
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Preizkus"
+
+#: devicepreference.ui:187
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "zaželi se izbrane naprave"
+
+#: devicepreference.ui:190
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Bolj zaželeno"
+
+#: devicepreference.ui:203
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "ni želja po izbrani napravi"
+
+#: devicepreference.ui:206
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Manj zaželeno"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr "Nastavitve Phonona"
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr "Dialog"
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr "Nastavitve večpredstavnosti"
+
+#: settings.ui:31
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Prednosti naprav"
+
+#: settings.ui:36
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Zaledje"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Marko Burjek"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "email4marko@gmail.com"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Da bodo spremembe zaledja stopile v veljavo, se boste morali odjaviti in "
+#~ "znova prijaviti."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Nastavitveni modul Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Avtorske pravice 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Predvajanje (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Snemanje (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Neodvisne naprave"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE-jeva nastavitev zvočnih naprav"
+
+#~ msgid "Hardware"
+#~ msgstr "Strojna oprema"
+
+#~ msgid "Profile"
+#~ msgstr "Profil"
+
+#~ msgid "Sound Card"
+#~ msgstr "Zvočna kartica"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Nastavitev naprave"
+
+#~ msgid "Connector"
+#~ msgstr "Povezovalnik"
+
+#~ msgid "Sound Device"
+#~ msgstr "Zvočna naprava"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Postavitev in preizkušanje zvočnikov"
+
+#~ msgid "Input Levels"
+#~ msgstr "Vhodne vrednosti"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Nastavitev zvočnih naprav"
+
+#~ msgid "Front Left"
+#~ msgstr "Spredaj levo"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Spredaj levo od sredine"
+
+#~ msgid "Front Center"
+#~ msgstr "Spredaj v sredini"
+
+#~ msgid "Mono"
+#~ msgstr "Mono"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Spredaj desno od sredine"
+
+#~ msgid "Front Right"
+#~ msgstr "Spredaj desno"
+
+#~ msgid "Side Left"
+#~ msgstr "Ob strani levo"
+
+#~ msgid "Side Right"
+#~ msgstr "Ob strani desno"
+
+#~ msgid "Rear Left"
+#~ msgstr "Zadaj levo"
+
+#~ msgid "Rear Center"
+#~ msgstr "Zadaj v sredini"
+
+#~ msgid "Rear Right"
+#~ msgstr "Zadaj desno"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Nizkotonec"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Neznan kanal"

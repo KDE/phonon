@@ -1,0 +1,341 @@
+# translation of kcm_phonon.po to
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kcm_phonon package.
+# ANI PETER|അനി പീറ്റര്‍ <apeter@redhat.com>, 2008.
+# Hari|ഹരി  Vishnu | വിഷ്ണു <harivishnu@gmail.com>, 2008.
+# Praveen Arimbrathodiyil <pravi.a@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2019-05-22 01:57+0530\n"
+"Last-Translator: Subin Siby <subins2000@gmai.com>\n"
+"Language-Team: SMC <smc.org.in>\n"
+"Language: ml\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"നിങ്ങളുടെ സിസ്റ്റത്തില്‍ ലഭ്യമുള്ള ഫോണണ്‍ ബാക്കെന്‍ഡുകള്‍.  ഈ ക്രമത്തിലാണു് ഫോണണ്‍ അവ ഉപയോഗിക്കുന്നതു്."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "മുന്‍ഗണന നല്‍കുക"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "വൈകിയ്ക്കുക"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "ഓഡിയോ പ്ലേബാക്ക്"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "ഓഡിയോ റിക്കോർഡിംഗ്"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "ഓഡിയോ റിക്കോർഡിംഗ്"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr ""
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "തിരഞ്ഞെടുത്ത ഉപകരണം പരിശോധിക്കുക"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr "ഉപകരണങ്ങളുടെ സഹജമായ ക്രമം വ്യക്തമാക്കുന്നു, ഇത് പ്രത്യേക വിഭാഗങ്ങള്‍ക്ക് അവഗണിക്കാം."
+
+#: devicepreference.cpp:303
+#, fuzzy
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "സഹജമായ രേഖപ്പെടുത്തലിനുള്ള ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍:"
+
+#: devicepreference.cpp:306
+#, fuzzy
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "സഹജമായ രേഖപ്പെടുത്തലിനുള്ള ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍:"
+
+#: devicepreference.cpp:309
+#, fuzzy
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "സഹജമായ രേഖപ്പെടുത്തലിനുള്ള ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍:"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "'%1' വിഭാഗത്തിലേക്കുള്ള രേഖപ്പെടുത്തതിനുള്ള ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍:"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "'%1' വിഭാഗത്തിലേക്കുള്ള രേഖപ്പെടുത്തതിനുള്ള ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍:"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "'%1' വിഭാഗത്തിലേക്കുള്ള രേഖപ്പെടുത്തതിനുള്ള ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍:"
+
+#: devicepreference.cpp:748
+#, fuzzy
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr "മറ്റുള്ള ശബ്ദ ഔട്ട്പുട്ട് വിഭാഗങ്ങള്‍ക്കും നിലവിലുള്ള ഈ ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍ നല്‍കുക:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "സഹജമായ/വ്യക്തമല്ലാത്ത വിഭാഗം"
+
+#: devicepreference.cpp:865
+#, fuzzy
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "തെരഞ്ഞെടുത്ത ഉപകരണത്തിനു് മുന്‍ഗണന നല്‍കുക"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr ""
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr ""
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr ""
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"ഔട്ട്പുട്ടുകളുടെ അനവധി വിഭാഗങ്ങള്‍.  ഓരോ വിഭാഗത്തിനും ഏതു് ഉപകരണത്തിന്റെ ഔട്ട്പുട്ടെന്നു് നിങ്ങള്‍ക്കു് "
+"തെരഞ്ഞെടുക്കാം."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "സങ്കീര്‍ണ്ണമായ ഉപകരണങ്ങള്‍ കാണിക്കുക"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "മറ്റുള്ള ശബ്ദ ഔട്ട്പുട്ട് വിഭാഗങ്ങള്‍ക്കും നിലവിലുള്ള ഈ ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍ നല്‍കുക:"
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "ഉപകരണ പട്ടിക സൂക്ഷിക്കേണ്ടതു്..."
+
+#: devicepreference.ui:113
+#, fuzzy
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"സിസ്റ്റത്തില്‍ ലഭ്യമായ ശബ്ദ ഔട്ട്പുട്ടുകള്‍.  ശബ്ദം ഏതു് ഉപകരണത്തില്‍ നിന്നു് വരണമെന്നു് തെരഞ്ഞെടുക്കുക."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"ഔട്ട്പുട്ട് ഉപകരണങ്ങളുടെ മുന്‍ഗണനയാണ് ഈ ക്രമം വ്യക്തമാക്കുന്നത്. എന്തെങ്കിലും കാരണത്താല്‍ ഫോണോണിന് "
+"ആദ്യത്തെ ഉപകരണം ഉപയോഗിക്കുവാന്‍ സാധ്യമല്ലെങ്കില്‍, അതു് രണ്ടാമത്തെ ഉപകരണം ശ്രമിക്കുന്നതാണു്, "
+"അല്ലെങ്കില്‍ അതിനടുത്തതു്."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "പരീക്ഷണം"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "തെരഞ്ഞെടുത്ത ഉപകരണത്തിനു് മുന്‍ഗണന നല്‍കുക"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "മുന്‍ഗണന നല്‍കുക"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "തെരഞ്ഞെടുത്ത ഉപകരണത്തിനു് മുന്‍ഗണനകള്‍ ലഭ്യമല്ല"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "വൈകിയ്ക്കുക"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "ബാക്കെന്‍ഡ്"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "അനി പീറ്റര്‍, ഹരി വിഷ്ണു, പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "apeter@redhat.com, harivishnu@gmail.com, pravi.a@gmail.com"
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "ഫോണണ്‍ ക്രമീകരണ മൊഡ്യൂള്‍"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "പകര്‍പ്പവകാശം 2006 മത്തിയാസ് ക്രെറ്റ്സ്"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "മത്തിയാസ് ക്രെറ്റ്സ്"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "കോളിൻ"
+
+#, fuzzy
+#~ msgid "Profile"
+#~ msgstr "മുന്‍ഗണന നല്‍കുക"
+
+#, fuzzy
+#~ msgid "Sound Device"
+#~ msgstr "സങ്കീര്‍ണ്ണമായ ഉപകരണങ്ങള്‍ കാണിക്കുക"
+
+#~ msgid "Audio Output"
+#~ msgstr "ശബ്ദ ഔട്ട്പുട്ട്"
+
+#~ msgid "Audio Capture"
+#~ msgstr "ശബ്ദം രേഖപ്പെടുത്തുക"
+
+#, fuzzy
+#~ msgid "Video Capture"
+#~ msgstr "ശബ്ദം രേഖപ്പെടുത്തുക"
+
+#, fuzzy
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "സഹജമായ ഔട്ട്പുട്ട് ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍: "
+
+#, fuzzy
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "'%1' വിഭാഗത്തിലേക്കുള്ള ഔട്ട്പുട്ട് ഉപകരണത്തിന്റെ മുന്‍ഗണനകള്‍:"
+
+#~ msgid "Remove"
+#~ msgstr "നീക്കം ചെയ്യുക"
+
+#, fuzzy
+#~ msgid "Output"
+#~ msgstr "ശബ്ദ ഔട്ട്പുട്ട്"
+
+#, fuzzy
+#~ msgid "Sound Output"
+#~ msgstr "ശബ്ദ ഔട്ട്പുട്ട്"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "തെരഞ്ഞെടുത്ത ഉപകരണത്തില്‍ പരീക്ഷണ ശബ്ദം കേള്‍പ്പിയ്ക്കുക"

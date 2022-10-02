@@ -1,0 +1,198 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Chetan Khona <chetan@kompkin.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2013-01-30 18:12+0530\n"
+"Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Lokalize 1.5\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+
+#: audiooutput.cpp:494
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, fuzzy, qt-format
+#| msgid "Revert back to device '%1'"
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "'%1' या साधनावर परत जा"
+
+#: audiooutput.cpp:512
+#, qt-format
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+
+#: mediacontroller.cpp:158
+#, fuzzy
+#| msgid "Main Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr "मुख्य मेन्यू"
+
+#: mediacontroller.cpp:160
+#, fuzzy
+#| msgid "Title Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr "शिर्षक मेन्यू"
+
+#: mediacontroller.cpp:162
+#, fuzzy
+#| msgid "Audio Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr "ऑडिओ मेन्यू"
+
+#: mediacontroller.cpp:164
+#, fuzzy
+#| msgid "Subtitle Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr "उपशिर्षक मेन्यू"
+
+#: mediacontroller.cpp:166
+#, fuzzy
+#| msgid "Chapter Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr "पाठ्य मेन्यू"
+
+#: mediacontroller.cpp:168
+#, fuzzy
+#| msgid "Angle Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr "कोन मेन्यू"
+
+#: phononnamespace.cpp:55
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Notifications"
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "सूचना"
+
+#: phononnamespace.cpp:57
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Music"
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "संगीत"
+
+#: phononnamespace.cpp:59
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Video"
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "व्हिडीओ"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "संवाद"
+
+#: phononnamespace.cpp:63
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Games"
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "खेळ"
+
+#: phononnamespace.cpp:65
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Accessibility"
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "सुलभता"
+
+#: phononnamespace.cpp:79
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Recording"
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr "रेकॉर्डिंग"
+
+#: phononnamespace.cpp:81
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Control"
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "नियंत्रण"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+#, fuzzy
+#| msgid "PulseAudio Sound Server"
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "पल्स ऑडिओ आवाज सर्व्हर"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, fuzzy, qt-format
+#| msgid "Volume: %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "आवाज : %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, qt-format
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+
+#: volumeslider.cpp:203
+#, fuzzy
+#| msgid "Muted"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "मौन केले"
+
+#, fuzzy
+#~| msgid "Restart Application"
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid "Restart Application"
+#~ msgstr "अनुप्रयोग पुन्हा सुरु करा"
+
+#, fuzzy
+#~| msgid "%0 by %1"
+#~ msgctxt "QObject|"
+#~ msgid "%0 by %1"
+#~ msgstr "%1 प्रमाणे %0 "

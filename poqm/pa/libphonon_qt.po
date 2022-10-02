@@ -1,0 +1,248 @@
+# translation of libphonon.po to Punjabi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# AP S Alam <aalam@users.sf.net>, 2007.
+# A S Alam <aalam@users.sf.net>, 2007, 2009, 2010, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: libphonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2011-06-29 23:28+0530\n"
+"Last-Translator: A S Alam <aalam@users.sf.net>\n"
+"Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
+"Language: pa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back "
+#| "to <b>%2</b>.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>ਆਡੀਓ ਪਲੇਅਬੈਕ ਜੰਤਰ <b>%1</b> ਕੰਮ ਨਹੀਂ ਕਰਦਾ। <br/><b>%2</b> ਵਰਤਿਆ ਜਾ ਰਿਹਾ ਹੈ।</"
+"html>"
+
+#: audiooutput.cpp:494
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>ਆਡੀਓ ਪਲੇਅਬੈਕ ਜੰਤਰ <b>%1</b> ਲਈ ਸਵਿੱਚ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ, <br/>ਜੋ ਕਿ ਹੁਣੇ ਉਪਲੱਬਧ "
+"ਹੋਇਆ ਹੈ ਅਤੇ ਵੱਧ ਪਸੰਦ ਕੀਤਾ ਜਾਂਦਾ ਹੈ।</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, fuzzy, qt-format
+#| msgid "Revert back to device '%1'"
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "ਜੰਤਰ '%1' ਮੁੜ ਲਵੋ"
+
+#: audiooutput.cpp:512
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which has "
+#| "higher preference or is specifically configured for this stream.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>ਆਡੀਓ ਪਲੇਅਬੈਕ ਜੰਤਰ <b>%1</b> ਲਈ ਸਵਿੱਚ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ, <br/>ਜਿਸ ਦੀ ਵੱਧ ਤਰਜੀਹ "
+"ਹੈ ਜਾਂ ਇਸ ਸਟਰੀਮ ਲਈ ਖਾਸ ਤੌਰ ਉੱਤੇ ਸੰਰਚਿਤ ਹੈ।</html>"
+
+#: mediacontroller.cpp:158
+#, fuzzy
+#| msgid "Main Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr "ਮੁੱਖ ਮੇਨੂ"
+
+#: mediacontroller.cpp:160
+#, fuzzy
+#| msgid "Title Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr "ਟਾਇਟਲ ਮੇਨੂ"
+
+#: mediacontroller.cpp:162
+#, fuzzy
+#| msgid "Audio Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr "ਆਡੀਓ ਮੇਨੂ"
+
+#: mediacontroller.cpp:164
+#, fuzzy
+#| msgid "Subtitle Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr "ਸਬ-ਟਾਈਟਲ ਮੇਨੂ"
+
+#: mediacontroller.cpp:166
+#, fuzzy
+#| msgid "Chapter Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr "ਚੈਪਟਰ ਮੇਨੂ"
+
+#: mediacontroller.cpp:168
+#, fuzzy
+#| msgid "Angle Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr "ਕੋਣ ਮੇਨੂ"
+
+#: phononnamespace.cpp:55
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Notifications"
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "ਨੋਟੀਫਿਕੇਸ਼ਨ"
+
+#: phononnamespace.cpp:57
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Music"
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "ਸੰਗੀਤ"
+
+#: phononnamespace.cpp:59
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Video"
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "ਵੀਡਿਓ"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "ਕਮਿਊਨੀਕੇਸ਼ਨ"
+
+#: phononnamespace.cpp:63
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Games"
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "ਖੇਡਾਂ"
+
+#: phononnamespace.cpp:65
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Accessibility"
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "ਅਸੈੱਸਬਿਲਟੀ"
+
+#: phononnamespace.cpp:79
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Recording"
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr "ਰਿਕਾਰਡਿੰਗ"
+
+#: phononnamespace.cpp:81
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Control"
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "ਕੰਟਰੋਲ"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+#, fuzzy
+#| msgid "PulseAudio Sound Server"
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "ਪਲਸਆਡੀਓ ਸਾਊਂਡ ਸਰਵਰ"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, fuzzy, qt-format
+#| msgid "Volume: %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "ਵਾਲੀਅਮ: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, fuzzy, qt-format
+#| msgid ""
+#| "Use this slider to adjust the volume. The leftmost position is 0%, the "
+#| "rightmost is %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr "ਇਹ ਸਲਾਇਡਰ ਨੂੰ ਵਾਲੀਅਮ ਅਡਜੱਸਟ ਕਰਨ ਲਈ ਵਰਤੋਂ। ਖੱਬੇ ਪਾਸੇ 0% ਹੈ ਅਤੇ ਸਭ ਤੋਂ ਸੱਜੇ ਪਾਸੇ %1% ਹੈ।"
+
+#: volumeslider.cpp:203
+#, fuzzy
+#| msgid "Muted"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "ਚੁੱਪ"
+
+#, fuzzy
+#~| msgid "Restart Application"
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid "Restart Application"
+#~ msgstr "ਐਪਲੀਕੇਸ਼ਨ ਮੁੜ-ਚਾਲੂ"
+
+#, fuzzy
+#~| msgid ""
+#~| "You changed the backend of the Phonon multimedia system.\n"
+#~| "\n"
+#~| "To apply this change you will need to restart '%1'."
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid ""
+#~ "You changed the backend of the Phonon multimedia system.\n"
+#~ "\n"
+#~ "To apply this change you will need to restart '%1'."
+#~ msgstr ""
+#~ "ਤੁਸੀਂ ਫੋਨੋਨ ਮਲਟੀਮੀਡਿਆ ਸਿਸਟਮ ਦਾ ਬੈਕਐਂਡ ਬਦਲਿਆ ਹੈ।\n"
+#~ "\n"
+#~ "ਇਹ ਬਦਲਾਅ ਲਾਗੂ ਕਰਨ ਲਈ ਤੁਹਾਨੂੰ '%1' ਨੂੰ ਮੁੜ-ਚਾਲੂ ਕਰਨਾ ਪਵੇਗਾ।"
+
+#, fuzzy
+#~| msgid "%0 by %1"
+#~ msgctxt "QObject|"
+#~ msgid "%0 by %1"
+#~ msgstr "%1 ਵਲੋਂ %0"
+
+#, fuzzy
+#~| msgctxt "Phonon::"
+#~| msgid "Communication"
+#~ msgctxt "Phonon::"
+#~ msgid "CaptureCommunication"
+#~ msgstr "ਕਮਿਊਨੀਕੇਸ਼ਨ"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "aalam@users.sf.net"

@@ -1,0 +1,337 @@
+# translation of kcm_phonon.po to Telugu
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Vijay Kiran Kamuju <infyquest@gmail.com>, 2008.
+# Krishna Babu K <kkrothap@redhat.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2009-01-16 22:16+0530\n"
+"Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
+"Language-Team: Telugu <en@li.org>\n"
+"Language: te\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: KBabel 1.11.4\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "అభీష్ట"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "విభేదం"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr ""
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr ""
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr ""
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr ""
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "ఎంపికచేసిన పరికరమును అభీష్టముచేయుము"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr "స్వతంత్ర వర్గముల చేత ఓవర్‌రైడ్ కాగల పరికరముల యొక్క అప్రమేయ క్రమమును నిర్వచిస్తుంది."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Capture Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "అప్రమేయ కాప్చర్ పరికరము అభీష్టము"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Capture Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "అప్రమేయ కాప్చర్ పరికరము అభీష్టము"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Capture Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "అప్రమేయ కాప్చర్ పరికరము అభీష్టము"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Capture Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "'%1' వర్గము కొరకు కాప్చర్ పరికరము అభీష్టము"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Capture Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "'%1' వర్గము కొరకు కాప్చర్ పరికరము అభీష్టము"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Capture Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "'%1' వర్గము కొరకు కాప్చర్ పరికరము అభీష్టము"
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio output categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"క్రింది యితర ఆడియో అవట్‌పుట్ వర్గములకు ప్రస్తుతం చూపించబడుతున్న పరికరపు అభీష్ట జాబితాను ఆపాదించుము:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "అప్రమేయ/తెలుపని వర్గము"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "ఎంపికచేసిన పరికరమును అభీష్టముచేయుము"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr ""
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr ""
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr ""
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show Advanced Devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "ఆధునిక పరికరాలు చూపు"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio output categories:"
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr ""
+"క్రింది యితర ఆడియో అవట్‌పుట్ వర్గములకు ప్రస్తుతం చూపించబడుతున్న పరికరపు అభీష్ట జాబితాను ఆపాదించుము:"
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "పరికరము జాబితాను దీనికి ఆపాదించుము..."
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "పరీక్ష"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "ఎంపికచేసిన పరికరమును అభీష్టముచేయుము"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "అభీష్ట"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "ఎంపికచేసిన పరికరముకు యెటువంటి అభీష్టములేదు"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "విభేదం"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "పరికరము పనితనము"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "బేక్ ఎండ్"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "విజయ్ కిరణ్ కముజు"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "infyquest@gmail.com"
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "ఫోనాన్ ఆకృతీకరణ మాడ్యూల్"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "కాపీ రైట్ 2006 మథైయాస్ క్రెట్జ్"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "మథైయాస్ క్రెట్జ్"
+
+#, fuzzy
+#~| msgid "Prefer"
+#~ msgid "Profile"
+#~ msgstr "అభీష్ట"
+
+#, fuzzy
+#~| msgid "Show Advanced Devices"
+#~ msgid "Sound Device"
+#~ msgstr "ఆధునిక పరికరాలు చూపు"
+
+#~ msgid "Audio Output"
+#~ msgstr "ఆడియో అవట్‌పుట్"
+
+#~ msgid "Audio Capture"
+#~ msgstr "ఆడియో కాప్చర్"
+
+#, fuzzy
+#~| msgid "Audio Capture"
+#~ msgid "Video Capture"
+#~ msgstr "ఆడియో కాప్చర్"
+
+#, fuzzy
+#~| msgid "Default Output Device Preference"
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "అప్రమేయ అవుట్‌పుట్ పరికరము అభీష్టము"
+
+#, fuzzy
+#~| msgid "Output Device Preference for the '%1' Category"
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "'%1' వర్గము కొరకు అవుట్‌పుట్ పరికరము అభీష్టము"
+
+#~ msgid "Remove"
+#~ msgstr "తొలగించు"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Output"
+#~ msgstr "ఆడియో అవట్‌పుట్"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Sound Output"
+#~ msgstr "ఆడియో అవట్‌పుట్"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "ఎంపికచేసిన పరికరముపైన పరిశీలనా శబ్దమును ప్లేచేయుము"

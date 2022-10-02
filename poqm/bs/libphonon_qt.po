@@ -1,0 +1,235 @@
+# Bosnian translation for phonon
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the phonon package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2012-10-27 23:16+0000\n"
+"Last-Translator: Samir Ribić <Unknown>\n"
+"Language-Team: Bosnian <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2014-10-21 06:50+0000\n"
+"X-Generator: Launchpad (build 17203)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back "
+#| "to <b>%2</b>.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>Uređaj za puštanje zvuka <b>%1</b> ne radi.<br/>Spadam na <b>%2</b>.</"
+"html>"
+
+#: audiooutput.cpp:494
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>Prebacuje na uređaj za puštanje zvuka <b>%1</b><br/>koji je upravo "
+"postao dostupan i poželjniji je.</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, fuzzy, qt-format
+#| msgid "Revert back to device '%1'"
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "Vraćam se na uređaj „%1“"
+
+#: audiooutput.cpp:512
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which has "
+#| "higher preference or is specifically configured for this stream.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>Prelaz na zvučnu karticu <b>%1</b><br/>koja ima veći prioritet ili je "
+"specijalno konfigurisana za ovaj prenos.</html>"
+
+#: mediacontroller.cpp:158
+#, fuzzy
+#| msgid "Main Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr "Glavni meni"
+
+#: mediacontroller.cpp:160
+#, fuzzy
+#| msgid "Title Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr "Naslovni meni"
+
+#: mediacontroller.cpp:162
+#, fuzzy
+#| msgid "Audio Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr "Audio Meni"
+
+#: mediacontroller.cpp:164
+#, fuzzy
+#| msgid "Subtitle Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr "Meni podnaslova"
+
+#: mediacontroller.cpp:166
+#, fuzzy
+#| msgid "Chapter Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr "Meni poglavlja"
+
+#: mediacontroller.cpp:168
+#, fuzzy
+#| msgid "Angle Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr "Meni uglova"
+
+#: phononnamespace.cpp:55
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Notifications"
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "Obavještenja"
+
+#: phononnamespace.cpp:57
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Music"
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "Muzika"
+
+#: phononnamespace.cpp:59
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Video"
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "Video"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "Komunikacija"
+
+#: phononnamespace.cpp:63
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Games"
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "Igre"
+
+#: phononnamespace.cpp:65
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Accessibility"
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "Pristupačnost"
+
+#: phononnamespace.cpp:79
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Recording"
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr "Snimanje"
+
+#: phononnamespace.cpp:81
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Control"
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "Kontrola"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+#, fuzzy
+#| msgid "PulseAudio Sound Server"
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "PulseAudio zvučni sistem"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, fuzzy, qt-format
+#| msgid "Volume: %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "Jačina: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, fuzzy, qt-format
+#| msgid ""
+#| "Use this slider to adjust the volume. The leftmost position is 0%, the "
+#| "rightmost is %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"Ovim klizačem određujete jačinu zvuka. Skroz lijevo je 0%, a skroz desno %1%."
+
+#: volumeslider.cpp:203
+#, fuzzy
+#| msgid "Muted"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "Utišano"
+
+#, fuzzy
+#~| msgid "Restart Application"
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid "Restart Application"
+#~ msgstr "Ponovo pokreni program"
+
+#, fuzzy
+#~| msgid ""
+#~| "You changed the backend of the Phonon multimedia system.\n"
+#~| "\n"
+#~| "To apply this change you will need to restart '%1'."
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid ""
+#~ "You changed the backend of the Phonon multimedia system.\n"
+#~ "\n"
+#~ "To apply this change you will need to restart '%1'."
+#~ msgstr ""
+#~ "Promijenili ste pozadinu za Phonon multimedia system.\n"
+#~ "\n"
+#~ "Da primijenite promjene trebate ponovo pokrenuti '%1'."
+
+#, fuzzy
+#~| msgid "%0 by %1"
+#~ msgctxt "QObject|"
+#~ msgid "%0 by %1"
+#~ msgstr "%0 od %1"

@@ -1,0 +1,241 @@
+# Irish translation of libphonon
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the libphonon package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdelibs/libphonon.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-01 01:43+0200\n"
+"PO-Revision-Date: 2007-06-27 10:27-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+"X-Qt-Contexts: true\n"
+
+#: audiooutput.cpp:481 audiooutput.cpp:519
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back "
+#| "to <b>%2</b>.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
+"<b>%2</b>.</html>"
+msgstr ""
+"<html>Tá gléas athsheinnte fuaime <b>%1</b> as fearas.<br/>Rachfar i muinín "
+"<b>%2</b> ina ionad.</html>"
+
+#: audiooutput.cpp:494
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
+#| "became available and has higher preference.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which just became "
+"available and has higher preference.</html>"
+msgstr ""
+"<html>Tá gléas athsheinnte fuaime <b>%1</b><br/>le tosaíocht níos airde ar "
+"fáil.  Á úsáid anois.</html>"
+
+#: audiooutput.cpp:497 audiooutput.cpp:515
+#, fuzzy, qt-format
+#| msgid "Revert back to device '%1'"
+msgctxt "Phonon::AudioOutput|"
+msgid "Revert back to device '%1'"
+msgstr "Téigh ar ais go gléas '%1'"
+
+#: audiooutput.cpp:512
+#, fuzzy, qt-format
+#| msgid ""
+#| "<html>Switching to the audio playback device <b>%1</b><br/>which has "
+#| "higher preference or is specifically configured for this stream.</html>"
+msgctxt "Phonon::AudioOutput|"
+msgid ""
+"<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
+"preference or is specifically configured for this stream.</html>"
+msgstr ""
+"<html>Gléas athsheinnte fuaime á athrú go <b>%1</b>,<br/>gléas a bhfuil "
+"tosaíocht níos airde aige, nó atá cumraithe don sruth áirithe seo.</html>"
+
+#: mediacontroller.cpp:158
+#, fuzzy
+#| msgid "Main Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Main Menu"
+msgstr "Príomhroghchlár"
+
+#: mediacontroller.cpp:160
+#, fuzzy
+#| msgid "Title Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Title Menu"
+msgstr "Roghchlár Teidil"
+
+#: mediacontroller.cpp:162
+#, fuzzy
+#| msgid "Audio Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Audio Menu"
+msgstr "Roghchlár Fuaime"
+
+#: mediacontroller.cpp:164
+#, fuzzy
+#| msgid "Subtitle Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Subtitle Menu"
+msgstr "Roghchlár Fotheidil"
+
+#: mediacontroller.cpp:166
+#, fuzzy
+#| msgid "Chapter Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Chapter Menu"
+msgstr "Roghchlár Caibidle"
+
+#: mediacontroller.cpp:168
+#, fuzzy
+#| msgid "Angle Menu"
+msgctxt "Phonon::MediaController|"
+msgid "Angle Menu"
+msgstr "Roghchlár Uillinne"
+
+#: phononnamespace.cpp:55
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Notifications"
+msgctxt "Phonon::|"
+msgid "Notifications"
+msgstr "Fógairt"
+
+#: phononnamespace.cpp:57
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Music"
+msgctxt "Phonon::|"
+msgid "Music"
+msgstr "Ceol"
+
+#: phononnamespace.cpp:59
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Video"
+msgctxt "Phonon::|"
+msgid "Video"
+msgstr "Fís"
+
+#: phononnamespace.cpp:61 phononnamespace.cpp:77
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Communication"
+msgctxt "Phonon::|"
+msgid "Communication"
+msgstr "Cumarsáid"
+
+#: phononnamespace.cpp:63
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Games"
+msgctxt "Phonon::|"
+msgid "Games"
+msgstr "Cluichí"
+
+#: phononnamespace.cpp:65
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Accessibility"
+msgctxt "Phonon::|"
+msgid "Accessibility"
+msgstr "Inrochtaineacht"
+
+#: phononnamespace.cpp:79
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Recording"
+msgctxt "Phonon::|"
+msgid "Recording"
+msgstr "Taifeadadh"
+
+#: phononnamespace.cpp:81
+#, fuzzy
+#| msgctxt "Phonon::"
+#| msgid "Control"
+msgctxt "Phonon::|"
+msgid "Control"
+msgstr "Rialú"
+
+#: pulsesupport.cpp:275 pulsesupport.cpp:286
+#, fuzzy
+#| msgid "PulseAudio Sound Server"
+msgctxt "QObject|"
+msgid "PulseAudio Sound Server"
+msgstr "Freastalaí Fuaime PulseAudio"
+
+#: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
+#: volumeslider.cpp:223
+#, fuzzy, qt-format
+#| msgid "Volume: %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Volume: %1%"
+msgstr "Airde: %1%"
+
+#: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
+#, fuzzy, qt-format
+#| msgid ""
+#| "Use this slider to adjust the volume. The leftmost position is 0%, the "
+#| "rightmost is %1%"
+msgctxt "Phonon::VolumeSlider|"
+msgid ""
+"Use this slider to adjust the volume. The leftmost position is 0%, the "
+"rightmost is %1%"
+msgstr ""
+"Úsáid an sleamhnán seo chun an airde a athrú.  Is é 0% an suíomh is faide ar "
+"clé, agus %1% an suíomh is faide ar dheis"
+
+#: volumeslider.cpp:203
+#, fuzzy
+#| msgid "Muted"
+msgctxt "Phonon::VolumeSlider|"
+msgid "Muted"
+msgstr "Gan Fuaim"
+
+#, fuzzy
+#~| msgid "Restart Application"
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid "Restart Application"
+#~ msgstr "Atosaigh an Feidhmchlár"
+
+#, fuzzy
+#~| msgid ""
+#~| "You changed the backend of the Phonon multimedia system.\n"
+#~| "\n"
+#~| "To apply this change you will need to restart '%1'."
+#~ msgctxt "Phonon::FactoryPrivate|"
+#~ msgid ""
+#~ "You changed the backend of the Phonon multimedia system.\n"
+#~ "\n"
+#~ "To apply this change you will need to restart '%1'."
+#~ msgstr ""
+#~ "D'athraigh tú an t-inneall atá taobh thiar an córas ilmheán Phonon.\n"
+#~ "\n"
+#~ "Chun an t-athrú seo a chur i bhfeidhm, caithfidh tú '%1' a atosú."
+
+#, fuzzy
+#~| msgid "%0 by %1"
+#~ msgctxt "QObject|"
+#~ msgid "%0 by %1"
+#~ msgstr "%0 le %1"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kevin Scannell"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kscanne@gmail.com"

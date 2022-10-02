@@ -1,0 +1,451 @@
+# translation of kcm_phonon.po to Kannada
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Adarsha Rao <adarsh@cadl.iisc.ernet.in>, 2007.
+# Shankar Prasad <svenkate@redhat.com>, 2008, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2012-01-08 13:27+0530\n"
+"Last-Translator: s\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"Language: kn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"ನಿಮ್ಮ ಗಣಕ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಸಿಕ್ಕಿದ ಫೋನಾನ್ ಹಿನ್ನೆಲೆಗಳ ಪಟ್ಟಿ. ಈ ಪಟ್ಟಿಯ ಹಿನ್ನೆಲೆಗಳ ಕ್ರಮವು "
+"ಫೋನಾನ್ ಅವುಗಳನ್ನು ಬಳಸುವ ಕ್ರಮವನ್ನು ನಿರ್ಧರಿಸುತ್ತದೆ."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "ಆದ್ಯತೆ ನೀಡು"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "ಮುಂದೂಡು"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "ಆಡಿಯೋ ಚಲಾಯಿಸುವಿಕೆ"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "ಆಡಿಯೊ ಮುದ್ರಣ"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "ವೀಡಿಯೊ ಮುದ್ರಣ"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "ಅಮಾನ್ಯ"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "ಆಯ್ದ ಸಾಧನವನ್ನು ಪರೀಕ್ಷಿಸು"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"ಸಾಧನಗಳ ಪೂರ್ವನಿಯೋಜಿತ ಜೋಡಣಾ ಕ್ರಮವನ್ನು ಸೂಚಿಸುತ್ತದೆ ಹಾಗು ಇದನ್ನು ಪ್ರತ್ಯೇಕ ವರ್ಗಗಳಿಂದ "
+"ಬದಲಾಯಿಸಬಹುದಾಗಿದೆ."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಶ್ರವಣ ಸಾಧನದ ಆದ್ಯತೆ"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಶ್ರವಣ ಮುದ್ರಣ ಸಾಧನದ ಆದ್ಯತೆ"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ ವೀಡಿಯೊ ಮುದ್ರಣ ಸಾಧನದ ಆದ್ಯತೆ"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "'%1' ವರ್ಗಕ್ಕಾಗಿ ಶ್ರವಣ ಸಾಧನದ ಆದ್ಯತೆ"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "'%1' ವರ್ಗಕ್ಕಾಗಿ ಧ್ವನಿ ಮುದ್ರಣ ಸಾಧನದ ಆದ್ಯತೆ"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "'%1' ವರ್ಗಕ್ಕಾಗಿ ವೀಡಿಯೊ ಮುದ್ರಣ ಸಾಧನದ ಆದ್ಯತೆ "
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"ಪ್ರಸಕ್ತ ತೋರಿಸಲಾಗುತ್ತಿರುವ ಸಾಧನ ಆದ್ಯತೆ ಪಟ್ಟಿಯನ್ನು ಈ ಕೆಳಗಿನ ಇತರೆ ಆಡಿಯೋ ಔಟ್‌ಪುಟ್ ವರ್ಗಗಳಿಗೆ "
+"ಅನ್ವಯಿಸು: "
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ/ಸೂಚಿಸದೆ ಇರುವ ವರ್ಗ"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "ಆಯ್ದ ಸಾಧನವನ್ನು ಪರೀಕ್ಷಿಸು"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "ನಿಮ್ಮ ಹಿನ್ನೆಲೆ ಯಂತ್ರಾಂಶ ಆಡಿಯೊ ಮುದ್ರಣವನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "ನಿಮ್ಮ ಹಿನ್ನೆಲೆ ಯಂತ್ರಾಂಶ ವಿಡಿಯೊ ಮುದ್ರಣವನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "ಪರೀಕ್ಷಿಸಲಾಗುತ್ತಿದೆ, %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"ಮಾಧ್ಯಮ ಬಳಕೆಯ ವಿವಿಧ ಪಂಗಡಗಳು. ಪ್ರತಿ ಪಂಗಡಕ್ಕೂ  ಫೋನಾನ್ ಅನ್ವಯಗಳು ಯಾವ ಸಾಧನವನ್ನು  "
+"ಬಳಸಬೇಕೆಂದು ನೀವು ಆರಿಸಬಹುದು. "
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "ಸುಧಾರಿತ ಸಾಧನಗಳನ್ನು ತೋರಿಸು"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "ಪ್ರಸಕ್ತ ತೋರಿಸಲಾಗುತ್ತಿರುವ ಸಾಧನ ಪಟ್ಟಿಯನ್ನು ಇತರೆ ಪಂಗಡಗಳಿಗೆ ಬಳಸು."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "ಸಾಧನದ ಪಟ್ಟಿಯನ್ನು ಇಲ್ಲಿಗೆ ಅನ್ವಯಿಸು..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"ಆಯ್ಕೆ ಮಾಡಿದ ಪಂಗಡಕ್ಕೆ ಸರಿಹೊಂದುವ ನಿಮ್ಮ ಗಣಕ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಸಿಕ್ಕಿದ ಸಾಧನಗಳು. ಅನ್ವಯಗಳು ಯಾವ "
+"ಸಾಧನವನ್ನು ಬಳಸಬೇಕೆಂಬುದನ್ನು ಆರಿಸಿ."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"ಈ ಕ್ರಮವು ಉತ್ಪನ್ನ ಸಾಧನಗಳ ಆದ್ಯತೆಯ ಕ್ರಮವನ್ನು ನಿರ್ಧರಿಸುತ್ತದೆ. ಯಾವುದೇ ಕಾರಣಕ್ಕೆ ಮೊದಲ "
+"ಸಾಧನವನ್ನು ಬಳಸಲಾಗದಿದ್ದಲ್ಲಿ ಫೋನಾನ್ ಎರಡನೇ ಸಾಧನವನ್ನು ಪ್ರಯತ್ನಿಸುತ್ತದೆ, ಇತ್ಯಾದಿ."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "ಪ್ರಾಯೋಗಿಕ"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "ಆಯ್ದ ಸಾಧನಕ್ಕೆ ಆದ್ಯತೆ ಕೊಡು"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "ಆದ್ಯತೆ ನೀಡು"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "ಆಯ್ದ ಸಾಧನಕ್ಕೆ ಯಾವುದೇ ಆದ್ಯತೆಗಳಿಲ್ಲ."
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "ಮುಂದೂಡು"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "ಸಾಧನದ ಆದ್ಯತೆ"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "ಹಿನ್ನೆಲೆ"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ಶಂಕರ ಪ್ರಸಾದ್, ಆದರ್ಶ ರಾವ್"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "svenkate@redhat.com,adarsharao@gmail.com"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr "ಹಿನ್ನೆಲೆ ತಂತ್ರಾಂಶಗಳನ್ನು ಬದಲಾಯಿಸಲು ನೀವು ಲಾಗೌಟ್ ಆಗಿ ಪುನಃ ಲಾಗಿನ್ ಆಗಬೇಕು."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "ಫೋನಾನ್ ಸಂರಚನೆಯ ಉಪಘಟಕ"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "ಅವತರಣಿಕೆ (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "ಮುದ್ರಣ (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "ಸ್ವತಂತ್ರ ಸಾಧನಗಳು"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE ಶ್ರವಣ ಯಂತ್ರಾಂಶ ಸಿದ್ಧತೆ"
+
+#~ msgid "Hardware"
+#~ msgstr "ಯಂತ್ರಾಂಶ"
+
+#~ msgid "Profile"
+#~ msgstr "ಪ್ರೊಫೈಲ್"
+
+#~ msgid "Sound Card"
+#~ msgstr "ಧ್ವನಿ ಬಿಲ್ಲೆ"
+
+#~ msgid "Device Configuration"
+#~ msgstr "ಸಾಧನ ಸಂರಚನೆ"
+
+#~ msgid "Connector"
+#~ msgstr "ಜೋಡಕ"
+
+#~ msgid "Sound Device"
+#~ msgstr "ಧ್ವನಿ ಸಾಧನ"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "ಧ್ವನಿವರ್ಧಕ ಸ್ಥಾಪನೆ ಮತ್ತು ಪರೀಕ್ಷೆ"
+
+#~ msgid "Input Levels"
+#~ msgstr "ಆದಾನ (ಇನ್ ಪುಟ್) ಮಟ್ಟ"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "ಶ್ರವಣ ಯಂತ್ರಾಂಶ ವ್ಯವಸ್ಥೆ"
+
+#~ msgid "Front Left"
+#~ msgstr "ಮುಂದಿನ ಎಡಭಾಗ"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "ಮುಂಭಾಗ ಮಧ್ಯದಿಂದ ಎಡಕ್ಕೆ"
+
+#~ msgid "Front Center"
+#~ msgstr "ಮಧ್ಯ ಮುಂಭಾಗ "
+
+#~ msgid "Mono"
+#~ msgstr "ಏಕ"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "ಮುಂಭಾಗ ಮಧ್ಯದಿಂದ ಬಲಕ್ಕೆ"
+
+#~ msgid "Front Right"
+#~ msgstr "ಮುಂದಿನ ಬಲ ಬದಿ"
+
+#~ msgid "Side Left"
+#~ msgstr "ಎಡ ಬದಿ"
+
+#~ msgid "Side Right"
+#~ msgstr "ಬಲ ಬದಿ"
+
+#~ msgid "Rear Left"
+#~ msgstr "ಹಿಂದಿನ ಎಡಬದಿ"
+
+#~ msgid "Rear Center"
+#~ msgstr "ಹಿಂದಿನ ನಡುಭಾಗ"
+
+#~ msgid "Rear Right"
+#~ msgstr "ಹಿಂದಿನ ಬಲಬದಿ"
+
+#~ msgid "Subwoofer"
+#~ msgstr "ಸಬ್‌ವೂಫರ್"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "ಅಜ್ಞಾತ ಚಾನಲ್"
+
+#~ msgid "Audio Output"
+#~ msgstr "ಧ್ವನಿ ಉತ್ಪನ್ನ"
+
+#~ msgid "Audio Capture"
+#~ msgstr "ಧ್ವನಿ ಗ್ರಹಿಕೆ"
+
+#, fuzzy
+#~| msgid "Audio Capture"
+#~ msgid "Video Capture"
+#~ msgstr "ಧ್ವನಿ ಗ್ರಹಿಕೆ"
+
+#, fuzzy
+#~| msgid "Default Output Device Preference"
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಔಟ್‌ಪುಟ್ ಸಾಧನದ ಆದ್ಯತೆ"
+
+#, fuzzy
+#~| msgid "Output Device Preference for the '%1' Category"
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "'%1' ವರ್ಗಕ್ಕಾಗಿ ಔಟ್‌ಪುಟ್ ಸಾಧನದ ಆದ್ಯತೆಯನ್ನು ಸೆರೆ ಹಿಡಿ"
+
+#~ msgid "Remove"
+#~ msgstr "ತೆಗೆದುಹಾಕು"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Output"
+#~ msgstr "ಧ್ವನಿ ಉತ್ಪನ್ನ"
+
+#, fuzzy
+#~| msgid "Audio Output"
+#~ msgid "Sound Output"
+#~ msgstr "ಧ್ವನಿ ಉತ್ಪನ್ನ"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "ಆಯ್ದ ಸಾಧನದಲ್ಲಿ ಒಂದು ಪರೀಕ್ಷಾ ಶಬ್ಧವನ್ನು ಪ್ಲೇ ಮಾಡು"

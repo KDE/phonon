@@ -1,0 +1,413 @@
+# translation of kcm_phonon.po to Khmer
+# Khoem Sokhem <khoemsokhem@khmeros.info>, 2008, 2010, 2011, 2012.
+# Auk Piseth <piseth_dv@khmeros.info>, 2008.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2012-06-08 15:33+0700\n"
+"Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
+"Language-Team: Khmer\n"
+"Language: km\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: KBabel 1.11.4\n"
+"X-Language: km-KH\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"រក​ឃើញ​បញ្ជី​របស់​កម្មវិធី​ផ្នែក​ខាង​ក្រោយ​របស់ Phonon នៅ​ក្នុង​ប្រព័ន្ធ​របស់​អ្នក ។ លំដាប់​មាន​នៅ​ទីនេះ កំណត់​"
+"លំដាប់​របស់ Phonon នឹង​ប្រើ​ពួកវា ។"
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "ពេញចិត្ត"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "ពន្យារពេល"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "ចាក់​អូឌីយ៉ូ​ឡើង​វិញ"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "ការថត​អូឌីយ៉ូ"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "ការ​ថត​វីដេអូ"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "មិន​ត្រឹមត្រូវ​​"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "សាកល្បង​ឧបករណ៍​ដែល​បាន​ជ្រើស​"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr "កំណត់​លំដាប់​ឧបករណ៍​លំនាំដើម​ដែល​អាច​ត្រូវ​បាន​បដិសេធ​ដោយ​ប្រភេទ​នីមួយៗ ។"
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "ចំណូល​ចិត្ត​ឧបករណ៍​ចាក់​​​អូឌីយ៉ូ​លំនាំដើម​"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "ចំណូល​ចិត្ត​ឧបករណ៍ថត​​អូឌីយ៉ូ​លំនាំដើម​"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "ចំណូល​ចិត្ត​ឧបករណ៍ថត​​វីដេអូ​លំនាំដើម​​"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "ចំណូល​ចិត្ត​ឧបករណ៍​ចាក់​​អូឌីយ៉ូ​​សម្រាប់​ប្រភេទ '%1'"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "ចំណូល​ចិត្ត​ឧបករណ៍ថត​​អូឌីយ៉ូ​​សម្រាប់​ប្រភេទ '%1'"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "ចំណូល​ចិត្ត​ឧបករណ៍ថត​​វីដេអូ​សម្រាប់​ប្រភេទ '%1' "
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"អនុវត្ត​បញ្ជី​ចំណូលចិត្ត​របស់​ឧបករណ៍​ដែល​បាន​បង្ហាញ​បច្ចុប្បន្ន ទៅ​ប្រភេទ​លទ្ធផល​របស់​អូឌីយ៉ូ​ផ្សេងៗ​ដូច​ខាង​ក្រោម ៖"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "ប្រភេទ​មិនបាន​បញ្ជាក់/លំនាំដើម"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "បាន​បរាជ័យ​ក្នុង​ការ​កំណត់​ឧបករណ៍​បង្ហាញ​អូឌីយ៉ូ"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "កម្មវិធី​ខាងក្រោយ​របស់​អ្នក​អាច​មិន​គាំទ្រ​ការ​ថត​​អូឌីយ៉ូ​ទេ"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "កម្មវិធី​ខាងក្រោយ​របស់​អ្នក​អាច​មិន​គាំទ្រ​ការ​ថត​វីដេអូ"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "ការ​សាកល្បង​ %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"ប្រភេទ​ផ្សេងៗ​​នៃ​​មេឌៀ​ប្រើ cases​​ ។ សម្រាប់​ប្រភេទ​នីមួយៗ អ្នក​អាច​ជ្រើស​ឧបករណ៍​អ្វី​ក៏​បាន ដែល​អ្នក​ចង់​ប្រើ​"
+"ដោយ​កម្មវិធី​ Phonon ។"
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "បង្ហាញ​ឧបករណ៍​កម្រិត​ខ្ពស់"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "ប្រើ​បញ្ជី​ឧបករណ៍​​ដែល​បង្ហាញ​បច្ចុប្បន្ន​សម្រាប់​ប្រភេទ​បន្ថែម ។​"
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "អនុវត្ត​បញ្ជី​ឧបករណ៍​ទៅ..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"រក​ឃើញ​ឧបករណ៍​លើ​ប្រព័ន្ធ​របស់​អ្នក ត្រូវ​នឹង​ប្រភេទ​ដែល​បាន​ជ្រើស​ ។  ​ជ្រើស​ឧបករណ៍​ដែល​អ្នក​ចង់​ប្រើ​តាម​​កម្មវិធី "
+"។​"
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"លំដាប់​កំណត់​ចំណូល​ចិត្ត​របស់​ឧបករណ៍ ។ ប្រសិន​បើ​សម្រាប់​មូលហេតុ​ឧបករណ៍​ដំបូង​មិន​អាច​ត្រូវ​​បាន​ប្រើ Phonon នឹង​"
+"ព្យាយាម​ប្រើ​ទី ២ និង​បន្ត​​ ។​"
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "សាកល្បង"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "ពេញចិត្ត​ឧបករណ៍​ដែល​បាន​ជ្រើស"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "ពេញចិត្ត"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "គ្មាន​ចំណូល​ចិត្ត​សម្រាប់​ឧបករណ៍​ដែល​បាន​ជ្រើស"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "ពន្យារពេល"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "ចំណូល​ចិត្ត​របស់​ឧបករណ៍"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "កម្មវិធីខាង​ក្រោយ"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ខឹម សុខែម, ម៉ន ម៉េត, សេង សុត្ថា, ចាន់ សម្បត្តិរតនៈ, សុខ សុភា"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ""
+#~ "khoemsokhem@khmeros.info,​​mornmet@khmeros.info,sutha@khmeros.info,"
+#~ "ratanak@khmeros.info,sophea@khmeros.info"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr "ដើម្បី​អនុវត្ត​ការ​ផ្លាស់ប្ដូរ​ផ្នែក​ខាង​ក្រោយ អ្នក​​ត្រូវ​តែ​ចេញ ហើយ​ចូល​​ម្ដង​ទៀត ។"
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "ម៉ូឌុល​កំណត់​រចនាសម្ព័ន្ធ​របស់ Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "រក្សាសិទ្ធិ​ឆ្នាំ ២០០៦ ដោយ Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "ចាក់​ឡើង​វិញ (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "ថត (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "ឧបករណ៍​ឯករាជ្យ"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "ការ​រៀបចំ​ផ្នែក​រឹង​អូឌីយ៉ូ​របស់ KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "ផ្នែក​រឹង"
+
+#~ msgid "Profile"
+#~ msgstr "ទម្រង់"
+
+#~ msgid "Sound Card"
+#~ msgstr "កាត​សំឡេង"
+
+#~ msgid "Device Configuration"
+#~ msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ឧបករណ៍"
+
+#~ msgid "Connector"
+#~ msgstr "បន្ទាត់​តភ្ជាប់"
+
+#~ msgid "Sound Device"
+#~ msgstr "ឧបករណ៍​សំឡេង"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "ការ​ដាក់​ និង​សាកល្បង​ធុងបាស​​"
+
+#~ msgid "Input Levels"
+#~ msgstr "កម្រិត​បញ្ចូល"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "ការ​រៀបចំ​ផ្នែក​រឹង​អូឌីយ៉ូ"
+
+#~ msgid "Front Left"
+#~ msgstr "មុខ ឆ្វេង"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "មុខ ឆ្វេង​កណ្ដាល"
+
+#~ msgid "Front Center"
+#~ msgstr "មុខ កណ្ដាល"
+
+#~ msgid "Mono"
+#~ msgstr "ម៉ូណូ"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "មុខ ស្ដាំ​កណ្ដាល"
+
+#~ msgid "Front Right"
+#~ msgstr "មុខ ស្ដាំ"
+
+#~ msgid "Side Left"
+#~ msgstr "ចំហៀង​ ឆ្វេង"
+
+#~ msgid "Side Right"
+#~ msgstr "ចំហៀង ស្ដាំ"
+
+#~ msgid "Rear Left"
+#~ msgstr "ក្រោយ ឆ្វេង"
+
+#~ msgid "Rear Center"
+#~ msgstr "ក្រោយ ​កណ្ដាល"
+
+#~ msgid "Rear Right"
+#~ msgstr "ក្រោយ​ ស្ដាំ"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Subwoofer"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "មិន​ស្គាល់​ឆានែល"

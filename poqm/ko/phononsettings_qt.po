@@ -1,0 +1,333 @@
+# Translation of kcm_phonon.po to Korean.
+# Copyright (C) 2007, 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kdelibs package.
+# Shinjo Park <kde@peremen.name>, 2007, 2008, 2010, 2011, 2012, 2019, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2020-04-21 00:36+0200\n"
+"Last-Translator: Shinjo Park <kde@peremen.name>\n"
+"Language-Team: Korean <kde-kr@kde.org>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 19.04.3\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"시스템에 설치되어 있는 Phonon 백엔드 목록입니다. 이 곳에서 지정된 순서는 "
+"Phonon에서 사용할 순서입니다."
+
+#: backendselection.ui:170
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "선호함"
+
+#: backendselection.ui:183
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "선호 안함"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "오디오 재생"
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "오디오 녹음"
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "비디오 녹화"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "잘못됨"
+
+#: devicepreference.cpp:150
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "선택한 장치 시험"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr "기본적인 장치 순서를 표시합니다. 각각 분류별로 수정할 수 있습니다."
+
+#: devicepreference.cpp:303
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "기본 오디오 재생 장치 우선 순위"
+
+#: devicepreference.cpp:306
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "기본 오디오 녹음 장치 우선 순위"
+
+#: devicepreference.cpp:309
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "기본 비디오 녹화 장치 우선 순위"
+
+#: devicepreference.cpp:316
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "분류 '%1'의 오디오 재생 장치 우선 순위"
+
+#: devicepreference.cpp:320
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "분류 '%1'의 오디오 녹음 장치 우선 순위"
+
+#: devicepreference.cpp:324
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "분류 '%1'의 비디오 녹화 장치 우선 순위"
+
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"현재 보이는 장치 우선 순위 목록을 다음의 오디오 재생 분류에도 적용합니다:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "기본/지정하지 않음"
+
+#: devicepreference.cpp:865
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "선택한 오디오 출력 장치를 선택할 수 없음"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "사용 중인 백엔드에서 녹음을 지원하지 않을 수 있음"
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "사용 중인 백엔드에서 녹화를 지원하지 않을 수 있음"
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "%1 시험 중"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"다양한 미디어 사용 분류입니다. 각각 분류에 대해서 Phonon 프로그램이 사용할 장"
+"치의 우선 순위를 정할 수 있습니다."
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "고급 장치 표시"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "현재 보이는 장치 우선 순위 목록을 더 많은 분류에 적용합니다."
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "다음에 장치 목록 적용하기..."
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"선택한 분류에 사용할 수 있는 시스템에 있는 장치입니다. 프로그램에서 사용하고 "
+"싶은 장치를 선택하십시오."
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"장치 선호도 목록입니다. 첫 번째 장치를 사용할 수 없으면 두 번째나 그 이후의 "
+"장치를 차례로 사용합니다."
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "시험"
+
+#: devicepreference.ui:187
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "선택한 장치 우선 순위 증가"
+
+#: devicepreference.ui:190
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "선호함"
+
+#: devicepreference.ui:203
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "선택한 장치의 설정 없음"
+
+#: devicepreference.ui:206
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "선호 안함"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr "Phonon 설정"
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr "대화 상자"
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr "멀티미디어 설정"
+
+#: settings.ui:31
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "장치 우선 순위(&V)"
+
+#: settings.ui:36
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "백엔드"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "박신조"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kde@peremen.name"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr "백엔드 변경 사항을 적용하려면 다시 로그인해야 합니다."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Phonon 설정 모듈"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "저작권자 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "재생 (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "녹음 (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "독립된 장치"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE 오디오 하드웨어 설정"
+
+#~ msgid "Hardware"
+#~ msgstr "하드웨어"
+
+#~ msgid "Profile"
+#~ msgstr "프로필"
+
+#~ msgid "Sound Card"
+#~ msgstr "사운드 카드"
+
+#~ msgid "Device Configuration"
+#~ msgstr "장치 설정"
+
+#~ msgid "Connector"
+#~ msgstr "커넥터"
+
+#~ msgid "Sound Device"
+#~ msgstr "사운드 장치"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "스피커 위치 및 시험"
+
+#~ msgid "Input Levels"
+#~ msgstr "입력 레벨"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "오디오 하드웨어 설정"
+
+#~ msgid "Front Left"
+#~ msgstr "왼쪽 앞"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "왼쪽 가운데 앞"
+
+#~ msgid "Front Center"
+#~ msgstr "가운데 앞"
+
+#~ msgid "Mono"
+#~ msgstr "모노"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "오른쪽 가운데 앞"
+
+#~ msgid "Front Right"
+#~ msgstr "오른쪽 앞"
+
+#~ msgid "Side Left"
+#~ msgstr "왼쪽 옆"
+
+#~ msgid "Side Right"
+#~ msgstr "오른쪽 옆"
+
+#~ msgid "Rear Left"
+#~ msgstr "왼쪽 뒤"
+
+#~ msgid "Rear Center"
+#~ msgstr "가운데 뒤"
+
+#~ msgid "Rear Right"
+#~ msgstr "오른쪽 뒤"
+
+#~ msgid "Subwoofer"
+#~ msgstr "서브우퍼"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "알 수 없는 채널"

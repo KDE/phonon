@@ -1,0 +1,437 @@
+# translation of kcm_phonon.po to Punjabi
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# AP S Alam <aalam@users.sf.net>, 2007.
+# A S Alam <aalam@users.sf.net>, 2007, 2008, 2010, 2011.
+# Amanpreet Singh Alam <apreet.alam@gmail.com>, 2008.
+# Amanpreet Singh <aalam@users.sf.net>, 2008, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2012-05-17 22:21+0530\n"
+"Last-Translator: A S Alam <aalam@users.sf.net>\n"
+"Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
+"Language: pa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"ਤੁਹਾਡੇ ਸਿਸਟਮ ਉੱਤੇ ਫੋਨੋਨ ਬੈਕਐਂਡ ਦੀ ਲਿਸਟ ਮਿਲੀ ਹੈ।  ਇੱਥੇ ਦਿੱਤੀ ਲੜੀ ਇਹ ਦੱਸੇਗੀ ਕਿ ਫੋਨੋਨ ਵਿੱਚ ਕਿਵੇਂ "
+"ਵਰਤੇ ਜਾਣੇਗੇ।"
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "ਪਸੰਦ"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "ਅੰਤਰ"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "ਆਡੀਓ ਪਲੇਅਬੈਕ"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "ਆਡੀਓ ਰਿਕਾਰਡਿੰਗ"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "ਵਿਡੀਓ ਰਿਕਾਰਡਿੰਗ"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "ਗਲਤ"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "ਚੁਣੇ ਜੰਤਰ ਟੈਸਟ ਕਰੋ"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "ਡਿਫਾਲਟ ਆਡੀਓ ਪਲੇਅਬੈਕ ਜੰਤਰ ਪਸੰਦ"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "ਡਿਫਾਲਟ ਆਡੀਓ ਰਿਕਾਰਡਿੰਗ ਜੰਤਰ ਪਸੰਦ"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "ਡਿਫਾਲਟ ਵਿਡੀਓ ਰਿਕਾਰਡਿੰਗ ਜੰਤਰ ਪਸੰਦ"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "'%1' ਕੈਟਾਗਰੀ ਲਈ ਆਡੀਓ ਪਲੇਅਬੈਕ ਜੰਤਰ ਪਸੰਦ"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "'%1' ਕੈਟਾਗਰੀ ਲਈ ਆਡੀਓ ਰਿਕਾਰਡਿੰਗ ਜੰਤਰ ਪਸੰਦ"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "'%1' ਕੈਟਾਗਰੀ ਲਈ ਵਿਡੀਓ ਰਿਕਾਰਡਿੰਗ ਜੰਤਰ ਪਸੰਦ"
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr "ਮੌਜੂਦਾ ਵੇਖਾਈ ਜੰਤਰ ਪਸੰਦ ਲਿਸਟ ਨੂੰ ਅੱਗੇ ਦਿੱਤੀਆਂ ਹੋਰ ਆਡੀਓ ਪਲੇਅਬੈਕ ਕੈਟਾਗਰੀਆਂ ਲਈ ਲਾਗੂ ਕਰੋ:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "ਡਿਫਾਲਟ/ਅਣ-ਦਿੱਤੀ ਕੈਟਾਗਰੀ"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "ਚੁਣੇ ਆਡੀਓ ਆਉਟਪੁੱਟ ਜੰਤਰ ਨੂੰ ਸੈੱਟ ਕਰਨ ਥਈ ਫੇਲ੍ਹ ਹੈ"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "ਤੁਹਾਡਾ ਬੈਕਐਂਡ ਆਡੀਓ ਰਿਕਾਰਡਿੰਗ ਲਈ ਸਹਾਇਕ ਨਹੀਂ ਹੈ"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "ਤੁਹਾਡਾ ਬੈਕਐਂਡ ਵਿਡੀਓ ਰਿਕਾਰਡਿੰਗ ਲਈ ਸਹਾਇਕ ਨਹੀਂ ਹੈ"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "%1 ਟੈਸਟਿੰਗ"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"ਤੁਹਾਡੇ ਸਿਸਟਮ ਉੱਤੇ ਜੰਤਰ ਮਿਲੇ ਹਨ, ਚੁਣੀ ਕੈਟਾਗਰੀ ਲਈ ਢੁੱਕਵੇਂ। ਜੰਤਰ ਦੀ ਚੋਣ ਕਰੋ, ਜੋ ਕਿ ਤੁਸੀਂ ਐਪਲੀਕੇਸ਼ਨ "
+"ਲਈ ਵਰਤਣਾ ਚਾਹੁੰਦੇ ਹੋ।"
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "ਤਕਨੀਕੀ ਜੰਤਰ ਵੇਖੋ"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "ਹੋਰ ਕੈਟਾਗਰੀਆਂ ਲਈ ਮੌਜੂਦਾ ਵੇਖਾਈ ਜੰਤਰ ਲਿਸਟ ਵਰਤੋਂ।"
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "ਜੰਤਰ ਲਿਸਟ ਲਾਗੂ ਕਰੋ..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"ਤੁਹਾਡੇ ਸਿਸਟਮ ਉੱਤੇ ਜੰਤਰ ਮਿਲੇ ਹਨ, ਚੁਣੀ ਕੈਟਾਗਰੀ ਲਈ ਢੁੱਕਵੇਂ। ਜੰਤਰ ਦੀ ਚੋਣ ਕਰੋ, ਜੋ ਕਿ ਤੁਸੀਂ ਐਪਲੀਕੇਸ਼ਨ "
+"ਲਈ ਵਰਤਣਾ ਚਾਹੁੰਦੇ ਹੋ।"
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "ਟੈਸਟ"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "ਚੁਣੇ ਜੰਤਰ ਲਈ ਪਸੰਦ"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "ਪਸੰਦ"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "ਚੁਣੇ ਜੰਤਰ ਲਈ ਕੋਈ ਪਸੰਦ ਨਹੀਂ"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "ਅੰਤਰ"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "ਜੰਤਰ ਪਸੰਦ"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "ਬੈਕ-ਐਂਡ"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "aalam@users.sf.net"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr "ਬੈਕਐਂਡ ਵਿੱਚ ਬਦਲਾਅ ਨੂੰ ਲਾਗੂ ਕਰਨ ਲਈ ਤੁਹਾਨੂੰ ਲਾਗ ਆਉਟ ਕਰਕੇ ਫੇਰ ਲਾਗਇਨ ਕਰਨਾ ਪਵੇਗਾ।"
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "ਫੋਨੋਨ ਸੰਰਚਨਾ ਮੋਡੀਊਲ"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "ਕਾਪੀਰਾਈਟ 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "ਮੈਥਿਜ਼ ਕਰੀਟਜ਼"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "ਕੋਲਿਨ ਗੁਥਰੀ"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "ਪਲੇਅਬੈਕ (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "ਰਿਕਾਰਡਿੰਗ (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "ਆਜ਼ਾਦ ਜੰਤਰ"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE ਆਡੀਓ ਹਾਰਡਵੇਅਰ ਸੈਟਅੱਪ"
+
+#~ msgid "Hardware"
+#~ msgstr "ਹਾਰਡਵੇਅਰ"
+
+#~ msgid "Profile"
+#~ msgstr "ਪਰੋਫਾਈਲ"
+
+#~ msgid "Sound Card"
+#~ msgstr "ਸਾਊਂਡ ਕਾਰਡ"
+
+#~ msgid "Device Configuration"
+#~ msgstr "ਜੰਤਰ ਸੰਰਚਨਾ"
+
+#~ msgid "Connector"
+#~ msgstr "ਕੁਨੈਕਟਰ"
+
+#~ msgid "Sound Device"
+#~ msgstr "ਸਾਊਂਡ ਜੰਤਰ"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "ਸਪੀਕਰ ਸਥਿਤੀ ਤੇ ਟੈਸਟਿੰਗ"
+
+#~ msgid "Input Levels"
+#~ msgstr "ਇੰਪੁੱਟ ਲੈਵਲ"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "ਆਡੀਓ ਹਾਰਡਵੇਅਰ ਸੈਟਅੱਪ"
+
+#~ msgid "Front Left"
+#~ msgstr "ਅੱਗੇ ਖੱਬਾ"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "ਸੈਂਟਰ ਦੇ ਅੱਗੇ ਖੱਬਾ"
+
+#~ msgid "Front Center"
+#~ msgstr "ਅੱਗੇ ਸੈਂਟਰ"
+
+#~ msgid "Mono"
+#~ msgstr "ਮੋਨੋ"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "ਸੈਂਟਰ ਵਿੱਚ ਅੱਗੇ ਸੱਜਾ"
+
+#~ msgid "Front Right"
+#~ msgstr "ਅੱਗੇ ਸੱਜਾ"
+
+#~ msgid "Side Left"
+#~ msgstr "ਖੱਬਾ ਪਾਸਾ"
+
+#~ msgid "Side Right"
+#~ msgstr "ਸੱਜਾ ਪਾਸਾ"
+
+#~ msgid "Rear Left"
+#~ msgstr "ਪਿੱਛੇ ਖੱਬਾ"
+
+#~ msgid "Rear Center"
+#~ msgstr "ਪਿੱਛੇ ਸੈਂਟਰ"
+
+#~ msgid "Rear Right"
+#~ msgstr "ਪਿੱਛੇ ਸੱਜਾ"
+
+#~ msgid "Subwoofer"
+#~ msgstr "ਸਬ-ਵੂਫ਼ਰ"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "ਅਣਜਾਣ ਚੈਨਲ"
+
+#~ msgid "Speaker Setup"
+#~ msgstr "ਸਪੀਕਰ ਸੈਟਅੱਪ"
+
+#~ msgid "Audio Output"
+#~ msgstr "ਆਡੀਓ ਆਉਟਪੁੱਟ"
+
+#~ msgid "Audio Capture"
+#~ msgstr "ਆਡੀਓ ਕੈਪਚਰ"
+
+#, fuzzy
+#~| msgid "Audio Capture"
+#~ msgid "Video Capture"
+#~ msgstr "ਆਡੀਓ ਕੈਪਚਰ"
+
+#, fuzzy
+#~| msgid "Default Output Device Preference"
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "ਡਿਫਾਲਟ ਆਉਟਪੁੱਟ ਜੰਤਰ ਪਸੰਦ"
+
+#, fuzzy
+#~| msgid "Output Device Preference for the '%1' Category"
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "'%1' ਕੈਟਾਗਰੀ ਲਈ ਆਉਟਪੁੱਟ ਜੰਤਰ ਪਸੰਦ"
+
+#~ msgid "Remove"
+#~ msgstr "ਹਟਾਓ"
+
+#~ msgid "Output"
+#~ msgstr "ਆਉਟਪੁੱਟ"
+
+#~ msgid "Sound Output"
+#~ msgstr "ਸਾਊਂਡ ਆਉਟਪੁੱਟ"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "ਚੁਣੇ ਜੰਤਰ ਉੱਤੇ ਇੱਕ ਟੈਸਟ ਸਾਊਂਡ ਚਲਾਓ"

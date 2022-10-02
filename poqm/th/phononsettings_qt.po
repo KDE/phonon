@@ -1,0 +1,424 @@
+# translation of kcm_phonon.po to Thai
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sahachart Anukulkitch <drrider@gmail.com>, 2007.
+# Thanomsub Noppaburana <donga.nb@gmail.com>, 2008, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2010-12-17 00:32+0700\n"
+"Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
+"Language-Team: Thai <thai-l10n@googlegroups.com>\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.1\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"รายการโปรแกรมเบื้องหลังสำหรับ Phonon บนระบบของคุณ  โดยลำดับที่ตรงนี้ "
+"จะเป็นการบอกถึงลำดับของอุปกรณ์ที่ Phonon จะเลือกใช้ก่อนหลัง"
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "ควรเลือกใช้"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "อนุโลมให้ใช้"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr ""
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr ""
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr ""
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr ""
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "กำหนดใช้งานอุปกรณ์ที่เลือก"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr "กำหนดลำดับของอุปกรณ์ปริยาย ซึ่งสามารถนำไปบังคับใช้แยกกับแต่ละหมวดหมู่ได้"
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Capture Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "อุปกรณ์อัดเสียงที่ควรใช้เป็นปริยาย"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Capture Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "อุปกรณ์อัดเสียงที่ควรใช้เป็นปริยาย"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Capture Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "อุปกรณ์อัดเสียงที่ควรใช้เป็นปริยาย"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Capture Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "อุปกรณ์อัดเสียงที่ควรใช้สำหรับหมวดหมู่ '%1'"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Capture Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "อุปกรณ์อัดเสียงที่ควรใช้สำหรับหมวดหมู่ '%1'"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Capture Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "อุปกรณ์อัดเสียงที่ควรใช้สำหรับหมวดหมู่ '%1'"
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio output categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr "ปรับใช้รายการอุปกรณ์ที่ควรใช้ที่แสดงอยู่นี้ ไปใช้กับหมวดหมู่อื่น ๆ ของส่วนส่งออกเสียงต่อไปนี้:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "หมวดหมู่ปริยาย/ไม่มีการระบุ"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "กำหนดใช้งานอุปกรณ์ที่เลือก"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr ""
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr ""
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr ""
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of outputs.  For each category you may choose what "
+#| "device you wish to output to."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"หมวดหมู่ต่างๆ ของอุปกรณ์ส่งออกเสียง  คุณอาจจะเลือกว่าจะแยกให้เสียงออกไปยังอุปกรณ์ใดบ้าง "
+"ในแต่ละหมวดหมู่"
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "แสดงส่วนควบคุมขั้นสูงของอุปกรณ์"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio output categories:"
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "ปรับใช้รายการอุปกรณ์ที่ควรใช้ที่แสดงอยู่นี้ ไปใช้กับหมวดหมู่อื่น ๆ ของส่วนส่งออกเสียงต่อไปนี้:"
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "ปรับใช้รายการอุปกรณ์กับ ..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Audio Outputs found on your system.  Choose the device that you wish "
+#| "sound to come out of."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr "พบอุปกรณ์ส่งออกเสียงบนระบบของคุณ, เลือกอุปกรณ์ที่จะใช้ส่งเสียงออก"
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the output devices. If for some "
+#| "reason the first device cannot be used Phonon will try to use the second, "
+#| "and\n"
+#| "so on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"นี่เป็นลำดับต่าง ๆ จะกำหนดถึงอุปกรณ์ส่งออกเสียงที่ควรจะเลือกใช้ก่อนหลัง "
+"หากอุปกรณ์ตัวแรกไม่สามารถใช้งานได้ไม่ว่าด้วยเหตุใดก็ตาม Phonon จะลองใช้อุปกรณ์ตัวที่สอง "
+"และต่อไปเรื่อย ๆ"
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "ทดสอบ"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "กำหนดใช้งานอุปกรณ์ที่เลือก"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "ควรเลือกใช้"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "ไม่มีการปรับแต่งสำหรับอุปกรณ์ที่เลือก"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "อนุโลมให้ใช้"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "อุปกรณ์ที่ควรใช้"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "โปรแกรมเบื้องหลัง"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "สหชาติ อนุกูลกิจ, ถนอมทรัพย์ นพบูรณ์"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "drrider@gmail.com, donga.nb@gmail.com"
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "มอดูลการปรับแต่ง Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "สงวนลิขสิทธิ์ 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Hardware"
+#~ msgstr "ฮาร์ดแวร์"
+
+#~ msgid "Profile"
+#~ msgstr "โพรไฟล์"
+
+#~ msgid "Sound Card"
+#~ msgstr "แผงวงจรเสียง"
+
+#~ msgid "Connector"
+#~ msgstr "ส่วนเชื่อมต่อ"
+
+#, fuzzy
+#~| msgid "Output Device"
+#~ msgid "Sound Device"
+#~ msgstr "อุปกรณ์ส่งออกเสียง"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "การจัดวางลำโพงและการทดสอบ"
+
+#~ msgid "Front Left"
+#~ msgstr "ด้านหน้าฝั่งซ้าย"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "ด้านหน้าซ้ายของตรงกลาง"
+
+#~ msgid "Front Center"
+#~ msgstr "ตรงกลางด้านหน้า"
+
+#~ msgid "Mono"
+#~ msgstr "โมโน"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "ด้านหน้าขวาของตรงกลาง"
+
+#~ msgid "Front Right"
+#~ msgstr "ด้านหน้าฝั่งขวา"
+
+#~ msgid "Side Left"
+#~ msgstr "ด้านข้างฝั่งซ้าย"
+
+#~ msgid "Side Right"
+#~ msgstr "ด้านข้างฝั่งขวา"
+
+#~ msgid "Rear Left"
+#~ msgstr "ด้านหลังฝั่งซ้าย"
+
+#~ msgid "Rear Center"
+#~ msgstr "ด้านหลังตรงกลาง"
+
+#~ msgid "Rear Right"
+#~ msgstr "ด้านหลังฝั่งขวา"
+
+#~ msgid "Subwoofer"
+#~ msgstr "ซับวูฟเฟอร์"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "ไม่ทราบช่องสัญญาณ"
+
+#~ msgid "Speaker Setup"
+#~ msgstr "ตั้งค่าลำโพง"
+
+#~ msgid "Audio Output"
+#~ msgstr "ส่วนส่งออกเสียง"
+
+#~ msgid "Audio Capture"
+#~ msgstr "ส่วนอัดเสียง"
+
+#, fuzzy
+#~| msgid "Audio Capture"
+#~ msgid "Video Capture"
+#~ msgstr "ส่วนอัดเสียง"
+
+#, fuzzy
+#~| msgid "Default Output Device Preference"
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "อุปกรณ์ส่งออกเสียงที่ควรใช้เป็นปริยาย"
+
+#, fuzzy
+#~| msgid "Output Device Preference for the '%1' Category"
+#~ msgid "Audio Output Device Preference for the '%1' Category"
+#~ msgstr "อุปกรณ์ส่งออกเสียงที่ควรใช้สำหรับหมวดหมู่ '%1'"
+
+#~ msgid "Remove"
+#~ msgstr "เอาออก"
+
+#~ msgid "Output"
+#~ msgstr "ส่วนส่งออก"
+
+#~ msgid "Sound Output"
+#~ msgstr "ส่วนส่งออกเสียง"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "เล่นเสียงทดสอบกับอุปกรณ์ที่เลือกไว้"
+
+#~ msgid "Capture Device"
+#~ msgstr "อุปกรณ์อัดเสียง"
+
+#, fuzzy
+#~| msgid "Default %1 Preference:"
+#~ msgid "Default %1 Preference:"
+#~ msgstr "อุปกรณ์ %1 ปริยายที่ควรใช้:"
+
+#, fuzzy
+#~| msgid "%1 Preference for the '%2' Category:"
+#~ msgid "%1 Preference for the '%2' Category:"
+#~ msgstr "อุปกรณ์ '%1' ที่ควรใช้สำหรับประเภท '%2':"

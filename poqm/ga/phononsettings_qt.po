@@ -1,0 +1,432 @@
+# Irish translation of kcm_phonon
+# Copyright (C) 2009 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kcm_phonon package.
+# Kevin Scannell <kscanne@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: kdelibs/kcm_phonon.po\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2007-06-27 10:27-0500\n"
+"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
+"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"Language: ga\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n < 11 ? "
+"3 : 4\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Liosta de na hInnill Phonon a aimsíodh ar do chóras.  Úsáidfidh Phonon iad "
+"san ord a fheiceann tú anseo."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Níos fearr"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Níos measa"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Athsheinm Fuaime"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Taifeadadh Fuaime"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Taifeadadh Físe"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Neamhbhailí"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Tástáil an gléas roghnaithe"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Socraíonn sé seo ord réamhshocraithe na ngléasanna (cé gur féidir é seo a "
+"shárú i gcatagóirí ar leith)."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Gléas Réamhshocraithe Athsheinnte Fuaime"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Gléas Réamhshocraithe Taifeadta Fuaime"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Gléas Réamhshocraithe Taifeadta Físe"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Gléas Réamhshocraithe Athsheinnte Fuaime i gCatagóir '%1'"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Gléas Réamhshocraithe Taifeadta Fuaime i gCatagóir '%1'"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category "
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Gléas Réamhshocraithe Taifeadta Físe i gCatagóir '%1'"
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Cuir an liosta tosaíochta gléasanna atá á thaispeáint faoi láthair i "
+"bhfeidhm ar na catagóirí athsheinnte fuaime seo a leanas:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Catagóir Réamhshocraithe/Gan Socrú"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Níorbh fhéidir an gléas aschurtha fuaime a shocrú"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Seans nach féidir le do chóras fuaim a thaifeadadh"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Seans nach féidir le do chóras fís a thaifeadadh"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "%1 á thástáil"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Catagóirí éagsúla de mheáin. I ngach catagóir, is féidir gléas a roghnú a "
+"úsáidfidh na feidhmchláir Phonon."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Taispeáin ardghléasanna"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr ""
+"Úsáid an liosta gléasanna atá á thaispeáint faoi láthair le haghaidh "
+"tuilleadh catagóirí."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Cuir Liosta na nGléasanna i bhFeidhm Ar..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Gléasanna a aimsíodh ar do chóras, oiriúnach don chatagóir roghnaithe.  "
+"Roghnaigh an gléas is mian leat a úsáid."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Úsáidfear na gléasanna san ord a fheiceann tú anseo. Mura bhfuil an chéad "
+"ghléas ar fáil ar fáth éigin, bainfidh Phonon triail as an dara gléas, mar "
+"sin de."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Tástáil"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "is fearr leat an gléas roghnaithe"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Níos fearr"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "ní fearr leat an gléas roghnaithe"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Níos measa"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Sainrogha Ghléis"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Inneall"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kevin Scannell"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kscanne@gmail.com"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Chun athrú an innill a chur i bhfeidhm, ní mór duit logáil amach agus "
+#~ "logáil isteach arís."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Modúl Cumraíochta Phonon"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Cóipcheart 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Athsheinm (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Taifeadadh (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Gléasanna Neamhspleácha"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "Socrú Crua-Earraí Fuaime KDE"
+
+#~ msgid "Hardware"
+#~ msgstr "Crua-Earraí"
+
+#~ msgid "Profile"
+#~ msgstr "Próifíl"
+
+#~ msgid "Sound Card"
+#~ msgstr "Cárta Fuaime"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Cumraíocht Ghléis"
+
+#~ msgid "Connector"
+#~ msgstr "Nascóir"
+
+#~ msgid "Sound Device"
+#~ msgstr "Gléas Fuaime"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Láithriú Callairí agus Tástáil"
+
+#~ msgid "Input Levels"
+#~ msgstr "Leibhéil Ionchurtha"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Socrú Crua-Earraí Fuaime"
+
+#~ msgid "Front Left"
+#~ msgstr "Aghaidh: Clé"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Aghaidh: Taobh Clé den Lár"
+
+#~ msgid "Front Center"
+#~ msgstr "Aghaidh: Lár"
+
+#~ msgid "Mono"
+#~ msgstr "Mona"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Aghaidh: Taobh Deas den Lár"
+
+#~ msgid "Front Right"
+#~ msgstr "Aghaidh: Deas"
+
+#~ msgid "Side Left"
+#~ msgstr "Taobh: Clé"
+
+#~ msgid "Side Right"
+#~ msgstr "Taobh: Deas"
+
+#~ msgid "Rear Left"
+#~ msgstr "Cúl: Clé"
+
+#~ msgid "Rear Center"
+#~ msgstr "Cúl: Lár"
+
+#~ msgid "Rear Right"
+#~ msgstr "Cúl: Deas"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Fo-dhordaire"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Cainéal Anaithnid"
+
+#~ msgid "Audio Output"
+#~ msgstr "Aschur Fuaime"
+
+#~ msgid "Audio Capture"
+#~ msgstr "Gabháil Fuaime"
+
+#~ msgid "Remove"
+#~ msgstr "Bain"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "Seinn fuaim thástála ar an ngléas roghnaithe"
+
+#~ msgid "Capture Device"
+#~ msgstr "Gléas Gabhála"

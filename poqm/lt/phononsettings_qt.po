@@ -1,0 +1,421 @@
+# translation of kcm_phonon.po to Lithuanian
+# This file is distributed under the same license as the kcm_phonon package.
+# Matas Brazdeikis <matasbbb@gmail.com>, 2008.
+# Antanas Uršulis <antanas.ursulis@gmail.com>, 2008.
+# Donatas Glodenis <dgvirtual@akl.lt>, 2009.
+# Tomas Straupis <tomasstraupis@gmail.com>, 2010, 2011.
+# Remigijus Jarmalavičius <remigijus@jarmalavicius.lt>, 2011.
+# Liudas Ališauskas <liudas.alisauskas@gmail.com>, 2011.
+# Liudas Alisauskas <liudas@akmc.lt>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2019-07-15 22:02+0300\n"
+"Last-Translator: Moo\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Poedit 2.2.1\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+#, fuzzy
+#| msgid ""
+#| "A list of Phonon Backends found on your system.  The order here "
+#| "determines the order Phonon will use them in."
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Sąrašas Phonon galinių sąsajų rastų sistemoje. Eiliškumas nurodo tvarką "
+"kokia jie bus naudojami Phonon."
+
+#: backendselection.ui:170
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Teikti pirmenybę"
+
+#: backendselection.ui:183
+#, fuzzy
+#| msgid "Defer"
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Neteikti pirmenybės"
+
+#: devicepreference.cpp:90
+#, fuzzy
+#| msgid "Audio Playback"
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Garso grojimas"
+
+#: devicepreference.cpp:104
+#, fuzzy
+#| msgid "Audio Recording"
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Garso įrašymas"
+
+#: devicepreference.cpp:107
+#, fuzzy
+#| msgid "Video Recording"
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Vaizdo įrašymas"
+
+#: devicepreference.cpp:110
+#, fuzzy
+#| msgid "Invalid"
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Neteisingas"
+
+#: devicepreference.cpp:150
+#, fuzzy
+#| msgid "Test the selected device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Patikrinti parinktą įrenginį"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+#, fuzzy
+#| msgid ""
+#| "Defines the default ordering of devices which can be overridden by "
+#| "individual categories."
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Nustato numatytą tvarką įrenginių, kuri gali būti pakeista individualių "
+"kategorijų."
+
+#: devicepreference.cpp:303
+#, fuzzy
+#| msgid "Default Audio Playback Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Numatyta garso grojimo įrenginių pirmenybė"
+
+#: devicepreference.cpp:306
+#, fuzzy
+#| msgid "Default Audio Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Numatyta garso įrašymo įrenginių pirmenybė"
+
+#: devicepreference.cpp:309
+#, fuzzy
+#| msgid "Default Video Recording Device Preference"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Numatyta vaizdo įrašymo įrenginių pirmenybė"
+
+#: devicepreference.cpp:316
+#, fuzzy, qt-format
+#| msgid "Audio Playback Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Garso grojimo įrenginių pirmenybė kategorijoje „%1“"
+
+#: devicepreference.cpp:320
+#, fuzzy, qt-format
+#| msgid "Audio Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Garso įrašymo įrenginių pirmenybė kategorijoje „%1“"
+
+#: devicepreference.cpp:324
+#, fuzzy, qt-format
+#| msgid "Video Recording Device Preference for the '%1' Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Vaizdo įrašymo įrenginių pirmenybė kategorijoje „%1“"
+
+#: devicepreference.cpp:748
+#, fuzzy
+#| msgid ""
+#| "Apply the currently shown device preference list to the following other "
+#| "audio playback categories:"
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Pritaikyti dabar rodomą įrenginių pirmenybės sąrašą šioms kitoms garso "
+"išvedimo kategorijoms:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+#, fuzzy
+#| msgid "Default/Unspecified Category"
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Numatyta/nenurodyta kategorija"
+
+#: devicepreference.cpp:865
+#, fuzzy
+#| msgid "Failed to set the selected audio output device"
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Nepavyko nustatyti garso išvesties įrenginio"
+
+#: devicepreference.cpp:895
+#, fuzzy
+#| msgid "Your backend may not support audio recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Jūsų parinktas variklis nepalaiko garso įrašymo"
+
+#: devicepreference.cpp:916
+#, fuzzy
+#| msgid "Your backend may not support video recording"
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Jūsų parinktas variklis nepalaiko vaizdo įrašymo"
+
+#: devicepreference.cpp:926
+#, fuzzy, qt-format
+#| msgid "Testing %1"
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Bandomas %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+#, fuzzy
+#| msgid ""
+#| "Various categories of media use cases.  For each category, you may choose "
+#| "what device you prefer to be used by the Phonon applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Įvairios išvedimo kategorijos skirtingiems panaudojimams. Kiekvienai "
+"kategorijai jūs galite pasirinkti įrenginį, kuris turėtų būti naudojamas "
+"Phonon programose."
+
+#: devicepreference.ui:47
+#, fuzzy
+#| msgid "Show advanced devices"
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Rodyti sudėtingesnius įrenginius"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+#, fuzzy
+#| msgid "Use the currently shown device list for more categories."
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Naudoti dabar rodomą įrenginių sąrašą kitoms kategorijoms."
+
+#: devicepreference.ui:83
+#, fuzzy
+#| msgid "Apply Device List To..."
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Pritaikyti įrenginių sąrašą..."
+
+#: devicepreference.ui:113
+#, fuzzy
+#| msgid ""
+#| "Devices found on your system, suitable for the selected category.  Choose "
+#| "the device that you wish to be used by the applications."
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Jūsų sistemoje rasti įrenginiai, tinkami parinktai kategorijai. Pasirinkite "
+"įrenginį kuris turėtų būti naudojamas programose."
+
+#: devicepreference.ui:116
+#, fuzzy
+#| msgid ""
+#| "The order determines the preference of the devices. If for some reason "
+#| "the first device cannot be used Phonon will try to use the second, and so "
+#| "on."
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Tvarka nulems įrenginių pirmenybę. Jei dėl kokių nors priežasčių neveiks "
+"pirmas įrenginys, Phonon bandys antrą ir t.t."
+
+#: devicepreference.ui:171
+#, fuzzy
+#| msgid "Test"
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Testuoti"
+
+#: devicepreference.ui:187
+#, fuzzy
+#| msgid "prefer the selected device"
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "teikti pirmenybę pasirinktam įrenginiui"
+
+#: devicepreference.ui:190
+#, fuzzy
+#| msgid "Prefer"
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Teikti pirmenybę"
+
+#: devicepreference.ui:203
+#, fuzzy
+#| msgid "no preference for the selected device"
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "neteikti pirmenybės pasirinktam įrenginiui"
+
+#: devicepreference.ui:206
+#, fuzzy
+#| msgid "Defer"
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Neteikti pirmenybės"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr ""
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr ""
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr ""
+
+#: settings.ui:31
+#, fuzzy
+#| msgid "Device Preference"
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Įrenginių pasirinkimai"
+
+#: settings.ui:36
+#, fuzzy
+#| msgid "Backend"
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Galinė sąsaja"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Matas Brazdeikis, Antanas Uršulis, Liudas Ališauskas"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "Matasbbb@gmail.com, antanas.ursulis@gmail.com, liudas@akmc.lt"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Kad pritaikyti galinės sąsajos pakeitimus, jūs turėsite atsijungti ir "
+#~ "prisijungti vėl."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Phonon konfigūracijos modulis"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Autorinės teisės 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Grojimas (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Įrašymas (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Nepriklausomi įrenginiai"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE garso aparatinės įrangos nustatymas"
+
+#~ msgid "Hardware"
+#~ msgstr "Aparatinė įranga"
+
+#~ msgid "Profile"
+#~ msgstr "Profilis"
+
+#~ msgid "Sound Card"
+#~ msgstr "Garso plokštė"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Įrenginio konfigūracija"
+
+#~ msgid "Connector"
+#~ msgstr "Jungtis"
+
+#~ msgid "Sound Device"
+#~ msgstr "Garso įrenginys"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Garsiakalbio talpinimas ir tikrinimas"
+
+#~ msgid "Input Levels"
+#~ msgstr "Įėjimo lygiai"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Garso aparatinės įrangos nustatymas"
+
+#~ msgid "Front Left"
+#~ msgstr "Priekinis kairysis"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Priekinis centro kairysis"
+
+#~ msgid "Front Center"
+#~ msgstr "Priekinis centrinis"
+
+#~ msgid "Mono"
+#~ msgstr "Mono"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Priekinis centro dešinysis"
+
+#~ msgid "Front Right"
+#~ msgstr "Priekinis dešinysis"
+
+#~ msgid "Side Left"
+#~ msgstr "Šono kairysis"
+
+#~ msgid "Side Right"
+#~ msgstr "Šono dešinysis"
+
+#~ msgid "Rear Left"
+#~ msgstr "Galinis kairysis"
+
+#~ msgid "Rear Center"
+#~ msgstr "Galinis centrinis"
+
+#~ msgid "Rear Right"
+#~ msgstr "Galinis dešinysis"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Žemų dažnių generatorius"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Nežinomas kanalas"

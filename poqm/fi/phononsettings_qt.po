@@ -1,0 +1,347 @@
+# Translation of kcm_phonon.po to Finnish
+# Copyright © 2008, 2008, 2011, 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kde-runtime package.
+# Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
+# Teemu Rytilahti <tpr@d5k.net>, 2008.
+# Teemu Rytilahti <teemu.rytilahti@d5k.net>, 2008.
+# Teemu Rytilahti <teemu.rytilahti@kde-fi.org>, 2008.
+# Lasse Liehu <lliehu@kolumbus.fi>, 2011, 2012, 2013.
+# Tommi Nieminen <translator@legisign.org>, 2016, 2020.
+#
+# KDE Finnish translation sprint participants:
+# Author: Lliehu
+# Teemu Rytilahti, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2020-01-01 12:30+0200\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:22:11+0000\n"
+"X-Generator: Lokalize 18.12.3\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Luettelo järjestelmästäsi löytyneistä Phonon-taustajärjestelmistä. Järjestys "
+"määrää, missä järjestyksessä Phonon käyttää laitteita."
+
+#: backendselection.ui:170
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Suosi"
+
+#: backendselection.ui:183
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Älä suosi"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Äänentoisto"
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Äänitys"
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Videontallennus"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Virheellinen"
+
+#: devicepreference.cpp:150
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Kokeile valittua laitetta"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Määrittää laitteiden oletusjärjestyksen, joka voidaan ohittaa eri luokkien "
+"omin asetuksin."
+
+#: devicepreference.cpp:303
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Oletusarvoinen äänentoistolaitejärjestys"
+
+#: devicepreference.cpp:306
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Oletusarvoinen äänityslaitejärjestys"
+
+#: devicepreference.cpp:309
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Oletusarvoinen videontallennuslaitejärjestys"
+
+#: devicepreference.cpp:316
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "Äänentoistolaitejärjestys luokalle ”%1”"
+
+#: devicepreference.cpp:320
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "Äänityslaitejärjestys luokalle ”%1”"
+
+#: devicepreference.cpp:324
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "Videontallennuslaitejärjestys luokalle ”%1”"
+
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Käytä tämän hetkistä laitejärjestystä seuraaviin muihin äänentoistoluokkiin:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Oletus- tai määrittämätön luokka"
+
+#: devicepreference.cpp:865
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Valitun ääniulostulon asettaminen epäonnistui"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Taustajärjestelmäsi ei ehkä tue äänitystä"
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Taustajärjestelmäsi ei ehkä tue videontallennusta"
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "Kokeillaan: %1"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Käyttötarkoituksen mukaisia luokkia. Voit valita kullekin laitteen, jota "
+"haluat Phonon-sovellusten suosivan."
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Näytä lisälaitteet"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Käytä nykyistä laiteluetteloa muihinkin luokkiin."
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Käytä laiteluetteloa muissakin luokissa…"
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Järjestelmästä löytyneet valittuun luokkaan sopivat äänilaitteet. Valitse "
+"laite, jota haluat sovellusten käyttävän."
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Järjestys määrää laitteiden ensisijaisuuden. Jos ensimmäistä laitetta ei voi "
+"jostakin syystä käyttää, Phonon yrittää toista laitetta jne."
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Kokeile"
+
+#: devicepreference.ui:187
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "suosi valittua laitetta"
+
+#: devicepreference.ui:190
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Suosi"
+
+#: devicepreference.ui:203
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "ei etusijaa valitulle laitteelle"
+
+#: devicepreference.ui:206
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Älä suosi"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr "Phonon-asetukset"
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr "Valintaikkuna"
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr "Multimedia-asetukset"
+
+#: settings.ui:31
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Laitteiden &käyttöjärjestys"
+
+#: settings.ui:36
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Taustajärjestelmä"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Teemu Rytilahti, Mikko Piippo, Tommi Nieminen"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr ",mikko.piippo@helsinki.fi,translator@legisign.org"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Käyttääksesi uutta taustajärjestelmää, sinun on kirjauduttava ulos ja "
+#~ "takaisin sisään."
+
+# Vältetään moduuli-sanaa.
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Phononin asetukset"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Toisto (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Äänitys (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Erilliset laitteet"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE:n äänilaitteiston asetukset"
+
+#~ msgid "Hardware"
+#~ msgstr "Laitteisto"
+
+#~ msgid "Profile"
+#~ msgstr "Profiili"
+
+#~ msgid "Sound Card"
+#~ msgstr "Äänikortti"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Laiteasetukset"
+
+#~ msgid "Connector"
+#~ msgstr "Liitin"
+
+#~ msgid "Sound Device"
+#~ msgstr "Äänilaite"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Kaiutinten sijoittelu ja testaus"
+
+#~ msgid "Input Levels"
+#~ msgstr "Äänitystasot"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Äänilaitteiston asetukset"
+
+#~ msgid "Front Left"
+#~ msgstr "Etuvasen"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Keskivasen"
+
+#~ msgid "Front Center"
+#~ msgstr "Etukeski"
+
+#~ msgid "Mono"
+#~ msgstr "Mono"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Keskioikea"
+
+#~ msgid "Front Right"
+#~ msgstr "Etuoikea"
+
+#~ msgid "Side Left"
+#~ msgstr "Sivuvasen"
+
+#~ msgid "Side Right"
+#~ msgstr "Sivuoikea"
+
+#~ msgid "Rear Left"
+#~ msgstr "Takavasen"
+
+#~ msgid "Rear Center"
+#~ msgstr "Takakeski"
+
+#~ msgid "Rear Right"
+#~ msgstr "Takaoikea"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Alibassokaiutin"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Tuntematon kanava"

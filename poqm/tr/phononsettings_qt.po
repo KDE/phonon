@@ -1,0 +1,382 @@
+# translation of kcm_phonon.po to Turkish
+# translation of kcm_phonon.po to
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Serdar Soytetir <tulliana@gmail.com>, 2007, 2008.
+# Serdar SOYTETİR <tulliana@gmail.com>, 2010.
+# H. İbrahim Güngör <tulliana@gmail.com>, 2011, 2012.
+# Emir SARI <emir_sari@icloud.com>, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: kcm_phonon\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-15 03:13+0200\n"
+"PO-Revision-Date: 2022-05-08 12:19+0300\n"
+"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 22.04.0\n"
+"X-Qt-Contexts: true\n"
+
+#: backendselection.ui:151 backendselection.ui:154
+msgctxt "BackendSelection|"
+msgid ""
+"A list of Phonon Backends found on your system.  The order here determines "
+"the order Phonon will use them in."
+msgstr ""
+"Sisteminizde bulunan Phonon Arka Uçlarının bir listesidir.  Buradaki "
+"sıralama bu arka uçların Phonon içerisindeki kullanım sırasını belirler."
+
+#: backendselection.ui:170
+msgctxt "BackendSelection|"
+msgid "Prefer"
+msgstr "Tercih Et"
+
+#: backendselection.ui:183
+msgctxt "BackendSelection|"
+msgid "Defer"
+msgstr "Ertele"
+
+#: devicepreference.cpp:90
+msgctxt "QObject|"
+msgid "Audio Playback"
+msgstr "Ses Çalma"
+
+#: devicepreference.cpp:104
+msgctxt "QObject|"
+msgid "Audio Recording"
+msgstr "Ses Kaydı"
+
+#: devicepreference.cpp:107
+msgctxt "QObject|"
+msgid "Video Recording"
+msgstr "Video Kaydı"
+
+#: devicepreference.cpp:110
+msgctxt "QObject|"
+msgid "Invalid"
+msgstr "Geçersiz"
+
+#: devicepreference.cpp:150
+msgctxt "Phonon::DevicePreference|"
+msgid "Test the selected device"
+msgstr "Seçili aygıtı sına"
+
+#: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Defines the default ordering of devices which can be overridden by "
+"individual categories."
+msgstr ""
+"Kategoriler tarafından gözardı edilecek olan öntanımlı aygıt sıralamasını "
+"tanımlar."
+
+#: devicepreference.cpp:303
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Playback Device Preference"
+msgstr "Öntanımlı Ses Çalma Aygıtı Tercihi"
+
+#: devicepreference.cpp:306
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Audio Recording Device Preference"
+msgstr "Öntanımlı Ses Kaydetme Aygıtı Tercihi"
+
+#: devicepreference.cpp:309
+msgctxt "Phonon::DevicePreference|"
+msgid "Default Video Recording Device Preference"
+msgstr "Öntanımlı Video Kaydetme Aygıtı Tercihi"
+
+#: devicepreference.cpp:316
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Playback Device Preference for the '%1' Category"
+msgstr "'%1' Kategorisi için Ses Çalma Aygıtı Tercihi"
+
+#: devicepreference.cpp:320
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Audio Recording Device Preference for the '%1' Category"
+msgstr "'%1' Kategorisi için Ses Kaydetme Aygıtı Tercihi"
+
+#: devicepreference.cpp:324
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Video Recording Device Preference for the '%1' Category "
+msgstr "'%1' Kategorisi için Video Kaydetme Aygıtı Tercihi"
+
+#: devicepreference.cpp:748
+msgctxt "Phonon::DevicePreference|"
+msgid ""
+"Apply the currently shown device preference list to the following other "
+"audio playback categories:"
+msgstr ""
+"Gösterilen aygıt tercihlerini aşağıdaki diğer ses çalma kategorilerine "
+"uygula:"
+
+#: devicepreference.cpp:761 devicepreference.cpp:767
+msgctxt "Phonon::DevicePreference|"
+msgid "Default/Unspecified Category"
+msgstr "Öntanımlı/Belirtilmemiş Kategori"
+
+#: devicepreference.cpp:865
+msgctxt "Phonon::DevicePreference|"
+msgid "Failed to set the selected audio output device"
+msgstr "Seçilen ses çıkışı aygıtı ayarlanamadı"
+
+#: devicepreference.cpp:895
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support audio recording"
+msgstr "Kullandığını arka uç ses kaydını desteklemeyebilir"
+
+#: devicepreference.cpp:916
+msgctxt "Phonon::DevicePreference|"
+msgid "Your backend may not support video recording"
+msgstr "Kullandığını arka uç video kaydını desteklemeyebilir"
+
+#: devicepreference.cpp:926
+#, qt-format
+msgctxt "Phonon::DevicePreference|"
+msgid "Testing %1"
+msgstr "%1 sınanıyor"
+
+#: devicepreference.ui:29 devicepreference.ui:32
+msgctxt "DevicePreference|"
+msgid ""
+"Various categories of media use cases.  For each category, you may choose "
+"what device you prefer to be used by the Phonon applications."
+msgstr ""
+"Çeşitli ortam kategorileri için kullanım durumları. Her kategori için Phonon "
+"tarafından hangi aygıtın kullanılacağını tercih edebilirsiniz."
+
+#: devicepreference.ui:47
+msgctxt "DevicePreference|"
+msgid "Show advanced devices"
+msgstr "Gelişmiş aygıtları göster"
+
+#: devicepreference.ui:77 devicepreference.ui:80
+msgctxt "DevicePreference|"
+msgid "Use the currently shown device list for more categories."
+msgstr "Gösterilen aygıt listesini daha fazla kategori için kullan."
+
+#: devicepreference.ui:83
+msgctxt "DevicePreference|"
+msgid "Apply Device List To..."
+msgstr "Aygıt Listesini Uygula..."
+
+#: devicepreference.ui:113
+msgctxt "DevicePreference|"
+msgid ""
+"Devices found on your system, suitable for the selected category.  Choose "
+"the device that you wish to be used by the applications."
+msgstr ""
+"Sisteminizde bulunana aygıtlar seçilen kategori için uygun. Aygıtın hangi "
+"uygulamalar tarafından kullanılmasını istediğinizi seçin."
+
+#: devicepreference.ui:116
+msgctxt "DevicePreference|"
+msgid ""
+"The order determines the preference of the devices. If for some reason the "
+"first device cannot be used Phonon will try to use the second, and so on."
+msgstr ""
+"Sıralama aygıt tercihini belirler. Eğer bazı nedenlerle birinci aygıt "
+"kullanılamazsa Phonon ikinci aygıtı deneyecek ve bu böyle sürecektir."
+
+#: devicepreference.ui:171
+msgctxt "DevicePreference|"
+msgid "Test"
+msgstr "Sına"
+
+#: devicepreference.ui:187
+msgctxt "DevicePreference|"
+msgid "prefer the selected device"
+msgstr "seçilen aygıtı tercih et"
+
+#: devicepreference.ui:190
+msgctxt "DevicePreference|"
+msgid "Prefer"
+msgstr "Tercih Et"
+
+#: devicepreference.ui:203
+msgctxt "DevicePreference|"
+msgid "no preference for the selected device"
+msgstr "seçilen aygıt için tercih yok"
+
+#: devicepreference.ui:206
+msgctxt "DevicePreference|"
+msgid "Defer"
+msgstr "Ertele"
+
+#: main.cpp:30
+msgctxt "QObject|"
+msgid "Phonon Settings"
+msgstr "Phonon Ayarları"
+
+#: settings.ui:14
+msgctxt "Settings|"
+msgid "Dialog"
+msgstr "Pencere"
+
+#: settings.ui:20
+msgctxt "Settings|"
+msgid "Multimedia Settings"
+msgstr "Çoklu Ortam Ayarları"
+
+#: settings.ui:31
+msgctxt "Settings|"
+msgid "De&vice Priority"
+msgstr "Aygıt Önceliği"
+
+#: settings.ui:36
+msgctxt "Settings|"
+msgid "Backend"
+msgstr "Arka Uç"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Serdar Soytetir"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "tulliana@gmail.com"
+
+#~ msgctxt "@info User changed Phonon backend"
+#~ msgid ""
+#~ "To apply the backend change you will have to log out and back in again."
+#~ msgstr ""
+#~ "Arka uç değişikliğinin etkinleştirilmesi için oturumu kapatıp yeniden "
+#~ "giriş yapmalısınız."
+
+#~ msgid "Phonon Configuration Module"
+#~ msgstr "Phonon Yapılandırma Modülü"
+
+#~ msgid "Copyright 2006 Matthias Kretz"
+#~ msgstr "Copyright 2006 Matthias Kretz"
+
+#~ msgid "Matthias Kretz"
+#~ msgstr "Matthias Kretz"
+
+#~ msgid "Colin Guthrie"
+#~ msgstr "Colin Guthrie"
+
+#~ msgid "Playback (%1)"
+#~ msgstr "Çalma (%1)"
+
+#~ msgid "Recording (%1)"
+#~ msgstr "Kayıt (%1)"
+
+#~ msgid "Independent Devices"
+#~ msgstr "Bağımsız Aygıtlar"
+
+#~ msgid "KDE Audio Hardware Setup"
+#~ msgstr "KDE Ses Donanımı Ayarları"
+
+#~ msgid "Hardware"
+#~ msgstr "Donanım"
+
+#~ msgid "Profile"
+#~ msgstr "Profil"
+
+#~ msgid "Sound Card"
+#~ msgstr "Ses Kartı"
+
+#~ msgid "Device Configuration"
+#~ msgstr "Aygıt Yapılandırması"
+
+#~ msgid "Connector"
+#~ msgstr "Bağlayıcı"
+
+#~ msgid "Sound Device"
+#~ msgstr "Ses Aygıtı"
+
+#~ msgid "Speaker Placement and Testing"
+#~ msgstr "Hoparlör Yerleşimi ve Testi"
+
+#~ msgid "Input Levels"
+#~ msgstr "Girdi Düzeyleri"
+
+#~ msgid "Audio Hardware Setup"
+#~ msgstr "Ses Donanımı Ayarları"
+
+#~ msgid "Front Left"
+#~ msgstr "Ön Sol"
+
+#~ msgid "Front Left of Center"
+#~ msgstr "Ön Ortanın Solu"
+
+#~ msgid "Front Center"
+#~ msgstr "Ön Orta"
+
+#~ msgid "Mono"
+#~ msgstr "Mono"
+
+#~ msgid "Front Right of Center"
+#~ msgstr "Ön Ortanın Sağı"
+
+#~ msgid "Front Right"
+#~ msgstr "Ön Sağ"
+
+#~ msgid "Side Left"
+#~ msgstr "Sol Taraf"
+
+#~ msgid "Side Right"
+#~ msgstr "Sağ Taraf"
+
+#~ msgid "Rear Left"
+#~ msgstr "Arka Sol"
+
+#~ msgid "Rear Center"
+#~ msgstr "Arka Orta"
+
+#~ msgid "Rear Right"
+#~ msgstr "Arka Sağ"
+
+#~ msgid "Subwoofer"
+#~ msgstr "Subwoofer"
+
+#~ msgid "Unknown Channel"
+#~ msgstr "Bilinmeyen Kanal"
+
+#~ msgid "Speaker Setup"
+#~ msgstr "Hoparlör Ayarları"
+
+#~ msgid "Audio Output"
+#~ msgstr "Ses Çıkışı"
+
+#~ msgid "Audio Capture"
+#~ msgstr "Ses Yakalama"
+
+#~ msgid "Video Capture"
+#~ msgstr "Video Yakalama"
+
+#~ msgid "Default Audio Output Device Preference"
+#~ msgstr "Öntanımlı Ses Çıkış Aygıt Tercihi"
+
+#~ msgid "Remove"
+#~ msgstr "Kaldır"
+
+#~ msgid "Output"
+#~ msgstr "Çıkış"
+
+#~ msgid "Sound Output"
+#~ msgstr "Ses Çıkışı"
+
+#~ msgid "Play a test sound on the selected device"
+#~ msgstr "Seçilen aygıt üzerinden bir deneme sesi çal"
+
+#~ msgid "Capture Device"
+#~ msgstr "Yakalama Aygıtı"
+
+#, fuzzy
+#~| msgid "Default Output Device Preference:"
+#~ msgid "Default %1 Preference:"
+#~ msgstr "Öntanımlı Çıktı Aygıtı Tercihi:"
+
+#, fuzzy
+#~| msgid "Output Device Preference for the '%1' Category:"
+#~ msgid "%1 Preference for the '%2' Category:"
+#~ msgstr "'%1' Kategorisi için Çıktı Aygıtı Tercihi:"
