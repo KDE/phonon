@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Qt-Contexts: true\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #: backendselection.ui:151 backendselection.ui:154
 msgctxt "BackendSelection|"
@@ -19,16 +19,19 @@ msgid ""
 "A list of Phonon Backends found on your system.  The order here determines "
 "the order Phonon will use them in."
 msgstr ""
+"თქვენს სისტემაში აღმოჩენილი Phonon-ის უკანაბოლოების ჩამონათვალი.   მათი "
+"მიმდევრობა ამ სიაში განსაზღვრავს თანამიმდევრობას, რომლითაც Phonon-ი მათ "
+"ჩატვირთავს."
 
 #: backendselection.ui:170
 msgctxt "BackendSelection|"
 msgid "Prefer"
-msgstr ""
+msgstr "მჯობინება"
 
 #: backendselection.ui:183
 msgctxt "BackendSelection|"
 msgid "Defer"
-msgstr ""
+msgstr "გადადება"
 
 #: devicepreference.cpp:90
 msgctxt "QObject|"
@@ -61,39 +64,41 @@ msgid ""
 "Defines the default ordering of devices which can be overridden by "
 "individual categories."
 msgstr ""
+"განსაზღვრავს მოწყობილობების ნაგულისხმევ თანამიმდევრობას, რომლითაც ისინი "
+"ინდივიდუალური კატეგორიების მიხედვით შეიძლება გადაიფარონ."
 
 #: devicepreference.cpp:303
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Playback Device Preference"
-msgstr ""
+msgstr "ნაგულისხმები აუდიოს დამკვრელი მოწყობილობის მორგება"
 
 #: devicepreference.cpp:306
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Recording Device Preference"
-msgstr ""
+msgstr "ნაგულისხმები აუდიოს ჩამწერი მოწყობილობის მორგება"
 
 #: devicepreference.cpp:309
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Video Recording Device Preference"
-msgstr ""
+msgstr "ნაგულისხმები ვიდეოს ჩამწერი მოწყობილობის მორგება"
 
 #: devicepreference.cpp:316
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Audio Playback Device Preference for the '%1' Category"
-msgstr ""
+msgstr "აუდიოს დამკვრელი მოწყობილობის პარამეტრები '%1' კატეგორიისთვის"
 
 #: devicepreference.cpp:320
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Audio Recording Device Preference for the '%1' Category"
-msgstr ""
+msgstr "აუდიოს ჩამწერი მოწყობილობის პარამეტრები '%1' კატეგორიისთვის"
 
 #: devicepreference.cpp:324
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Video Recording Device Preference for the '%1' Category "
-msgstr ""
+msgstr "ვიდეოს ჩამწერი მოწყობილობის პარამეტრები '%1' კატეგორიისთვის "
 
 #: devicepreference.cpp:748
 msgctxt "Phonon::DevicePreference|"
@@ -101,26 +106,28 @@ msgid ""
 "Apply the currently shown device preference list to the following other "
 "audio playback categories:"
 msgstr ""
+"ახლა ნაჩვენები მოწყობილობის პარამეტრების სიის შემდეგ სხვა აუდიოს დაკვრის "
+"კატეგორიებზე გადატარება:"
 
 #: devicepreference.cpp:761 devicepreference.cpp:767
 msgctxt "Phonon::DevicePreference|"
 msgid "Default/Unspecified Category"
-msgstr ""
+msgstr "ნაგულისხმები/მიუთითებელი კატეგორია"
 
 #: devicepreference.cpp:865
 msgctxt "Phonon::DevicePreference|"
 msgid "Failed to set the selected audio output device"
-msgstr ""
+msgstr "აუდიოს გამოყვანის მოწყობილობის დაყენების შეცდომა"
 
 #: devicepreference.cpp:895
 msgctxt "Phonon::DevicePreference|"
 msgid "Your backend may not support audio recording"
-msgstr ""
+msgstr "თქვენს უკანაბოლოს შეიძლება აუდიოს ჩაწერის მხარდაჭერა არ გააჩნია"
 
 #: devicepreference.cpp:916
 msgctxt "Phonon::DevicePreference|"
 msgid "Your backend may not support video recording"
-msgstr ""
+msgstr "თქვენს უკანაბოლოს შეიძლება ვიდეოს ჩაწერის მხარდაჭერა არ გააჩნია"
 
 #: devicepreference.cpp:926
 #, qt-format
@@ -134,21 +141,24 @@ msgid ""
 "Various categories of media use cases.  For each category, you may choose "
 "what device you prefer to be used by the Phonon applications."
 msgstr ""
+"მედიის გამოყენების სხვადასხვა კატეგორიები.  თითოეული კატეგორიისთვის "
+"შეგიძლიათ აირჩიოთ, Phonon-ის აპლიკაციები რომელ მოწყობილობას გამოიყენებენ."
 
 #: devicepreference.ui:47
 msgctxt "DevicePreference|"
 msgid "Show advanced devices"
-msgstr ""
+msgstr "დამატებითი მოწყობილობების ჩვენება"
 
 #: devicepreference.ui:77 devicepreference.ui:80
 msgctxt "DevicePreference|"
 msgid "Use the currently shown device list for more categories."
 msgstr ""
+"ამჟამად ნაჩვენები მოწყობილობების სიის მეტი კატეგორიებისთვის გამოყენება."
 
 #: devicepreference.ui:83
 msgctxt "DevicePreference|"
 msgid "Apply Device List To..."
-msgstr ""
+msgstr "მოწყობილობის სიის მიმაგრება..."
 
 #: devicepreference.ui:113
 msgctxt "DevicePreference|"
@@ -156,6 +166,8 @@ msgid ""
 "Devices found on your system, suitable for the selected category.  Choose "
 "the device that you wish to be used by the applications."
 msgstr ""
+"თქვენს სისტემაში ნაპოვნი მოწყობილობები, რომელიც არჩეულ კატეგორიას "
+"ერგებიან.   აირჩიეთ მოწყობილობა, რომელიც გნებავთ, აპლიკაციებმა გამოიყენონ."
 
 #: devicepreference.ui:116
 msgctxt "DevicePreference|"
@@ -163,6 +175,8 @@ msgid ""
 "The order determines the preference of the devices. If for some reason the "
 "first device cannot be used Phonon will try to use the second, and so on."
 msgstr ""
+"მოწყობილობების პრიორიტეტი გამოყენებისას. თუ რამე მიზეზით Phonon-ი პირველ "
+"მოწყობილობას ვერ იყენებს, ის სცდის მეორეს, შემდეგ მესამეს და ა.შ."
 
 #: devicepreference.ui:171
 msgctxt "DevicePreference|"
@@ -172,22 +186,22 @@ msgstr "შემოწმება"
 #: devicepreference.ui:187
 msgctxt "DevicePreference|"
 msgid "prefer the selected device"
-msgstr ""
+msgstr "მირჩევნა მონიშნული მოწყობილობა"
 
 #: devicepreference.ui:190
 msgctxt "DevicePreference|"
 msgid "Prefer"
-msgstr ""
+msgstr "მჯობინება"
 
 #: devicepreference.ui:203
 msgctxt "DevicePreference|"
 msgid "no preference for the selected device"
-msgstr ""
+msgstr "მონიშნული მოწყობილობა არ მირჩევნია"
 
 #: devicepreference.ui:206
 msgctxt "DevicePreference|"
 msgid "Defer"
-msgstr ""
+msgstr "გადადება"
 
 #: main.cpp:30
 msgctxt "QObject|"

@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Qt-Contexts: true\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #: audiooutput.cpp:481 audiooutput.cpp:519
 #, qt-format
@@ -129,7 +129,7 @@ msgstr "PulseAudio Sound Server"
 #, qt-format
 msgctxt "Phonon::VolumeSlider|"
 msgid "Volume: %1%"
-msgstr "ხმა: %1"
+msgstr "ხმა: %1%"
 
 #: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
 #, qt-format
