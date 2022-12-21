@@ -148,6 +148,10 @@ namespace Experimental
                 return QImage(reinterpret_cast<const uchar *>(data0.constData()),
                         width, height, QImage::Format_RGB888);
             }
+            if (format == Format_RGB32) {
+                return QImage(reinterpret_cast<const uchar *>(data0.constData()),
+                        width, height, QImage::Format_RGB32);
+            }
             return QImage();
         }
     };

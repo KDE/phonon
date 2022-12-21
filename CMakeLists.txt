@@ -91,6 +91,19 @@ set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
     DESCRIPTION "Needed to build the Qt Designer plugin"
     URL "https://www.qt.io/download")
 
+find_package(Qt${QT_MAJOR_VERSION}Qml ${REQUIRED_QT_VERSION})
+set_package_properties(Qt${QT_MAJOR_VERSION}Qml PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt${QT_MAJOR_VERSION} qml module"
+    URL "https://www.qt.io/download")
+
+find_package(Qt${QT_MAJOR_VERSION}Quick ${REQUIRED_QT_VERSION})
+set_package_properties(Qt${QT_MAJOR_VERSION}Quick PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt${QT_MAJOR_VERSION} Quick module"
+    URL "https://www.qt.io/download")
+
+
 if(QT_MAJOR_VERSION STREQUAL "6")
     find_package(Qt6Core5Compat)
 endif()
@@ -112,6 +125,7 @@ endif()
 
 add_subdirectory(phonon)
 add_subdirectory(includes)
+add_subdirectory(quick)
 
 if(PHONON_BUILD_DEMOS)
     message(STATUS "Building demos.")
