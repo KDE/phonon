@@ -220,7 +220,7 @@ msgstr "Ajorna"
 #: main.cpp:30
 msgctxt "QObject|"
 msgid "Phonon Settings"
-msgstr "Configuració de Phonon"
+msgstr "Configureu Phonon"
 
 #: settings.ui:14
 msgctxt "Settings|"
