@@ -1,15 +1,16 @@
-# translation of kcm_phonon.po to Esperanto
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# translation of phononsettings_qt.pot to Esperanto
+# Copyright (C) 2007 Free Software Foundation, Inc.
+# This file is distributed under the same license as the phonon package.
 # Cindy McKee <cfmckee@gmail.com>, 2007.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kcm_phonon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2007-12-22 10:32-0600\n"
-"Last-Translator: Cindy McKee <cfmckee@gmail.com>\n"
+"PO-Revision-Date: 2023-01-18 23:57+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -20,10 +21,6 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 
 #: backendselection.ui:151 backendselection.ui:154
-#, fuzzy
-#| msgid ""
-#| "A list of Phonon Backends found on your system.  The order here "
-#| "determines the order Phonon will use them in."
 msgctxt "BackendSelection|"
 msgid ""
 "A list of Phonon Backends found on your system.  The order here determines "
@@ -33,15 +30,11 @@ msgstr ""
 "tiu listo."
 
 #: backendselection.ui:170
-#, fuzzy
-#| msgid "Prefer"
 msgctxt "BackendSelection|"
 msgid "Prefer"
 msgstr "Preferi"
 
 #: backendselection.ui:183
-#, fuzzy
-#| msgid "Defer"
 msgctxt "BackendSelection|"
 msgid "Defer"
 msgstr "Cedi"
@@ -49,29 +42,27 @@ msgstr "Cedi"
 #: devicepreference.cpp:90
 msgctxt "QObject|"
 msgid "Audio Playback"
-msgstr ""
+msgstr "Sonrelego"
 
 #: devicepreference.cpp:104
 msgctxt "QObject|"
 msgid "Audio Recording"
-msgstr ""
+msgstr "Sonregistrado"
 
 #: devicepreference.cpp:107
 msgctxt "QObject|"
 msgid "Video Recording"
-msgstr ""
+msgstr "Vidregistrado"
 
 #: devicepreference.cpp:110
 msgctxt "QObject|"
 msgid "Invalid"
-msgstr ""
+msgstr "Nevalida"
 
 #: devicepreference.cpp:150
-#, fuzzy
-#| msgid "prefer the selected device"
 msgctxt "Phonon::DevicePreference|"
 msgid "Test the selected device"
-msgstr "preferi la elektitan disponaĵon"
+msgstr "Testi la elektitan disponaĵon"
 
 #: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
 msgctxt "Phonon::DevicePreference|"
@@ -79,48 +70,43 @@ msgid ""
 "Defines the default ordering of devices which can be overridden by "
 "individual categories."
 msgstr ""
+"Difinas la defaŭltan ordigadon de aparatoj kiu povas esti superregata per "
+"individuaj kategorioj."
 
 #: devicepreference.cpp:303
-#, fuzzy
-#| msgid "Device Preference"
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Playback Device Preference"
-msgstr "Disponaĵa prefero"
+msgstr "Defaŭlta Prefero de Sonreleg-aparato"
 
 #: devicepreference.cpp:306
-#, fuzzy
-#| msgid "Device Preference"
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Recording Device Preference"
-msgstr "Disponaĵa prefero"
+msgstr "Defaŭlta Prefero de Sonregistrada Aparato"
 
 #: devicepreference.cpp:309
-#, fuzzy
-#| msgid "Device Preference"
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Video Recording Device Preference"
-msgstr "Disponaĵa prefero"
+msgstr "Defaŭlta Prefero de Vidregistrada Aparato"
 
 #: devicepreference.cpp:316
 #, fuzzy, qt-format
-#| msgid "Device Preference"
+#| msgctxt "Phonon::DevicePreference|"
+#| msgid "Audio Playback Device Preference for the '%1' Category"
 msgctxt "Phonon::DevicePreference|"
 msgid "Audio Playback Device Preference for the '%1' Category"
 msgstr "Disponaĵa prefero"
 
 #: devicepreference.cpp:320
-#, fuzzy, qt-format
-#| msgid "Device Preference"
+#, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Audio Recording Device Preference for the '%1' Category"
-msgstr "Disponaĵa prefero"
+msgstr "Prefero de Sonregistrada Aparato por la Kategorio '%1'"
 
 #: devicepreference.cpp:324
-#, fuzzy, qt-format
-#| msgid "Device Preference"
+#, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Video Recording Device Preference for the '%1' Category "
-msgstr "Disponaĵa prefero"
+msgstr "Prefero de Vidregistrada Aparato por la Kategorio '%1'"
 
 #: devicepreference.cpp:748
 msgctxt "Phonon::DevicePreference|"
@@ -134,28 +120,27 @@ msgctxt "Phonon::DevicePreference|"
 msgid "Default/Unspecified Category"
 msgstr ""
 
+#
 #: devicepreference.cpp:865
-#, fuzzy
-#| msgid "prefer the selected device"
 msgctxt "Phonon::DevicePreference|"
 msgid "Failed to set the selected audio output device"
-msgstr "preferi la elektitan disponaĵon"
+msgstr "Malsukcesis meti la elektitan aŭdeligan aparaton"
 
 #: devicepreference.cpp:895
 msgctxt "Phonon::DevicePreference|"
 msgid "Your backend may not support audio recording"
-msgstr ""
+msgstr "Via internaĵo eble ne subtenas aŭdregistradon"
 
 #: devicepreference.cpp:916
 msgctxt "Phonon::DevicePreference|"
 msgid "Your backend may not support video recording"
-msgstr ""
+msgstr "Via internaĵo eble ne subtenas vidregistradon"
 
 #: devicepreference.cpp:926
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Testing %1"
-msgstr ""
+msgstr "testanta %1"
 
 #: devicepreference.ui:29 devicepreference.ui:32
 #, fuzzy
@@ -167,8 +152,8 @@ msgid ""
 "Various categories of media use cases.  For each category, you may choose "
 "what device you prefer to be used by the Phonon applications."
 msgstr ""
-"Diversaj kategorioj de eligoj. Por ĉiu kategorio vi povas elekti la eligotan "
-"disponaĵon."
+"Diversaj kategorioj de amaskomunikilaj uzkazoj. Por ĉiu kategorio vi povas "
+"elekti la aparaton prefereatan por la Phonon-aplikaĵoj."
 
 #: devicepreference.ui:47
 msgctxt "DevicePreference|"
@@ -178,25 +163,21 @@ msgstr ""
 #: devicepreference.ui:77 devicepreference.ui:80
 msgctxt "DevicePreference|"
 msgid "Use the currently shown device list for more categories."
-msgstr ""
+msgstr "Uzi la aktuale montratan aparatliston por pliaj kategorioj."
 
 #: devicepreference.ui:83
 msgctxt "DevicePreference|"
 msgid "Apply Device List To..."
-msgstr ""
+msgstr "Apliki Aparatliston Al..."
 
 #: devicepreference.ui:113
-#, fuzzy
-#| msgid ""
-#| "Audio Outputs found on your system.  Choose the device that you wish "
-#| "sound to come out of."
 msgctxt "DevicePreference|"
 msgid ""
 "Devices found on your system, suitable for the selected category.  Choose "
 "the device that you wish to be used by the applications."
 msgstr ""
-"Sonaj eligoj kiuj estas trovitaj en via sistemo. Elektu la disponaĵon el kiu "
-"vi deziras aŭdi sonon."
+"Aparatoj trovataj en via sistemo, adekvataj por la elektita kategorio. "
+"Elektu la aparaton uzendan far la aplikaĵoj."
 
 #: devicepreference.ui:116
 #, fuzzy
@@ -209,40 +190,30 @@ msgid ""
 "The order determines the preference of the devices. If for some reason the "
 "first device cannot be used Phonon will try to use the second, and so on."
 msgstr ""
-"Phonon uzos ilin laŭ ordo. Se la unua ne povas esti uzita, Phonon penos uzi "
-"la duan, ktp."
+"La ordo determinas la preferon de la aparatoj. Se ial la unua aparato ne "
+"povas esti uzata, Phonon provos uzi la duan, ktp."
 
 #: devicepreference.ui:171
-#, fuzzy
-#| msgid "Test"
 msgctxt "DevicePreference|"
 msgid "Test"
 msgstr "Testo"
 
 #: devicepreference.ui:187
-#, fuzzy
-#| msgid "prefer the selected device"
 msgctxt "DevicePreference|"
 msgid "prefer the selected device"
-msgstr "preferi la elektitan disponaĵon"
+msgstr "preferi la elektitan aparaton"
 
 #: devicepreference.ui:190
-#, fuzzy
-#| msgid "Prefer"
 msgctxt "DevicePreference|"
 msgid "Prefer"
 msgstr "Preferi"
 
 #: devicepreference.ui:203
-#, fuzzy
-#| msgid "no preference for the selected device"
 msgctxt "DevicePreference|"
 msgid "no preference for the selected device"
-msgstr "neniu prefero por la elektita disponaĵo"
+msgstr "neniu prefero por la elektita aparato"
 
 #: devicepreference.ui:206
-#, fuzzy
-#| msgid "Defer"
 msgctxt "DevicePreference|"
 msgid "Defer"
 msgstr "Cedi"
@@ -250,96 +221,24 @@ msgstr "Cedi"
 #: main.cpp:30
 msgctxt "QObject|"
 msgid "Phonon Settings"
-msgstr ""
+msgstr "Agordo de Phonon"
 
 #: settings.ui:14
 msgctxt "Settings|"
 msgid "Dialog"
-msgstr ""
+msgstr "Dialogo"
 
 #: settings.ui:20
 msgctxt "Settings|"
 msgid "Multimedia Settings"
-msgstr ""
+msgstr "Plurmedia Agordo"
 
 #: settings.ui:31
-#, fuzzy
-#| msgid "Device Preference"
 msgctxt "Settings|"
 msgid "De&vice Priority"
-msgstr "Disponaĵa prefero"
+msgstr "A&parata Prioritato"
 
 #: settings.ui:36
-#, fuzzy
-#| msgid "Backend"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "Interno"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Cindy McKee"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "cfmckee@gmail.com"
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "Agorda modulo por Phonon"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "Copyright 2006 Matthias Kretz"
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#, fuzzy
-#~| msgid "Prefer"
-#~ msgid "Profile"
-#~ msgstr "Preferi"
-
-#~ msgid "Audio Output"
-#~ msgstr "Sona eligo"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Audio Capture"
-#~ msgstr "Sona eligo"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Video Capture"
-#~ msgstr "Sona eligo"
-
-#, fuzzy
-#~| msgid "Device Preference"
-#~ msgid "Default Audio Output Device Preference"
-#~ msgstr "Disponaĵa prefero"
-
-#, fuzzy
-#~| msgid "Device Preference"
-#~ msgid "Audio Output Device Preference for the '%1' Category"
-#~ msgstr "Disponaĵa prefero"
-
-#~ msgid "Remove"
-#~ msgstr "Forpreni"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Output"
-#~ msgstr "Sona eligo"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Sound Output"
-#~ msgstr "Sona eligo"
-
-#, fuzzy
-#~| msgid "prefer the selected device"
-#~ msgid "Play a test sound on the selected device"
-#~ msgstr "preferi la elektitan disponaĵon"
-
-#, fuzzy
-#~| msgid "Device Preference"
-#~ msgid "Default %1 Preference:"
-#~ msgstr "Disponaĵa prefero"

@@ -1,16 +1,17 @@
-# translation of libphonon.po to Esperanto
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# translation of libphonon_qt.pot to Esperanto
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the phonon package.
 # Cindy McKee <cfmckee@gmail.com>, 2007.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libphonon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-07-01 01:43+0200\n"
-"PO-Revision-Date: 2009-12-19 23:39+0100\n"
-"Last-Translator: Axel Rousseau <axel@esperanto-jeunes.org>\n"
+"PO-Revision-Date: 2023-01-18 23:57+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-doc@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -21,125 +22,97 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 
 #: audiooutput.cpp:481 audiooutput.cpp:519
-#, fuzzy, qt-format
-#| msgid ""
-#| "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back "
-#| "to <b>%2</b>.</html>"
+#, qt-format
 msgctxt "Phonon::AudioOutput|"
 msgid ""
 "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
 "<b>%2</b>.</html>"
 msgstr ""
-"<html>La sona relega disponaĵo <b>%1</b> ne funkcias.<br/>Revenas al rezerva "
-"<b>%2</b>.</html>"
+"<html>La sonreprodukta aparato <b>%1</b> ne funkcias.<br/>Retropaŝanta al <b>"
+"%2</b>.</html>"
 
 #: audiooutput.cpp:494
-#, fuzzy, qt-format
-#| msgid ""
-#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
-#| "became available and has higher preference.</html>"
+#, qt-format
 msgctxt "Phonon::AudioOutput|"
 msgid ""
 "<html>Switching to the audio playback device <b>%1</b><br/>which just became "
 "available and has higher preference.</html>"
 msgstr ""
-"<html>Nun ŝanĝiĝas al la sona relega disponaĵo <b>%1</b><br/>kiu fariĝas "
+"<html>Ŝaltanta al la sonreprodukta aparato <b>%1</b><br/>kiu ĵus fariĝis "
 "havebla kaj estas pli preferata.</html>"
 
 #: audiooutput.cpp:497 audiooutput.cpp:515
-#, fuzzy, qt-format
-#| msgid "Revert back to device '%1'"
+#, qt-format
 msgctxt "Phonon::AudioOutput|"
 msgid "Revert back to device '%1'"
 msgstr "Reveni al disponaĵo '%1'"
 
 #: audiooutput.cpp:512
-#, fuzzy, qt-format
-#| msgid ""
-#| "<html>Switching to the audio playback device <b>%1</b><br/>which just "
-#| "became available and has higher preference.</html>"
+#, qt-format
 msgctxt "Phonon::AudioOutput|"
 msgid ""
 "<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
 "preference or is specifically configured for this stream.</html>"
 msgstr ""
-"<html>Nun ŝanĝiĝas al la sona relega disponaĵo <b>%1</b><br/>kiu fariĝas "
-"havebla kaj estas pli preferata.</html>"
+"<html>Ŝaltanta al la sonreprodukta disponaĵo <b>%1</b><br/>kiu estas pli "
+"preferinda aŭ etas specife agordita por tiu ĉi sistemo.</html>"
 
 #: mediacontroller.cpp:158
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
-msgstr ""
+msgstr "Ĉefmenuo"
 
 #: mediacontroller.cpp:160
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
-msgstr ""
+msgstr "Titolmenuo"
 
 #: mediacontroller.cpp:162
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
-msgstr ""
+msgstr "Sonmenuo"
 
 #: mediacontroller.cpp:164
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
-msgstr ""
+msgstr "Subtitolmenuo"
 
 #: mediacontroller.cpp:166
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
-msgstr ""
+msgstr "Ĉapitra Menuo"
 
 #: mediacontroller.cpp:168
 msgctxt "Phonon::MediaController|"
 msgid "Angle Menu"
-msgstr ""
+msgstr "Angula Menuo"
 
 #: phononnamespace.cpp:55
-#, fuzzy
-#| msgctxt "Phonon::"
-#| msgid "Notifications"
 msgctxt "Phonon::|"
 msgid "Notifications"
 msgstr "Atentigoj"
 
 #: phononnamespace.cpp:57
-#, fuzzy
-#| msgctxt "Phonon::"
-#| msgid "Music"
 msgctxt "Phonon::|"
 msgid "Music"
 msgstr "Muziko"
 
 #: phononnamespace.cpp:59
-#, fuzzy
-#| msgctxt "Phonon::"
-#| msgid "Video"
 msgctxt "Phonon::|"
 msgid "Video"
 msgstr "Filmo"
 
 #: phononnamespace.cpp:61 phononnamespace.cpp:77
-#, fuzzy
-#| msgctxt "Phonon::"
-#| msgid "Communication"
 msgctxt "Phonon::|"
 msgid "Communication"
 msgstr "Komunikado"
 
 #: phononnamespace.cpp:63
-#, fuzzy
-#| msgctxt "Phonon::"
-#| msgid "Games"
 msgctxt "Phonon::|"
 msgid "Games"
 msgstr "Ludoj"
 
 #: phononnamespace.cpp:65
-#, fuzzy
-#| msgctxt "Phonon::"
-#| msgid "Accessibility"
 msgctxt "Phonon::|"
 msgid "Accessibility"
 msgstr "Alirebleco"
@@ -147,36 +120,27 @@ msgstr "Alirebleco"
 #: phononnamespace.cpp:79
 msgctxt "Phonon::|"
 msgid "Recording"
-msgstr ""
+msgstr "Registrado"
 
 #: phononnamespace.cpp:81
-#, fuzzy
-#| msgctxt "Phonon::"
-#| msgid "Control"
 msgctxt "Phonon::|"
 msgid "Control"
-msgstr "Kontrolo"
+msgstr "Stirado"
 
 #: pulsesupport.cpp:275 pulsesupport.cpp:286
-#, fuzzy
-#| msgid "PulseAudio Sound Server"
 msgctxt "QObject|"
 msgid "PulseAudio Sound Server"
 msgstr "PulseAudio Son-Servilo"
 
 #: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
 #: volumeslider.cpp:223
-#, fuzzy, qt-format
-#| msgid "Volume: %1%"
+#, qt-format
 msgctxt "Phonon::VolumeSlider|"
 msgid "Volume: %1%"
 msgstr "Laŭteco: %1%"
 
 #: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
-#, fuzzy, qt-format
-#| msgid ""
-#| "Use this slider to adjust the volume. The leftmost position is 0%, the "
-#| "rightmost is %1%"
+#, qt-format
 msgctxt "Phonon::VolumeSlider|"
 msgid ""
 "Use this slider to adjust the volume. The leftmost position is 0%, the "
@@ -186,23 +150,6 @@ msgstr ""
 "0%, la plej dekstra estas %1%"
 
 #: volumeslider.cpp:203
-#, fuzzy
-#| msgid "Muted"
 msgctxt "Phonon::VolumeSlider|"
 msgid "Muted"
 msgstr "Silentigita"
-
-#, fuzzy
-#~| msgctxt "Phonon::"
-#~| msgid "Communication"
-#~ msgctxt "Phonon::"
-#~ msgid "CaptureCommunication"
-#~ msgstr "Komunikado"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Cindy McKee"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "cfmckee@gmail.com"
