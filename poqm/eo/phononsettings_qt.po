@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kcm_phonon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2023-01-18 23:57+0100\n"
+"PO-Revision-Date: 2023-01-19 21:02+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -42,7 +42,7 @@ msgstr "Cedi"
 #: devicepreference.cpp:90
 msgctxt "QObject|"
 msgid "Audio Playback"
-msgstr "Sonrelego"
+msgstr "Sonreproduktado"
 
 #: devicepreference.cpp:104
 msgctxt "QObject|"
@@ -76,37 +76,35 @@ msgstr ""
 #: devicepreference.cpp:303
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Playback Device Preference"
-msgstr "Defaŭlta Prefero de Sonreleg-aparato"
+msgstr "Defaŭlta Prefero de Sonreprodukta Aparato"
 
 #: devicepreference.cpp:306
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Recording Device Preference"
-msgstr "Defaŭlta Prefero de Sonregistrada Aparato"
+msgstr "Defaŭlta Prefero de Sonregistra Aparato"
 
 #: devicepreference.cpp:309
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Video Recording Device Preference"
-msgstr "Defaŭlta Prefero de Vidregistrada Aparato"
+msgstr "Defaŭlta Prefero de Vidregistra Aparato"
 
 #: devicepreference.cpp:316
-#, fuzzy, qt-format
-#| msgctxt "Phonon::DevicePreference|"
-#| msgid "Audio Playback Device Preference for the '%1' Category"
+#, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Audio Playback Device Preference for the '%1' Category"
-msgstr "Disponaĵa prefero"
+msgstr "Prefero de Sonreprodukta Aparato for la Kategorio '%1'"
 
 #: devicepreference.cpp:320
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Audio Recording Device Preference for the '%1' Category"
-msgstr "Prefero de Sonregistrada Aparato por la Kategorio '%1'"
+msgstr "Prefero de Sonregistra Aparato por la Kategorio '%1'"
 
 #: devicepreference.cpp:324
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Video Recording Device Preference for the '%1' Category "
-msgstr "Prefero de Vidregistrada Aparato por la Kategorio '%1'"
+msgstr "Prefero de Vidregistra Aparato por la Kategorio '%1'"
 
 #: devicepreference.cpp:748
 msgctxt "Phonon::DevicePreference|"
@@ -114,11 +112,13 @@ msgid ""
 "Apply the currently shown device preference list to the following other "
 "audio playback categories:"
 msgstr ""
+"Apliki la aktuale montratan aparatpreferoliston al la sekvantaj ceteraj "
+"kategorioj de sonreprodukto:"
 
 #: devicepreference.cpp:761 devicepreference.cpp:767
 msgctxt "Phonon::DevicePreference|"
 msgid "Default/Unspecified Category"
-msgstr ""
+msgstr "Defaŭlta/Nespecifita Kategorio"
 
 #
 #: devicepreference.cpp:865
@@ -143,22 +143,18 @@ msgid "Testing %1"
 msgstr "testanta %1"
 
 #: devicepreference.ui:29 devicepreference.ui:32
-#, fuzzy
-#| msgid ""
-#| "Various categories of outputs.  For each category you may choose what "
-#| "device you wish to output to."
 msgctxt "DevicePreference|"
 msgid ""
 "Various categories of media use cases.  For each category, you may choose "
 "what device you prefer to be used by the Phonon applications."
 msgstr ""
-"Diversaj kategorioj de amaskomunikilaj uzkazoj. Por ĉiu kategorio vi povas "
-"elekti la aparaton prefereatan por la Phonon-aplikaĵoj."
+"Diversaj kategorioj de plurmediaj uzkazoj. Por ĉiu kategorio vi povas elekti "
+"la aparaton kiun vi preferas por uzo de la Phonon-aplikaĵoj."
 
 #: devicepreference.ui:47
 msgctxt "DevicePreference|"
 msgid "Show advanced devices"
-msgstr ""
+msgstr "Montri progresintajn aparatojn"
 
 #: devicepreference.ui:77 devicepreference.ui:80
 msgctxt "DevicePreference|"
@@ -180,11 +176,6 @@ msgstr ""
 "Elektu la aparaton uzendan far la aplikaĵoj."
 
 #: devicepreference.ui:116
-#, fuzzy
-#| msgid ""
-#| "The order determines the preference of the devices. If for some reason "
-#| "the first device cannot be used Phonon will try to use the second, and so "
-#| "on."
 msgctxt "DevicePreference|"
 msgid ""
 "The order determines the preference of the devices. If for some reason the "
