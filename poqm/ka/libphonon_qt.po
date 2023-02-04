@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Qt-Contexts: true\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: audiooutput.cpp:481 audiooutput.cpp:519
 #, qt-format
@@ -107,7 +107,7 @@ msgstr "თამაშები"
 #: phononnamespace.cpp:65
 msgctxt "Phonon::|"
 msgid "Accessibility"
-msgstr "_დამხმარე საშუალებები"
+msgstr "წვდომადობა"
 
 #: phononnamespace.cpp:79
 msgctxt "Phonon::|"
