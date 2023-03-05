@@ -271,7 +271,7 @@ msgstr "الواجهة الخلفية"
 #~ msgstr "جهاز مستقل"
 
 #~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "منصب كدي للأجهزة الصوتية"
+#~ msgstr "منصب كِيدِي للأجهزة الصوتية"
 
 #~ msgid "Hardware"
 #~ msgstr "جهاز"
