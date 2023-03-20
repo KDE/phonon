@@ -39,7 +39,7 @@ msgid ""
 "available and has higher preference.</html>"
 msgstr ""
 "<html>Henüz kullanılabilir duruma gelen ve daha yüksek önceliği olan <b>%1</"
-"b><br>ses çalma aygıtına geçiliyor.</html>"
+"b><br/>ses çalma aygıtına geçiliyor.</html>"
 
 #: audiooutput.cpp:497 audiooutput.cpp:515
 #, qt-format
