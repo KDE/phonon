@@ -1,28 +1,29 @@
 # translation of libphonon.po to galician
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # mvillarino <mvillarino@users.sourceforge.net>, 2007, 2008, 2009.
 # marce villarino <mvillarino@users.sourceforge.net>, 2009.
 # Marce Villarino <mvillarino@gmail.com>, 2009.
 # mvillarino <mvillarino@gmail.com>, 2010.
 # Marce Villarino <mvillarino@kde-espana.es>, 2011, 2014.
 # Adrián Chaves Fernández (Gallaecio) <adriyetichaves@gmail.com>, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2019, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: libphonon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-07-01 01:43+0200\n"
-"PO-Revision-Date: 2019-07-13 13:38+0200\n"
+"PO-Revision-Date: 2023-04-23 06:18+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
-"Language-Team: Galician <kde-i18n-doc@kde.org>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Qt-Contexts: true\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: audiooutput.cpp:481 audiooutput.cpp:519
 #, qt-format
@@ -149,8 +150,8 @@ msgid ""
 "Use this slider to adjust the volume. The leftmost position is 0%, the "
 "rightmost is %1%"
 msgstr ""
-"Use esta barra deslizante para axustar o volume. A posición da esquerda é o "
-"0%, a da dereita o %1%"
+"Use este desprazador para axustar o volume. A posición da esquerda é o 0%, a "
+"da dereita o %1%"
 
 #: volumeslider.cpp:203
 msgctxt "Phonon::VolumeSlider|"
