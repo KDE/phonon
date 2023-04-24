@@ -4,7 +4,7 @@
 # Marcello Anni <marcello.anni@alice.it>, 2007.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2009.
 # Nicola Ruggero <nicola@nxnt.org>, 2011, 2012.
-# Paolo Zamponi <zapaolo@email.it>, 2018, 2019.
+# Paolo Zamponi <feus73@gmail.com>, 2018, 2019.
 #
 msgid ""
 msgstr ""
