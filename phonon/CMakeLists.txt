@@ -67,7 +67,7 @@ set(phonon_LIB_SRCS
    ${phonon_VGO_SRCS}
    )
 
-ecm_create_qm_loader(phonon_LIB_SRCS libphonon_qt)
+ecm_create_qm_loader(phonon_LIB_SRCS libphonon6_qt)
 
 option(PHONON_NO_PLATFORMPLUGIN "Do not use any platform plugin")
 if (PHONON_NO_PLATFORMPLUGIN)
