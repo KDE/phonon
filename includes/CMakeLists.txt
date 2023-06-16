@@ -53,59 +53,61 @@ install( FILES
     phonon/VolumeSlider
 DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
 
-set(COMPAT_HEADERS
-    old/Phonon/AbstractAudioOutput
-    old/Phonon/AbstractMediaStream
-    old/Phonon/AbstractVideoOutput
-    old/Phonon/AddonInterface
-    old/Phonon/AudioDevice
-    old/Phonon/AudioDeviceEnumerator
-    old/Phonon/AudioOutput
-    old/Phonon/AudioOutputDevice
-    old/Phonon/AudioOutputDeviceModel
-    old/Phonon/AudioOutputInterface
-    old/Phonon/BackendCapabilities
-    old/Phonon/BackendInterface
-    old/Phonon/Effect
-    old/Phonon/EffectDescription
-    old/Phonon/EffectDescriptionModel
-    old/Phonon/EffectInterface
-    old/Phonon/EffectParameter
-    old/Phonon/EffectWidget
-    old/Phonon/Global
-    old/Phonon/MediaController
-    old/Phonon/MediaNode
-    old/Phonon/MediaObject
-    old/Phonon/MediaObjectInterface
-    old/Phonon/MediaSource
-    old/Phonon/ObjectDescription
-    old/Phonon/ObjectDescriptionModel
-    old/Phonon/Path
-    old/Phonon/PlatformPlugin
-    old/Phonon/SeekSlider
-    old/Phonon/StreamInterface
-    old/Phonon/VideoPlayer
-    old/Phonon/VideoWidget
-    old/Phonon/VideoWidgetInterface
-    old/Phonon/VolumeFaderEffect
-    old/Phonon/VolumeFaderInterface
-    old/Phonon/VolumeSlider
-)
+if (QT_MAJOR_VERSION EQUAL "5")
+    set(COMPAT_HEADERS
+        old/Phonon/AbstractAudioOutput
+        old/Phonon/AbstractMediaStream
+        old/Phonon/AbstractVideoOutput
+        old/Phonon/AddonInterface
+        old/Phonon/AudioDevice
+        old/Phonon/AudioDeviceEnumerator
+        old/Phonon/AudioOutput
+        old/Phonon/AudioOutputDevice
+        old/Phonon/AudioOutputDeviceModel
+        old/Phonon/AudioOutputInterface
+        old/Phonon/BackendCapabilities
+        old/Phonon/BackendInterface
+        old/Phonon/Effect
+        old/Phonon/EffectDescription
+        old/Phonon/EffectDescriptionModel
+        old/Phonon/EffectInterface
+        old/Phonon/EffectParameter
+        old/Phonon/EffectWidget
+        old/Phonon/Global
+        old/Phonon/MediaController
+        old/Phonon/MediaNode
+        old/Phonon/MediaObject
+        old/Phonon/MediaObjectInterface
+        old/Phonon/MediaSource
+        old/Phonon/ObjectDescription
+        old/Phonon/ObjectDescriptionModel
+        old/Phonon/Path
+        old/Phonon/PlatformPlugin
+        old/Phonon/SeekSlider
+        old/Phonon/StreamInterface
+        old/Phonon/VideoPlayer
+        old/Phonon/VideoWidget
+        old/Phonon/VideoWidgetInterface
+        old/Phonon/VolumeFaderEffect
+        old/Phonon/VolumeFaderInterface
+        old/Phonon/VolumeSlider
+    )
 
-install(FILES ${COMPAT_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon
-    COMPONENT Devel)
+    install(FILES ${COMPAT_HEADERS}
+        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon
+        COMPONENT Devel)
 
-if (PHONON_BUILD_EXPERIMENTAL)
-    install(FILES
-        old/Phonon/Experimental/AbstractVideoDataOutput
-        old/Phonon/Experimental/AudioDataOutput
-        old/Phonon/Experimental/SnapshotInterface
-        old/Phonon/Experimental/VideoDataOutput
-        old/Phonon/Experimental/VideoDataOutputInterface
-        old/Phonon/Experimental/VideoFrame
-        old/Phonon/Experimental/VideoFrame2
-        old/Phonon/Experimental/Visualization
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon/Experimental COMPONENT Devel)
-    # Qt4.x never included the experimental library, so no need for compat headers.
-endif (PHONON_BUILD_EXPERIMENTAL)
+    if (PHONON_BUILD_EXPERIMENTAL)
+        install(FILES
+            old/Phonon/Experimental/AbstractVideoDataOutput
+            old/Phonon/Experimental/AudioDataOutput
+            old/Phonon/Experimental/SnapshotInterface
+            old/Phonon/Experimental/VideoDataOutput
+            old/Phonon/Experimental/VideoDataOutputInterface
+            old/Phonon/Experimental/VideoFrame
+            old/Phonon/Experimental/VideoFrame2
+            old/Phonon/Experimental/Visualization
+        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Phonon/Experimental COMPONENT Devel)
+        # Qt4.x never included the experimental library, so no need for compat headers.
+    endif (PHONON_BUILD_EXPERIMENTAL)
+endif()
