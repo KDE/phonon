@@ -15,4 +15,4 @@ set(phota_SRCS
 qt5_wrap_ui(phota_SRCS videoeffects.ui)
 
 add_executable(phota ${phota_SRCS})
-target_link_libraries(phota Phonon::${PHONON_LIB_SONAME} Qt5::Core Qt5::Widgets)
+target_link_libraries(phota Phonon::phonon4qt5 Qt5::Core Qt5::Widgets)

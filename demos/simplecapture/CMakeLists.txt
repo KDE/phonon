@@ -11,4 +11,4 @@ set(simplecapture_SRCS
 )
 
 add_executable(simplecapture ${simplecapture_SRCS})
-target_link_libraries(simplecapture Phonon::${PHONON_LIB_SONAME} Qt5::Core Qt5::Widgets)
+target_link_libraries(simplecapture Phonon::phonon4qt5 Qt5::Core Qt5::Widgets)

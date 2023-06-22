@@ -33,11 +33,11 @@ set_target_properties(${PHONON_LIB_SONAME}experimental
         SOVERSION ${PHONON_SOVERSION}
         DEFINE_SYMBOL MAKE_PHONONEXPERIMENTAL_LIB
 )
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+install(TARGETS ${PHONON_LIB_SONAME}experimental EXPORT PhononExperimentalLibs${QT_MAJOR_VERSION} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # We intentionally cast incorrect values into the ObjectDescriptionType enum for experimental types.
     target_compile_options(${PHONON_LIB_SONAME}experimental PRIVATE "-Wno-enum-constexpr-conversion")
 endif()
-install(TARGETS ${PHONON_LIB_SONAME}experimental EXPORT PhononExperimentalLibs ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 target_include_directories(${PHONON_LIB_SONAME}experimental
     INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>")
 

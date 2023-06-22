@@ -11,4 +11,4 @@ set(simpleplayer_SRCS
 )
 
 add_executable(simpleplayer ${simpleplayer_SRCS})
-target_link_libraries(simpleplayer Phonon::${PHONON_LIB_SONAME} Qt5::Core Qt5::Widgets)
+target_link_libraries(simpleplayer Phonon::phonon4qt5    Qt5::Core Qt5::Widgets)

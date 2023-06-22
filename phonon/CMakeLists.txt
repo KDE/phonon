@@ -2,8 +2,8 @@ if(PHONON_BUILD_EXPERIMENTAL)
     add_subdirectory(experimental)
 endif()
 
-configure_file(phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononconfig_p.h @ONLY)
-configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h @ONLY)
+configure_file(phononconfig_p.h.in ${CMAKE_CURRENT_BINARY_DIR}/phonon/phononconfig_p.h @ONLY)
+configure_file(phononnamespace.h.in ${CMAKE_CURRENT_BINARY_DIR}/phonon/phononnamespace.h @ONLY)
 
 find_package(PulseAudio 0.9.15)
 set_package_properties(PulseAudio PROPERTIES
@@ -109,11 +109,11 @@ target_include_directories(${PHONON_LIB_SONAME}
     INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>"
     PUBLIC
         # snake header <phonon/foo.h>
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../;${CMAKE_CURRENT_BINARY_DIR}/../>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../;${CMAKE_CURRENT_BINARY_DIR}/../;${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/phonon>"
         # camel header <phonon/Foo>
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../includes;${CMAKE_CURRENT_BINARY_DIR}/../includes>")
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../includes;${CMAKE_CURRENT_BINARY_DIR}/../includes;${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/phonon>")
 
-install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ${PHONON_LIB_SONAME} EXPORT PhononLibs${QT_MAJOR_VERSION} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
    abstractaudiooutput.h
@@ -154,6 +154,6 @@ install(FILES
    volumefaderinterface.h
    volumeslider.h
    ${phonon_VGO_HDRS}
-   ${CMAKE_CURRENT_BINARY_DIR}/phononnamespace.h
+   ${CMAKE_CURRENT_BINARY_DIR}/phonon/phononnamespace.h
    ${CMAKE_CURRENT_BINARY_DIR}/phonon_version.h
    DESTINATION ${INCLUDE_INSTALL_DIR}/phonon COMPONENT Devel)
