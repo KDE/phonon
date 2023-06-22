@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     }
     else
     {
-        consoleOut << "Usage: metadatareader <media file>" << endl;
+        consoleOut << "Usage: metadatareader <media file>" << Qt::endl;
         return 0;
     }
 }

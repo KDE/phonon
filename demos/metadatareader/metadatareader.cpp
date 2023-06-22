@@ -62,7 +62,7 @@ void MetaDataReader::checkForError(Phonon::State state, Phonon::State)
 {
     if(state == Phonon::ErrorState)
     {
-        textStream << "Error: unable to read meta data of " << mediaObj->currentSource().fileName() << endl;
+        textStream << "Error: unable to read meta data of " << mediaObj->currentSource().fileName() << Qt::endl;
         quit();
     }
 }
