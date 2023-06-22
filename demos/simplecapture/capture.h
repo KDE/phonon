@@ -38,7 +38,7 @@ namespace Phonon {
  *
  * Can capture video using a media object.
  *
- * Using just a single media object, you can't capture audio and video 
+ * Using just a single media object, you can't capture audio and video
  * at the same time, if the desired device knows only audio or only video.
  *
  * @note Phonon capture is still not stabilised, don't be surprised if audio
@@ -60,7 +60,7 @@ public:
      *
      * @see setupCaptureSource
      */
-    CaptureWidget(QWidget *parent = NULL, Qt::WindowFlags f = 0);
+    CaptureWidget(QWidget *parent = NULL, Qt::WindowFlags f = Qt::Widget);
 
 private slots:
     /**

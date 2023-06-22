@@ -38,7 +38,7 @@ class Player : public QWidget {
 Q_OBJECT
 
 public:
-    Player(QWidget *parent = 0, Qt::WindowFlags flag = 0);
+    Player(QWidget *parent = 0, Qt::WindowFlags flag = Qt::Widget);
 
 public slots:
 
