@@ -150,8 +150,8 @@ msgid ""
 "Use this slider to adjust the volume. The leftmost position is 0%, the "
 "rightmost is %1%"
 msgstr ""
-"Use este desprazador para axustar o volume. A posición da esquerda é o 0%, a "
-"da dereita o %1%"
+"Use este control esvaradío para axustar o volume. A posición da esquerda é o "
+"0%, a da dereita o %1%"
 
 #: volumeslider.cpp:203
 msgctxt "Phonon::VolumeSlider|"
