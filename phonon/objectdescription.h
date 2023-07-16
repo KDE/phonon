@@ -43,7 +43,7 @@ namespace Phonon
      *
      * \ingroup Backend
      */
-    enum ObjectDescriptionType
+    enum ObjectDescriptionType : unsigned
     {
         /**
          * Audio output devices. This can be soundcards (with different drivers), soundservers or
