@@ -8,8 +8,26 @@ option(PHONON_BUILD_DEMOS "Build the demos" OFF)
 option(PHONON_BUILD_DESIGNER_PLUGIN "Build the Qt Designer plugin" ON)
 option(PHONON_BUILD_DOC "Build the API documentation" OFF)
 option(PHONON_BUILD_SETTINGS "Build the settings GUI" ON)
-
+option(PHONON_BUILD_QT5 "Build for Qt5" ON)
+option(PHONON_BUILD_QT6 "Build for Qt6" ON)
 option(PHONON_NO_CAPTURE "Disable the capture capabilities")
+
+# CI is stupid and doesn't allow us to set CMAKE options per build variant
+if($ENV{CI_JOB_NAME_SLUG} MATCHES "qt5")
+    set(PHONON_BUILD_QT5 ON)
+    set(PHONON_BUILD_QT6 OFF)
+elseif($ENV{CI_JOB_NAME_SLUG} MATCHES "qt6")
+    set(PHONON_BUILD_QT5 OFF)
+    set(PHONON_BUILD_QT6 ON)
+endif()
+
+set(VERSIONS)
+if(PHONON_BUILD_QT5)
+    list(APPEND VERSIONS "5")
+elseif(PHONON_BUILD_QT6)
+    list(APPEND VERSIONS "6")
+    set(BUILD_WITH_QT6 ON) # necessary on older ECMs
+endif()
 
 # Not set by ECM (yet)
 set(CMAKE_AUTOUIC TRUE)
@@ -33,13 +51,6 @@ include(ECMGeneratePkgConfigFile)
 include(ECMPoQmTools)
 include(ECMSetupVersion)
 
-set(VERSIONS "5;6")
-# CI is stupid and doesn't allow us to set CMAKE options per build variant
-if ($ENV{CI_JOB_NAME_SLUG} MATCHES "qt5")
-    set(VERSIONS "5")
-elseif($ENV{CI_JOB_NAME_SLUG} MATCHES "qt6")
-    set(VERSIONS "6")
-endif()
 foreach(version ${VERSIONS})
     set(QT_MAJOR_VERSION ${version})
 
