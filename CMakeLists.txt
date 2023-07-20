@@ -133,6 +133,7 @@ foreach(version ${VERSIONS})
         add_subdirectory(designer designer${QT_MAJOR_VERSION})
     endif()
 
+    add_subdirectory(includes includes${PHONON_LIB_SONAME})
     add_subdirectory(phonon ${PHONON_LIB_SONAME})
 
     set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/${PHONON_LIB_SONAME}")
