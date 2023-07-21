@@ -127,7 +127,7 @@ foreach(version ${VERSIONS})
     endif()
 
     if(QT_MAJOR_VERSION STREQUAL "6")
-        find_package(Qt6Core5Compat)
+        find_package(Qt6Core5Compat REQUIRED)
         # Qt6Designer links to OpenGLWidgets but doesnt find it
         find_package(Qt6OpenGLWidgets ${REQUIRED_QT_VERSION})
         # https://bugreports.qt.io/browse/QTBUG-114706
