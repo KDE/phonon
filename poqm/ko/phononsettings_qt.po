@@ -141,8 +141,8 @@ msgid ""
 "Various categories of media use cases.  For each category, you may choose "
 "what device you prefer to be used by the Phonon applications."
 msgstr ""
-"다양한 미디어 사용 분류입니다. 각각 분류에 대해서 Phonon 프로그램이 사용할 장"
-"치의 우선 순위를 정할 수 있습니다."
+"다양한 미디어 사용 분류입니다. 각각 분류에 대해서 Phonon 앱이 사용할 장치의 "
+"우선 순위를 정할 수 있습니다."
 
 #: devicepreference.ui:47
 msgctxt "DevicePreference|"
@@ -165,8 +165,8 @@ msgid ""
 "Devices found on your system, suitable for the selected category.  Choose "
 "the device that you wish to be used by the applications."
 msgstr ""
-"선택한 분류에 사용할 수 있는 시스템에 있는 장치입니다. 프로그램에서 사용하고 "
-"싶은 장치를 선택하십시오."
+"선택한 분류에 사용할 수 있는 시스템에 있는 장치입니다. 앱에서 사용하고 싶은 "
+"장치를 선택하십시오."
 
 #: devicepreference.ui:116
 msgctxt "DevicePreference|"
