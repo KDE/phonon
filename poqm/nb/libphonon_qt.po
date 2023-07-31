@@ -28,6 +28,8 @@ msgid ""
 "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
 "<b>%2</b>.</html>"
 msgstr ""
+"<html>Lydavspillingsenheten <b>%1</b> virker ikke.<br/>Går tilbake til "
+"<b>%2</b>.</html>"
 
 #: audiooutput.cpp:494
 #, qt-format
@@ -36,12 +38,14 @@ msgid ""
 "<html>Switching to the audio playback device <b>%1</b><br/>which just became "
 "available and has higher preference.</html>"
 msgstr ""
+"<html>Bytter til lydavspillingsenheten <b>%1</b><br/> som akkurat ble "
+"tilgjengelig og rangeres høyere.</html>"
 
 #: audiooutput.cpp:497 audiooutput.cpp:515
 #, qt-format
 msgctxt "Phonon::AudioOutput|"
 msgid "Revert back to device '%1'"
-msgstr ""
+msgstr "Tilbakestill til enhet «%1»"
 
 #: audiooutput.cpp:512
 #, qt-format
@@ -50,88 +54,90 @@ msgid ""
 "<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
 "preference or is specifically configured for this stream.</html>"
 msgstr ""
+"<html>Bytter til lydavspillingsenheten <b>%1</b><br/>som rangeres høyere "
+"eller er spesielt satt opp for denne strømmen.</html>"
 
 #: mediacontroller.cpp:158
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
-msgstr ""
+msgstr "Hovedmeny"
 
 #: mediacontroller.cpp:160
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
-msgstr ""
+msgstr "Tittelmeny"
 
 #: mediacontroller.cpp:162
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
-msgstr ""
+msgstr "Lydmeny"
 
 #: mediacontroller.cpp:164
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
-msgstr ""
+msgstr "Undertekstmeny"
 
 #: mediacontroller.cpp:166
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
-msgstr ""
+msgstr "Kapitelmeny"
 
 #: mediacontroller.cpp:168
 msgctxt "Phonon::MediaController|"
 msgid "Angle Menu"
-msgstr ""
+msgstr "Vinkelmeny"
 
 #: phononnamespace.cpp:55
 msgctxt "Phonon::|"
 msgid "Notifications"
-msgstr ""
+msgstr "Varslinger"
 
 #: phononnamespace.cpp:57
 msgctxt "Phonon::|"
 msgid "Music"
-msgstr ""
+msgstr "Musikk"
 
 #: phononnamespace.cpp:59
 msgctxt "Phonon::|"
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: phononnamespace.cpp:61 phononnamespace.cpp:77
 msgctxt "Phonon::|"
 msgid "Communication"
-msgstr ""
+msgstr "Kommunikasjon"
 
 #: phononnamespace.cpp:63
 msgctxt "Phonon::|"
 msgid "Games"
-msgstr ""
+msgstr "Spill"
 
 #: phononnamespace.cpp:65
 msgctxt "Phonon::|"
 msgid "Accessibility"
-msgstr ""
+msgstr "Tilgjengelighet"
 
 #: phononnamespace.cpp:79
 msgctxt "Phonon::|"
 msgid "Recording"
-msgstr ""
+msgstr "Opptak"
 
 #: phononnamespace.cpp:81
 msgctxt "Phonon::|"
 msgid "Control"
-msgstr ""
+msgstr "Styring"
 
 #: pulsesupport.cpp:275 pulsesupport.cpp:286
 msgctxt "QObject|"
 msgid "PulseAudio Sound Server"
-msgstr ""
+msgstr "PulseAudio lydtjener"
 
 #: volumeslider.cpp:40 volumeslider.cpp:62 volumeslider.cpp:208
 #: volumeslider.cpp:223
 #, qt-format
 msgctxt "Phonon::VolumeSlider|"
 msgid "Volume: %1%"
-msgstr ""
+msgstr "Lydstyrke: %1%"
 
 #: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
 #, qt-format
@@ -140,8 +146,10 @@ msgid ""
 "Use this slider to adjust the volume. The leftmost position is 0%, the "
 "rightmost is %1%"
 msgstr ""
+"Bruk denne glidebryteren for å justere lydstyrken. Posisjonen helt til "
+"venstre er 0%, til høyre er %1%"
 
 #: volumeslider.cpp:203
 msgctxt "Phonon::VolumeSlider|"
 msgid "Muted"
-msgstr ""
+msgstr "Dempet"
