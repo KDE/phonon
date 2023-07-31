@@ -26,41 +26,43 @@ msgid ""
 "A list of Phonon Backends found on your system.  The order here determines "
 "the order Phonon will use them in."
 msgstr ""
+"En liste over bakstykker for Phonon som finnes på systemet. Rekkefølgen her "
+"viser rekkefølgen Phonon vil bruke dem."
 
 #: backendselection.ui:170
 msgctxt "BackendSelection|"
 msgid "Prefer"
-msgstr ""
+msgstr "Foretrekk"
 
 #: backendselection.ui:183
 msgctxt "BackendSelection|"
 msgid "Defer"
-msgstr ""
+msgstr "Utsett"
 
 #: devicepreference.cpp:90
 msgctxt "QObject|"
 msgid "Audio Playback"
-msgstr ""
+msgstr "Lydavspilling"
 
 #: devicepreference.cpp:104
 msgctxt "QObject|"
 msgid "Audio Recording"
-msgstr ""
+msgstr "Lydopptak"
 
 #: devicepreference.cpp:107
 msgctxt "QObject|"
 msgid "Video Recording"
-msgstr ""
+msgstr "Videoopptak"
 
 #: devicepreference.cpp:110
 msgctxt "QObject|"
 msgid "Invalid"
-msgstr ""
+msgstr "Ugyldig"
 
 #: devicepreference.cpp:150
 msgctxt "Phonon::DevicePreference|"
 msgid "Test the selected device"
-msgstr ""
+msgstr "Test den valgte enheten"
 
 #: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
 msgctxt "Phonon::DevicePreference|"
@@ -68,39 +70,41 @@ msgid ""
 "Defines the default ordering of devices which can be overridden by "
 "individual categories."
 msgstr ""
+"Definerer standard rekkefølge for enheter som kan overstyres av individuelle "
+"kategorier."
 
 #: devicepreference.cpp:303
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Playback Device Preference"
-msgstr ""
+msgstr "Innstilling for standard lydavspillingsenhet"
 
 #: devicepreference.cpp:306
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Recording Device Preference"
-msgstr ""
+msgstr "Innstilling for standard lydopptaksenhet"
 
 #: devicepreference.cpp:309
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Video Recording Device Preference"
-msgstr ""
+msgstr "Innstilling for standard video-opptaksenhet"
 
 #: devicepreference.cpp:316
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Audio Playback Device Preference for the '%1' Category"
-msgstr ""
+msgstr "Foretrukket lydavspillingsenhet for kategori «%1»"
 
 #: devicepreference.cpp:320
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Audio Recording Device Preference for the '%1' Category"
-msgstr ""
+msgstr "Foretrukket lydopptaksenhet for kategori «%1»"
 
 #: devicepreference.cpp:324
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Video Recording Device Preference for the '%1' Category "
-msgstr ""
+msgstr "Foretrukket videoopptaksenhet for kategori «%1» "
 
 #: devicepreference.cpp:748
 msgctxt "Phonon::DevicePreference|"
@@ -108,32 +112,34 @@ msgid ""
 "Apply the currently shown device preference list to the following other "
 "audio playback categories:"
 msgstr ""
+"Bruk den preferanselista som vises nå på følgende andre "
+"lydavspillingskategorier:"
 
 #: devicepreference.cpp:761 devicepreference.cpp:767
 msgctxt "Phonon::DevicePreference|"
 msgid "Default/Unspecified Category"
-msgstr ""
+msgstr "Standard/uspesifisert kategori"
 
 #: devicepreference.cpp:865
 msgctxt "Phonon::DevicePreference|"
 msgid "Failed to set the selected audio output device"
-msgstr ""
+msgstr "Klarte ikke å angi den valgte lydutgangsenheten"
 
 #: devicepreference.cpp:895
 msgctxt "Phonon::DevicePreference|"
 msgid "Your backend may not support audio recording"
-msgstr ""
+msgstr "Bakgrunnsmotoren din støtter kanskje ikke lydopptak"
 
 #: devicepreference.cpp:916
 msgctxt "Phonon::DevicePreference|"
 msgid "Your backend may not support video recording"
-msgstr ""
+msgstr "Bakgrunnsmotoren din støtter kanskje ikke video-opptak"
 
 #: devicepreference.cpp:926
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Testing %1"
-msgstr ""
+msgstr "Tester %1"
 
 #: devicepreference.ui:29 devicepreference.ui:32
 msgctxt "DevicePreference|"
@@ -141,21 +147,23 @@ msgid ""
 "Various categories of media use cases.  For each category, you may choose "
 "what device you prefer to be used by the Phonon applications."
 msgstr ""
+"Forskjellige kategorier media-bruk. For hver kategori kan det velges hvilken "
+"enhet du foretrekker at Phonon-programmene bruker."
 
 #: devicepreference.ui:47
 msgctxt "DevicePreference|"
 msgid "Show advanced devices"
-msgstr ""
+msgstr "Vis avanserte enheter"
 
 #: devicepreference.ui:77 devicepreference.ui:80
 msgctxt "DevicePreference|"
 msgid "Use the currently shown device list for more categories."
-msgstr ""
+msgstr "Bruk den enhetslista som vises nå for flere kategorier."
 
 #: devicepreference.ui:83
 msgctxt "DevicePreference|"
 msgid "Apply Device List To..."
-msgstr ""
+msgstr "Bruk enhetslista på …"
 
 #: devicepreference.ui:113
 msgctxt "DevicePreference|"
@@ -163,6 +171,8 @@ msgid ""
 "Devices found on your system, suitable for the selected category.  Choose "
 "the device that you wish to be used by the applications."
 msgstr ""
+"Enheter som passer den valgte kategorien funnet på systemet ditt. Velg enhet "
+"som du vil at programmene skal bruke."
 
 #: devicepreference.ui:116
 msgctxt "DevicePreference|"
@@ -170,31 +180,34 @@ msgid ""
 "The order determines the preference of the devices. If for some reason the "
 "first device cannot be used Phonon will try to use the second, and so on."
 msgstr ""
+"Rekkefølgen bestemmer innstillinga for enhetene. Hvis den første enheten av "
+"en eller annen grunn ikke kan brukes, så forsøker Phonon å bruke den neste, "
+"osv."
 
 #: devicepreference.ui:171
 msgctxt "DevicePreference|"
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: devicepreference.ui:187
 msgctxt "DevicePreference|"
 msgid "prefer the selected device"
-msgstr ""
+msgstr "foretrekk den valgte enheten"
 
 #: devicepreference.ui:190
 msgctxt "DevicePreference|"
 msgid "Prefer"
-msgstr ""
+msgstr "Foretrekk"
 
 #: devicepreference.ui:203
 msgctxt "DevicePreference|"
 msgid "no preference for the selected device"
-msgstr ""
+msgstr "ingen innstilling for den valgte enheten"
 
 #: devicepreference.ui:206
 msgctxt "DevicePreference|"
 msgid "Defer"
-msgstr ""
+msgstr "Utsett"
 
 #: main.cpp:30
 msgctxt "QObject|"
@@ -209,7 +222,7 @@ msgstr ""
 #: settings.ui:20
 msgctxt "Settings|"
 msgid "Multimedia Settings"
-msgstr ""
+msgstr "Multimediainnstillinger"
 
 #: settings.ui:31
 msgctxt "Settings|"
@@ -219,4 +232,4 @@ msgstr ""
 #: settings.ui:36
 msgctxt "Settings|"
 msgid "Backend"
-msgstr ""
+msgstr "Bakstykke"
