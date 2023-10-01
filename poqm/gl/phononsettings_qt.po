@@ -126,7 +126,7 @@ msgstr "Categoría predeterminada/non especificada"
 #: devicepreference.cpp:865
 msgctxt "Phonon::DevicePreference|"
 msgid "Failed to set the selected audio output device"
-msgstr "Non se puido configurar o dispositivo de saída de son escollido"
+msgstr "Non foi posíbel configurar o dispositivo de saída de son escollido"
 
 #: devicepreference.cpp:895
 msgctxt "Phonon::DevicePreference|"
@@ -142,7 +142,7 @@ msgstr "Poida que a infraestrutura non permita gravar vídeo"
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Testing %1"
-msgstr "Estase a probar %1"
+msgstr "Probando %1"
 
 #: devicepreference.ui:29 devicepreference.ui:32
 msgctxt "DevicePreference|"
