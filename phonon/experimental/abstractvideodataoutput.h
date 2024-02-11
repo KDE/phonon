@@ -29,7 +29,7 @@
 #include <QObject>
 #include "videoframe2.h"
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#ifndef K_DOXYGEN
 template<typename T> class QSet;
 #endif
 

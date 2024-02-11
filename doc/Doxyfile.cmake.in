@@ -1515,7 +1515,7 @@ INCLUDE_FILE_PATTERNS  =
 # instead of the = operator.
 
 PREDEFINED             = \
-    DOXYGEN_SHOULD_SKIP_THIS \
+    K_DOXYGEN \
     PHONON_EXPORT=""
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then

@@ -28,7 +28,7 @@
 #include "../phonondefs.h"
 #include <QObject>
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#ifndef K_DOXYGEN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 template<typename T> class QVector;
 #else

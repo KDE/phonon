@@ -27,7 +27,7 @@
 #include "../phonondefs.h"
 #include "audioformat.h"
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#ifndef K_DOXYGEN
 template<typename T> class QSet;
 #endif
 
