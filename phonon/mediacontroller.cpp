@@ -27,7 +27,11 @@
 #include "addoninterface.h"
 #include <QList>
 #include <QVariant>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QTextCodec>
+#else
+#include <QStringDecoder>
+#endif
 #include <QFont>
 #include "frontendinterface_p.h"
 
@@ -267,8 +271,13 @@ QString MediaController::subtitleEncoding() const
 void MediaController::setSubtitleEncoding(const QString &encoding)
 {
     IFACE;
+#if QT_VERSION <= QT_VERSION_CHECK(6, 0, 0)
     if (!QTextCodec::availableCodecs().contains(encoding.toLocal8Bit()))
         return;
+#else
+    if (!QStringDecoder(encoding.toUtf8().constData()).isValid())
+        return;
+#endif
     iface->interfaceCall(AddonInterface::SubtitleInterface,
         AddonInterface::setSubtitleEncoding, QList<QVariant>() << QVariant(encoding));
 }

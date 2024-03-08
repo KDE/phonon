@@ -95,10 +95,6 @@ target_link_libraries(${PHONON_LIB_SONAME}
         ${optional_link_libraries}
 )
 
-if (QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(${PHONON_LIB_SONAME} PRIVATE Qt6::Core5Compat)
-endif()
-
 set_target_properties(${PHONON_LIB_SONAME}
     PROPERTIES
         VERSION ${PHONON_VERSION}
