@@ -66,42 +66,42 @@ msgstr ""
 "<html>ਆਡੀਓ ਪਲੇਅਬੈਕ ਜੰਤਰ <b>%1</b> ਲਈ ਸਵਿੱਚ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ, <br/>ਜਿਸ ਦੀ ਵੱਧ ਤਰਜੀਹ "
 "ਹੈ ਜਾਂ ਇਸ ਸਟਰੀਮ ਲਈ ਖਾਸ ਤੌਰ ਉੱਤੇ ਸੰਰਚਿਤ ਹੈ।</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 #, fuzzy
 #| msgid "Main Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "ਮੁੱਖ ਮੇਨੂ"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 #, fuzzy
 #| msgid "Title Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "ਟਾਇਟਲ ਮੇਨੂ"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 #, fuzzy
 #| msgid "Audio Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "ਆਡੀਓ ਮੇਨੂ"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 #, fuzzy
 #| msgid "Subtitle Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "ਸਬ-ਟਾਈਟਲ ਮੇਨੂ"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 #, fuzzy
 #| msgid "Chapter Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "ਚੈਪਟਰ ਮੇਨੂ"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 #, fuzzy
 #| msgid "Angle Menu"
 msgctxt "Phonon::MediaController|"

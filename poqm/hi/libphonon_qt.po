@@ -56,32 +56,32 @@ msgstr ""
 "<html>ऑडियो प्लैबैक उपकरण <b>%1</b><br/> पर बदल रहा है जो कि अभी उपलब्ध हुआ है और "
 "जिसे उच्च प्राथमिकता दी गई है ।</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "मुख्य मेन्यू"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "शीर्षक मेन्यू"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "श्रव्य मेन्यू"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "उपशीर्षक मेन्यू"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "अध्याय मेन्यू"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 msgctxt "Phonon::MediaController|"
 msgid "Angle Menu"
 msgstr "कोण मेन्यू"

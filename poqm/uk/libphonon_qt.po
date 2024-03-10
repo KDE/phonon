@@ -58,32 +58,32 @@ msgstr ""
 "<html>Перемикання на пристрій відтворення <b>%1</b><br/>, який має вищий "
 "пріоритет або спеціально налаштований на відтворення цього потоку.</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "Головне меню"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "Меню заголовка"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "Меню звуку"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "Меню субтитрів"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "Меню частин"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 msgctxt "Phonon::MediaController|"
 msgid "Angle Menu"
 msgstr "Меню кута"

@@ -55,32 +55,32 @@ msgstr ""
 "<html>지금 사용할 수 있는 우선 순위가 높거나 이 스트림용으로 설정한 <br/>오디"
 "오 재생 장치 <b>%1</b>(으)로 전환합니다.</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "주 메뉴"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "타이틀 메뉴"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "오디오 메뉴"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "자막 메뉴"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "챕터 메뉴"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 msgctxt "Phonon::MediaController|"
 msgid "Angle Menu"
 msgstr "각도 메뉴"

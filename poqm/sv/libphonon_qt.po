@@ -54,32 +54,32 @@ msgstr ""
 "<html>Byter till uppspelningsenheten för ljud <b>%1</b><br/>som har högre "
 "prioritet, eller är specifikt inställd för den här strömmen.</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "Huvudmeny"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "Titelmeny"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "Ljudmeny"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "Textningsmeny"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "Kapitelmeny"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 msgctxt "Phonon::MediaController|"
 msgid "Angle Menu"
 msgstr "Vinkelmeny"

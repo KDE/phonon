@@ -65,42 +65,42 @@ msgstr ""
 "<html>Perjungiama į audio atkūrimo įrenginį <b>%1</b>,<br/>kuris turi "
 "aukštesnį prioritetą arba buvo sukonfigūruotas būtent šiam srautui.</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 #, fuzzy
 #| msgid "Main Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "Pagrindinis meniu"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 #, fuzzy
 #| msgid "Title Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "Antraštės meniu"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 #, fuzzy
 #| msgid "Audio Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "Garso meniu"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 #, fuzzy
 #| msgid "Subtitle Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "Subtitrų meniu"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 #, fuzzy
 #| msgid "Chapter Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "Skyriaus meniu"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 #, fuzzy
 #| msgid "Angle Menu"
 msgctxt "Phonon::MediaController|"

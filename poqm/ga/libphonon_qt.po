@@ -64,42 +64,42 @@ msgstr ""
 "<html>Gléas athsheinnte fuaime á athrú go <b>%1</b>,<br/>gléas a bhfuil "
 "tosaíocht níos airde aige, nó atá cumraithe don sruth áirithe seo.</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 #, fuzzy
 #| msgid "Main Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "Príomhroghchlár"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 #, fuzzy
 #| msgid "Title Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "Roghchlár Teidil"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 #, fuzzy
 #| msgid "Audio Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "Roghchlár Fuaime"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 #, fuzzy
 #| msgid "Subtitle Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "Roghchlár Fotheidil"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 #, fuzzy
 #| msgid "Chapter Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "Roghchlár Caibidle"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 #, fuzzy
 #| msgid "Angle Menu"
 msgctxt "Phonon::MediaController|"

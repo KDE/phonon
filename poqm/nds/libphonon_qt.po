@@ -66,42 +66,42 @@ msgstr ""
 "<html>Wessel na de Afspeelreedschap <b>%1</b>,<br/>dat en höger Prioriteet "
 "hett oder besünners för dissen Stroom topasst is.</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 #, fuzzy
 #| msgid "Main Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "Hööftmenü"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 #, fuzzy
 #| msgid "Title Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "Titelmenü"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 #, fuzzy
 #| msgid "Audio Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "Klangmenü"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 #, fuzzy
 #| msgid "Subtitle Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "Ünnertitelmenü"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 #, fuzzy
 #| msgid "Chapter Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "Kapitelmenü"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 #, fuzzy
 #| msgid "Angle Menu"
 msgctxt "Phonon::MediaController|"

@@ -67,42 +67,42 @@ msgstr ""
 "<html>Prelaz na zvučnu karticu <b>%1</b><br/>koja ima veći prioritet ili je "
 "specijalno konfigurisana za ovaj prenos.</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 #, fuzzy
 #| msgid "Main Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "Glavni meni"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 #, fuzzy
 #| msgid "Title Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "Naslovni meni"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 #, fuzzy
 #| msgid "Audio Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "Audio Meni"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 #, fuzzy
 #| msgid "Subtitle Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "Meni podnaslova"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 #, fuzzy
 #| msgid "Chapter Menu"
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "Meni poglavlja"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 #, fuzzy
 #| msgid "Angle Menu"
 msgctxt "Phonon::MediaController|"
