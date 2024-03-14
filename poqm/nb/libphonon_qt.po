@@ -57,32 +57,32 @@ msgstr ""
 "<html>Bytter til lydavspillingsenheten <b>%1</b><br/>som rangeres høyere "
 "eller er spesielt satt opp for denne strømmen.</html>"
 
-#: mediacontroller.cpp:158
+#: mediacontroller.cpp:162
 msgctxt "Phonon::MediaController|"
 msgid "Main Menu"
 msgstr "Hovedmeny"
 
-#: mediacontroller.cpp:160
+#: mediacontroller.cpp:164
 msgctxt "Phonon::MediaController|"
 msgid "Title Menu"
 msgstr "Tittelmeny"
 
-#: mediacontroller.cpp:162
+#: mediacontroller.cpp:166
 msgctxt "Phonon::MediaController|"
 msgid "Audio Menu"
 msgstr "Lydmeny"
 
-#: mediacontroller.cpp:164
+#: mediacontroller.cpp:168
 msgctxt "Phonon::MediaController|"
 msgid "Subtitle Menu"
 msgstr "Undertekstmeny"
 
-#: mediacontroller.cpp:166
+#: mediacontroller.cpp:170
 msgctxt "Phonon::MediaController|"
 msgid "Chapter Menu"
 msgstr "Kapitelmeny"
 
-#: mediacontroller.cpp:168
+#: mediacontroller.cpp:172
 msgctxt "Phonon::MediaController|"
 msgid "Angle Menu"
 msgstr "Vinkelmeny"
