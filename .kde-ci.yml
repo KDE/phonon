@@ -6,3 +6,6 @@ Dependencies:
 - 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5', 'Android/Qt5']
   'require':
     'frameworks/extra-cmake-modules': '@stable'
+
+Options:
+  require-passing-tests-on: ['Linux', 'FreeBSD', 'Windows']
