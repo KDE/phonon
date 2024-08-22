@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
-project(Phonon VERSION "4.12.0")
+project(Phonon VERSION "4.11.1")
 
 include(FeatureSummary)
 
@@ -116,23 +116,27 @@ foreach(version ${VERSIONS})
     # https://bugreports.qt.io/browse/QTBUG-114706
     add_library(Qt::Widgets ALIAS Qt${QT_MAJOR_VERSION}::Widgets)
 
-    # Designer Plugin
-    find_package(Qt${QT_MAJOR_VERSION}Designer ${REQUIRED_QT_VERSION})
-    set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
-        TYPE RECOMMENDED
-        DESCRIPTION "Needed to build the Qt Designer plugin"
-        URL "https://www.qt.io/download")
-    # https://bugreports.qt.io/browse/QTBUG-114706
-    if(Qt${QT_MAJOR_VERSION}Xml_FOUND)
-        add_library(Qt::Xml ALIAS Qt${QT_MAJOR_VERSION}::Xml)
+    if(PHONON_BUILD_DESIGNER_PLUGIN)
+        # Designer Plugin
+        find_package(Qt${QT_MAJOR_VERSION}Designer ${REQUIRED_QT_VERSION})
+        set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
+            TYPE RECOMMENDED
+            DESCRIPTION "Needed to build the Qt Designer plugin"
+            URL "https://www.qt.io/download")
+        # https://bugreports.qt.io/browse/QTBUG-114706
+        if(Qt${QT_MAJOR_VERSION}Xml_FOUND)
+            add_library(Qt::Xml ALIAS Qt${QT_MAJOR_VERSION}::Xml)
+        endif()
+        if(QT_MAJOR_VERSION STREQUAL "6")
+            # Qt6Designer links to OpenGLWidgets but doesnt find it
+            find_package(Qt6OpenGLWidgets ${REQUIRED_QT_VERSION})
+            # https://bugreports.qt.io/browse/QTBUG-114706
+            add_library(Qt::OpenGLWidgets ALIAS Qt6::OpenGLWidgets)
+        endif()
     endif()
 
     if(QT_MAJOR_VERSION STREQUAL "6")
         find_package(Qt6Core5Compat REQUIRED)
-        # Qt6Designer links to OpenGLWidgets but doesnt find it
-        find_package(Qt6OpenGLWidgets ${REQUIRED_QT_VERSION})
-        # https://bugreports.qt.io/browse/QTBUG-114706
-        add_library(Qt::OpenGLWidgets ALIAS Qt6::OpenGLWidgets)
     endif()
 
     set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
