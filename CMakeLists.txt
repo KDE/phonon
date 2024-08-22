@@ -116,22 +116,24 @@ foreach(version ${VERSIONS})
     # https://bugreports.qt.io/browse/QTBUG-114706
     add_library(Qt::Widgets ALIAS Qt${QT_MAJOR_VERSION}::Widgets)
 
-    # Designer Plugin
-    find_package(Qt${QT_MAJOR_VERSION}Designer ${REQUIRED_QT_VERSION})
-    set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
-        TYPE RECOMMENDED
-        DESCRIPTION "Needed to build the Qt Designer plugin"
-        URL "https://www.qt.io/download")
-    # https://bugreports.qt.io/browse/QTBUG-114706
-    if(Qt${QT_MAJOR_VERSION}Xml_FOUND)
-        add_library(Qt::Xml ALIAS Qt${QT_MAJOR_VERSION}::Xml)
-    endif()
-
-    if(QT_MAJOR_VERSION STREQUAL "6")
-        # Qt6Designer links to OpenGLWidgets but doesnt find it
-        find_package(Qt6OpenGLWidgets ${REQUIRED_QT_VERSION})
+    if(PHONON_BUILD_DESIGNER_PLUGIN)
+        # Designer Plugin
+        find_package(Qt${QT_MAJOR_VERSION}Designer ${REQUIRED_QT_VERSION})
+        set_package_properties(Qt${QT_MAJOR_VERSION}Designer PROPERTIES
+            TYPE RECOMMENDED
+            DESCRIPTION "Needed to build the Qt Designer plugin"
+            URL "https://www.qt.io/download")
         # https://bugreports.qt.io/browse/QTBUG-114706
-        add_library(Qt::OpenGLWidgets ALIAS Qt6::OpenGLWidgets)
+        if(Qt${QT_MAJOR_VERSION}Xml_FOUND)
+            add_library(Qt::Xml ALIAS Qt${QT_MAJOR_VERSION}::Xml)
+        endif()
+
+        if(QT_MAJOR_VERSION STREQUAL "6")
+            # Qt6Designer links to OpenGLWidgets but doesnt find it
+            find_package(Qt6OpenGLWidgets ${REQUIRED_QT_VERSION})
+            # https://bugreports.qt.io/browse/QTBUG-114706
+            add_library(Qt::OpenGLWidgets ALIAS Qt6::OpenGLWidgets)
+        endif()
     endif()
 
     set(BUILDSYSTEM_INSTALL_DIR ${CMAKE_INSTALL_FULL_DATAROOTDIR}/${PHONON_LIB_SONAME}/buildsystem/)
