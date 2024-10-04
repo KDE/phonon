@@ -1,28 +1,17 @@
-# translation of kcm_phonon.po to Spanish
-# Translation of kcm_phonon to Spanish
-# Copyright (C) 2007 This_file_is_part_of_KDE
-# This file is distributed under the same license as the kdelibs package.
-#
-# Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2007, 2008, 2012, 2014, 2019.
-# Jaime Robles <jaime@kde.org>, 2008.
-# Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>, 2010, 2011, 2012.
-# Raul Gonzalez <raulgf83@gmail.com>, 2012.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: kcm_phonon\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2019-08-12 20:41+0200\n"
+"Project-Id-Version: phononsettings_qt\n"
+"PO-Revision-Date: 2019-08-30 20:59+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.07.90\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.0\n"
 
 #: backendselection.ui:151 backendselection.ui:154
 msgctxt "BackendSelection|"
@@ -240,110 +229,3 @@ msgstr "Prioridad del dispositi&vo"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "Motor"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr ""
-#~ "Eloy Cuadra,Enrique Matías Sánchez (Quique),Cristina Yenyxe González "
-#~ "García"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ecuadra@eloihr.net,cronopios@gmail.com,the.blue.valkyrie@gmail.com"
-
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr ""
-#~ "Para aplicar el cambio del motor tendrá que cerrar sesión y volver a "
-#~ "abrirla."
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "Módulo de configuración de Phonon"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "Copyright 2006 Matthias Kretz"
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#~ msgid "Colin Guthrie"
-#~ msgstr "Colin Guthrie"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "Reproducción (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "Grabación (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "Dispositivos independientes"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "Configuración de hardware de audio de KDE"
-
-#~ msgid "Hardware"
-#~ msgstr "Hardware"
-
-#~ msgid "Profile"
-#~ msgstr "Perfil"
-
-#~ msgid "Sound Card"
-#~ msgstr "Tarjeta de sonido"
-
-#~ msgid "Device Configuration"
-#~ msgstr "Configuración de dispositivos"
-
-#~ msgid "Connector"
-#~ msgstr "Conector"
-
-#~ msgid "Sound Device"
-#~ msgstr "Dispositivo de sonido"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "Ubicación de altavoces y pruebas"
-
-#~ msgid "Input Levels"
-#~ msgstr "Niveles de entrada"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "Configuración de hardware de audio"
-
-#~ msgid "Front Left"
-#~ msgstr "Frontal izquierdo"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "Frontal izquierdo o central"
-
-#~ msgid "Front Center"
-#~ msgstr "Frontal central"
-
-#~ msgid "Mono"
-#~ msgstr "Mono"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "Frontal derecho o central"
-
-#~ msgid "Front Right"
-#~ msgstr "Frontal derecho"
-
-#~ msgid "Side Left"
-#~ msgstr "Lateral izquierdo"
-
-#~ msgid "Side Right"
-#~ msgstr "Lateral derecho"
-
-#~ msgid "Rear Left"
-#~ msgstr "Trasero izquierdo"
-
-#~ msgid "Rear Center"
-#~ msgstr "Trasero central"
-
-#~ msgid "Rear Right"
-#~ msgstr "Trasero derecho"
-
-#~ msgid "Subwoofer"
-#~ msgstr "Subwoofer"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "Canal desconocido"

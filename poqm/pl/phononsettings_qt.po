@@ -1,14 +1,12 @@
 # translation of kcm_phonon.po to
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2008, 2009.
 # Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2019, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: kcm_phonon\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
 "PO-Revision-Date: 2022-01-08 09:07+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -16,7 +14,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.03.70\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Qt-Contexts: true\n"
@@ -63,7 +60,7 @@ msgstr "Nieprawidłowe"
 #: devicepreference.cpp:150
 msgctxt "Phonon::DevicePreference|"
 msgid "Test the selected device"
-msgstr "Wypróbuj wybrane urżądzenie"
+msgstr "Wypróbuj wybrane urządzenie"
 
 #: devicepreference.cpp:173 devicepreference.cpp:180 devicepreference.cpp:187
 msgctxt "Phonon::DevicePreference|"
@@ -71,7 +68,7 @@ msgid ""
 "Defines the default ordering of devices which can be overridden by "
 "individual categories."
 msgstr ""
-"Definiuje domyślny porządek urządzeń, który może zostać nadpisany przez "
+"Określa domyślny porządek urządzeń, który może zostać nadpisany przez "
 "poszczególne kategorie."
 
 #: devicepreference.cpp:303
@@ -105,7 +102,7 @@ msgstr "Kolejność urządzeń nagrywających dźwięk dla kategorii '%1'"
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Video Recording Device Preference for the '%1' Category "
-msgstr "Preferowane urządzenie nagrywające obraz dla kategorii '%1' "
+msgstr "Kolejność urządzeń nagrywających obraz dla kategorii '%1' "
 
 #: devicepreference.cpp:748
 msgctxt "Phonon::DevicePreference|"
@@ -113,8 +110,8 @@ msgid ""
 "Apply the currently shown device preference list to the following other "
 "audio playback categories:"
 msgstr ""
-"Zastosuj obecnie pokazywaną listę preferowanych urządzeń do następujących "
-"innych kategorii odtwarzania dźwięku:"
+"Zastosuj obecnie wyświetlany porządek urządzeń do następujących innych "
+"kategorii odtwarzania dźwięku:"
 
 #: devicepreference.cpp:761 devicepreference.cpp:767
 msgctxt "Phonon::DevicePreference|"
@@ -235,145 +232,3 @@ msgstr "&Kolejność urządzeń"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "Silnik"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Marta Rybczyńska, Łukasz Wojniłowicz"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kde-i18n@rybczynska.net, lukasz.wojnilowicz@gmail.com"
-
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr ""
-#~ "Aby zastosować zmianę silnika będzie trzeba wylogować się i zalogować "
-#~ "ponownie."
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "Phonon: moduł ustawień"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "Prawa autorskie 2006 Matthias Kretz"
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#~ msgid "Colin Guthrie"
-#~ msgstr "Colin Guthrie"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "Odtwarzanie (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "Nagrywanie (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "Niezależne urządzenia"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "Ustawienia sprzętu dźwiękowego KDE"
-
-#~ msgid "Hardware"
-#~ msgstr "Sprzęt"
-
-#~ msgid "Profile"
-#~ msgstr "Profil"
-
-#~ msgid "Sound Card"
-#~ msgstr "Karta dźwiękowa"
-
-#~ msgid "Device Configuration"
-#~ msgstr "Ustawienia urządzenia"
-
-#~ msgid "Connector"
-#~ msgstr "Złącze"
-
-#~ msgid "Sound Device"
-#~ msgstr "Urządzenie dźwiękowe"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "Rozmieszczenie głośników i testowanie"
-
-#~ msgid "Input Levels"
-#~ msgstr "Poziomy wejściowe"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "Ustawienia urządzenia dźwiękowego"
-
-#~ msgid "Front Left"
-#~ msgstr "Przedni lewy"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "Przedni lewy środka"
-
-#~ msgid "Front Center"
-#~ msgstr "Przedni środkowy"
-
-#~ msgid "Mono"
-#~ msgstr "Mono"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "Przedni prawy środka"
-
-#~ msgid "Front Right"
-#~ msgstr "Przedni prawy"
-
-#~ msgid "Side Left"
-#~ msgstr "Boczny lewy"
-
-#~ msgid "Side Right"
-#~ msgstr "Boczny prawy"
-
-#~ msgid "Rear Left"
-#~ msgstr "Tylny lewy"
-
-#~ msgid "Rear Center"
-#~ msgstr "Tylny środkowy"
-
-#~ msgid "Rear Right"
-#~ msgstr "Tylny prawy"
-
-#~ msgid "Subwoofer"
-#~ msgstr "Głośnik niskotonowy"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "Nieznany kanał"
-
-#~ msgid "Audio Output"
-#~ msgstr "Wyjście audio"
-
-#~ msgid "Audio Capture"
-#~ msgstr "Nagrywanie"
-
-#, fuzzy
-#~| msgid "Audio Capture"
-#~ msgid "Video Capture"
-#~ msgstr "Nagrywanie"
-
-#, fuzzy
-#~| msgid "Default Output Device Preference"
-#~ msgid "Default Audio Output Device Preference"
-#~ msgstr "Preferowane urządzenia wyjścia"
-
-#, fuzzy
-#~| msgid "Output Device Preference for the '%1' Category"
-#~ msgid "Audio Output Device Preference for the '%1' Category"
-#~ msgstr "Preferowane urządzenia dla kategorii \"%1\""
-
-#~ msgid "Remove"
-#~ msgstr "Usuń"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Output"
-#~ msgstr "Wyjście audio"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Sound Output"
-#~ msgstr "Wyjście audio"
-
-#~ msgid "Play a test sound on the selected device"
-#~ msgstr "Odtwórz dźwięk testowy na wybranym urządzeniu"

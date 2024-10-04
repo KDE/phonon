@@ -1,22 +1,17 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2014, 2019.
+# Freek de Kruijf <freekdekruijf@kde.nl>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2019-08-07 11:23+0200\n"
-"Last-Translator: Freek de Kruijf <f.de.kruijf@gmail.com>\n"
+"PO-Revision-Date: 2019-09-01 23:58+0200\n"
+"Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.04.3\n"
 "X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.08.0\n"
 
 #: backendselection.ui:151 backendselection.ui:154
 msgctxt "BackendSelection|"
@@ -231,108 +226,3 @@ msgstr "Apparaat&voorkeur"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "Backend"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Freek de Kruijf - t/m 2019"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "freekdekruijf@kde.nl"
-
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr ""
-#~ "Om de wijziging in de backend toe te passen moet u zich af- en weer "
-#~ "aanmelden."
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "Phonon Configuratiemodule"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "Copyright 2006 Matthias Kretz"
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#~ msgid "Colin Guthrie"
-#~ msgstr "Colin Guthrie"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "Afspelen (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "Opnemen (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "Onafhankelijke apparaten"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "KDE geluidsinstellingen van de hardware"
-
-#~ msgid "Hardware"
-#~ msgstr "Hardware"
-
-#~ msgid "Profile"
-#~ msgstr "Profiel"
-
-#~ msgid "Sound Card"
-#~ msgstr "Geluidskaart"
-
-#~ msgid "Device Configuration"
-#~ msgstr "Apparaatinstellingen"
-
-#~ msgid "Connector"
-#~ msgstr "Connector"
-
-#~ msgid "Sound Device"
-#~ msgstr "Geluidsapparaat"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "Luidsprekeropstelling en testen"
-
-#~ msgid "Input Levels"
-#~ msgstr "Invoerniveaus"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "Geluidsinstellingen van de hardware"
-
-#~ msgid "Front Left"
-#~ msgstr "Vooraan links"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "Vooraan links van het midden"
-
-#~ msgid "Front Center"
-#~ msgstr "Vooraan midden"
-
-#~ msgid "Mono"
-#~ msgstr "Mono"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "Vooraan rechts van het midden"
-
-#~ msgid "Front Right"
-#~ msgstr "Vooraan rechts"
-
-#~ msgid "Side Left"
-#~ msgstr "Opzij links"
-
-#~ msgid "Side Right"
-#~ msgstr "Opzij rechts"
-
-#~ msgid "Rear Left"
-#~ msgstr "Achter links"
-
-#~ msgid "Rear Center"
-#~ msgstr "Achter midden"
-
-#~ msgid "Rear Right"
-#~ msgstr "Achter rechts"
-
-#~ msgid "Subwoofer"
-#~ msgstr "Subwoofer"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "Onbekend kanaal"

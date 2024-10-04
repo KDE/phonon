@@ -5,10 +5,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: desktop_kdebase\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2008-11-06 22:08+0100\n"
-"Last-Translator: Eduard Werner <edi.werner@gmx.de>\n"
 "Language-Team: en_US <kde-i18n-doc@lists.kde.org>\n"
 "Language: hsb\n"
 "MIME-Version: 1.0\n"
@@ -141,11 +137,9 @@ msgid ""
 msgstr ""
 
 #: devicepreference.ui:47
-#, fuzzy
-#| msgid "Show advanced options"
 msgctxt "DevicePreference|"
 msgid "Show advanced devices"
-msgstr "Pokaž opcije za pokročenych"
+msgstr ""
 
 #: devicepreference.ui:77 devicepreference.ui:80
 msgctxt "DevicePreference|"
@@ -172,11 +166,9 @@ msgid ""
 msgstr ""
 
 #: devicepreference.ui:171
-#, fuzzy
-#| msgid "Test"
 msgctxt "DevicePreference|"
 msgid "Test"
-msgstr "Test"
+msgstr ""
 
 #: devicepreference.ui:187
 msgctxt "DevicePreference|"
@@ -222,11 +214,3 @@ msgstr ""
 msgctxt "Settings|"
 msgid "Backend"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Show advanced options"
-#~ msgid "Sound Device"
-#~ msgstr "Pokaž opcije za pokročenych"
-
-#~ msgid "Remove"
-#~ msgstr "Zničić"

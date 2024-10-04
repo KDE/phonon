@@ -1,21 +1,18 @@
-# translation of kcm_phonon.po to Slovak
-# Richard Fric <Richard.Fric@kdemail.net>, 2007, 2009.
-# Michal Sulek <misurel@gmail.com>, 2009, 2011.
-# Richard Frič <Richard.Fric@kdemail.net>, 2012.
-# Matej Mrenica <matejm98mthw@gmail.com>, 2019.
+# translation of phononsettings_qt.po to Slovak
+# Roman Paholik <wizzardsk@gmail.com>, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: kcm_phonon\n"
+"Project-Id-Version: phononsettings_qt\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2019-08-08 12:16+0200\n"
-"Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
-"Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2019-08-17 05:44+0000\n"
+"PO-Revision-Date: 2019-08-31 15:59+0200\n"
+"Last-Translator: Roman Paholík <wizzardsk@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.07.90\n"
+"X-Generator: Lokalize 18.12.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Qt-Contexts: true\n"
 
@@ -51,7 +48,7 @@ msgstr "Nahrávanie audia"
 #: devicepreference.cpp:107
 msgctxt "QObject|"
 msgid "Video Recording"
-msgstr "Nahrávanie videa"
+msgstr "Prehrávanie videa"
 
 #: devicepreference.cpp:110
 msgctxt "QObject|"
@@ -103,7 +100,7 @@ msgstr "Preferencia zariadenia na záznam zvuku pre kategóriu '%1'"
 #, qt-format
 msgctxt "Phonon::DevicePreference|"
 msgid "Video Recording Device Preference for the '%1' Category "
-msgstr "Preferencia zariadenia na záznam videa pre kategóriu '%1' "
+msgstr "Preferencia zariadenia na záznam videa pre kategóriu '%1'"
 
 #: devicepreference.cpp:748
 msgctxt "Phonon::DevicePreference|"
@@ -186,7 +183,7 @@ msgstr ""
 #: devicepreference.ui:171
 msgctxt "DevicePreference|"
 msgid "Test"
-msgstr "Otestovať"
+msgstr "Test"
 
 #: devicepreference.ui:187
 msgctxt "DevicePreference|"
@@ -211,127 +208,24 @@ msgstr "Nepreferovať"
 #: main.cpp:30
 msgctxt "QObject|"
 msgid "Phonon Settings"
-msgstr "Phonon nastavenia"
+msgstr "Nastavenia Phonon"
 
 #: settings.ui:14
 msgctxt "Settings|"
 msgid "Dialog"
-msgstr "Dialógové okno"
+msgstr "Dialóg"
 
 #: settings.ui:20
 msgctxt "Settings|"
 msgid "Multimedia Settings"
-msgstr "Nastavenia multimédií"
+msgstr "Multimediálne nastavenia"
 
 #: settings.ui:31
 msgctxt "Settings|"
 msgid "De&vice Priority"
-msgstr "Poradie zariadení"
+msgstr "Priorita zariadenia"
 
 #: settings.ui:36
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "Backend"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Michal Šulek,Roman Paholík"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "misurel@gmail.com,wizzardsk@gmail.com"
-
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr "Na použitie zmeny backendu sa musíte odhlásiť a zase prihlásiť."
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "Ovládací modul Phonon"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "Copyright 2006 Matthias Kretz"
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#~ msgid "Colin Guthrie"
-#~ msgstr "Colin Guthrie"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "Prehrávanie (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "Nahrávanie (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "Nezávislé zariadenia"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "Nastavenie audio hardvéru KDE"
-
-#~ msgid "Hardware"
-#~ msgstr "Hardvér"
-
-#~ msgid "Profile"
-#~ msgstr "Profil"
-
-#~ msgid "Sound Card"
-#~ msgstr "Zvuková karta"
-
-#~ msgid "Device Configuration"
-#~ msgstr "Nastavenie zariadenia"
-
-#~ msgid "Connector"
-#~ msgstr "Konektor"
-
-#~ msgid "Sound Device"
-#~ msgstr "Zvukové zariadenie"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "Umiestnenie a testovanie reproduktorov"
-
-#~ msgid "Input Levels"
-#~ msgstr "Vstupné úrovne"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "Nastavenie audio hardvéru"
-
-#~ msgid "Front Left"
-#~ msgstr "Predný ľavý"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "Predný ľavý stredový"
-
-#~ msgid "Front Center"
-#~ msgstr "Predný stredový"
-
-#~ msgid "Mono"
-#~ msgstr "Mono"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "Predný pravý stredový"
-
-#~ msgid "Front Right"
-#~ msgstr "Predný pravý"
-
-#~ msgid "Side Left"
-#~ msgstr "Bočný ľavý"
-
-#~ msgid "Side Right"
-#~ msgstr "Bočný pravý"
-
-#~ msgid "Rear Left"
-#~ msgstr "Zadný ľavý"
-
-#~ msgid "Rear Center"
-#~ msgstr "Zadný stredový"
-
-#~ msgid "Rear Right"
-#~ msgstr "Zadný pravý"
-
-#~ msgid "Subwoofer"
-#~ msgstr "Subwoofer"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "Neznámy kanál"

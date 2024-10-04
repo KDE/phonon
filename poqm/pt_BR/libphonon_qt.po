@@ -1,27 +1,17 @@
-# Translation of libphonon.po to Brazilian Portuguese
-# Copyright (C) 2007-2013 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
-# Diniz Bortolotto <diniz.bortolotto@gmail.com>, 2007.
-# doutor.zero <doutor.zero@gmail.com>, 2007.
-# André Marcelo Alvarenga <alvarenga@kde.org>, 2009, 2011, 2013.
-# Marcus Gama <marcus.gama@gmail.com>, 2010.
-# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2010, 2019.
+# Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: libphonon\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-01 01:43+0200\n"
-"PO-Revision-Date: 2019-07-04 14:00-0300\n"
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2019-07-04 13:44-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.04.2\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Lokalize 19.04.2\n"
 
 #: audiooutput.cpp:481 audiooutput.cpp:519
 #, qt-format
@@ -95,7 +85,6 @@ msgctxt "Phonon::|"
 msgid "Notifications"
 msgstr "Notificações"
 
-# Deve permanecer no singular.
 #: phononnamespace.cpp:57
 msgctxt "Phonon::|"
 msgid "Music"

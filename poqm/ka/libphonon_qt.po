@@ -1,17 +1,17 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: libphonon_qt\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
+"Language-Team: \n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Qt-Contexts: true\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: audiooutput.cpp:481 audiooutput.cpp:519
 #, qt-format
@@ -129,7 +129,7 @@ msgstr "PulseAudio Sound Server"
 #, qt-format
 msgctxt "Phonon::VolumeSlider|"
 msgid "Volume: %1%"
-msgstr "ხმა: %1%"
+msgstr "ხმა: %1"
 
 #: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
 #, qt-format
@@ -144,4 +144,4 @@ msgstr ""
 #: volumeslider.cpp:203
 msgctxt "Phonon::VolumeSlider|"
 msgid "Muted"
-msgstr "დადუმებული"
+msgstr "ხმა გამორთული"

@@ -45,7 +45,7 @@ msgstr "Ajorna"
 #: devicepreference.cpp:90
 msgctxt "QObject|"
 msgid "Audio Playback"
-msgstr "Reproducció d'àudio"
+msgstr "Reproduïu l'àudio"
 
 #: devicepreference.cpp:104
 msgctxt "QObject|"
@@ -171,7 +171,7 @@ msgstr ""
 #: devicepreference.ui:83
 msgctxt "DevicePreference|"
 msgid "Apply Device List To..."
-msgstr "Aplica la llista de dispositius a..."
+msgstr "Aplica la llista de dispositius a…"
 
 #: devicepreference.ui:113
 msgctxt "DevicePreference|"

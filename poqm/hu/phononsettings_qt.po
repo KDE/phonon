@@ -1,24 +1,17 @@
-# Kcm_Phonon Hungarian translation
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
-# Tamas Szanto <tszanto@interware.hu>, 2007.
-# Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011, 2012, 2020.
+# Kristóf Kiszel <kiszel.kristof@gmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: KDE 4.2\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2020-11-28 14:55+0100\n"
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2021-01-02 10:03+0100\n"
 "Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 21.03.70\n"
-"X-Qt-Contexts: true\n"
 
 #: backendselection.ui:151 backendselection.ui:154
 msgctxt "BackendSelection|"
@@ -235,142 +228,3 @@ msgstr "Esz&közprioritás"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "Rendszermodulok"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kiszel Kristóf"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "ulysses@kubuntu.org"
-
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr "A modulváltoztatás alkalmazásához jelentkezzen ki és be."
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "Phonon beállítómodul"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "© Matthias Kretz, 2006."
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#~ msgid "Colin Guthrie"
-#~ msgstr "Colin Guthrie"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "Lejátszás (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "Felvétel (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "Független eszközök"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "KDE hangeszköz-beállítás"
-
-#~ msgid "Hardware"
-#~ msgstr "Hardver"
-
-#~ msgid "Profile"
-#~ msgstr "Profil"
-
-#~ msgid "Sound Card"
-#~ msgstr "Hangkártya"
-
-#~ msgid "Device Configuration"
-#~ msgstr "Eszközbeállítás"
-
-#~ msgid "Connector"
-#~ msgstr "Csatlakozó"
-
-#~ msgid "Sound Device"
-#~ msgstr "Hangeszközök"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "Hangszóró-elhelyezés és tesztelés"
-
-#~ msgid "Input Levels"
-#~ msgstr "Bemeneti szintek"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "Hangeszköz-beállítás"
-
-#~ msgid "Front Left"
-#~ msgstr "Bal elöl"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "Bal első-középső"
-
-#~ msgid "Front Center"
-#~ msgstr "Bal középső"
-
-#~ msgid "Mono"
-#~ msgstr "Monó"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "Jobb első-középső"
-
-#~ msgid "Front Right"
-#~ msgstr "Jobb első"
-
-#~ msgid "Side Left"
-#~ msgstr "Bal oldalsó"
-
-#~ msgid "Side Right"
-#~ msgstr "Jobb oldalsó"
-
-#~ msgid "Rear Left"
-#~ msgstr "Bal hátsó"
-
-#~ msgid "Rear Center"
-#~ msgstr "Hátsó középső"
-
-#~ msgid "Rear Right"
-#~ msgstr "Jobb hátsó"
-
-#~ msgid "Subwoofer"
-#~ msgstr "Mélysugárzó"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "Ismeretlen csatorna"
-
-#~ msgid "Speaker Setup"
-#~ msgstr "Hangszóró-beállítás"
-
-#~ msgid "Audio Output"
-#~ msgstr "Hangkimenet"
-
-#~ msgid "Audio Capture"
-#~ msgstr "Hangfelvétel"
-
-#, fuzzy
-#~| msgid "Audio Capture"
-#~ msgid "Video Capture"
-#~ msgstr "Hangfelvétel"
-
-#, fuzzy
-#~| msgid "Default Output Device Preference"
-#~ msgid "Default Audio Output Device Preference"
-#~ msgstr "Alapértelmezett kimeneti eszköz"
-
-#, fuzzy
-#~| msgid "Output Device Preference for the '%1' Category"
-#~ msgid "Audio Output Device Preference for the '%1' Category"
-#~ msgstr "Alapértelmezett kimeneti eszköz ebben a kategóriában: „%1”"
-
-#~ msgid "Remove"
-#~ msgstr "Eltávolítás"
-
-#~ msgid "Output"
-#~ msgstr "Kimenet"
-
-#~ msgid "Sound Output"
-#~ msgstr "Hangkimenet"
-
-#~ msgid "Play a test sound on the selected device"
-#~ msgstr "Hanglejátszási próba a kijelölt eszközön"

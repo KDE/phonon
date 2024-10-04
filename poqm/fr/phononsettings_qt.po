@@ -5,14 +5,12 @@
 # Guillaume Pujol <guill.p@gmail.com>, 2008.
 # Jean-Jacques Finazzi <mrjay01@users.sourceforge.net>, 2007, 2008, 2010, 2011, 2012.
 # Sébastien Renard <renard@kde.org>, 2012.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013, 2021.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013, 2021.
 # Simon Depiets <sdepiets@gmail.com>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kcm_phonon\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
 "PO-Revision-Date: 2021-01-13 17:47+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -254,116 +252,3 @@ msgstr "Priorités des &périphériques"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "Moteur"
-
-#, fuzzy
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Xavier Besnard, Jean-Jacques Finazzi, Guillaume Pujol"
-
-#, fuzzy
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr ""
-#~ "xavier.besnard@neuf.fr, mrjay01@users.sourceforge.net, guill.p@gmail.com"
-
-#, fuzzy
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr ""
-#~ "Pour appliquer le changement de moteur, vous devrez vous déconnecter puis "
-#~ "vous reconnecter."
-
-#, fuzzy
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "Module de configuration de Phonon"
-
-#, fuzzy
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "Copyright 2006 Matthias Kretz"
-
-#, fuzzy
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#, fuzzy
-#~ msgid "Colin Guthrie"
-#~ msgstr "Colin Guthrie"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "Lecture (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "Enregistrement (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "Périphériques indépendants"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "Configuration des périphériques audio de KDE"
-
-#~ msgid "Hardware"
-#~ msgstr "Matériel"
-
-#~ msgid "Profile"
-#~ msgstr "Profil"
-
-#~ msgid "Sound Card"
-#~ msgstr "Carte son"
-
-#~ msgid "Device Configuration"
-#~ msgstr "Configuration du périphérique"
-
-#~ msgid "Connector"
-#~ msgstr "Connecteur"
-
-#~ msgid "Sound Device"
-#~ msgstr "Périphérique audio"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "Emplacement et test du haut-parleur"
-
-#~ msgid "Input Levels"
-#~ msgstr "Niveaux d'entrée"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "Configuration des périphériques audio"
-
-#~ msgid "Front Left"
-#~ msgstr "Avant gauche"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "Avant gauche du centre"
-
-#~ msgid "Front Center"
-#~ msgstr "Avant centre"
-
-#~ msgid "Mono"
-#~ msgstr "Mono"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "Avant droit du centre"
-
-#~ msgid "Front Right"
-#~ msgstr "Avant droit"
-
-#~ msgid "Side Left"
-#~ msgstr "Latéral gauche"
-
-#~ msgid "Side Right"
-#~ msgstr "Latéral droit"
-
-#~ msgid "Rear Left"
-#~ msgstr "Arrière gauche"
-
-#~ msgid "Rear Center"
-#~ msgstr "Arrière centre"
-
-#~ msgid "Rear Right"
-#~ msgstr "Arrière droit"
-
-#~ msgid "Subwoofer"
-#~ msgstr "Caisson de basses"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "Canal inconnu"

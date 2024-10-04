@@ -1,25 +1,17 @@
-# translation of kcm_phonon.po to Hindi
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
-# Ravishankar Shrivastava <raviratlami@yahoo.com>, 2007.
-# G Karunakar <karunakar@indlinux.org>, 2012.
 # Raghavendra Kamath <raghu@raghukamath.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: kcm_phonon\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2021-08-21 16:25+0530\n"
+"Project-Id-Version: \n"
+"PO-Revision-Date: 2021-08-21 17:43+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.0\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Qt-Contexts: true\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Lokalize 21.08.0\n"
 
 #: backendselection.ui:151 backendselection.ui:154
 msgctxt "BackendSelection|"
@@ -233,145 +225,3 @@ msgstr "उपकरण प्राथमिकता (&v)"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "पृष्ठभाग"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "रविशंकर श्रीवास्तव, जी. करूणाकर"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "raviratlami@aol.in,"
-
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr "बैकेण्ड बदलाव लगाने के लिए आपको लागउट कर लॉगिन करना होगा."
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "फोनॉन कॉन्फ़िगरेशन मॉड्यूल"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "सर्वाधिकार 2006 मैथियास कर्त्ज"
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "मैथियास कर्त्ज"
-
-#~ msgid "Colin Guthrie"
-#~ msgstr "कोलिन गूत्री"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "प्लेबैक (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "रेकॉर्डिंग (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "स्वतंत्र उपकरण"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "कडीई ध्वनि हार्डवेयर सेटप"
-
-#~ msgid "Hardware"
-#~ msgstr "हार्डवेयर"
-
-#~ msgid "Profile"
-#~ msgstr "प्रोफ़ाइल"
-
-#~ msgid "Sound Card"
-#~ msgstr "ध्वनि कार्ड"
-
-#~ msgid "Device Configuration"
-#~ msgstr "उपकरण कॉन्फ़िगरेशन"
-
-#~ msgid "Connector"
-#~ msgstr "कनेक्टर"
-
-#~ msgid "Sound Device"
-#~ msgstr "ध्वनि उपकरण"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "स्पीकर स्थान चुनाव व जाँच"
-
-#~ msgid "Input Levels"
-#~ msgstr "ईनपुट सतर"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "ध्वनि हार्डवेयर सेटप"
-
-#~ msgid "Front Left"
-#~ msgstr "आगे बाएँ"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "बीच से आगे बाएँ"
-
-#~ msgid "Front Center"
-#~ msgstr "आगे बीच में"
-
-#~ msgid "Mono"
-#~ msgstr "मोनो"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "बीच से आगे दाएँ"
-
-#~ msgid "Front Right"
-#~ msgstr "आगे दाएँ"
-
-#~ msgid "Side Left"
-#~ msgstr "बाजू में बाएँ"
-
-#~ msgid "Side Right"
-#~ msgstr "बाजू दाएँ"
-
-#~ msgid "Rear Left"
-#~ msgstr "पीछे बाएँ"
-
-#~ msgid "Rear Center"
-#~ msgstr "पीछे बीच में"
-
-#~ msgid "Rear Right"
-#~ msgstr "पीछे दाएँ"
-
-#~ msgid "Subwoofer"
-#~ msgstr "सबवूफर"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "अज्ञात चैनेल"
-
-#~ msgid "Audio Output"
-#~ msgstr "ऑडियो आउटपुट"
-
-#~ msgid "Audio Capture"
-#~ msgstr "ऑडियो कैप्चर"
-
-#, fuzzy
-#~| msgid "Audio Capture"
-#~ msgid "Video Capture"
-#~ msgstr "ऑडियो कैप्चर"
-
-#, fuzzy
-#~| msgid "Default Output Device Preference:"
-#~ msgid "Default Audio Output Device Preference"
-#~ msgstr "डिफ़ॉल्ट आउटपुट उपकरण वरीयता:"
-
-#, fuzzy
-#~| msgid "Output Device Preference for the '%1' Category:"
-#~ msgid "Audio Output Device Preference for the '%1' Category"
-#~ msgstr "'%1' वर्ग के लिए आउटपुट उपकरण वरीयता:"
-
-#~ msgid "Remove"
-#~ msgstr "हटाएँ"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Output"
-#~ msgstr "ऑडियो आउटपुट"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Sound Output"
-#~ msgstr "ऑडियो आउटपुट"
-
-#, fuzzy
-#~| msgid "prefer the selected device"
-#~ msgid "Play a test sound on the selected device"
-#~ msgstr "चयनित उपकरण पसंद करें"

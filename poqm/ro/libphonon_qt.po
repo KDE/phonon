@@ -8,8 +8,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: libphonon\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-01 01:43+0200\n"
 "PO-Revision-Date: 2020-09-13 14:26+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -155,42 +153,3 @@ msgstr ""
 msgctxt "Phonon::VolumeSlider|"
 msgid "Muted"
 msgstr "Muțit"
-
-#, fuzzy
-#~| msgid "Restart Application"
-#~ msgctxt "Phonon::FactoryPrivate|"
-#~ msgid "Restart Application"
-#~ msgstr "Repornește aplicația"
-
-#, fuzzy
-#~| msgid ""
-#~| "You changed the backend of the Phonon multimedia system.\n"
-#~| "\n"
-#~| "To apply this change you will need to restart '%1'."
-#~ msgctxt "Phonon::FactoryPrivate|"
-#~ msgid ""
-#~ "You changed the backend of the Phonon multimedia system.\n"
-#~ "\n"
-#~ "To apply this change you will need to restart '%1'."
-#~ msgstr ""
-#~ "Ați schimbat suportul sistemului multimedia Phonon.\n"
-#~ "\n"
-#~ "Pentru a aplica schimbarea trebuie să reporniți „%1”."
-
-#, fuzzy
-#~| msgid "%0 by %1"
-#~ msgctxt "QObject|"
-#~ msgid "%0 by %1"
-#~ msgstr "%0 de %1"
-
-#~ msgctxt "Phonon::"
-#~ msgid "CaptureCommunication"
-#~ msgstr "ComunicareCaptură"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Sergiu Bivol"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "sergiu-bivol@mail.md"

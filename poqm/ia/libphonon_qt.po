@@ -1,8 +1,8 @@
-# giovanni <g.sora@tiscali.it>, 2020, 2021.
+# Giovanni Sora <g.sora@tiscali.it>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2021-04-10 22:34+0100\n"
+"PO-Revision-Date: 2021-04-09 22:55+0100\n"
 "Last-Translator: Giovanni Sora <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -46,8 +46,8 @@ msgid ""
 "<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
 "preference or is specifically configured for this stream.</html>"
 msgstr ""
-"<html>Commutar al dispositivo de reproduction audio <b>%1</b><br/> que justo "
-"deveni disponibile e ha un preferentia major.</html>"
+"<html>Commutar al dispositivo de reproduction audio <b>%1</b><br/> que  ha "
+"un preferentia major o es specificatemente configurate per iste fluxo.</html>"
 
 #: mediacontroller.cpp:158
 msgctxt "Phonon::MediaController|"

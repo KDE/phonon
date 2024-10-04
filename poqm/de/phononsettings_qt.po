@@ -1,8 +1,8 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"PO-Revision-Date: 2019-08-06 07:03+0200\n"
+"Project-Id-Version: phononsettings_qt\n"
+"PO-Revision-Date: 2019-09-03 06:13+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"

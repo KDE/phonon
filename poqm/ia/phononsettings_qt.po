@@ -1,22 +1,17 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
-# G.Sora <g.sora@tiscali.it>, 2014, 2020, 2021.
+# Giovanni Sora <g.sora@tiscali.it>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2021-04-06 22:20+0100\n"
+"PO-Revision-Date: 2021-04-06 21:27+0100\n"
 "Last-Translator: Giovanni Sora <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Qt-Contexts: true\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 2.0\n"
-"X-Qt-Contexts: true\n"
 
 #: backendselection.ui:151 backendselection.ui:154
 msgctxt "BackendSelection|"
@@ -35,7 +30,7 @@ msgstr "Prefere"
 #: backendselection.ui:183
 msgctxt "BackendSelection|"
 msgid "Defer"
-msgstr "Postpone..."
+msgstr "Postpone"
 
 #: devicepreference.cpp:90
 msgctxt "QObject|"
@@ -237,108 +232,3 @@ msgstr "Prioritate de Dispositi&vo"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "Retro-Administration"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Giovanni Sora"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "g.sora@tiscali.it"
-
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr ""
-#~ "Pro applical le modification de retro administration tu debe abandonar e "
-#~ "identificar te de nove."
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "Modulo de configuration de Phonon"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "Copyright 2006 Matthias Kretz"
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#~ msgid "Colin Guthrie"
-#~ msgstr "Colin Guthrie"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "Reproduce (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "Registration (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "Dispositivos independente"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "Configuration Hardware de Audio de KDE"
-
-#~ msgid "Hardware"
-#~ msgstr "Hardware"
-
-#~ msgid "Profile"
-#~ msgstr "Profilo"
-
-#~ msgid "Sound Card"
-#~ msgstr "Carta de sono "
-
-#~ msgid "Device Configuration"
-#~ msgstr "Configuration de dispositivo"
-
-#~ msgid "Connector"
-#~ msgstr "Connector"
-
-#~ msgid "Sound Device"
-#~ msgstr "Dispositivo de sono"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "Position e essayo de altoparlator"
-
-#~ msgid "Input Levels"
-#~ msgstr "Nivellos de ingresso"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "Configuration Hardware de audio"
-
-#~ msgid "Front Left"
-#~ msgstr "Fronte sinistre"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "Fronte sinistre de centro"
-
-#~ msgid "Front Center"
-#~ msgstr "Fronte centro"
-
-#~ msgid "Mono"
-#~ msgstr "Mono"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "Fronte dextere de centro"
-
-#~ msgid "Front Right"
-#~ msgstr "Fronte dextere"
-
-#~ msgid "Side Left"
-#~ msgstr "Latere sinistre"
-
-#~ msgid "Side Right"
-#~ msgstr "Latere dextere"
-
-#~ msgid "Rear Left"
-#~ msgstr "Posterior sinistre"
-
-#~ msgid "Rear Center"
-#~ msgstr "Posterior centro"
-
-#~ msgid "Rear Right"
-#~ msgstr "Posterior dextere"
-
-#~ msgid "Subwoofer"
-#~ msgstr "Subwoofer"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "Canal Incognite"

@@ -10,8 +10,6 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kcm_phonon\n"
-"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-07-15 03:13+0200\n"
 "PO-Revision-Date: 2021-12-11 21:30+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -21,7 +19,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 21.07.70\n"
 "X-Qt-Contexts: true\n"
 
 #: backendselection.ui:151 backendselection.ui:154
@@ -233,145 +230,3 @@ msgstr "أولوية الج&هاز"
 msgctxt "Settings|"
 msgid "Backend"
 msgstr "الواجهة الخلفية"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Youssef Chahibi,Zayed,Hajur Alaseefer,Abderrahim Kitouni"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr ""
-#~ "chahibi@gmail.com,zayed.alsaidi@gmail.com,frostbutterfly@gmail.com,a."
-#~ "kitouni@gmail.com"
-
-#~ msgctxt "@info User changed Phonon backend"
-#~ msgid ""
-#~ "To apply the backend change you will have to log out and back in again."
-#~ msgstr "لتطبيق التغيرات اخرج ثم لُج مجددا."
-
-#~ msgid "Phonon Configuration Module"
-#~ msgstr "وحدة إعداد فونون"
-
-#~ msgid "Copyright 2006 Matthias Kretz"
-#~ msgstr "حقوق النسخ محفوظة 2006 - Matthias Kretz"
-
-#~ msgid "Matthias Kretz"
-#~ msgstr "Matthias Kretz"
-
-#~ msgid "Colin Guthrie"
-#~ msgstr "Colin Guthrie"
-
-#~ msgid "Playback (%1)"
-#~ msgstr "العزف (%1)"
-
-#~ msgid "Recording (%1)"
-#~ msgstr "التسجيل (%1)"
-
-#~ msgid "Independent Devices"
-#~ msgstr "جهاز مستقل"
-
-#~ msgid "KDE Audio Hardware Setup"
-#~ msgstr "منصب كِيدِي للأجهزة الصوتية"
-
-#~ msgid "Hardware"
-#~ msgstr "جهاز"
-
-#~ msgid "Profile"
-#~ msgstr "الملف الشخصي"
-
-#~ msgid "Sound Card"
-#~ msgstr "بطاقة الصوت"
-
-#~ msgid "Device Configuration"
-#~ msgstr "تهيئة الجهاز"
-
-#~ msgid "Connector"
-#~ msgstr "موصل"
-
-#~ msgid "Sound Device"
-#~ msgstr "الأجهزة الصوتية"
-
-#~ msgid "Speaker Placement and Testing"
-#~ msgstr "مموضع ومختبر السبيكر"
-
-#~ msgid "Input Levels"
-#~ msgstr "مستوى الإدخال"
-
-#~ msgid "Audio Hardware Setup"
-#~ msgstr "تنصيب جهاز صوتي"
-
-#~ msgid "Front Left"
-#~ msgstr "يسار المقدمة"
-
-#~ msgid "Front Left of Center"
-#~ msgstr "يسار مقدمة الوسط"
-
-#~ msgid "Front Center"
-#~ msgstr "مقدمة الوسط"
-
-#~ msgid "Mono"
-#~ msgstr "مونو"
-
-#~ msgid "Front Right of Center"
-#~ msgstr "يمين مقدمة الوسط"
-
-#~ msgid "Front Right"
-#~ msgstr "يمين المقدمة"
-
-#~ msgid "Side Left"
-#~ msgstr "يسار الجانب"
-
-#~ msgid "Side Right"
-#~ msgstr "يمين الجانب"
-
-#~ msgid "Rear Left"
-#~ msgstr "يسار المؤخرة"
-
-#~ msgid "Rear Center"
-#~ msgstr "وسط المؤخرة"
-
-#~ msgid "Rear Right"
-#~ msgstr "يمين المؤخرة"
-
-#~ msgid "Subwoofer"
-#~ msgstr "مضخم الصوت"
-
-#~ msgid "Unknown Channel"
-#~ msgstr "قناة غير معلومة"
-
-#~ msgid "Audio Output"
-#~ msgstr "خرج صوتي"
-
-#~ msgid "Audio Capture"
-#~ msgstr "التقاط الصوت"
-
-#, fuzzy
-#~| msgid "Audio Capture"
-#~ msgid "Video Capture"
-#~ msgstr "التقاط الصوت"
-
-#, fuzzy
-#~| msgid "Default Output Device Preference"
-#~ msgid "Default Audio Output Device Preference"
-#~ msgstr "تفضيلات جهاز الإخراج المبدئي"
-
-#, fuzzy
-#~| msgid "Output Device Preference for the '%1' Category"
-#~ msgid "Audio Output Device Preference for the '%1' Category"
-#~ msgstr "تفضيلات جهاز الإخراج للفئة '%1'"
-
-#~ msgid "Remove"
-#~ msgstr "أزِل"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Output"
-#~ msgstr "خرج صوتي"
-
-#, fuzzy
-#~| msgid "Audio Output"
-#~ msgid "Sound Output"
-#~ msgstr "خرج صوتي"
-
-#~ msgid "Play a test sound on the selected device"
-#~ msgstr "شغل صوت اختباري على الجهاز المُنتقى"
