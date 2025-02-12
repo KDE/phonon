@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: none 
+# SPDX-FileCopyrightText: none
 # SPDX-License-Identifier: CC0-1.0
 
 include:
@@ -7,6 +7,7 @@ include:
       - /gitlab-templates/linux.yml
       - /gitlab-templates/linux-static.yml
       - /gitlab-templates/linux-qt6.yml
+      - /gitlab-templates/linux-qt6-next.yml
       - /gitlab-templates/android-qt6.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/windows-static.yml
