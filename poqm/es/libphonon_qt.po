@@ -1,15 +1,15 @@
-# Spanish translations for libphonon.po package.
-# Copyright (C) 2017 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Spanish translations for libphonon_qt.po package.
+# Copyright (C) 2017-2025 This file is copyright:
+# This file is distributed under the same license as the phonon package.
 # Automatically generated, 2017.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2017, 2019.
+#
+# SPDX-FileCopyrightText: 2017, 2019, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
-"Project-Id-Version: libphonon\n"
+"Project-Id-Version: libphonon_qt\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-07-01 01:50+0200\n"
-"PO-Revision-Date: 2019-07-09 19:00+0200\n"
+"PO-Revision-Date: 2025-07-07 17:18+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -153,21 +153,3 @@ msgstr ""
 msgctxt "Phonon::VolumeSlider|"
 msgid "Muted"
 msgstr "Silenciado"
-
-#~ msgctxt "Phonon::FactoryPrivate|"
-#~ msgid "Restart Application"
-#~ msgstr "Reiniciar la aplicación"
-
-#~ msgctxt "Phonon::FactoryPrivate|"
-#~ msgid ""
-#~ "You changed the backend of the Phonon multimedia system.\n"
-#~ "\n"
-#~ "To apply this change you will need to restart '%1'."
-#~ msgstr ""
-#~ "Ha cambiado el motor del sistema multimedia Phonon.\n"
-#~ "\n"
-#~ "Para aplicar este cambio necesita reiniciar «%1»."
-
-#~ msgctxt "QObject|"
-#~ msgid "%0 by %1"
-#~ msgstr "%0 por %1"
