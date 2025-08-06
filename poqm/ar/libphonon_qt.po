@@ -2,11 +2,11 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
-# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2021.
+# SPDX-FileCopyrightText: 2021, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: libphonon\n"
-"PO-Revision-Date: 2021-12-11 21:33+0400\n"
+"PO-Revision-Date: 2025-08-05 19:49+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Qt-Contexts: true\n"
 
 #: audiooutput.cpp:481 audiooutput.cpp:519
@@ -24,7 +25,7 @@ msgid ""
 "<html>The audio playback device <b>%1</b> does not work.<br/>Falling back to "
 "<b>%2</b>.</html>"
 msgstr ""
-"<html>لا يعمل جهاز الرد الصوتي <b>%1</b>.<br/>عودة إلى <b>%2</b>.</html>"
+"<html>لا يعمل جهاز التشغيل الصوتي <b>%1</b>.<br/>عودة إلى <b>%2</b>.</html>"
 
 #: audiooutput.cpp:494
 #, qt-format
@@ -33,8 +34,8 @@ msgid ""
 "<html>Switching to the audio playback device <b>%1</b><br/>which just became "
 "available and has higher preference.</html>"
 msgstr ""
-"<html>التحول إلى جهاز الرد الصوتي <b>%1</b><br/>الذي صار متاحا في هذه اللحظة "
-"والذي له أفضلية علوى.</html>"
+"<html>التحول إلى جهاز التشغيل الصوتي <b>%1</b><br/>الذي صار متاحا في هذه "
+"اللحظة والذي له أفضلية أعلى.</html>"
 
 #: audiooutput.cpp:497 audiooutput.cpp:515
 #, qt-format
@@ -49,8 +50,8 @@ msgid ""
 "<html>Switching to the audio playback device <b>%1</b><br/>which has higher "
 "preference or is specifically configured for this stream.</html>"
 msgstr ""
-"<html>التحول إلى جهاز الرد الصوتي <b>%1</b><br/>الذي لديه تفضيل أعلى أو تم "
-"تكوينه خصيصًا لهذا البث. </html>"
+"<html>التحول إلى جهاز التشغيل الصوتي <b>%1</b><br/>الذي لديه تفضيل أعلى أو "
+"ضُبط خصيصًا لهذا البث. </html>"
 
 #: mediacontroller.cpp:158
 msgctxt "Phonon::MediaController|"
@@ -85,7 +86,7 @@ msgstr "قائمة الزاوية"
 #: phononnamespace.cpp:55
 msgctxt "Phonon::|"
 msgid "Notifications"
-msgstr "الإخطارات"
+msgstr "الإشعارات"
 
 #: phononnamespace.cpp:57
 msgctxt "Phonon::|"
