@@ -4,20 +4,20 @@
 # This file is distributed under the same license as the kdelibs package.
 #
 # Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2007, 2009, 2010, 2011, 2019.
+# SPDX-FileCopyrightText: 2007, 2009, 2010, 2011, 2019, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: libphonon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-07-01 01:43+0200\n"
-"PO-Revision-Date: 2019-07-09 19:00+0200\n"
+"PO-Revision-Date: 2025-09-16 01:03+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 19.04.2\n"
+"X-Generator: Lokalize 25.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Qt-Contexts: true\n"
 
@@ -138,7 +138,7 @@ msgstr "Servidor de sonido PulseAudio"
 #, qt-format
 msgctxt "Phonon::VolumeSlider|"
 msgid "Volume: %1%"
-msgstr "Volumen: %1%"
+msgstr "Volumen: %1 %"
 
 #: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
 #, qt-format
@@ -147,28 +147,10 @@ msgid ""
 "Use this slider to adjust the volume. The leftmost position is 0%, the "
 "rightmost is %1%"
 msgstr ""
-"Use este deslizador para ajustar el volumen. El extremo izquierdo es el 0%, "
-"y el extremo derecho es el %1%"
+"Use este deslizador para ajustar el volumen. El extremo izquierdo es el 0 %, "
+"y el extremo derecho es el %1 %"
 
 #: volumeslider.cpp:203
 msgctxt "Phonon::VolumeSlider|"
 msgid "Muted"
 msgstr "Silenciado"
-
-#~ msgctxt "Phonon::FactoryPrivate|"
-#~ msgid "Restart Application"
-#~ msgstr "Reiniciar la aplicación"
-
-#~ msgctxt "Phonon::FactoryPrivate|"
-#~ msgid ""
-#~ "You changed the backend of the Phonon multimedia system.\n"
-#~ "\n"
-#~ "To apply this change you will need to restart '%1'."
-#~ msgstr ""
-#~ "Ha cambiado el motor del sistema multimedia Phonon.\n"
-#~ "\n"
-#~ "Para aplicar este cambio necesita reiniciar «%1»."
-
-#~ msgctxt "QObject|"
-#~ msgid "%0 by %1"
-#~ msgstr "%0 por %1"
