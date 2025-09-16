@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: libphonon_qt\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-07-01 01:50+0200\n"
-"PO-Revision-Date: 2025-07-07 17:18+0100\n"
+"PO-Revision-Date: 2025-09-16 01:03+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.04.2\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-Qt-Contexts: true\n"
 
 #: audiooutput.cpp:481 audiooutput.cpp:519
@@ -137,7 +137,7 @@ msgstr "Servidor de sonido PulseAudio"
 #, qt-format
 msgctxt "Phonon::VolumeSlider|"
 msgid "Volume: %1%"
-msgstr "Volumen: %1%"
+msgstr "Volumen: %1 %"
 
 #: volumeslider.cpp:43 volumeslider.cpp:65 volumeslider.cpp:123
 #, qt-format
@@ -146,8 +146,8 @@ msgid ""
 "Use this slider to adjust the volume. The leftmost position is 0%, the "
 "rightmost is %1%"
 msgstr ""
-"Use este deslizador para ajustar el volumen. El extremo izquierdo es el 0%, "
-"y el extremo derecho es el %1%"
+"Use este deslizador para ajustar el volumen. El extremo izquierdo es el 0 %, "
+"y el extremo derecho es el %1 %"
 
 #: volumeslider.cpp:203
 msgctxt "Phonon::VolumeSlider|"
