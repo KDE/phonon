@@ -1,9 +1,9 @@
-# Stephan Johach <hunsum@gmx.de>, 2007.
-# Thomas Reitelbach <tr@erdfunkstelle.de>, 2009.
-# Johannes Obermayr <johannesobermayr@gmx.de>, 2010.
-# Frederik Schwarzer <schwarzer@kde.org>, 2010, 2011.
-# Burkhard Lück <lueck@hube-lueck.de>, 2011, 2019.
-# Frank Steinmetzger <Warp_7@gmx.de>, 2011.
+# SPDX-FileCopyrightText: 2007 Stephan Johach <hunsum@gmx.de>
+# SPDX-FileCopyrightText: 2009 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2010 Johannes Obermayr <johannesobermayr@gmx.de>
+# SPDX-FileCopyrightText: 2010, 2011 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2011, 2019 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2011 Frank Steinmetzger <Warp_7@gmx.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: libphonon_qt\n"
