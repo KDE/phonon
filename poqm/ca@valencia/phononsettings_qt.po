@@ -129,7 +129,7 @@ msgstr "Categoria predeterminada/sense especificar"
 msgctxt "Phonon::DevicePreference|"
 msgid "Failed to set the selected audio output device"
 msgstr ""
-"No s'ha pogut establir el dispositiu seleccionat per a l'eixida d'àudio"
+"Ha fallat mentre s'establia el dispositiu seleccionat per a l'eixida d'àudio"
 
 #: devicepreference.cpp:895
 msgctxt "Phonon::DevicePreference|"
