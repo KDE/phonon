@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: phononsettings_qt\n"
-"PO-Revision-Date: 2019-09-03 06:13+0200\n"
+"PO-Revision-Date: 2019-08-06 07:03+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Liste der Phonon-Backends, die auf Ihrem System gefunden wurden. Die hier "
 "angegebene Reihenfolge legt fest, in welcher Reihenfolge sie von Phonon "
-"benutzt werden."
+"verwendet werden."
 
 #: backendselection.ui:170
 msgctxt "BackendSelection|"
