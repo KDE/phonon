@@ -113,7 +113,7 @@ msgid ""
 "Apply the currently shown device preference list to the following other "
 "audio playback categories:"
 msgstr ""
-"طبق قائمة تفضيلات الأجهزة المعروضة حالياً على فئات أجهزة إخراج الصوت التالية:"
+"طبق قائمة تفضيلات الأجهزة المعروضة حاليًا على فئات أجهزة إخراج الصوت التالية:"
 
 #: devicepreference.cpp:761 devicepreference.cpp:767
 msgctxt "Phonon::DevicePreference|"
