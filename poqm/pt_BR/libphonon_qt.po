@@ -5,7 +5,7 @@
 # Diniz Bortolotto <diniz.bortolotto@gmail.com>, 2007.
 # doutor.zero <doutor.zero@gmail.com>, 2007.
 # André Marcelo Alvarenga <alvarenga@kde.org>, 2009, 2011, 2013.
-# Marcus Gama <marcus.gama@gmail.com>, 2010.
+# Marcus Gama <marcus.gama@kde.org>, 2010.
 # Luiz Fernando Ranghetti <elchevive@opensuse.org>, 2010, 2019.
 msgid ""
 msgstr ""
