@@ -6,13 +6,13 @@
 # Serdar Soytetir <tulliana@gmail.com>, 2007, 2008.
 # Serdar SOYTETİR <tulliana@gmail.com>, 2010.
 # H. İbrahim Güngör <tulliana@gmail.com>, 2011, 2012.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022-2023, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kcm_phonon\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2019-07-15 03:13+0200\n"
-"PO-Revision-Date: 2023-05-15 22:40+0300\n"
+"PO-Revision-Date: 2026-11-22 19:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 26.08.2\n"
 "X-Qt-Contexts: true\n"
 
 #: backendselection.ui:151 backendselection.ui:154
@@ -73,23 +73,23 @@ msgid ""
 "Defines the default ordering of devices which can be overridden by "
 "individual categories."
 msgstr ""
-"Kategoriler tarafından yok sayılacak olan öntanımlı aygıt sıralamasını "
+"Kategoriler tarafından yok sayılacak olan varsayılan aygıt sıralamasını "
 "tanımlar."
 
 #: devicepreference.cpp:303
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Playback Device Preference"
-msgstr "Öntanımlı Ses Çalma Aygıtı Tercihi"
+msgstr "Varsayılan Ses Çalma Aygıtı Tercihi"
 
 #: devicepreference.cpp:306
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Audio Recording Device Preference"
-msgstr "Öntanımlı Ses Kaydetme Aygıtı Tercihi"
+msgstr "Varsayılan Ses Kaydetme Aygıtı Tercihi"
 
 #: devicepreference.cpp:309
 msgctxt "Phonon::DevicePreference|"
 msgid "Default Video Recording Device Preference"
-msgstr "Öntanımlı Video Kaydetme Aygıtı Tercihi"
+msgstr "Varsayılan Video Kaydetme Aygıtı Tercihi"
 
 #: devicepreference.cpp:316
 #, qt-format
@@ -121,7 +121,7 @@ msgstr ""
 #: devicepreference.cpp:761 devicepreference.cpp:767
 msgctxt "Phonon::DevicePreference|"
 msgid "Default/Unspecified Category"
-msgstr "Öntanımlı/Belirtilmemiş Kategori"
+msgstr "Varsayılan/Belirtilmemiş Kategori"
 
 #: devicepreference.cpp:865
 msgctxt "Phonon::DevicePreference|"
